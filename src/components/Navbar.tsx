@@ -16,11 +16,11 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'Services', href: '#services' },
-    { name: 'Portfolio', href: '#portfolio' },
-    { name: 'Testimonials', href: '#testimonials' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Inicio', href: '#home' },
+    { name: 'Servicios', href: '#services' },
+    { name: 'Portafolio', href: '#portfolio' },
+    { name: 'Testimonios', href: '#testimonials' },
+    { name: 'Contacto', href: '#contact' },
   ];
 
   return (
@@ -55,7 +55,7 @@ const Navbar = () => {
               href="#contact"
               className="px-6 py-2.5 rounded-full bg-primary text-white text-sm hover-grow shadow-sm"
             >
-              Hire Me
+              Contrátame
             </a>
           </div>
 
@@ -97,7 +97,7 @@ const Navbar = () => {
             className="px-6 py-2.5 text-center rounded-full bg-primary text-white hover-grow mt-2"
             onClick={() => setMobileMenuOpen(false)}
           >
-            Hire Me
+            Contrátame
           </a>
         </div>
       </div>

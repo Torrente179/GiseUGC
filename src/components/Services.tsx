@@ -5,33 +5,33 @@ const Services = () => {
   const services = [
     {
       icon: <Video className="h-10 w-10 mb-6 text-primary" />,
-      title: 'UGC Video Content',
-      description: 'Authentic product videos that showcase your products in real-life settings, driving engagement and conversions.'
+      title: 'Videos UGC',
+      description: 'Videos de productos auténticos que muestran tus productos en entornos reales, impulsando el engagement y las conversiones.'
     },
     {
       icon: <Image className="h-10 w-10 mb-6 text-primary" />,
-      title: 'Product Photography',
-      description: 'Professional, lifestyle-focused product photos that tell your brand story and connect with your audience.'
+      title: 'Fotografía de Productos',
+      description: 'Fotos de productos profesionales, enfocadas en el estilo de vida que cuentan la historia de tu marca y conectan con tu audiencia.'
     },
     {
       icon: <ShoppingBag className="h-10 w-10 mb-6 text-primary" />,
-      title: 'E-commerce Content',
-      description: 'Specialized content optimized for marketplace platforms to boost visibility and drive sales.'
+      title: 'Contenido para E-commerce',
+      description: 'Contenido especializado optimizado para plataformas de mercados para aumentar la visibilidad e impulsar las ventas.'
     },
     {
       icon: <MessageSquare className="h-10 w-10 mb-6 text-primary" />,
-      title: 'Review Videos',
-      description: 'Authentic, detailed product reviews that build trust and showcase benefits to potential customers.'
+      title: 'Videos de Reseñas',
+      description: 'Reseñas de productos auténticas y detalladas que generan confianza y muestran los beneficios a los clientes potenciales.'
     },
     {
       icon: <Award className="h-10 w-10 mb-6 text-primary" />,
-      title: 'Brand Collaborations',
-      description: 'Strategic partnerships to expand your reach and connect with new, relevant audiences.'
+      title: 'Colaboraciones con Marcas',
+      description: 'Alianzas estratégicas para expandir tu alcance y conectar con nuevas audiencias relevantes.'
     },
     {
       icon: <TrendingUp className="h-10 w-10 mb-6 text-primary" />,
-      title: 'Social Media Strategy',
-      description: 'Expert guidance on content deployment to maximize engagement and ROI across platforms.'
+      title: 'Estrategia de Redes Sociales',
+      description: 'Orientación experta sobre el despliegue de contenido para maximizar el engagement y el ROI en todas las plataformas.'
     },
   ];
 
@@ -39,8 +39,8 @@ const Services = () => {
     <section id="services" className="section-padding bg-secondary/30">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <p className="text-primary/80 mb-3 uppercase tracking-wider font-light">What I Offer</p>
-          <h2 className="text-3xl md:text-4xl font-bold font-cormorant mb-6">My Services</h2>
+          <p className="text-primary/80 mb-3 uppercase tracking-wider font-light">Lo Que Ofrezco</p>
+          <h2 className="text-3xl md:text-4xl font-bold font-cormorant mb-6">Mis Servicios</h2>
           <div className="w-20 h-1 signature-line mx-auto"></div>
         </div>
 

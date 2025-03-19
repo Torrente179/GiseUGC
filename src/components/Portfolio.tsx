@@ -1,72 +1,72 @@
 
 import { useState } from 'react';
-import { Play, Maximize } from 'lucide-react';
+import { Play, Maximize, X } from 'lucide-react';
 
 const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedItem, setSelectedItem] = useState<any>(null);
 
   const categories = [
-    { id: 'all', name: 'All' },
-    { id: 'fashion', name: 'Fashion' },
-    { id: 'beauty', name: 'Beauty' },
-    { id: 'tech', name: 'Tech' },
-    { id: 'lifestyle', name: 'Lifestyle' }
+    { id: 'all', name: 'Todos' },
+    { id: 'fashion', name: 'Moda' },
+    { id: 'beauty', name: 'Belleza' },
+    { id: 'tech', name: 'Tecnología' },
+    { id: 'lifestyle', name: 'Estilo de Vida' }
   ];
 
   const portfolioItems = [
     {
       id: 1,
-      title: 'Summer Fashion Collection',
+      title: 'Colección de Moda Verano',
       category: 'fashion',
       thumbnail: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       type: 'image'
     },
     {
       id: 2,
-      title: 'Skincare Review Series',
+      title: 'Serie de Reseñas de Skincare',
       category: 'beauty',
       thumbnail: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       type: 'video'
     },
     {
       id: 3,
-      title: 'Tech Gadget Showcase',
+      title: 'Showcase de Gadgets',
       category: 'tech',
       thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       type: 'image'
     },
     {
       id: 4,
-      title: 'Home Decor Ideas',
+      title: 'Ideas de Decoración',
       category: 'lifestyle',
       thumbnail: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       type: 'image'
     },
     {
       id: 5,
-      title: 'Makeup Tutorial',
+      title: 'Tutorial de Maquillaje',
       category: 'beauty',
       thumbnail: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       type: 'video'
     },
     {
       id: 6,
-      title: 'Athletic Wear Collection',
+      title: 'Colección Ropa Deportiva',
       category: 'fashion',
       thumbnail: 'https://images.unsplash.com/photo-1520999166575-37d109989923?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       type: 'image'
     },
     {
       id: 7,
-      title: 'Smartphone Review',
+      title: 'Reseña de Smartphone',
       category: 'tech',
       thumbnail: 'https://images.unsplash.com/photo-1551721434-8b94ddff0e6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       type: 'video'
     },
     {
       id: 8,
-      title: 'Morning Routine',
+      title: 'Rutina Matutina',
       category: 'lifestyle',
       thumbnail: 'https://images.unsplash.com/photo-1498575732665-aac7705c2c7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       type: 'video'
@@ -85,8 +85,8 @@ const Portfolio = () => {
     <section id="portfolio" className="section-padding">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <p className="text-primary/60 mb-3 uppercase tracking-wider">My Work</p>
-          <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">Featured Portfolio</h2>
+          <p className="text-primary/60 mb-3 uppercase tracking-wider">Mi Trabajo</p>
+          <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">Portafolio Destacado</h2>
           <div className="w-20 h-1 bg-primary/20 mx-auto rounded-full"></div>
         </div>
 
@@ -174,7 +174,5 @@ const Portfolio = () => {
     </section>
   );
 };
-
-import { X } from "lucide-react";
 
 export default Portfolio;

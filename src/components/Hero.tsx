@@ -12,27 +12,27 @@ const Hero = () => {
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="order-2 md:order-1">
             <p className="text-primary/80 text-lg mb-4 animate-fade-in tracking-wider uppercase font-light">
-              UGC Creator & Content Specialist
+              Creadora de UGC & Especialista en Contenido
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground font-cormorant mb-6 leading-tight animate-slide-down">
               Gisela <span className="text-primary italic">Saldarriaga</span>
             </h1>
             <div className="w-32 h-1 signature-line mb-8"></div>
             <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              Creating authentic, elegant UGC content that showcases your brand's unique story and connects with your audience on a deeper level.
+              Creando contenido UGC auténtico y elegante que muestra la historia única de tu marca y conecta con tu audiencia a un nivel más profundo.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 animate-fade-in" style={{ animationDelay: '0.6s' }}>
               <a 
                 href="#portfolio" 
                 className="px-8 py-3.5 rounded-full bg-primary text-white font-medium hover-grow"
               >
-                View My Work
+                Ver Mi Trabajo
               </a>
               <a 
                 href="#contact" 
                 className="px-8 py-3.5 rounded-full bg-transparent border border-primary text-primary font-medium hover-grow"
               >
-                Get In Touch
+                Contactar
               </a>
             </div>
           </div>
@@ -54,7 +54,7 @@ const Hero = () => {
       
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-float">
         <a href="#services" className="flex flex-col items-center text-primary/70 hover:text-primary transition-colors">
-          <span className="text-sm mb-2 font-light">Explore My Services</span>
+          <span className="text-sm mb-2 font-light">Explora Mis Servicios</span>
           <ArrowDown className="h-5 w-5" />
         </a>
       </div>
