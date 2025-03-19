@@ -35,9 +35,9 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <a 
             href="#home" 
-            className="text-xl md:text-2xl font-semibold font-playfair text-primary"
+            className="text-xl md:text-2xl font-medium font-cormorant text-primary italic"
           >
-            Portfolio<span className="text-3xl">.</span>
+            Gisela<span className="text-foreground not-italic font-normal">.UGC</span>
           </a>
 
           {/* Desktop Navigation */}
@@ -46,16 +46,14 @@ const Navbar = () => {
               <a
                 key={link.name}
                 href={link.href}
-                className="text-sm text-primary hover-lift hover:text-primary/80"
+                className="text-sm text-foreground hover-lift hover:text-primary/80 transition-all"
               >
                 {link.name}
               </a>
             ))}
             <a
-              href="https://www.fiverr.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-2.5 rounded-full bg-primary text-white text-sm hover-grow"
+              href="#contact"
+              className="px-6 py-2.5 rounded-full bg-primary text-white text-sm hover-grow shadow-sm"
             >
               Hire Me
             </a>
@@ -63,11 +61,14 @@ const Navbar = () => {
 
           {/* Mobile Navigation Toggle */}
           <div className="md:hidden">
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-foreground hover:text-primary transition-colors"
+            >
               {mobileMenuOpen ? (
-                <X className="h-6 w-6 text-primary" />
+                <X className="h-6 w-6" />
               ) : (
-                <Menu className="h-6 w-6 text-primary" />
+                <Menu className="h-6 w-6" />
               )}
             </button>
           </div>
@@ -76,7 +77,7 @@ const Navbar = () => {
 
       {/* Mobile Navigation Menu */}
       <div 
-        className={`fixed inset-x-0 top-[61px] glass-dark md:hidden p-6 transition-all duration-300 ease-in-out ${
+        className={`fixed inset-x-0 top-[61px] glass md:hidden p-6 transition-all duration-300 ease-in-out ${
           mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'
         }`}
       >
@@ -85,17 +86,15 @@ const Navbar = () => {
             <a
               key={link.name}
               href={link.href}
-              className="text-primary py-2 hover:text-primary/80 transition-all"
+              className="text-foreground py-2 hover:text-primary transition-all border-b border-border/30"
               onClick={() => setMobileMenuOpen(false)}
             >
               {link.name}
             </a>
           ))}
           <a
-            href="https://www.fiverr.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-2.5 text-center rounded-full bg-primary text-white hover-grow"
+            href="#contact"
+            className="px-6 py-2.5 text-center rounded-full bg-primary text-white hover-grow mt-2"
             onClick={() => setMobileMenuOpen(false)}
           >
             Hire Me

@@ -36,25 +36,25 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="section-padding bg-secondary">
+    <section id="services" className="section-padding bg-secondary/30">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <p className="text-primary/60 mb-3 uppercase tracking-wider">What I Offer</p>
-          <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">My Services</h2>
-          <div className="w-20 h-1 bg-primary/20 mx-auto rounded-full"></div>
+          <p className="text-primary/80 mb-3 uppercase tracking-wider font-light">What I Offer</p>
+          <h2 className="text-3xl md:text-4xl font-bold font-cormorant mb-6">My Services</h2>
+          <div className="w-20 h-1 signature-line mx-auto"></div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div 
               key={index} 
-              className="bg-white p-8 rounded-xl shadow-sm hover-grow group"
+              className="bg-white p-8 rounded-xl shadow-sm hover-grow group elegant-shadow"
             >
               <div className="relative">
-                <div className="absolute -top-2 -left-2 w-16 h-16 bg-secondary/50 rounded-lg -z-10 group-hover:scale-110 transition-transform"></div>
+                <div className="absolute -top-2 -left-2 w-16 h-16 bg-secondary/80 rounded-lg -z-10 group-hover:scale-110 transition-transform"></div>
                 {service.icon}
               </div>
-              <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
+              <h3 className="text-xl font-semibold mb-3 font-cormorant">{service.title}</h3>
               <p className="text-muted-foreground">{service.description}</p>
             </div>
           ))}
