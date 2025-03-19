@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, PlayCircle } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -35,9 +35,15 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <a 
             href="#home" 
-            className="text-xl md:text-2xl font-medium font-cormorant text-primary italic"
+            className="flex items-center gap-2 group"
           >
-            Gisela<span className="text-foreground not-italic font-normal">.UGC</span>
+            <div className="relative h-8 w-8 flex items-center justify-center">
+              <div className="absolute inset-0 bg-primary/20 rounded-full blur-sm group-hover:bg-primary/30 transition-all"></div>
+              <PlayCircle className="h-6 w-6 text-primary relative z-10" />
+            </div>
+            <span className="text-xl font-medium font-playfair text-primary italic">
+              Gisela<span className="text-foreground not-italic font-normal">.UGC</span>
+            </span>
           </a>
 
           {/* Desktop Navigation */}
@@ -46,16 +52,18 @@ const Navbar = () => {
               <a
                 key={link.name}
                 href={link.href}
-                className="text-sm text-foreground hover-lift hover:text-primary/80 transition-all"
+                className="text-sm text-foreground hover-lift hover:text-primary/80 transition-all relative overflow-hidden group"
               >
                 {link.name}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary/70 group-hover:w-full transition-all duration-300"></span>
               </a>
             ))}
             <a
               href="#contact"
-              className="px-6 py-2.5 rounded-full bg-primary text-white text-sm hover-grow shadow-sm"
+              className="px-6 py-2.5 rounded-full bg-primary text-white text-sm hover-grow shadow-sm relative overflow-hidden group"
             >
-              Hire Me
+              <span className="absolute inset-0 w-full h-full bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
+              <span className="relative z-10">Hire Me</span>
             </a>
           </div>
 
