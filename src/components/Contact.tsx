@@ -1,60 +1,67 @@
 
-import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Mail, MessageSquare, Send } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+// Define Zod schema for validation
+const formSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  email: z.string().email({ message: "Invalid email address." }),
+  subject: z.string().min(3, { message: "Subject must be at least 3 characters." }),
+  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+});
+
+// Infer the type from the schema
+type ContactFormData = z.infer<typeof formSchema>;
 
 const Contact = () => {
+  const { t } = useTranslation();
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ContactFormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { // Set default values for react-hook-form
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      toast({
-        title: "¡Mensaje enviado!",
-        description: "Gracias por tu mensaje. Me pondré en contacto contigo pronto.",
-      });
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
-      setIsSubmitting(false);
-    }, 1500);
+  // Define the submit handler function
+  const onSubmit = (data: ContactFormData) => {
+    console.log("Form Data Submitted:", data); // Log validated data
+    // Simulate form submission (replace with actual EmailJS call later)
+    return new Promise(resolve => {
+      setTimeout(() => {
+        toast({
+          title: t('contact.toast.successTitle'),
+          description: t('contact.toast.successDescription'),
+          duration: 5000, // Set duration to 5 seconds
+        });
+        reset(); // Reset form fields using react-hook-form's reset
+        resolve(true);
+      }, 1500);
+    });
   };
 
   return (
     <section id="contact" className="section-padding">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <p className="text-primary/60 mb-3 uppercase tracking-wider">Ponte en Contacto</p>
-          <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">Contáctame</h2>
+          <p className="text-primary/60 mb-3 uppercase tracking-wider">{t('contact.sectionSubtitle')}</p>
+          <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">{t('contact.sectionTitle')}</h2>
           <div className="w-20 h-1 bg-primary/20 mx-auto rounded-full"></div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           <div className="flex flex-col justify-center">
-            <h3 className="text-2xl font-semibold mb-6">Hablemos de tu Proyecto</h3>
+            <h3 className="text-2xl font-semibold mb-6">{t('contact.heading')}</h3>
             <p className="text-muted-foreground mb-8">
-              ¿Listo para elevar tu marca con contenido UGC profesional? Me encantaría conocer tu proyecto y discutir cómo podemos colaborar para alcanzar tus objetivos.
+              {t('contact.description')}
             </p>
             
             <div className="space-y-6">
@@ -63,8 +70,8 @@ const Contact = () => {
                   <Mail className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium">Email</h4>
-                  <p className="text-muted-foreground">contacto@ejemplo.com</p>
+                  <h4 className="font-medium">{t('contact.emailLabel')}</h4>
+                  <p className="text-muted-foreground">{t('contact.emailValue')}</p>
                 </div>
               </div>
               
@@ -73,79 +80,72 @@ const Contact = () => {
                   <MessageSquare className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium">Fiverr</h4>
-                  <p className="text-muted-foreground">fiverr.com/nombredeusuario</p>
+                  <h4 className="font-medium">{t('contact.fiverrLabel')}</h4>
+                  <p className="text-muted-foreground">{t('contact.fiverrValue')}</p>
                 </div>
               </div>
             </div>
           </div>
           
           <div className="bg-white rounded-xl shadow-sm p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Use react-hook-form's handleSubmit */}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-2">Tu Nombre</label>
+                  <label htmlFor="name" className="block text-sm font-medium mb-2">{t('contact.form.nameLabel')}</label>
                   <input
                     type="text"
                     id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                    placeholder="Juan Pérez"
-                    required
+                    {...register("name")} // Register with react-hook-form
+                    className={`w-full p-3 border ${errors.name ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all`}
+                    placeholder={t('contact.form.namePlaceholder')}
                   />
+                  {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
                 </div>
                 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">Tu Email</label>
+                  <label htmlFor="email" className="block text-sm font-medium mb-2">{t('contact.form.emailLabel')}</label>
                   <input
                     type="email"
                     id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full p-3 border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                    placeholder="juan@ejemplo.com"
-                    required
+                    {...register("email")} // Register with react-hook-form
+                    className={`w-full p-3 border ${errors.email ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all`}
+                    placeholder={t('contact.form.emailPlaceholder')}
                   />
+                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
                 </div>
               </div>
               
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium mb-2">Asunto</label>
+                <label htmlFor="subject" className="block text-sm font-medium mb-2">{t('contact.form.subjectLabel')}</label>
                 <input
                   type="text"
                   id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="w-full p-3 border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                  placeholder="Consulta sobre proyecto"
-                  required
+                  {...register("subject")} // Register with react-hook-form
+                  className={`w-full p-3 border ${errors.subject ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all`}
+                  placeholder={t('contact.form.subjectPlaceholder')}
                 />
+                {errors.subject && <p className="text-red-500 text-sm mt-1">{errors.subject.message}</p>}
               </div>
               
               <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">Mensaje</label>
+                <label htmlFor="message" className="block text-sm font-medium mb-2">{t('contact.form.messageLabel')}</label>
                 <textarea
                   id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
+                  {...register("message")} // Register with react-hook-form
                   rows={4}
-                  className="w-full p-3 border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
-                  placeholder="Cuéntame sobre tu proyecto..."
-                  required
+                  className={`w-full p-3 border ${errors.message ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none`}
+                  placeholder={t('contact.form.messagePlaceholder')}
                 />
+                {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
               </div>
               
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting} // Use isSubmitting from react-hook-form
                 className="w-full bg-primary text-white py-3.5 rounded-lg flex items-center justify-center gap-2 hover-grow disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
+                {isSubmitting ? t('contact.form.submittingButton') : t('contact.form.submitButton')}
                 <Send className="w-4 h-4" />
               </button>
             </form>

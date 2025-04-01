@@ -1,7 +1,8 @@
-
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 import { ArrowDown } from 'lucide-react';
 
 const Hero = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-secondary/30 via-white to-secondary/20">
@@ -12,27 +13,27 @@ const Hero = () => {
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="order-2 md:order-1">
             <p className="text-primary/80 text-lg mb-4 animate-fade-in tracking-wider uppercase font-light">
-              Creadora de UGC & Especialista en Contenido
+              {t('hero.subtitle')}
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground font-cormorant mb-6 leading-tight animate-slide-down">
               Gisela <span className="text-primary italic">Saldarriaga</span>
             </h1>
             <div className="w-32 h-1 signature-line mb-8"></div>
             <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              Creando contenido UGC auténtico y elegante que muestra la historia única de tu marca y conecta con tu audiencia a un nivel más profundo.
+              {t('hero.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 animate-fade-in" style={{ animationDelay: '0.6s' }}>
               <a 
                 href="#portfolio" 
                 className="px-8 py-3.5 rounded-full bg-primary text-white font-medium hover-grow"
               >
-                Ver Mi Trabajo
+                {t('hero.buttonPortfolio')}
               </a>
               <a 
                 href="#contact" 
                 className="px-8 py-3.5 rounded-full bg-transparent border border-primary text-primary font-medium hover-grow"
               >
-                Contactar
+                {t('hero.buttonContact')}
               </a>
             </div>
           </div>
@@ -43,7 +44,7 @@ const Hero = () => {
               <div className="relative rounded-2xl overflow-hidden border border-white/40 shadow-xl max-w-sm mx-auto">
                 <img 
                   src="/lovable-uploads/1bceae6e-5154-4d2e-b3fb-2957b86796a7.png" 
-                  alt="Gisela Saldarriaga" 
+                  alt={t('hero.imageAlt')}
                   className="w-full h-auto"
                 />
               </div>
@@ -54,7 +55,7 @@ const Hero = () => {
       
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-float">
         <a href="#services" className="flex flex-col items-center text-primary/70 hover:text-primary transition-colors">
-          <span className="text-sm mb-2 font-light">Explora Mis Servicios</span>
+          <span className="text-sm mb-2 font-light">{t('hero.scrollPrompt')}</span>
           <ArrowDown className="h-5 w-5" />
         </a>
       </div>

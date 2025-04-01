@@ -1,0 +1,132 @@
+{
+  "navbar": {
+    "home": "Home",
+    "services": "Services",
+    "portfolio": "Portfolio",
+    "testimonials": "Testimonials",
+    "contact": "Contact",
+    "hireMe": "Contact me"
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Change Language"
+  },
+  "hero": {
+    "subtitle": "UGC Creator & Content Specialist",
+    "description": "Creating authentic and elegant UGC content that showcases your brand's unique story and connects with your audience on a deeper level.",
+    "buttonPortfolio": "See My Work",
+    "buttonContact": "Contact",
+    "imageAlt": "Gisela Saldarriaga",
+    "scrollPrompt": "Explore My Services"
+  },
+  "services": {
+    "sectionSubtitle": "What I Offer",
+    "sectionTitle": "My Services",
+    "service1": {
+      "title": "UGC Videos",
+      "description": "Authentic product videos showcasing your items in real-life settings, boosting engagement and conversions."
+    },
+    "service2": {
+      "title": "Product Photography",
+      "description": "Professional, lifestyle-focused product photos that tell your brand's story and connect with your audience."
+    },
+    "service3": {
+      "title": "E-commerce Content",
+      "description": "Specialized content optimized for marketplace platforms to increase visibility and drive sales."
+    },
+    "service4": {
+      "title": "Review Videos",
+      "description": "Authentic and detailed product reviews that build trust and showcase benefits to potential customers."
+    },
+    "service5": {
+      "title": "Brand Collaborations",
+      "description": "Strategic partnerships to expand your reach and connect with relevant new audiences."
+    },
+    "service6": {
+      "title": "Social Media Strategy",
+      "description": "Expert guidance on content deployment to maximize engagement and ROI across platforms."
+    }
+  },
+  "portfolio": {
+    "sectionSubtitle": "My Work",
+    "sectionTitle": "Featured Portfolio",
+    "categories": {
+      "all": "All",
+      "fashion": "Fashion",
+      "beauty": "Beauty",
+      "tech": "Technology",
+      "lifestyle": "Lifestyle"
+    },
+    "items": {
+      "item1": "Summer Fashion Collection",
+      "item2": "Skincare Review Series",
+      "item3": "Gadget Showcase",
+      "item4": "Home Decor Ideas",
+      "item5": "Makeup Tutorial",
+      "item6": "Sportswear Collection",
+      "item7": "Smartphone Review",
+      "item8": "Morning Routine"
+    }
+  },
+  "testimonials": {
+    "sectionSubtitle": "Client Feedback",
+    "sectionTitle": "Testimonials",
+    "testimonial1": {
+      "name": "Sara Jiménez",
+      "company": "Fashion Brand Ltd.",
+      "role": "Marketing Director",
+      "text": "The UGC content created for our summer campaign exceeded all expectations. Our engagement increased by 45%, and we saw a significant uplift in sales. Highly recommended for anyone looking to elevate their brand presence."
+    },
+    "testimonial2": {
+      "name": "Miguel Chen",
+      "company": "TechGadget Inc.",
+      "role": "E-commerce Manager",
+      "text": "I was blown away by the quality and creativity of the content. The product videos perfectly showcased our new tech gadgets and helped us connect with our target audience in a way we hadn't before."
+    },
+    "testimonial3": {
+      "name": "Emma García",
+      "company": "RadiantBeauty",
+      "role": "Brand Owner",
+      "text": "Working with this UGC creator has transformed our skincare brand. The authentic approach to showcasing our products resulted in a 60% increase in conversions. The professionalism and attention to detail are unmatched."
+    },
+    "ariaPrev": "Previous testimonial",
+    "ariaNext": "Next testimonial",
+    "ariaGoTo": "Go to testimonial {{index}}"
+  },
+  "contact": {
+    "sectionSubtitle": "Get In Touch",
+    "sectionTitle": "Contact Me",
+    "heading": "Let's Discuss Your Project",
+    "description": "Ready to elevate your brand with professional UGC content? I'd love to hear about your project and discuss how we can collaborate to achieve your goals.",
+    "emailLabel": "Email",
+    "emailValue": "contact@example.com",
+    "fiverrLabel": "Fiverr",
+    "fiverrValue": "fiverr.com/username",
+    "form": {
+      "nameLabel": "Your Name",
+      "namePlaceholder": "John Doe",
+      "emailLabel": "Your Email",
+      "emailPlaceholder": "john@example.com",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "Project Inquiry",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Tell me about your project...",
+      "submitButton": "Send Message",
+      "submittingButton": "Sending..."
+    },
+    "toast": {
+      "successTitle": "Message Sent!",
+      "successDescription": "Thanks for your message. I'll get back to you soon."
+    }
+  },
+  "footer": {
+    "brandName": "Portfolio",
+    "description": "Creating authentic UGC content that drives engagement and converts viewers into customers.",
+    "servicesTitle": "Services",
+    "quickLinksTitle": "Quick Links",
+    "contactTitle": "Contact",
+    "emailLabel": "Email",
+    "fiverrLabel": "Fiverr",
+    "hireOnFiverrButton": "Hire Me on Fiverr",
+    "copyright": "© {{year}} UGC Portfolio. All rights reserved."
+  }
+}

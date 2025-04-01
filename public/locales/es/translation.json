@@ -1,0 +1,132 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "services": "Servicios",
+    "portfolio": "Portafolio",
+    "testimonials": "Testimonios",
+    "contact": "Contacto",
+    "hireMe": "Contáctame"
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Cambiar Idioma"
+  },
+  "hero": {
+    "subtitle": "Creadora de UGC & Especialista en Contenido",
+    "description": "Creando contenido UGC auténtico y elegante que muestra la historia única de tu marca y conecta con tu audiencia a un nivel más profundo.",
+    "buttonPortfolio": "Ver Mi Trabajo",
+    "buttonContact": "Contactar",
+    "imageAlt": "Gisela Saldarriaga",
+    "scrollPrompt": "Explora Mis Servicios"
+  },
+  "services": {
+    "sectionSubtitle": "Lo Que Ofrezco",
+    "sectionTitle": "Mis Servicios",
+    "service1": {
+      "title": "Videos UGC",
+      "description": "Videos de productos auténticos que muestran tus productos en entornos reales, impulsando el engagement y las conversiones."
+    },
+    "service2": {
+      "title": "Fotografía de Productos",
+      "description": "Fotos de productos profesionales, enfocadas en el estilo de vida que cuentan la historia de tu marca y conectan con tu audiencia."
+    },
+    "service3": {
+      "title": "Contenido para E-commerce",
+      "description": "Contenido especializado optimizado para plataformas de mercados para aumentar la visibilidad e impulsar las ventas."
+    },
+    "service4": {
+      "title": "Videos de Reseñas",
+      "description": "Reseñas de productos auténticas y detalladas que generan confianza y muestran los beneficios a los clientes potenciales."
+    },
+    "service5": {
+      "title": "Colaboraciones con Marcas",
+      "description": "Alianzas estratégicas para expandir tu alcance y conectar con nuevas audiencias relevantes."
+    },
+    "service6": {
+      "title": "Estrategia de Redes Sociales",
+      "description": "Orientación experta sobre el despliegue de contenido para maximizar el engagement y el ROI en todas las plataformas."
+    }
+  },
+  "portfolio": {
+    "sectionSubtitle": "Mi Trabajo",
+    "sectionTitle": "Portafolio Destacado",
+    "categories": {
+      "all": "Todos",
+      "fashion": "Moda",
+      "beauty": "Belleza",
+      "tech": "Tecnología",
+      "lifestyle": "Estilo de Vida"
+    },
+    "items": {
+      "item1": "Colección de Moda Verano",
+      "item2": "Serie de Reseñas de Skincare",
+      "item3": "Showcase de Gadgets",
+      "item4": "Ideas de Decoración",
+      "item5": "Tutorial de Maquillaje",
+      "item6": "Colección Ropa Deportiva",
+      "item7": "Reseña de Smartphone",
+      "item8": "Rutina Matutina"
+    }
+  },
+  "testimonials": {
+    "sectionSubtitle": "Comentarios de Clientes",
+    "sectionTitle": "Testimonios",
+    "testimonial1": {
+      "name": "Sara Jiménez",
+      "company": "Marca de Moda S.L.",
+      "role": "Directora de Marketing",
+      "text": "El contenido UGC creado para nuestra campaña de verano superó todas las expectativas. Nuestro engagement aumentó un 45% y vimos un aumento significativo en las ventas. Muy recomendable para cualquiera que busque elevar la presencia de su marca."
+    },
+    "testimonial2": {
+      "name": "Miguel Chen",
+      "company": "TechGadget Inc.",
+      "role": "Gerente de E-commerce",
+      "text": "Me quedé impresionado por la calidad y creatividad del contenido. Los videos de productos mostraron perfectamente nuestros nuevos gadgets tecnológicos y nos ayudaron a conectar con nuestro público objetivo de una manera que no habíamos logrado antes."
+    },
+    "testimonial3": {
+      "name": "Emma García",
+      "company": "BellezaRadiante",
+      "role": "Dueña de la Marca",
+      "text": "Trabajar con esta creadora de UGC ha transformado nuestra marca de cuidado de la piel. El enfoque auténtico para mostrar nuestros productos resultó en un aumento del 60% en las conversiones. El profesionalismo y la atención al detalle no tienen comparación."
+    },
+    "ariaPrev": "Testimonio anterior",
+    "ariaNext": "Siguiente testimonio",
+    "ariaGoTo": "Ir al testimonio {{index}}"
+  },
+  "contact": {
+    "sectionSubtitle": "Ponte en Contacto",
+    "sectionTitle": "Contáctame",
+    "heading": "Hablemos de tu Proyecto",
+    "description": "¿Listo para elevar tu marca con contenido UGC profesional? Me encantaría conocer tu proyecto y discutir cómo podemos colaborar para alcanzar tus objetivos.",
+    "emailLabel": "Email",
+    "emailValue": "contacto@ejemplo.com",
+    "fiverrLabel": "Fiverr",
+    "fiverrValue": "fiverr.com/nombredeusuario",
+    "form": {
+      "nameLabel": "Tu Nombre",
+      "namePlaceholder": "Juan Pérez",
+      "emailLabel": "Tu Email",
+      "emailPlaceholder": "juan@ejemplo.com",
+      "subjectLabel": "Asunto",
+      "subjectPlaceholder": "Consulta sobre proyecto",
+      "messageLabel": "Mensaje",
+      "messagePlaceholder": "Cuéntame sobre tu proyecto...",
+      "submitButton": "Enviar Mensaje",
+      "submittingButton": "Enviando..."
+    },
+    "toast": {
+      "successTitle": "¡Mensaje enviado!",
+      "successDescription": "Gracias por tu mensaje. Me pondré en contacto contigo pronto."
+    }
+  },
+  "footer": {
+    "brandName": "Portafolio",
+    "description": "Creando contenido UGC auténtico que impulsa el engagement y convierte a los espectadores en clientes.",
+    "servicesTitle": "Servicios",
+    "quickLinksTitle": "Enlaces Rápidos",
+    "contactTitle": "Contacto",
+    "emailLabel": "Email",
+    "fiverrLabel": "Fiverr",
+    "hireOnFiverrButton": "Contrátame en Fiverr",
+    "copyright": "© {{year}} Portafolio UGC. Todos los derechos reservados."
+  }
+}
