@@ -6,7 +6,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
   
   return (
-    <footer className="bg-gradient-to-r from-primary to-fuchsia-600 text-white py-16">
+    <footer className="bg-primary text-white py-16">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
@@ -64,7 +64,7 @@ const Footer = () => {
                   href="https://www.fiverr.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block mt-4 px-6 py-2.5 rounded-full btn-gradient font-medium"
+                  className="inline-block mt-4 px-6 py-2.5 rounded-full bg-white text-primary font-medium hover-grow"
                 >
                   {t('footer.hireOnFiverrButton')}
                 </a>
