@@ -5,7 +5,7 @@ const Hero = () => {
   const { t } = useTranslation(); // Initialize useTranslation
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-secondary/30 via-white to-secondary/20">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-white to-secondary/20">
         <div className="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1575223970966-76ae61ee7838?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')] bg-center bg-no-repeat bg-fixed"></div>
       </div>
       
@@ -15,23 +15,25 @@ const Hero = () => {
             <p className="text-primary/80 text-lg mb-4 animate-fade-in tracking-wider uppercase font-light">
               {t('hero.subtitle')}
             </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground font-cormorant mb-6 leading-tight animate-slide-down">
-              Gisela <span className="text-primary italic">Saldarriaga</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-cormorant mb-6 leading-tight animate-slide-down">
+              <span className="bg-gradient-to-r from-primary to-fuchsia-600 bg-clip-text text-transparent">
+                Gisela Saldarriaga
+              </span>
             </h1>
             <div className="w-32 h-1 signature-line mb-8"></div>
             <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
               {t('hero.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 animate-fade-in" style={{ animationDelay: '0.6s' }}>
-              <a 
-                href="#portfolio" 
-                className="px-8 py-3.5 rounded-full bg-primary text-white font-medium hover-grow"
+              <a
+                href="#portfolio"
+                className="btn-gradient px-8 py-3.5 rounded-full font-medium"
               >
                 {t('hero.buttonPortfolio')}
               </a>
-              <a 
-                href="#contact" 
-                className="px-8 py-3.5 rounded-full bg-transparent border border-primary text-primary font-medium hover-grow"
+              <a
+                href="#contact"
+                className="px-8 py-3.5 rounded-full border border-primary text-primary font-medium hover:brightness-110 transition-all"
               >
                 {t('hero.buttonContact')}
               </a>
@@ -40,8 +42,8 @@ const Hero = () => {
           
           <div className="order-1 md:order-2 flex justify-center">
             <div className="relative">
-              <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-primary/30 to-secondary blur-lg opacity-50"></div>
-              <div className="relative rounded-2xl overflow-hidden border border-white/40 shadow-xl max-w-sm mx-auto">
+              <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-primary/40 to-fuchsia-600/40 blur-lg opacity-50"></div>
+              <div className="relative rounded-2xl overflow-hidden border border-white/40 shadow-xl elegant-shadow max-w-sm mx-auto">
                 <img 
                   src="/lovable-uploads/1bceae6e-5154-4d2e-b3fb-2957b86796a7.png" 
                   alt={t('hero.imageAlt')}

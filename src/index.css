@@ -7,33 +7,34 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    /* Updated color palette for a fresher look */
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 340 50% 55%;
+    --primary: 258 85% 60%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 340 30% 96%;
-    --secondary-foreground: 340 50% 40%;
+    --secondary: 215 28% 95%;
+    --secondary-foreground: 222 47% 20%;
 
-    --muted: 340 10% 96%;
-    --muted-foreground: 340 4% 46%;
+    --muted: 215 20% 96%;
+    --muted-foreground: 222 11% 40%;
 
-    --accent: 340 15% 96%;
-    --accent-foreground: 340 50% 40%;
+    --accent: 258 15% 88%;
+    --accent-foreground: 258 45% 40%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 340 20% 90%;
-    --input: 340 20% 90%;
-    --ring: 340 50% 55%;
+    --border: 215 20% 86%;
+    --input: 215 20% 86%;
+    --ring: 258 84% 65%;
 
     --radius: 0.75rem;
 
@@ -97,16 +98,20 @@
   .hover-lift {
     @apply transition-all duration-300 hover:-translate-y-1;
   }
+
+  .btn-gradient {
+    @apply bg-gradient-to-r from-primary to-fuchsia-600 text-white shadow-md hover:brightness-110 transition-all;
+  }
   
   .text-shadow {
     text-shadow: 0 1px 2px rgba(0,0,0,0.1);
   }
   
   .elegant-shadow {
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
   }
   
   .signature-line {
-    @apply h-[2px] bg-gradient-to-r from-primary/20 via-primary to-primary/20 rounded-full;
+    @apply h-[2px] bg-gradient-to-r from-primary/20 via-primary to-fuchsia-600/40 rounded-full;
   }
 }

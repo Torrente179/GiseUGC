@@ -51,7 +51,7 @@ const Services = () => {
           {serviceData.map((service, index) => (
             <div
               key={index}
-              className="bg-white p-8 rounded-xl shadow-sm hover-grow group elegant-shadow"
+              className="glass p-8 rounded-xl shadow-sm hover-grow group elegant-shadow"
             >
               <div className="relative">
                 <div className="absolute -top-2 -left-2 w-16 h-16 bg-secondary/80 rounded-lg -z-10 group-hover:scale-110 transition-transform"></div>
