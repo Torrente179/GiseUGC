@@ -87,7 +87,7 @@ const Contact = () => {
             </div>
           </div>
           
-          <div className="bg-white rounded-xl shadow-sm p-8">
+          <div className="glass rounded-xl shadow-sm p-8">
             {/* Use react-hook-form's handleSubmit */}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

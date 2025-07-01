@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import { Video, Image, ShoppingBag, MessageSquare, Award, TrendingUp } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 const Services = () => {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -49,17 +50,21 @@ const Services = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {serviceData.map((service, index) => (
-            <div
+            <Card
               key={index}
-              className="bg-white p-8 rounded-xl shadow-sm hover-grow group elegant-shadow"
+              className="border-none bg-white/80 backdrop-blur-sm p-1 hover-grow group elegant-shadow overflow-hidden"
             >
-              <div className="relative">
-                <div className="absolute -top-2 -left-2 w-16 h-16 bg-secondary/80 rounded-lg -z-10 group-hover:scale-110 transition-transform"></div>
-                {service.icon}
-              </div>
-              <h3 className="text-xl font-semibold mb-3 font-cormorant">{t(service.titleKey)}</h3>
-              <p className="text-muted-foreground">{t(service.descriptionKey)}</p>
-            </div>
+              <div className="absolute top-0 left-0 w-0 h-1 bg-gradient-to-r from-primary/50 to-primary group-hover:w-full transition-all duration-500"></div>
+              <CardContent className="p-8">
+                <div className="relative">
+                  <div className="absolute -top-3 -left-3 w-16 h-16 bg-secondary/80 rounded-lg -z-10 group-hover:scale-110 transition-transform"></div>
+                  <div className="absolute top-0 left-0 w-10 h-10 rounded-full bg-primary/10 animate-pulse"></div>
+                  {service.icon}
+                </div>
+                <h3 className="text-xl font-semibold mb-3 font-playfair">{t(service.titleKey)}</h3>
+                <p className="text-muted-foreground">{t(service.descriptionKey)}</p>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>
