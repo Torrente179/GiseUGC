@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'; // Import useTranslation
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Hero = () => {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -10,40 +11,53 @@ const Hero = () => {
       </div>
       
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="order-2 md:order-1">
-            <p className="text-primary/80 text-lg mb-4 animate-fade-in tracking-wider uppercase font-light">
-              {t('hero.subtitle')}
-            </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground font-cormorant mb-6 leading-tight animate-slide-down">
-              Gisela <span className="text-primary italic">Saldarriaga</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/80 backdrop-blur-sm mb-6 animate-fade-in">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <p className="text-primary/90 text-sm font-medium tracking-wider">
+                {t('hero.subtitle')}
+              </p>
+            </div>
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground font-playfair mb-6 leading-tight animate-slide-down">
+              Gisela <span className="relative inline-block">
+                <span className="text-primary italic">Saldarriaga</span>
+                <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-primary/20 via-primary to-primary/20 rounded-full"></span>
+              </span>
             </h1>
-            <div className="w-32 h-1 signature-line mb-8"></div>
+
             <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
               {t('hero.description')}
             </p>
+
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 animate-fade-in" style={{ animationDelay: '0.6s' }}>
-              <a 
-                href="#portfolio" 
-                className="px-8 py-3.5 rounded-full bg-primary text-white font-medium hover-grow"
+              <Button
+                variant="default"
+                size="lg"
+                className="rounded-full px-8 py-6 font-medium hover-grow text-base"
+                asChild
               >
-                {t('hero.buttonPortfolio')}
-              </a>
-              <a 
-                href="#contact" 
-                className="px-8 py-3.5 rounded-full bg-transparent border border-primary text-primary font-medium hover-grow"
+                <a href="#portfolio">{t('hero.buttonPortfolio')}</a>
+              </Button>
+
+              <Button
+                variant="outline"
+                size="lg"
+                className="rounded-full px-8 py-6 font-medium hover-grow text-primary border-primary text-base"
+                asChild
               >
-                {t('hero.buttonContact')}
-              </a>
+                <a href="#contact">{t('hero.buttonContact')}</a>
+              </Button>
             </div>
           </div>
-          
+
           <div className="order-1 md:order-2 flex justify-center">
-            <div className="relative">
-              <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-primary/30 to-secondary blur-lg opacity-50"></div>
-              <div className="relative rounded-2xl overflow-hidden border border-white/40 shadow-xl max-w-sm mx-auto">
-                <img 
-                  src="/lovable-uploads/1bceae6e-5154-4d2e-b3fb-2957b86796a7.png" 
+            <div className="relative glow">
+              <div className="absolute -inset-4 rounded-2xl bg-gradient-to-br from-primary/20 via-white to-secondary/50 blur-xl opacity-70"></div>
+              <div className="relative rounded-2xl overflow-hidden border-2 border-white/60 shadow-xl max-w-sm mx-auto transform rotate-2 hover:rotate-0 transition-all duration-500">
+                <img
+                  src="/lovable-uploads/1bceae6e-5154-4d2e-b3fb-2957b86796a7.png"
                   alt={t('hero.imageAlt')}
                   className="w-full h-auto"
                 />
