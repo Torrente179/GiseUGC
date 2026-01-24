@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Play, Maximize, X } from 'lucide-react';
 
 // Define an interface for the portfolio item structure
@@ -88,7 +88,7 @@ const Portfolio = () => {
     }
   ];
 
-  const filteredItems = activeFilter === 'all' 
+  const filteredItems = activeFilter === 'all'
     ? portfolioItemData
     : portfolioItemData.filter(item => item.category === activeFilter);
 
@@ -110,64 +110,86 @@ const Portfolio = () => {
             <button
               key={category.id}
               onClick={() => setActiveFilter(category.id)}
-              className={`px-6 py-2 rounded-full text-sm transition-all ${
-                activeFilter === category.id
+              className={`px-6 py-2 rounded-full text-sm transition-all ${activeFilter === category.id
                   ? 'bg-primary text-white'
                   : 'bg-secondary text-primary hover:bg-primary/10'
-              }`}
+                }`}
             >
               {t(category.nameKey)} {/* Use t() for category name */}
             </button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredItems.map((item) => (
-            <div 
-              key={item.id}
-              className="group relative overflow-hidden rounded-xl shadow-sm hover-grow cursor-pointer"
-              onClick={() => setSelectedItem(item)}
-            >
-              <div className="aspect-w-16 aspect-h-9 w-full">
-                <img 
-                  src={item.thumbnail} 
-                  alt={t(item.titleKey)}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-5">
-                <h3 className="text-white font-medium mb-1">{t(item.titleKey)}</h3> {/* Use t() for title */}
-                <p className="text-white/70 text-sm capitalize">{t(`portfolio.categories.${item.category}`)}</p> {/* Use t() for category name */}
-                
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  {item.type === 'video' ? (
-                    <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center">
-                      <Play className="h-6 w-6 text-primary fill-primary" />
-                    </div>
-                  ) : (
-                    <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center">
-                      <Maximize className="h-6 w-6 text-primary" />
-                    </div>
-                  )}
+        <div className="columns-1 md:columns-2 lg:columns-4 gap-6 space-y-6">
+          {filteredItems.map((item, index) => {
+            // 3D tilt effect handler
+            const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+              const el = e.currentTarget;
+              const rect = el.getBoundingClientRect();
+              const x = (e.clientX - rect.left - rect.width / 2) / 15;
+              const y = (e.clientY - rect.top - rect.height / 2) / 15;
+              el.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg) scale(1.02)`;
+            };
+            const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+              e.currentTarget.style.transform = 'perspective(1000px) rotateY(0) rotateX(0) scale(1)';
+            };
+
+            // Variable aspect ratios for masonry effect
+            const aspectRatios = ['4/3', '1/1', '3/4', '16/9'];
+            const aspect = aspectRatios[index % aspectRatios.length];
+
+            return (
+              <div
+                key={item.id}
+                className="group relative overflow-hidden rounded-xl shadow-sm cursor-pointer break-inside-avoid mb-6 transition-all duration-300 ease-out"
+                onClick={() => setSelectedItem(item)}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                <div className="w-full overflow-hidden" style={{ aspectRatio: aspect }}>
+                  <img
+                    src={item.thumbnail}
+                    alt={t(item.titleKey)}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-5">
+                  <h3 className="text-white font-medium mb-1">{t(item.titleKey)}</h3>
+                  <p className="text-white/70 text-sm capitalize">{t(`portfolio.categories.${item.category}`)}</p>
+
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    {item.type === 'video' ? (
+                      <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center">
+                        <Play className="h-6 w-6 text-primary fill-primary" />
+                      </div>
+                    ) : (
+                      <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center">
+                        <Maximize className="h-6 w-6 text-primary" />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
       {/* Modal */}
       {selectedItem && (
-        <div 
+        <div
           className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
           onClick={closeModal}
         >
-          <div 
+          <div
             className="relative max-w-4xl w-full bg-white rounded-xl overflow-hidden animate-scale"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="aspect-w-16 aspect-h-9 w-full bg-black">
-              <img 
+              <img
                 src={selectedItem.thumbnail}
                 alt={t(selectedItem.titleKey)}
                 className="w-full h-full object-cover"
@@ -177,7 +199,7 @@ const Portfolio = () => {
               <h3 className="text-xl font-medium">{t(selectedItem.titleKey)}</h3> {/* Use t() for title */}
               <p className="text-muted-foreground capitalize">{t(`portfolio.categories.${selectedItem.category}`)}</p> {/* Use t() for category name */}
             </div>
-            <button 
+            <button
               className="absolute top-4 right-4 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white"
               onClick={closeModal}
             >

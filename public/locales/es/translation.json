@@ -128,5 +128,11 @@
     "fiverrLabel": "Fiverr",
     "hireOnFiverrButton": "Contrátame en Fiverr",
     "copyright": "© {{year}} Portafolio UGC. Todos los derechos reservados."
+  },
+  "socialProof": {
+    "brands": "Marcas",
+    "views": "Vistas Generadas",
+    "satisfaction": "Satisfacción",
+    "contentPieces": "Piezas de Contenido"
   }
 }

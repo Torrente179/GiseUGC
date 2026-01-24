@@ -58,8 +58,8 @@ const Testimonials = () => {
 
         <div className="max-w-4xl mx-auto relative">
           <div className="overflow-hidden">
-            <div 
-              className="flex transition-transform duration-500" 
+            <div
+              className="flex transition-transform duration-500"
               style={{ transform: `translateX(-${activeIndex * 100}%)` }}
             >
               {testimonialData.map((testimonial) => (
@@ -67,10 +67,12 @@ const Testimonials = () => {
                   <div className="bg-white rounded-xl p-8 md:p-10 shadow-sm">
                     <div className="flex flex-col md:flex-row md:items-center mb-6 gap-6">
                       <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
-                        <img 
-                          src={testimonial.image} 
+                        <img
+                          src={testimonial.image}
                           alt={t(testimonial.nameKey)}
                           className="w-full h-full object-cover"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                       <div>
@@ -78,13 +80,12 @@ const Testimonials = () => {
                         <p className="text-muted-foreground">{t(testimonial.roleKey)}, {t(testimonial.companyKey)}</p>
                         <div className="flex mt-2">
                           {[...Array(5)].map((_, index) => (
-                            <Star 
-                              key={index} 
-                              className={`w-4 h-4 ${
-                                index < testimonial.stars 
-                                  ? 'text-yellow-400 fill-yellow-400' 
+                            <Star
+                              key={index}
+                              className={`w-4 h-4 ${index < testimonial.stars
+                                  ? 'text-yellow-400 fill-yellow-400'
                                   : 'text-gray-300'
-                              }`} 
+                                }`}
                             />
                           ))}
                         </div>
@@ -100,7 +101,7 @@ const Testimonials = () => {
           </div>
 
           <div className="flex justify-center mt-8 gap-4">
-            <button 
+            <button
               onClick={prevTestimonial}
               className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm hover-grow"
               aria-label={t('testimonials.ariaPrev')}
@@ -112,14 +113,13 @@ const Testimonials = () => {
                 <button
                   key={index}
                   onClick={() => setActiveIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${
-                    activeIndex === index ? 'bg-primary scale-125' : 'bg-primary/30'
-                  }`}
+                  className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? 'bg-primary scale-125' : 'bg-primary/30'
+                    }`}
                   aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
                 />
               ))}
             </div>
-            <button 
+            <button
               onClick={nextTestimonial}
               className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm hover-grow"
               aria-label={t('testimonials.ariaNext')}

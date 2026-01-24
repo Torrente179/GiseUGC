@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mail, MessageSquare, Send } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
@@ -23,7 +24,7 @@ const Contact = () => {
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ContactFormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: { // Set default values for react-hook-form
+    defaultValues: {
       name: "",
       email: "",
       subject: "",
@@ -31,18 +32,47 @@ const Contact = () => {
     },
   });
 
+  // Rate limiting - cooldown after submission
+  const [cooldown, setCooldown] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(0);
+
   // Define the submit handler function
-  const onSubmit = (data: ContactFormData) => {
-    console.log("Form Data Submitted:", data); // Log validated data
-    // Simulate form submission (replace with actual EmailJS call later)
+  const onSubmit = (data: ContactFormData & { website?: string }) => {
+    // Honeypot check - bots will fill this hidden field
+    if ((data as any).website) {
+      console.log('Bot detected - honeypot triggered');
+      return Promise.resolve(); // Silently fail for bots
+    }
+
+    // Rate limiting check
+    if (cooldown) {
+      return Promise.resolve();
+    }
+
+    console.log("Form Data Submitted:", data);
     return new Promise(resolve => {
       setTimeout(() => {
         toast({
           title: t('contact.toast.successTitle'),
           description: t('contact.toast.successDescription'),
-          duration: 5000, // Set duration to 5 seconds
+          duration: 5000,
         });
-        reset(); // Reset form fields using react-hook-form's reset
+        reset();
+
+        // Start cooldown
+        setCooldown(true);
+        setCooldownTime(30);
+        const interval = setInterval(() => {
+          setCooldownTime(prev => {
+            if (prev <= 1) {
+              clearInterval(interval);
+              setCooldown(false);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+
         resolve(true);
       }, 1500);
     });
@@ -63,7 +93,7 @@ const Contact = () => {
             <p className="text-muted-foreground mb-8">
               {t('contact.description')}
             </p>
-            
+
             <div className="space-y-6">
               <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center flex-shrink-0 mr-4">
@@ -74,7 +104,7 @@ const Contact = () => {
                   <p className="text-muted-foreground">{t('contact.emailValue')}</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center flex-shrink-0 mr-4">
                   <MessageSquare className="w-5 h-5 text-primary" />
@@ -86,66 +116,81 @@ const Contact = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-xl shadow-sm p-8">
             {/* Use react-hook-form's handleSubmit */}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
+                <div className="input-glow rounded-lg">
                   <label htmlFor="name" className="block text-sm font-medium mb-2">{t('contact.form.nameLabel')}</label>
                   <input
                     type="text"
                     id="name"
-                    {...register("name")} // Register with react-hook-form
-                    className={`w-full p-3 border ${errors.name ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all`}
+                    {...register("name")}
+                    className={`w-full p-3 border ${errors.name ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background`}
                     placeholder={t('contact.form.namePlaceholder')}
                   />
                   {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
                 </div>
-                
-                <div>
+
+                <div className="input-glow rounded-lg">
                   <label htmlFor="email" className="block text-sm font-medium mb-2">{t('contact.form.emailLabel')}</label>
                   <input
                     type="email"
                     id="email"
-                    {...register("email")} // Register with react-hook-form
-                    className={`w-full p-3 border ${errors.email ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all`}
+                    {...register("email")}
+                    className={`w-full p-3 border ${errors.email ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background`}
                     placeholder={t('contact.form.emailPlaceholder')}
                   />
                   {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
                 </div>
               </div>
-              
-              <div>
+
+              {/* Honeypot field - invisible to users, bots will fill it */}
+              <input
+                type="text"
+                name="website"
+                autoComplete="off"
+                tabIndex={-1}
+                style={{ position: 'absolute', left: '-9999px', opacity: 0 }}
+                {...register("website" as any)}
+              />
+
+              <div className="input-glow rounded-lg">
                 <label htmlFor="subject" className="block text-sm font-medium mb-2">{t('contact.form.subjectLabel')}</label>
                 <input
                   type="text"
                   id="subject"
-                  {...register("subject")} // Register with react-hook-form
-                  className={`w-full p-3 border ${errors.subject ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all`}
+                  {...register("subject")}
+                  className={`w-full p-3 border ${errors.subject ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background`}
                   placeholder={t('contact.form.subjectPlaceholder')}
                 />
                 {errors.subject && <p className="text-red-500 text-sm mt-1">{errors.subject.message}</p>}
               </div>
-              
-              <div>
+
+              <div className="input-glow rounded-lg">
                 <label htmlFor="message" className="block text-sm font-medium mb-2">{t('contact.form.messageLabel')}</label>
                 <textarea
                   id="message"
-                  {...register("message")} // Register with react-hook-form
+                  {...register("message")}
                   rows={4}
-                  className={`w-full p-3 border ${errors.message ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none`}
+                  className={`w-full p-3 border ${errors.message ? 'border-red-500' : 'border-border'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none bg-background`}
                   placeholder={t('contact.form.messagePlaceholder')}
                 />
                 {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
               </div>
-              
+
               <button
                 type="submit"
-                disabled={isSubmitting} // Use isSubmitting from react-hook-form
-                className="w-full bg-primary text-white py-3.5 rounded-lg flex items-center justify-center gap-2 hover-grow disabled:opacity-70 disabled:cursor-not-allowed"
+                disabled={isSubmitting || cooldown}
+                className="w-full bg-primary text-white py-3.5 rounded-lg flex items-center justify-center gap-2 hover-grow btn-press disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? t('contact.form.submittingButton') : t('contact.form.submitButton')}
+                {cooldown
+                  ? `${t('contact.form.submitButton')} (${cooldownTime}s)`
+                  : isSubmitting
+                    ? t('contact.form.submittingButton')
+                    : t('contact.form.submitButton')
+                }
                 <Send className="w-4 h-4" />
               </button>
             </form>

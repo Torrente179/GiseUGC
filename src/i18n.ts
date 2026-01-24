@@ -20,7 +20,8 @@ i18n
     debug: import.meta.env.DEV, // Enable debug output in development
     detection: {
       order: ['querystring', 'cookie', 'localStorage', 'sessionStorage', 'navigator', 'htmlTag'],
-      caches: ['cookie'], // Cache the language in a cookie
+      caches: ['cookie'],
+      cookieOptions: { path: '/', sameSite: 'strict' },
     },
     backend: {
       loadPath: '/locales/{{lng}}/translation.json', // Path to translation files relative to public folder

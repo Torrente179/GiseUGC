@@ -128,5 +128,11 @@
     "fiverrLabel": "Fiverr",
     "hireOnFiverrButton": "Hire Me on Fiverr",
     "copyright": "© {{year}} UGC Portfolio. All rights reserved."
+  },
+  "socialProof": {
+    "brands": "Brands",
+    "views": "Views Generated",
+    "satisfaction": "Satisfaction",
+    "contentPieces": "Content Pieces"
   }
 }
