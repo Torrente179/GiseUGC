@@ -1,69 +1,101 @@
-# Welcome to your Lovable project
+# Gisela.UGC - Portafolio de Creadora de Contenido
 
-## Project info
+![Gisela UGC](https://img.shields.io/badge/UGC-Content%20Creator-C77D8D?style=for-the-badge)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite)
 
-**URL**: https://lovable.dev/projects/9a3d3c8f-7a82-40c7-9587-957350d91f20
+Sitio web profesional y portafolio personal de **Gisela Saldarriaga**, creadora de contenido UGC (User Generated Content) especializada en crear contenido auténtico y elegante que conecta marcas con su audiencia.
 
-## How can I edit this code?
+## ✨ Características
 
-There are several ways of editing your application.
+- 🎨 **Diseño Moderno** - Interfaz elegante con animaciones suaves y efectos glassmorphism
+- 🌙 **Modo Oscuro/Claro** - Soporte completo para temas claro y oscuro
+- 🌐 **Bilingüe** - Disponible en Español e Inglés (i18n)
+- 📱 **Responsive** - Optimizado para móviles, tablets y desktop
+- ⚡ **Alto Rendimiento** - Construido con Vite para carga ultrarrápida
+- 🎭 **Animaciones** - Micro-interacciones y transiciones fluidas
 
-**Use Lovable**
+## 🛠️ Tecnologías
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9a3d3c8f-7a82-40c7-9587-957350d91f20) and start prompting.
+- **Frontend:** React 18 + TypeScript
+- **Build Tool:** Vite 5
+- **Estilos:** Tailwind CSS
+- **Internacionalización:** react-i18next
+- **Iconos:** Lucide React
+- **UI Components:** Radix UI + shadcn/ui
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 Instalación
 
-**Use your preferred IDE**
+```bash
+# Clonar el repositorio
+git clone https://github.com/Torrente179/GiseUGC.git
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+# Entrar al directorio
+cd GiseUGC
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+# Instalar dependencias
+npm install
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Iniciar servidor de desarrollo
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+La aplicación estará disponible en `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📦 Scripts Disponibles
 
-**Use GitHub Codespaces**
+| Comando | Descripción |
+|---------|-------------|
+| `npm run dev` | Inicia el servidor de desarrollo |
+| `npm run build` | Genera la build de producción |
+| `npm run preview` | Vista previa de la build de producción |
+| `npm run lint` | Ejecuta el linter |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📂 Estructura del Proyecto
 
-## What technologies are used for this project?
+```
+GiseUGC/
+├── public/
+│   └── uploads/          # Imágenes y assets
+├── src/
+│   ├── components/       # Componentes React
+│   │   ├── Hero.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── Services.tsx
+│   │   ├── Portfolio.tsx
+│   │   ├── Testimonials.tsx
+│   │   ├── Contact.tsx
+│   │   └── ui/           # Componentes UI reutilizables
+│   ├── i18n/             # Configuración de idiomas
+│   │   ├── locales/
+│   │   │   ├── en.json   # Traducciones en inglés
+│   │   │   └── es.json   # Traducciones en español
+│   │   └── index.ts
+│   ├── App.tsx
+│   └── main.tsx
+├── index.html
+└── package.json
+```
 
-This project is built with .
+## 🎯 Secciones
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+1. **Hero** - Presentación principal con imagen y call-to-action
+2. **Servicios** - Tipos de contenido UGC disponibles
+3. **Portafolio** - Galería de trabajos realizados
+4. **Testimonios** - Opiniones de clientes satisfechos
+5. **Contacto** - Formulario para conectar
 
-## How can I deploy this project?
+## 🌐 Demo
 
-Simply open [Lovable](https://lovable.dev/projects/9a3d3c8f-7a82-40c7-9587-957350d91f20) and click on Share -> Publish.
+Visita el sitio en vivo: [giseugc.com](https://giseugc.com)
 
-## I want to use a custom domain - is that possible?
+## 📄 Licencia
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+Este proyecto es privado y pertenece a Gisela Saldarriaga.
+
+---
+
+<p align="center">
+  Desarrollado con 💗 para <strong>Gisela.UGC</strong>
+</p>
