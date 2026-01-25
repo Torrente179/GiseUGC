@@ -5,8 +5,8 @@ const Hero = () => {
   const { t } = useTranslation(); // Initialize useTranslation
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-secondary/30 via-white to-secondary/20">
-        <div className="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1575223970966-76ae61ee7838?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')] bg-center bg-no-repeat bg-fixed"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-secondary/30 via-background to-secondary/20 dark:from-secondary/10 dark:via-background dark:to-secondary/5">
+        <div className="absolute inset-0 opacity-10 dark:opacity-5 bg-[url('https://images.unsplash.com/photo-1575223970966-76ae61ee7838?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')] bg-center bg-no-repeat bg-fixed"></div>
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
@@ -19,7 +19,7 @@ const Hero = () => {
               Gisela <span className="text-primary italic">Saldarriaga</span>
             </h1>
             <div className="w-32 h-1 signature-line mb-8"></div>
-            <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <p className="text-foreground/70 dark:text-foreground/80 text-lg md:text-xl mb-10 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
               {t('hero.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 animate-fade-in" style={{ animationDelay: '0.6s' }}>
@@ -43,7 +43,7 @@ const Hero = () => {
               <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-primary/30 to-secondary blur-lg opacity-50"></div>
               <div className="relative rounded-2xl overflow-hidden border border-white/40 shadow-xl max-w-sm mx-auto">
                 <img
-                  src="/lovable-uploads/1bceae6e-5154-4d2e-b3fb-2957b86796a7.png"
+                  src="/uploads/1bceae6e-5154-4d2e-b3fb-2957b86796a7.png"
                   alt={t('hero.imageAlt')}
                   className="w-full h-auto"
                   fetchPriority="high"

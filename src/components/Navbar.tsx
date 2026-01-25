@@ -1,7 +1,7 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const Navbar = () => {
@@ -30,12 +30,20 @@ const Navbar = () => {
     };
   }, [mobileMenuOpen]);
 
+  const closeMobileMenu = useCallback(() => {
+    setMobileMenuOpen(false);
+  }, []);
+
+  const toggleMobileMenu = useCallback(() => {
+    setMobileMenuOpen(prev => !prev);
+  }, []);
+
   const navLinkKeys = [
-    { key: 'navbar.home', href: '#home' },
-    { key: 'navbar.services', href: '#services' },
-    { key: 'navbar.portfolio', href: '#portfolio' },
-    { key: 'navbar.testimonials', href: '#testimonials' },
-    { key: 'navbar.contact', href: '#contact' },
+    { key: 'navbar.home', href: '#home', number: '01' },
+    { key: 'navbar.services', href: '#services', number: '02' },
+    { key: 'navbar.portfolio', href: '#portfolio', number: '03' },
+    { key: 'navbar.testimonials', href: '#testimonials', number: '04' },
+    { key: 'navbar.contact', href: '#contact', number: '05' },
   ];
 
   const changeLanguage = (lng: string) => {
@@ -43,133 +51,185 @@ const Navbar = () => {
   };
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled
-          ? 'py-3 glass shadow-sm'
-          : 'py-5 bg-transparent'
-        }`}
-    >
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="flex items-center justify-between">
-          <a
-            href="#home"
-            className="text-xl md:text-2xl font-medium font-cormorant text-primary italic"
-          >
-            Gisela<span className="text-foreground not-italic font-normal">.UGC</span>
-          </a>
+    <>
+      {/* Full-screen Mobile Menu - Modern Animated */}
+      <div
+        className={`fixed inset-0 z-[100] md:hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${mobileMenuOpen
+          ? 'opacity-100 pointer-events-auto'
+          : 'opacity-0 pointer-events-none'
+          }`}
+      >
+        {/* Animated backdrop - slight transparency */}
+        <div
+          className={`absolute inset-0 bg-background/90 backdrop-blur-sm transition-all duration-500 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'
+            }`}
+          onClick={closeMobileMenu}
+        />
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinkKeys.map((link) => (
-              <a
-                key={link.key}
-                href={link.href}
-                className="text-sm text-foreground hover-lift hover:text-primary/80 transition-all"
-              >
-                {t(link.key)}
-              </a>
-            ))}
-            {/* Language Switcher - Desktop */}
-            <div className="flex items-center space-x-2 ml-4 border-l border-border/30 pl-4">
-              <button
-                onClick={() => changeLanguage('es')}
-                className={`text-sm font-medium ${i18n.resolvedLanguage === 'es' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
-                aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
-              >
-                ES
-              </button>
-              <span className="text-foreground/30 text-sm">|</span>
-              <button
-                onClick={() => changeLanguage('en')}
-                className={`text-sm font-medium ${i18n.resolvedLanguage === 'en' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
-                aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
-              >
-                EN
-              </button>
+        {/* Decorative blurred circles */}
+        <div className={`absolute top-20 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl transition-all duration-700 delay-100 ${mobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+          }`} />
+        <div className={`absolute bottom-20 left-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl transition-all duration-700 delay-200 ${mobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+          }`} />
+
+        {/* Menu content */}
+        <div className="relative h-full flex flex-col pt-24 px-8">
+          {/* Navigation Links */}
+          <nav className="flex-1 flex flex-col justify-center -mt-16">
+            <div className="space-y-2">
+              {navLinkKeys.map((link, index) => (
+                <a
+                  key={link.key}
+                  href={link.href}
+                  onClick={closeMobileMenu}
+                  className={`group flex items-center gap-4 py-4 transition-all duration-500 ease-out ${mobileMenuOpen
+                    ? 'opacity-100 translate-x-0'
+                    : 'opacity-0 -translate-x-8'
+                    }`}
+                  style={{
+                    transitionDelay: mobileMenuOpen ? `${index * 75 + 150}ms` : '0ms'
+                  }}
+                >
+                  <span className="text-xs font-mono text-primary/60 tracking-wider">
+                    {link.number}
+                  </span>
+                  <span className="text-3xl font-medium text-foreground group-hover:text-primary transition-colors duration-300">
+                    {t(link.key)}
+                  </span>
+                  <ArrowRight className="w-5 h-5 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                </a>
+              ))}
             </div>
-            {/* Theme Toggle - Desktop */}
-            <ThemeToggle />
+          </nav>
+
+          {/* Bottom CTA */}
+          <div
+            className={`pb-12 transition-all duration-500 ease-out ${mobileMenuOpen
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-8'
+              }`}
+            style={{ transitionDelay: mobileMenuOpen ? '500ms' : '0ms' }}
+          >
             <a
               href="#contact"
-              className="px-6 py-2.5 rounded-full bg-primary text-white text-sm hover-grow btn-press shadow-sm ml-2"
+              onClick={closeMobileMenu}
+              className="flex items-center justify-center gap-3 w-full py-4 px-8 bg-gradient-to-r from-primary to-primary/80 text-white text-lg font-medium rounded-2xl shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
             >
               {t('navbar.hireMe')}
+              <ArrowRight className="w-5 h-5" />
             </a>
-          </div>
 
-          {/* Mobile Navigation - Right Side */}
-          <div className="md:hidden flex items-center space-x-3">
-            {/* Language Switcher - Mobile Header */}
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => changeLanguage('es')}
-                className={`text-sm font-medium ${i18n.resolvedLanguage === 'es' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
-                aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
-              >
-                ES
-              </button>
-              <span className="text-foreground/30 text-sm">|</span>
-              <button
-                onClick={() => changeLanguage('en')}
-                className={`text-sm font-medium ${i18n.resolvedLanguage === 'en' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
-                aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
-              >
-                EN
-              </button>
+            {/* Brand footer */}
+            <div className="flex flex-col items-center gap-2 mt-8 pt-6 border-t border-primary/20">
+              <span className="text-2xl font-cormorant italic text-primary font-semibold">
+                Gisela<span className="text-foreground not-italic font-normal">.UGC</span>
+              </span>
+              <span className="text-sm text-foreground/60 tracking-wide">Content Creator</span>
             </div>
-            {/* Theme Toggle - Mobile */}
-            <ThemeToggle />
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-foreground hover:text-primary transition-colors btn-press"
-              aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation Menu - Full Screen Takeover */}
-      <div
-        className={`fixed inset-0 md:hidden z-40 transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      <nav
+        className={`fixed top-0 left-0 w-full z-[110] transition-all duration-300 ${isScrolled
+          ? 'py-3 glass shadow-sm'
+          : 'py-5 bg-transparent'
           }`}
       >
-        {/* Backdrop */}
-        <div
-          className="absolute inset-0 bg-background/80 backdrop-blur-xl"
-          onClick={() => setMobileMenuOpen(false)}
-        />
+        <div className="container mx-auto px-6 md:px-12">
+          <div className="flex items-center justify-between">
+            <a
+              href="#home"
+              className="text-xl md:text-2xl font-medium font-cormorant text-primary italic"
+              onClick={closeMobileMenu}
+            >
+              Gisela<span className="text-foreground not-italic font-normal">.UGC</span>
+            </a>
 
-        {/* Menu Content */}
-        <div className="relative h-full flex flex-col justify-center items-center">
-          <div className="flex flex-col items-center space-y-6">
-            {mobileMenuOpen && navLinkKeys.map((link, index) => (
-              <a
-                key={link.key}
-                href={link.href}
-                className="text-2xl font-medium text-foreground hover:text-primary transition-all stagger-item"
-                onClick={() => setMobileMenuOpen(false)}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                {t(link.key)}
-              </a>
-            ))}
-            {mobileMenuOpen && (
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              {navLinkKeys.map((link) => (
+                <a
+                  key={link.key}
+                  href={link.href}
+                  className="text-sm text-foreground hover-lift hover:text-primary/80 transition-all"
+                >
+                  {t(link.key)}
+                </a>
+              ))}
+              {/* Language Switcher - Desktop */}
+              <div className="flex items-center space-x-2 ml-4 border-l border-border/30 pl-4">
+                <button
+                  onClick={() => changeLanguage('es')}
+                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'es' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
+                  aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
+                >
+                  ES
+                </button>
+                <span className="text-foreground/30 text-sm">|</span>
+                <button
+                  onClick={() => changeLanguage('en')}
+                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'en' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
+                  aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
+                >
+                  EN
+                </button>
+              </div>
+              {/* Theme Toggle - Desktop */}
+              <ThemeToggle />
               <a
                 href="#contact"
-                className="px-8 py-3 text-lg rounded-full bg-primary text-white hover-grow btn-press mt-4 stagger-item"
-                onClick={() => setMobileMenuOpen(false)}
-                style={{ animationDelay: '0.3s' }}
+                className="px-6 py-2.5 rounded-full bg-primary text-white text-sm hover-grow btn-press shadow-sm ml-2"
               >
                 {t('navbar.hireMe')}
               </a>
-            )}
+            </div>
+
+            {/* Mobile Navigation - Right Side */}
+            <div className="md:hidden flex items-center space-x-3">
+              {/* Language Switcher - Mobile Header */}
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => changeLanguage('es')}
+                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'es' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
+                  aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
+                >
+                  ES
+                </button>
+                <span className="text-foreground/30 text-sm">|</span>
+                <button
+                  onClick={() => changeLanguage('en')}
+                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'en' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
+                  aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
+                >
+                  EN
+                </button>
+              </div>
+              {/* Theme Toggle - Mobile */}
+              <ThemeToggle />
+              {/* Mobile Menu Toggle - Animated Icon */}
+              <button
+                onClick={toggleMobileMenu}
+                className="relative p-2 -mr-2 text-foreground hover:text-primary transition-colors"
+                aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
+                aria-expanded={mobileMenuOpen}
+              >
+                <div className="relative w-6 h-6">
+                  <Menu
+                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
+                      }`}
+                  />
+                  <X
+                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
+                      }`}
+                  />
+                </div>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 };
 
