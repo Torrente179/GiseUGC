@@ -127,7 +127,7 @@ const Services = () => {
             <p className="text-sm text-muted-foreground mt-3 max-w-2xl">{t('services.motionSubtitle')}</p>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-background/45">
+          <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-muted/32">
             <div className="absolute inset-y-0 left-0 w-12 md:w-20 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
             <div className="absolute inset-y-0 right-0 w-12 md:w-20 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
 
