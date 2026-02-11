@@ -31,12 +31,15 @@ type TheaterSwipeGesture = {
 const THEATER_CLOSE_DURATION_MS = 320;
 const THEATER_SWIPE_DISTANCE_THRESHOLD = 110;
 const THEATER_SWIPE_VELOCITY_THRESHOLD = 0.45;
+const THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD = 72;
+const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
 
 const Portfolio = () => {
   const { t } = useTranslation();
 
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
+  const [activeReelIndex, setActiveReelIndex] = useState<number | null>(null);
   const [collageHovered, setCollageHovered] = useState(false);
   const [theaterDragY, setTheaterDragY] = useState(0);
   const [isTheaterDragging, setIsTheaterDragging] = useState(false);
@@ -72,6 +75,7 @@ const Portfolio = () => {
   const finalizeTheaterClose = useCallback(() => {
     clearTheaterCloseTimer();
     setActiveReelPreview(null);
+    setActiveReelIndex(null);
     setIsTheaterDismissing(false);
     setIsTheaterVisible(false);
     setIsTheaterDragging(false);
@@ -101,7 +105,7 @@ const Portfolio = () => {
   );
 
   const openReelPreview = useCallback(
-    (clip: ReelClip) => {
+    (clip: ReelClip, index: number) => {
       clearTheaterCloseTimer();
       theaterSwipeStartRef.current = null;
       setTheaterDismissDirection(1);
@@ -110,8 +114,21 @@ const Portfolio = () => {
       setIsTheaterVisible(false);
       queueTheaterDrag(0);
       setActiveReelPreview(clip);
+      setActiveReelIndex(index);
     },
     [clearTheaterCloseTimer, queueTheaterDrag],
+  );
+
+  const navigateReelPreview = useCallback(
+    (direction: 1 | -1) => {
+      if (activeReelIndex === null) return;
+      const nextIndex = (activeReelIndex + direction + reelClips.length) % reelClips.length;
+      const nextClip = reelClips[nextIndex];
+      if (!nextClip) return;
+      setActiveReelIndex(nextIndex);
+      setActiveReelPreview(nextClip);
+    },
+    [activeReelIndex],
   );
 
   const handleTheaterTouchStart = useCallback(
@@ -146,10 +163,16 @@ const Portfolio = () => {
         swipeStart.axis = Math.abs(deltaY) >= Math.abs(deltaX) ? 'vertical' : 'horizontal';
       }
 
-      if (swipeStart.axis !== 'vertical') return;
-      event.preventDefault();
-      const resistance = 0.92 - Math.min(Math.abs(deltaY) / 900, 0.28);
-      queueTheaterDrag(deltaY * resistance);
+      if (swipeStart.axis === 'vertical') {
+        event.preventDefault();
+        const resistance = 0.92 - Math.min(Math.abs(deltaY) / 900, 0.28);
+        queueTheaterDrag(deltaY * resistance);
+        return;
+      }
+
+      if (swipeStart.axis === 'horizontal') {
+        event.preventDefault();
+      }
     },
     [isTheaterDismissing, queueTheaterDrag],
   );
@@ -170,12 +193,25 @@ const Portfolio = () => {
       const deltaX = touch.clientX - swipeStart.x;
       const deltaY = touch.clientY - swipeStart.y;
       const elapsed = Math.max(1, performance.now() - swipeStart.timestamp);
+      const velocityX = deltaX / elapsed;
       const velocityY = deltaY / elapsed;
+      const isHorizontalSwipe =
+        swipeStart.axis === 'horizontal' || Math.abs(deltaX) > Math.abs(deltaY) * 1.1;
       const isVerticalSwipe =
         swipeStart.axis === 'vertical' || Math.abs(deltaY) > Math.abs(deltaX) * 1.1;
+
+      const crossedHorizontalThreshold =
+        Math.abs(deltaX) >= THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD ||
+        Math.abs(velocityX) >= THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD;
       const crossedThreshold =
         Math.abs(deltaY) >= THEATER_SWIPE_DISTANCE_THRESHOLD ||
         Math.abs(velocityY) >= THEATER_SWIPE_VELOCITY_THRESHOLD;
+
+      if (isHorizontalSwipe && crossedHorizontalThreshold) {
+        queueTheaterDrag(0);
+        navigateReelPreview(deltaX < 0 ? 1 : -1);
+        return;
+      }
 
       if (isVerticalSwipe && crossedThreshold) {
         dismissReelPreview(deltaY < 0 ? -1 : 1);
@@ -184,7 +220,7 @@ const Portfolio = () => {
 
       queueTheaterDrag(0);
     },
-    [dismissReelPreview, queueTheaterDrag],
+    [dismissReelPreview, navigateReelPreview, queueTheaterDrag],
   );
 
   const resetTheaterSwipe = useCallback(() => {
@@ -224,12 +260,20 @@ const Portfolio = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         dismissReelPreview();
+        return;
+      }
+      if (event.key === 'ArrowRight') {
+        navigateReelPreview(1);
+        return;
+      }
+      if (event.key === 'ArrowLeft') {
+        navigateReelPreview(-1);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeReelPreview, dismissReelPreview]);
+  }, [activeReelPreview, dismissReelPreview, navigateReelPreview]);
 
   const scrollReels = (direction: 'left' | 'right') => {
     const container = reelScrollRef.current;
@@ -454,12 +498,12 @@ const Portfolio = () => {
                 ref={reelScrollRef}
                 className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory md:snap-none"
               >
-                {reelClips.map((clip) => (
+                {reelClips.map((clip, index) => (
                   <button
                     type="button"
                     key={clip.id}
                     className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-pan-y"
-                    onClick={() => openReelPreview(clip)}
+                    onClick={() => openReelPreview(clip, index)}
                     aria-label={t(clip.titleKey)}
                   >
                     <video
