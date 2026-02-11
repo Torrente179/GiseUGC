@@ -25,8 +25,15 @@ Enhanced the Hero section with a prestige introduction and refactored the Servic
     - Reimagined the portfolio header with a more "catchy" and strategic title: *"Historias que Convierten"*.
     - Implemented mixed typography using Playfair Display for authority and Alex Brush for artistic signature, creating a high-end editorial feel.
 - **Seamless Infinite Marquee**:
-    - Fixed the "Toolkit" carousel to be truly infinite by triple-buffering the content items.
-    - Optimized the CSS animation loop from 50% to 33.333% to eliminate any visible jumps or resets, ensuring a silky smooth scroll on all screen sizes.
+    - Fixed the "Toolkit" carousel to be truly infinite using a programmatic scroll handler that loops seamlessly in both directions.
+    - Added **Manual Navigation Arrows** (Chevron) that reveal on hover for desktop and are always accessible for mobile.
+    - Synchronized auto-scroll with manual interaction; the animation gracefully pauses on hover.
+- **Hero Mobile Optimization**:
+    - Removed a duplicate grid of services on mobile that was appearing between the bio and social proof sections, streamlining the landing page flow.
+- **Creator Advantage Collage Refinement**:
+    - Converted the video collage into a pure cosmetic "GIF" feature.
+    - Removed UI noise including "Hint" text, background overlays, and play buttons to focus on the high-end visuals.
+    - Optimized video playback to be continuous and truly autonomous.
 
 ## Aesthetic Refinement
 The website now follows a clearer storytelling path: Identity -> Services -> Portfolio -> Social Proof -> Testimonials -> Creative Toolkit -> Conversion.
