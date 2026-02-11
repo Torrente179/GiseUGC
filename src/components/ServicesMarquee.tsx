@@ -266,8 +266,8 @@ const ServicesMarquee = () => {
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-50" />
                                     </div>
 
-                                    <div className="w-full mt-5 px-3 text-center">
-                                        <h3 className="text-lg md:text-xl font-sans font-medium text-foreground leading-tight tracking-tight mb-2">
+                                    <div className="w-full mt-6 px-3 text-center">
+                                        <h3 className="text-[10px] md:text-[11px] uppercase font-light text-foreground/80 leading-tight tracking-[0.25em] mb-2">
                                             {t(card.titleKey)}
                                         </h3>
 

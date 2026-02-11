@@ -193,7 +193,7 @@ const Portfolio = () => {
         <div className="mb-12 md:mb-14">
           <div className="mb-5 md:mb-6">
             <p className="section-label text-xs text-muted-foreground mb-2">{t('portfolio.reelSubtitle')}</p>
-            <h3 className="text-xl md:text-[1.9rem] font-serif font-normal tracking-[-0.03em] text-foreground leading-tight">
+            <h3 className="text-xl md:text-[1.9rem] font-sans font-medium tracking-tight text-foreground leading-tight">
               {t('portfolio.reelTitle')}
             </h3>
           </div>
@@ -253,7 +253,7 @@ const Portfolio = () => {
                         <p className="text-[10px] uppercase tracking-[0.2em] text-white/75 mb-1">
                           {t(`portfolio.categories.${clip.category}`)}
                         </p>
-                        <p className="text-sm font-medium leading-tight">{t(clip.titleKey)}</p>
+                        <p className="text-sm font-light leading-tight tracking-tight">{t(clip.titleKey)}</p>
                       </div>
 
                       <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/24 backdrop-blur-md">
@@ -270,7 +270,7 @@ const Portfolio = () => {
         <div className="grid lg:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)] gap-8 lg:gap-10 items-center mb-14 md:mb-16">
           <div>
             <p className="section-label text-sm text-muted-foreground mb-4">{t('portfolio.collageEyebrow')}</p>
-            <h3 className="text-3xl md:text-[2.4rem] font-serif font-normal tracking-[-0.04em] leading-tight mb-5">
+            <h3 className="text-3xl md:text-[2.4rem] font-sans font-medium tracking-tight leading-tight mb-5">
               {t('portfolio.collageTitle')}
             </h3>
             <p className="text-muted-foreground leading-relaxed mb-6">{t('portfolio.collageDescription')}</p>
