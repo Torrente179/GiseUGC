@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Award, Image, MessageSquare, ShoppingBag, TrendingUp, Video } from 'lucide-react';
+import { Film, Lightbulb, Megaphone, PlayCircle, Sparkles, Star } from 'lucide-react';
 
 interface ServiceVideoCard {
   titleKey: string;
@@ -14,33 +14,38 @@ const Services = () => {
 
   const serviceData = [
     {
-      icon: <Video className="h-8 w-8 text-primary/80" />,
+      icon: <Megaphone className="h-8 w-8 text-primary/80" />,
       titleKey: 'services.service1.title',
+      subtitleKey: 'services.service1.subtitle',
       descriptionKey: 'services.service1.description',
     },
     {
-      icon: <Image className="h-8 w-8 text-primary/80" />,
+      icon: <Star className="h-8 w-8 text-primary/80" />,
       titleKey: 'services.service2.title',
       descriptionKey: 'services.service2.description',
     },
     {
-      icon: <ShoppingBag className="h-8 w-8 text-primary/80" />,
+      icon: <PlayCircle className="h-8 w-8 text-primary/80" />,
       titleKey: 'services.service3.title',
+      subtitleKey: 'services.service3.subtitle',
       descriptionKey: 'services.service3.description',
     },
     {
-      icon: <MessageSquare className="h-8 w-8 text-primary/80" />,
+      icon: <Lightbulb className="h-8 w-8 text-primary/80" />,
       titleKey: 'services.service4.title',
+      subtitleKey: 'services.service4.subtitle',
       descriptionKey: 'services.service4.description',
     },
     {
-      icon: <Award className="h-8 w-8 text-primary/80" />,
+      icon: <Sparkles className="h-8 w-8 text-primary/80" />,
       titleKey: 'services.service5.title',
+      subtitleKey: 'services.service5.subtitle',
       descriptionKey: 'services.service5.description',
     },
     {
-      icon: <TrendingUp className="h-8 w-8 text-primary/80" />,
+      icon: <Film className="h-8 w-8 text-primary/80" />,
       titleKey: 'services.service6.title',
+      subtitleKey: 'services.service6.subtitle',
       descriptionKey: 'services.service6.description',
     },
   ];
@@ -69,9 +74,15 @@ const Services = () => {
               <div className="mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110">
                 {service.icon}
               </div>
-              <h3 className="text-lg md:text-2xl font-sans font-medium tracking-tight text-foreground mb-3 md:mb-4 leading-tight">
+              <h3 className="text-lg md:text-2xl font-sans font-medium tracking-tight text-foreground mb-1 leading-tight">
                 {t(service.titleKey)}
               </h3>
+              {service.subtitleKey && (
+                <p className="text-sm md:text-base text-muted-foreground/70 mb-3 md:mb-4 italic">
+                  {t(service.subtitleKey)}
+                </p>
+              )}
+              {!service.subtitleKey && <div className="mb-3 md:mb-4" />}
               <p className="strategic-body text-muted-foreground text-sm md:text-base line-clamp-3 md:line-clamp-none">
                 {t(service.descriptionKey)}
               </p>

@@ -40,28 +40,33 @@
     "videoPreviewLabel": "Video preview",
     "videoPreviewClose": "Close video preview",
     "service1": {
-      "title": "UGC Videos",
-      "description": "Authentic product videos showcasing your items in real-life settings, boosting engagement and conversions."
+      "title": "UGC Ads",
+      "subtitle": "Ad Videos",
+      "description": "I create UGC videos designed to convert: powerful hooks, clear benefits, and calls to action for campaigns on Meta, TikTok, and YouTube."
     },
     "service2": {
-      "title": "Product Photography",
-      "description": "Professional, lifestyle-focused product photos that tell your brand's story and connect with your audience."
+      "title": "Testimonials / UGC Reviews",
+      "description": "I produce authentic and persuasive reviews that build trust, showcase results, and help your audience make purchasing decisions."
     },
     "service3": {
-      "title": "E-commerce Content",
-      "description": "Specialized content optimized for marketplace platforms to increase visibility and drive sales."
+      "title": "Demo / How-to",
+      "subtitle": "Product Tutorial",
+      "description": "I record step-by-step demonstrations and tutorials so your customer understands how to use the product, sees its value, and wants it from the first minute."
     },
     "service4": {
-      "title": "Review Videos",
-      "description": "Authentic and detailed product reviews that build trust and showcase benefits to potential customers."
+      "title": "Problem–Solution",
+      "subtitle": "Pain → Solution",
+      "description": "I create pieces that connect from the consumer's real problem and show how your product solves it in a clear, credible, and attractive way."
     },
     "service5": {
-      "title": "Brand Collaborations",
-      "description": "Strategic partnerships to expand your reach and connect with relevant new audiences."
+      "title": "Lifestyle UGC",
+      "subtitle": "Organic Social Content",
+      "description": "I integrate your product into real-life scenes with curated aesthetics and natural storytelling, ideal for Reels, TikTok, and organic brand content."
     },
     "service6": {
-      "title": "Social Media Strategy",
-      "description": "Expert guidance on content deployment to maximize engagement and ROI across platforms."
+      "title": "B-Roll / UGC Footage",
+      "subtitle": "Clips for Editing",
+      "description": "I deliver premium shot packages (close-ups, details, action shots, and environments) for your team to edit into multiple ads and posts."
     }
   },
   "portfolio": {

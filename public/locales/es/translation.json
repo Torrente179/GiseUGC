@@ -40,28 +40,33 @@
     "videoPreviewLabel": "Vista previa en video",
     "videoPreviewClose": "Cerrar vista previa de video",
     "service1": {
-      "title": "Videos UGC",
-      "description": "Videos de productos auténticos que muestran tus productos en entornos reales, impulsando el engagement y las conversiones."
+      "title": "UGC Ads",
+      "subtitle": "Videos para anuncios",
+      "description": "Creo videos UGC diseñados para convertir: hooks potentes, beneficios claros y llamado a la acción para campañas en Meta, TikTok y YouTube."
     },
     "service2": {
-      "title": "Fotografía de Productos",
-      "description": "Fotos de productos profesionales, enfocadas en el estilo de vida que cuentan la historia de tu marca y conectan con tu audiencia."
+      "title": "Testimoniales / Reseñas UGC",
+      "description": "Produzco reseñas auténticas y persuasivas que generan confianza, muestran resultados y ayudan a tu audiencia a tomar la decisión de compra."
     },
     "service3": {
-      "title": "Contenido para E-commerce",
-      "description": "Contenido especializado optimizado para plataformas de mercados para aumentar la visibilidad e impulsar las ventas."
+      "title": "Demo / How-to",
+      "subtitle": "Tutorial del producto",
+      "description": "Grabo demostraciones y tutoriales paso a paso para que tu cliente entienda cómo usar el producto, vea su valor y lo quiera desde el primer minuto."
     },
     "service4": {
-      "title": "Videos de Reseñas",
-      "description": "Reseñas de productos auténticas y detalladas que generan confianza y muestran los beneficios a los clientes potenciales."
+      "title": "Problem–Solution",
+      "subtitle": "Dolor → Solución",
+      "description": "Creo piezas que conectan desde el problema real del consumidor y muestran cómo tu producto lo resuelve de forma clara, creíble y atractiva."
     },
     "service5": {
-      "title": "Colaboraciones con Marcas",
-      "description": "Alianzas estratégicas para expandir tu alcance y conectar con nuevas audiencias relevantes."
+      "title": "Lifestyle UGC",
+      "subtitle": "Contenido orgánico para redes",
+      "description": "Integro tu producto en escenas de vida real con estética cuidada y narrativa natural, ideal para Reels, TikTok y contenido orgánico de marca."
     },
     "service6": {
-      "title": "Estrategia de Redes Sociales",
-      "description": "Orientación experta sobre el despliegue de contenido para maximizar el engagement y el ROI en todas las plataformas."
+      "title": "B-Roll / UGC Footage",
+      "subtitle": "Clips para edición",
+      "description": "Entrego paquetes de tomas premium (close-ups, detalles, uso en acción y ambientes) para que tu equipo edite múltiples anuncios y publicaciones."
     }
   },
   "portfolio": {
