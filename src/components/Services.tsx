@@ -1,8 +1,16 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Video, Image, ShoppingBag, MessageSquare, Award, TrendingUp } from 'lucide-react';
+import { Video, Image, ShoppingBag, MessageSquare, Award, TrendingUp, X } from 'lucide-react';
+
+interface ServiceVideoCard {
+  titleKey: string;
+  videoSrc: string;
+  poster: string;
+}
 
 const Services = () => {
   const { t } = useTranslation();
+  const [activePreview, setActivePreview] = useState<ServiceVideoCard | null>(null);
 
   const serviceData = [
     {
@@ -46,7 +54,7 @@ const Services = () => {
     'services.service6.title'
   ];
 
-  const serviceVideoCards = [
+  const serviceVideoCards: ServiceVideoCard[] = [
     {
       titleKey: serviceTitleKeys[0],
       videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
@@ -119,13 +127,15 @@ const Services = () => {
             <div className="absolute inset-y-0 left-0 w-14 md:w-20 z-20 bg-gradient-to-r from-card via-card/90 to-transparent" />
             <div className="absolute inset-y-0 right-0 w-14 md:w-20 z-20 bg-gradient-to-l from-card via-card/90 to-transparent" />
 
-            <div className="relative z-10 service-corner-drift">
+            <div className="relative z-10">
               <div className="service-marquee flex w-max gap-4 py-5">
                 {serviceCards.map((card, index) => (
-                  <article
+                  <button
+                    type="button"
                     key={`${card.titleKey}-${index}`}
-                    className="shrink-0 w-[220px] sm:w-[260px] rounded-2xl border border-border bg-card p-3 shadow-sm"
+                    className="shrink-0 w-[220px] sm:w-[260px] rounded-2xl border border-border bg-card p-3 shadow-sm text-left hover:border-primary/40 transition-colors"
                     aria-label={t(card.titleKey)}
+                    onClick={() => setActivePreview(card)}
                   >
                     <div className="h-[130px] sm:h-[150px] rounded-xl bg-secondary mb-3 overflow-hidden">
                       <video
@@ -142,7 +152,7 @@ const Services = () => {
                     <p className="text-xl sm:text-2xl font-cormorant text-foreground text-center leading-tight">
                       {t(card.titleKey)}
                     </p>
-                  </article>
+                  </button>
                 ))}
               </div>
             </div>
@@ -153,6 +163,43 @@ const Services = () => {
           </div>
         </div>
       </div>
+
+      {activePreview && (
+        <div
+          className="fixed inset-0 z-50 bg-foreground/55 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setActivePreview(null)}
+        >
+          <div
+            className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-3 shadow-xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="absolute top-3 right-3 h-8 w-8 rounded-full border border-border bg-card/90 flex items-center justify-center hover:bg-secondary"
+              onClick={() => setActivePreview(null)}
+              aria-label={t('services.videoPreviewClose')}
+            >
+              <X className="h-4 w-4 text-foreground" />
+            </button>
+
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
+              {t('services.videoPreviewLabel')}
+            </p>
+            <h4 className="text-lg font-playfair pr-10 mb-3">{t(activePreview.titleKey)}</h4>
+
+            <div className="rounded-xl overflow-hidden bg-black">
+              <video
+                className="w-full aspect-[9/16] object-contain"
+                src={activePreview.videoSrc}
+                poster={activePreview.poster}
+                controls
+                autoPlay
+                playsInline
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

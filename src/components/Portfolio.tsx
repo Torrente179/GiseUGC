@@ -31,6 +31,7 @@ const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   const [collagePlaying, setCollagePlaying] = useState(false);
+  const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
 
   const reelTrackRef = useRef<HTMLDivElement>(null);
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -303,9 +304,12 @@ const Portfolio = () => {
               className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             >
               {reelClips.map((clip) => (
-                <article
+                <button
+                  type="button"
                   key={clip.id}
-                  className="group relative shrink-0 snap-start w-[180px] sm:w-[200px] md:w-[220px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm"
+                  className="group relative shrink-0 snap-start w-[180px] sm:w-[200px] md:w-[220px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/45 transition-colors"
+                  onClick={() => setActiveReelPreview(clip)}
+                  aria-label={t(clip.titleKey)}
                 >
                   <video
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -316,7 +320,7 @@ const Portfolio = () => {
                     loop
                     playsInline
                     preload="metadata"
-                    aria-label={t(clip.titleKey)}
+                    aria-hidden="true"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
@@ -333,7 +337,7 @@ const Portfolio = () => {
                       <VolumeX className="h-4 w-4" />
                     </span>
                   </div>
-                </article>
+                </button>
               ))}
             </div>
 
@@ -370,7 +374,7 @@ const Portfolio = () => {
 
             <a
               href="#contact"
-              className="inline-flex rounded-full bg-primary px-7 py-3 text-primary-foreground font-medium hover-grow btn-press"
+              className="btn-primary-nordic px-7 py-3 hover-grow btn-press"
             >
               {t('portfolio.collageCta')}
             </a>
@@ -535,6 +539,43 @@ const Portfolio = () => {
             >
               <X className="h-5 w-5 text-primary" />
             </button>
+          </div>
+        </div>
+      )}
+
+      {activeReelPreview && (
+        <div
+          className="fixed inset-0 z-50 bg-foreground/55 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setActiveReelPreview(null)}
+        >
+          <div
+            className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-3 shadow-xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="absolute top-3 right-3 h-8 w-8 rounded-full border border-border bg-card/90 flex items-center justify-center hover:bg-secondary"
+              onClick={() => setActiveReelPreview(null)}
+              aria-label={t('portfolio.reelPreviewClose')}
+            >
+              <X className="h-4 w-4 text-foreground" />
+            </button>
+
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
+              {t('portfolio.reelPreviewLabel')}
+            </p>
+            <h4 className="text-lg font-playfair pr-10 mb-3">{t(activeReelPreview.titleKey)}</h4>
+
+            <div className="rounded-xl overflow-hidden bg-black">
+              <video
+                className="w-full aspect-[9/16] object-contain"
+                src={activeReelPreview.videoSrc}
+                poster={activeReelPreview.poster}
+                controls
+                autoPlay
+                playsInline
+              />
+            </div>
           </div>
         </div>
       )}

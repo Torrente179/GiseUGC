@@ -23,6 +23,8 @@
     "sectionTitle": "My Services",
     "motionTitle": "The complete toolkit for modern advertisers",
     "motionSubtitle": "Strategic UGC services designed to build trust, shorten buying decisions, and scale winning creatives.",
+    "videoPreviewLabel": "Video preview",
+    "videoPreviewClose": "Close video preview",
     "service1": {
       "title": "UGC Videos",
       "description": "Authentic product videos showcasing your items in real-life settings, boosting engagement and conversions."
@@ -56,6 +58,8 @@
     "reelDescription": "Each reel is crafted to hook attention fast, communicate value clearly, and drive conversion intent.",
     "reelAriaPrev": "Scroll previous videos",
     "reelAriaNext": "Scroll next videos",
+    "reelPreviewLabel": "Reel preview",
+    "reelPreviewClose": "Close reel preview",
     "collageEyebrow": "Creator advantage",
     "collageTitle": "High-converting UGC coverage across your full funnel",
     "collageDescription": "From first impression to final decision, I create creator-led assets that make your brand feel credible, human, and purchase-ready.",

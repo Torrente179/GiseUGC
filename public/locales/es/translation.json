@@ -23,6 +23,8 @@
     "sectionTitle": "Mis Servicios",
     "motionTitle": "El toolkit completo para anunciantes modernos",
     "motionSubtitle": "Servicios UGC estrategicos para generar confianza, acelerar decisiones de compra y escalar creativos ganadores.",
+    "videoPreviewLabel": "Vista previa en video",
+    "videoPreviewClose": "Cerrar vista previa de video",
     "service1": {
       "title": "Videos UGC",
       "description": "Videos de productos auténticos que muestran tus productos en entornos reales, impulsando el engagement y las conversiones."
@@ -56,6 +58,8 @@
     "reelDescription": "Cada reel esta pensado para captar atencion rapido, comunicar valor con claridad y elevar la intencion de compra.",
     "reelAriaPrev": "Desplazar videos anteriores",
     "reelAriaNext": "Desplazar videos siguientes",
+    "reelPreviewLabel": "Vista previa del reel",
+    "reelPreviewClose": "Cerrar vista previa del reel",
     "collageEyebrow": "Ventaja del creador",
     "collageTitle": "Cobertura UGC de alta conversion para todo tu funnel",
     "collageDescription": "Desde la primera impresion hasta la decision final, creo activos liderados por creador que hacen tu marca mas creible, humana y lista para vender.",
