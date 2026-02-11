@@ -123,22 +123,25 @@ const Services = () => {
 
         <div className="studio-rule mb-16 md:mb-20" />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-3">
           {serviceData.map((service, index) => (
             <article
               key={index}
-              className="group rounded-[1.5rem] border border-border/70 bg-card/50 p-8 backdrop-blur-md transition-all duration-500 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1"
+              className="group rounded-[1.25rem] md:rounded-[1.5rem] border border-border/70 bg-card/50 p-5 md:p-8 backdrop-blur-md transition-all duration-500 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1"
             >
-              <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110">
+              <div className="mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110">
                 {service.icon}
               </div>
-              <h3 className="text-2xl font-serif font-normal tracking-[-0.03em] text-foreground mb-4 leading-tight">
+              <h3 className="text-lg md:text-2xl font-serif font-normal tracking-[-0.02em] md:tracking-[-0.03em] text-foreground mb-3 md:mb-4 leading-tight">
                 {t(service.titleKey)}
               </h3>
-              <p className="text-muted-foreground leading-relaxed text-base">{t(service.descriptionKey)}</p>
+              <p className="text-muted-foreground leading-relaxed text-sm md:text-base line-clamp-3 md:line-clamp-none">
+                {t(service.descriptionKey)}
+              </p>
             </article>
           ))}
         </div>
+
       </div>
 
       <div className="mt-32 md:mt-44 mb-20 md:mb-28">
