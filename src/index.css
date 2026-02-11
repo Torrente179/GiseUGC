@@ -4,21 +4,21 @@
 
 @layer base {
   :root {
-    /* Coastal Nordic Portfolio - source of truth */
-    --coastal-teal: 193 60.9% 42.2%;
-    /* #2A91AD */
-    --washed-khaki: 53 24.2% 62.7%;
-    /* #B7B289 */
-    --muted-earth: 15 22.6% 42.5%;
-    /* #856054 */
-    --pure-linen: 45 28.6% 97.3%;
-    /* #FAF9F6 */
-    --warm-sand: 18 25.4% 86.9%;
-    /* #E6DAD5 */
-    --soft-stone: 60 7.8% 72.4%;
-    /* #BEBEB3 */
-    --deep-ebony: 0 0% 14.1%;
-    /* #242424 */
+    /* Nordic Atelier palette inspired by the provided reference image */
+    --coastal-teal: 193 63.9% 47.8%;
+    /* #2CA7C8 */
+    --washed-khaki: 46 23.6% 71.8%;
+    /* #C8C0A6 */
+    --muted-earth: 30 14.4% 49.0%;
+    /* #8F7D6B */
+    --pure-linen: 40 38.5% 92.4%;
+    /* #F3EEE4 */
+    --warm-sand: 37 35.8% 78.6%;
+    /* #DCCDB5 */
+    --soft-stone: 35 14.3% 67.1%;
+    /* #B7AD9F */
+    --deep-ebony: 33 13.3% 16.3%;
+    /* #2F2A24 */
 
     --background: var(--pure-linen);
     --foreground: var(--deep-ebony);
@@ -61,22 +61,22 @@
 
   /* Dark mode variables */
   .dark {
-    --background: 15 14% 9%;
-    --foreground: 45 20% 92%;
+    --background: 30 12% 10.5%;
+    --foreground: 40 36% 90%;
 
-    --card: 16 14% 12%;
-    --card-foreground: 45 20% 92%;
+    --card: 30 11% 13.5%;
+    --card-foreground: 40 36% 90%;
 
-    --popover: 16 14% 12%;
-    --popover-foreground: 45 20% 92%;
+    --popover: 30 11% 13.5%;
+    --popover-foreground: 40 36% 90%;
 
-    --primary: var(--coastal-teal);
-    --primary-foreground: 45 28.6% 97.3%;
+    --primary: 193 56% 56%;
+    --primary-foreground: var(--deep-ebony);
 
-    --secondary: 15 17% 18%;
-    --secondary-foreground: 45 20% 92%;
+    --secondary: 31 12% 20%;
+    --secondary-foreground: 40 36% 90%;
 
-    --muted: 15 14% 16%;
+    --muted: 31 10% 22%;
     --muted-foreground: var(--soft-stone);
 
     --accent: var(--washed-khaki);
@@ -85,9 +85,9 @@
     --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 15 12% 24%;
-    --input: 15 12% 24%;
-    --ring: var(--coastal-teal);
+    --border: 30 10% 28%;
+    --input: 30 10% 28%;
+    --ring: 193 56% 56%;
 
     --brand-teal: var(--coastal-teal);
     --brand-olive: var(--washed-khaki);
@@ -148,7 +148,7 @@
     font-weight: 700;
     font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.5em;
+    letter-spacing: 0.18em;
     line-height: 1;
     color: hsl(var(--accent));
   }
@@ -215,8 +215,8 @@
   }
 
   .glass {
-    @apply backdrop-blur-[12px] border border-white/30 shadow-sm;
-    background-color: rgba(255, 255, 255, 0.6);
+    @apply backdrop-blur-[12px] border border-border/60 shadow-sm;
+    background-color: hsl(var(--pure-linen) / 0.72);
   }
 
   .dark .glass {
@@ -378,7 +378,7 @@
     font-size: 10px;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    letter-spacing: 0.5em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: hsl(var(--foreground) / 0.72);
     backdrop-filter: blur(8px);
