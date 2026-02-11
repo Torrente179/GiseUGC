@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
@@ -36,6 +36,8 @@ const Testimonials = () => {
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   const nextTestimonial = () => {
     setActiveIndex((prevIndex) => (prevIndex + 1) % testimonialData.length);
@@ -43,6 +45,28 @@ const Testimonials = () => {
 
   const prevTestimonial = () => {
     setActiveIndex((prevIndex) => (prevIndex - 1 + testimonialData.length) % testimonialData.length);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = null;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current === null || touchEndX.current === null) return;
+    const distance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50;
+    if (distance > minSwipeDistance) {
+      nextTestimonial();
+    } else if (distance < -minSwipeDistance) {
+      prevTestimonial();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
   };
 
   return (
@@ -74,7 +98,12 @@ const Testimonials = () => {
 
         <div className="studio-rule mb-8 md:mb-10" />
 
-        <div className="relative overflow-hidden">
+        <div
+          className="relative overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <div
             className="flex transition-transform duration-500"
             style={{ transform: `translateX(-${activeIndex * 100}%)` }}
