@@ -15,5 +15,12 @@ Enhanced the Hero section with a prestige introduction and refactored the Servic
 - **Typography Restoration**:
     - Re-applied original aesthetic fonts (`Playfair Display`, `Alex Brush`) globally while maintaining the new Mauve & Charcoal color palette.
 
+- **Interactivity & GIF Effect**:
+    - Updated the "Creator Advantage" collage to auto-play on mount, creating a seamless "GIF" experience for mobile users without requiring clicks.
+- **Hero Styled Name**:
+    - Updated the "Saldarriaga" part of the main title to use the brand's Mauve accent color for a more cohesive prestige look.
+- **Intro Cleanup**:
+    - Removed the redundant "See My Work" link from the bio/introduction space to maintain minimalist elegance.
+
 ## Aesthetic Refinement
 The website now follows a clearer storytelling path: Identity -> Services -> Portfolio -> Social Proof -> Testimonials -> Creative Toolkit -> Conversion.
