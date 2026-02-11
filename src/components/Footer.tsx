@@ -6,7 +6,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#C4B59B] text-foreground py-16 md:py-20">
+    <footer className="bg-[#F6F3EE] text-foreground py-16 md:py-20">
       <div className="studio-container">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)] lg:items-start mb-16">
           <div>
