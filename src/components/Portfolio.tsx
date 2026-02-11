@@ -49,57 +49,57 @@ const Portfolio = () => {
       id: 1,
       titleKey: 'portfolio.items.item1',
       category: 'fashion',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-      poster: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=700&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2021/08/30/86911-594991432_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2021/08/30/86911-594991432_tiny.jpg'
     },
     {
       id: 2,
       titleKey: 'portfolio.items.item2',
       category: 'beauty',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-      poster: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=700&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2024/02/09/199958-911694865_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2024/02/09/199958-911694865_tiny.jpg'
     },
     {
       id: 3,
       titleKey: 'portfolio.items.item3',
       category: 'tech',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-      poster: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=700&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2022/02/12/107492-678970856_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2022/02/12/107492-678970856_tiny.jpg'
     },
     {
       id: 4,
       titleKey: 'portfolio.items.item4',
       category: 'lifestyle',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-      poster: 'https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=700&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2024/05/25/213616_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2024/05/25/213616_tiny.jpg'
     },
     {
       id: 5,
       titleKey: 'portfolio.items.item5',
       category: 'beauty',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-      poster: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=700&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.jpg'
     },
     {
       id: 6,
       titleKey: 'portfolio.items.item6',
       category: 'fashion',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-      poster: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=700&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2021/08/04/83869-584870610_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2021/08/04/83869-584870610_tiny.jpg'
     },
     {
       id: 7,
       titleKey: 'portfolio.items.item7',
       category: 'tech',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-      poster: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2022/10/14/134796-760690958_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2022/10/14/134796-760690958_tiny.jpg'
     },
     {
       id: 8,
       titleKey: 'portfolio.items.item8',
       category: 'lifestyle',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-      poster: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2024/06/09/216038_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2024/06/09/216038_tiny.jpg'
     }
   ];
 
@@ -107,36 +107,36 @@ const Portfolio = () => {
     {
       id: 1,
       labelKey: 'portfolio.items.item2',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-      poster: 'https://images.unsplash.com/photo-1542831371-d531d36971e6?auto=format&fit=crop&w=900&q=80',
+      videoSrc: 'https://cdn.pixabay.com/video/2023/06/20/168085-838533639_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2023/06/20/168085-838533639_tiny.jpg',
       className: 'top-7 left-10 w-[44%] -rotate-[5deg]'
     },
     {
       id: 2,
       labelKey: 'portfolio.items.item6',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-      poster: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=900&q=80',
+      videoSrc: 'https://cdn.pixabay.com/video/2024/05/23/213387_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2024/05/23/213387_tiny.jpg',
       className: 'top-1 right-14 w-[38%] rotate-[2deg]'
     },
     {
       id: 3,
       labelKey: 'portfolio.items.item3',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-      poster: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80',
+      videoSrc: 'https://cdn.pixabay.com/video/2024/03/26/205691-927672681_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2024/03/26/205691-927672681_tiny.jpg',
       className: 'top-[34%] left-[35%] w-[36%] z-20'
     },
     {
       id: 4,
       labelKey: 'portfolio.items.item8',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-      poster: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80',
+      videoSrc: 'https://cdn.pixabay.com/video/2023/11/28/191126-889267474_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2023/11/28/191126-889267474_tiny.jpg',
       className: 'bottom-7 right-14 w-[34%] rotate-[3deg]'
     },
     {
       id: 5,
       labelKey: 'portfolio.items.item4',
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-      poster: 'https://images.unsplash.com/photo-1514996550219-62672472d03b?auto=format&fit=crop&w=900&q=80',
+      videoSrc: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.jpg',
       className: 'bottom-4 left-[8%] w-[30%] -rotate-1'
     }
   ];
@@ -212,7 +212,7 @@ const Portfolio = () => {
     if (!reelTrackRef.current) return;
 
     reelTrackRef.current.scrollBy({
-      left: direction === 'next' ? 340 : -340,
+      left: direction === 'next' ? 560 : -560,
       behavior: 'smooth'
     });
   };
@@ -266,7 +266,7 @@ const Portfolio = () => {
           <div className="w-24 h-1 signature-line mx-auto" />
         </div>
 
-        <div className="cafe-panel p-4 md:p-6 mb-16 relative overflow-hidden">
+        <div className="cafe-panel p-4 md:p-6 mb-4 relative overflow-hidden">
           <div className="absolute inset-0 bg-card" />
           <div className="relative z-10">
             <div className="flex items-end justify-between gap-4 mb-5">
@@ -299,49 +299,54 @@ const Portfolio = () => {
               </div>
             </div>
 
-            <div
-              ref={reelTrackRef}
-              className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-            >
-              {reelClips.map((clip) => (
-                <button
-                  type="button"
-                  key={clip.id}
-                  className="group relative shrink-0 snap-start w-[180px] sm:w-[200px] md:w-[220px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/45 transition-colors"
-                  onClick={() => setActiveReelPreview(clip)}
-                  aria-label={t(clip.titleKey)}
-                >
-                  <video
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    src={clip.videoSrc}
-                    poster={clip.poster}
-                    muted
-                    autoPlay
-                    loop
-                    playsInline
-                    preload="metadata"
-                    aria-hidden="true"
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-
-                  <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-white">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.2em] text-white/75 mb-1">
-                        {t(`portfolio.categories.${clip.category}`)}
-                      </p>
-                      <p className="text-sm font-medium leading-tight">{t(clip.titleKey)}</p>
-                    </div>
-
-                    <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/25 backdrop-blur-md">
-                      <VolumeX className="h-4 w-4" />
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-
             <p className="text-sm text-muted-foreground mt-4">{t('portfolio.reelDescription')}</p>
+          </div>
+        </div>
+
+        <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden mb-16">
+          <div className="absolute inset-y-0 left-0 w-12 sm:w-16 md:w-24 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-12 sm:w-16 md:w-24 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
+
+          <div
+            ref={reelTrackRef}
+            className="relative z-10 flex gap-4 md:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 pt-1 px-3 sm:px-5 md:px-8 lg:px-10 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {reelClips.map((clip) => (
+              <button
+                type="button"
+                key={clip.id}
+                className="group relative shrink-0 snap-start w-[220px] sm:w-[240px] md:w-[260px] lg:w-[280px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/45 transition-colors"
+                onClick={() => setActiveReelPreview(clip)}
+                aria-label={t(clip.titleKey)}
+              >
+                <video
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  src={clip.videoSrc}
+                  poster={clip.poster}
+                  muted
+                  autoPlay
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-hidden="true"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+                <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-white">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.2em] text-white/75 mb-1">
+                      {t(`portfolio.categories.${clip.category}`)}
+                    </p>
+                    <p className="text-sm font-medium leading-tight">{t(clip.titleKey)}</p>
+                  </div>
+
+                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/25 backdrop-blur-md">
+                    <VolumeX className="h-4 w-4" />
+                  </span>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
 

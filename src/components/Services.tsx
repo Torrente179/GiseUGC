@@ -57,33 +57,33 @@ const Services = () => {
   const serviceVideoCards: ServiceVideoCard[] = [
     {
       titleKey: serviceTitleKeys[0],
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-      poster: 'https://images.unsplash.com/photo-1557838923-2985c318be48?auto=format&fit=crop&w=1100&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2021/08/04/83869-584870610_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2021/08/04/83869-584870610_tiny.jpg'
     },
     {
       titleKey: serviceTitleKeys[1],
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-      poster: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1100&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.jpg'
     },
     {
       titleKey: serviceTitleKeys[2],
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-      poster: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1100&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2022/02/12/107492-678970856_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2022/02/12/107492-678970856_tiny.jpg'
     },
     {
       titleKey: serviceTitleKeys[3],
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-      poster: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1100&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2021/08/30/86911-594991432_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2021/08/30/86911-594991432_tiny.jpg'
     },
     {
       titleKey: serviceTitleKeys[4],
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-      poster: 'https://images.unsplash.com/photo-1544717305-996b815c338c?auto=format&fit=crop&w=1100&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2024/03/26/205691-927672681_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2024/03/26/205691-927672681_tiny.jpg'
     },
     {
       titleKey: serviceTitleKeys[5],
-      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-      poster: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=1100&q=80'
+      videoSrc: 'https://cdn.pixabay.com/video/2023/11/28/191126-889267474_tiny.mp4',
+      poster: 'https://cdn.pixabay.com/video/2023/11/28/191126-889267474_tiny.jpg'
     }
   ];
 
