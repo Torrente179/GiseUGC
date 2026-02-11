@@ -151,10 +151,10 @@ const Portfolio = () => {
   };
 
   const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, scale: 0.985 },
     visible: (i: number) => ({
       opacity: 1,
-      y: 0,
+      scale: 1,
       transition: {
         duration: 0.5,
         delay: i * 0.05,
@@ -511,31 +511,66 @@ const Portfolio = () => {
     : 'transform 0ms linear, opacity 0ms linear';
 
 
+  const splitTitleVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        delay: 0.1 + i * 0.1,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    }),
+  };
+
+  const titleWords = t('portfolio.sectionTitle').split(' ');
+
   return (
     <section id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
       <div className="studio-container">
         <motion.div
           className="studio-header mb-10 md:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10"
-          variants={headerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
           <div className="text-center md:text-left">
-            <div className="inline-flex items-center gap-2 mb-6">
+            <motion.div
+              className="inline-flex items-center gap-2 mb-6"
+              variants={headerVariants}
+            >
               <span className="h-px w-8 bg-accent/40" />
               <p className="section-label text-accent text-sm md:text-base">{t('portfolio.sectionSubtitle')}</p>
-            </div>
-            <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95]">
-              {t('portfolio.sectionTitle')}
-              <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">{t('portfolio.sectionTitleAccent')}</span>
+            </motion.div>
+            <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95] overflow-hidden flex flex-wrap gap-x-4 justify-center md:justify-start">
+              {titleWords.map((word, i) => (
+                <motion.span
+                  key={i}
+                  custom={i}
+                  variants={splitTitleVariants}
+                  className="inline-block"
+                >
+                  {word}
+                </motion.span>
+              ))}
+              <motion.span
+                className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent"
+                custom={titleWords.length}
+                variants={splitTitleVariants}
+              >
+                {t('portfolio.sectionTitleAccent')}
+              </motion.span>
             </h2>
           </div>
-          <div className="lg:max-w-xs text-center lg:text-right">
+          <motion.div
+            className="lg:max-w-xs text-center lg:text-right"
+            variants={headerVariants}
+          >
             <p className="strategic-body text-foreground/40 text-lg md:text-xl italic">
               {t('portfolio.reelDescription')}
             </p>
-          </div>
+          </motion.div>
         </motion.div>
 
         <div className="studio-rule mb-10 md:mb-12" />
@@ -591,11 +626,6 @@ const Portfolio = () => {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
-                    whileHover={{
-                      y: -4,
-                      scale: 1.01,
-                      transition: { type: "spring", stiffness: 400, damping: 25 }
-                    }}
                     className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center"
                     onClick={() => openReelPreview(index)}
                     aria-label={t(clip.titleKey)}

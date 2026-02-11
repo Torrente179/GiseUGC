@@ -4,6 +4,7 @@ import { Mail, MessageSquare, Send } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { motion, Variants } from 'framer-motion';
 import * as z from 'zod';
 
 const formSchema = z.object({
@@ -75,21 +76,67 @@ const Contact = () => {
     });
   };
 
+  const headerVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
   return (
     <section id="contact" className="studio-section bg-secondary/16">
       <div className="studio-container">
-        <div className="studio-header">
+        <motion.div
+          className="studio-header"
+          variants={headerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <div>
             <p className="section-label text-muted-foreground mb-3">{t('contact.sectionSubtitle')}</p>
             <h2 className="studio-title">{t('contact.sectionTitle')}</h2>
           </div>
           <p className="studio-subtitle lg:justify-self-end">{t('contact.description')}</p>
-        </div>
+        </motion.div>
 
         <div className="studio-rule mb-10 md:mb-12" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] gap-6 md:gap-7 max-w-6xl mx-auto">
-          <aside className="studio-panel p-7 md:p-8 lg:p-9 flex flex-col justify-between">
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] gap-6 md:gap-7 max-w-6xl mx-auto"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          <motion.aside
+            className="studio-panel p-7 md:p-8 lg:p-9 flex flex-col justify-between"
+            variants={itemVariants}
+          >
             <div>
               <h3 className="text-[2rem] md:text-[2.2rem] font-sans font-medium tracking-tight mb-5 text-foreground leading-tight">
                 {t('contact.heading')}
@@ -97,7 +144,10 @@ const Contact = () => {
               <p className="strategic-body text-muted-foreground mb-7">{t('contact.description')}</p>
 
               <div className="space-y-4">
-                <div className="rounded-xl border border-border/70 bg-background/55 px-4 py-3.5 flex items-center gap-3.5">
+                <motion.div
+                  className="rounded-xl border border-border/70 bg-background/55 px-4 py-3.5 flex items-center gap-3.5"
+                  whileHover={{ x: 5, transition: { duration: 0.2 } }}
+                >
                   <span className="h-10 w-10 rounded-full border border-border/70 bg-card/90 flex items-center justify-center">
                     <Mail className="h-4 w-4 text-primary" />
                   </span>
@@ -105,9 +155,12 @@ const Contact = () => {
                     <h4 className="text-sm font-medium text-foreground">{t('contact.emailLabel')}</h4>
                     <p className="text-sm text-muted-foreground">{t('contact.emailValue')}</p>
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="rounded-xl border border-border/70 bg-background/55 px-4 py-3.5 flex items-center gap-3.5">
+                <motion.div
+                  className="rounded-xl border border-border/70 bg-background/55 px-4 py-3.5 flex items-center gap-3.5"
+                  whileHover={{ x: 5, transition: { duration: 0.2 } }}
+                >
                   <span className="h-10 w-10 rounded-full border border-border/70 bg-card/90 flex items-center justify-center">
                     <MessageSquare className="h-4 w-4 text-primary" />
                   </span>
@@ -115,12 +168,15 @@ const Contact = () => {
                     <h4 className="text-sm font-medium text-foreground">{t('contact.fiverrLabel')}</h4>
                     <p className="text-sm text-muted-foreground">{t('contact.fiverrValue')}</p>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </div>
-          </aside>
+          </motion.aside>
 
-          <div className="studio-panel p-7 md:p-8 lg:p-9">
+          <motion.div
+            className="studio-panel p-7 md:p-8 lg:p-9"
+            variants={itemVariants}
+          >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="input-glow rounded-lg">
@@ -189,10 +245,12 @@ const Contact = () => {
                 {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
               </div>
 
-              <button
+              <motion.button
                 type="submit"
                 disabled={isSubmitting || cooldown}
-                className="w-full btn-primary-nordic py-3.5 rounded-xl flex items-center justify-center gap-2 hover-grow btn-press disabled:opacity-70 disabled:cursor-not-allowed"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                className="w-full btn-primary-nordic py-3.5 rounded-xl flex items-center justify-center gap-2 btn-press disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {cooldown
                   ? `${t('contact.form.submitButton')} (${cooldownTime}s)`
@@ -200,10 +258,10 @@ const Contact = () => {
                     ? t('contact.form.submittingButton')
                     : t('contact.form.submitButton')}
                 <Send className="w-4 h-4" />
-              </button>
+              </motion.button>
             </form>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

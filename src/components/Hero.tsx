@@ -41,6 +41,32 @@ const Hero = () => {
     },
   };
 
+  const splitTitleVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        delay: 0.3 + i * 0.1,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    }),
+  };
+
+  const floatVariants: Variants = {
+    animate: {
+      y: [0, -12, 0],
+      transition: {
+        duration: 5,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  const titleWords = ["Gisela", "Saldarriaga"];
+
   return (
     <section
       id="home"
@@ -64,12 +90,24 @@ const Hero = () => {
               <p className="section-label font-outfit text-muted-foreground/95">{t('hero.subtitle')}</p>
             </motion.div>
 
-            <motion.h1
-              className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3"
-              variants={itemVariants}
-            >
-              Gisela <span className="text-accent luxury-accent">Saldarriaga</span>
-            </motion.h1>
+            <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3 overflow-hidden flex flex-wrap gap-x-4">
+              {titleWords.map((word, i) => (
+                <motion.span
+                  key={i}
+                  custom={i}
+                  variants={splitTitleVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="inline-block"
+                >
+                  {word === "Saldarriaga" ? (
+                    <span className="text-accent luxury-accent">{word}</span>
+                  ) : (
+                    word
+                  )}
+                </motion.span>
+              ))}
+            </h1>
 
             <motion.p
               className="section-label text-foreground/55 mb-8"
@@ -128,8 +166,19 @@ const Hero = () => {
             animate="visible"
           >
             <div className="relative w-full max-w-[25rem]">
-              <div className="hero-frame-glow absolute -inset-6 pointer-events-none" />
-              <div className="hero-image-shell relative overflow-hidden p-3.5 bg-card/95">
+              <motion.div
+                className="hero-frame-glow absolute -inset-6 pointer-events-none"
+                animate={{
+                  opacity: [0.3, 0.6, 0.3],
+                  scale: [1, 1.05, 1]
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div
+                className="hero-image-shell relative overflow-hidden p-3.5 bg-card/95"
+                variants={floatVariants}
+                animate="animate"
+              >
                 <img
                   src="/uploads/1bceae6e-5154-4d2e-b3fb-2957b86796a7.png"
                   alt={t('hero.imageAlt')}
@@ -137,13 +186,14 @@ const Hero = () => {
                   fetchPriority="high"
                   decoding="async"
                 />
-              </div>
+              </motion.div>
 
               <motion.div
                 className="hero-floating-card"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
                 <p className="hero-floating-label">{t('hero.proofLabel')}</p>
                 <p className="hero-floating-value">{t('hero.proofValue')}</p>
@@ -155,6 +205,7 @@ const Hero = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 1, ease: "easeOut" }}
+                whileHover={{ y: 5, transition: { duration: 0.2 } }}
               >
                 <span>{t('hero.tagline')}</span>
               </motion.div>
@@ -165,10 +216,10 @@ const Hero = () => {
         {/* Introduction Section */}
         <motion.div
           className="mt-24 mb-16 pt-16 border-t border-border/40"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="grid lg:grid-cols-[1fr_2fr] gap-12 items-start">
             <div className="space-y-6">

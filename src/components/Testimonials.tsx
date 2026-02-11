@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { motion, Variants } from 'framer-motion';
 
 const Testimonials = () => {
   const { t } = useTranslation();
@@ -69,40 +70,72 @@ const Testimonials = () => {
     touchEndX.current = null;
   };
 
+  const headerVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
+  const panelVariants: Variants = {
+    hidden: { opacity: 0, scale: 0.98 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 1, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
+
   return (
     <section id="testimonials" className="studio-section bg-background">
       <div className="studio-container">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-10 md:mb-12">
+        <motion.div
+          className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-10 md:mb-12"
+          variants={headerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <div>
             <p className="section-label text-muted-foreground mb-3">{t('testimonials.sectionSubtitle')}</p>
             <h2 className="studio-title">{t('testimonials.sectionTitle')}</h2>
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <button
+            <motion.button
               onClick={prevTestimonial}
-              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
               aria-label={t('testimonials.ariaPrev')}
             >
               <ChevronLeft className="h-5 w-5 text-primary" />
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={nextTestimonial}
-              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
               aria-label={t('testimonials.ariaNext')}
             >
               <ChevronRight className="h-5 w-5 text-primary" />
-            </button>
+            </motion.button>
           </div>
-        </div>
+        </motion.div>
 
         <div className="studio-rule mb-8 md:mb-10" />
 
-        <div
+        <motion.div
           className="relative overflow-hidden"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          variants={panelVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
         >
           <div
             className="flex transition-transform duration-500"
@@ -149,7 +182,7 @@ const Testimonials = () => {
               </article>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         <div className="flex justify-center mt-7 md:mt-8 gap-2.5">
           {testimonialData.map((_, index) => (
