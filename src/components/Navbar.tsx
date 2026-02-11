@@ -99,7 +99,7 @@ const Navbar = () => {
               <span className="brand-logo text-2xl text-accent">
                 Gisela<span className="text-foreground font-normal">.UGC</span>
               </span>
-              <p className="section-label text-muted-foreground mt-2">Nordic UGC Studio</p>
+              <p className="section-label text-muted-foreground mt-2">{t('navbar.studioLabel')}</p>
             </div>
           </div>
         </div>
