@@ -138,15 +138,20 @@ const ServicesMarquee = () => {
         let animationFrameId: number;
 
         const animate = () => {
+            // Auto-scroll only when not paused and not dragging
             if (container && !isPausedRef.current && !isDraggingRef.current) {
                 container.scrollLeft += 0.45;
-
-                // Wrap around when reaching the end of the second set
-                const setWidth = container.scrollWidth / 3;
-                if (container.scrollLeft >= setWidth * 2) {
-                    container.scrollLeft -= setWidth;
-                }
             }
+
+            // Always check boundaries every frame for infinite loop
+            // (handles auto-scroll, manual drag, arrows, and trackpad)
+            const setWidth = container.scrollWidth / 3;
+            if (container.scrollLeft >= setWidth * 2) {
+                container.scrollLeft -= setWidth;
+            } else if (container.scrollLeft < 10) {
+                container.scrollLeft += setWidth;
+            }
+
             animationFrameId = requestAnimationFrame(animate);
         };
 
