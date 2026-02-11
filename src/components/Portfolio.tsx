@@ -21,7 +21,6 @@ interface CollageClip {
 const Portfolio = () => {
   const { t } = useTranslation();
 
-  const [collagePlaying, setCollagePlaying] = useState(false);
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
 
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -151,45 +150,16 @@ const Portfolio = () => {
   ];
 
   useEffect(() => {
-    // Activate collage playback on mount to create the "GIF" effect (especially for mobile)
-    const timeoutId = setTimeout(() => {
-      void setCollagePlayback(true);
-    }, 100);
-    return () => clearTimeout(timeoutId);
+    // Ensure all collage videos are playing
+    collageVideoRefs.current.forEach((video) => {
+      if (video) {
+        video.play().catch(() => undefined);
+      }
+    });
   }, []);
 
-  const setCollagePlayback = async (shouldPlay: boolean) => {
-    setCollagePlaying(shouldPlay);
-
-    await Promise.all(
-      collageVideoRefs.current.map(async (video) => {
-        if (!video) return;
-
-        if (shouldPlay) {
-          const maybePromise = video.play();
-          if (maybePromise) {
-            await maybePromise.catch(() => undefined);
-          }
-          return;
-        }
-
-        video.pause();
-        video.currentTime = 0;
-      })
-    );
-  };
-
-  const handleCollageActivate = () => {
-    void setCollagePlayback(true);
-  };
-
-  const handleCollageDeactivate = () => {
-    void setCollagePlayback(false);
-  };
-
   const getCollageMotionClass = (clipId: number) => {
-    if (!collagePlaying) return '';
-
+    // Constant motion effect
     if (clipId === 4) return '-translate-x-11 -translate-y-6 scale-[1.05]';
     if (clipId === 5) return 'translate-x-11 -translate-y-6 scale-[1.05]';
     if (clipId === 3) return '-translate-y-2 scale-[1.03]';
@@ -326,28 +296,8 @@ const Portfolio = () => {
           </div>
 
           <div
-            className="studio-panel relative h-[430px] p-6 md:p-8 overflow-hidden cursor-pointer"
-            onMouseEnter={handleCollageActivate}
-            onMouseLeave={handleCollageDeactivate}
-            onFocus={handleCollageActivate}
-            onBlur={(event) => {
-              const nextTarget = event.relatedTarget as Node | null;
-              if (!nextTarget || !event.currentTarget.contains(nextTarget)) {
-                handleCollageDeactivate();
-              }
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                handleCollageActivate();
-              }
-              if (event.key === 'Escape') {
-                handleCollageDeactivate();
-              }
-            }}
-            tabIndex={0}
-            role="button"
-            aria-label={t('portfolio.collageTitle')}
+            className="studio-panel relative h-[430px] p-6 md:p-8 overflow-hidden"
+            role="presentation"
           >
             <div className="absolute inset-0 bg-card" />
             <div className="absolute inset-x-0 top-0 h-44 bg-secondary blur-2xl opacity-60" />
@@ -371,24 +321,8 @@ const Portfolio = () => {
                   preload="metadata"
                   aria-label={t(clip.labelKey)}
                 />
-
-                <div
-                  className={`absolute inset-0 bg-black/35 backdrop-blur-[1px] transition-opacity duration-300 ${collagePlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
-                    }`}
-                />
-
-                <span
-                  className={`absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full bg-card/90 text-primary transition-opacity duration-300 ${collagePlaying ? 'opacity-0' : 'opacity-100'
-                    }`}
-                >
-                  <Play className="h-5 w-5 fill-current" />
-                </span>
               </div>
             ))}
-
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center px-4 py-2 rounded-full bg-card/95 border border-border backdrop-blur-sm text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              {collagePlaying ? t('portfolio.collageHintPlaying') : t('portfolio.collageHintIdle')}
-            </div>
           </div>
         </div>
       </div>
