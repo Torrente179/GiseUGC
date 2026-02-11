@@ -48,12 +48,10 @@ const Testimonials = () => {
   };
 
   return (
-    <section id="testimonials" className="section-padding relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-secondary/70 via-brand-cream/75 to-secondary/40" />
-      <div className="absolute right-[-12rem] top-[-6rem] h-[18rem] w-[18rem] rounded-full bg-brand-teal/10 blur-[100px]" />
+    <section id="testimonials" className="section-padding bg-background">
       <div className="container relative z-10 mx-auto">
         <div className="text-center mb-16">
-          <p className="text-brand-olive mb-3 uppercase tracking-[0.18em] font-semibold">{t('testimonials.sectionSubtitle')}</p>
+          <p className="text-muted-foreground mb-3 uppercase tracking-[0.18em] font-semibold">{t('testimonials.sectionSubtitle')}</p>
           <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">{t('testimonials.sectionTitle')}</h2>
           <div className="w-24 h-1 signature-line mx-auto" />
         </div>
@@ -68,7 +66,7 @@ const Testimonials = () => {
                 <div key={testimonial.id} className="min-w-full px-4">
                   <div className="cafe-panel p-8 md:p-10 bg-card/90">
                     <div className="flex flex-col md:flex-row md:items-center mb-6 gap-6">
-                      <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 border-2 border-brand-teal/30">
+                      <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 border-2 border-border">
                         <img
                           src={testimonial.image}
                           alt={t(testimonial.nameKey)}
@@ -85,7 +83,7 @@ const Testimonials = () => {
                             <Star
                               key={index}
                               className={`w-4 h-4 ${index < testimonial.stars
-                                  ? 'text-brand-gold fill-brand-gold'
+                                  ? 'text-primary fill-primary'
                                   : 'text-muted'
                                 }`}
                             />
@@ -93,7 +91,7 @@ const Testimonials = () => {
                         </div>
                       </div>
                     </div>
-                    <blockquote className="text-lg md:text-xl italic text-primary/90 leading-relaxed">
+                    <blockquote className="text-lg md:text-xl italic text-foreground/90 leading-relaxed">
                       "{t(testimonial.textKey)}"
                     </blockquote>
                   </div>
@@ -108,14 +106,14 @@ const Testimonials = () => {
               className="w-12 h-12 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
               aria-label={t('testimonials.ariaPrev')}
             >
-              <ChevronLeft className="w-5 h-5 text-brand-teal" />
+              <ChevronLeft className="w-5 h-5 text-primary" />
             </button>
             <div className="flex gap-2">
               {testimonialData.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? 'bg-brand-teal scale-125' : 'bg-primary/25'
+                  className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? 'bg-primary scale-125' : 'bg-primary/25'
                     }`}
                   aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
                 />
@@ -126,7 +124,7 @@ const Testimonials = () => {
               className="w-12 h-12 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
               aria-label={t('testimonials.ariaNext')}
             >
-              <ChevronRight className="w-5 h-5 text-brand-teal" />
+              <ChevronRight className="w-5 h-5 text-primary" />
             </button>
           </div>
         </div>

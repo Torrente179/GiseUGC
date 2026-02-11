@@ -333,7 +333,6 @@ const Portfolio = () => {
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16">
           <div>
-            <p className="text-sm uppercase tracking-[0.22em] text-brand-olive font-semibold mb-4">
             <p className="text-sm uppercase tracking-[0.22em] text-muted-foreground font-semibold mb-4">
               {t('portfolio.collageEyebrow')}
             </p>
@@ -407,7 +406,6 @@ const Portfolio = () => {
                 />
 
                 <div
-                  className={`absolute inset-0 bg-brand-cocoa/40 backdrop-blur-[1px] transition-opacity duration-300 ${
                   className={`absolute inset-0 bg-black/35 backdrop-blur-[1px] transition-opacity duration-300 ${
                     collagePlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
                   }`}

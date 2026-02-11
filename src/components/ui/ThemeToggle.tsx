@@ -24,13 +24,13 @@ const ThemeToggle = () => {
     return (
         <button
             onClick={() => setTheme(isDark ? 'light' : 'dark')}
-            className="w-9 h-9 rounded-full flex items-center justify-center bg-secondary/70 border border-primary/15 hover:bg-secondary transition-colors btn-press"
+            className="w-9 h-9 rounded-full flex items-center justify-center bg-card border border-border hover:bg-secondary transition-colors btn-press"
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
             {isDark ? (
-                <Sun className="w-5 h-5 text-brand-gold" />
+                <Sun className="w-5 h-5 text-primary" />
             ) : (
-                <Moon className="w-5 h-5 text-brand-teal" />
+                <Moon className="w-5 h-5 text-primary" />
             )}
         </button>
     );

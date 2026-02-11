@@ -81,12 +81,10 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="section-padding relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/35 to-brand-cream/70" />
-      <div className="absolute left-[-16rem] top-[10%] h-[22rem] w-[22rem] rounded-full bg-brand-teal/10 blur-[120px]" />
+    <section id="contact" className="section-padding bg-secondary/25">
       <div className="container relative z-10 mx-auto">
         <div className="text-center mb-16">
-          <p className="text-brand-olive mb-3 uppercase tracking-[0.18em] font-semibold">{t('contact.sectionSubtitle')}</p>
+          <p className="text-muted-foreground mb-3 uppercase tracking-[0.18em] font-semibold">{t('contact.sectionSubtitle')}</p>
           <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">{t('contact.sectionTitle')}</h2>
           <div className="w-24 h-1 signature-line mx-auto" />
         </div>
@@ -100,8 +98,8 @@ const Contact = () => {
 
             <div className="space-y-6">
               <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-brand-teal/15 flex items-center justify-center flex-shrink-0 mr-4">
-                  <Mail className="w-5 h-5 text-brand-teal" />
+                <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center flex-shrink-0 mr-4">
+                  <Mail className="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <h4 className="font-medium text-primary">{t('contact.emailLabel')}</h4>
@@ -110,7 +108,7 @@ const Contact = () => {
               </div>
 
               <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mr-4">
+                <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center flex-shrink-0 mr-4">
                   <MessageSquare className="w-5 h-5 text-primary" />
                 </div>
                 <div>
@@ -187,7 +185,7 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={isSubmitting || cooldown}
-                className="w-full bg-gradient-to-r from-primary to-brand-teal text-primary-foreground py-3.5 rounded-lg flex items-center justify-center gap-2 hover-grow btn-press disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full bg-primary text-primary-foreground py-3.5 rounded-lg flex items-center justify-center gap-2 hover-grow btn-press disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {cooldown
                   ? `${t('contact.form.submitButton')} (${cooldownTime}s)`

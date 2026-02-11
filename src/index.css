@@ -184,7 +184,7 @@
   }
 
   .cafe-card {
-    @apply rounded-2xl border border-border bg-card/98 backdrop-blur-sm transition-all duration-300 elegant-shadow;
+    @apply rounded-2xl border border-border bg-card/95 backdrop-blur-sm transition-all duration-300 elegant-shadow;
   }
 
   .cafe-card:hover {
