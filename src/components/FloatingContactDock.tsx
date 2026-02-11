@@ -22,7 +22,7 @@ const FloatingContactDock = () => {
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
     >
-      <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col items-end gap-3">
+      <div className="w-full max-w-[1400px] mx-auto px-6 md:px-8 flex flex-col items-end gap-3">
       <a
         href={whatsappUrl}
         target="_blank"
