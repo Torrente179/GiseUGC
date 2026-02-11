@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Award, Image, MessageSquare, ShoppingBag, TrendingUp, Video } from 'lucide-react';
 
@@ -10,6 +11,8 @@ interface ServiceVideoCard {
 
 const Services = () => {
   const { t } = useTranslation();
+  const [expandedCard, setExpandedCard] = useState<number | null>(null);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const serviceData = [
     {
@@ -85,6 +88,26 @@ const Services = () => {
 
   const marqueeCards = [...serviceVideoCards, ...serviceVideoCards];
 
+  const handleVideoHover = (index: number) => {
+    const video = videoRefs.current[index];
+    if (video) {
+      const p = video.play();
+      if (p) p.catch(() => undefined);
+    }
+  };
+
+  const handleVideoLeave = (index: number) => {
+    const video = videoRefs.current[index];
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
+  };
+
+  const handleCardClick = (index: number) => {
+    setExpandedCard(expandedCard === index ? null : index);
+  };
+
   return (
     <section id="services" className="studio-section bg-background pt-24 md:pt-32">
       <div className="studio-container">
@@ -135,48 +158,47 @@ const Services = () => {
           <div className="absolute inset-y-0 left-0 w-20 md:w-60 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
           <div className="absolute inset-y-0 right-0 w-20 md:w-60 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
 
-          <div className="service-marquee relative z-10 flex w-max gap-10 lg:gap-16 py-16 md:py-24">
-            {marqueeCards.map((card, index) => (
-              <div
-                key={`${card.titleKey}-${index}`}
-                className="group relative shrink-0 w-[280px] sm:w-[320px] lg:w-[360px] flex flex-col items-center"
-              >
-                {/* TikTok Style Vertical Frame */}
-                <div className="relative aspect-[9/15] w-full overflow-hidden rounded-[3rem] border border-border/60 shadow-xl bg-card transition-all duration-700 ease-out group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] group-hover:border-primary/25 group-hover:-translate-y-3">
-                  <video
-                    className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                    src={card.videoSrc}
-                    poster={card.poster}
-                    muted
-                    autoPlay
-                    loop
-                    playsInline
-                    preload="metadata"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60" />
-                </div>
+          <div className="service-marquee relative z-10 flex w-max gap-6 lg:gap-8 py-10 md:py-16">
+            {marqueeCards.map((card, index) => {
+              const isExpanded = expandedCard === index;
+              return (
+                <div
+                  key={`${card.titleKey}-${index}`}
+                  className="relative shrink-0 w-[200px] sm:w-[220px] lg:w-[240px] flex flex-col items-center cursor-pointer"
+                  onMouseEnter={() => handleVideoHover(index)}
+                  onMouseLeave={() => handleVideoLeave(index)}
+                  onClick={() => handleCardClick(index)}
+                >
+                  {/* Compact Vertical Frame */}
+                  <div className={`relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card transition-all duration-500 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:border-primary/25 ${isExpanded ? '-translate-y-2' : ''}`}>
+                    <video
+                      ref={(el) => { videoRefs.current[index] = el; }}
+                      className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                      src={card.videoSrc}
+                      poster={card.poster}
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-50" />
+                  </div>
 
-                {/* Symmetrical Writing with Hover Reveal */}
-                <div className="w-full mt-10 px-8 text-center h-[120px] relative">
-                  <div className="transition-transform duration-500 ease-out group-hover:-translate-y-8">
-                    <h3 className="text-2xl md:text-3xl font-serif text-foreground leading-tight tracking-[-0.02em] mb-4">
+                  {/* Title (always visible) + Description (on click) */}
+                  <div className="w-full mt-5 px-3 text-center">
+                    <h3 className="text-lg md:text-xl font-serif text-foreground leading-tight tracking-[-0.02em] mb-2">
                       {t(card.titleKey)}
                     </h3>
 
-                    <div className="relative w-full flex justify-center overflow-hidden">
-                      <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-8 group-hover:translate-y-0">
-                        <p className="text-base leading-relaxed text-muted-foreground px-2 max-w-[280px]">
-                          {t(card.descriptionKey)}
-                        </p>
-                      </div>
+                    <div className={`overflow-hidden transition-all duration-500 ease-out ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+                      <p className="text-sm leading-relaxed text-muted-foreground pt-1">
+                        {t(card.descriptionKey)}
+                      </p>
                     </div>
                   </div>
                 </div>
-
-                {/* Aesthetic Detail Line */}
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-1.5 h-12 bg-primary/20 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000 transform translate-y-6 group-hover:translate-y-0" />
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -185,3 +207,4 @@ const Services = () => {
 };
 
 export default Services;
+

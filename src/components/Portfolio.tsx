@@ -202,13 +202,13 @@ const Portfolio = () => {
             <div className="absolute inset-y-0 left-0 w-8 sm:w-12 md:w-20 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
             <div className="absolute inset-y-0 right-0 w-8 sm:w-12 md:w-20 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
 
-            <div className="relative z-10 mx-auto max-w-[1920px] px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+            <div className="relative z-10 mx-auto px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
+              <div className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide">
                 {reelClips.map((clip) => (
                   <button
                     type="button"
                     key={clip.id}
-                    className="group relative w-full aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors"
+                    className="group relative shrink-0 w-[140px] sm:w-[160px] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors"
                     onClick={() => setActiveReelPreview(clip)}
                     aria-label={t(clip.titleKey)}
                   >
