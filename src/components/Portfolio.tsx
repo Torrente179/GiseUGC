@@ -1,7 +1,6 @@
 import { useRef, useState, useCallback, useEffect, type TouchEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Play, VolumeX, X } from 'lucide-react';
-import { motion, Variants } from 'framer-motion';
 
 interface ReelClip {
   id: number;
@@ -32,147 +31,17 @@ type TheaterSwipeGesture = {
 const THEATER_CLOSE_DURATION_MS = 320;
 const THEATER_SWIPE_DISTANCE_THRESHOLD = 110;
 const THEATER_SWIPE_VELOCITY_THRESHOLD = 0.45;
-const THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD = 72;
-const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
-const THEATER_MAX_DRAG_DISTANCE_X = 190;
-const THEATER_REEL_SWITCH_ANIMATION_MS = 260;
-
-const REEL_CLIPS: ReelClip[] = [
-  {
-    id: 1,
-    titleKey: 'portfolio.items.item1',
-    category: 'fashion',
-    videoSrc: 'https://assets.mixkit.co/videos/42308/42308-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/42308/42308-thumb-720-0.jpg',
-  },
-  {
-    id: 2,
-    titleKey: 'portfolio.items.item2',
-    category: 'beauty',
-    videoSrc: 'https://assets.mixkit.co/videos/50423/50423-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/50423/50423-thumb-720-0.jpg',
-  },
-  {
-    id: 3,
-    titleKey: 'portfolio.items.item3',
-    category: 'tech',
-    videoSrc: 'https://assets.mixkit.co/videos/39774/39774-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/39774/39774-thumb-720-0.jpg',
-  },
-  {
-    id: 4,
-    titleKey: 'portfolio.items.item4',
-    category: 'lifestyle',
-    videoSrc: 'https://assets.mixkit.co/videos/34487/34487-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/34487/34487-thumb-720-0.jpg',
-  },
-  {
-    id: 5,
-    titleKey: 'portfolio.items.item5',
-    category: 'beauty',
-    videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
-  },
-  {
-    id: 6,
-    titleKey: 'portfolio.items.item6',
-    category: 'fashion',
-    videoSrc: 'https://assets.mixkit.co/videos/42293/42293-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/42293/42293-thumb-720-0.jpg',
-  },
-  {
-    id: 7,
-    titleKey: 'portfolio.items.item7',
-    category: 'tech',
-    videoSrc: 'https://assets.mixkit.co/videos/47002/47002-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/47002/47002-thumb-720-2.jpg',
-  },
-  {
-    id: 8,
-    titleKey: 'portfolio.items.item8',
-    category: 'lifestyle',
-    videoSrc: 'https://assets.mixkit.co/videos/49647/49647-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/49647/49647-thumb-720-0.jpg',
-  },
-  {
-    id: 9,
-    titleKey: 'portfolio.items.item9',
-    category: 'lifestyle',
-    videoSrc: 'https://assets.mixkit.co/videos/34487/34487-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/34487/34487-thumb-720-0.jpg',
-  },
-  {
-    id: 10,
-    titleKey: 'portfolio.items.item10',
-    category: 'beauty',
-    videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
-  },
-];
-
-const COLLAGE_CLIPS: CollageClip[] = [
-  {
-    id: 1,
-    labelKey: 'portfolio.items.item4',
-    videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
-    cornerClass: 'top-[13%] left-[8%] w-[29%] -rotate-[6deg] z-30',
-    hoverClass: 'top-[12%] left-[16%] w-[29%] -rotate-[2deg] z-40',
-  },
-  {
-    id: 2,
-    labelKey: 'portfolio.items.item1',
-    videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
-    cornerClass: 'top-[5%] left-[35%] w-[30%] rotate-0 z-50',
-    hoverClass: 'top-[7%] left-[35%] w-[30%] rotate-0 z-50 scale-[1.03]',
-  },
-  {
-    id: 3,
-    labelKey: 'portfolio.items.item5',
-    videoSrc: 'https://assets.mixkit.co/videos/51168/51168-720.mp4',
-    poster: 'https://assets.mixkit.co/videos/51168/51168-thumb-720-0.jpg',
-    cornerClass: 'top-[13%] right-[8%] w-[29%] rotate-[6deg] z-30',
-    hoverClass: 'top-[12%] right-[16%] w-[29%] rotate-[2deg] z-40',
-  },
-];
 
 const Portfolio = () => {
   const { t } = useTranslation();
 
-  const headerVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-    },
-  };
-
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.985 },
-    visible: (i: number) => ({
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        delay: i * 0.05,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    }),
-  };
-
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
-  const [activeReelIndex, setActiveReelIndex] = useState<number | null>(null);
   const [collageHovered, setCollageHovered] = useState(false);
-  const [theaterDragX, setTheaterDragX] = useState(0);
   const [theaterDragY, setTheaterDragY] = useState(0);
-  const [theaterReelShiftX, setTheaterReelShiftX] = useState(0);
   const [isTheaterDragging, setIsTheaterDragging] = useState(false);
   const [isTheaterVisible, setIsTheaterVisible] = useState(false);
   const [isTheaterDismissing, setIsTheaterDismissing] = useState(false);
-  const [isTheaterReelSwitching, setIsTheaterReelSwitching] = useState(false);
   const [theaterDismissDirection, setTheaterDismissDirection] = useState<1 | -1>(1);
 
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -180,9 +49,7 @@ const Portfolio = () => {
   const theaterSwipeStartRef = useRef<TheaterSwipeGesture | null>(null);
   const theaterCloseTimerRef = useRef<number | null>(null);
   const theaterDragFrameRef = useRef<number | null>(null);
-  const theaterReelSwitchTimerRef = useRef<number | null>(null);
-  const theaterReelSwitchFrameRef = useRef<number | null>(null);
-  const theaterPendingDragRef = useRef({ x: 0, y: 0 });
+  const theaterPendingDragYRef = useRef(0);
 
   const clearTheaterCloseTimer = useCallback(() => {
     if (theaterCloseTimerRef.current !== null) {
@@ -191,63 +58,42 @@ const Portfolio = () => {
     }
   }, []);
 
-  const clearTheaterReelSwitchTimer = useCallback(() => {
-    if (theaterReelSwitchTimerRef.current !== null) {
-      window.clearTimeout(theaterReelSwitchTimerRef.current);
-      theaterReelSwitchTimerRef.current = null;
-    }
-    if (theaterReelSwitchFrameRef.current !== null) {
-      window.cancelAnimationFrame(theaterReelSwitchFrameRef.current);
-      theaterReelSwitchFrameRef.current = null;
-    }
-  }, []);
-
-  const queueTheaterDrag = useCallback((dragX: number, dragY: number) => {
-    const clampedX = Math.max(-THEATER_MAX_DRAG_DISTANCE_X, Math.min(THEATER_MAX_DRAG_DISTANCE_X, dragX));
-    const clampedY = Math.max(-THEATER_MAX_DRAG_DISTANCE, Math.min(THEATER_MAX_DRAG_DISTANCE, dragY));
-    theaterPendingDragRef.current = { x: clampedX, y: clampedY };
+  const queueTheaterDrag = useCallback((dragY: number) => {
+    const clampedDrag = Math.max(-THEATER_MAX_DRAG_DISTANCE, Math.min(THEATER_MAX_DRAG_DISTANCE, dragY));
+    theaterPendingDragYRef.current = clampedDrag;
 
     if (theaterDragFrameRef.current !== null) return;
     theaterDragFrameRef.current = window.requestAnimationFrame(() => {
-      setTheaterDragX(theaterPendingDragRef.current.x);
-      setTheaterDragY(theaterPendingDragRef.current.y);
+      setTheaterDragY(theaterPendingDragYRef.current);
       theaterDragFrameRef.current = null;
     });
   }, []);
 
   const finalizeTheaterClose = useCallback(() => {
     clearTheaterCloseTimer();
-    clearTheaterReelSwitchTimer();
     setActiveReelPreview(null);
-    setActiveReelIndex(null);
     setIsTheaterDismissing(false);
     setIsTheaterVisible(false);
     setIsTheaterDragging(false);
-    setIsTheaterReelSwitching(false);
     setTheaterDismissDirection(1);
-    setTheaterReelShiftX(0);
-    setTheaterDragX(0);
     setTheaterDragY(0);
-  }, [clearTheaterCloseTimer, clearTheaterReelSwitchTimer]);
+  }, [clearTheaterCloseTimer]);
 
   const dismissReelPreview = useCallback(
     (direction: 1 | -1 = 1) => {
       if (!activeReelPreview || isTheaterDismissing) return;
       clearTheaterCloseTimer();
-      clearTheaterReelSwitchTimer();
       setIsTheaterDragging(false);
-      setIsTheaterReelSwitching(false);
-      setTheaterReelShiftX(0);
       theaterSwipeStartRef.current = null;
       setTheaterDismissDirection(direction);
       setIsTheaterDismissing(true);
-      queueTheaterDrag(0, 0);
+      setIsTheaterVisible(false);
+      queueTheaterDrag(0);
       theaterCloseTimerRef.current = window.setTimeout(finalizeTheaterClose, THEATER_CLOSE_DURATION_MS);
     },
     [
       activeReelPreview,
       clearTheaterCloseTimer,
-      clearTheaterReelSwitchTimer,
       finalizeTheaterClose,
       isTheaterDismissing,
       queueTheaterDrag,
@@ -255,53 +101,17 @@ const Portfolio = () => {
   );
 
   const openReelPreview = useCallback(
-    (index: number) => {
-      const selectedReel = REEL_CLIPS[index];
-      if (!selectedReel) return;
-
+    (clip: ReelClip) => {
       clearTheaterCloseTimer();
-      clearTheaterReelSwitchTimer();
       theaterSwipeStartRef.current = null;
       setTheaterDismissDirection(1);
       setIsTheaterDismissing(false);
       setIsTheaterDragging(false);
-      setIsTheaterReelSwitching(false);
       setIsTheaterVisible(false);
-      setTheaterReelShiftX(0);
-      queueTheaterDrag(0, 0);
-      setActiveReelIndex(index);
-      setActiveReelPreview(selectedReel);
-
-      const frameId = window.requestAnimationFrame(() => {
-        setIsTheaterVisible(true);
-      });
-      theaterReelSwitchFrameRef.current = frameId;
+      queueTheaterDrag(0);
+      setActiveReelPreview(clip);
     },
-    [clearTheaterCloseTimer, clearTheaterReelSwitchTimer, queueTheaterDrag],
-  );
-
-  const navigateReelPreview = useCallback(
-    (direction: 1 | -1) => {
-      if (activeReelIndex === null || isTheaterDismissing) return;
-      const nextIndex = (activeReelIndex + direction + REEL_CLIPS.length) % REEL_CLIPS.length;
-      const nextReel = REEL_CLIPS[nextIndex];
-      if (!nextReel) return;
-
-      clearTheaterReelSwitchTimer();
-      setIsTheaterReelSwitching(false);
-      setTheaterReelShiftX(direction * 24);
-      setActiveReelIndex(nextIndex);
-      setActiveReelPreview(nextReel);
-
-      theaterReelSwitchFrameRef.current = window.requestAnimationFrame(() => {
-        setIsTheaterReelSwitching(true);
-        setTheaterReelShiftX(0);
-      });
-      theaterReelSwitchTimerRef.current = window.setTimeout(() => {
-        setIsTheaterReelSwitching(false);
-      }, THEATER_REEL_SWITCH_ANIMATION_MS);
-    },
-    [activeReelIndex, clearTheaterReelSwitchTimer, isTheaterDismissing],
+    [clearTheaterCloseTimer, queueTheaterDrag],
   );
 
   const handleTheaterTouchStart = useCallback(
@@ -336,18 +146,10 @@ const Portfolio = () => {
         swipeStart.axis = Math.abs(deltaY) >= Math.abs(deltaX) ? 'vertical' : 'horizontal';
       }
 
-      if (swipeStart.axis === 'vertical') {
-        event.preventDefault();
-        const resistance = 0.92 - Math.min(Math.abs(deltaY) / 900, 0.28);
-        queueTheaterDrag(0, deltaY * resistance);
-        return;
-      }
-
-      if (swipeStart.axis === 'horizontal') {
-        event.preventDefault();
-        const resistance = 0.9 - Math.min(Math.abs(deltaX) / 850, 0.26);
-        queueTheaterDrag(deltaX * resistance, 0);
-      }
+      if (swipeStart.axis !== 'vertical') return;
+      event.preventDefault();
+      const resistance = 0.92 - Math.min(Math.abs(deltaY) / 900, 0.28);
+      queueTheaterDrag(deltaY * resistance);
     },
     [isTheaterDismissing, queueTheaterDrag],
   );
@@ -361,71 +163,60 @@ const Portfolio = () => {
 
       const touch = event.changedTouches[0];
       if (!touch) {
-        queueTheaterDrag(0, 0);
+        queueTheaterDrag(0);
         return;
       }
 
       const deltaX = touch.clientX - swipeStart.x;
       const deltaY = touch.clientY - swipeStart.y;
       const elapsed = Math.max(1, performance.now() - swipeStart.timestamp);
-      const velocityX = deltaX / elapsed;
       const velocityY = deltaY / elapsed;
-      const finalAxis =
-        swipeStart.axis === 'pending'
-          ? Math.abs(deltaY) >= Math.abs(deltaX)
-            ? 'vertical'
-            : 'horizontal'
-          : swipeStart.axis;
-
-      if (finalAxis === 'horizontal') {
-        const crossedHorizontalThreshold =
-          Math.abs(deltaX) >= THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD ||
-          Math.abs(velocityX) >= THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD;
-        queueTheaterDrag(0, 0);
-        if (crossedHorizontalThreshold) {
-          navigateReelPreview(deltaX < 0 ? 1 : -1);
-        }
-        return;
-      }
-
-      const crossedVerticalThreshold =
+      const isVerticalSwipe =
+        swipeStart.axis === 'vertical' || Math.abs(deltaY) > Math.abs(deltaX) * 1.1;
+      const crossedThreshold =
         Math.abs(deltaY) >= THEATER_SWIPE_DISTANCE_THRESHOLD ||
         Math.abs(velocityY) >= THEATER_SWIPE_VELOCITY_THRESHOLD;
 
-      if (crossedVerticalThreshold) {
+      if (isVerticalSwipe && crossedThreshold) {
         dismissReelPreview(deltaY < 0 ? -1 : 1);
         return;
       }
 
-      queueTheaterDrag(0, 0);
+      queueTheaterDrag(0);
     },
-    [dismissReelPreview, navigateReelPreview, queueTheaterDrag],
+    [dismissReelPreview, queueTheaterDrag],
   );
 
   const resetTheaterSwipe = useCallback(() => {
     theaterSwipeStartRef.current = null;
     setIsTheaterDragging(false);
-    queueTheaterDrag(0, 0);
+    queueTheaterDrag(0);
   }, [queueTheaterDrag]);
 
   useEffect(() => {
-    if (activeReelPreview) return;
-    setIsTheaterVisible(false);
-    setIsTheaterDragging(false);
-    setIsTheaterReelSwitching(false);
-    queueTheaterDrag(0, 0);
-  }, [activeReelPreview, queueTheaterDrag]);
+    if (!activeReelPreview) {
+      setIsTheaterVisible(false);
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      setIsTheaterVisible(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [activeReelPreview]);
 
   useEffect(() => {
     return () => {
       clearTheaterCloseTimer();
-      clearTheaterReelSwitchTimer();
       if (theaterDragFrameRef.current !== null) {
         window.cancelAnimationFrame(theaterDragFrameRef.current);
         theaterDragFrameRef.current = null;
       }
     };
-  }, [clearTheaterCloseTimer, clearTheaterReelSwitchTimer]);
+  }, [clearTheaterCloseTimer]);
 
   useEffect(() => {
     if (!activeReelPreview) return;
@@ -434,17 +225,11 @@ const Portfolio = () => {
       if (event.key === 'Escape') {
         dismissReelPreview();
       }
-      if (event.key === 'ArrowRight') {
-        navigateReelPreview(1);
-      }
-      if (event.key === 'ArrowLeft') {
-        navigateReelPreview(-1);
-      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeReelPreview, dismissReelPreview, navigateReelPreview]);
+  }, [activeReelPreview, dismissReelPreview]);
 
   const scrollReels = (direction: 'left' | 'right') => {
     const container = reelScrollRef.current;
@@ -487,107 +272,159 @@ const Portfolio = () => {
     pauseCollageVideos();
   }, [pauseCollageVideos]);
 
-  const theaterVerticalProgress = Math.min(Math.abs(theaterDragY) / THEATER_MAX_DRAG_DISTANCE, 1);
-  const theaterHorizontalProgress = Math.min(Math.abs(theaterDragX) / THEATER_MAX_DRAG_DISTANCE_X, 1);
-  const theaterInteractionProgress = Math.max(theaterVerticalProgress, theaterHorizontalProgress);
+  const reelClips: ReelClip[] = [
+    {
+      id: 1,
+      titleKey: 'portfolio.items.item1',
+      category: 'fashion',
+      videoSrc: 'https://assets.mixkit.co/videos/42308/42308-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/42308/42308-thumb-720-0.jpg',
+    },
+    {
+      id: 2,
+      titleKey: 'portfolio.items.item2',
+      category: 'beauty',
+      videoSrc: 'https://assets.mixkit.co/videos/50423/50423-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/50423/50423-thumb-720-0.jpg',
+    },
+    {
+      id: 3,
+      titleKey: 'portfolio.items.item3',
+      category: 'tech',
+      videoSrc: 'https://assets.mixkit.co/videos/39774/39774-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/39774/39774-thumb-720-0.jpg',
+    },
+    {
+      id: 4,
+      titleKey: 'portfolio.items.item4',
+      category: 'lifestyle',
+      videoSrc: 'https://assets.mixkit.co/videos/34487/34487-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/34487/34487-thumb-720-0.jpg',
+    },
+    {
+      id: 5,
+      titleKey: 'portfolio.items.item5',
+      category: 'beauty',
+      videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
+    },
+    {
+      id: 6,
+      titleKey: 'portfolio.items.item6',
+      category: 'fashion',
+      videoSrc: 'https://assets.mixkit.co/videos/42293/42293-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/42293/42293-thumb-720-0.jpg',
+    },
+    {
+      id: 7,
+      titleKey: 'portfolio.items.item7',
+      category: 'tech',
+      videoSrc: 'https://assets.mixkit.co/videos/47002/47002-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/47002/47002-thumb-720-2.jpg',
+    },
+    {
+      id: 8,
+      titleKey: 'portfolio.items.item8',
+      category: 'lifestyle',
+      videoSrc: 'https://assets.mixkit.co/videos/49647/49647-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/49647/49647-thumb-720-0.jpg',
+    },
+    {
+      id: 9,
+      titleKey: 'portfolio.items.item9',
+      category: 'lifestyle',
+      videoSrc: 'https://assets.mixkit.co/videos/34487/34487-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/34487/34487-thumb-720-0.jpg',
+    },
+    {
+      id: 10,
+      titleKey: 'portfolio.items.item10',
+      category: 'beauty',
+      videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
+    },
+  ];
+
+  const collageClips: CollageClip[] = [
+    {
+      id: 1,
+      labelKey: 'portfolio.items.item4',
+      videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
+      /* Left card */
+      cornerClass: 'top-[13%] left-[8%] w-[29%] -rotate-[6deg] z-30',
+      hoverClass: 'top-[12%] left-[16%] w-[29%] -rotate-[2deg] z-40',
+    },
+    {
+      id: 2,
+      labelKey: 'portfolio.items.item1',
+      videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
+      /* Center card */
+      cornerClass: 'top-[5%] left-[35%] w-[30%] rotate-0 z-50',
+      hoverClass: 'top-[7%] left-[35%] w-[30%] rotate-0 z-50 scale-[1.03]',
+    },
+    {
+      id: 3,
+      labelKey: 'portfolio.items.item5',
+      videoSrc: 'https://assets.mixkit.co/videos/51168/51168-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/51168/51168-thumb-720-0.jpg',
+      /* Right card */
+      cornerClass: 'top-[13%] right-[8%] w-[29%] rotate-[6deg] z-30',
+      hoverClass: 'top-[12%] right-[16%] w-[29%] rotate-[2deg] z-40',
+    },
+  ];
+
+  const theaterDragDistance = Math.abs(theaterDragY);
+  const theaterDragProgress = Math.min(theaterDragDistance / THEATER_MAX_DRAG_DISTANCE, 1);
   const theaterOverlayOpacity =
-    (isTheaterVisible ? 1 : 0) * (isTheaterDismissing ? 0 : 1 - theaterInteractionProgress * 0.34);
-  const theaterCardScale = 1 - theaterInteractionProgress * 0.04;
+    (isTheaterVisible && !isTheaterDismissing ? 1 : 0) * (1 - theaterDragProgress * 0.5);
+  const theaterCardScale = 1 - theaterDragProgress * 0.07;
+  const theaterCardRotation = theaterDragY * 0.012;
 
   const theaterCardTransform = isTheaterDismissing
-    ? `translate3d(0, ${theaterDismissDirection * 108}vh, 0) scale(0.96)`
+    ? `translate3d(0, ${theaterDismissDirection * 120}vh, 0) scale(0.88) rotate(${theaterDismissDirection * 3.8}deg)`
     : isTheaterVisible
-      ? `translate3d(${theaterDragX * 0.65}px, ${theaterDragY}px, 0) scale(${theaterCardScale})`
-      : 'translate3d(0, 22px, 0) scale(0.985)';
+      ? `translate3d(0, ${theaterDragY}px, 0) scale(${theaterCardScale}) rotate(${theaterCardRotation}deg)`
+      : 'translate3d(0, 36px, 0) scale(0.95)';
 
   const theaterCardTransition = isTheaterDragging
     ? 'transform 0ms linear, opacity 120ms linear'
     : isTheaterDismissing
-      ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.16, 1, 0.3, 1), opacity 280ms ease`
-      : 'transform 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease';
+      ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.32,0.72,0,1), opacity 250ms ease`
+      : 'transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease';
 
-  const theaterContentTransition = isTheaterReelSwitching
-    ? `transform ${THEATER_REEL_SWITCH_ANIMATION_MS}ms cubic-bezier(0.22, 1, 0.36, 1), opacity ${THEATER_REEL_SWITCH_ANIMATION_MS}ms ease`
-    : 'transform 0ms linear, opacity 0ms linear';
-
-
-  const splitTitleVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        delay: 0.1 + i * 0.1,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    }),
-  };
-
-  const titleWords = t('portfolio.sectionTitle').split(' ');
 
   return (
     <section id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
       <div className="studio-container">
-        <motion.div
-          className="studio-header mb-10 md:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-        >
+        <div className="studio-header mb-10 md:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
           <div className="text-center md:text-left">
-            <motion.div
-              className="inline-flex items-center gap-2 mb-6"
-              variants={headerVariants}
-            >
+            <div className="inline-flex items-center gap-2 mb-6">
               <span className="h-px w-8 bg-accent/40" />
               <p className="section-label text-accent text-sm md:text-base">{t('portfolio.sectionSubtitle')}</p>
-            </motion.div>
-            <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95] overflow-hidden flex flex-wrap gap-x-4 justify-center md:justify-start">
-              {titleWords.map((word, i) => (
-                <motion.span
-                  key={i}
-                  custom={i}
-                  variants={splitTitleVariants}
-                  className="inline-block"
-                >
-                  {word}
-                </motion.span>
-              ))}
-              <motion.span
-                className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent"
-                custom={titleWords.length}
-                variants={splitTitleVariants}
-              >
-                {t('portfolio.sectionTitleAccent')}
-              </motion.span>
+            </div>
+            <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95]">
+              {t('portfolio.sectionTitle')}
+              <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">{t('portfolio.sectionTitleAccent')}</span>
             </h2>
           </div>
-          <motion.div
-            className="lg:max-w-xs text-center lg:text-right"
-            variants={headerVariants}
-          >
+          <div className="lg:max-w-xs text-center lg:text-right">
             <p className="strategic-body text-foreground/40 text-lg md:text-xl italic">
               {t('portfolio.reelDescription')}
             </p>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         <div className="studio-rule mb-10 md:mb-12" />
 
         <div className="mb-12 md:mb-14">
-          <motion.div
-            className="mb-5 md:mb-6"
-            variants={headerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
+          <div className="mb-5 md:mb-6">
             <p className="section-label text-muted-foreground mb-2">{t('portfolio.reelSubtitle')}</p>
             <h3 className="text-xl md:text-[1.9rem] font-sans font-medium tracking-tight text-foreground leading-tight">
               {t('portfolio.reelTitle')}
             </h3>
-          </motion.div>
+          </div>
 
           <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-secondary/60 via-background to-secondary/60" />
@@ -617,17 +454,12 @@ const Portfolio = () => {
                 ref={reelScrollRef}
                 className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory md:snap-none"
               >
-                {REEL_CLIPS.map((clip, index) => (
-                  <motion.button
+                {reelClips.map((clip) => (
+                  <button
                     type="button"
                     key={clip.id}
-                    custom={index}
-                    variants={cardVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-50px" }}
                     className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center"
-                    onClick={() => openReelPreview(index)}
+                    onClick={() => openReelPreview(clip)}
                     aria-label={t(clip.titleKey)}
                   >
                     <video
@@ -656,7 +488,7 @@ const Portfolio = () => {
                         <VolumeX className="h-4 w-4" />
                       </span>
                     </div>
-                  </motion.button>
+                  </button>
                 ))}
               </div>
             </div>
@@ -664,12 +496,7 @@ const Portfolio = () => {
         </div>
 
         <div className="grid lg:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)] gap-8 lg:gap-10 items-center mb-14 md:mb-16">
-          <motion.div
-            variants={headerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
+          <div>
             <p className="section-label text-muted-foreground mb-4">{t('portfolio.collageEyebrow')}</p>
             <h3 className="text-3xl md:text-[2.4rem] font-sans font-medium tracking-tight leading-tight mb-5">
               {t('portfolio.collageTitle')}
@@ -694,18 +521,14 @@ const Portfolio = () => {
             <a href="#contact" className="btn-primary-nordic px-7 py-3 hover-grow btn-press">
               {t('portfolio.collageCta')}
             </a>
-          </motion.div>
+          </div>
 
           {/* Desktop: Absolute-positioned collage with hover interaction */}
-          <motion.div
+          <div
             className="hidden lg:block relative h-[530px] xl:h-[560px] w-full max-w-[720px] mx-auto rounded-[1.75rem] border border-border/60 overflow-hidden cursor-pointer shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.4)]"
             role="presentation"
             onMouseEnter={handleCollageMouseEnter}
             onMouseLeave={handleCollageMouseLeave}
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Sunset gradient background matching the reference */}
             <div
@@ -716,7 +539,7 @@ const Portfolio = () => {
             />
             <div className="absolute inset-0 bg-card/20" />
 
-            {COLLAGE_CLIPS.map((clip, index) => (
+            {collageClips.map((clip, index) => (
               <div
                 key={clip.id}
                 className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden origin-center will-change-transform transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${collageHovered ? clip.hoverClass : clip.cornerClass
@@ -748,16 +571,12 @@ const Portfolio = () => {
                 </div>
               </div>
             ))}
-          </motion.div>
+          </div>
 
           {/* Mobile: Collage layout with always-on looping videos */}
-          <motion.div
+          <div
             className="lg:hidden relative w-full max-w-[440px] rounded-[1.25rem] border border-border/60 p-4 overflow-hidden shadow-lg mx-auto"
             role="presentation"
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Sunset gradient background for mobile too */}
             <div
@@ -769,14 +588,14 @@ const Portfolio = () => {
             <div className="absolute inset-0 bg-card/15" />
 
             <div className="relative z-10 w-full h-[320px] sm:h-[360px]">
-              {COLLAGE_CLIPS.map((clip, index) => (
+              {collageClips.map((clip, index) => (
                 <div
                   key={clip.id}
                   className={`absolute rounded-xl border-2 border-white/85 shadow-md overflow-hidden ${index === 0
-                    ? 'top-[19%] left-[8%] w-[33%] -rotate-[7deg] z-20'
-                    : index === 1
-                      ? 'top-[6%] left-[34%] w-[32%] rotate-0 z-40'
-                      : 'top-[19%] right-[8%] w-[33%] rotate-[7deg] z-20'
+                      ? 'top-[19%] left-[8%] w-[33%] -rotate-[7deg] z-20'
+                      : index === 1
+                        ? 'top-[6%] left-[34%] w-[32%] rotate-0 z-40'
+                        : 'top-[19%] right-[8%] w-[33%] rotate-[7deg] z-20'
                     }`}
                   style={{ aspectRatio: '9/14' }}
                 >
@@ -797,7 +616,7 @@ const Portfolio = () => {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
@@ -833,7 +652,6 @@ const Portfolio = () => {
               transform: theaterCardTransform,
               opacity: isTheaterDismissing ? 0 : isTheaterVisible ? 1 : 0,
               transition: theaterCardTransition,
-              willChange: 'transform, opacity',
             }}
           >
             <div className="pointer-events-none absolute inset-0 rounded-[inherit] border border-white/20" />
@@ -848,15 +666,7 @@ const Portfolio = () => {
               <X className="h-4 w-4 text-foreground" />
             </button>
 
-            <div
-              className="relative rounded-[1.55rem] border border-border/70 bg-card/75 px-4 pb-4 pt-5 shadow-[inset_0_1px_0_hsl(var(--background)/0.45)]"
-              style={{
-                transform: `translate3d(${theaterReelShiftX}px, 0, 0)`,
-                opacity: isTheaterReelSwitching ? 1 : theaterReelShiftX === 0 ? 1 : 0.88,
-                transition: theaterContentTransition,
-                willChange: 'transform, opacity',
-              }}
-            >
+            <div className="relative rounded-[1.55rem] border border-border/70 bg-card/75 px-4 pb-4 pt-5 shadow-[inset_0_1px_0_hsl(var(--background)/0.45)]">
               <div className="mb-2 pr-12">
                 <p className="brand-logo text-[1.6rem] leading-[0.9] text-foreground">
                   Gise<span className="text-foreground font-medium">.UGC</span>
@@ -871,38 +681,13 @@ const Portfolio = () => {
               </h4>
 
               <div className="relative overflow-hidden rounded-[1.25rem] border border-white/25 bg-black shadow-[0_20px_52px_-30px_hsl(var(--foreground)/0.9)]">
-                <button
-                  type="button"
-                  className="absolute left-2 top-1/2 z-20 -translate-y-1/2 h-9 w-9 rounded-full border border-white/35 bg-black/40 text-white backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/60"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    navigateReelPreview(-1);
-                  }}
-                  aria-label={t('portfolio.reelPreviewPrev')}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  className="absolute right-2 top-1/2 z-20 -translate-y-1/2 h-9 w-9 rounded-full border border-white/35 bg-black/40 text-white backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/60"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    navigateReelPreview(1);
-                  }}
-                  aria-label={t('portfolio.reelPreviewNext')}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-
                 <video
-                  key={activeReelPreview.id}
                   className="w-full aspect-[9/16] object-cover"
                   src={activeReelPreview.videoSrc}
                   poster={activeReelPreview.poster}
                   controls
                   autoPlay
                   playsInline
-                  preload="metadata"
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent" />
               </div>

@@ -1,71 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Sparkles, Diamond, Zap } from 'lucide-react';
-import { motion, Variants } from 'framer-motion';
+import { ArrowDown, Sparkles, Diamond, Zap, Video, Image, ShoppingBag, MessageSquare, Award, TrendingUp } from 'lucide-react';
+
 
 const Hero = () => {
   const { t } = useTranslation();
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
-  const imageVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.98 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1],
-        delay: 0.2,
-      },
-    },
-  };
-
-  const splitTitleVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        delay: 0.3 + i * 0.1,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    }),
-  };
-
-  const floatVariants: Variants = {
-    animate: {
-      y: [0, -12, 0],
-      transition: {
-        duration: 5,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  const titleWords = ["Gisela", "Saldarriaga"];
 
   return (
     <section
@@ -76,74 +14,41 @@ const Hero = () => {
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="hero-shell grid lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] gap-12 lg:gap-16 items-center">
-          <motion.div
-            className="order-2 lg:order-1"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.div
-              className="inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/70 px-4 py-2 backdrop-blur-sm"
-              variants={itemVariants}
-            >
+          <div className="order-2 lg:order-1">
+            <div className="inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/70 px-4 py-2 backdrop-blur-sm animate-fade-in">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
               <p className="section-label font-outfit text-muted-foreground/95">{t('hero.subtitle')}</p>
-            </motion.div>
+            </div>
 
-            <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3 overflow-hidden flex flex-wrap gap-x-4">
-              {titleWords.map((word, i) => (
-                <motion.span
-                  key={i}
-                  custom={i}
-                  variants={splitTitleVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="inline-block"
-                >
-                  {word === "Saldarriaga" ? (
-                    <span className="text-accent luxury-accent">{word}</span>
-                  ) : (
-                    word
-                  )}
-                </motion.span>
-              ))}
+            <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3 animate-slide-down">
+              Gisela <span className="text-accent luxury-accent">Saldarriaga</span>
             </h1>
-
-            <motion.p
-              className="section-label text-foreground/55 mb-8"
-              variants={itemVariants}
+            <p
+              className="section-label text-foreground/55 mb-8 animate-fade-in"
+              style={{ animationDelay: '0.1s' }}
             >
               {t('hero.signature')}
-            </motion.p>
+            </p>
 
-            <motion.div
-              className="w-44 h-px signature-line mb-8"
-              variants={itemVariants}
-            />
+            <div className="w-44 h-px signature-line mb-8" />
 
-            <motion.p
-              className="strategic-body text-foreground/80 text-lg md:text-xl mb-10 max-w-xl"
-              variants={itemVariants}
+            <p
+              className="strategic-body text-foreground/80 text-lg md:text-xl mb-10 max-w-xl animate-fade-in"
+              style={{ animationDelay: '0.25s' }}
             >
               {t('hero.description')}
-            </motion.p>
+            </p>
 
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 sm:gap-5"
-              variants={itemVariants}
-            >
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 animate-fade-in" style={{ animationDelay: '0.4s' }}>
               <a href="#portfolio" className="btn-primary-nordic px-8 py-3.5 hover-grow btn-press">
                 {t('hero.buttonPortfolio')}
               </a>
               <a href="#contact" className="btn-secondary-nordic px-8 py-3.5 hover-grow">
                 {t('hero.buttonContact')}
               </a>
-            </motion.div>
+            </div>
 
-            <motion.div
-              className="mt-10 hidden md:flex md:flex-wrap gap-3"
-              variants={itemVariants}
-            >
+            <div className="mt-10 hidden md:flex md:flex-wrap gap-3 animate-fade-in" style={{ animationDelay: '0.55s' }}>
               <div className="hero-chip group">
                 <Sparkles className="h-3 w-3 text-accent/70 group-hover:text-accent transition-colors" />
                 <span>{t('hero.pillStrategy')}</span>
@@ -156,29 +61,13 @@ const Hero = () => {
                 <Zap className="h-3 w-3 text-accent/70 group-hover:text-accent transition-colors" />
                 <span>{t('hero.pillConversion')}</span>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          <motion.div
-            className="order-1 lg:order-2 flex justify-center lg:justify-end"
-            variants={imageVariants}
-            initial="hidden"
-            animate="visible"
-          >
+          <div className="order-1 lg:order-2 flex justify-center lg:justify-end animate-scale">
             <div className="relative w-full max-w-[25rem]">
-              <motion.div
-                className="hero-frame-glow absolute -inset-6 pointer-events-none"
-                animate={{
-                  opacity: [0.3, 0.6, 0.3],
-                  scale: [1, 1.05, 1]
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <motion.div
-                className="hero-image-shell relative overflow-hidden p-3.5 bg-card/95"
-                variants={floatVariants}
-                animate="animate"
-              >
+              <div className="hero-frame-glow absolute -inset-6 pointer-events-none" />
+              <div className="hero-image-shell relative overflow-hidden p-3.5 bg-card/95">
                 <img
                   src="/uploads/1bceae6e-5154-4d2e-b3fb-2957b86796a7.png"
                   alt={t('hero.imageAlt')}
@@ -186,41 +75,23 @@ const Hero = () => {
                   fetchPriority="high"
                   decoding="async"
                 />
-              </motion.div>
+              </div>
 
-              <motion.div
-                className="hero-floating-card"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-              >
+              <div className="hero-floating-card">
                 <p className="hero-floating-label">{t('hero.proofLabel')}</p>
                 <p className="hero-floating-value">{t('hero.proofValue')}</p>
                 <p className="hero-floating-caption">{t('hero.proofCaption')}</p>
-              </motion.div>
+              </div>
 
-              <motion.div
-                className="hero-corner-tag"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 1, ease: "easeOut" }}
-                whileHover={{ y: 5, transition: { duration: 0.2 } }}
-              >
+              <div className="hero-corner-tag">
                 <span>{t('hero.tagline')}</span>
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Introduction Section */}
-        <motion.div
-          className="mt-24 mb-16 pt-16 border-t border-border/40"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        >
+        <div className="mt-24 mb-16 pt-16 border-t border-border/40 animate-fade-in" style={{ animationDelay: '0.8s' }}>
           <div className="grid lg:grid-cols-[1fr_2fr] gap-12 items-start">
             <div className="space-y-6">
               <span className="section-label">{t('hero.introduction.eyebrow')}</span>
@@ -234,9 +105,12 @@ const Hero = () => {
               </p>
             </div>
           </div>
-        </motion.div>
+        </div>
+
+
       </div>
     </section>
+
   );
 };
 
