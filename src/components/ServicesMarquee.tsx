@@ -46,7 +46,7 @@ const ServicesMarquee = () => {
         },
     ];
 
-    const marqueeCards = [...serviceVideoCards, ...serviceVideoCards];
+    const marqueeCards = [...serviceVideoCards, ...serviceVideoCards, ...serviceVideoCards];
 
     const handleVideoHover = (index: number) => {
         const video = videoRefs.current[index];
