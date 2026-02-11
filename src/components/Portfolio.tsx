@@ -56,6 +56,7 @@ const Portfolio = () => {
     collageVideoRefs.current.forEach((video) => {
       if (video) {
         video.pause();
+        video.currentTime = 0;
       }
     });
   }, []);
@@ -150,8 +151,8 @@ const Portfolio = () => {
       videoSrc: 'https://assets.mixkit.co/videos/50406/50406-720.mp4',
       poster: 'https://assets.mixkit.co/videos/50406/50406-thumb-720-0.jpg',
       /* Top-left */
-      cornerClass: 'top-[4%] left-[4%] w-[28%] -rotate-[4deg] -translate-x-[6%] -translate-y-[4%]',
-      hoverClass: 'top-[10%] left-[12%] w-[30%] -rotate-[2deg]',
+      cornerClass: 'top-[6%] left-[7%] w-[30%] -rotate-[5deg] z-20',
+      hoverClass: 'top-[10%] left-[14%] w-[29%] -rotate-[1deg] z-30',
     },
     {
       id: 2,
@@ -159,8 +160,8 @@ const Portfolio = () => {
       videoSrc: 'https://assets.mixkit.co/videos/50426/50426-720.mp4',
       poster: 'https://assets.mixkit.co/videos/50426/50426-thumb-720-0.jpg',
       /* Top-center */
-      cornerClass: 'top-[-2%] left-[35%] w-[26%] rotate-[1deg] -translate-y-[4%]',
-      hoverClass: 'top-[4%] left-[35%] w-[28%] rotate-[0deg] z-10',
+      cornerClass: 'top-[1%] left-[36%] w-[28%] rotate-[2deg] z-30',
+      hoverClass: 'top-[4%] left-[36%] w-[28%] rotate-[0deg] z-40',
     },
     {
       id: 3,
@@ -168,8 +169,8 @@ const Portfolio = () => {
       videoSrc: 'https://assets.mixkit.co/videos/50426/50426-720.mp4',
       poster: 'https://assets.mixkit.co/videos/50426/50426-thumb-720-0.jpg',
       /* Top-right */
-      cornerClass: 'top-[2%] right-[4%] w-[27%] rotate-[4deg] translate-x-[6%] -translate-y-[2%]',
-      hoverClass: 'top-[12%] right-[14%] w-[29%] rotate-[2deg]',
+      cornerClass: 'top-[7%] right-[7%] w-[30%] rotate-[5deg] z-20',
+      hoverClass: 'top-[10%] right-[14%] w-[29%] rotate-[1deg] z-30',
     },
     {
       id: 4,
@@ -177,8 +178,8 @@ const Portfolio = () => {
       videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
       poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
       /* Center */
-      cornerClass: 'top-[30%] left-[37%] w-[25%] rotate-[0deg] scale-[0.85] opacity-80 z-10',
-      hoverClass: 'top-[26%] left-[37%] w-[28%] rotate-[0deg] z-20 opacity-100',
+      cornerClass: 'top-[30%] left-[37%] w-[27%] rotate-[0deg] scale-[0.9] z-40',
+      hoverClass: 'top-[28%] left-[36%] w-[30%] rotate-[0deg] z-50 scale-100',
     },
     {
       id: 5,
@@ -186,8 +187,8 @@ const Portfolio = () => {
       videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
       poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
       /* Bottom-left */
-      cornerClass: 'bottom-[4%] left-[4%] w-[28%] -rotate-[3deg] -translate-x-[4%] translate-y-[4%]',
-      hoverClass: 'bottom-[12%] left-[14%] w-[30%] -rotate-[1deg]',
+      cornerClass: 'bottom-[6%] left-[8%] w-[30%] -rotate-[4deg] z-20',
+      hoverClass: 'bottom-[10%] left-[15%] w-[29%] -rotate-[1deg] z-30',
     },
     {
       id: 6,
@@ -195,8 +196,8 @@ const Portfolio = () => {
       videoSrc: 'https://assets.mixkit.co/videos/51168/51168-720.mp4',
       poster: 'https://assets.mixkit.co/videos/51168/51168-thumb-720-0.jpg',
       /* Bottom-right */
-      cornerClass: 'bottom-[2%] right-[4%] w-[26%] rotate-[5deg] translate-x-[6%] translate-y-[6%]',
-      hoverClass: 'bottom-[10%] right-[15%] w-[28%] rotate-[2deg]',
+      cornerClass: 'bottom-[7%] right-[8%] w-[30%] rotate-[4deg] z-20',
+      hoverClass: 'bottom-[10%] right-[15%] w-[29%] rotate-[1deg] z-30',
     },
   ];
 
@@ -331,7 +332,7 @@ const Portfolio = () => {
 
           {/* Desktop: Absolute-positioned collage with hover interaction */}
           <div
-            className="hidden md:block relative h-[460px] rounded-[1.75rem] border border-border/60 overflow-hidden cursor-pointer shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.4)]"
+            className="hidden lg:block relative h-[500px] xl:h-[540px] w-full max-w-[720px] mx-auto rounded-[1.75rem] border border-border/60 overflow-hidden cursor-pointer shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.4)]"
             role="presentation"
             onMouseEnter={handleCollageMouseEnter}
             onMouseLeave={handleCollageMouseLeave}
@@ -348,7 +349,7 @@ const Portfolio = () => {
             {collageClips.map((clip, index) => (
               <div
                 key={clip.id}
-                className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${collageHovered ? clip.hoverClass : clip.cornerClass
+                className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden origin-center will-change-transform transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${collageHovered ? clip.hoverClass : clip.cornerClass
                   }`}
                 style={{ aspectRatio: '9/16' }}
               >
@@ -381,7 +382,7 @@ const Portfolio = () => {
 
           {/* Mobile: Grid layout so videos don't overlap */}
           <div
-            className="md:hidden relative rounded-[1.25rem] border border-border/60 p-3 overflow-hidden shadow-lg"
+            className="lg:hidden relative rounded-[1.25rem] border border-border/60 p-3.5 overflow-hidden shadow-lg max-w-[440px] mx-auto"
             role="presentation"
           >
             {/* Sunset gradient background for mobile too */}
@@ -393,13 +394,12 @@ const Portfolio = () => {
             />
             <div className="absolute inset-0 bg-card/15" />
 
-            <div className="relative z-10 grid grid-cols-2 gap-2.5">
-              {collageClips.map((clip, index) => (
+            <div className="relative z-10 grid grid-cols-3 gap-2.5">
+              {collageClips.map((clip) => (
                 <div
                   key={clip.id}
-                  className={`rounded-xl border-2 border-white/80 shadow-md overflow-hidden ${index === 3 ? 'col-span-2 mx-auto w-[55%]' : ''
-                    }`}
-                  style={{ aspectRatio: '9/16' }}
+                  className="rounded-xl border-2 border-white/80 shadow-md overflow-hidden"
+                  style={{ aspectRatio: '9/14' }}
                 >
                   <video
                     className="h-full w-full object-cover"
