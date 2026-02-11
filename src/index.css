@@ -329,7 +329,7 @@
   }
 
   .service-marquee {
-    animation: services-marquee 44s linear infinite;
+    animation: services-marquee 56s linear infinite;
     will-change: transform;
   }
 

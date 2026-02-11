@@ -116,28 +116,31 @@ const Services = () => {
         </div>
 
         <div className="mt-20">
-          <div className="text-center mb-8">
+          <div className="text-center mb-10">
             <h3 className="text-3xl md:text-5xl font-serif font-normal tracking-[-0.04em] leading-tight max-w-4xl mx-auto">
               {t('services.motionTitle')}
             </h3>
+            <p className="relative z-20 text-sm text-muted-foreground mt-4">
+              {t('services.motionSubtitle')}
+            </p>
           </div>
 
-          <div className="cafe-panel relative overflow-hidden min-h-[260px] p-5 md:p-7">
-            <div className="absolute inset-0 bg-card" />
-            <div className="absolute inset-y-0 left-0 w-14 md:w-20 z-20 bg-gradient-to-r from-card via-card/90 to-transparent" />
-            <div className="absolute inset-y-0 right-0 w-14 md:w-20 z-20 bg-gradient-to-l from-card via-card/90 to-transparent" />
+          <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-secondary/60 via-background to-secondary/60" />
+            <div className="absolute inset-y-0 left-0 w-16 md:w-28 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
+            <div className="absolute inset-y-0 right-0 w-16 md:w-28 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
 
             <div className="relative z-10">
-              <div className="service-marquee flex w-max gap-4 py-5">
+              <div className="service-marquee flex w-max gap-5 lg:gap-6 py-5 md:py-7">
                 {serviceCards.map((card, index) => (
                   <button
                     type="button"
                     key={`${card.titleKey}-${index}`}
-                    className="shrink-0 w-[220px] sm:w-[260px] rounded-2xl border border-border bg-card p-3 shadow-sm text-left hover:border-primary/40 transition-colors"
+                    className="shrink-0 w-[280px] sm:w-[320px] lg:w-[360px] overflow-hidden rounded-2xl border border-border bg-card shadow-sm text-left hover:border-primary/40 transition-colors"
                     aria-label={t(card.titleKey)}
                     onClick={() => setActivePreview(card)}
                   >
-                    <div className="h-[130px] sm:h-[150px] rounded-xl bg-secondary mb-3 overflow-hidden">
+                    <div className="h-[170px] sm:h-[200px] lg:h-[220px] w-full bg-secondary overflow-hidden">
                       <video
                         className="h-full w-full object-cover"
                         src={card.videoSrc}
@@ -149,17 +152,15 @@ const Services = () => {
                         preload="metadata"
                       />
                     </div>
-                    <p className="text-xl sm:text-2xl font-serif text-foreground text-center leading-tight tracking-[-0.02em]">
-                      {t(card.titleKey)}
-                    </p>
+                    <div className="px-4 py-3 sm:px-5 sm:py-4">
+                      <p className="text-2xl sm:text-[2rem] font-serif text-foreground text-center leading-tight tracking-[-0.03em]">
+                        {t(card.titleKey)}
+                      </p>
+                    </div>
                   </button>
                 ))}
               </div>
             </div>
-
-            <p className="relative z-20 text-center text-sm text-muted-foreground mt-3">
-              {t('services.motionSubtitle')}
-            </p>
           </div>
         </div>
       </div>
