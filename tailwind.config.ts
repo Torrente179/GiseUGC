@@ -27,7 +27,7 @@ export default {
 			},
 			letterSpacing: {
 				'tight-serif': '-0.05em',
-				prestige: '0.5em',
+				prestige: '0.18em',
 			},
 			colors: {
 				border: 'hsl(var(--border))',
