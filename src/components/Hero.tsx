@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Sparkles, Diamond, Zap } from 'lucide-react';
 
 const Hero = () => {
   const { t } = useTranslation();
@@ -47,10 +47,19 @@ const Hero = () => {
               </a>
             </div>
 
-            <div className="mt-9 grid gap-3 sm:grid-cols-3 max-w-2xl animate-fade-in" style={{ animationDelay: '0.55s' }}>
-              <div className="hero-chip">{t('hero.pillStrategy')}</div>
-              <div className="hero-chip">{t('hero.pillAesthetic')}</div>
-              <div className="hero-chip">{t('hero.pillConversion')}</div>
+            <div className="mt-10 flex flex-wrap gap-3 animate-fade-in" style={{ animationDelay: '0.55s' }}>
+              <div className="hero-chip group">
+                <Sparkles className="h-3 w-3 text-accent/70 group-hover:text-accent transition-colors" />
+                <span>{t('hero.pillStrategy')}</span>
+              </div>
+              <div className="hero-chip group">
+                <Diamond className="h-3 w-3 text-accent/70 group-hover:text-accent transition-colors" />
+                <span>{t('hero.pillAesthetic')}</span>
+              </div>
+              <div className="hero-chip group">
+                <Zap className="h-3 w-3 text-accent/70 group-hover:text-accent transition-colors" />
+                <span>{t('hero.pillConversion')}</span>
+              </div>
             </div>
           </div>
 

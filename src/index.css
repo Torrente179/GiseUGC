@@ -193,7 +193,14 @@
   }
 
   .studio-header {
-    @apply grid gap-6 md:gap-8 lg:grid-cols-[minmax(0,0.62fr)_minmax(0,0.38fr)] lg:items-end mb-12 md:mb-14;
+    @apply grid gap-6 md:gap-8 lg:items-end mb-12 md:mb-14;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1024px) {
+    .studio-header {
+      grid-template-columns: minmax(0, 0.62fr) minmax(0, 0.38fr);
+    }
   }
 
   .studio-title {
@@ -258,20 +265,18 @@
     bottom: 6%;
     left: 53%;
     width: 1px;
-    background: linear-gradient(
-      180deg,
-      transparent,
-      hsl(var(--foreground) / 0.08) 18%,
-      hsl(var(--foreground) / 0.14) 50%,
-      hsl(var(--foreground) / 0.08) 82%,
-      transparent
-    );
+    background: linear-gradient(180deg,
+        transparent,
+        hsl(var(--foreground) / 0.08) 18%,
+        hsl(var(--foreground) / 0.14) 50%,
+        hsl(var(--foreground) / 0.08) 82%,
+        transparent);
     opacity: 0;
     pointer-events: none;
   }
 
   .hero-chip {
-    @apply rounded-full border border-border/80 bg-card/80 px-4 py-2.5 text-center text-sm font-medium tracking-[0.04em] text-muted-foreground backdrop-blur-sm;
+    @apply inline-flex items-center gap-2.5 rounded-full border border-border/50 bg-card/45 px-5 py-2.5 text-[11px] sm:text-[12.5px] font-medium tracking-[0.01em] text-muted-foreground/90 backdrop-blur-md transition-all duration-300 hover:border-accent/30 hover:bg-card/80 hover:text-foreground hover:shadow-[0_12px_24px_-12px_hsl(var(--foreground)/0.15)] cursor-default;
   }
 
   .hero-image-shell {
@@ -527,6 +532,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+
     .service-marquee,
     .service-corner-drift {
       animation: none;
