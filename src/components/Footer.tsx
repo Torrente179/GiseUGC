@@ -17,18 +17,18 @@ const Footer = () => {
             <p className="strategic-body text-foreground/70 max-w-md">{t('footer.description')}</p>
 
             <div className="flex gap-3 mt-8">
-              <a href="#" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+              <button type="button" aria-label="Instagram" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
                 <Instagram className="h-4 w-4" />
-              </a>
-              <a href="#" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+              </button>
+              <button type="button" aria-label="Twitter" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
                 <Twitter className="h-4 w-4" />
-              </a>
-              <a href="#" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+              </button>
+              <button type="button" aria-label="LinkedIn" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
                 <Linkedin className="h-4 w-4" />
-              </a>
-              <a href="#" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+              </button>
+              <button type="button" aria-label="Facebook" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
                 <Facebook className="h-4 w-4" />
-              </a>
+              </button>
             </div>
           </div>
 
