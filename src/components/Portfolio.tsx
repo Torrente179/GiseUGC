@@ -83,6 +83,20 @@ const Portfolio = () => {
       videoSrc: 'https://assets.mixkit.co/videos/49647/49647-720.mp4',
       poster: 'https://assets.mixkit.co/videos/49647/49647-thumb-720-0.jpg',
     },
+    {
+      id: 9,
+      titleKey: 'portfolio.items.item9',
+      category: 'lifestyle',
+      videoSrc: 'https://assets.mixkit.co/videos/34487/34487-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/34487/34487-thumb-720-0.jpg',
+    },
+    {
+      id: 10,
+      titleKey: 'portfolio.items.item10',
+      category: 'beauty',
+      videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
+    },
   ];
 
   const collageClips: CollageClip[] = [
@@ -189,7 +203,7 @@ const Portfolio = () => {
             <div className="absolute inset-y-0 right-0 w-8 sm:w-12 md:w-20 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
 
             <div className="relative z-10 mx-auto max-w-[1920px] px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
                 {reelClips.map((clip) => (
                   <button
                     type="button"
@@ -306,15 +320,13 @@ const Portfolio = () => {
                 />
 
                 <div
-                  className={`absolute inset-0 bg-black/35 backdrop-blur-[1px] transition-opacity duration-300 ${
-                    collagePlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
-                  }`}
+                  className={`absolute inset-0 bg-black/35 backdrop-blur-[1px] transition-opacity duration-300 ${collagePlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                    }`}
                 />
 
                 <span
-                  className={`absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full bg-card/90 text-primary transition-opacity duration-300 ${
-                    collagePlaying ? 'opacity-0' : 'opacity-100'
-                  }`}
+                  className={`absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full bg-card/90 text-primary transition-opacity duration-300 ${collagePlaying ? 'opacity-0' : 'opacity-100'
+                    }`}
                 >
                   <Play className="h-5 w-5 fill-current" />
                 </span>
