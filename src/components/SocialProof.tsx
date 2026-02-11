@@ -101,7 +101,7 @@ const SocialProof = () => {
                   {stat.icon}
                 </div>
 
-                <span className="block text-4xl md:text-[3.25rem] font-serif font-normal tracking-[-0.04em] text-primary mb-2 leading-none">
+                <span className="block text-4xl md:text-[3.25rem] font-sans font-medium tracking-tight text-primary mb-2 leading-none">
                   <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                 </span>
 

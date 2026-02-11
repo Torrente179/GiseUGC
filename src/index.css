@@ -215,7 +215,7 @@
   }
 
   .studio-title {
-    @apply text-3xl md:text-4xl lg:text-[2.7rem] font-serif font-normal tracking-[-0.04em] leading-tight text-foreground;
+    @apply text-3xl md:text-4xl lg:text-[3.2rem] font-sans font-medium tracking-tight leading-[1.1] text-foreground;
   }
 
   .studio-subtitle {

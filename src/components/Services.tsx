@@ -51,7 +51,7 @@ const Services = () => {
         <div className="studio-header mb-12">
           <div className="text-center md:text-left">
             <p className="section-label text-muted-foreground mb-4">{t('services.sectionSubtitle')}</p>
-            <h2 className="studio-title text-4xl md:text-5xl lg:text-6xl">{t('services.sectionTitle')}</h2>
+            <h2 className="studio-title">{t('services.sectionTitle')}</h2>
           </div>
           <p className="studio-subtitle lg:justify-self-end text-center md:text-right max-w-lg">
             {t('services.motionSubtitle')}
@@ -69,7 +69,7 @@ const Services = () => {
               <div className="mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110">
                 {service.icon}
               </div>
-              <h3 className="text-lg md:text-2xl font-serif font-normal tracking-[-0.02em] md:tracking-[-0.03em] text-foreground mb-3 md:mb-4 leading-tight">
+              <h3 className="text-lg md:text-2xl font-sans font-medium tracking-tight text-foreground mb-3 md:mb-4 leading-tight">
                 {t(service.titleKey)}
               </h3>
               <p className="text-muted-foreground leading-relaxed text-sm md:text-base line-clamp-3 md:line-clamp-none">
