@@ -194,6 +194,10 @@
     font-family: 'Playfair Display', serif;
   }
 
+  .font-outfit {
+    font-family: 'Outfit', sans-serif;
+  }
+
   .editorial-label {
     @apply font-sans font-bold uppercase text-[10px] tracking-prestige leading-none;
   }

@@ -17,7 +17,7 @@ const Hero = () => {
           <div className="order-2 lg:order-1">
             <div className="inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/70 px-4 py-2 backdrop-blur-sm animate-fade-in">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              <p className="section-label text-muted-foreground/95">{t('hero.subtitle')}</p>
+              <p className="section-label font-outfit text-muted-foreground/95">{t('hero.subtitle')}</p>
             </div>
 
             <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3 animate-slide-down">
