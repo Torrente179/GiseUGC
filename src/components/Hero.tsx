@@ -20,7 +20,7 @@ const Hero = () => {
               <p className="section-label text-muted-foreground/95">{t('hero.subtitle')}</p>
             </div>
 
-            <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-accent mt-7 mb-3 animate-slide-down">
+            <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3 animate-slide-down">
               Gisela <span className="text-accent luxury-accent">Saldarriaga</span>
             </h1>
             <p
