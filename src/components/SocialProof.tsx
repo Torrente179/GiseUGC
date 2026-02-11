@@ -83,14 +83,10 @@ const SocialProof = () => {
   ];
 
   return (
-    <section className="relative z-20 -mt-10 md:-mt-14 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-border/40 bg-card/35 backdrop-blur-2xl shadow-[0_32px_80px_-40px_rgba(0,0,0,0.12)] group">
-          {/* Subtle background luxury textures */}
-          <div className="absolute inset-0 -z-10 bg-gradient-to-br from-white/10 via-transparent to-black/5 opacity-40" />
-          <div className="absolute top-0 right-0 w-80 h-80 bg-accent/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 items-center py-10 md:py-14">
+    <section className="relative z-20 py-20 bg-white border-y border-muted/30">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="relative overflow-hidden group">
+          <div className="grid grid-cols-2 lg:grid-cols-4 items-center gap-y-12 lg:gap-0">
             {stats.map((stat, index) => (
               <div
                 key={index}
@@ -98,31 +94,23 @@ const SocialProof = () => {
               >
                 {/* Vertical separator for desktop */}
                 {index !== 0 && (
-                  <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-16 bg-gradient-to-b from-transparent via-border/40 to-transparent" />
+                  <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-16 bg-gradient-to-b from-transparent via-muted to-transparent" />
                 )}
 
-                {/* Horizontal separator for mobile (only between rows) */}
-                {index === 2 && (
-                  <div className="lg:hidden absolute -top-5 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-border/30 to-transparent" />
-                )}
-
-                <div className="mb-4 text-primary/30 group-hover/item:text-primary/70 transition-colors duration-500">
+                <div className="mb-4 text-accent/40 group-hover/item:text-accent transition-colors duration-500">
                   {stat.icon}
                 </div>
 
-                <span className="block text-4xl md:text-[3.25rem] font-serif font-normal tracking-[-0.04em] text-foreground mb-2 leading-none">
+                <span className="block text-4xl md:text-[3.25rem] font-serif font-normal tracking-[-0.04em] text-primary mb-2 leading-none">
                   <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                 </span>
 
-                <span className="block text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-muted-foreground/80 font-medium">
+                <span className="block text-[10px] md:text-[11px] uppercase tracking-[0.24em] text-muted-foreground font-semibold">
                   {t(stat.labelKey)}
                 </span>
               </div>
             ))}
           </div>
-
-          {/* Bottom highlight line */}
-          <div className="absolute bottom-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
         </div>
       </div>
     </section>
