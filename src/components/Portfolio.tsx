@@ -260,14 +260,17 @@ const Portfolio = () => {
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        event.preventDefault();
         dismissReelPreview();
         return;
       }
       if (event.key === 'ArrowRight') {
+        event.preventDefault();
         navigateReelPreview(1);
         return;
       }
       if (event.key === 'ArrowLeft') {
+        event.preventDefault();
         navigateReelPreview(-1);
       }
     };
@@ -280,23 +283,41 @@ const Portfolio = () => {
     if (!isTheaterOpen) return;
 
     const scrollY = window.scrollY;
+    const htmlElement = document.documentElement;
     const previousStyles = {
       position: document.body.style.position,
       top: document.body.style.top,
+      left: document.body.style.left,
+      right: document.body.style.right,
       width: document.body.style.width,
       overflow: document.body.style.overflow,
+      overscrollBehavior: document.body.style.overscrollBehavior,
+    };
+    const previousHtmlStyles = {
+      overflow: htmlElement.style.overflow,
+      overscrollBehavior: htmlElement.style.overscrollBehavior,
     };
 
     document.body.style.position = 'fixed';
     document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
     document.body.style.width = '100%';
     document.body.style.overflow = 'hidden';
+    document.body.style.overscrollBehavior = 'none';
+    htmlElement.style.overflow = 'hidden';
+    htmlElement.style.overscrollBehavior = 'none';
 
     return () => {
       document.body.style.position = previousStyles.position;
       document.body.style.top = previousStyles.top;
+      document.body.style.left = previousStyles.left;
+      document.body.style.right = previousStyles.right;
       document.body.style.width = previousStyles.width;
       document.body.style.overflow = previousStyles.overflow;
+      document.body.style.overscrollBehavior = previousStyles.overscrollBehavior;
+      htmlElement.style.overflow = previousHtmlStyles.overflow;
+      htmlElement.style.overscrollBehavior = previousHtmlStyles.overscrollBehavior;
       window.scrollTo(0, scrollY);
     };
   }, [isTheaterOpen]);
@@ -725,7 +746,7 @@ const Portfolio = () => {
           >
             <button
               type="button"
-              className="absolute -left-2 md:-left-14 top-1/2 -translate-y-1/2 z-[210] h-6 w-6 md:h-11 md:w-11 rounded-full border border-white/35 bg-black/45 text-white backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/65"
+              className="absolute left-0 top-1/2 -translate-x-[122%] -translate-y-1/2 z-[220] h-6 w-6 md:h-11 md:w-11 rounded-full border border-white/35 bg-black/55 text-white shadow-[0_12px_26px_-14px_rgba(0,0,0,0.9)] backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/70"
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -737,7 +758,7 @@ const Portfolio = () => {
             </button>
             <button
               type="button"
-              className="absolute -right-2 md:-right-14 top-1/2 -translate-y-1/2 z-[210] h-6 w-6 md:h-11 md:w-11 rounded-full border border-white/35 bg-black/45 text-white backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/65"
+              className="absolute right-0 top-1/2 translate-x-[122%] -translate-y-1/2 z-[220] h-6 w-6 md:h-11 md:w-11 rounded-full border border-white/35 bg-black/55 text-white shadow-[0_12px_26px_-14px_rgba(0,0,0,0.9)] backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/70"
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
