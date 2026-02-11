@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, type TouchEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Play, VolumeX, X } from 'lucide-react';
 
@@ -29,6 +29,44 @@ const Portfolio = () => {
 
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const reelScrollRef = useRef<HTMLDivElement>(null);
+  const theaterSwipeStartRef = useRef<{ x: number; y: number; timestamp: number } | null>(null);
+
+  const closeActiveReelPreview = useCallback(() => {
+    setActiveReelPreview(null);
+  }, []);
+
+  const handleTheaterTouchStart = useCallback((event: TouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    theaterSwipeStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      timestamp: Date.now(),
+    };
+  }, []);
+
+  const handleTheaterTouchEnd = useCallback(
+    (event: TouchEvent<HTMLDivElement>) => {
+      const swipeStart = theaterSwipeStartRef.current;
+      theaterSwipeStartRef.current = null;
+      if (!swipeStart) return;
+
+      const touch = event.changedTouches[0];
+      const deltaX = touch.clientX - swipeStart.x;
+      const deltaY = touch.clientY - swipeStart.y;
+      const elapsed = Date.now() - swipeStart.timestamp;
+      const isVerticalSwipe = Math.abs(deltaY) > Math.abs(deltaX) * 1.2;
+      const crossedThreshold = Math.abs(deltaY) >= 90 && elapsed <= 900;
+
+      if (isVerticalSwipe && crossedThreshold) {
+        closeActiveReelPreview();
+      }
+    },
+    [closeActiveReelPreview],
+  );
+
+  const resetTheaterSwipe = useCallback(() => {
+    theaterSwipeStartRef.current = null;
+  }, []);
 
   const scrollReels = (direction: 'left' | 'right') => {
     const container = reelScrollRef.current;
@@ -402,17 +440,20 @@ const Portfolio = () => {
 
       {activeReelPreview && (
         <div
-          className="fixed inset-0 z-50 bg-foreground/55 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setActiveReelPreview(null)}
+          className="fixed inset-0 z-[200] bg-foreground/55 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={closeActiveReelPreview}
         >
           <div
             className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-3 shadow-xl"
             onClick={(event) => event.stopPropagation()}
+            onTouchStart={handleTheaterTouchStart}
+            onTouchEnd={handleTheaterTouchEnd}
+            onTouchCancel={resetTheaterSwipe}
           >
             <button
               type="button"
               className="absolute top-3 right-3 h-8 w-8 rounded-full border border-border bg-card/90 flex items-center justify-center hover:bg-secondary"
-              onClick={() => setActiveReelPreview(null)}
+              onClick={closeActiveReelPreview}
               aria-label={t('portfolio.reelPreviewClose')}
             >
               <X className="h-4 w-4 text-foreground" />
