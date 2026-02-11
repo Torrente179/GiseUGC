@@ -40,6 +40,7 @@ const Portfolio = () => {
 
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
   const [activeReelIndex, setActiveReelIndex] = useState<number | null>(null);
+  const isTheaterOpen = activeReelPreview !== null;
   const [collageHovered, setCollageHovered] = useState(false);
   const [theaterDragY, setTheaterDragY] = useState(0);
   const [isTheaterDragging, setIsTheaterDragging] = useState(false);
@@ -276,7 +277,7 @@ const Portfolio = () => {
   }, [activeReelPreview, dismissReelPreview, navigateReelPreview]);
 
   useEffect(() => {
-    if (!activeReelPreview) return;
+    if (!isTheaterOpen) return;
 
     const scrollY = window.scrollY;
     const previousStyles = {
@@ -298,7 +299,7 @@ const Portfolio = () => {
       document.body.style.overflow = previousStyles.overflow;
       window.scrollTo(0, scrollY);
     };
-  }, [activeReelPreview]);
+  }, [isTheaterOpen]);
 
   const scrollReels = (direction: 'left' | 'right') => {
     const container = reelScrollRef.current;
@@ -715,41 +716,46 @@ const Portfolio = () => {
                 'radial-gradient(circle at 14% 12%, hsl(var(--accent) / 0.24) 0%, transparent 48%), radial-gradient(circle at 84% 88%, hsl(var(--primary) / 0.26) 0%, transparent 52%)',
             }}
           />
-          <button
-            type="button"
-            className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 z-[210] h-7 w-7 sm:h-10 sm:w-10 rounded-full border border-white/35 bg-black/40 text-white backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/60"
-            onClick={(event) => {
-              event.stopPropagation();
-              navigateReelPreview(-1);
-            }}
-            aria-label={t('portfolio.reelPreviewPrev')}
-          >
-            <ChevronLeft className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
-          </button>
-          <button
-            type="button"
-            className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 z-[210] h-7 w-7 sm:h-10 sm:w-10 rounded-full border border-white/35 bg-black/40 text-white backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/60"
-            onClick={(event) => {
-              event.stopPropagation();
-              navigateReelPreview(1);
-            }}
-            aria-label={t('portfolio.reelPreviewNext')}
-          >
-            <ChevronRight className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
-          </button>
           <div
-            className="relative w-full max-w-[430px] overflow-hidden rounded-[2rem] border border-white/25 bg-card/80 p-[10px] shadow-[0_38px_92px_-42px_hsl(var(--foreground)/0.9)] backdrop-blur-2xl"
-            onClick={(event) => event.stopPropagation()}
+            className="relative w-full max-w-[430px]"
             onTouchStart={handleTheaterTouchStart}
             onTouchMove={handleTheaterTouchMove}
             onTouchEnd={handleTheaterTouchEnd}
             onTouchCancel={resetTheaterSwipe}
-            style={{
-              transform: theaterCardTransform,
-              opacity: isTheaterDismissing ? 0 : isTheaterVisible ? 1 : 0,
-              transition: theaterCardTransition,
-            }}
           >
+            <button
+              type="button"
+              className="absolute -left-2 md:-left-14 top-1/2 -translate-y-1/2 z-[210] h-6 w-6 md:h-11 md:w-11 rounded-full border border-white/35 bg-black/45 text-white backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/65"
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                navigateReelPreview(-1);
+              }}
+              aria-label={t('portfolio.reelPreviewPrev')}
+            >
+              <ChevronLeft className="h-3 w-3 md:h-5 md:w-5" />
+            </button>
+            <button
+              type="button"
+              className="absolute -right-2 md:-right-14 top-1/2 -translate-y-1/2 z-[210] h-6 w-6 md:h-11 md:w-11 rounded-full border border-white/35 bg-black/45 text-white backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/65"
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                navigateReelPreview(1);
+              }}
+              aria-label={t('portfolio.reelPreviewNext')}
+            >
+              <ChevronRight className="h-3 w-3 md:h-5 md:w-5" />
+            </button>
+            <div
+              className="relative w-full overflow-hidden rounded-[2rem] border border-white/25 bg-card/80 p-[10px] shadow-[0_38px_92px_-42px_hsl(var(--foreground)/0.9)] backdrop-blur-2xl"
+              onClick={(event) => event.stopPropagation()}
+              style={{
+                transform: theaterCardTransform,
+                opacity: isTheaterDismissing ? 0 : isTheaterVisible ? 1 : 0,
+                transition: theaterCardTransition,
+              }}
+            >
             <div className="pointer-events-none absolute inset-0 rounded-[inherit] border border-white/20" />
             <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[linear-gradient(180deg,hsl(var(--card)/0.42)_0%,hsl(var(--card)/0.08)_40%,transparent_100%)]" />
 
@@ -792,6 +798,7 @@ const Portfolio = () => {
                 {t('portfolio.reelPreviewSwipeHint')}
               </p>
             </div>
+          </div>
           </div>
         </div>
       )}
