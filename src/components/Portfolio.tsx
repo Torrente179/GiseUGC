@@ -246,19 +246,17 @@ const Portfolio = () => {
   };
 
   return (
-    <section id="portfolio" className="section-padding relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-brand-cream/60 to-secondary/45" />
-      <div className="absolute left-[-14rem] bottom-[-10rem] h-[24rem] w-[24rem] rounded-full bg-primary/10 blur-[120px]" />
+    <section id="portfolio" className="section-padding bg-secondary/20">
 
       <div className="container relative z-10 mx-auto">
         <div className="text-center mb-12">
-          <p className="text-brand-olive mb-3 uppercase tracking-[0.18em] font-semibold">{t('portfolio.sectionSubtitle')}</p>
+          <p className="text-muted-foreground mb-3 uppercase tracking-[0.18em] font-semibold">{t('portfolio.sectionSubtitle')}</p>
           <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">{t('portfolio.sectionTitle')}</h2>
           <div className="w-24 h-1 signature-line mx-auto" />
         </div>
 
         <div className="cafe-panel p-4 md:p-6 mb-16 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-brand-teal/10 to-primary/5" />
+          <div className="absolute inset-0 bg-card" />
           <div className="relative z-10">
             <div className="flex items-end justify-between gap-4 mb-5">
               <div>
@@ -297,7 +295,7 @@ const Portfolio = () => {
               {reelClips.map((clip) => (
                 <article
                   key={clip.id}
-                  className="group relative shrink-0 snap-start w-[180px] sm:w-[200px] md:w-[220px] aspect-[9/16] rounded-2xl overflow-hidden border border-primary/15 shadow-lg"
+                  className="group relative shrink-0 snap-start w-[180px] sm:w-[200px] md:w-[220px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm"
                 >
                   <video
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -311,17 +309,17 @@ const Portfolio = () => {
                     aria-label={t(clip.titleKey)}
                   />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-cocoa/90 via-brand-cocoa/25 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
-                  <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-brand-cream">
+                  <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-white">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.2em] text-brand-cream/75 mb-1">
+                      <p className="text-xs uppercase tracking-[0.2em] text-white/75 mb-1">
                         {t(`portfolio.categories.${clip.category}`)}
                       </p>
                       <p className="text-sm font-medium leading-tight">{t(clip.titleKey)}</p>
                     </div>
 
-                    <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-cream/25 backdrop-blur-md">
+                    <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/25 backdrop-blur-md">
                       <VolumeX className="h-4 w-4" />
                     </span>
                   </div>
@@ -336,6 +334,7 @@ const Portfolio = () => {
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16">
           <div>
             <p className="text-sm uppercase tracking-[0.22em] text-brand-olive font-semibold mb-4">
+            <p className="text-sm uppercase tracking-[0.22em] text-muted-foreground font-semibold mb-4">
               {t('portfolio.collageEyebrow')}
             </p>
             <h3 className="text-3xl md:text-4xl font-playfair leading-tight mb-5">
@@ -362,7 +361,7 @@ const Portfolio = () => {
 
             <a
               href="#contact"
-              className="inline-flex rounded-full bg-gradient-to-r from-primary to-brand-teal px-7 py-3 text-primary-foreground font-medium hover-grow btn-press"
+              className="inline-flex rounded-full bg-primary px-7 py-3 text-primary-foreground font-medium hover-grow btn-press"
             >
               {t('portfolio.collageCta')}
             </a>
@@ -383,13 +382,13 @@ const Portfolio = () => {
             role="button"
             aria-label={t('portfolio.collageTitle')}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-cream via-card to-secondary/80" />
-            <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-r from-primary/30 via-brand-teal/20 to-primary/20 blur-2xl" />
+            <div className="absolute inset-0 bg-card" />
+            <div className="absolute inset-x-0 top-0 h-44 bg-secondary blur-2xl opacity-60" />
 
             {collageClips.map((clip, index) => (
               <div
                 key={clip.id}
-                className={`absolute ${clip.className} rounded-2xl border border-primary/15 shadow-xl overflow-hidden transition-all duration-500 ${
+                className={`absolute ${clip.className} rounded-2xl border border-border shadow-lg overflow-hidden transition-all duration-500 ${
                   collagePlaying ? 'scale-[1.02]' : ''
                 }`}
               >
@@ -409,12 +408,13 @@ const Portfolio = () => {
 
                 <div
                   className={`absolute inset-0 bg-brand-cocoa/40 backdrop-blur-[1px] transition-opacity duration-300 ${
+                  className={`absolute inset-0 bg-black/35 backdrop-blur-[1px] transition-opacity duration-300 ${
                     collagePlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
                   }`}
                 />
 
                 <span
-                  className={`absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full bg-brand-cream/90 text-primary transition-opacity duration-300 ${
+                  className={`absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full bg-card/90 text-primary transition-opacity duration-300 ${
                     collagePlaying ? 'opacity-0' : 'opacity-100'
                   }`}
                 >
@@ -423,7 +423,7 @@ const Portfolio = () => {
               </div>
             ))}
 
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center px-4 py-2 rounded-full bg-card/90 border border-primary/20 backdrop-blur-sm text-xs uppercase tracking-[0.2em] text-primary/80">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center px-4 py-2 rounded-full bg-card/95 border border-border backdrop-blur-sm text-xs uppercase tracking-[0.2em] text-muted-foreground">
               {collagePlaying ? t('portfolio.collageHintPlaying') : t('portfolio.collageHintIdle')}
             </div>
           </div>
@@ -436,7 +436,7 @@ const Portfolio = () => {
               onClick={() => setActiveFilter(category.id)}
               className={`px-6 py-2 rounded-full text-sm transition-all ${
                 activeFilter === category.id
-                  ? 'bg-gradient-to-r from-primary to-brand-teal text-primary-foreground shadow-md'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'cafe-chip hover:bg-secondary'
               }`}
             >
@@ -465,7 +465,7 @@ const Portfolio = () => {
             return (
               <div
                 key={item.id}
-                className="group relative overflow-hidden rounded-2xl border border-primary/15 shadow-sm cursor-pointer break-inside-avoid mb-6 transition-all duration-300 ease-out bg-card/75"
+                className="group relative overflow-hidden rounded-2xl border border-border shadow-sm cursor-pointer break-inside-avoid mb-6 transition-all duration-300 ease-out bg-card/75"
                 onClick={() => setSelectedItem(item)}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
@@ -481,18 +481,18 @@ const Portfolio = () => {
                   />
                 </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-cocoa/85 via-brand-cocoa/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-5">
-                  <h3 className="text-brand-cream font-medium mb-1">{t(item.titleKey)}</h3>
-                  <p className="text-brand-cream/75 text-sm capitalize">{t(`portfolio.categories.${item.category}`)}</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/28 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-5">
+                  <h3 className="text-white font-medium mb-1">{t(item.titleKey)}</h3>
+                  <p className="text-white/75 text-sm capitalize">{t(`portfolio.categories.${item.category}`)}</p>
 
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     {item.type === 'video' ? (
-                      <div className="w-14 h-14 bg-brand-cream/90 rounded-full flex items-center justify-center">
-                        <Play className="h-6 w-6 text-brand-teal fill-brand-teal" />
+                      <div className="w-14 h-14 bg-card/90 rounded-full flex items-center justify-center">
+                        <Play className="h-6 w-6 text-primary fill-primary" />
                       </div>
                     ) : (
-                      <div className="w-14 h-14 bg-brand-cream/90 rounded-full flex items-center justify-center">
-                        <Maximize className="h-6 w-6 text-brand-teal" />
+                      <div className="w-14 h-14 bg-card/90 rounded-full flex items-center justify-center">
+                        <Maximize className="h-6 w-6 text-primary" />
                       </div>
                     )}
                   </div>
@@ -505,14 +505,14 @@ const Portfolio = () => {
 
       {selectedItem && (
         <div
-          className="fixed inset-0 z-50 bg-brand-cocoa/85 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-foreground/55 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={closeModal}
         >
           <div
             className="relative max-w-4xl w-full bg-card rounded-2xl overflow-hidden animate-scale border border-primary/20"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="aspect-w-16 aspect-h-9 w-full bg-brand-cocoa">
+            <div className="aspect-w-16 aspect-h-9 w-full bg-foreground/15">
               <img
                 src={selectedItem.thumbnail}
                 alt={t(selectedItem.titleKey)}
@@ -524,10 +524,10 @@ const Portfolio = () => {
               <p className="text-muted-foreground capitalize">{t(`portfolio.categories.${selectedItem.category}`)}</p>
             </div>
             <button
-              className="absolute top-4 right-4 w-10 h-10 bg-brand-cream/90 rounded-full flex items-center justify-center hover:bg-brand-cream"
+              className="absolute top-4 right-4 w-10 h-10 bg-card/90 rounded-full border border-border flex items-center justify-center hover:bg-card"
               onClick={closeModal}
             >
-              <X className="h-5 w-5 text-brand-teal" />
+              <X className="h-5 w-5 text-primary" />
             </button>
           </div>
         </div>

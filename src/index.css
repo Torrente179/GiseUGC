@@ -6,89 +6,89 @@
 
 @layer base {
   :root {
-    --background: 40 33% 95%;
-    --foreground: 27 23% 24%;
+    --background: 37 16% 94%;
+    --foreground: 26 14% 25%;
 
-    --card: 38 29% 97%;
-    --card-foreground: 27 23% 24%;
+    --card: 37 18% 97%;
+    --card-foreground: 26 14% 25%;
 
-    --popover: 38 29% 97%;
-    --popover-foreground: 27 23% 24%;
+    --popover: 37 18% 97%;
+    --popover-foreground: 26 14% 25%;
 
-    --primary: 29 34% 33%;
-    --primary-foreground: 41 32% 95%;
+    --primary: 29 20% 33%;
+    --primary-foreground: 40 24% 95%;
 
-    --secondary: 38 31% 88%;
-    --secondary-foreground: 28 27% 28%;
+    --secondary: 36 16% 90%;
+    --secondary-foreground: 29 14% 28%;
 
-    --muted: 38 25% 91%;
-    --muted-foreground: 30 13% 43%;
+    --muted: 36 12% 92%;
+    --muted-foreground: 30 10% 43%;
 
-    --accent: 186 50% 36%;
-    --accent-foreground: 42 25% 95%;
+    --accent: 185 28% 40%;
+    --accent-foreground: 40 24% 95%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 34 24% 78%;
-    --input: 36 23% 84%;
-    --ring: 186 44% 36%;
+    --border: 32 12% 80%;
+    --input: 32 12% 86%;
+    --ring: 185 28% 40%;
 
     --radius: 1rem;
 
-    --brand-teal: 186 50% 36%;
-    --brand-olive: 95 13% 43%;
-    --brand-sand: 35 28% 79%;
-    --brand-cocoa: 26 27% 25%;
-    --brand-cream: 40 33% 95%;
-    --brand-gold: 38 37% 62%;
+    --brand-teal: 185 28% 40%;
+    --brand-olive: 96 12% 43%;
+    --brand-sand: 34 20% 82%;
+    --brand-cocoa: 29 18% 34%;
+    --brand-cream: 37 16% 94%;
+    --brand-gold: 38 20% 63%;
 
-    --sidebar-background: 40 30% 93%;
-    --sidebar-foreground: 27 23% 24%;
-    --sidebar-primary: 29 34% 33%;
-    --sidebar-primary-foreground: 41 32% 95%;
-    --sidebar-accent: 38 31% 88%;
-    --sidebar-accent-foreground: 28 27% 28%;
-    --sidebar-border: 34 24% 78%;
-    --sidebar-ring: 186 44% 36%;
+    --sidebar-background: 37 16% 92%;
+    --sidebar-foreground: 26 14% 25%;
+    --sidebar-primary: 29 20% 33%;
+    --sidebar-primary-foreground: 40 24% 95%;
+    --sidebar-accent: 36 16% 90%;
+    --sidebar-accent-foreground: 29 14% 28%;
+    --sidebar-border: 32 12% 80%;
+    --sidebar-ring: 185 28% 40%;
   }
 
   /* Dark mode variables */
   .dark {
-    --background: 27 24% 12%;
-    --foreground: 42 24% 91%;
+    --background: 25 12% 12%;
+    --foreground: 37 16% 90%;
 
-    --card: 27 22% 16%;
-    --card-foreground: 42 24% 91%;
+    --card: 25 11% 16%;
+    --card-foreground: 37 16% 90%;
 
-    --popover: 27 22% 16%;
-    --popover-foreground: 42 24% 91%;
+    --popover: 25 11% 16%;
+    --popover-foreground: 37 16% 90%;
 
-    --primary: 34 34% 62%;
-    --primary-foreground: 27 24% 12%;
+    --primary: 34 20% 66%;
+    --primary-foreground: 25 12% 12%;
 
-    --secondary: 25 17% 22%;
-    --secondary-foreground: 40 21% 84%;
+    --secondary: 27 11% 21%;
+    --secondary-foreground: 37 16% 88%;
 
-    --muted: 27 15% 20%;
-    --muted-foreground: 36 13% 66%;
+    --muted: 25 10% 19%;
+    --muted-foreground: 35 10% 66%;
 
-    --accent: 186 40% 43%;
-    --accent-foreground: 42 24% 91%;
+    --accent: 185 23% 54%;
+    --accent-foreground: 25 12% 12%;
 
     --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 27 16% 28%;
-    --input: 27 16% 28%;
-    --ring: 186 40% 43%;
+    --border: 27 10% 30%;
+    --input: 27 10% 30%;
+    --ring: 185 23% 54%;
 
-    --brand-teal: 186 40% 43%;
-    --brand-olive: 95 18% 54%;
-    --brand-sand: 33 21% 49%;
-    --brand-cocoa: 33 17% 86%;
-    --brand-cream: 33 18% 90%;
-    --brand-gold: 38 36% 66%;
+    --brand-teal: 185 23% 54%;
+    --brand-olive: 96 10% 59%;
+    --brand-sand: 34 10% 48%;
+    --brand-cocoa: 37 14% 84%;
+    --brand-cream: 37 16% 90%;
+    --brand-gold: 38 16% 71%;
   }
 
   * {
@@ -102,10 +102,7 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Manrope', sans-serif;
-    background-image:
-      radial-gradient(circle at 18% 16%, hsl(var(--secondary) / 0.5), transparent 32%),
-      radial-gradient(circle at 82% 8%, hsl(var(--brand-teal) / 0.1), transparent 34%),
-      linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)));
+    background-image: linear-gradient(180deg, hsl(var(--background)), hsl(37 20% 93%));
     min-height: 100vh;
   }
 
@@ -143,15 +140,15 @@
   }
 
   .glass {
-    @apply bg-card/75 backdrop-blur-xl border border-primary/10 shadow-sm;
+    @apply bg-card/92 backdrop-blur-md border border-border shadow-sm;
   }
 
   .dark .glass {
-    @apply bg-card/75 border-primary/20;
+    @apply bg-card/90 border-border;
   }
 
   .glass-dark {
-    @apply bg-primary/10 backdrop-blur-lg border border-primary/20;
+    @apply bg-card/80 backdrop-blur-md border border-border;
   }
 
   .section-padding {
@@ -175,32 +172,28 @@
   }
 
   .elegant-shadow {
-    box-shadow:
-      0 14px 30px -18px hsl(var(--primary) / 0.45),
-      0 6px 18px -8px hsl(var(--brand-cocoa) / 0.18);
+    box-shadow: 0 12px 28px -22px hsl(var(--foreground) / 0.55);
   }
 
   .signature-line {
-    @apply h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent rounded-full;
+    @apply h-[2px] bg-gradient-to-r from-transparent via-primary/40 to-transparent rounded-full;
   }
 
   .cafe-panel {
-    @apply rounded-[1.5rem] border border-primary/15 bg-card/85 backdrop-blur-sm elegant-shadow;
+    @apply rounded-[1.4rem] border border-border bg-card/95 backdrop-blur-sm elegant-shadow;
   }
 
   .cafe-card {
-    @apply rounded-2xl border border-primary/10 bg-card/95 backdrop-blur-sm transition-all duration-300 elegant-shadow;
+    @apply rounded-2xl border border-border bg-card/98 backdrop-blur-sm transition-all duration-300 elegant-shadow;
   }
 
   .cafe-card:hover {
-    transform: translateY(-4px);
-    box-shadow:
-      0 20px 40px -20px hsl(var(--primary) / 0.55),
-      0 12px 28px -16px hsl(var(--brand-cocoa) / 0.22);
+    box-shadow: 0 16px 32px -24px hsl(var(--foreground) / 0.55);
+    border-color: hsl(var(--primary) / 0.32);
   }
 
   .cafe-chip {
-    @apply rounded-full border border-primary/20 bg-secondary/60 text-primary;
+    @apply rounded-full border border-border bg-card text-foreground/80;
   }
 
   .grain-overlay {
@@ -212,14 +205,9 @@
     content: '';
     position: absolute;
     inset: 0;
-    background-image:
-      radial-gradient(hsl(var(--primary) / 0.06) 0.6px, transparent 0.6px),
-      radial-gradient(hsl(var(--accent) / 0.04) 0.6px, transparent 0.6px);
-    background-position: 0 0, 7px 7px;
-    background-size: 14px 14px;
+    background-image: linear-gradient(to bottom, hsl(var(--foreground) / 0.02), hsl(var(--foreground) / 0.02));
     pointer-events: none;
-    mix-blend-mode: multiply;
-    opacity: 0.55;
+    opacity: 1;
   }
 
 

@@ -60,14 +60,14 @@ const Navbar = () => {
           }`}
       >
         <div
-          className={`absolute inset-0 bg-gradient-to-br from-brand-cream/95 via-secondary/95 to-background/95 backdrop-blur-md transition-all duration-500 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          className={`absolute inset-0 bg-background/95 backdrop-blur-md transition-all duration-500 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'
             }`}
           onClick={closeMobileMenu}
         />
 
-        <div className={`absolute top-16 right-8 w-72 h-72 bg-brand-teal/15 rounded-full blur-3xl transition-all duration-700 delay-100 ${mobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+        <div className={`absolute top-16 right-8 w-72 h-72 bg-secondary/70 rounded-full blur-3xl transition-all duration-700 delay-100 ${mobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
           }`} />
-        <div className={`absolute bottom-12 left-8 w-96 h-96 bg-primary/10 rounded-full blur-3xl transition-all duration-700 delay-200 ${mobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+        <div className={`absolute bottom-12 left-8 w-96 h-96 bg-card/70 rounded-full blur-3xl transition-all duration-700 delay-200 ${mobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
           }`} />
 
         <div className="relative h-full flex flex-col pt-24 px-8">
@@ -86,13 +86,13 @@ const Navbar = () => {
                     transitionDelay: mobileMenuOpen ? `${index * 75 + 150}ms` : '0ms'
                   }}
                 >
-                  <span className="text-xs font-mono text-brand-olive tracking-wider">
+                  <span className="text-xs font-mono text-muted-foreground tracking-wider">
                     {link.number}
                   </span>
                   <span className="text-3xl font-playfair text-foreground group-hover:text-primary transition-colors duration-300">
                     {t(link.key)}
                   </span>
-                  <ArrowRight className="w-5 h-5 text-brand-teal opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  <ArrowRight className="w-5 h-5 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                 </a>
               ))}
             </div>
@@ -108,7 +108,7 @@ const Navbar = () => {
             <a
               href="#contact"
               onClick={closeMobileMenu}
-              className="flex items-center justify-center gap-3 w-full py-4 px-8 bg-gradient-to-r from-primary to-brand-teal text-primary-foreground text-lg font-medium rounded-2xl shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+              className="flex items-center justify-center gap-3 w-full py-4 px-8 bg-primary text-primary-foreground text-lg font-medium rounded-2xl shadow-sm hover:opacity-95 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300"
             >
               {t('navbar.hireMe')}
               <ArrowRight className="w-5 h-5" />
@@ -118,7 +118,7 @@ const Navbar = () => {
               <span className="text-2xl font-cormorant italic text-primary font-semibold">
                 Gisela<span className="text-foreground not-italic font-normal">.UGC</span>
               </span>
-              <span className="text-sm text-foreground/60 tracking-wide">Coffee-style UGC creator</span>
+              <span className="text-sm text-foreground/60 tracking-wide">Content Creator</span>
             </div>
           </div>
         </div>
@@ -126,7 +126,7 @@ const Navbar = () => {
 
       <nav
         className={`fixed top-0 left-0 w-full z-[110] transition-all duration-300 ${isScrolled
-          ? 'py-3 bg-background/85 backdrop-blur-xl border-b border-primary/15 shadow-[0_10px_30px_-20px_hsl(var(--primary)/0.6)]'
+          ? 'py-3 bg-background/92 backdrop-blur-xl border-b border-border shadow-[0_12px_30px_-24px_hsl(var(--foreground)/0.35)]'
           : 'py-5 bg-transparent'
           }`}
       >
@@ -137,7 +137,7 @@ const Navbar = () => {
               className="text-xl md:text-2xl font-semibold font-cormorant text-primary italic tracking-wide"
               onClick={closeMobileMenu}
             >
-              Gisela<span className="text-brand-teal not-italic font-medium">.UGC</span>
+              Gisela<span className="text-foreground not-italic font-medium">.UGC</span>
             </a>
 
             <div className="hidden md:flex items-center space-x-8">
@@ -170,7 +170,7 @@ const Navbar = () => {
               <ThemeToggle />
               <a
                 href="#contact"
-                className="px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-brand-teal text-primary-foreground text-sm hover-grow btn-press shadow-sm ml-2"
+                className="px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm hover-grow btn-press shadow-sm ml-2"
               >
                 {t('navbar.hireMe')}
               </a>
@@ -197,7 +197,7 @@ const Navbar = () => {
               <ThemeToggle />
               <button
                 onClick={toggleMobileMenu}
-                className="relative p-2 -mr-2 text-foreground hover:text-primary transition-colors bg-secondary/70 rounded-full"
+                className="relative p-2 -mr-2 text-foreground hover:text-primary transition-colors bg-card/85 border border-border rounded-full"
                 aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
                 aria-expanded={mobileMenuOpen}
               >
