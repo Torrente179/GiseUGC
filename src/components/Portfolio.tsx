@@ -275,6 +275,31 @@ const Portfolio = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeReelPreview, dismissReelPreview, navigateReelPreview]);
 
+  useEffect(() => {
+    if (!activeReelPreview) return;
+
+    const scrollY = window.scrollY;
+    const previousStyles = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+    };
+
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.position = previousStyles.position;
+      document.body.style.top = previousStyles.top;
+      document.body.style.width = previousStyles.width;
+      document.body.style.overflow = previousStyles.overflow;
+      window.scrollTo(0, scrollY);
+    };
+  }, [activeReelPreview]);
+
   const scrollReels = (direction: 'left' | 'right') => {
     const container = reelScrollRef.current;
     if (!container) return;
@@ -690,6 +715,28 @@ const Portfolio = () => {
                 'radial-gradient(circle at 14% 12%, hsl(var(--accent) / 0.24) 0%, transparent 48%), radial-gradient(circle at 84% 88%, hsl(var(--primary) / 0.26) 0%, transparent 52%)',
             }}
           />
+          <button
+            type="button"
+            className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 z-[210] h-7 w-7 sm:h-10 sm:w-10 rounded-full border border-white/35 bg-black/40 text-white backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/60"
+            onClick={(event) => {
+              event.stopPropagation();
+              navigateReelPreview(-1);
+            }}
+            aria-label={t('portfolio.reelPreviewPrev')}
+          >
+            <ChevronLeft className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
+          </button>
+          <button
+            type="button"
+            className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 z-[210] h-7 w-7 sm:h-10 sm:w-10 rounded-full border border-white/35 bg-black/40 text-white backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/60"
+            onClick={(event) => {
+              event.stopPropagation();
+              navigateReelPreview(1);
+            }}
+            aria-label={t('portfolio.reelPreviewNext')}
+          >
+            <ChevronRight className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
+          </button>
           <div
             className="relative w-full max-w-[430px] overflow-hidden rounded-[2rem] border border-white/25 bg-card/80 p-[10px] shadow-[0_38px_92px_-42px_hsl(var(--foreground)/0.9)] backdrop-blur-2xl"
             onClick={(event) => event.stopPropagation()}
