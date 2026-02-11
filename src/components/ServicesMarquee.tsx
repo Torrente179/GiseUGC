@@ -200,8 +200,8 @@ const ServicesMarquee = () => {
         <div className="mt-32 md:mt-44 mb-20 md:mb-28 overflow-hidden">
             <div className="studio-container">
                 <div className="px-4 mb-12 md:mb-20 text-center mx-auto">
-                    <h3 className="text-3xl md:text-5xl lg:text-6xl font-sans font-medium tracking-tight leading-[1.1] text-foreground max-w-5xl mx-auto">
-                        {t('services.motionTitle')}
+                    <h3 className="text-3xl md:text-5xl lg:text-5xl font-sans font-medium tracking-tight leading-[1.1] text-foreground max-w-5xl mx-auto">
+                        El toolkit completo para anunciantes <span className="luxury-accent text-accent inline-block transform rotate-[-2deg] ml-2">modernos</span>
                     </h3>
                     <p className="text-base md:text-xl text-muted-foreground mt-6 max-w-3xl mx-auto leading-relaxed">
                         {t('services.motionSubtitle')}
