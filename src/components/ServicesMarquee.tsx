@@ -222,7 +222,7 @@ const ServicesMarquee = () => {
     };
 
     return (
-        <div className="mt-32 md:mt-44 mb-20 md:mb-28 overflow-hidden">
+        <div className="mt-16 md:mt-20 mb-12 md:mb-16 overflow-hidden">
             <div className="studio-container">
                 <div className="px-4 mb-12 md:mb-20 text-center mx-auto">
                     <h3 className="text-3xl md:text-5xl lg:text-5xl font-sans font-medium tracking-tight leading-[1.1] text-foreground max-w-5xl mx-auto">

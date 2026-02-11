@@ -176,9 +176,9 @@ const Portfolio = () => {
 
 
   return (
-    <section id="portfolio" className="studio-section bg-secondary/5 pt-32 pb-24">
+    <section id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
       <div className="studio-container">
-        <div className="studio-header mb-16 md:mb-24 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
+        <div className="studio-header mb-10 md:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
           <div className="text-center md:text-left">
             <div className="inline-flex items-center gap-2 mb-6">
               <span className="h-px w-8 bg-accent/40" />
@@ -371,8 +371,7 @@ const Portfolio = () => {
               {collageClips.map((clip, index) => (
                 <div
                   key={clip.id}
-                  className={`absolute rounded-xl border-2 border-white/85 shadow-md overflow-hidden ${
-                    index === 0
+                  className={`absolute rounded-xl border-2 border-white/85 shadow-md overflow-hidden ${index === 0
                       ? 'top-[19%] left-[8%] w-[33%] -rotate-[7deg] z-20'
                       : index === 1
                         ? 'top-[6%] left-[34%] w-[32%] rotate-0 z-40'
