@@ -107,34 +107,6 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Mobile Services Grid */}
-        <div className="mt-8 md:hidden animate-fade-in" style={{ animationDelay: '1s' }}>
-          <div className="grid grid-cols-2 gap-4 pb-8">
-            {[
-              { icon: <Video className="h-6 w-6" />, title: 'services.service1.title', desc: 'services.service1.description' },
-              { icon: <Image className="h-6 w-6" />, title: 'services.service2.title', desc: 'services.service2.description' },
-              { icon: <ShoppingBag className="h-6 w-6" />, title: 'services.service3.title', desc: 'services.service3.description' },
-              { icon: <MessageSquare className="h-6 w-6" />, title: 'services.service4.title', desc: 'services.service4.description' },
-              { icon: <Award className="h-6 w-6" />, title: 'services.service5.title', desc: 'services.service5.description' },
-              { icon: <TrendingUp className="h-6 w-6" />, title: 'services.service6.title', desc: 'services.service6.description' }
-            ].map((service, index) => (
-              <div
-                key={index}
-                className="flex flex-col p-5 rounded-[1.5rem] border border-border/70 bg-card/40 backdrop-blur-md shadow-sm"
-              >
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-background/90 text-primary border border-border/50 shadow-sm">
-                  {service.icon}
-                </div>
-                <h3 className="text-base font-serif font-normal tracking-tight text-foreground leading-tight mb-2">
-                  {t(service.title)}
-                </h3>
-                <p className="text-[10px] md:text-xs text-muted-foreground leading-relaxed line-clamp-3">
-                  {t(service.desc)}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
 
       </div>
     </section>
