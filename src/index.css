@@ -4,89 +4,89 @@
 
 @layer base {
   :root {
-    --background: 40 16% 98%;
-    --foreground: 220 11% 20%;
+    --background: 40 22% 97%;
+    --foreground: 222 30% 14%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 11% 20%;
+    --card: 40 18% 99%;
+    --card-foreground: 222 30% 14%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 11% 20%;
+    --popover: 40 18% 99%;
+    --popover-foreground: 222 30% 14%;
 
-    --primary: 222 10% 22%;
-    --primary-foreground: 40 16% 98%;
+    --primary: 222 34% 17%;
+    --primary-foreground: 40 22% 97%;
 
-    --secondary: 35 18% 95%;
-    --secondary-foreground: 220 11% 24%;
+    --secondary: 35 26% 94%;
+    --secondary-foreground: 222 26% 22%;
 
-    --muted: 220 15% 93%;
-    --muted-foreground: 220 10% 44%;
+    --muted: 220 14% 92%;
+    --muted-foreground: 222 14% 42%;
 
-    --accent: 210 18% 46%;
-    --accent-foreground: 40 16% 98%;
+    --accent: 34 44% 50%;
+    --accent-foreground: 40 22% 97%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 12% 86%;
-    --input: 220 12% 90%;
-    --ring: 210 18% 50%;
+    --border: 35 14% 84%;
+    --input: 35 14% 89%;
+    --ring: 34 40% 52%;
 
     --radius: 1rem;
 
-    --brand-teal: 202 20% 44%;
-    --brand-olive: 108 9% 50%;
-    --brand-sand: 32 24% 74%;
-    --brand-cocoa: 223 8% 31%;
-    --brand-cream: 40 16% 98%;
-    --brand-gold: 34 24% 60%;
+    --brand-teal: 195 32% 40%;
+    --brand-olive: 148 18% 42%;
+    --brand-sand: 32 38% 70%;
+    --brand-cocoa: 222 20% 26%;
+    --brand-cream: 40 22% 97%;
+    --brand-gold: 34 48% 52%;
 
-    --sidebar-background: 40 14% 96%;
-    --sidebar-foreground: 220 11% 20%;
-    --sidebar-primary: 222 10% 22%;
-    --sidebar-primary-foreground: 40 16% 98%;
-    --sidebar-accent: 35 18% 95%;
-    --sidebar-accent-foreground: 220 11% 24%;
-    --sidebar-border: 220 12% 86%;
-    --sidebar-ring: 210 18% 50%;
+    --sidebar-background: 40 18% 96%;
+    --sidebar-foreground: 222 30% 14%;
+    --sidebar-primary: 222 34% 17%;
+    --sidebar-primary-foreground: 40 22% 97%;
+    --sidebar-accent: 35 26% 94%;
+    --sidebar-accent-foreground: 222 26% 22%;
+    --sidebar-border: 35 14% 84%;
+    --sidebar-ring: 34 40% 52%;
   }
 
   /* Dark mode variables */
   .dark {
-    --background: 220 13% 11%;
-    --foreground: 210 20% 91%;
+    --background: 222 20% 10%;
+    --foreground: 38 20% 90%;
 
-    --card: 220 12% 15%;
-    --card-foreground: 210 20% 91%;
+    --card: 222 18% 14%;
+    --card-foreground: 38 20% 90%;
 
-    --popover: 220 12% 15%;
-    --popover-foreground: 210 20% 91%;
+    --popover: 222 18% 14%;
+    --popover-foreground: 38 20% 90%;
 
-    --primary: 210 18% 74%;
-    --primary-foreground: 220 13% 11%;
+    --primary: 34 38% 68%;
+    --primary-foreground: 222 20% 10%;
 
-    --secondary: 220 10% 20%;
-    --secondary-foreground: 210 18% 88%;
+    --secondary: 222 14% 18%;
+    --secondary-foreground: 38 16% 86%;
 
-    --muted: 220 10% 18%;
-    --muted-foreground: 210 10% 67%;
+    --muted: 222 12% 16%;
+    --muted-foreground: 222 10% 62%;
 
-    --accent: 210 18% 62%;
-    --accent-foreground: 220 13% 11%;
+    --accent: 34 34% 58%;
+    --accent-foreground: 222 20% 10%;
 
     --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 10% 28%;
-    --input: 220 10% 28%;
-    --ring: 210 18% 62%;
+    --border: 222 12% 24%;
+    --input: 222 12% 24%;
+    --ring: 34 34% 58%;
 
-    --brand-teal: 202 15% 66%;
-    --brand-olive: 108 7% 62%;
-    --brand-sand: 35 10% 52%;
-    --brand-cocoa: 210 16% 86%;
-    --brand-cream: 210 20% 91%;
-    --brand-gold: 34 15% 70%;
+    --brand-teal: 195 24% 58%;
+    --brand-olive: 148 14% 56%;
+    --brand-sand: 34 20% 54%;
+    --brand-cocoa: 222 16% 78%;
+    --brand-cream: 38 20% 90%;
+    --brand-gold: 34 34% 64%;
   }
 
   * {
@@ -105,7 +105,7 @@
     line-height: 1.6;
     background-image:
       radial-gradient(circle at 10% 8%, hsl(var(--muted) / 0.55), transparent 32%),
-      linear-gradient(180deg, hsl(var(--background)), hsl(220 18% 97%));
+      linear-gradient(180deg, hsl(var(--background)), hsl(38 18% 96%));
     min-height: 100vh;
   }
 
