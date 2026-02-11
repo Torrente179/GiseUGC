@@ -132,13 +132,13 @@ const Navbar = () => {
       >
         <div className="container mx-auto px-6 md:px-12">
           <div className="flex items-center justify-between">
-              <a
-                href="#home"
-                className="brand-logo text-xl md:text-2xl text-primary"
-                onClick={closeMobileMenu}
-              >
-                Gisela<span className="text-foreground font-medium">.UGC</span>
-              </a>
+            <a
+              href="#home"
+              className="brand-logo text-xl md:text-2xl text-primary"
+              onClick={closeMobileMenu}
+            >
+              Gisela<span className="text-foreground font-medium">.UGC</span>
+            </a>
 
             <div className="hidden md:flex items-center space-x-8">
               {navLinkKeys.map((link) => (
