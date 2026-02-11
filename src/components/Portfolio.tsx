@@ -271,7 +271,7 @@ const Portfolio = () => {
           <div className="relative z-10">
             <div className="flex items-end justify-between gap-4 mb-5">
               <div>
-                <p className="section-label text-xs text-primary/70 mb-2">
+                <p className="section-label text-xs text-muted-foreground mb-2">
                   {t('portfolio.reelSubtitle')}
                 </p>
                 <h3 className="text-xl md:text-2xl font-serif font-normal tracking-[-0.03em] text-foreground">

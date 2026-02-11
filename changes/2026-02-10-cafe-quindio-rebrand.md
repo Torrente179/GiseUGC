@@ -56,3 +56,27 @@ Based on design feedback, the visual direction was refined from "warm cafe with 
 
 ### Refinement Validation
 - Build: `npm run build` passed after all adjustments.
+
+## Update - 2026-02-11 (Full Nordic Reset)
+Direction changed from "Cafe Quindio inspired" to a pure Nordic interior aesthetic as requested.
+
+### Nordic Direction Applied
+1. Rebuilt the global design system in `/src/index.css`:
+   - Brighter Scandinavian palette (off-white, warm stone, muted charcoal, soft sage accents).
+   - Reduced decorative styling and lowered contrast noise.
+   - Updated typography to a clean Nordic hierarchy (`Manrope` + restrained serif accents with `Cormorant Garamond`).
+   - Refined utility surfaces and button system for a calmer visual rhythm.
+2. Updated font sources and Tailwind mappings:
+   - `/index.html` (font imports).
+   - `/tailwind.config.ts` (serif family remapped).
+3. Reworked main UX surfaces to feel airy, minimal, and premium:
+   - `/src/components/Navbar.tsx` (simplified glass shell, cleaner desktop/mobile nav rhythm).
+   - `/src/components/Hero.tsx` (more whitespace, calmer hierarchy, less decorative gradients).
+   - `/src/components/Footer.tsx` (light architectural footer tone).
+   - `/src/components/Contact.tsx` (quieter form hierarchy and labels).
+   - `/src/components/Portfolio.tsx` (muted labels and more balanced accents).
+   - `/src/components/ui/ThemeToggle.tsx` (clean neutral control styling).
+4. Kept advanced interactive features (reels, collage, marquee) while making all visual treatments match the Nordic look.
+
+### Nordic Validation
+- Build: `npm run build` passed after the full Nordic pass.

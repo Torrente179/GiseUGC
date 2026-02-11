@@ -81,7 +81,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="section-padding bg-secondary/25">
+    <section id="contact" className="section-padding bg-secondary/18">
       <div className="container relative z-10 mx-auto">
         <div className="text-center mb-16">
           <p className="section-label text-muted-foreground mb-3">{t('contact.sectionSubtitle')}</p>
@@ -91,7 +91,7 @@ const Contact = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           <div className="cafe-panel p-8 md:p-10 flex flex-col justify-center bg-card/80">
-            <h3 className="text-3xl font-semibold mb-6 text-primary">{t('contact.heading')}</h3>
+            <h3 className="text-3xl font-serif font-medium tracking-[-0.02em] mb-6 text-foreground">{t('contact.heading')}</h3>
             <p className="text-muted-foreground mb-8 leading-relaxed">
               {t('contact.description')}
             </p>
@@ -102,7 +102,7 @@ const Contact = () => {
                   <Mail className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-primary">{t('contact.emailLabel')}</h4>
+                  <h4 className="font-medium text-foreground">{t('contact.emailLabel')}</h4>
                   <p className="text-muted-foreground">{t('contact.emailValue')}</p>
                 </div>
               </div>
@@ -112,7 +112,7 @@ const Contact = () => {
                   <MessageSquare className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-primary">{t('contact.fiverrLabel')}</h4>
+                  <h4 className="font-medium text-foreground">{t('contact.fiverrLabel')}</h4>
                   <p className="text-muted-foreground">{t('contact.fiverrValue')}</p>
                 </div>
               </div>
@@ -124,7 +124,7 @@ const Contact = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="input-glow rounded-lg">
-                  <label htmlFor="name" className="block text-sm font-medium mb-2 text-primary">{t('contact.form.nameLabel')}</label>
+                  <label htmlFor="name" className="block text-sm font-medium mb-2 text-foreground">{t('contact.form.nameLabel')}</label>
                   <input
                     type="text"
                     id="name"
@@ -136,7 +136,7 @@ const Contact = () => {
                 </div>
 
                 <div className="input-glow rounded-lg">
-                  <label htmlFor="email" className="block text-sm font-medium mb-2 text-primary">{t('contact.form.emailLabel')}</label>
+                  <label htmlFor="email" className="block text-sm font-medium mb-2 text-foreground">{t('contact.form.emailLabel')}</label>
                   <input
                     type="email"
                     id="email"
@@ -159,7 +159,7 @@ const Contact = () => {
               />
 
               <div className="input-glow rounded-lg">
-                <label htmlFor="subject" className="block text-sm font-medium mb-2 text-primary">{t('contact.form.subjectLabel')}</label>
+                <label htmlFor="subject" className="block text-sm font-medium mb-2 text-foreground">{t('contact.form.subjectLabel')}</label>
                 <input
                   type="text"
                   id="subject"
@@ -171,7 +171,7 @@ const Contact = () => {
               </div>
 
               <div className="input-glow rounded-lg">
-                <label htmlFor="message" className="block text-sm font-medium mb-2 text-primary">{t('contact.form.messageLabel')}</label>
+                <label htmlFor="message" className="block text-sm font-medium mb-2 text-foreground">{t('contact.form.messageLabel')}</label>
                 <textarea
                   id="message"
                   {...register("message")}

@@ -6,7 +6,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
   
   return (
-    <footer className="bg-secondary/40 text-foreground py-16 border-t border-border">
+    <footer className="bg-background text-foreground py-20 border-t border-border">
       <div className="container relative z-10 mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
@@ -31,7 +31,7 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-lg font-medium mb-6 text-primary">{t('footer.servicesTitle')}</h3>
+            <h3 className="section-label text-primary mb-5">{t('footer.servicesTitle')}</h3>
             <ul className="space-y-3">
               {/* Use keys from services section */}
               <li><a href="#services" className="text-muted-foreground hover:text-foreground transition-colors">{t('services.service1.title')}</a></li>
@@ -42,7 +42,7 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-lg font-medium mb-6 text-primary">{t('footer.quickLinksTitle')}</h3>
+            <h3 className="section-label text-primary mb-5">{t('footer.quickLinksTitle')}</h3>
             <ul className="space-y-3">
               {/* Use keys from navbar section */}
               <li><a href="#home" className="text-muted-foreground hover:text-foreground transition-colors">{t('navbar.home')}</a></li>
@@ -54,7 +54,7 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-lg font-medium mb-6 text-primary">{t('footer.contactTitle')}</h3>
+            <h3 className="section-label text-primary mb-5">{t('footer.contactTitle')}</h3>
             <ul className="space-y-3">
               {/* Use keys from contact section */}
               <li className="text-muted-foreground">{t('contact.emailLabel')}: {t('contact.emailValue')}</li>

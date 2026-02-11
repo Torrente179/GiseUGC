@@ -20,7 +20,7 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				serif: ['"Bodoni Moda"', 'serif'],
+				serif: ['"Cormorant Garamond"', 'serif'],
 				sans: ['"Manrope"', 'sans-serif'],
 			},
 			colors: {
