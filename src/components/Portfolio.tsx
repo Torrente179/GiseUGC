@@ -157,8 +157,8 @@ const Portfolio = () => {
     {
       id: 2,
       labelKey: 'portfolio.items.item1',
-      videoSrc: 'https://assets.mixkit.co/videos/42308/42308-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/42308/42308-thumb-720-0.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
       /* Center card */
       cornerClass: 'top-[5%] left-[35%] w-[30%] rotate-0 z-50',
       hoverClass: 'top-[7%] left-[35%] w-[30%] rotate-0 z-50 scale-[1.03]',
