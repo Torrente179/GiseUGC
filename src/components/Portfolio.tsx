@@ -147,30 +147,30 @@ const Portfolio = () => {
   const collageClips: CollageClip[] = [
     {
       id: 1,
-      labelKey: 'portfolio.items.item2',
-      videoSrc: 'https://assets.mixkit.co/videos/50406/50406-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/50406/50406-thumb-720-0.jpg',
+      labelKey: 'portfolio.items.item4',
+      videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
       /* Left card */
-      cornerClass: 'top-[20%] left-[10%] w-[34%] -rotate-[7deg] z-30',
-      hoverClass: 'top-[18%] left-[16%] w-[33%] -rotate-[2deg] z-40',
+      cornerClass: 'top-[13%] left-[8%] w-[29%] -rotate-[6deg] z-30',
+      hoverClass: 'top-[12%] left-[16%] w-[29%] -rotate-[2deg] z-40',
     },
     {
       id: 2,
-      labelKey: 'portfolio.items.item6',
-      videoSrc: 'https://assets.mixkit.co/videos/50426/50426-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/50426/50426-thumb-720-0.jpg',
+      labelKey: 'portfolio.items.item1',
+      videoSrc: 'https://assets.mixkit.co/videos/42308/42308-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/42308/42308-thumb-720-0.jpg',
       /* Center card */
-      cornerClass: 'top-[8%] left-[34%] w-[32%] rotate-0 z-50',
-      hoverClass: 'top-[9%] left-[34%] w-[32%] rotate-0 z-50 scale-[1.03]',
+      cornerClass: 'top-[5%] left-[35%] w-[30%] rotate-0 z-50',
+      hoverClass: 'top-[7%] left-[35%] w-[30%] rotate-0 z-50 scale-[1.03]',
     },
     {
       id: 3,
-      labelKey: 'portfolio.items.item3',
-      videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
+      labelKey: 'portfolio.items.item5',
+      videoSrc: 'https://assets.mixkit.co/videos/51168/51168-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/51168/51168-thumb-720-0.jpg',
       /* Right card */
-      cornerClass: 'top-[20%] right-[10%] w-[34%] rotate-[7deg] z-30',
-      hoverClass: 'top-[18%] right-[16%] w-[33%] rotate-[2deg] z-40',
+      cornerClass: 'top-[13%] right-[8%] w-[29%] rotate-[6deg] z-30',
+      hoverClass: 'top-[12%] right-[16%] w-[29%] rotate-[2deg] z-40',
     },
   ];
 
@@ -305,7 +305,7 @@ const Portfolio = () => {
 
           {/* Desktop: Absolute-positioned collage with hover interaction */}
           <div
-            className="hidden lg:block relative h-[430px] xl:h-[470px] w-full max-w-[720px] mx-auto rounded-[1.75rem] border border-border/60 overflow-hidden cursor-pointer shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.4)]"
+            className="hidden lg:block relative h-[530px] xl:h-[560px] w-full max-w-[720px] mx-auto rounded-[1.75rem] border border-border/60 overflow-hidden cursor-pointer shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.4)]"
             role="presentation"
             onMouseEnter={handleCollageMouseEnter}
             onMouseLeave={handleCollageMouseLeave}
@@ -355,7 +355,7 @@ const Portfolio = () => {
 
           {/* Mobile: Collage layout with always-on looping videos */}
           <div
-            className="lg:hidden relative rounded-[1.25rem] border border-border/60 p-3.5 overflow-hidden shadow-lg max-w-[440px] mx-auto"
+            className="lg:hidden relative w-full max-w-[440px] rounded-[1.25rem] border border-border/60 p-4 overflow-hidden shadow-lg mx-auto"
             role="presentation"
           >
             {/* Sunset gradient background for mobile too */}
@@ -367,16 +367,16 @@ const Portfolio = () => {
             />
             <div className="absolute inset-0 bg-card/15" />
 
-            <div className="relative z-10 h-[300px] sm:h-[340px]">
+            <div className="relative z-10 w-full h-[320px] sm:h-[360px]">
               {collageClips.map((clip, index) => (
                 <div
                   key={clip.id}
                   className={`absolute rounded-xl border-2 border-white/85 shadow-md overflow-hidden ${
                     index === 0
-                      ? 'top-[20%] left-[2%] w-[36%] -rotate-[8deg] z-20'
+                      ? 'top-[19%] left-[8%] w-[33%] -rotate-[7deg] z-20'
                       : index === 1
-                        ? 'top-[4%] left-[33%] w-[34%] rotate-0 z-40'
-                        : 'top-[20%] right-[2%] w-[36%] rotate-[8deg] z-20'
+                        ? 'top-[6%] left-[34%] w-[32%] rotate-0 z-40'
+                        : 'top-[19%] right-[8%] w-[33%] rotate-[7deg] z-20'
                     }`}
                   style={{ aspectRatio: '9/14' }}
                 >
