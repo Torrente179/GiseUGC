@@ -57,25 +57,25 @@ const SocialProof = () => {
 
   const stats = [
     {
-      icon: <Briefcase className="h-5 w-5 text-primary" />,
+      icon: <Briefcase className="h-4 w-4" />,
       value: 50,
       suffix: '+',
       labelKey: 'socialProof.brands',
     },
     {
-      icon: <Eye className="h-5 w-5 text-primary" />,
+      icon: <Eye className="h-4 w-4" />,
       value: 2,
       suffix: 'M+',
       labelKey: 'socialProof.views',
     },
     {
-      icon: <Star className="h-5 w-5 text-primary" />,
+      icon: <Star className="h-4 w-4" />,
       value: 100,
       suffix: '%',
       labelKey: 'socialProof.satisfaction',
     },
     {
-      icon: <Users className="h-5 w-5 text-primary" />,
+      icon: <Users className="h-4 w-4" />,
       value: 500,
       suffix: '+',
       labelKey: 'socialProof.contentPieces',
@@ -83,31 +83,51 @@ const SocialProof = () => {
   ];
 
   return (
-    <section className="studio-section-tight -mt-6 md:-mt-10">
-      <div className="studio-container">
-        <div className="studio-panel p-3 md:p-4 lg:p-5">
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+    <section className="relative z-20 -mt-10 md:-mt-14 px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-border/40 bg-card/35 backdrop-blur-2xl shadow-[0_32px_80px_-40px_rgba(0,0,0,0.12)] group">
+          {/* Subtle background luxury textures */}
+          <div className="absolute inset-0 -z-10 bg-gradient-to-br from-white/10 via-transparent to-black/5 opacity-40" />
+          <div className="absolute top-0 right-0 w-80 h-80 bg-accent/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 items-center py-10 md:py-14">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="rounded-2xl border border-border/70 bg-card/70 px-4 py-5 text-center md:px-5 md:py-6"
+                className="flex flex-col items-center px-4 relative group/item"
               >
-                <div className="mx-auto mb-3 flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-background/75">
+                {/* Vertical separator for desktop */}
+                {index !== 0 && (
+                  <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-16 bg-gradient-to-b from-transparent via-border/40 to-transparent" />
+                )}
+
+                {/* Horizontal separator for mobile (only between rows) */}
+                {index === 2 && (
+                  <div className="lg:hidden absolute -top-5 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-border/30 to-transparent" />
+                )}
+
+                <div className="mb-4 text-primary/30 group-hover/item:text-primary/70 transition-colors duration-500">
                   {stat.icon}
                 </div>
-                <span className="block text-3xl md:text-[2.15rem] font-serif font-semibold tracking-[-0.03em] text-foreground">
+
+                <span className="block text-4xl md:text-[3.25rem] font-serif font-normal tracking-[-0.04em] text-foreground mb-2 leading-none">
                   <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                 </span>
-                <span className="mt-1 block text-[11px] md:text-xs uppercase tracking-[0.13em] text-muted-foreground">
+
+                <span className="block text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-muted-foreground/80 font-medium">
                   {t(stat.labelKey)}
                 </span>
               </div>
             ))}
           </div>
+
+          {/* Bottom highlight line */}
+          <div className="absolute bottom-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
         </div>
       </div>
     </section>
   );
 };
+
 
 export default SocialProof;
