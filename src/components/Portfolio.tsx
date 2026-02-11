@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Play, VolumeX, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, VolumeX, X } from 'lucide-react';
 
 interface ReelClip {
   id: number;
@@ -25,6 +25,19 @@ const Portfolio = () => {
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
 
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const reelScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollReels = (direction: 'left' | 'right') => {
+    const container = reelScrollRef.current;
+    if (!container) return;
+    const cardWidth = container.querySelector('button')?.offsetWidth ?? 200;
+    const gap = 12;
+    const scrollAmount = cardWidth + gap;
+    container.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  };
 
   const reelClips: ReelClip[] = [
     {
@@ -202,13 +215,34 @@ const Portfolio = () => {
             <div className="absolute inset-y-0 left-0 w-8 sm:w-12 md:w-20 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
             <div className="absolute inset-y-0 right-0 w-8 sm:w-12 md:w-20 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
 
+            {/* Mobile navigation arrows */}
+            <button
+              type="button"
+              className="md:hidden absolute left-2 top-1/2 -translate-y-1/2 z-30 h-10 w-10 rounded-full bg-foreground/60 backdrop-blur-sm flex items-center justify-center text-white hover:bg-foreground/80 transition-colors"
+              onClick={() => scrollReels('left')}
+              aria-label={t('portfolio.reelAriaPrev')}
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-30 h-10 w-10 rounded-full bg-foreground/60 backdrop-blur-sm flex items-center justify-center text-white hover:bg-foreground/80 transition-colors"
+              onClick={() => scrollReels('right')}
+              aria-label={t('portfolio.reelAriaNext')}
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+
             <div className="relative z-10 mx-auto px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
-              <div className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide">
+              <div
+                ref={reelScrollRef}
+                className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory md:snap-none"
+              >
                 {reelClips.map((clip) => (
                   <button
                     type="button"
                     key={clip.id}
-                    className="group relative shrink-0 w-[140px] sm:w-[160px] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors"
+                    className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center"
                     onClick={() => setActiveReelPreview(clip)}
                     aria-label={t(clip.titleKey)}
                   >
