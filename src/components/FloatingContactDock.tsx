@@ -17,56 +17,78 @@ const FloatingContactDock = () => {
 
   return createPortal(
     <div
-      className="fixed bottom-5 md:bottom-8 left-0 right-0 z-[9999] pointer-events-none"
+      className="fixed bottom-5 md:bottom-8 right-5 md:right-8 z-[9999] pointer-events-none"
       style={{
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        paddingRight: 'env(safe-area-inset-right, 0px)',
       }}
     >
-      <div className="w-full max-w-[1400px] mx-auto px-6 md:px-8 flex flex-col items-end gap-3">
-      <a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={t('floatingContact.whatsappAria')}
-        className="group pointer-events-auto inline-flex items-center gap-2.5 rounded-full border border-border bg-card p-2.5 md:pl-4 md:pr-5 md:py-3 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:border-foreground/25"
-      >
-        <span className="inline-flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300">
-          <MessageCircle className="h-[18px] w-[18px] md:h-5 md:w-5" />
-        </span>
-        <span className="hidden text-sm font-medium text-foreground/80 group-hover:text-foreground md:inline">
-          {t('floatingContact.whatsappLabel')}
-        </span>
-      </a>
+      {/* Mobile: vertical stack with labels */}
+      <div className="flex flex-col items-end gap-2.5 md:hidden">
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('floatingContact.whatsappAria')}
+          className="pointer-events-auto inline-flex items-center justify-center rounded-full border border-border bg-card p-2.5 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+        >
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300">
+            <MessageCircle className="h-[18px] w-[18px]" />
+          </span>
+        </a>
+        <a
+          href={telegramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('floatingContact.telegramAria')}
+          className="pointer-events-auto inline-flex items-center justify-center rounded-full border border-border bg-card p-2.5 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+        >
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-300">
+            <Send className="h-[18px] w-[18px] -rotate-12" />
+          </span>
+        </a>
+        <a
+          href={fiverrUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('floatingContact.fiverrAria')}
+          className="pointer-events-auto inline-flex items-center justify-center rounded-full border border-border bg-card p-2.5 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+        >
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-green-500/15 text-green-600 dark:text-green-300">
+            <FiverrIcon className="h-[18px] w-[18px]" />
+          </span>
+        </a>
+      </div>
 
-      <a
-        href={telegramUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={t('floatingContact.telegramAria')}
-        className="group pointer-events-auto inline-flex items-center gap-2.5 rounded-full border border-border bg-card p-2.5 md:pl-4 md:pr-5 md:py-3 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:border-foreground/25"
-      >
-        <span className="inline-flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-300">
-          <Send className="h-[18px] w-[18px] md:h-5 md:w-5 -rotate-12" />
-        </span>
-        <span className="hidden text-sm font-medium text-foreground/80 group-hover:text-foreground md:inline">
-          {t('floatingContact.telegramLabel')}
-        </span>
-      </a>
-
-      <a
-        href={fiverrUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={t('floatingContact.fiverrAria')}
-        className="group pointer-events-auto inline-flex items-center gap-2.5 rounded-full border border-border bg-card p-2.5 md:pl-4 md:pr-5 md:py-3 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:border-foreground/25"
-      >
-        <span className="inline-flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-green-500/15 text-green-600 dark:text-green-300">
-          <FiverrIcon className="h-[18px] w-[18px] md:h-5 md:w-5" />
-        </span>
-        <span className="hidden text-sm font-medium text-foreground/80 group-hover:text-foreground md:inline">
-          {t('floatingContact.fiverrLabel')}
-        </span>
-      </a>
+      {/* Desktop: horizontal row, icons only, bigger */}
+      <div className="hidden md:flex items-center gap-3 rounded-full border border-border bg-card px-3 py-2.5 shadow-lg pointer-events-auto">
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('floatingContact.whatsappAria')}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 transition-all duration-300 hover:scale-110 hover:bg-emerald-500/25"
+        >
+          <MessageCircle className="h-5 w-5" />
+        </a>
+        <a
+          href={telegramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('floatingContact.telegramAria')}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-300 transition-all duration-300 hover:scale-110 hover:bg-sky-500/25"
+        >
+          <Send className="h-5 w-5 -rotate-12" />
+        </a>
+        <a
+          href={fiverrUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('floatingContact.fiverrAria')}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-500/15 text-green-600 dark:text-green-300 transition-all duration-300 hover:scale-110 hover:bg-green-500/25"
+        >
+          <FiverrIcon className="h-5 w-5" />
+        </a>
       </div>
     </div>,
     document.body
