@@ -91,7 +91,7 @@ const Testimonials = () => {
                         </div>
                       </div>
                     </div>
-                    <blockquote className="text-lg md:text-xl italic text-foreground/90 leading-relaxed">
+                    <blockquote className="text-lg md:text-xl font-serif italic text-foreground/90 leading-relaxed tracking-[-0.01em]">
                       "{t(testimonial.textKey)}"
                     </blockquote>
                   </div>

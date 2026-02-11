@@ -81,7 +81,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="section-padding bg-secondary/18">
+    <section id="contact" className="section-padding bg-muted/25">
       <div className="container relative z-10 mx-auto">
         <div className="text-center mb-16">
           <p className="section-label text-muted-foreground mb-3">{t('contact.sectionSubtitle')}</p>

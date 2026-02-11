@@ -20,8 +20,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				serif: ['"Cormorant Garamond"', 'serif'],
-				sans: ['"Manrope"', 'sans-serif'],
+				serif: ['"Playfair Display"', 'serif'],
+				sans: ['"Inter"', 'sans-serif'],
+				script: ['"Alex Brush"', 'cursive'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

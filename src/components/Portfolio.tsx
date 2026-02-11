@@ -41,7 +41,7 @@ const Portfolio = () => {
     { id: 'fashion', nameKey: 'portfolio.categories.fashion' },
     { id: 'beauty', nameKey: 'portfolio.categories.beauty' },
     { id: 'tech', nameKey: 'portfolio.categories.tech' },
-    { id: 'lifestyle', nameKey: 'portfolio.categories.lifestyle' }
+    { id: 'lifestyle', nameKey: 'portfolio.categories.lifestyle' },
   ];
 
   const reelClips: ReelClip[] = [
@@ -50,57 +50,57 @@ const Portfolio = () => {
       titleKey: 'portfolio.items.item1',
       category: 'fashion',
       videoSrc: 'https://cdn.pixabay.com/video/2021/08/30/86911-594991432_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2021/08/30/86911-594991432_tiny.jpg'
+      poster: 'https://cdn.pixabay.com/video/2021/08/30/86911-594991432_tiny.jpg',
     },
     {
       id: 2,
       titleKey: 'portfolio.items.item2',
       category: 'beauty',
       videoSrc: 'https://cdn.pixabay.com/video/2024/02/09/199958-911694865_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/02/09/199958-911694865_tiny.jpg'
+      poster: 'https://cdn.pixabay.com/video/2024/02/09/199958-911694865_tiny.jpg',
     },
     {
       id: 3,
       titleKey: 'portfolio.items.item3',
       category: 'tech',
       videoSrc: 'https://cdn.pixabay.com/video/2022/02/12/107492-678970856_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2022/02/12/107492-678970856_tiny.jpg'
+      poster: 'https://cdn.pixabay.com/video/2022/02/12/107492-678970856_tiny.jpg',
     },
     {
       id: 4,
       titleKey: 'portfolio.items.item4',
       category: 'lifestyle',
       videoSrc: 'https://cdn.pixabay.com/video/2024/05/25/213616_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/05/25/213616_tiny.jpg'
+      poster: 'https://cdn.pixabay.com/video/2024/05/25/213616_tiny.jpg',
     },
     {
       id: 5,
       titleKey: 'portfolio.items.item5',
       category: 'beauty',
       videoSrc: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.jpg'
+      poster: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.jpg',
     },
     {
       id: 6,
       titleKey: 'portfolio.items.item6',
       category: 'fashion',
       videoSrc: 'https://cdn.pixabay.com/video/2021/08/04/83869-584870610_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2021/08/04/83869-584870610_tiny.jpg'
+      poster: 'https://cdn.pixabay.com/video/2021/08/04/83869-584870610_tiny.jpg',
     },
     {
       id: 7,
       titleKey: 'portfolio.items.item7',
       category: 'tech',
       videoSrc: 'https://cdn.pixabay.com/video/2022/10/14/134796-760690958_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2022/10/14/134796-760690958_tiny.jpg'
+      poster: 'https://cdn.pixabay.com/video/2022/10/14/134796-760690958_tiny.jpg',
     },
     {
       id: 8,
       titleKey: 'portfolio.items.item8',
       category: 'lifestyle',
       videoSrc: 'https://cdn.pixabay.com/video/2024/06/09/216038_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/06/09/216038_tiny.jpg'
-    }
+      poster: 'https://cdn.pixabay.com/video/2024/06/09/216038_tiny.jpg',
+    },
   ];
 
   const collageClips: CollageClip[] = [
@@ -109,36 +109,36 @@ const Portfolio = () => {
       labelKey: 'portfolio.items.item2',
       videoSrc: 'https://cdn.pixabay.com/video/2023/06/20/168085-838533639_tiny.mp4',
       poster: 'https://cdn.pixabay.com/video/2023/06/20/168085-838533639_tiny.jpg',
-      className: 'top-7 left-10 w-[44%] -rotate-[5deg]'
+      className: 'top-8 left-10 w-[42%] -rotate-[3deg]',
     },
     {
       id: 2,
       labelKey: 'portfolio.items.item6',
       videoSrc: 'https://cdn.pixabay.com/video/2024/05/23/213387_tiny.mp4',
       poster: 'https://cdn.pixabay.com/video/2024/05/23/213387_tiny.jpg',
-      className: 'top-1 right-14 w-[38%] rotate-[2deg]'
+      className: 'top-3 right-12 w-[36%] rotate-[1deg]',
     },
     {
       id: 3,
       labelKey: 'portfolio.items.item3',
       videoSrc: 'https://cdn.pixabay.com/video/2024/03/26/205691-927672681_tiny.mp4',
       poster: 'https://cdn.pixabay.com/video/2024/03/26/205691-927672681_tiny.jpg',
-      className: 'top-[34%] left-[35%] w-[36%] z-20'
+      className: 'top-[33%] left-[34%] w-[34%] z-20',
     },
     {
       id: 4,
       labelKey: 'portfolio.items.item8',
       videoSrc: 'https://cdn.pixabay.com/video/2023/11/28/191126-889267474_tiny.mp4',
       poster: 'https://cdn.pixabay.com/video/2023/11/28/191126-889267474_tiny.jpg',
-      className: 'bottom-7 right-14 w-[34%] rotate-[3deg]'
+      className: 'bottom-8 right-14 w-[32%] rotate-[2deg]',
     },
     {
       id: 5,
       labelKey: 'portfolio.items.item4',
       videoSrc: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.mp4',
       poster: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.jpg',
-      className: 'bottom-4 left-[8%] w-[30%] -rotate-1'
-    }
+      className: 'bottom-6 left-[10%] w-[30%] -rotate-[1deg]',
+    },
   ];
 
   const portfolioItemData: PortfolioItem[] = [
@@ -147,62 +147,63 @@ const Portfolio = () => {
       titleKey: 'portfolio.items.item1',
       category: 'fashion',
       thumbnail: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'image'
+      type: 'image',
     },
     {
       id: 2,
       titleKey: 'portfolio.items.item2',
       category: 'beauty',
       thumbnail: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'video'
+      type: 'video',
     },
     {
       id: 3,
       titleKey: 'portfolio.items.item3',
       category: 'tech',
       thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'image'
+      type: 'image',
     },
     {
       id: 4,
       titleKey: 'portfolio.items.item4',
       category: 'lifestyle',
       thumbnail: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'image'
+      type: 'image',
     },
     {
       id: 5,
       titleKey: 'portfolio.items.item5',
       category: 'beauty',
       thumbnail: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'video'
+      type: 'video',
     },
     {
       id: 6,
       titleKey: 'portfolio.items.item6',
       category: 'fashion',
       thumbnail: 'https://images.unsplash.com/photo-1520999166575-37d109989923?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'image'
+      type: 'image',
     },
     {
       id: 7,
       titleKey: 'portfolio.items.item7',
       category: 'tech',
       thumbnail: 'https://images.unsplash.com/photo-1551721434-8b94ddff0e6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'video'
+      type: 'video',
     },
     {
       id: 8,
       titleKey: 'portfolio.items.item8',
       category: 'lifestyle',
       thumbnail: 'https://images.unsplash.com/photo-1498575732665-aac7705c2c7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'video'
-    }
+      type: 'video',
+    },
   ];
 
-  const filteredItems = activeFilter === 'all'
-    ? portfolioItemData
-    : portfolioItemData.filter((item) => item.category === activeFilter);
+  const filteredItems =
+    activeFilter === 'all'
+      ? portfolioItemData
+      : portfolioItemData.filter((item) => item.category === activeFilter);
 
   const closeModal = () => {
     setSelectedItem(null);
@@ -212,8 +213,8 @@ const Portfolio = () => {
     if (!reelTrackRef.current) return;
 
     reelTrackRef.current.scrollBy({
-      left: direction === 'next' ? 560 : -560,
-      behavior: 'smooth'
+      left: direction === 'next' ? 520 : -520,
+      behavior: 'smooth',
     });
   };
 
@@ -249,150 +250,150 @@ const Portfolio = () => {
   const getCollageMotionClass = (clipId: number) => {
     if (!collagePlaying) return '';
 
-    if (clipId === 4) return '-translate-x-8 -translate-y-6 scale-[1.04]';
-    if (clipId === 5) return 'translate-x-8 -translate-y-5 scale-[1.04]';
-    if (clipId === 3) return '-translate-y-2 scale-[1.03]';
+    if (clipId === 4) return '-translate-x-6 -translate-y-4 scale-[1.03]';
+    if (clipId === 5) return 'translate-x-6 -translate-y-4 scale-[1.03]';
+    if (clipId === 3) return '-translate-y-1 scale-[1.02]';
 
-    return 'scale-[1.02]';
+    return 'scale-[1.015]';
   };
 
-  return (
-    <section id="portfolio" className="section-padding bg-secondary/20">
+  const cardAspectRatios = ['4 / 5', '1 / 1', '3 / 4', '4 / 5'];
 
-      <div className="container relative z-10 mx-auto">
-        <div className="text-center mb-12">
-          <p className="section-label text-muted-foreground mb-3">{t('portfolio.sectionSubtitle')}</p>
-          <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-[-0.04em] mb-6">{t('portfolio.sectionTitle')}</h2>
-          <div className="w-24 h-1 signature-line mx-auto" />
+  return (
+    <section id="portfolio" className="studio-section bg-secondary/14">
+      <div className="studio-container">
+        <div className="studio-header">
+          <div>
+            <p className="section-label text-muted-foreground mb-3">{t('portfolio.sectionSubtitle')}</p>
+            <h2 className="studio-title">{t('portfolio.sectionTitle')}</h2>
+          </div>
+          <p className="studio-subtitle lg:justify-self-end">{t('portfolio.reelDescription')}</p>
         </div>
 
-        <div className="cafe-panel p-4 md:p-6 mb-4 relative overflow-hidden">
-          <div className="absolute inset-0 bg-card" />
-          <div className="relative z-10">
-            <div className="flex items-end justify-between gap-4 mb-5">
-              <div>
-                <p className="section-label text-xs text-muted-foreground mb-2">
-                  {t('portfolio.reelSubtitle')}
-                </p>
-                <h3 className="text-xl md:text-2xl font-serif font-normal tracking-[-0.03em] text-foreground">
-                  {t('portfolio.reelTitle')}
-                </h3>
-              </div>
+        <div className="studio-rule mb-10 md:mb-12" />
 
-              <div className="hidden sm:flex items-center gap-2">
-                <button
-                  type="button"
-                  aria-label={t('portfolio.reelAriaPrev')}
-                  className="h-10 w-10 rounded-full border border-primary/25 bg-card/90 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-                  onClick={() => scrollReel('prev')}
-                >
-                  <ArrowLeft className="h-5 w-5 mx-auto" />
-                </button>
-                <button
-                  type="button"
-                  aria-label={t('portfolio.reelAriaNext')}
-                  className="h-10 w-10 rounded-full border border-primary/25 bg-card/90 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-                  onClick={() => scrollReel('next')}
-                >
-                  <ArrowRight className="h-5 w-5 mx-auto" />
-                </button>
-              </div>
+        <div className="studio-panel p-4 md:p-6 mb-12 md:mb-14">
+          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between mb-5 md:mb-6">
+            <div>
+              <p className="section-label text-xs text-muted-foreground mb-2">{t('portfolio.reelSubtitle')}</p>
+              <h3 className="text-xl md:text-[1.9rem] font-serif font-normal tracking-[-0.03em] text-foreground leading-tight">
+                {t('portfolio.reelTitle')}
+              </h3>
             </div>
 
-            <p className="text-sm text-muted-foreground mt-4">{t('portfolio.reelDescription')}</p>
-          </div>
-        </div>
-
-        <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden mb-16">
-          <div className="absolute inset-y-0 left-0 w-12 sm:w-16 md:w-24 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
-          <div className="absolute inset-y-0 right-0 w-12 sm:w-16 md:w-24 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
-
-          <div
-            ref={reelTrackRef}
-            className="relative z-10 flex gap-4 md:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 pt-1 px-3 sm:px-5 md:px-8 lg:px-10 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-          >
-            {reelClips.map((clip) => (
+            <div className="hidden sm:flex items-center gap-2">
               <button
                 type="button"
-                key={clip.id}
-                className="group relative shrink-0 snap-start w-[220px] sm:w-[240px] md:w-[260px] lg:w-[280px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/45 transition-colors"
-                onClick={() => setActiveReelPreview(clip)}
-                aria-label={t(clip.titleKey)}
+                aria-label={t('portfolio.reelAriaPrev')}
+                className="h-10 w-10 rounded-full border border-primary/20 bg-card/90 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                onClick={() => scrollReel('prev')}
               >
-                <video
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  src={clip.videoSrc}
-                  poster={clip.poster}
-                  muted
-                  autoPlay
-                  loop
-                  playsInline
-                  preload="metadata"
-                  aria-hidden="true"
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-
-                <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-white">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-white/75 mb-1">
-                      {t(`portfolio.categories.${clip.category}`)}
-                    </p>
-                    <p className="text-sm font-medium leading-tight">{t(clip.titleKey)}</p>
-                  </div>
-
-                  <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/25 backdrop-blur-md">
-                    <VolumeX className="h-4 w-4" />
-                  </span>
-                </div>
+                <ArrowLeft className="h-5 w-5 mx-auto" />
               </button>
-            ))}
+              <button
+                type="button"
+                aria-label={t('portfolio.reelAriaNext')}
+                className="h-10 w-10 rounded-full border border-primary/20 bg-card/90 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                onClick={() => scrollReel('next')}
+              >
+                <ArrowRight className="h-5 w-5 mx-auto" />
+              </button>
+            </div>
+          </div>
+
+          <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-background/45">
+            <div className="absolute inset-y-0 left-0 w-12 md:w-16 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
+            <div className="absolute inset-y-0 right-0 w-12 md:w-16 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
+
+            <div
+              ref={reelTrackRef}
+              className="relative z-10 flex gap-4 md:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 md:py-5 px-3 md:px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {reelClips.map((clip) => (
+                <button
+                  type="button"
+                  key={clip.id}
+                  className="group relative shrink-0 snap-start w-[210px] sm:w-[225px] md:w-[245px] lg:w-[260px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors"
+                  onClick={() => setActiveReelPreview(clip)}
+                  aria-label={t(clip.titleKey)}
+                >
+                  <video
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    src={clip.videoSrc}
+                    poster={clip.poster}
+                    muted
+                    autoPlay
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-hidden="true"
+                  />
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/24 to-transparent" />
+
+                  <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-white">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-white/75 mb-1">
+                        {t(`portfolio.categories.${clip.category}`)}
+                      </p>
+                      <p className="text-sm font-medium leading-tight">{t(clip.titleKey)}</p>
+                    </div>
+
+                    <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/24 backdrop-blur-md">
+                      <VolumeX className="h-4 w-4" />
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16">
+        <div className="grid lg:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)] gap-8 lg:gap-10 items-center mb-14 md:mb-16">
           <div>
-            <p className="section-label text-sm text-muted-foreground mb-4">
-              {t('portfolio.collageEyebrow')}
-            </p>
-            <h3 className="text-3xl md:text-4xl font-serif font-normal tracking-[-0.04em] leading-tight mb-5">
+            <p className="section-label text-sm text-muted-foreground mb-4">{t('portfolio.collageEyebrow')}</p>
+            <h3 className="text-3xl md:text-[2.4rem] font-serif font-normal tracking-[-0.04em] leading-tight mb-5">
               {t('portfolio.collageTitle')}
             </h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">
-              {t('portfolio.collageDescription')}
-            </p>
+            <p className="text-muted-foreground leading-relaxed mb-6">{t('portfolio.collageDescription')}</p>
 
             <ul className="space-y-3 text-foreground/85 mb-8">
               <li className="flex gap-3">
-                <span className="mt-[0.5rem] h-2 w-2 rounded-full bg-primary" />
+                <span className="mt-[0.5rem] h-1.5 w-1.5 rounded-full bg-primary" />
                 <span>{t('portfolio.collagePoint1')}</span>
               </li>
               <li className="flex gap-3">
-                <span className="mt-[0.5rem] h-2 w-2 rounded-full bg-primary" />
+                <span className="mt-[0.5rem] h-1.5 w-1.5 rounded-full bg-primary" />
                 <span>{t('portfolio.collagePoint2')}</span>
               </li>
               <li className="flex gap-3">
-                <span className="mt-[0.5rem] h-2 w-2 rounded-full bg-primary" />
+                <span className="mt-[0.5rem] h-1.5 w-1.5 rounded-full bg-primary" />
                 <span>{t('portfolio.collagePoint3')}</span>
               </li>
             </ul>
 
-            <a
-              href="#contact"
-              className="btn-primary-nordic px-7 py-3 hover-grow btn-press"
-            >
+            <a href="#contact" className="btn-primary-nordic px-7 py-3 hover-grow btn-press">
               {t('portfolio.collageCta')}
             </a>
           </div>
 
           <div
-            className="cafe-panel relative h-[460px] p-6 md:p-8 overflow-hidden cursor-pointer"
+            className="studio-panel relative h-[430px] p-6 md:p-8 overflow-hidden cursor-pointer"
             onMouseEnter={handleCollageActivate}
             onMouseLeave={handleCollageDeactivate}
             onFocus={handleCollageActivate}
             onBlur={(event) => {
               const nextTarget = event.relatedTarget as Node | null;
               if (!nextTarget || !event.currentTarget.contains(nextTarget)) {
+                handleCollageDeactivate();
+              }
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleCollageActivate();
+              }
+              if (event.key === 'Escape') {
                 handleCollageDeactivate();
               }
             }}
@@ -444,12 +445,12 @@ const Portfolio = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-4 mb-10">
+        <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8 md:mb-10">
           {categoryKeys.map((category) => (
             <button
               key={category.id}
               onClick={() => setActiveFilter(category.id)}
-              className={`px-6 py-2 rounded-full text-sm transition-all ${
+              className={`px-5 md:px-6 py-2.5 rounded-full text-xs md:text-sm uppercase tracking-[0.1em] transition-all ${
                 activeFilter === category.id
                   ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'cafe-chip hover:bg-secondary'
@@ -460,59 +461,40 @@ const Portfolio = () => {
           ))}
         </div>
 
-        <div className="columns-1 md:columns-2 lg:columns-4 gap-6 space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
           {filteredItems.map((item, index) => {
-            const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-              const element = event.currentTarget;
-              const rect = element.getBoundingClientRect();
-              const x = (event.clientX - rect.left - rect.width / 2) / 15;
-              const y = (event.clientY - rect.top - rect.height / 2) / 15;
-              element.style.transform = `perspective(1000px) rotateY(${x}deg) rotateX(${-y}deg) scale(1.02)`;
-            };
-
-            const handleMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
-              event.currentTarget.style.transform = 'perspective(1000px) rotateY(0) rotateX(0) scale(1)';
-            };
-
-            const aspectRatios = ['4/3', '1/1', '3/4', '16/9'];
-            const aspectRatio = aspectRatios[index % aspectRatios.length];
+            const aspectRatio = cardAspectRatios[index % cardAspectRatios.length];
 
             return (
-              <div
+              <button
+                type="button"
                 key={item.id}
-                className="group relative overflow-hidden rounded-2xl border border-border shadow-sm cursor-pointer break-inside-avoid mb-6 transition-all duration-300 ease-out bg-card/75"
+                className="group relative overflow-hidden rounded-[1.25rem] border border-border/75 shadow-sm text-left transition-colors bg-card/82 hover:border-primary/35"
                 onClick={() => setSelectedItem(item)}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                style={{ transformStyle: 'preserve-3d' }}
               >
                 <div className="w-full overflow-hidden" style={{ aspectRatio }}>
                   <img
                     src={item.thumbnail}
                     alt={t(item.titleKey)}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/28 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-5">
-                  <h3 className="text-white font-medium mb-1">{t(item.titleKey)}</h3>
-                  <p className="text-white/75 text-sm capitalize">{t(`portfolio.categories.${item.category}`)}</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/28 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    {item.type === 'video' ? (
-                      <div className="w-14 h-14 bg-card/90 rounded-full flex items-center justify-center">
-                        <Play className="h-6 w-6 text-primary fill-primary" />
-                      </div>
-                    ) : (
-                      <div className="w-14 h-14 bg-card/90 rounded-full flex items-center justify-center">
-                        <Maximize className="h-6 w-6 text-primary" />
-                      </div>
-                    )}
-                  </div>
+                <div className="absolute inset-x-0 bottom-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                  <h3 className="font-medium mb-0.5">{t(item.titleKey)}</h3>
+                  <p className="text-white/75 text-xs uppercase tracking-[0.1em]">
+                    {t(`portfolio.categories.${item.category}`)}
+                  </p>
                 </div>
-              </div>
+
+                <span className="absolute top-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-card/88 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                  {item.type === 'video' ? <Play className="h-4 w-4 fill-current" /> : <Maximize className="h-4 w-4" />}
+                </span>
+              </button>
             );
           })}
         </div>
@@ -528,11 +510,7 @@ const Portfolio = () => {
             onClick={(event) => event.stopPropagation()}
           >
             <div className="aspect-w-16 aspect-h-9 w-full bg-foreground/15">
-              <img
-                src={selectedItem.thumbnail}
-                alt={t(selectedItem.titleKey)}
-                className="w-full h-full object-cover"
-              />
+              <img src={selectedItem.thumbnail} alt={t(selectedItem.titleKey)} className="w-full h-full object-cover" />
             </div>
             <div className="p-6">
               <h3 className="text-2xl font-serif font-normal tracking-[-0.03em] text-primary">{t(selectedItem.titleKey)}</h3>
@@ -566,9 +544,7 @@ const Portfolio = () => {
               <X className="h-4 w-4 text-foreground" />
             </button>
 
-            <p className="section-label text-xs text-muted-foreground mb-1">
-              {t('portfolio.reelPreviewLabel')}
-            </p>
+            <p className="section-label text-xs text-muted-foreground mb-1">{t('portfolio.reelPreviewLabel')}</p>
             <h4 className="text-lg font-serif font-normal tracking-[-0.03em] pr-10 mb-3">{t(activeReelPreview.titleKey)}</h4>
 
             <div className="rounded-xl overflow-hidden bg-black">

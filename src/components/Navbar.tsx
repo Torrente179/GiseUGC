@@ -73,7 +73,7 @@ const Navbar = () => {
               >
                 <div className="flex items-center gap-4">
                   <span className="text-xs text-muted-foreground font-mono">{link.number}</span>
-                  <span className="text-3xl font-serif tracking-[-0.03em] text-foreground group-hover:text-primary transition-colors">
+                  <span className="text-3xl font-sans font-semibold tracking-[0.04em] text-foreground group-hover:text-primary transition-colors">
                     {t(link.key)}
                   </span>
                 </div>
