@@ -12,11 +12,19 @@
   },
   "hero": {
     "subtitle": "Creadora de UGC & Especialista en Contenido",
+    "signature": "Contenido de autor para marcas premium",
     "description": "Creando contenido UGC auténtico y elegante que muestra la historia única de tu marca y conecta con tu audiencia a un nivel más profundo.",
     "buttonPortfolio": "Ver Mi Trabajo",
     "buttonContact": "Contactar",
     "imageAlt": "Gisela Saldarriaga",
-    "scrollPrompt": "Explora Mis Servicios"
+    "scrollPrompt": "Explora Mis Servicios",
+    "pillStrategy": "Dirección creativa",
+    "pillAesthetic": "Estética premium",
+    "pillConversion": "Enfoque en conversión",
+    "proofLabel": "Campañas activas",
+    "proofValue": "+28 marcas",
+    "proofCaption": "Moda, belleza y lifestyle",
+    "tagline": "Editorial UGC"
   },
   "services": {
     "sectionSubtitle": "Lo Que Ofrezco",
