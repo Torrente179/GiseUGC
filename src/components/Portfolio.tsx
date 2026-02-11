@@ -182,7 +182,7 @@ const Portfolio = () => {
           <div className="text-center md:text-left">
             <div className="inline-flex items-center gap-2 mb-6">
               <span className="h-px w-8 bg-accent/40" />
-              <p className="section-label text-accent/80">{t('portfolio.sectionSubtitle')}</p>
+              <p className="section-label text-accent">{t('portfolio.sectionSubtitle')}</p>
             </div>
             <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95]">
               {t('portfolio.sectionTitle')}
