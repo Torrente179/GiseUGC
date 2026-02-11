@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Play, VolumeX, X } from 'lucide-react';
 
@@ -15,13 +15,17 @@ interface CollageClip {
   labelKey: string;
   videoSrc: string;
   poster: string;
-  className: string;
+  /* Corner position (spread out, paused state) */
+  cornerClass: string;
+  /* Hovered position (gathered together, playing state) */
+  hoverClass: string;
 }
 
 const Portfolio = () => {
   const { t } = useTranslation();
 
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
+  const [collageHovered, setCollageHovered] = useState(false);
 
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const reelScrollRef = useRef<HTMLDivElement>(null);
@@ -37,6 +41,34 @@ const Portfolio = () => {
       behavior: 'smooth',
     });
   };
+
+  /* Play all collage videos */
+  const playCollageVideos = useCallback(() => {
+    collageVideoRefs.current.forEach((video) => {
+      if (video) {
+        video.play().catch(() => undefined);
+      }
+    });
+  }, []);
+
+  /* Pause all collage videos */
+  const pauseCollageVideos = useCallback(() => {
+    collageVideoRefs.current.forEach((video) => {
+      if (video) {
+        video.pause();
+      }
+    });
+  }, []);
+
+  const handleCollageMouseEnter = useCallback(() => {
+    setCollageHovered(true);
+    playCollageVideos();
+  }, [playCollageVideos]);
+
+  const handleCollageMouseLeave = useCallback(() => {
+    setCollageHovered(false);
+    pauseCollageVideos();
+  }, [pauseCollageVideos]);
 
   const reelClips: ReelClip[] = [
     {
@@ -117,55 +149,62 @@ const Portfolio = () => {
       labelKey: 'portfolio.items.item2',
       videoSrc: 'https://assets.mixkit.co/videos/50406/50406-720.mp4',
       poster: 'https://assets.mixkit.co/videos/50406/50406-thumb-720-0.jpg',
-      className: 'top-8 left-10 w-[42%] -rotate-[3deg]',
+      /* Top-left, spread to corner */
+      cornerClass: 'top-[4%] left-[4%] w-[36%] -rotate-[4deg] -translate-x-[6%] -translate-y-[4%]',
+      /* Gathered inward */
+      hoverClass: 'top-[6%] left-[8%] w-[38%] -rotate-[2deg] translate-x-0 translate-y-0 scale-[1.03]',
     },
     {
       id: 2,
       labelKey: 'portfolio.items.item6',
       videoSrc: 'https://assets.mixkit.co/videos/50426/50426-720.mp4',
       poster: 'https://assets.mixkit.co/videos/50426/50426-thumb-720-0.jpg',
-      className: 'top-3 right-12 w-[36%] rotate-[1deg]',
+      /* Top-center, slightly offset */
+      cornerClass: 'top-[-2%] left-[30%] w-[32%] rotate-[1deg] -translate-y-[4%]',
+      /* Gathered inward */
+      hoverClass: 'top-[2%] left-[30%] w-[34%] rotate-[0deg] translate-y-0 scale-[1.02] z-10',
     },
     {
       id: 3,
       labelKey: 'portfolio.items.item3',
-      videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
-      className: 'top-[33%] left-[34%] w-[34%] z-20',
+      videoSrc: 'https://assets.mixkit.co/videos/50426/50426-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/50426/50426-thumb-720-0.jpg',
+      /* Top-right, spread to corner */
+      cornerClass: 'top-[2%] right-[2%] w-[34%] rotate-[4deg] translate-x-[6%] -translate-y-[2%]',
+      /* Gathered inward */
+      hoverClass: 'top-[4%] right-[6%] w-[36%] rotate-[2deg] translate-x-0 translate-y-0 scale-[1.02]',
     },
     {
       id: 4,
       labelKey: 'portfolio.items.item8',
-      videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
-      className: 'bottom-8 right-14 w-[32%] rotate-[2deg]',
+      videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
+      /* Center, slightly recessed when spread */
+      cornerClass: 'top-[26%] left-[30%] w-[32%] rotate-[0deg] scale-[0.88] opacity-80 z-10',
+      /* Center, prominent when hovered */
+      hoverClass: 'top-[22%] left-[30%] w-[36%] rotate-[0deg] z-20 scale-[1.06] opacity-100',
     },
     {
       id: 5,
       labelKey: 'portfolio.items.item4',
+      videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
+      /* Bottom-left, spread to corner */
+      cornerClass: 'bottom-[2%] left-[2%] w-[36%] -rotate-[3deg] -translate-x-[4%] translate-y-[4%]',
+      /* Gathered inward */
+      hoverClass: 'bottom-[4%] left-[6%] w-[38%] -rotate-[1deg] translate-x-0 translate-y-0 scale-[1.02]',
+    },
+    {
+      id: 6,
+      labelKey: 'portfolio.items.item5',
       videoSrc: 'https://assets.mixkit.co/videos/51168/51168-720.mp4',
       poster: 'https://assets.mixkit.co/videos/51168/51168-thumb-720-0.jpg',
-      className: 'bottom-6 left-[10%] w-[30%] -rotate-[1deg]',
+      /* Bottom-right, spread to corner */
+      cornerClass: 'bottom-[0%] right-[2%] w-[32%] rotate-[5deg] translate-x-[6%] translate-y-[6%]',
+      /* Gathered inward */
+      hoverClass: 'bottom-[4%] right-[6%] w-[34%] rotate-[2deg] translate-x-0 translate-y-0 scale-[1.02]',
     },
   ];
-
-  useEffect(() => {
-    // Ensure all collage videos are playing
-    collageVideoRefs.current.forEach((video) => {
-      if (video) {
-        video.play().catch(() => undefined);
-      }
-    });
-  }, []);
-
-  const getCollageMotionClass = (clipId: number) => {
-    // Constant motion effect
-    if (clipId === 4) return '-translate-x-11 -translate-y-6 scale-[1.05]';
-    if (clipId === 5) return 'translate-x-11 -translate-y-6 scale-[1.05]';
-    if (clipId === 3) return '-translate-y-2 scale-[1.03]';
-
-    return 'scale-[1.02]';
-  };
 
   return (
     <section id="portfolio" className="studio-section bg-secondary/5 pt-32 pb-24">
@@ -295,17 +334,28 @@ const Portfolio = () => {
             </a>
           </div>
 
+          {/* Desktop: Absolute-positioned collage with hover interaction */}
           <div
-            className="studio-panel relative h-[430px] p-6 md:p-8 overflow-hidden"
+            className="hidden md:block relative h-[460px] rounded-[1.75rem] border border-border/60 overflow-hidden cursor-pointer shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.4)]"
             role="presentation"
+            onMouseEnter={handleCollageMouseEnter}
+            onMouseLeave={handleCollageMouseLeave}
           >
-            <div className="absolute inset-0 bg-card" />
-            <div className="absolute inset-x-0 top-0 h-44 bg-secondary blur-2xl opacity-60" />
+            {/* Sunset gradient background matching the reference */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: 'linear-gradient(180deg, #7c5ba3 0%, #c97b8b 30%, #e8a87c 60%, #f4c6a0 80%, hsl(var(--card)) 100%)',
+              }}
+            />
+            <div className="absolute inset-0 bg-card/20" />
 
             {collageClips.map((clip, index) => (
               <div
                 key={clip.id}
-                className={`absolute ${clip.className} rounded-2xl border border-border shadow-lg overflow-hidden transition-all duration-700 ease-out ${getCollageMotionClass(clip.id)}`}
+                className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${collageHovered ? clip.hoverClass : clip.cornerClass
+                  }`}
+                style={{ aspectRatio: '9/16' }}
               >
                 <video
                   ref={(element) => {
@@ -317,12 +367,59 @@ const Portfolio = () => {
                   muted
                   loop
                   playsInline
-                  autoPlay
                   preload="metadata"
                   aria-label={t(clip.labelKey)}
                 />
+
+                {/* Individual play icon per card — fades on hover */}
+                <div
+                  className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-500 ${collageHovered ? 'opacity-0' : 'opacity-100'
+                    }`}
+                >
+                  <div className="h-9 w-9 rounded-full bg-white/70 backdrop-blur-sm flex items-center justify-center shadow-md">
+                    <Play className="h-4 w-4 text-foreground/80 ml-0.5" fill="currentColor" />
+                  </div>
+                </div>
               </div>
             ))}
+          </div>
+
+          {/* Mobile: Grid layout so videos don't overlap */}
+          <div
+            className="md:hidden relative rounded-[1.25rem] border border-border/60 p-3 overflow-hidden shadow-lg"
+            role="presentation"
+          >
+            {/* Sunset gradient background for mobile too */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background: 'linear-gradient(180deg, #7c5ba3 0%, #c97b8b 30%, #e8a87c 60%, #f4c6a0 80%, hsl(var(--card)) 100%)',
+              }}
+            />
+            <div className="absolute inset-0 bg-card/15" />
+
+            <div className="relative z-10 grid grid-cols-2 gap-2.5">
+              {collageClips.map((clip, index) => (
+                <div
+                  key={clip.id}
+                  className={`rounded-xl border-2 border-white/80 shadow-md overflow-hidden ${index === 3 ? 'col-span-2 mx-auto w-[55%]' : ''
+                    }`}
+                  style={{ aspectRatio: '9/16' }}
+                >
+                  <video
+                    className="h-full w-full object-cover"
+                    src={clip.videoSrc}
+                    poster={clip.poster}
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                    preload="metadata"
+                    aria-label={t(clip.labelKey)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
