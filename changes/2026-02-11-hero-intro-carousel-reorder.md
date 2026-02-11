@@ -21,6 +21,12 @@ Enhanced the Hero section with a prestige introduction and refactored the Servic
     - Updated the "Saldarriaga" part of the main title to use the brand's Mauve accent color for a more cohesive prestige look.
 - **Intro Cleanup**:
     - Removed the redundant "See My Work" link from the bio/introduction space to maintain minimalist elegance.
+- **Editorial Portfolio Title**:
+    - Reimagined the portfolio header with a more "catchy" and strategic title: *"Historias que Convierten"*.
+    - Implemented mixed typography using Playfair Display for authority and Alex Brush for artistic signature, creating a high-end editorial feel.
+- **Seamless Infinite Marquee**:
+    - Fixed the "Toolkit" carousel to be truly infinite by triple-buffering the content items.
+    - Optimized the CSS animation loop from 50% to 33.333% to eliminate any visible jumps or resets, ensuring a silky smooth scroll on all screen sizes.
 
 ## Aesthetic Refinement
 The website now follows a clearer storytelling path: Identity -> Services -> Portfolio -> Social Proof -> Testimonials -> Creative Toolkit -> Conversion.
