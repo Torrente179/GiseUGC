@@ -1,78 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Marcellus&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background: 40 33% 95%;
+    --foreground: 27 23% 24%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card: 38 29% 97%;
+    --card-foreground: 27 23% 24%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --popover: 38 29% 97%;
+    --popover-foreground: 27 23% 24%;
 
-    --primary: 340 50% 55%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 29 34% 33%;
+    --primary-foreground: 41 32% 95%;
 
-    --secondary: 340 30% 96%;
-    --secondary-foreground: 340 50% 40%;
+    --secondary: 38 31% 88%;
+    --secondary-foreground: 28 27% 28%;
 
-    --muted: 340 10% 96%;
-    --muted-foreground: 340 4% 46%;
+    --muted: 38 25% 91%;
+    --muted-foreground: 30 13% 43%;
 
-    --accent: 340 15% 96%;
-    --accent-foreground: 340 50% 40%;
+    --accent: 186 50% 36%;
+    --accent-foreground: 42 25% 95%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 340 20% 90%;
-    --input: 340 20% 90%;
-    --ring: 340 50% 55%;
+    --border: 34 24% 78%;
+    --input: 36 23% 84%;
+    --ring: 186 44% 36%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --brand-teal: 186 50% 36%;
+    --brand-olive: 95 13% 43%;
+    --brand-sand: 35 28% 79%;
+    --brand-cocoa: 26 27% 25%;
+    --brand-cream: 40 33% 95%;
+    --brand-gold: 38 37% 62%;
+
+    --sidebar-background: 40 30% 93%;
+    --sidebar-foreground: 27 23% 24%;
+    --sidebar-primary: 29 34% 33%;
+    --sidebar-primary-foreground: 41 32% 95%;
+    --sidebar-accent: 38 31% 88%;
+    --sidebar-accent-foreground: 28 27% 28%;
+    --sidebar-border: 34 24% 78%;
+    --sidebar-ring: 186 44% 36%;
   }
 
   /* Dark mode variables */
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 27 24% 12%;
+    --foreground: 42 24% 91%;
 
-    --card: 240 10% 5%;
-    --card-foreground: 0 0% 98%;
+    --card: 27 22% 16%;
+    --card-foreground: 42 24% 91%;
 
-    --popover: 240 10% 5%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 27 22% 16%;
+    --popover-foreground: 42 24% 91%;
 
-    --primary: 340 50% 60%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 34 34% 62%;
+    --primary-foreground: 27 24% 12%;
 
-    --secondary: 340 30% 12%;
-    --secondary-foreground: 340 50% 70%;
+    --secondary: 25 17% 22%;
+    --secondary-foreground: 40 21% 84%;
 
-    --muted: 340 10% 15%;
-    --muted-foreground: 340 4% 64%;
+    --muted: 27 15% 20%;
+    --muted-foreground: 36 13% 66%;
 
-    --accent: 340 15% 15%;
-    --accent-foreground: 340 50% 70%;
+    --accent: 186 40% 43%;
+    --accent-foreground: 42 24% 91%;
 
     --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 340 20% 18%;
-    --input: 340 20% 18%;
-    --ring: 340 50% 55%;
+    --border: 27 16% 28%;
+    --input: 27 16% 28%;
+    --ring: 186 40% 43%;
+
+    --brand-teal: 186 40% 43%;
+    --brand-olive: 95 18% 54%;
+    --brand-sand: 33 21% 49%;
+    --brand-cocoa: 33 17% 86%;
+    --brand-cream: 33 18% 90%;
+    --brand-gold: 38 36% 66%;
   }
 
   * {
@@ -85,23 +101,37 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Manrope', sans-serif;
+    background-image:
+      radial-gradient(circle at 18% 16%, hsl(var(--secondary) / 0.5), transparent 32%),
+      radial-gradient(circle at 82% 8%, hsl(var(--brand-teal) / 0.1), transparent 34%),
+      linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)));
+    min-height: 100vh;
   }
 
   /* Enhanced typography */
   h1 {
     @apply tracking-tight;
+    font-family: 'Marcellus', serif;
+    letter-spacing: 0.01em;
     font-feature-settings: "ss03", "liga";
   }
 
   h2 {
     @apply tracking-tight;
+    font-family: 'Marcellus', serif;
+  }
+
+  h3,
+  h4 {
+    font-family: 'Cormorant Garamond', serif;
   }
 }
 
 @layer utilities {
   .font-playfair {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Marcellus', serif;
+    letter-spacing: 0.01em;
   }
 
   .font-cormorant {
@@ -113,15 +143,15 @@
   }
 
   .glass {
-    @apply bg-white/80 backdrop-blur-lg border border-white/30 shadow-sm;
+    @apply bg-card/75 backdrop-blur-xl border border-primary/10 shadow-sm;
   }
 
   .dark .glass {
-    @apply bg-black/40 border-white/10;
+    @apply bg-card/75 border-primary/20;
   }
 
   .glass-dark {
-    @apply bg-black/5 backdrop-blur-lg border border-white/20;
+    @apply bg-primary/10 backdrop-blur-lg border border-primary/20;
   }
 
   .section-padding {
@@ -145,11 +175,51 @@
   }
 
   .elegant-shadow {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow:
+      0 14px 30px -18px hsl(var(--primary) / 0.45),
+      0 6px 18px -8px hsl(var(--brand-cocoa) / 0.18);
   }
 
   .signature-line {
-    @apply h-[2px] bg-gradient-to-r from-primary/20 via-primary to-primary/20 rounded-full;
+    @apply h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent rounded-full;
+  }
+
+  .cafe-panel {
+    @apply rounded-[1.5rem] border border-primary/15 bg-card/85 backdrop-blur-sm elegant-shadow;
+  }
+
+  .cafe-card {
+    @apply rounded-2xl border border-primary/10 bg-card/95 backdrop-blur-sm transition-all duration-300 elegant-shadow;
+  }
+
+  .cafe-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 20px 40px -20px hsl(var(--primary) / 0.55),
+      0 12px 28px -16px hsl(var(--brand-cocoa) / 0.22);
+  }
+
+  .cafe-chip {
+    @apply rounded-full border border-primary/20 bg-secondary/60 text-primary;
+  }
+
+  .grain-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .grain-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(hsl(var(--primary) / 0.06) 0.6px, transparent 0.6px),
+      radial-gradient(hsl(var(--accent) / 0.04) 0.6px, transparent 0.6px);
+    background-position: 0 0, 7px 7px;
+    background-size: 14px 14px;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0.55;
   }
 
 

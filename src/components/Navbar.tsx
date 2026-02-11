@@ -54,27 +54,23 @@ const Navbar = () => {
     <>
       {/* Full-screen Mobile Menu - Modern Animated */}
       <div
-        className={`fixed inset-0 z-[100] md:hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${mobileMenuOpen
+        className={`fixed inset-0 z-[100] md:hidden transition-all duration-500 ease-out ${mobileMenuOpen
           ? 'opacity-100 pointer-events-auto'
           : 'opacity-0 pointer-events-none'
           }`}
       >
-        {/* Animated backdrop - slight transparency */}
         <div
-          className={`absolute inset-0 bg-background/90 backdrop-blur-sm transition-all duration-500 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          className={`absolute inset-0 bg-gradient-to-br from-brand-cream/95 via-secondary/95 to-background/95 backdrop-blur-md transition-all duration-500 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'
             }`}
           onClick={closeMobileMenu}
         />
 
-        {/* Decorative blurred circles */}
-        <div className={`absolute top-20 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl transition-all duration-700 delay-100 ${mobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+        <div className={`absolute top-16 right-8 w-72 h-72 bg-brand-teal/15 rounded-full blur-3xl transition-all duration-700 delay-100 ${mobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
           }`} />
-        <div className={`absolute bottom-20 left-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl transition-all duration-700 delay-200 ${mobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+        <div className={`absolute bottom-12 left-8 w-96 h-96 bg-primary/10 rounded-full blur-3xl transition-all duration-700 delay-200 ${mobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
           }`} />
 
-        {/* Menu content */}
         <div className="relative h-full flex flex-col pt-24 px-8">
-          {/* Navigation Links */}
           <nav className="flex-1 flex flex-col justify-center -mt-16">
             <div className="space-y-2">
               {navLinkKeys.map((link, index) => (
@@ -90,19 +86,18 @@ const Navbar = () => {
                     transitionDelay: mobileMenuOpen ? `${index * 75 + 150}ms` : '0ms'
                   }}
                 >
-                  <span className="text-xs font-mono text-primary/60 tracking-wider">
+                  <span className="text-xs font-mono text-brand-olive tracking-wider">
                     {link.number}
                   </span>
-                  <span className="text-3xl font-medium text-foreground group-hover:text-primary transition-colors duration-300">
+                  <span className="text-3xl font-playfair text-foreground group-hover:text-primary transition-colors duration-300">
                     {t(link.key)}
                   </span>
-                  <ArrowRight className="w-5 h-5 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  <ArrowRight className="w-5 h-5 text-brand-teal opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                 </a>
               ))}
             </div>
           </nav>
 
-          {/* Bottom CTA */}
           <div
             className={`pb-12 transition-all duration-500 ease-out ${mobileMenuOpen
               ? 'opacity-100 translate-y-0'
@@ -113,18 +108,17 @@ const Navbar = () => {
             <a
               href="#contact"
               onClick={closeMobileMenu}
-              className="flex items-center justify-center gap-3 w-full py-4 px-8 bg-gradient-to-r from-primary to-primary/80 text-white text-lg font-medium rounded-2xl shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+              className="flex items-center justify-center gap-3 w-full py-4 px-8 bg-gradient-to-r from-primary to-brand-teal text-primary-foreground text-lg font-medium rounded-2xl shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
             >
               {t('navbar.hireMe')}
               <ArrowRight className="w-5 h-5" />
             </a>
 
-            {/* Brand footer */}
             <div className="flex flex-col items-center gap-2 mt-8 pt-6 border-t border-primary/20">
               <span className="text-2xl font-cormorant italic text-primary font-semibold">
                 Gisela<span className="text-foreground not-italic font-normal">.UGC</span>
               </span>
-              <span className="text-sm text-foreground/60 tracking-wide">Content Creator</span>
+              <span className="text-sm text-foreground/60 tracking-wide">Coffee-style UGC creator</span>
             </div>
           </div>
         </div>
@@ -132,7 +126,7 @@ const Navbar = () => {
 
       <nav
         className={`fixed top-0 left-0 w-full z-[110] transition-all duration-300 ${isScrolled
-          ? 'py-3 glass shadow-sm'
+          ? 'py-3 bg-background/85 backdrop-blur-xl border-b border-primary/15 shadow-[0_10px_30px_-20px_hsl(var(--primary)/0.6)]'
           : 'py-5 bg-transparent'
           }`}
       >
@@ -140,28 +134,26 @@ const Navbar = () => {
           <div className="flex items-center justify-between">
             <a
               href="#home"
-              className="text-xl md:text-2xl font-medium font-cormorant text-primary italic"
+              className="text-xl md:text-2xl font-semibold font-cormorant text-primary italic tracking-wide"
               onClick={closeMobileMenu}
             >
-              Gisela<span className="text-foreground not-italic font-normal">.UGC</span>
+              Gisela<span className="text-brand-teal not-italic font-medium">.UGC</span>
             </a>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
               {navLinkKeys.map((link) => (
                 <a
                   key={link.key}
                   href={link.href}
-                  className="text-sm text-foreground hover-lift hover:text-primary/80 transition-all"
+                  className="text-sm text-foreground hover-lift hover:text-primary transition-all"
                 >
                   {t(link.key)}
                 </a>
               ))}
-              {/* Language Switcher - Desktop */}
-              <div className="flex items-center space-x-2 ml-4 border-l border-border/30 pl-4">
+              <div className="flex items-center space-x-2 ml-4 border-l border-primary/20 pl-4">
                 <button
                   onClick={() => changeLanguage('es')}
-                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'es' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
+                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'es' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-primary'}`}
                   aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
                 >
                   ES
@@ -169,29 +161,26 @@ const Navbar = () => {
                 <span className="text-foreground/30 text-sm">|</span>
                 <button
                   onClick={() => changeLanguage('en')}
-                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'en' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
+                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'en' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-primary'}`}
                   aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
                 >
                   EN
                 </button>
               </div>
-              {/* Theme Toggle - Desktop */}
               <ThemeToggle />
               <a
                 href="#contact"
-                className="px-6 py-2.5 rounded-full bg-primary text-white text-sm hover-grow btn-press shadow-sm ml-2"
+                className="px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-brand-teal text-primary-foreground text-sm hover-grow btn-press shadow-sm ml-2"
               >
                 {t('navbar.hireMe')}
               </a>
             </div>
 
-            {/* Mobile Navigation - Right Side */}
             <div className="md:hidden flex items-center space-x-3">
-              {/* Language Switcher - Mobile Header */}
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => changeLanguage('es')}
-                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'es' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
+                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'es' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-primary'}`}
                   aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
                 >
                   ES
@@ -199,18 +188,16 @@ const Navbar = () => {
                 <span className="text-foreground/30 text-sm">|</span>
                 <button
                   onClick={() => changeLanguage('en')}
-                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'en' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-foreground'}`}
+                  className={`text-sm font-medium ${i18n.resolvedLanguage === 'en' ? 'text-primary font-semibold' : 'text-foreground/70 hover:text-primary'}`}
                   aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
                 >
                   EN
                 </button>
               </div>
-              {/* Theme Toggle - Mobile */}
               <ThemeToggle />
-              {/* Mobile Menu Toggle - Animated Icon */}
               <button
                 onClick={toggleMobileMenu}
-                className="relative p-2 -mr-2 text-foreground hover:text-primary transition-colors"
+                className="relative p-2 -mr-2 text-foreground hover:text-primary transition-colors bg-secondary/70 rounded-full"
                 aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
                 aria-expanded={mobileMenuOpen}
               >

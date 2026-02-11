@@ -97,12 +97,14 @@ const Portfolio = () => {
   };
 
   return (
-    <section id="portfolio" className="section-padding">
-      <div className="container mx-auto">
+    <section id="portfolio" className="section-padding relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-brand-cream/60 to-secondary/45" />
+      <div className="absolute left-[-14rem] bottom-[-10rem] h-[24rem] w-[24rem] rounded-full bg-primary/10 blur-[120px]" />
+      <div className="container relative z-10 mx-auto">
         <div className="text-center mb-16">
-          <p className="text-primary/60 mb-3 uppercase tracking-wider">{t('portfolio.sectionSubtitle')}</p>
+          <p className="text-brand-olive mb-3 uppercase tracking-[0.18em] font-semibold">{t('portfolio.sectionSubtitle')}</p>
           <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">{t('portfolio.sectionTitle')}</h2>
-          <div className="w-20 h-1 bg-primary/20 mx-auto rounded-full"></div>
+          <div className="w-24 h-1 signature-line mx-auto" />
         </div>
 
         <div className="flex flex-wrap justify-center gap-4 mb-10">
@@ -111,8 +113,8 @@ const Portfolio = () => {
               key={category.id}
               onClick={() => setActiveFilter(category.id)}
               className={`px-6 py-2 rounded-full text-sm transition-all ${activeFilter === category.id
-                  ? 'bg-primary text-white'
-                  : 'bg-secondary text-primary hover:bg-primary/10'
+                  ? 'bg-gradient-to-r from-primary to-brand-teal text-primary-foreground shadow-md'
+                  : 'cafe-chip hover:bg-secondary'
                 }`}
             >
               {t(category.nameKey)} {/* Use t() for category name */}
@@ -141,7 +143,7 @@ const Portfolio = () => {
             return (
               <div
                 key={item.id}
-                className="group relative overflow-hidden rounded-xl shadow-sm cursor-pointer break-inside-avoid mb-6 transition-all duration-300 ease-out"
+                className="group relative overflow-hidden rounded-2xl border border-primary/15 shadow-sm cursor-pointer break-inside-avoid mb-6 transition-all duration-300 ease-out bg-card/75"
                 onClick={() => setSelectedItem(item)}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
@@ -156,18 +158,18 @@ const Portfolio = () => {
                     decoding="async"
                   />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-5">
-                  <h3 className="text-white font-medium mb-1">{t(item.titleKey)}</h3>
-                  <p className="text-white/70 text-sm capitalize">{t(`portfolio.categories.${item.category}`)}</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-cocoa/85 via-brand-cocoa/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-5">
+                  <h3 className="text-brand-cream font-medium mb-1">{t(item.titleKey)}</h3>
+                  <p className="text-brand-cream/75 text-sm capitalize">{t(`portfolio.categories.${item.category}`)}</p>
 
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     {item.type === 'video' ? (
-                      <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center">
-                        <Play className="h-6 w-6 text-primary fill-primary" />
+                      <div className="w-14 h-14 bg-brand-cream/90 rounded-full flex items-center justify-center">
+                        <Play className="h-6 w-6 text-brand-teal fill-brand-teal" />
                       </div>
                     ) : (
-                      <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center">
-                        <Maximize className="h-6 w-6 text-primary" />
+                      <div className="w-14 h-14 bg-brand-cream/90 rounded-full flex items-center justify-center">
+                        <Maximize className="h-6 w-6 text-brand-teal" />
                       </div>
                     )}
                   </div>
@@ -181,14 +183,14 @@ const Portfolio = () => {
       {/* Modal */}
       {selectedItem && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-brand-cocoa/85 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={closeModal}
         >
           <div
-            className="relative max-w-4xl w-full bg-white rounded-xl overflow-hidden animate-scale"
+            className="relative max-w-4xl w-full bg-card rounded-2xl overflow-hidden animate-scale border border-primary/20"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="aspect-w-16 aspect-h-9 w-full bg-black">
+            <div className="aspect-w-16 aspect-h-9 w-full bg-brand-cocoa">
               <img
                 src={selectedItem.thumbnail}
                 alt={t(selectedItem.titleKey)}
@@ -196,14 +198,14 @@ const Portfolio = () => {
               />
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-medium">{t(selectedItem.titleKey)}</h3> {/* Use t() for title */}
+              <h3 className="text-2xl font-cormorant text-primary">{t(selectedItem.titleKey)}</h3> {/* Use t() for title */}
               <p className="text-muted-foreground capitalize">{t(`portfolio.categories.${selectedItem.category}`)}</p> {/* Use t() for category name */}
             </div>
             <button
-              className="absolute top-4 right-4 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white"
+              className="absolute top-4 right-4 w-10 h-10 bg-brand-cream/90 rounded-full flex items-center justify-center hover:bg-brand-cream"
               onClick={closeModal}
             >
-              <X className="h-5 w-5 text-primary" />
+              <X className="h-5 w-5 text-brand-teal" />
             </button>
           </div>
         </div>

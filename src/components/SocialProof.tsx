@@ -56,7 +56,7 @@ const SocialProof = () => {
 
     const stats = [
         {
-            icon: <Briefcase className="w-8 h-8 text-primary mb-3" />,
+            icon: <Briefcase className="w-8 h-8 text-brand-teal mb-3" />,
             value: 50,
             suffix: '+',
             labelKey: 'socialProof.brands'
@@ -68,13 +68,13 @@ const SocialProof = () => {
             labelKey: 'socialProof.views'
         },
         {
-            icon: <Star className="w-8 h-8 text-primary mb-3" />,
+            icon: <Star className="w-8 h-8 text-brand-gold mb-3" />,
             value: 100,
             suffix: '%',
             labelKey: 'socialProof.satisfaction'
         },
         {
-            icon: <Users className="w-8 h-8 text-primary mb-3" />,
+            icon: <Users className="w-8 h-8 text-brand-olive mb-3" />,
             value: 500,
             suffix: '+',
             labelKey: 'socialProof.contentPieces'
@@ -82,19 +82,22 @@ const SocialProof = () => {
     ];
 
     return (
-        <section className="py-16 bg-gradient-to-r from-primary/5 via-secondary/30 to-primary/5">
-            <div className="container mx-auto px-6 md:px-12">
+        <section className="py-20 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-secondary/65 via-background to-secondary/65" />
+            <div className="absolute left-[-18rem] top-[-8rem] h-[24rem] w-[24rem] rounded-full bg-primary/10 blur-[120px]" />
+            <div className="absolute right-[-14rem] bottom-[-8rem] h-[20rem] w-[20rem] rounded-full bg-brand-teal/15 blur-[110px]" />
+            <div className="container relative z-10 mx-auto px-6 md:px-12">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                     {stats.map((stat, index) => (
                         <div
                             key={index}
-                            className="flex flex-col items-center p-6 rounded-xl bg-white/50 dark:bg-card/50 backdrop-blur-sm hover-lift"
+                            className="cafe-card flex flex-col items-center p-6 bg-card/75 hover-lift"
                         >
                             {stat.icon}
                             <span className="text-3xl md:text-4xl font-bold text-foreground mb-2">
                                 <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                             </span>
-                            <span className="text-sm text-muted-foreground uppercase tracking-wider">
+                            <span className="text-sm text-primary/80 uppercase tracking-[0.16em]">
                                 {t(stat.labelKey)}
                             </span>
                         </div>

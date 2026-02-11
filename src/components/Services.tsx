@@ -39,26 +39,28 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="section-padding bg-secondary/30">
-      <div className="container mx-auto">
+    <section id="services" className="section-padding relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-secondary/55 via-background to-brand-sand/35" />
+      <div className="absolute right-[-10rem] top-[-7rem] h-[18rem] w-[18rem] rounded-full bg-brand-teal/10 blur-[90px]" />
+      <div className="container relative z-10 mx-auto">
         <div className="text-center mb-16">
-          <p className="text-primary/80 mb-3 uppercase tracking-wider font-light">{t('services.sectionSubtitle')}</p>
-          <h2 className="text-3xl md:text-4xl font-bold font-cormorant mb-6">{t('services.sectionTitle')}</h2>
-          <div className="w-20 h-1 signature-line mx-auto"></div>
+          <p className="text-brand-olive mb-3 uppercase tracking-[0.18em] font-semibold">{t('services.sectionSubtitle')}</p>
+          <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">{t('services.sectionTitle')}</h2>
+          <div className="w-24 h-1 signature-line mx-auto" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {serviceData.map((service, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-card p-8 rounded-xl shadow-sm hover-grow group elegant-shadow border border-border/50"
+              className="cafe-card p-8 hover-grow group"
             >
-              <div className="relative">
-                <div className="absolute -top-2 -left-2 w-16 h-16 bg-secondary/80 rounded-lg -z-10 group-hover:scale-110 transition-transform"></div>
+              <div className="relative mb-4">
+                <div className="absolute -top-1 -left-1 w-16 h-16 bg-gradient-to-br from-brand-teal/20 to-primary/20 rounded-xl -z-10 group-hover:scale-110 transition-transform" />
                 {service.icon}
               </div>
-              <h3 className="text-xl font-semibold mb-3 font-cormorant">{t(service.titleKey)}</h3>
-              <p className="text-muted-foreground">{t(service.descriptionKey)}</p>
+              <h3 className="text-2xl font-semibold mb-3 font-cormorant text-primary">{t(service.titleKey)}</h3>
+              <p className="text-muted-foreground leading-relaxed">{t(service.descriptionKey)}</p>
             </div>
           ))}
         </div>
