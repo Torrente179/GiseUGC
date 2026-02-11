@@ -261,8 +261,8 @@ const Portfolio = () => {
 
       <div className="container relative z-10 mx-auto">
         <div className="text-center mb-12">
-          <p className="text-muted-foreground mb-3 uppercase tracking-[0.18em] font-semibold">{t('portfolio.sectionSubtitle')}</p>
-          <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">{t('portfolio.sectionTitle')}</h2>
+          <p className="section-label text-muted-foreground mb-3">{t('portfolio.sectionSubtitle')}</p>
+          <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-[-0.04em] mb-6">{t('portfolio.sectionTitle')}</h2>
           <div className="w-24 h-1 signature-line mx-auto" />
         </div>
 
@@ -271,10 +271,10 @@ const Portfolio = () => {
           <div className="relative z-10">
             <div className="flex items-end justify-between gap-4 mb-5">
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-primary/70 mb-2">
+                <p className="section-label text-xs text-primary/70 mb-2">
                   {t('portfolio.reelSubtitle')}
                 </p>
-                <h3 className="text-xl md:text-2xl font-playfair text-foreground">
+                <h3 className="text-xl md:text-2xl font-serif font-normal tracking-[-0.03em] text-foreground">
                   {t('portfolio.reelTitle')}
                 </h3>
               </div>
@@ -347,10 +347,10 @@ const Portfolio = () => {
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16">
           <div>
-            <p className="text-sm uppercase tracking-[0.22em] text-muted-foreground font-semibold mb-4">
+            <p className="section-label text-sm text-muted-foreground mb-4">
               {t('portfolio.collageEyebrow')}
             </p>
-            <h3 className="text-3xl md:text-4xl font-playfair leading-tight mb-5">
+            <h3 className="text-3xl md:text-4xl font-serif font-normal tracking-[-0.04em] leading-tight mb-5">
               {t('portfolio.collageTitle')}
             </h3>
             <p className="text-muted-foreground leading-relaxed mb-6">
@@ -530,7 +530,7 @@ const Portfolio = () => {
               />
             </div>
             <div className="p-6">
-              <h3 className="text-2xl font-cormorant text-primary">{t(selectedItem.titleKey)}</h3>
+              <h3 className="text-2xl font-serif font-normal tracking-[-0.03em] text-primary">{t(selectedItem.titleKey)}</h3>
               <p className="text-muted-foreground capitalize">{t(`portfolio.categories.${selectedItem.category}`)}</p>
             </div>
             <button
@@ -561,10 +561,10 @@ const Portfolio = () => {
               <X className="h-4 w-4 text-foreground" />
             </button>
 
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
+            <p className="section-label text-xs text-muted-foreground mb-1">
               {t('portfolio.reelPreviewLabel')}
             </p>
-            <h4 className="text-lg font-playfair pr-10 mb-3">{t(activeReelPreview.titleKey)}</h4>
+            <h4 className="text-lg font-serif font-normal tracking-[-0.03em] pr-10 mb-3">{t(activeReelPreview.titleKey)}</h4>
 
             <div className="rounded-xl overflow-hidden bg-black">
               <video

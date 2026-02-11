@@ -11,11 +11,11 @@ const Hero = () => {
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="order-2 md:order-1">
-            <p className="text-muted-foreground text-sm md:text-base mb-5 animate-fade-in tracking-[0.2em] uppercase font-semibold">
+            <p className="section-label text-muted-foreground mb-5 animate-fade-in">
               {t('hero.subtitle')}
             </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl text-foreground font-playfair mb-6 leading-tight animate-slide-down">
-              Gisela <span className="text-primary italic">Saldarriaga</span>
+            <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 animate-slide-down">
+              Gisela <span className="luxury-accent text-primary">Saldarriaga</span>
             </h1>
             <div className="w-40 h-1 signature-line mb-8" />
             <p className="text-foreground/75 dark:text-foreground/80 text-lg md:text-xl mb-10 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -24,13 +24,13 @@ const Hero = () => {
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 animate-fade-in" style={{ animationDelay: '0.6s' }}>
               <a
                 href="#portfolio"
-                className="px-8 py-3.5 rounded-full bg-primary text-primary-foreground font-medium hover-grow btn-press"
+                className="btn-primary-nordic px-8 py-3.5 hover-grow btn-press"
               >
                 {t('hero.buttonPortfolio')}
               </a>
               <a
                 href="#contact"
-                className="px-8 py-3.5 rounded-full bg-transparent border border-border text-primary font-medium hover-grow hover:bg-card"
+                className="btn-secondary-nordic px-8 py-3.5 hover-grow"
               >
                 {t('hero.buttonContact')}
               </a>

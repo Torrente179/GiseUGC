@@ -30,3 +30,29 @@ Implemented a full website aesthetic rebrand to match the Cafe Quindio store fee
 - Build: `npm run build` passed successfully.
 - Lint: existing unrelated baseline lint issues remain in shared UI files and Tailwind config; no new blocking issues were introduced by this rebrand work.
 
+## Update - 2026-02-11 (Nordic-Luxe Refinement)
+Based on design feedback, the visual direction was refined from "warm cafe with strong contrast" to a cleaner Nordic-style interpretation of Cafe Quindio.
+
+### Refinement Notes
+1. Reduced visual noise globally in `/src/index.css`:
+   - Lowered color saturation and contrast.
+   - Replaced dramatic gradients with softer neutral surfaces.
+   - Softened shadows and card elevations.
+2. Removed mixed-gradient CTA styling and standardized to cleaner solid primary buttons in:
+   - `/src/components/Navbar.tsx`
+   - `/src/components/Hero.tsx`
+   - `/src/components/Contact.tsx`
+   - `/src/components/Portfolio.tsx`
+   - `/src/pages/NotFound.tsx`
+3. Reworked footer from dark cocoa block to a light premium section:
+   - `/src/components/Footer.tsx`
+4. Simplified section backgrounds and accents to match the calm, minimal store references:
+   - `/src/components/SocialProof.tsx`
+   - `/src/components/Services.tsx`
+   - `/src/components/Testimonials.tsx`
+   - `/src/components/Portfolio.tsx`
+5. Aligned controls/components with the new minimalist taste:
+   - `/src/components/ui/ThemeToggle.tsx`
+
+### Refinement Validation
+- Build: `npm run build` passed after all adjustments.

@@ -84,8 +84,8 @@ const Contact = () => {
     <section id="contact" className="section-padding bg-secondary/25">
       <div className="container relative z-10 mx-auto">
         <div className="text-center mb-16">
-          <p className="text-muted-foreground mb-3 uppercase tracking-[0.18em] font-semibold">{t('contact.sectionSubtitle')}</p>
-          <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">{t('contact.sectionTitle')}</h2>
+          <p className="section-label text-muted-foreground mb-3">{t('contact.sectionSubtitle')}</p>
+          <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-[-0.04em] mb-6">{t('contact.sectionTitle')}</h2>
           <div className="w-24 h-1 signature-line mx-auto" />
         </div>
 
@@ -185,7 +185,7 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={isSubmitting || cooldown}
-                className="w-full bg-primary text-primary-foreground py-3.5 rounded-lg flex items-center justify-center gap-2 hover-grow btn-press disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full btn-primary-nordic py-3.5 rounded-lg flex items-center justify-center gap-2 hover-grow btn-press disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {cooldown
                   ? `${t('contact.form.submitButton')} (${cooldownTime}s)`

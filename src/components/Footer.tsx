@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="container relative z-10 mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
-            <h3 className="text-2xl font-playfair font-semibold mb-6 text-primary">{t('footer.brandName')}<span className="text-foreground text-3xl">.</span></h3>
+            <h3 className="brand-logo text-2xl mb-6 text-primary">{t('footer.brandName')}<span className="text-foreground text-3xl">.</span></h3>
             <p className="text-muted-foreground mb-6">
               {t('footer.description')}
             </p>
@@ -64,7 +64,7 @@ const Footer = () => {
                   href="https://www.fiverr.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block mt-4 px-6 py-2.5 rounded-full bg-primary text-primary-foreground font-medium hover-grow"
+                  className="btn-primary-nordic mt-4 px-6 py-2.5 hover-grow"
                 >
                   {t('footer.hireOnFiverrButton')}
                 </a>

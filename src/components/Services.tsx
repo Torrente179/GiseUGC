@@ -94,8 +94,8 @@ const Services = () => {
 
       <div className="container relative z-10 mx-auto">
         <div className="text-center mb-16">
-          <p className="text-muted-foreground mb-3 uppercase tracking-[0.18em] font-semibold">{t('services.sectionSubtitle')}</p>
-          <h2 className="text-3xl md:text-4xl font-bold font-playfair mb-6">{t('services.sectionTitle')}</h2>
+          <p className="section-label text-muted-foreground mb-3">{t('services.sectionSubtitle')}</p>
+          <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-[-0.04em] mb-6">{t('services.sectionTitle')}</h2>
           <div className="w-24 h-1 signature-line mx-auto" />
         </div>
 
@@ -109,7 +109,7 @@ const Services = () => {
                 <div className="absolute -top-1 -left-1 w-16 h-16 bg-secondary rounded-xl -z-10 group-hover:scale-105 transition-transform" />
                 {service.icon}
               </div>
-              <h3 className="text-2xl font-semibold mb-3 font-cormorant text-foreground">{t(service.titleKey)}</h3>
+              <h3 className="text-2xl font-semibold mb-3 font-serif text-foreground tracking-[-0.02em]">{t(service.titleKey)}</h3>
               <p className="text-muted-foreground leading-relaxed">{t(service.descriptionKey)}</p>
             </div>
           ))}
@@ -117,7 +117,7 @@ const Services = () => {
 
         <div className="mt-20">
           <div className="text-center mb-8">
-            <h3 className="text-3xl md:text-5xl font-playfair leading-tight max-w-4xl mx-auto">
+            <h3 className="text-3xl md:text-5xl font-serif font-normal tracking-[-0.04em] leading-tight max-w-4xl mx-auto">
               {t('services.motionTitle')}
             </h3>
           </div>
@@ -149,7 +149,7 @@ const Services = () => {
                         preload="metadata"
                       />
                     </div>
-                    <p className="text-xl sm:text-2xl font-cormorant text-foreground text-center leading-tight">
+                    <p className="text-xl sm:text-2xl font-serif text-foreground text-center leading-tight tracking-[-0.02em]">
                       {t(card.titleKey)}
                     </p>
                   </button>
@@ -182,10 +182,10 @@ const Services = () => {
               <X className="h-4 w-4 text-foreground" />
             </button>
 
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-1">
+            <p className="section-label text-xs text-muted-foreground mb-1">
               {t('services.videoPreviewLabel')}
             </p>
-            <h4 className="text-lg font-playfair pr-10 mb-3">{t(activePreview.titleKey)}</h4>
+            <h4 className="text-lg font-serif font-normal tracking-[-0.03em] pr-10 mb-3">{t(activePreview.titleKey)}</h4>
 
             <div className="rounded-xl overflow-hidden bg-black">
               <video
