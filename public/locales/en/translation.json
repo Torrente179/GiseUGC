@@ -21,6 +21,8 @@
   "services": {
     "sectionSubtitle": "What I Offer",
     "sectionTitle": "My Services",
+    "motionTitle": "The complete toolkit for modern advertisers",
+    "motionSubtitle": "A slow-moving carousel of the formats and deliverables I create for brands.",
     "service1": {
       "title": "UGC Videos",
       "description": "Authentic product videos showcasing your items in real-life settings, boosting engagement and conversions."
@@ -49,6 +51,20 @@
   "portfolio": {
     "sectionSubtitle": "My Work",
     "sectionTitle": "Featured Portfolio",
+    "reelSubtitle": "Short-form reels",
+    "reelTitle": "Swipe through featured short videos",
+    "reelDescription": "Preview real portfolio clips in a fast, mobile-first reel experience.",
+    "reelAriaPrev": "Scroll previous videos",
+    "reelAriaNext": "Scroll next videos",
+    "collageEyebrow": "Interactive showcase",
+    "collageTitle": "Hover the collage to start the full video mix",
+    "collageDescription": "This section simulates ad-ready video collages. Move your cursor in to start playback and move out to stop all clips instantly.",
+    "collagePoint1": "All clips play at once on hover/focus for quick campaign previews.",
+    "collagePoint2": "Cards are layered to mimic social-first creative variations.",
+    "collagePoint3": "Playback resets when idle, so every new hover starts clean.",
+    "collageCta": "Start your campaign",
+    "collageHintIdle": "Hover to play",
+    "collageHintPlaying": "Playing now",
     "categories": {
       "all": "All",
       "fashion": "Fashion",

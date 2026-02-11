@@ -1,10 +1,9 @@
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 import { Video, Image, ShoppingBag, MessageSquare, Award, TrendingUp } from 'lucide-react';
 
 const Services = () => {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
-  // Store keys and icons, text will come from t()
   const serviceData = [
     {
       icon: <Video className="h-10 w-10 mb-6 text-primary" />,
@@ -35,13 +34,25 @@ const Services = () => {
       icon: <TrendingUp className="h-10 w-10 mb-6 text-primary" />,
       titleKey: 'services.service6.title',
       descriptionKey: 'services.service6.description'
-    },
+    }
   ];
+
+  const serviceTitleKeys = [
+    'services.service1.title',
+    'services.service2.title',
+    'services.service3.title',
+    'services.service4.title',
+    'services.service5.title',
+    'services.service6.title'
+  ];
+
+  const serviceCards = [...serviceTitleKeys, ...serviceTitleKeys];
 
   return (
     <section id="services" className="section-padding relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-secondary/55 via-background to-brand-sand/35" />
       <div className="absolute right-[-10rem] top-[-7rem] h-[18rem] w-[18rem] rounded-full bg-brand-teal/10 blur-[90px]" />
+
       <div className="container relative z-10 mx-auto">
         <div className="text-center mb-16">
           <p className="text-brand-olive mb-3 uppercase tracking-[0.18em] font-semibold">{t('services.sectionSubtitle')}</p>
@@ -63,6 +74,41 @@ const Services = () => {
               <p className="text-muted-foreground leading-relaxed">{t(service.descriptionKey)}</p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-20">
+          <div className="text-center mb-8">
+            <h3 className="text-3xl md:text-5xl font-playfair leading-tight max-w-4xl mx-auto">
+              {t('services.motionTitle')}
+            </h3>
+          </div>
+
+          <div className="cafe-panel relative overflow-hidden min-h-[260px] p-5 md:p-7">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-brand-cream/50 to-brand-teal/20" />
+            <div className="absolute inset-y-0 left-0 w-14 md:w-20 z-20 bg-gradient-to-r from-card via-card/90 to-transparent" />
+            <div className="absolute inset-y-0 right-0 w-14 md:w-20 z-20 bg-gradient-to-l from-card via-card/90 to-transparent" />
+
+            <div className="relative z-10 service-corner-drift">
+              <div className="service-marquee flex w-max gap-4 py-5">
+                {serviceCards.map((titleKey, index) => (
+                  <article
+                    key={`${titleKey}-${index}`}
+                    className="shrink-0 w-[220px] sm:w-[260px] rounded-2xl border border-primary/15 bg-card/85 p-3 shadow-md"
+                    aria-label={t(titleKey)}
+                  >
+                    <div className="h-[130px] sm:h-[150px] rounded-xl bg-gradient-to-br from-primary/20 via-brand-teal/20 to-brand-gold/25 mb-3" />
+                    <p className="text-xl sm:text-2xl font-cormorant text-foreground text-center leading-tight">
+                      {t(titleKey)}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            <p className="relative z-20 text-center text-sm text-muted-foreground mt-3">
+              {t('services.motionSubtitle')}
+            </p>
+          </div>
         </div>
       </div>
     </section>

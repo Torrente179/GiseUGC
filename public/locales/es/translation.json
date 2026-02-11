@@ -21,6 +21,8 @@
   "services": {
     "sectionSubtitle": "Lo Que Ofrezco",
     "sectionTitle": "Mis Servicios",
+    "motionTitle": "El toolkit completo para anunciantes modernos",
+    "motionSubtitle": "Un carrusel en movimiento lento con los formatos y entregables que creo para marcas.",
     "service1": {
       "title": "Videos UGC",
       "description": "Videos de productos auténticos que muestran tus productos en entornos reales, impulsando el engagement y las conversiones."
@@ -49,6 +51,20 @@
   "portfolio": {
     "sectionSubtitle": "Mi Trabajo",
     "sectionTitle": "Portafolio Destacado",
+    "reelSubtitle": "Reels cortos",
+    "reelTitle": "Desliza y explora videos destacados",
+    "reelDescription": "Visualiza clips reales del portafolio en una experiencia rápida y mobile-first.",
+    "reelAriaPrev": "Desplazar videos anteriores",
+    "reelAriaNext": "Desplazar videos siguientes",
+    "collageEyebrow": "Showcase interactivo",
+    "collageTitle": "Pasa el cursor por el collage para activar todo el mix de video",
+    "collageDescription": "Esta sección simula collages de video listos para anuncios. Entra con el cursor para reproducir y sal para detener todos los clips al instante.",
+    "collagePoint1": "Todos los clips se reproducen a la vez al pasar el cursor o con foco.",
+    "collagePoint2": "Las tarjetas en capas imitan variaciones creativas social-first.",
+    "collagePoint3": "La reproducción se reinicia al salir para empezar limpio cada vez.",
+    "collageCta": "Inicia tu campaña",
+    "collageHintIdle": "Pasa el cursor para reproducir",
+    "collageHintPlaying": "Reproduciendo",
     "categories": {
       "all": "Todos",
       "fashion": "Moda",
