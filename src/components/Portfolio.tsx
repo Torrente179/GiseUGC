@@ -149,62 +149,57 @@ const Portfolio = () => {
       labelKey: 'portfolio.items.item2',
       videoSrc: 'https://assets.mixkit.co/videos/50406/50406-720.mp4',
       poster: 'https://assets.mixkit.co/videos/50406/50406-thumb-720-0.jpg',
-      /* Top-left, spread to corner */
-      cornerClass: 'top-[4%] left-[4%] w-[36%] -rotate-[4deg] -translate-x-[6%] -translate-y-[4%]',
-      /* Gathered inward */
-      hoverClass: 'top-[6%] left-[8%] w-[38%] -rotate-[2deg] translate-x-0 translate-y-0 scale-[1.03]',
+      /* Top-left */
+      cornerClass: 'top-[4%] left-[4%] w-[28%] -rotate-[4deg] -translate-x-[6%] -translate-y-[4%]',
+      hoverClass: 'top-[10%] left-[12%] w-[30%] -rotate-[2deg]',
     },
     {
       id: 2,
       labelKey: 'portfolio.items.item6',
       videoSrc: 'https://assets.mixkit.co/videos/50426/50426-720.mp4',
       poster: 'https://assets.mixkit.co/videos/50426/50426-thumb-720-0.jpg',
-      /* Top-center, slightly offset */
-      cornerClass: 'top-[-2%] left-[30%] w-[32%] rotate-[1deg] -translate-y-[4%]',
-      /* Gathered inward */
-      hoverClass: 'top-[2%] left-[30%] w-[34%] rotate-[0deg] translate-y-0 scale-[1.02] z-10',
+      /* Top-center */
+      cornerClass: 'top-[-2%] left-[35%] w-[26%] rotate-[1deg] -translate-y-[4%]',
+      hoverClass: 'top-[4%] left-[35%] w-[28%] rotate-[0deg] z-10',
     },
     {
       id: 3,
       labelKey: 'portfolio.items.item3',
       videoSrc: 'https://assets.mixkit.co/videos/50426/50426-720.mp4',
       poster: 'https://assets.mixkit.co/videos/50426/50426-thumb-720-0.jpg',
-      /* Top-right, spread to corner */
-      cornerClass: 'top-[2%] right-[2%] w-[34%] rotate-[4deg] translate-x-[6%] -translate-y-[2%]',
-      /* Gathered inward */
-      hoverClass: 'top-[4%] right-[6%] w-[36%] rotate-[2deg] translate-x-0 translate-y-0 scale-[1.02]',
+      /* Top-right */
+      cornerClass: 'top-[2%] right-[4%] w-[27%] rotate-[4deg] translate-x-[6%] -translate-y-[2%]',
+      hoverClass: 'top-[12%] right-[14%] w-[29%] rotate-[2deg]',
     },
     {
       id: 4,
       labelKey: 'portfolio.items.item8',
       videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
       poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
-      /* Center, slightly recessed when spread */
-      cornerClass: 'top-[26%] left-[30%] w-[32%] rotate-[0deg] scale-[0.88] opacity-80 z-10',
-      /* Center, prominent when hovered */
-      hoverClass: 'top-[22%] left-[30%] w-[36%] rotate-[0deg] z-20 scale-[1.06] opacity-100',
+      /* Center */
+      cornerClass: 'top-[30%] left-[37%] w-[25%] rotate-[0deg] scale-[0.85] opacity-80 z-10',
+      hoverClass: 'top-[26%] left-[37%] w-[28%] rotate-[0deg] z-20 opacity-100',
     },
     {
       id: 5,
       labelKey: 'portfolio.items.item4',
       videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
       poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
-      /* Bottom-left, spread to corner */
-      cornerClass: 'bottom-[2%] left-[2%] w-[36%] -rotate-[3deg] -translate-x-[4%] translate-y-[4%]',
-      /* Gathered inward */
-      hoverClass: 'bottom-[4%] left-[6%] w-[38%] -rotate-[1deg] translate-x-0 translate-y-0 scale-[1.02]',
+      /* Bottom-left */
+      cornerClass: 'bottom-[4%] left-[4%] w-[28%] -rotate-[3deg] -translate-x-[4%] translate-y-[4%]',
+      hoverClass: 'bottom-[12%] left-[14%] w-[30%] -rotate-[1deg]',
     },
     {
       id: 6,
       labelKey: 'portfolio.items.item5',
       videoSrc: 'https://assets.mixkit.co/videos/51168/51168-720.mp4',
       poster: 'https://assets.mixkit.co/videos/51168/51168-thumb-720-0.jpg',
-      /* Bottom-right, spread to corner */
-      cornerClass: 'bottom-[0%] right-[2%] w-[32%] rotate-[5deg] translate-x-[6%] translate-y-[6%]',
-      /* Gathered inward */
-      hoverClass: 'bottom-[4%] right-[6%] w-[34%] rotate-[2deg] translate-x-0 translate-y-0 scale-[1.02]',
+      /* Bottom-right */
+      cornerClass: 'bottom-[2%] right-[4%] w-[26%] rotate-[5deg] translate-x-[6%] translate-y-[6%]',
+      hoverClass: 'bottom-[10%] right-[15%] w-[28%] rotate-[2deg]',
     },
   ];
+
 
   return (
     <section id="portfolio" className="studio-section bg-secondary/5 pt-32 pb-24">
@@ -239,8 +234,8 @@ const Portfolio = () => {
 
           <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-secondary/60 via-background to-secondary/60" />
-            <div className="absolute inset-y-0 left-0 w-8 sm:w-12 md:w-20 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
-            <div className="absolute inset-y-0 right-0 w-8 sm:w-12 md:w-20 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
+            <div className="absolute inset-y-0 left-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
+            <div className="absolute inset-y-0 right-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-l from-background via-background/80 to-transparent" />
 
             {/* Mobile navigation arrows */}
             <button

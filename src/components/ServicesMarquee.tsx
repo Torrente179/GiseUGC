@@ -13,9 +13,14 @@ const ServicesMarquee = () => {
     const { t } = useTranslation();
     const [expandedCard, setExpandedCard] = useState<number | null>(null);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const trackRef = useRef<HTMLDivElement>(null);
     const isPausedRef = useRef(false);
     const isDraggingRef = useRef(false);
+    const offsetRef = useRef(0);
+    const setWidthRef = useRef(0);
+    const dragStartRef = useRef({ x: 0, offset: 0 });
+    const hasDraggedRef = useRef(false);
 
     const serviceVideoCards: ServiceVideoCard[] = [
         {
@@ -61,7 +66,6 @@ const ServicesMarquee = () => {
     };
 
     const handleVideoLeave = (index: number) => {
-        // Don't stop video if this card is expanded (clicked open)
         if (expandedCard === index) return;
         const video = videoRefs.current[index];
         if (video) {
@@ -71,9 +75,11 @@ const ServicesMarquee = () => {
     };
 
     const handleCardClick = (index: number) => {
+        // Ignore click if user was dragging
+        if (hasDraggedRef.current) return;
+
         const isClosing = expandedCard === index;
 
-        // If switching from a different expanded card, stop its video
         if (!isClosing && expandedCard !== null) {
             const prevVideo = videoRefs.current[expandedCard];
             if (prevVideo) {
@@ -84,7 +90,6 @@ const ServicesMarquee = () => {
 
         setExpandedCard(isClosing ? null : index);
 
-        // Play video when expanding (essential for mobile where hover doesn't exist)
         const video = videoRefs.current[index];
         if (video) {
             if (isClosing) {
@@ -97,12 +102,12 @@ const ServicesMarquee = () => {
         }
     };
 
-    // Sync pause state with expanded card — only pauses when a card is open
+    // Sync pause state with expanded card
     useEffect(() => {
         isPausedRef.current = expandedCard !== null;
     }, [expandedCard]);
 
-    // Click anywhere outside a card to dismiss expanded card and resume scrolling
+    // Click outside cards to dismiss expanded card and resume scrolling
     useEffect(() => {
         if (expandedCard === null) return;
 
@@ -123,82 +128,97 @@ const ServicesMarquee = () => {
         };
     }, [expandedCard]);
 
-    // Auto-scroll + infinite loop + drag handling
+    // Transform-based infinite scroll — no native scroll, full control
     useEffect(() => {
-        const container = scrollContainerRef.current;
-        if (!container) return;
+        const container = containerRef.current;
+        const track = trackRef.current;
+        if (!container || !track) return;
 
-        // Start at the middle set so we can scroll left or right infinitely
-        const setupInitialScroll = () => {
-            const setWidth = container.scrollWidth / 3;
-            container.scrollLeft = setWidth;
+        // Measure one set width and start at the middle set
+        const measure = () => {
+            setWidthRef.current = track.scrollWidth / 3;
+            offsetRef.current = setWidthRef.current;
+            track.style.transform = `translateX(-${offsetRef.current}px)`;
         };
-        const initTimeout = setTimeout(setupInitialScroll, 100);
+        const initTimeout = setTimeout(measure, 50);
 
         let animationFrameId: number;
 
         const animate = () => {
-            // Auto-scroll only when not paused and not dragging
-            if (container && !isPausedRef.current && !isDraggingRef.current) {
-                container.scrollLeft += 0.45;
-            }
+            const sw = setWidthRef.current;
+            if (sw > 0) {
+                // Auto-scroll when not paused and not dragging
+                if (!isPausedRef.current && !isDraggingRef.current) {
+                    offsetRef.current += 0.45;
+                }
 
-            // Always check boundaries every frame for infinite loop
-            // (handles auto-scroll, manual drag, arrows, and trackpad)
-            const setWidth = container.scrollWidth / 3;
-            if (container.scrollLeft >= setWidth * 2) {
-                container.scrollLeft -= setWidth;
-            } else if (container.scrollLeft < 10) {
-                container.scrollLeft += setWidth;
-            }
+                // Wrap boundaries — runs every frame regardless
+                if (offsetRef.current >= sw * 2) {
+                    offsetRef.current -= sw;
+                } else if (offsetRef.current <= 0) {
+                    offsetRef.current += sw;
+                }
 
+                track.style.transform = `translateX(-${offsetRef.current}px)`;
+            }
             animationFrameId = requestAnimationFrame(animate);
         };
 
-        // Track active dragging so auto-scroll doesn't fight user input
-        const handleMouseDown = () => { isDraggingRef.current = true; };
-        const handleMouseUp = () => { isDraggingRef.current = false; };
-        const handleTouchStart = () => { isDraggingRef.current = true; };
-        const handleTouchEnd = () => { isDraggingRef.current = false; };
+        // Mouse drag
+        const handleMouseDown = (e: MouseEvent) => {
+            isDraggingRef.current = true;
+            hasDraggedRef.current = false;
+            dragStartRef.current = { x: e.clientX, offset: offsetRef.current };
+        };
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!isDraggingRef.current) return;
+            const dx = dragStartRef.current.x - e.clientX;
+            if (Math.abs(dx) > 5) hasDraggedRef.current = true;
+            offsetRef.current = dragStartRef.current.offset + dx;
+        };
+        const handleMouseUp = () => {
+            isDraggingRef.current = false;
+        };
 
-        // Handle infinite wrap on manual scroll (arrows, drag, trackpad)
-        const handleScroll = () => {
-            const setWidth = container.scrollWidth / 3;
-            if (container.scrollLeft >= setWidth * 2) {
-                container.scrollLeft -= setWidth;
-            } else if (container.scrollLeft < 10) {
-                container.scrollLeft += setWidth;
-            }
+        // Touch drag
+        const handleTouchStart = (e: TouchEvent) => {
+            isDraggingRef.current = true;
+            hasDraggedRef.current = false;
+            dragStartRef.current = { x: e.touches[0].clientX, offset: offsetRef.current };
+        };
+        const handleTouchMove = (e: TouchEvent) => {
+            if (!isDraggingRef.current) return;
+            const dx = dragStartRef.current.x - e.touches[0].clientX;
+            if (Math.abs(dx) > 5) hasDraggedRef.current = true;
+            offsetRef.current = dragStartRef.current.offset + dx;
+        };
+        const handleTouchEnd = () => {
+            isDraggingRef.current = false;
         };
 
         animationFrameId = requestAnimationFrame(animate);
 
         container.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
         container.addEventListener('touchstart', handleTouchStart, { passive: true });
+        window.addEventListener('touchmove', handleTouchMove, { passive: true });
         window.addEventListener('touchend', handleTouchEnd);
-        container.addEventListener('scroll', handleScroll);
 
         return () => {
             clearTimeout(initTimeout);
             cancelAnimationFrame(animationFrameId);
             container.removeEventListener('mousedown', handleMouseDown);
+            window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
             container.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchmove', handleTouchMove);
             window.removeEventListener('touchend', handleTouchEnd);
-            container.removeEventListener('scroll', handleScroll);
         };
     }, []);
 
     const scroll = (direction: 'left' | 'right') => {
-        if (scrollContainerRef.current) {
-            const { current } = scrollContainerRef;
-            const scrollAmount = 300;
-            current.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
-                behavior: 'smooth'
-            });
-        }
+        offsetRef.current += direction === 'left' ? -300 : 300;
     };
 
     return (
@@ -216,8 +236,8 @@ const ServicesMarquee = () => {
 
             <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen group">
                 <div className="absolute inset-0 bg-gradient-to-r from-secondary/40 via-transparent to-secondary/40 pointer-events-none" />
-                <div className="absolute inset-y-0 left-0 w-20 md:w-60 z-20 bg-gradient-to-r from-background via-background/95 to-transparent pointer-events-none" />
-                <div className="absolute inset-y-0 right-0 w-20 md:w-60 z-20 bg-gradient-to-l from-background via-background/95 to-transparent pointer-events-none" />
+                <div className="absolute inset-y-0 left-0 w-10 md:w-24 z-20 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none" />
+                <div className="absolute inset-y-0 right-0 w-10 md:w-24 z-20 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none" />
 
                 {/* Navigation Arrows */}
                 <div className="absolute inset-y-0 left-4 md:left-12 z-30 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -240,11 +260,15 @@ const ServicesMarquee = () => {
                 </div>
 
                 <div
-                    ref={scrollContainerRef}
-                    className="relative z-10 flex overflow-x-auto scrollbar-hide pt-10 md:pt-16 pb-20 no-scrollbar select-none cursor-grab active:cursor-grabbing"
-                    style={{ WebkitOverflowScrolling: 'touch' }}
+                    ref={containerRef}
+                    className="relative z-10 overflow-hidden pt-10 md:pt-16 pb-20 select-none cursor-grab active:cursor-grabbing"
+                    onDragStart={(e) => e.preventDefault()}
                 >
-                    <div className="flex w-max gap-6 lg:gap-8 px-4 md:px-20">
+                    <div
+                        ref={trackRef}
+                        className="flex w-max gap-6 lg:gap-8 px-4 md:px-20"
+                        style={{ willChange: 'transform' }}
+                    >
                         {marqueeCards.map((card, index) => {
                             const isExpanded = expandedCard === index;
                             return (
