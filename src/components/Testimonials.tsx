@@ -78,7 +78,7 @@ const Testimonials = () => {
             <h2 className="studio-title">{t('testimonials.sectionTitle')}</h2>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <button
               onClick={prevTestimonial}
               className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
