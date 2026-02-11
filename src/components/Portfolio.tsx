@@ -314,7 +314,7 @@ const Portfolio = () => {
             <div
               className="absolute inset-0"
               style={{
-                background: 'linear-gradient(180deg, hsl(var(--coastal-teal)) 0%, hsl(var(--washed-khaki)) 38%, hsl(var(--warm-sand)) 72%, hsl(var(--pure-linen)) 100%)',
+                background: 'linear-gradient(180deg, hsl(var(--muted-earth)) 0%, hsl(var(--washed-khaki)) 36%, hsl(var(--warm-sand)) 72%, hsl(var(--pure-linen)) 100%)',
               }}
             />
             <div className="absolute inset-0 bg-card/20" />
@@ -362,7 +362,7 @@ const Portfolio = () => {
             <div
               className="absolute inset-0"
               style={{
-                background: 'linear-gradient(180deg, hsl(var(--coastal-teal)) 0%, hsl(var(--washed-khaki)) 38%, hsl(var(--warm-sand)) 72%, hsl(var(--pure-linen)) 100%)',
+                background: 'linear-gradient(180deg, hsl(var(--muted-earth)) 0%, hsl(var(--washed-khaki)) 36%, hsl(var(--warm-sand)) 72%, hsl(var(--pure-linen)) 100%)',
               }}
             />
             <div className="absolute inset-0 bg-card/15" />

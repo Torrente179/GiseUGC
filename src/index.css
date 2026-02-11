@@ -29,13 +29,13 @@
     --popover: var(--pure-linen);
     --popover-foreground: var(--deep-ebony);
 
-    --primary: var(--coastal-teal);
+    --primary: var(--muted-earth);
     --primary-foreground: var(--pure-linen);
 
     --secondary: var(--warm-sand);
     --secondary-foreground: var(--deep-ebony);
 
-    --muted: var(--warm-sand);
+    --muted: var(--soft-stone);
     --muted-foreground: var(--muted-earth);
 
     --accent: var(--washed-khaki);
@@ -61,22 +61,22 @@
 
   /* Dark mode variables */
   .dark {
-    --background: 15 14% 9%;
+    --background: 18 10% 11%;
     --foreground: 45 20% 92%;
 
-    --card: 16 14% 12%;
+    --card: 18 12% 14%;
     --card-foreground: 45 20% 92%;
 
-    --popover: 16 14% 12%;
+    --popover: 18 12% 14%;
     --popover-foreground: 45 20% 92%;
 
-    --primary: var(--coastal-teal);
-    --primary-foreground: 45 28.6% 97.3%;
+    --primary: var(--washed-khaki);
+    --primary-foreground: var(--deep-ebony);
 
-    --secondary: 15 17% 18%;
+    --secondary: 20 12% 18%;
     --secondary-foreground: 45 20% 92%;
 
-    --muted: 15 14% 16%;
+    --muted: 20 10% 22%;
     --muted-foreground: var(--soft-stone);
 
     --accent: var(--washed-khaki);
@@ -211,8 +211,8 @@
   }
 
   .glass {
-    @apply backdrop-blur-[12px] border border-white/30 shadow-sm;
-    background-color: rgba(255, 255, 255, 0.6);
+    @apply backdrop-blur-[12px] border border-border/60 shadow-sm;
+    background-color: hsl(var(--pure-linen) / 0.78);
   }
 
   .dark .glass {
