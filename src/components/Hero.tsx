@@ -48,7 +48,7 @@ const Hero = () => {
               </a>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-3 animate-fade-in" style={{ animationDelay: '0.55s' }}>
+            <div className="mt-10 hidden md:flex md:flex-wrap gap-3 animate-fade-in" style={{ animationDelay: '0.55s' }}>
               <div className="hero-chip group">
                 <Sparkles className="h-3 w-3 text-accent/70 group-hover:text-accent transition-colors" />
                 <span>{t('hero.pillStrategy')}</span>
