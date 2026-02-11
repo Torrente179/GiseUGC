@@ -21,7 +21,7 @@ const Hero = () => {
             </div>
 
             <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3 animate-slide-down">
-              Gisela <span className="text-primary luxury-accent">Saldarriaga</span>
+              Gisela <span className="text-accent luxury-accent">Saldarriaga</span>
             </h1>
             <p
               className="text-[11px] md:text-xs uppercase tracking-[0.26em] text-foreground/55 mb-8 animate-fade-in"
