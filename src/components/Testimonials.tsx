@@ -1,12 +1,10 @@
-
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
 const Testimonials = () => {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
-  // Store keys and static data, text will come from t()
   const testimonialData = [
     {
       id: 1,
@@ -48,85 +46,91 @@ const Testimonials = () => {
   };
 
   return (
-    <section id="testimonials" className="section-padding bg-background">
-      <div className="container relative z-10 mx-auto">
-        <div className="text-center mb-16">
-          <p className="section-label text-muted-foreground mb-3">{t('testimonials.sectionSubtitle')}</p>
-          <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-[-0.04em] mb-6">{t('testimonials.sectionTitle')}</h2>
-          <div className="w-24 h-1 signature-line mx-auto" />
+    <section id="testimonials" className="studio-section bg-background">
+      <div className="studio-container">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-10 md:mb-12">
+          <div>
+            <p className="section-label text-muted-foreground mb-3">{t('testimonials.sectionSubtitle')}</p>
+            <h2 className="studio-title">{t('testimonials.sectionTitle')}</h2>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={prevTestimonial}
+              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
+              aria-label={t('testimonials.ariaPrev')}
+            >
+              <ChevronLeft className="h-5 w-5 text-primary" />
+            </button>
+            <button
+              onClick={nextTestimonial}
+              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
+              aria-label={t('testimonials.ariaNext')}
+            >
+              <ChevronRight className="h-5 w-5 text-primary" />
+            </button>
+          </div>
         </div>
 
-        <div className="max-w-4xl mx-auto relative">
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-500"
-              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-            >
-              {testimonialData.map((testimonial) => (
-                <div key={testimonial.id} className="min-w-full px-4">
-                  <div className="cafe-panel p-8 md:p-10 bg-card/90">
-                    <div className="flex flex-col md:flex-row md:items-center mb-6 gap-6">
-                      <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 border-2 border-border">
-                        <img
-                          src={testimonial.image}
-                          alt={t(testimonial.nameKey)}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-xl">{t(testimonial.nameKey)}</h3>
-                        <p className="text-muted-foreground">{t(testimonial.roleKey)}, {t(testimonial.companyKey)}</p>
-                        <div className="flex mt-2">
-                          {[...Array(5)].map((_, index) => (
-                            <Star
-                              key={index}
-                              className={`w-4 h-4 ${index < testimonial.stars
-                                  ? 'text-primary fill-primary'
-                                  : 'text-muted'
-                                }`}
-                            />
-                          ))}
+        <div className="studio-rule mb-8 md:mb-10" />
+
+        <div className="relative overflow-hidden">
+          <div
+            className="flex transition-transform duration-500"
+            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+          >
+            {testimonialData.map((testimonial) => (
+              <article key={testimonial.id} className="min-w-full">
+                <div className="studio-panel p-6 md:p-8 lg:p-10">
+                  <div className="grid gap-8 lg:grid-cols-[minmax(0,0.34fr)_minmax(0,0.66fr)] lg:items-start">
+                    <div className="rounded-2xl border border-border/70 bg-background/55 p-5 md:p-6">
+                      <div className="flex items-center gap-4 mb-5">
+                        <div className="h-16 w-16 rounded-full overflow-hidden flex-shrink-0 border border-border">
+                          <img
+                            src={testimonial.image}
+                            alt={t(testimonial.nameKey)}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-medium leading-tight text-foreground">{t(testimonial.nameKey)}</h3>
+                          <p className="text-sm text-muted-foreground mt-1">{t(testimonial.roleKey)}</p>
+                          <p className="text-sm text-muted-foreground">{t(testimonial.companyKey)}</p>
                         </div>
                       </div>
+
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, index) => (
+                          <Star
+                            key={index}
+                            className={`h-4 w-4 ${index < testimonial.stars ? 'text-primary fill-primary' : 'text-muted'}`}
+                          />
+                        ))}
+                      </div>
                     </div>
-                    <blockquote className="text-lg md:text-xl font-serif italic text-foreground/90 leading-relaxed tracking-[-0.01em]">
-                      "{t(testimonial.textKey)}"
+
+                    <blockquote className="relative text-lg md:text-[1.45rem] font-serif italic text-foreground/90 leading-relaxed tracking-[-0.01em]">
+                      <span className="absolute -top-5 md:-top-7 -left-2 text-5xl md:text-6xl text-primary/20 not-italic leading-none">“</span>
+                      <span className="relative z-10">{t(testimonial.textKey)}</span>
                     </blockquote>
                   </div>
                 </div>
-              ))}
-            </div>
+              </article>
+            ))}
           </div>
+        </div>
 
-          <div className="flex justify-center mt-8 gap-4">
+        <div className="flex justify-center mt-7 md:mt-8 gap-2.5">
+          {testimonialData.map((_, index) => (
             <button
-              onClick={prevTestimonial}
-              className="w-12 h-12 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
-              aria-label={t('testimonials.ariaPrev')}
-            >
-              <ChevronLeft className="w-5 h-5 text-primary" />
-            </button>
-            <div className="flex gap-2">
-              {testimonialData.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? 'bg-primary scale-125' : 'bg-primary/25'
-                    }`}
-                  aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
-                />
-              ))}
-            </div>
-            <button
-              onClick={nextTestimonial}
-              className="w-12 h-12 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
-              aria-label={t('testimonials.ariaNext')}
-            >
-              <ChevronRight className="w-5 h-5 text-primary" />
-            </button>
-          </div>
+              key={index}
+              onClick={() => setActiveIndex(index)}
+              className={`h-2.5 rounded-full transition-all ${activeIndex === index ? 'w-8 bg-primary' : 'w-2.5 bg-primary/30'}`}
+              aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
+            />
+          ))}
         </div>
       </div>
     </section>
