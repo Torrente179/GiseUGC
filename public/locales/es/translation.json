@@ -172,5 +172,11 @@
     "views": "Vistas Generadas",
     "satisfaction": "Satisfacción",
     "contentPieces": "Piezas de Contenido"
+  },
+  "floatingContact": {
+    "whatsappLabel": "WhatsApp",
+    "telegramLabel": "Telegram",
+    "whatsappAria": "Chatear por WhatsApp",
+    "telegramAria": "Chatear por Telegram"
   }
 }

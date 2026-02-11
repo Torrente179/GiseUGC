@@ -172,5 +172,11 @@
     "views": "Views Generated",
     "satisfaction": "Satisfaction",
     "contentPieces": "Content Pieces"
+  },
+  "floatingContact": {
+    "whatsappLabel": "WhatsApp",
+    "telegramLabel": "Telegram",
+    "whatsappAria": "Chat on WhatsApp",
+    "telegramAria": "Chat on Telegram"
   }
 }
