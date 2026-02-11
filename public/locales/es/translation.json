@@ -184,6 +184,8 @@
     "whatsappLabel": "WhatsApp",
     "telegramLabel": "Telegram",
     "whatsappAria": "Chatear por WhatsApp",
-    "telegramAria": "Chatear por Telegram"
+    "telegramAria": "Chatear por Telegram",
+    "fiverrLabel": "Fiverr",
+    "fiverrAria": "Contrátame en Fiverr"
   }
 }
