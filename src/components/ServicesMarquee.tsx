@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -71,6 +71,61 @@ const ServicesMarquee = () => {
 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        // Initial jump to middle set of cards
+        const setupInitialScroll = () => {
+            const setWidth = container.scrollWidth / 3;
+            container.scrollLeft = setWidth;
+        };
+
+        // Delay setup slightly to ensure layout is ready
+        const timeoutId = setTimeout(setupInitialScroll, 100);
+
+        let animationFrameId: number;
+        let isPaused = false;
+
+        const animate = () => {
+            if (container && !isPaused) {
+                container.scrollLeft += 0.45; // Smooth slow scroll
+
+                const setWidth = container.scrollWidth / 3;
+                if (container.scrollLeft >= setWidth * 2) {
+                    container.scrollLeft -= setWidth;
+                }
+            }
+            animationFrameId = requestAnimationFrame(animate);
+        };
+
+        const handleMouseEnter = () => { isPaused = true; };
+        const handleMouseLeave = () => { isPaused = false; };
+
+        // Detect manual scroll jumps
+        const handleScroll = () => {
+            const setWidth = container.scrollWidth / 3;
+            if (container.scrollLeft >= setWidth * 2) {
+                container.scrollLeft -= setWidth;
+            } else if (container.scrollLeft <= 0) {
+                container.scrollLeft += setWidth;
+            }
+        };
+
+        animationFrameId = requestAnimationFrame(animate);
+        container.addEventListener('mouseenter', handleMouseEnter);
+        container.addEventListener('mouseleave', handleMouseLeave);
+        container.addEventListener('scroll', handleScroll);
+
+        return () => {
+            clearTimeout(timeoutId);
+            cancelAnimationFrame(animationFrameId);
+            container.removeEventListener('mouseenter', handleMouseEnter);
+            container.removeEventListener('mouseleave', handleMouseLeave);
+            container.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     const scroll = (direction: 'left' | 'right') => {
         if (scrollContainerRef.current) {
             const { current } = scrollContainerRef;
@@ -122,9 +177,10 @@ const ServicesMarquee = () => {
 
                 <div
                     ref={scrollContainerRef}
-                    className="relative z-10 flex overflow-x-auto scrollbar-hide snap-x snap-mandatory pt-10 md:pt-16 pb-20 no-scrollbar"
+                    className="relative z-10 flex overflow-x-auto scrollbar-hide snap-x snap-mandatory pt-10 md:pt-16 pb-20 no-scrollbar select-none"
+                    style={{ WebkitOverflowScrolling: 'touch' }}
                 >
-                    <div className="service-marquee flex w-max gap-6 lg:gap-8 px-4 md:px-20">
+                    <div className="flex w-max gap-6 lg:gap-8 px-4 md:px-20">
                         {marqueeCards.map((card, index) => {
                             const isExpanded = expandedCard === index;
                             return (
