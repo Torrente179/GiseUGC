@@ -96,7 +96,7 @@ const Navbar = () => {
               {t('navbar.hireMe')}
             </a>
             <div className="mt-8 pt-5 border-t border-border text-center">
-              <span className="brand-logo text-2xl text-primary">
+              <span className="brand-logo text-2xl text-accent">
                 Gisela<span className="text-foreground font-normal">.UGC</span>
               </span>
               <p className="section-label text-muted-foreground mt-2">Nordic UGC Studio</p>
@@ -116,7 +116,7 @@ const Navbar = () => {
           >
             <a
               href="#home"
-              className="brand-logo text-xl md:text-2xl text-primary"
+              className="brand-logo text-xl md:text-2xl text-accent"
               onClick={closeMobileMenu}
             >
               Gisela<span className="text-foreground font-medium">.UGC</span>
