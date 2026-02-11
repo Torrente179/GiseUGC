@@ -90,8 +90,29 @@ const Hero = () => {
           </div>
         </div>
 
+        {/* Introduction Section */}
+        <div className="mt-24 mb-16 pt-16 border-t border-border/40 animate-fade-in" style={{ animationDelay: '0.8s' }}>
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-12 items-start">
+            <div className="space-y-6">
+              <span className="section-label tracking-[0.3em]">{t('hero.introduction.eyebrow')}</span>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-[1.1] tracking-tight">
+                {t('hero.introduction.title')}
+              </h2>
+            </div>
+            <div className="lg:pt-20">
+              <p className="text-foreground/60 text-lg md:text-xl leading-relaxed max-w-2xl font-light">
+                {t('hero.introduction.description')}
+              </p>
+              <div className="mt-8 flex items-center gap-4 text-accent hover:gap-6 transition-all cursor-pointer group">
+                <span className="text-sm uppercase tracking-widest font-semibold">{t('hero.buttonPortfolio')}</span>
+                <ArrowDown className="h-4 w-4 -rotate-90 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Mobile Services Grid */}
-        <div className="mt-16 md:hidden animate-fade-in" style={{ animationDelay: '0.7s' }}>
+        <div className="mt-8 md:hidden animate-fade-in" style={{ animationDelay: '1s' }}>
           <div className="grid grid-cols-2 gap-4 pb-8">
             {[
               { icon: <Video className="h-6 w-6" />, title: 'services.service1.title', desc: 'services.service1.description' },

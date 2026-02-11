@@ -24,7 +24,12 @@
     "proofLabel": "Active campaigns",
     "proofValue": "28+ brands",
     "proofCaption": "Fashion, beauty and lifestyle",
-    "tagline": "Editorial UGC"
+    "tagline": "Editorial UGC",
+    "introduction": {
+      "eyebrow": "Creative UGC",
+      "title": "Elevating brands through authentic narratives",
+      "description": "As a content specialist, I bridge the gap between your brand identity and consumer connection. My approach combines editorial aesthetics with performance marketing strategies to create assets that don't just look good—they sell."
+    }
   },
   "services": {
     "sectionSubtitle": "What I Offer",

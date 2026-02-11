@@ -104,12 +104,37 @@
     /* Removed explicit color to rely on text-foreground for better contrast */
   }
 
+  .brand-logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    color: hsl(var(--primary));
+  }
+
+  h1,
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    color: hsl(var(--foreground));
+  }
+
   .section-label {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.22em;
+    color: hsl(var(--accent));
+  }
+
+  .luxury-accent {
+    font-family: 'Alex Brush', cursive;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.01em;
     color: hsl(var(--accent));
   }
 
