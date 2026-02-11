@@ -103,10 +103,6 @@ const Hero = () => {
               <p className="text-foreground/60 text-lg md:text-xl leading-relaxed max-w-2xl font-light">
                 {t('hero.introduction.description')}
               </p>
-              <div className="mt-8 flex items-center gap-4 text-accent hover:gap-6 transition-all cursor-pointer group">
-                <span className="text-sm uppercase tracking-widest font-semibold">{t('hero.buttonPortfolio')}</span>
-                <ArrowDown className="h-4 w-4 -rotate-90 group-hover:translate-x-1 transition-transform" />
-              </div>
             </div>
           </div>
         </div>
