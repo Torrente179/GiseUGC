@@ -4,84 +4,97 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    /* Nordic White #F9F9F9 */
-    --foreground: 0 0% 10%;
-    /* Charcoal #1A1A1A */
+    /* Coastal Nordic Portfolio - source of truth */
+    --coastal-teal: 193 60.9% 42.2%;
+    /* #2A91AD */
+    --washed-khaki: 53 24.2% 62.7%;
+    /* #B7B289 */
+    --muted-earth: 15 22.6% 42.5%;
+    /* #856054 */
+    --pure-linen: 45 28.6% 97.3%;
+    /* #FAF9F6 */
+    --warm-sand: 18 25.4% 86.9%;
+    /* #E6DAD5 */
+    --soft-stone: 60 7.8% 72.4%;
+    /* #BEBEB3 */
+    --deep-ebony: 0 0% 14.1%;
+    /* #242424 */
 
-    --card: 0 0% 100%;
-    /* Snow #FFFFFF */
-    --card-foreground: 0 0% 10%;
-    /* Charcoal #1A1A1A */
+    --background: var(--pure-linen);
+    --foreground: var(--deep-ebony);
 
-    --popover: 0 0% 100%;
-    /* Snow #FFFFFF */
-    --popover-foreground: 0 0% 10%;
+    --card: var(--pure-linen);
+    --card-foreground: var(--deep-ebony);
 
-    --primary: 0 0% 10%;
-    /* Charcoal #1A1A1A */
-    --primary-foreground: 0 0% 100%;
-    /* Snow #FFFFFF */
+    --popover: var(--pure-linen);
+    --popover-foreground: var(--deep-ebony);
 
-    --secondary: 0 0% 100%;
-    /* Snow #FFFFFF */
-    --secondary-foreground: 0 0% 10%;
+    --primary: var(--coastal-teal);
+    --primary-foreground: var(--pure-linen);
 
-    --muted: 0 0% 90%;
-    /* Stone #E5E5E5 */
-    --muted-foreground: 0 0% 50%;
+    --secondary: var(--warm-sand);
+    --secondary-foreground: var(--deep-ebony);
 
-    --accent: 342 37% 58%;
-    /* Mauve #BC6C84 */
-    --accent-foreground: 0 0% 100%;
+    --muted: var(--warm-sand);
+    --muted-foreground: var(--muted-earth);
+
+    --accent: var(--washed-khaki);
+    --accent-foreground: var(--deep-ebony);
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 90%;
-    /* Stone #E5E5E5 */
-    --input: 0 0% 90%;
-    --ring: 342 37% 58%;
+    --border: var(--soft-stone);
+    --input: var(--soft-stone);
+    --ring: var(--coastal-teal);
+
+    /* Backward compatibility aliases */
+    --brand-teal: var(--coastal-teal);
+    --brand-olive: var(--washed-khaki);
+    --brand-sand: var(--warm-sand);
+    --brand-cocoa: var(--muted-earth);
+    --brand-cream: var(--pure-linen);
+    --brand-gold: var(--soft-stone);
 
     --radius: 1.25rem;
   }
 
   /* Dark mode variables */
   .dark {
-    --background: 20 16% 10%;
-    --foreground: 30 18% 90%;
+    --background: 15 14% 9%;
+    --foreground: 45 20% 92%;
 
-    --card: 20 14% 14%;
-    --card-foreground: 30 18% 90%;
+    --card: 16 14% 12%;
+    --card-foreground: 45 20% 92%;
 
-    --popover: 20 14% 14%;
-    --popover-foreground: 30 18% 90%;
+    --popover: 16 14% 12%;
+    --popover-foreground: 45 20% 92%;
 
-    --primary: 350 22% 72%;
-    --primary-foreground: 20 16% 10%;
+    --primary: var(--coastal-teal);
+    --primary-foreground: 45 28.6% 97.3%;
 
-    --secondary: 20 12% 18%;
-    --secondary-foreground: 30 14% 86%;
+    --secondary: 15 17% 18%;
+    --secondary-foreground: 45 20% 92%;
 
-    --muted: 20 10% 16%;
-    --muted-foreground: 20 8% 62%;
+    --muted: 15 14% 16%;
+    --muted-foreground: var(--soft-stone);
 
-    --accent: 350 20% 62%;
-    --accent-foreground: 20 16% 10%;
+    --accent: var(--washed-khaki);
+    --accent-foreground: var(--deep-ebony);
 
     --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 20 10% 24%;
-    --input: 20 10% 24%;
-    --ring: 350 20% 62%;
+    --border: 15 12% 24%;
+    --input: 15 12% 24%;
+    --ring: var(--coastal-teal);
 
-    --brand-teal: 160 14% 58%;
-    --brand-olive: 155 10% 56%;
-    --brand-sand: 28 16% 54%;
-    --brand-cocoa: 20 12% 76%;
-    --brand-cream: 30 18% 90%;
-    --brand-gold: 15 22% 66%;
+    --brand-teal: var(--coastal-teal);
+    --brand-olive: var(--washed-khaki);
+    --brand-sand: var(--warm-sand);
+    --brand-cocoa: var(--muted-earth);
+    --brand-cream: var(--pure-linen);
+    --brand-gold: var(--soft-stone);
   }
 
   * {
@@ -153,8 +166,7 @@
     font-family: 'Inter', sans-serif;
     font-weight: 300;
     line-height: 1.8;
-    color: hsla(0, 0%, 10%, 0.4);
-    /* Charcoal at 40% for longer paragraphs */
+    color: hsl(var(--foreground) / 0.82);
   }
 
   h1,

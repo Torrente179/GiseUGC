@@ -83,7 +83,7 @@ const SocialProof = () => {
   ];
 
   return (
-    <section className="relative z-20 py-20 bg-white border-y border-muted/30">
+    <section className="relative z-20 py-20 bg-secondary/35 border-y border-muted/30">
       <div className="max-w-6xl mx-auto px-6">
         <div className="relative overflow-hidden group">
           <div className="grid grid-cols-2 lg:grid-cols-4 items-center gap-y-12 lg:gap-0">

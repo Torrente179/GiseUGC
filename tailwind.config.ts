@@ -74,6 +74,13 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				brand: {
+					coastalTeal: 'hsl(var(--coastal-teal))',
+					washedKhaki: 'hsl(var(--washed-khaki))',
+					mutedEarth: 'hsl(var(--muted-earth))',
+					pureLinen: 'hsl(var(--pure-linen))',
+					warmSand: 'hsl(var(--warm-sand))',
+					softStone: 'hsl(var(--soft-stone))',
+					deepEbony: 'hsl(var(--deep-ebony))',
 					teal: 'hsl(var(--brand-teal))',
 					olive: 'hsl(var(--brand-olive))',
 					sand: 'hsl(var(--brand-sand))',
