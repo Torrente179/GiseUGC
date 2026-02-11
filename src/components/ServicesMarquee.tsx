@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ServiceVideoCard {
     titleKey: string;
@@ -68,6 +69,19 @@ const ServicesMarquee = () => {
         setExpandedCard(expandedCard === index ? null : index);
     };
 
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    const scroll = (direction: 'left' | 'right') => {
+        if (scrollContainerRef.current) {
+            const { current } = scrollContainerRef;
+            const scrollAmount = 300;
+            current.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    };
+
     return (
         <div className="mt-32 md:mt-44 mb-20 md:mb-28 overflow-hidden">
             <div className="studio-container">
@@ -81,52 +95,77 @@ const ServicesMarquee = () => {
                 </div>
             </div>
 
-            <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-secondary/40 via-transparent to-secondary/40" />
-                <div className="absolute inset-y-0 left-0 w-20 md:w-60 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
-                <div className="absolute inset-y-0 right-0 w-20 md:w-60 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
+            <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen group">
+                <div className="absolute inset-0 bg-gradient-to-r from-secondary/40 via-transparent to-secondary/40 pointer-events-none" />
+                <div className="absolute inset-y-0 left-0 w-20 md:w-60 z-20 bg-gradient-to-r from-background via-background/95 to-transparent pointer-events-none" />
+                <div className="absolute inset-y-0 right-0 w-20 md:w-60 z-20 bg-gradient-to-l from-background via-background/95 to-transparent pointer-events-none" />
 
-                <div className="service-marquee relative z-10 flex w-max gap-6 lg:gap-8 py-10 md:py-16">
-                    {marqueeCards.map((card, index) => {
-                        const isExpanded = expandedCard === index;
-                        return (
-                            <div
-                                key={`${card.titleKey}-${index}`}
-                                className="relative shrink-0 w-[200px] sm:w-[220px] lg:w-[240px] flex flex-col items-center cursor-pointer"
-                                onMouseEnter={() => handleVideoHover(index)}
-                                onMouseLeave={() => handleVideoLeave(index)}
-                                onClick={() => handleCardClick(index)}
-                            >
-                                {/* Compact Vertical Frame */}
-                                <div className={`relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card transition-all duration-500 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:border-primary/25 ${isExpanded ? '-translate-y-2' : ''}`}>
-                                    <video
-                                        ref={(el) => { videoRefs.current[index] = el; }}
-                                        className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                                        src={card.videoSrc}
-                                        poster={card.poster}
-                                        muted
-                                        loop
-                                        playsInline
-                                        preload="metadata"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-50" />
-                                </div>
+                {/* Navigation Arrows */}
+                <div className="absolute inset-y-0 left-4 md:left-12 z-30 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button
+                        onClick={() => scroll('left')}
+                        className="h-12 w-12 rounded-full bg-card/80 border border-border/50 flex items-center justify-center text-primary backdrop-blur-md shadow-lg hover:bg-primary hover:text-white transition-all hover:scale-110"
+                        aria-label="Scroll left"
+                    >
+                        <ChevronLeft className="h-6 w-6" />
+                    </button>
+                </div>
+                <div className="absolute inset-y-0 right-4 md:right-12 z-30 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button
+                        onClick={() => scroll('right')}
+                        className="h-12 w-12 rounded-full bg-card/80 border border-border/50 flex items-center justify-center text-primary backdrop-blur-md shadow-lg hover:bg-primary hover:text-white transition-all hover:scale-110"
+                        aria-label="Scroll right"
+                    >
+                        <ChevronRight className="h-6 w-6" />
+                    </button>
+                </div>
 
-                                {/* Title (always visible) + Description (on click) */}
-                                <div className="w-full mt-5 px-3 text-center">
-                                    <h3 className="text-lg md:text-xl font-serif text-foreground leading-tight tracking-[-0.02em] mb-2">
-                                        {t(card.titleKey)}
-                                    </h3>
+                <div
+                    ref={scrollContainerRef}
+                    className="relative z-10 flex overflow-x-auto scrollbar-hide snap-x snap-mandatory pt-10 md:pt-16 pb-20 no-scrollbar"
+                >
+                    <div className="service-marquee flex w-max gap-6 lg:gap-8 px-4 md:px-20">
+                        {marqueeCards.map((card, index) => {
+                            const isExpanded = expandedCard === index;
+                            return (
+                                <div
+                                    key={`${card.titleKey}-${index}`}
+                                    className="relative shrink-0 w-[200px] sm:w-[220px] lg:w-[240px] flex flex-col items-center cursor-pointer snap-center"
+                                    onMouseEnter={() => handleVideoHover(index)}
+                                    onMouseLeave={() => handleVideoLeave(index)}
+                                    onClick={() => handleCardClick(index)}
+                                >
+                                    {/* Compact Vertical Frame */}
+                                    <div className={`relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card transition-all duration-500 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:border-primary/25 ${isExpanded ? '-translate-y-2' : ''}`}>
+                                        <video
+                                            ref={(el) => { videoRefs.current[index] = el; }}
+                                            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                                            src={card.videoSrc}
+                                            poster={card.poster}
+                                            muted
+                                            loop
+                                            playsInline
+                                            preload="metadata"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-50" />
+                                    </div>
 
-                                    <div className={`overflow-hidden transition-all duration-500 ease-out ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
-                                        <p className="text-sm leading-relaxed text-muted-foreground pt-1">
-                                            {t(card.descriptionKey)}
-                                        </p>
+                                    {/* Title (always visible) + Description (on click) */}
+                                    <div className="w-full mt-5 px-3 text-center">
+                                        <h3 className="text-lg md:text-xl font-serif text-foreground leading-tight tracking-[-0.02em] mb-2">
+                                            {t(card.titleKey)}
+                                        </h3>
+
+                                        <div className={`overflow-hidden transition-all duration-500 ease-out ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                            <p className="text-sm leading-relaxed text-muted-foreground pt-1">
+                                                {t(card.descriptionKey)}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         </div>
