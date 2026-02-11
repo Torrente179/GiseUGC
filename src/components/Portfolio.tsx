@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, type TouchEvent } from 'react';
+import { useRef, useState, useCallback, useEffect, type TouchEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Play, VolumeX, X } from 'lucide-react';
 
@@ -21,52 +21,215 @@ interface CollageClip {
   hoverClass: string;
 }
 
+type TheaterSwipeGesture = {
+  x: number;
+  y: number;
+  timestamp: number;
+  axis: 'pending' | 'vertical' | 'horizontal';
+};
+
+const THEATER_CLOSE_DURATION_MS = 320;
+const THEATER_SWIPE_DISTANCE_THRESHOLD = 110;
+const THEATER_SWIPE_VELOCITY_THRESHOLD = 0.45;
+const THEATER_MAX_DRAG_DISTANCE = 260;
+
 const Portfolio = () => {
   const { t } = useTranslation();
 
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
   const [collageHovered, setCollageHovered] = useState(false);
+  const [theaterDragY, setTheaterDragY] = useState(0);
+  const [isTheaterDragging, setIsTheaterDragging] = useState(false);
+  const [isTheaterVisible, setIsTheaterVisible] = useState(false);
+  const [isTheaterDismissing, setIsTheaterDismissing] = useState(false);
+  const [theaterDismissDirection, setTheaterDismissDirection] = useState<1 | -1>(1);
 
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const reelScrollRef = useRef<HTMLDivElement>(null);
-  const theaterSwipeStartRef = useRef<{ x: number; y: number; timestamp: number } | null>(null);
+  const theaterSwipeStartRef = useRef<TheaterSwipeGesture | null>(null);
+  const theaterCloseTimerRef = useRef<number | null>(null);
+  const theaterDragFrameRef = useRef<number | null>(null);
+  const theaterPendingDragYRef = useRef(0);
 
-  const closeActiveReelPreview = useCallback(() => {
+  const clearTheaterCloseTimer = useCallback(() => {
+    if (theaterCloseTimerRef.current !== null) {
+      window.clearTimeout(theaterCloseTimerRef.current);
+      theaterCloseTimerRef.current = null;
+    }
+  }, []);
+
+  const queueTheaterDrag = useCallback((dragY: number) => {
+    const clampedDrag = Math.max(-THEATER_MAX_DRAG_DISTANCE, Math.min(THEATER_MAX_DRAG_DISTANCE, dragY));
+    theaterPendingDragYRef.current = clampedDrag;
+
+    if (theaterDragFrameRef.current !== null) return;
+    theaterDragFrameRef.current = window.requestAnimationFrame(() => {
+      setTheaterDragY(theaterPendingDragYRef.current);
+      theaterDragFrameRef.current = null;
+    });
+  }, []);
+
+  const finalizeTheaterClose = useCallback(() => {
+    clearTheaterCloseTimer();
     setActiveReelPreview(null);
-  }, []);
+    setIsTheaterDismissing(false);
+    setIsTheaterVisible(false);
+    setIsTheaterDragging(false);
+    setTheaterDismissDirection(1);
+    setTheaterDragY(0);
+  }, [clearTheaterCloseTimer]);
 
-  const handleTheaterTouchStart = useCallback((event: TouchEvent<HTMLDivElement>) => {
-    const touch = event.touches[0];
-    theaterSwipeStartRef.current = {
-      x: touch.clientX,
-      y: touch.clientY,
-      timestamp: Date.now(),
-    };
-  }, []);
+  const dismissReelPreview = useCallback(
+    (direction: 1 | -1 = 1) => {
+      if (!activeReelPreview || isTheaterDismissing) return;
+      clearTheaterCloseTimer();
+      setIsTheaterDragging(false);
+      theaterSwipeStartRef.current = null;
+      setTheaterDismissDirection(direction);
+      setIsTheaterDismissing(true);
+      setIsTheaterVisible(false);
+      queueTheaterDrag(0);
+      theaterCloseTimerRef.current = window.setTimeout(finalizeTheaterClose, THEATER_CLOSE_DURATION_MS);
+    },
+    [
+      activeReelPreview,
+      clearTheaterCloseTimer,
+      finalizeTheaterClose,
+      isTheaterDismissing,
+      queueTheaterDrag,
+    ],
+  );
+
+  const openReelPreview = useCallback(
+    (clip: ReelClip) => {
+      clearTheaterCloseTimer();
+      theaterSwipeStartRef.current = null;
+      setTheaterDismissDirection(1);
+      setIsTheaterDismissing(false);
+      setIsTheaterDragging(false);
+      setIsTheaterVisible(false);
+      queueTheaterDrag(0);
+      setActiveReelPreview(clip);
+    },
+    [clearTheaterCloseTimer, queueTheaterDrag],
+  );
+
+  const handleTheaterTouchStart = useCallback(
+    (event: TouchEvent<HTMLDivElement>) => {
+      if (isTheaterDismissing) return;
+      const touch = event.touches[0];
+      if (!touch) return;
+
+      theaterSwipeStartRef.current = {
+        x: touch.clientX,
+        y: touch.clientY,
+        timestamp: performance.now(),
+        axis: 'pending',
+      };
+      setIsTheaterDragging(true);
+    },
+    [isTheaterDismissing],
+  );
+
+  const handleTheaterTouchMove = useCallback(
+    (event: TouchEvent<HTMLDivElement>) => {
+      const swipeStart = theaterSwipeStartRef.current;
+      if (!swipeStart || isTheaterDismissing) return;
+      const touch = event.touches[0];
+      if (!touch) return;
+
+      const deltaX = touch.clientX - swipeStart.x;
+      const deltaY = touch.clientY - swipeStart.y;
+
+      if (swipeStart.axis === 'pending') {
+        if (Math.abs(deltaX) < 6 && Math.abs(deltaY) < 6) return;
+        swipeStart.axis = Math.abs(deltaY) >= Math.abs(deltaX) ? 'vertical' : 'horizontal';
+      }
+
+      if (swipeStart.axis !== 'vertical') return;
+      event.preventDefault();
+      const resistance = 0.92 - Math.min(Math.abs(deltaY) / 900, 0.28);
+      queueTheaterDrag(deltaY * resistance);
+    },
+    [isTheaterDismissing, queueTheaterDrag],
+  );
 
   const handleTheaterTouchEnd = useCallback(
     (event: TouchEvent<HTMLDivElement>) => {
       const swipeStart = theaterSwipeStartRef.current;
       theaterSwipeStartRef.current = null;
+      setIsTheaterDragging(false);
       if (!swipeStart) return;
 
       const touch = event.changedTouches[0];
+      if (!touch) {
+        queueTheaterDrag(0);
+        return;
+      }
+
       const deltaX = touch.clientX - swipeStart.x;
       const deltaY = touch.clientY - swipeStart.y;
-      const elapsed = Date.now() - swipeStart.timestamp;
-      const isVerticalSwipe = Math.abs(deltaY) > Math.abs(deltaX) * 1.2;
-      const crossedThreshold = Math.abs(deltaY) >= 90 && elapsed <= 900;
+      const elapsed = Math.max(1, performance.now() - swipeStart.timestamp);
+      const velocityY = deltaY / elapsed;
+      const isVerticalSwipe =
+        swipeStart.axis === 'vertical' || Math.abs(deltaY) > Math.abs(deltaX) * 1.1;
+      const crossedThreshold =
+        Math.abs(deltaY) >= THEATER_SWIPE_DISTANCE_THRESHOLD ||
+        Math.abs(velocityY) >= THEATER_SWIPE_VELOCITY_THRESHOLD;
 
       if (isVerticalSwipe && crossedThreshold) {
-        closeActiveReelPreview();
+        dismissReelPreview(deltaY < 0 ? -1 : 1);
+        return;
       }
+
+      queueTheaterDrag(0);
     },
-    [closeActiveReelPreview],
+    [dismissReelPreview, queueTheaterDrag],
   );
 
   const resetTheaterSwipe = useCallback(() => {
     theaterSwipeStartRef.current = null;
-  }, []);
+    setIsTheaterDragging(false);
+    queueTheaterDrag(0);
+  }, [queueTheaterDrag]);
+
+  useEffect(() => {
+    if (!activeReelPreview) {
+      setIsTheaterVisible(false);
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      setIsTheaterVisible(true);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [activeReelPreview]);
+
+  useEffect(() => {
+    return () => {
+      clearTheaterCloseTimer();
+      if (theaterDragFrameRef.current !== null) {
+        window.cancelAnimationFrame(theaterDragFrameRef.current);
+        theaterDragFrameRef.current = null;
+      }
+    };
+  }, [clearTheaterCloseTimer]);
+
+  useEffect(() => {
+    if (!activeReelPreview) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        dismissReelPreview();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeReelPreview, dismissReelPreview]);
 
   const scrollReels = (direction: 'left' | 'right') => {
     const container = reelScrollRef.current;
@@ -212,6 +375,25 @@ const Portfolio = () => {
     },
   ];
 
+  const theaterDragDistance = Math.abs(theaterDragY);
+  const theaterDragProgress = Math.min(theaterDragDistance / THEATER_MAX_DRAG_DISTANCE, 1);
+  const theaterOverlayOpacity =
+    (isTheaterVisible && !isTheaterDismissing ? 1 : 0) * (1 - theaterDragProgress * 0.5);
+  const theaterCardScale = 1 - theaterDragProgress * 0.07;
+  const theaterCardRotation = theaterDragY * 0.012;
+
+  const theaterCardTransform = isTheaterDismissing
+    ? `translate3d(0, ${theaterDismissDirection * 120}vh, 0) scale(0.88) rotate(${theaterDismissDirection * 3.8}deg)`
+    : isTheaterVisible
+      ? `translate3d(0, ${theaterDragY}px, 0) scale(${theaterCardScale}) rotate(${theaterCardRotation}deg)`
+      : 'translate3d(0, 36px, 0) scale(0.95)';
+
+  const theaterCardTransition = isTheaterDragging
+    ? 'transform 0ms linear, opacity 120ms linear'
+    : isTheaterDismissing
+      ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.32,0.72,0,1), opacity 250ms ease`
+      : 'transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease';
+
 
   return (
     <section id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
@@ -277,7 +459,7 @@ const Portfolio = () => {
                     type="button"
                     key={clip.id}
                     className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center"
-                    onClick={() => setActiveReelPreview(clip)}
+                    onClick={() => openReelPreview(clip)}
                     aria-label={t(clip.titleKey)}
                   >
                     <video
@@ -440,37 +622,79 @@ const Portfolio = () => {
 
       {activeReelPreview && (
         <div
-          className="fixed inset-0 z-[200] bg-foreground/55 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={closeActiveReelPreview}
+          className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4"
+          onClick={() => dismissReelPreview()}
         >
           <div
-            className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-3 shadow-xl"
+            className="absolute inset-0 bg-foreground/65 backdrop-blur-[14px]"
+            style={{
+              opacity: theaterOverlayOpacity,
+              transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 280ms ease',
+            }}
+          />
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              opacity: theaterOverlayOpacity,
+              transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 320ms ease',
+              background:
+                'radial-gradient(circle at 14% 12%, hsl(var(--accent) / 0.24) 0%, transparent 48%), radial-gradient(circle at 84% 88%, hsl(var(--primary) / 0.26) 0%, transparent 52%)',
+            }}
+          />
+          <div
+            className="relative w-full max-w-[430px] overflow-hidden rounded-[2rem] border border-white/25 bg-card/80 p-[10px] shadow-[0_38px_92px_-42px_hsl(var(--foreground)/0.9)] backdrop-blur-2xl"
             onClick={(event) => event.stopPropagation()}
             onTouchStart={handleTheaterTouchStart}
+            onTouchMove={handleTheaterTouchMove}
             onTouchEnd={handleTheaterTouchEnd}
             onTouchCancel={resetTheaterSwipe}
+            style={{
+              transform: theaterCardTransform,
+              opacity: isTheaterDismissing ? 0 : isTheaterVisible ? 1 : 0,
+              transition: theaterCardTransition,
+            }}
           >
+            <div className="pointer-events-none absolute inset-0 rounded-[inherit] border border-white/20" />
+            <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[linear-gradient(180deg,hsl(var(--card)/0.42)_0%,hsl(var(--card)/0.08)_40%,transparent_100%)]" />
+
             <button
               type="button"
-              className="absolute top-3 right-3 h-8 w-8 rounded-full border border-border bg-card/90 flex items-center justify-center hover:bg-secondary"
-              onClick={closeActiveReelPreview}
+              className="absolute top-4 right-4 z-20 h-9 w-9 rounded-full border border-border/80 bg-card/90 flex items-center justify-center text-foreground/90 hover:bg-secondary transition-colors"
+              onClick={() => dismissReelPreview()}
               aria-label={t('portfolio.reelPreviewClose')}
             >
               <X className="h-4 w-4 text-foreground" />
             </button>
 
-            <p className="section-label text-muted-foreground mb-1">{t('portfolio.reelPreviewLabel')}</p>
-            <h4 className="text-lg font-serif font-normal tracking-[-0.03em] pr-10 mb-3">{t(activeReelPreview.titleKey)}</h4>
+            <div className="relative rounded-[1.55rem] border border-border/70 bg-card/75 px-4 pb-4 pt-5 shadow-[inset_0_1px_0_hsl(var(--background)/0.45)]">
+              <div className="mb-2 pr-12">
+                <p className="brand-logo text-[1.6rem] leading-[0.9] text-foreground">
+                  Gise<span className="text-foreground font-medium">.UGC</span>
+                </p>
+                <p className="section-label mt-2 text-foreground/55">
+                  {t(`portfolio.categories.${activeReelPreview.category}`)}
+                </p>
+              </div>
 
-            <div className="rounded-xl overflow-hidden bg-black">
-              <video
-                className="w-full aspect-[9/16] object-contain"
-                src={activeReelPreview.videoSrc}
-                poster={activeReelPreview.poster}
-                controls
-                autoPlay
-                playsInline
-              />
+              <h4 className="text-xl font-serif font-normal tracking-[-0.03em] leading-tight text-foreground mb-3">
+                {t(activeReelPreview.titleKey)}
+              </h4>
+
+              <div className="relative overflow-hidden rounded-[1.25rem] border border-white/25 bg-black shadow-[0_20px_52px_-30px_hsl(var(--foreground)/0.9)]">
+                <video
+                  className="w-full aspect-[9/16] object-cover"
+                  src={activeReelPreview.videoSrc}
+                  poster={activeReelPreview.poster}
+                  controls
+                  autoPlay
+                  playsInline
+                />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent" />
+              </div>
+
+              <p className="mt-3 section-label text-[9px] text-foreground/45">
+                {t('portfolio.reelPreviewSwipeHint')}
+              </p>
             </div>
           </div>
         </div>
