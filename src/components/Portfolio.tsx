@@ -1,14 +1,8 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, ArrowRight, Maximize, Play, VolumeX, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Play, VolumeX, X } from 'lucide-react';
 
-interface PortfolioItem {
-  id: number;
-  titleKey: string;
-  category: 'fashion' | 'beauty' | 'tech' | 'lifestyle';
-  thumbnail: string;
-  type: 'image' | 'video';
-}
+
 
 interface ReelClip {
   id: number;
@@ -28,21 +22,12 @@ interface CollageClip {
 
 const Portfolio = () => {
   const { t } = useTranslation();
-  const [activeFilter, setActiveFilter] = useState('all');
-  const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
+
   const [collagePlaying, setCollagePlaying] = useState(false);
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
 
   const reelTrackRef = useRef<HTMLDivElement>(null);
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
-
-  const categoryKeys = [
-    { id: 'all', nameKey: 'portfolio.categories.all' },
-    { id: 'fashion', nameKey: 'portfolio.categories.fashion' },
-    { id: 'beauty', nameKey: 'portfolio.categories.beauty' },
-    { id: 'tech', nameKey: 'portfolio.categories.tech' },
-    { id: 'lifestyle', nameKey: 'portfolio.categories.lifestyle' },
-  ];
 
   const reelClips: ReelClip[] = [
     {
@@ -141,73 +126,7 @@ const Portfolio = () => {
     },
   ];
 
-  const portfolioItemData: PortfolioItem[] = [
-    {
-      id: 1,
-      titleKey: 'portfolio.items.item1',
-      category: 'fashion',
-      thumbnail: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'image',
-    },
-    {
-      id: 2,
-      titleKey: 'portfolio.items.item2',
-      category: 'beauty',
-      thumbnail: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'video',
-    },
-    {
-      id: 3,
-      titleKey: 'portfolio.items.item3',
-      category: 'tech',
-      thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'image',
-    },
-    {
-      id: 4,
-      titleKey: 'portfolio.items.item4',
-      category: 'lifestyle',
-      thumbnail: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'image',
-    },
-    {
-      id: 5,
-      titleKey: 'portfolio.items.item5',
-      category: 'beauty',
-      thumbnail: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'video',
-    },
-    {
-      id: 6,
-      titleKey: 'portfolio.items.item6',
-      category: 'fashion',
-      thumbnail: 'https://images.unsplash.com/photo-1520999166575-37d109989923?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'image',
-    },
-    {
-      id: 7,
-      titleKey: 'portfolio.items.item7',
-      category: 'tech',
-      thumbnail: 'https://images.unsplash.com/photo-1551721434-8b94ddff0e6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'video',
-    },
-    {
-      id: 8,
-      titleKey: 'portfolio.items.item8',
-      category: 'lifestyle',
-      thumbnail: 'https://images.unsplash.com/photo-1498575732665-aac7705c2c7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      type: 'video',
-    },
-  ];
 
-  const filteredItems =
-    activeFilter === 'all'
-      ? portfolioItemData
-      : portfolioItemData.filter((item) => item.category === activeFilter);
-
-  const closeModal = () => {
-    setSelectedItem(null);
-  };
 
   const scrollReel = (direction: 'prev' | 'next') => {
     if (!reelTrackRef.current) return;
@@ -257,7 +176,7 @@ const Portfolio = () => {
     return 'scale-[1.015]';
   };
 
-  const cardAspectRatios = ['4 / 5', '1 / 1', '3 / 4', '4 / 5'];
+
 
   return (
     <section id="portfolio" className="studio-section bg-secondary/14">
@@ -424,15 +343,13 @@ const Portfolio = () => {
                 />
 
                 <div
-                  className={`absolute inset-0 bg-black/35 backdrop-blur-[1px] transition-opacity duration-300 ${
-                    collagePlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
-                  }`}
+                  className={`absolute inset-0 bg-black/35 backdrop-blur-[1px] transition-opacity duration-300 ${collagePlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                    }`}
                 />
 
                 <span
-                  className={`absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full bg-card/90 text-primary transition-opacity duration-300 ${
-                    collagePlaying ? 'opacity-0' : 'opacity-100'
-                  }`}
+                  className={`absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full bg-card/90 text-primary transition-opacity duration-300 ${collagePlaying ? 'opacity-0' : 'opacity-100'
+                    }`}
                 >
                   <Play className="h-5 w-5 fill-current" />
                 </span>
@@ -445,86 +362,9 @@ const Portfolio = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8 md:mb-10">
-          {categoryKeys.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveFilter(category.id)}
-              className={`px-5 md:px-6 py-2.5 rounded-full text-xs md:text-sm uppercase tracking-[0.1em] transition-all ${
-                activeFilter === category.id
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'cafe-chip hover:bg-secondary'
-              }`}
-            >
-              {t(category.nameKey)}
-            </button>
-          ))}
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
-          {filteredItems.map((item, index) => {
-            const aspectRatio = cardAspectRatios[index % cardAspectRatios.length];
-
-            return (
-              <button
-                type="button"
-                key={item.id}
-                className="group relative overflow-hidden rounded-[1.25rem] border border-border/75 shadow-sm text-left transition-colors bg-card/82 hover:border-primary/35"
-                onClick={() => setSelectedItem(item)}
-              >
-                <div className="w-full overflow-hidden" style={{ aspectRatio }}>
-                  <img
-                    src={item.thumbnail}
-                    alt={t(item.titleKey)}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/28 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                <div className="absolute inset-x-0 bottom-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                  <h3 className="font-medium mb-0.5">{t(item.titleKey)}</h3>
-                  <p className="text-white/75 text-xs uppercase tracking-[0.1em]">
-                    {t(`portfolio.categories.${item.category}`)}
-                  </p>
-                </div>
-
-                <span className="absolute top-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-card/88 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                  {item.type === 'video' ? <Play className="h-4 w-4 fill-current" /> : <Maximize className="h-4 w-4" />}
-                </span>
-              </button>
-            );
-          })}
-        </div>
       </div>
 
-      {selectedItem && (
-        <div
-          className="fixed inset-0 z-50 bg-foreground/55 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={closeModal}
-        >
-          <div
-            className="relative max-w-4xl w-full bg-card rounded-2xl overflow-hidden animate-scale border border-primary/20"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="aspect-w-16 aspect-h-9 w-full bg-foreground/15">
-              <img src={selectedItem.thumbnail} alt={t(selectedItem.titleKey)} className="w-full h-full object-cover" />
-            </div>
-            <div className="p-6">
-              <h3 className="text-2xl font-serif font-normal tracking-[-0.03em] text-primary">{t(selectedItem.titleKey)}</h3>
-              <p className="text-muted-foreground capitalize">{t(`portfolio.categories.${selectedItem.category}`)}</p>
-            </div>
-            <button
-              className="absolute top-4 right-4 w-10 h-10 bg-card/90 rounded-full border border-border flex items-center justify-center hover:bg-card"
-              onClick={closeModal}
-            >
-              <X className="h-5 w-5 text-primary" />
-            </button>
-          </div>
-        </div>
-      )}
 
       {activeReelPreview && (
         <div
