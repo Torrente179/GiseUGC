@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Play, VolumeX, X } from 'lucide-react';
 
@@ -149,6 +149,14 @@ const Portfolio = () => {
       className: 'bottom-6 left-[10%] w-[30%] -rotate-[1deg]',
     },
   ];
+
+  useEffect(() => {
+    // Activate collage playback on mount to create the "GIF" effect (especially for mobile)
+    const timeoutId = setTimeout(() => {
+      void setCollagePlayback(true);
+    }, 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const setCollagePlayback = async (shouldPlay: boolean) => {
     setCollagePlaying(shouldPlay);
@@ -349,6 +357,7 @@ const Portfolio = () => {
                   muted
                   loop
                   playsInline
+                  autoPlay
                   preload="metadata"
                   aria-label={t(clip.labelKey)}
                 />
