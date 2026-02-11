@@ -34,10 +34,6 @@ const THEATER_SWIPE_VELOCITY_THRESHOLD = 0.45;
 const THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
-const PORTFOLIO_REEL_BG_GRADIENT = 'linear-gradient(90deg, rgba(42, 145, 167, 0.78) 0%, rgba(42, 145, 167, 0.46) 50%, rgba(42, 145, 167, 0.78) 100%)';
-const PORTFOLIO_REEL_EDGE_FADE_LEFT = 'linear-gradient(90deg, rgba(42, 145, 167, 0.95) 0%, rgba(42, 145, 167, 0.76) 65%, rgba(42, 145, 167, 0) 100%)';
-const PORTFOLIO_REEL_EDGE_FADE_RIGHT = 'linear-gradient(270deg, rgba(42, 145, 167, 0.95) 0%, rgba(42, 145, 167, 0.76) 65%, rgba(42, 145, 167, 0) 100%)';
-const PORTFOLIO_COLLAGE_BG_GRADIENT = 'linear-gradient(180deg, #52c0d6 0%, #2a91a7 46%, #1f6f81 100%)';
 
 const Portfolio = () => {
   const { t } = useTranslation();
@@ -522,18 +518,9 @@ const Portfolio = () => {
           </div>
 
           <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden">
-            <div
-              className="absolute inset-0"
-              style={{ background: PORTFOLIO_REEL_BG_GRADIENT }}
-            />
-            <div
-              className="absolute inset-y-0 left-0 w-6 sm:w-10 md:w-16 z-20"
-              style={{ background: PORTFOLIO_REEL_EDGE_FADE_LEFT }}
-            />
-            <div
-              className="absolute inset-y-0 right-0 w-6 sm:w-10 md:w-16 z-20"
-              style={{ background: PORTFOLIO_REEL_EDGE_FADE_RIGHT }}
-            />
+            <div className="absolute inset-0 bg-gradient-to-r from-secondary/60 via-background to-secondary/60" />
+            <div className="absolute inset-y-0 left-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
+            <div className="absolute inset-y-0 right-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-l from-background via-background/80 to-transparent" />
 
             {/* Mobile navigation arrows */}
             <button
@@ -638,7 +625,7 @@ const Portfolio = () => {
             <div
               className="absolute inset-0"
               style={{
-                background: PORTFOLIO_COLLAGE_BG_GRADIENT,
+                background: 'linear-gradient(180deg, hsl(var(--coastal-teal)) 0%, hsl(var(--washed-khaki)) 38%, hsl(var(--warm-sand)) 72%, hsl(var(--pure-linen)) 100%)',
               }}
             />
             <div className="absolute inset-0 bg-card/20" />
@@ -686,7 +673,7 @@ const Portfolio = () => {
             <div
               className="absolute inset-0"
               style={{
-                background: PORTFOLIO_COLLAGE_BG_GRADIENT,
+                background: 'linear-gradient(180deg, hsl(var(--coastal-teal)) 0%, hsl(var(--washed-khaki)) 38%, hsl(var(--warm-sand)) 72%, hsl(var(--pure-linen)) 100%)',
               }}
             />
             <div className="absolute inset-0 bg-card/15" />
