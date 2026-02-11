@@ -458,7 +458,7 @@ const Portfolio = () => {
                   <button
                     type="button"
                     key={clip.id}
-                    className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center"
+                    className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-pan-y"
                     onClick={() => openReelPreview(clip)}
                     aria-label={t(clip.titleKey)}
                   >
@@ -575,7 +575,7 @@ const Portfolio = () => {
 
           {/* Mobile: Collage layout with always-on looping videos */}
           <div
-            className="lg:hidden relative w-full max-w-[440px] rounded-[1.25rem] border border-border/60 p-4 overflow-hidden shadow-lg mx-auto"
+            className="lg:hidden relative w-full max-w-[440px] rounded-[1.25rem] border border-border/60 p-4 overflow-hidden shadow-lg mx-auto pointer-events-none select-none"
             role="presentation"
           >
             {/* Sunset gradient background for mobile too */}
@@ -596,7 +596,7 @@ const Portfolio = () => {
                       : index === 1
                         ? 'top-[6%] left-[34%] w-[32%] rotate-0 z-40'
                         : 'top-[19%] right-[8%] w-[33%] rotate-[7deg] z-20'
-                    }`}
+                    } pointer-events-none`}
                   style={{ aspectRatio: '9/14' }}
                 >
                   <video
@@ -608,7 +608,12 @@ const Portfolio = () => {
                     playsInline
                     autoPlay
                     preload="auto"
+                    disablePictureInPicture
+                    disableRemotePlayback
                     onLoadedData={(event) => {
+                      event.currentTarget.play().catch(() => undefined);
+                    }}
+                    onPause={(event) => {
                       event.currentTarget.play().catch(() => undefined);
                     }}
                     aria-label={t(clip.labelKey)}
