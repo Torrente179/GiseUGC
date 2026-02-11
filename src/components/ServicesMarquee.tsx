@@ -13,6 +13,9 @@ const ServicesMarquee = () => {
     const { t } = useTranslation();
     const [expandedCard, setExpandedCard] = useState<number | null>(null);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const isPausedRef = useRef(false);
+    const isDraggingRef = useRef(false);
 
     const serviceVideoCards: ServiceVideoCard[] = [
         {
@@ -58,6 +61,8 @@ const ServicesMarquee = () => {
     };
 
     const handleVideoLeave = (index: number) => {
+        // Don't stop video if this card is expanded (clicked open)
+        if (expandedCard === index) return;
         const video = videoRefs.current[index];
         if (video) {
             video.pause();
@@ -66,31 +71,77 @@ const ServicesMarquee = () => {
     };
 
     const handleCardClick = (index: number) => {
-        setExpandedCard(expandedCard === index ? null : index);
+        const isClosing = expandedCard === index;
+
+        // If switching from a different expanded card, stop its video
+        if (!isClosing && expandedCard !== null) {
+            const prevVideo = videoRefs.current[expandedCard];
+            if (prevVideo) {
+                prevVideo.pause();
+                prevVideo.currentTime = 0;
+            }
+        }
+
+        setExpandedCard(isClosing ? null : index);
+
+        // Play video when expanding (essential for mobile where hover doesn't exist)
+        const video = videoRefs.current[index];
+        if (video) {
+            if (isClosing) {
+                video.pause();
+                video.currentTime = 0;
+            } else {
+                const p = video.play();
+                if (p) p.catch(() => undefined);
+            }
+        }
     };
 
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    // Sync pause state with expanded card — only pauses when a card is open
+    useEffect(() => {
+        isPausedRef.current = expandedCard !== null;
+    }, [expandedCard]);
 
+    // Click anywhere outside a card to dismiss expanded card and resume scrolling
+    useEffect(() => {
+        if (expandedCard === null) return;
+
+        const handleClickOutside = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            if (!target.closest('[data-carousel-card]')) {
+                setExpandedCard(null);
+            }
+        };
+
+        const timeoutId = setTimeout(() => {
+            document.addEventListener('click', handleClickOutside);
+        }, 0);
+
+        return () => {
+            clearTimeout(timeoutId);
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [expandedCard]);
+
+    // Auto-scroll + infinite loop + drag handling
     useEffect(() => {
         const container = scrollContainerRef.current;
         if (!container) return;
 
-        // Initial jump to middle set of cards
+        // Start at the middle set so we can scroll left or right infinitely
         const setupInitialScroll = () => {
             const setWidth = container.scrollWidth / 3;
             container.scrollLeft = setWidth;
         };
-
-        // Delay setup slightly to ensure layout is ready
-        const timeoutId = setTimeout(setupInitialScroll, 100);
+        const initTimeout = setTimeout(setupInitialScroll, 100);
 
         let animationFrameId: number;
-        let isPaused = false;
 
         const animate = () => {
-            if (container && !isPaused) {
-                container.scrollLeft += 0.45; // Smooth slow scroll
+            if (container && !isPausedRef.current && !isDraggingRef.current) {
+                container.scrollLeft += 0.45;
 
+                // Wrap around when reaching the end of the second set
                 const setWidth = container.scrollWidth / 3;
                 if (container.scrollLeft >= setWidth * 2) {
                     container.scrollLeft -= setWidth;
@@ -99,29 +150,37 @@ const ServicesMarquee = () => {
             animationFrameId = requestAnimationFrame(animate);
         };
 
-        const handleMouseEnter = () => { isPaused = true; };
-        const handleMouseLeave = () => { isPaused = false; };
+        // Track active dragging so auto-scroll doesn't fight user input
+        const handleMouseDown = () => { isDraggingRef.current = true; };
+        const handleMouseUp = () => { isDraggingRef.current = false; };
+        const handleTouchStart = () => { isDraggingRef.current = true; };
+        const handleTouchEnd = () => { isDraggingRef.current = false; };
 
-        // Detect manual scroll jumps
+        // Handle infinite wrap on manual scroll (arrows, drag, trackpad)
         const handleScroll = () => {
             const setWidth = container.scrollWidth / 3;
             if (container.scrollLeft >= setWidth * 2) {
                 container.scrollLeft -= setWidth;
-            } else if (container.scrollLeft <= 0) {
+            } else if (container.scrollLeft < 10) {
                 container.scrollLeft += setWidth;
             }
         };
 
         animationFrameId = requestAnimationFrame(animate);
-        container.addEventListener('mouseenter', handleMouseEnter);
-        container.addEventListener('mouseleave', handleMouseLeave);
+
+        container.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mouseup', handleMouseUp);
+        container.addEventListener('touchstart', handleTouchStart, { passive: true });
+        window.addEventListener('touchend', handleTouchEnd);
         container.addEventListener('scroll', handleScroll);
 
         return () => {
-            clearTimeout(timeoutId);
+            clearTimeout(initTimeout);
             cancelAnimationFrame(animationFrameId);
-            container.removeEventListener('mouseenter', handleMouseEnter);
-            container.removeEventListener('mouseleave', handleMouseLeave);
+            container.removeEventListener('mousedown', handleMouseDown);
+            window.removeEventListener('mouseup', handleMouseUp);
+            container.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchend', handleTouchEnd);
             container.removeEventListener('scroll', handleScroll);
         };
     }, []);
@@ -141,7 +200,7 @@ const ServicesMarquee = () => {
         <div className="mt-32 md:mt-44 mb-20 md:mb-28 overflow-hidden">
             <div className="studio-container">
                 <div className="px-4 mb-12 md:mb-20 text-center mx-auto">
-                    <h3 className="text-3xl md:text-5xl lg:text-6xl font-serif font-normal tracking-[-0.04em] leading-tight text-foreground max-w-5xl mx-auto">
+                    <h3 className="text-3xl md:text-5xl lg:text-6xl font-sans font-medium tracking-tight leading-[1.1] text-foreground max-w-5xl mx-auto">
                         {t('services.motionTitle')}
                     </h3>
                     <p className="text-base md:text-xl text-muted-foreground mt-6 max-w-3xl mx-auto leading-relaxed">
@@ -177,7 +236,7 @@ const ServicesMarquee = () => {
 
                 <div
                     ref={scrollContainerRef}
-                    className="relative z-10 flex overflow-x-auto scrollbar-hide snap-x snap-mandatory pt-10 md:pt-16 pb-20 no-scrollbar select-none"
+                    className="relative z-10 flex overflow-x-auto scrollbar-hide pt-10 md:pt-16 pb-20 no-scrollbar select-none cursor-grab active:cursor-grabbing"
                     style={{ WebkitOverflowScrolling: 'touch' }}
                 >
                     <div className="flex w-max gap-6 lg:gap-8 px-4 md:px-20">
@@ -186,7 +245,8 @@ const ServicesMarquee = () => {
                             return (
                                 <div
                                     key={`${card.titleKey}-${index}`}
-                                    className="relative shrink-0 w-[200px] sm:w-[220px] lg:w-[240px] flex flex-col items-center cursor-pointer snap-center"
+                                    data-carousel-card
+                                    className="relative shrink-0 w-[200px] sm:w-[220px] lg:w-[240px] flex flex-col items-center cursor-pointer"
                                     onMouseEnter={() => handleVideoHover(index)}
                                     onMouseLeave={() => handleVideoLeave(index)}
                                     onClick={() => handleCardClick(index)}
@@ -206,9 +266,8 @@ const ServicesMarquee = () => {
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-50" />
                                     </div>
 
-                                    {/* Title (always visible) + Description (on click) */}
                                     <div className="w-full mt-5 px-3 text-center">
-                                        <h3 className="text-lg md:text-xl font-serif text-foreground leading-tight tracking-[-0.02em] mb-2">
+                                        <h3 className="text-lg md:text-xl font-sans font-medium text-foreground leading-tight tracking-tight mb-2">
                                             {t(card.titleKey)}
                                         </h3>
 
