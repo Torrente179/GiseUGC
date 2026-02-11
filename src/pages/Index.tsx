@@ -5,6 +5,7 @@ import SocialProof from '@/components/SocialProof';
 import Services from '@/components/Services';
 import Portfolio from '@/components/Portfolio';
 import Testimonials from '@/components/Testimonials';
+import ServicesMarquee from '@/components/ServicesMarquee';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 
@@ -17,6 +18,7 @@ const Index = () => {
       <Services />
       <Portfolio />
       <Testimonials />
+      <ServicesMarquee />
       <Contact />
       <Footer />
     </div>
