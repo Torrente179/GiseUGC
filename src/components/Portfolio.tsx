@@ -150,54 +150,27 @@ const Portfolio = () => {
       labelKey: 'portfolio.items.item2',
       videoSrc: 'https://assets.mixkit.co/videos/50406/50406-720.mp4',
       poster: 'https://assets.mixkit.co/videos/50406/50406-thumb-720-0.jpg',
-      /* Top-left */
-      cornerClass: 'top-[6%] left-[7%] w-[30%] -rotate-[5deg] z-20',
-      hoverClass: 'top-[10%] left-[14%] w-[29%] -rotate-[1deg] z-30',
+      /* Left card */
+      cornerClass: 'top-[20%] left-[10%] w-[34%] -rotate-[7deg] z-30',
+      hoverClass: 'top-[18%] left-[16%] w-[33%] -rotate-[2deg] z-40',
     },
     {
       id: 2,
       labelKey: 'portfolio.items.item6',
       videoSrc: 'https://assets.mixkit.co/videos/50426/50426-720.mp4',
       poster: 'https://assets.mixkit.co/videos/50426/50426-thumb-720-0.jpg',
-      /* Top-center */
-      cornerClass: 'top-[1%] left-[36%] w-[28%] rotate-[2deg] z-30',
-      hoverClass: 'top-[4%] left-[36%] w-[28%] rotate-[0deg] z-40',
+      /* Center card */
+      cornerClass: 'top-[8%] left-[34%] w-[32%] rotate-0 z-50',
+      hoverClass: 'top-[9%] left-[34%] w-[32%] rotate-0 z-50 scale-[1.03]',
     },
     {
       id: 3,
       labelKey: 'portfolio.items.item3',
-      videoSrc: 'https://assets.mixkit.co/videos/50426/50426-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/50426/50426-thumb-720-0.jpg',
-      /* Top-right */
-      cornerClass: 'top-[7%] right-[7%] w-[30%] rotate-[5deg] z-20',
-      hoverClass: 'top-[10%] right-[14%] w-[29%] rotate-[1deg] z-30',
-    },
-    {
-      id: 4,
-      labelKey: 'portfolio.items.item8',
       videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
       poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
-      /* Center */
-      cornerClass: 'top-[30%] left-[37%] w-[27%] rotate-[0deg] scale-[0.9] z-40',
-      hoverClass: 'top-[28%] left-[36%] w-[30%] rotate-[0deg] z-50 scale-100',
-    },
-    {
-      id: 5,
-      labelKey: 'portfolio.items.item4',
-      videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
-      /* Bottom-left */
-      cornerClass: 'bottom-[6%] left-[8%] w-[30%] -rotate-[4deg] z-20',
-      hoverClass: 'bottom-[10%] left-[15%] w-[29%] -rotate-[1deg] z-30',
-    },
-    {
-      id: 6,
-      labelKey: 'portfolio.items.item5',
-      videoSrc: 'https://assets.mixkit.co/videos/51168/51168-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/51168/51168-thumb-720-0.jpg',
-      /* Bottom-right */
-      cornerClass: 'bottom-[7%] right-[8%] w-[30%] rotate-[4deg] z-20',
-      hoverClass: 'bottom-[10%] right-[15%] w-[29%] rotate-[1deg] z-30',
+      /* Right card */
+      cornerClass: 'top-[20%] right-[10%] w-[34%] rotate-[7deg] z-30',
+      hoverClass: 'top-[18%] right-[16%] w-[33%] rotate-[2deg] z-40',
     },
   ];
 
@@ -332,7 +305,7 @@ const Portfolio = () => {
 
           {/* Desktop: Absolute-positioned collage with hover interaction */}
           <div
-            className="hidden lg:block relative h-[500px] xl:h-[540px] w-full max-w-[720px] mx-auto rounded-[1.75rem] border border-border/60 overflow-hidden cursor-pointer shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.4)]"
+            className="hidden lg:block relative h-[430px] xl:h-[470px] w-full max-w-[720px] mx-auto rounded-[1.75rem] border border-border/60 overflow-hidden cursor-pointer shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.4)]"
             role="presentation"
             onMouseEnter={handleCollageMouseEnter}
             onMouseLeave={handleCollageMouseLeave}
@@ -380,7 +353,7 @@ const Portfolio = () => {
             ))}
           </div>
 
-          {/* Mobile: Grid layout so videos don't overlap */}
+          {/* Mobile: Collage layout with always-on looping videos */}
           <div
             className="lg:hidden relative rounded-[1.25rem] border border-border/60 p-3.5 overflow-hidden shadow-lg max-w-[440px] mx-auto"
             role="presentation"
@@ -394,22 +367,31 @@ const Portfolio = () => {
             />
             <div className="absolute inset-0 bg-card/15" />
 
-            <div className="relative z-10 grid grid-cols-3 gap-2.5">
-              {collageClips.map((clip) => (
+            <div className="relative z-10 h-[300px] sm:h-[340px]">
+              {collageClips.map((clip, index) => (
                 <div
                   key={clip.id}
-                  className="rounded-xl border-2 border-white/80 shadow-md overflow-hidden"
+                  className={`absolute rounded-xl border-2 border-white/85 shadow-md overflow-hidden ${
+                    index === 0
+                      ? 'top-[20%] left-[2%] w-[36%] -rotate-[8deg] z-20'
+                      : index === 1
+                        ? 'top-[4%] left-[33%] w-[34%] rotate-0 z-40'
+                        : 'top-[20%] right-[2%] w-[36%] rotate-[8deg] z-20'
+                    }`}
                   style={{ aspectRatio: '9/14' }}
                 >
                   <video
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover pointer-events-none"
                     src={clip.videoSrc}
                     poster={clip.poster}
                     muted
                     loop
                     playsInline
                     autoPlay
-                    preload="metadata"
+                    preload="auto"
+                    onLoadedData={(event) => {
+                      event.currentTarget.play().catch(() => undefined);
+                    }}
                     aria-label={t(clip.labelKey)}
                   />
                 </div>
