@@ -33,7 +33,7 @@ const FloatingContactDock = () => {
         <span className="inline-flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-300">
           <MessageCircle className="h-[18px] w-[18px] md:h-5 md:w-5" />
         </span>
-        <span className="hidden section-label text-sm text-foreground/80 group-hover:text-foreground md:inline">
+        <span className="hidden text-sm font-medium text-foreground/80 group-hover:text-foreground md:inline">
           {t('floatingContact.whatsappLabel')}
         </span>
       </a>
@@ -48,7 +48,7 @@ const FloatingContactDock = () => {
         <span className="inline-flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-300">
           <Send className="h-[18px] w-[18px] md:h-5 md:w-5 -rotate-12" />
         </span>
-        <span className="hidden section-label text-sm text-foreground/80 group-hover:text-foreground md:inline">
+        <span className="hidden text-sm font-medium text-foreground/80 group-hover:text-foreground md:inline">
           {t('floatingContact.telegramLabel')}
         </span>
       </a>
@@ -63,7 +63,7 @@ const FloatingContactDock = () => {
         <span className="inline-flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-green-500/15 text-green-600 dark:text-green-300">
           <FiverrIcon className="h-[18px] w-[18px] md:h-5 md:w-5" />
         </span>
-        <span className="hidden section-label text-sm text-foreground/80 group-hover:text-foreground md:inline">
+        <span className="hidden text-sm font-medium text-foreground/80 group-hover:text-foreground md:inline">
           {t('floatingContact.fiverrLabel')}
         </span>
       </a>
