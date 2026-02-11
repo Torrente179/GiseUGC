@@ -69,7 +69,7 @@ const Hero = () => {
               <div className="hero-frame-glow absolute -inset-6 pointer-events-none" />
               <div className="hero-image-shell relative overflow-hidden p-3.5 bg-card/95">
                 <img
-                  src="/uploads/1bceae6e-5154-4d2e-b3fb-2957b86796a7.png"
+                  src="/uploads/E3AF5948-F6CB-4DEE-87AE-9383B816D3EC (1).jpg"
                   alt={t('hero.imageAlt')}
                   className="w-full aspect-[4/5] object-cover rounded-[1.5rem]"
                   fetchPriority="high"

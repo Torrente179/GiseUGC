@@ -114,6 +114,7 @@
     background-image: none;
     background-color: hsl(var(--background));
     min-height: 100vh;
+    overflow-x: hidden;
     /* Removed explicit color to rely on text-foreground for better contrast */
   }
 
