@@ -198,14 +198,24 @@ const Portfolio = () => {
   };
 
   return (
-    <section id="portfolio" className="studio-section bg-secondary/14">
+    <section id="portfolio" className="studio-section bg-secondary/5 pt-32 pb-24">
       <div className="studio-container">
-        <div className="studio-header">
-          <div>
-            <p className="section-label text-muted-foreground mb-3">{t('portfolio.sectionSubtitle')}</p>
-            <h2 className="studio-title">{t('portfolio.sectionTitle')}</h2>
+        <div className="studio-header mb-16 md:mb-24 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
+          <div className="text-center md:text-left">
+            <div className="inline-flex items-center gap-2 mb-6">
+              <span className="h-px w-8 bg-accent/40" />
+              <p className="section-label text-accent/80 tracking-[0.3em] font-medium">{t('portfolio.sectionSubtitle')}</p>
+            </div>
+            <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-[-0.03em] leading-[0.95]">
+              {t('portfolio.sectionTitle')}
+              <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">{t('portfolio.sectionTitleAccent')}</span>
+            </h2>
           </div>
-          <p className="studio-subtitle lg:justify-self-end">{t('portfolio.reelDescription')}</p>
+          <div className="lg:max-w-xs text-center lg:text-right">
+            <p className="text-foreground/40 text-lg md:text-xl font-light leading-relaxed italic">
+              {t('portfolio.reelDescription')}
+            </p>
+          </div>
         </div>
 
         <div className="studio-rule mb-10 md:mb-12" />

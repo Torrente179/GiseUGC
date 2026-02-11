@@ -64,8 +64,9 @@
     }
   },
   "portfolio": {
-    "sectionSubtitle": "Mi Trabajo",
-    "sectionTitle": "Portafolio Destacado",
+    "sectionSubtitle": "Showcase",
+    "sectionTitle": "Historias que ",
+    "sectionTitleAccent": "Convierten",
     "reelSubtitle": "Reels de performance",
     "reelTitle": "UGC short-form destacado para convertir",
     "reelDescription": "Cada reel esta pensado para captar atencion rapido, comunicar valor con claridad y elevar la intencion de compra.",
