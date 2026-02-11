@@ -72,7 +72,7 @@ const Services = () => {
               <h3 className="text-lg md:text-2xl font-sans font-medium tracking-tight text-foreground mb-3 md:mb-4 leading-tight">
                 {t(service.titleKey)}
               </h3>
-              <p className="text-muted-foreground leading-relaxed text-sm md:text-base line-clamp-3 md:line-clamp-none">
+              <p className="strategic-body text-muted-foreground text-sm md:text-base line-clamp-3 md:line-clamp-none">
                 {t(service.descriptionKey)}
               </p>
             </article>
@@ -85,4 +85,3 @@ const Services = () => {
 
 
 export default Services;
-

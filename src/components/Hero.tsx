@@ -24,7 +24,7 @@ const Hero = () => {
               Gisela <span className="text-accent luxury-accent">Saldarriaga</span>
             </h1>
             <p
-              className="text-[11px] md:text-xs uppercase tracking-[0.26em] text-foreground/55 mb-8 animate-fade-in"
+              className="section-label text-foreground/55 mb-8 animate-fade-in"
               style={{ animationDelay: '0.1s' }}
             >
               {t('hero.signature')}
@@ -33,7 +33,7 @@ const Hero = () => {
             <div className="w-44 h-px signature-line mb-8" />
 
             <p
-              className="text-foreground/80 text-lg md:text-xl mb-10 max-w-xl leading-relaxed animate-fade-in"
+              className="strategic-body text-foreground/80 text-lg md:text-xl mb-10 max-w-xl animate-fade-in"
               style={{ animationDelay: '0.25s' }}
             >
               {t('hero.description')}
@@ -94,13 +94,13 @@ const Hero = () => {
         <div className="mt-24 mb-16 pt-16 border-t border-border/40 animate-fade-in" style={{ animationDelay: '0.8s' }}>
           <div className="grid lg:grid-cols-[1fr_2fr] gap-12 items-start">
             <div className="space-y-6">
-              <span className="section-label tracking-[0.3em]">{t('hero.introduction.eyebrow')}</span>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-[1.1] tracking-tight">
+              <span className="section-label">{t('hero.introduction.eyebrow')}</span>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-[0.95] tracking-tight-serif">
                 {t('hero.introduction.title')}
               </h2>
             </div>
             <div className="lg:pt-20">
-              <p className="text-foreground/60 text-lg md:text-xl leading-relaxed max-w-2xl font-light">
+              <p className="strategic-body text-foreground/60 text-lg md:text-xl max-w-2xl">
                 {t('hero.introduction.description')}
               </p>
             </div>

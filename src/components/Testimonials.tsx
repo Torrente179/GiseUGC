@@ -140,7 +140,7 @@ const Testimonials = () => {
                       </div>
                     </div>
 
-                    <blockquote className="relative text-lg md:text-[1.45rem] font-sans font-normal italic text-foreground/90 leading-relaxed tracking-tight">
+                    <blockquote className="relative text-lg md:text-[1.45rem] font-sans font-light italic text-foreground/90 leading-[1.8]">
                       <span className="absolute -top-5 md:-top-7 -left-2 text-5xl md:text-6xl text-primary/20 not-italic leading-none">“</span>
                       <span className="relative z-10">{t(testimonial.textKey)}</span>
                     </blockquote>

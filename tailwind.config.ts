@@ -1,5 +1,6 @@
 
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
 	darkMode: ["class"],
@@ -21,8 +22,12 @@ export default {
 		extend: {
 			fontFamily: {
 				serif: ['"Playfair Display"', 'serif'],
-				sans: ['"Outfit"', 'sans-serif'],
+				sans: ['"Inter"', 'sans-serif'],
 				script: ['"Alex Brush"', 'cursive'],
+			},
+			letterSpacing: {
+				'tight-serif': '-0.05em',
+				prestige: '0.5em',
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -133,5 +138,5 @@ export default {
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [tailwindcssAnimate],
 } satisfies Config;

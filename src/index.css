@@ -94,10 +94,10 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 300;
-    letter-spacing: -0.01em;
-    line-height: 1.6;
+    letter-spacing: 0;
+    line-height: 1.8;
     background-image: none;
     background-color: hsl(var(--background));
     min-height: 100vh;
@@ -106,39 +106,53 @@
 
   .brand-logo {
     font-family: 'Playfair Display', serif;
-    font-weight: 500;
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    letter-spacing: -0.05em;
     text-transform: none;
     color: hsl(var(--primary));
   }
 
   h1,
+  h2,
   .hero-title {
     font-family: 'Playfair Display', serif;
-    font-weight: 400;
-    letter-spacing: -0.03em;
-    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -0.05em;
     color: hsl(var(--foreground));
+  }
+
+  h1,
+  .hero-title {
+    line-height: 0.9;
+  }
+
+  h2 {
+    line-height: 0.95;
   }
 
   .section-label {
     font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 11px;
+    font-weight: 700;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.5em;
+    line-height: 1;
     color: hsl(var(--accent));
   }
 
   .luxury-accent {
     font-family: 'Alex Brush', cursive;
     font-weight: 400;
+    font-size: 1.4em;
     line-height: 1;
     letter-spacing: 0.01em;
     color: hsl(var(--accent));
   }
 
   p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
     color: hsla(0, 0%, 10%, 0.4);
     /* Charcoal at 40% for longer paragraphs */
   }
@@ -166,6 +180,18 @@
 
   .font-cormorant {
     font-family: 'Playfair Display', serif;
+  }
+
+  .editorial-label {
+    @apply font-sans font-bold uppercase text-[10px] tracking-prestige leading-none;
+  }
+
+  .power-display {
+    @apply font-serif font-bold tracking-tight-serif;
+  }
+
+  .strategic-body {
+    @apply font-sans font-light leading-[1.8];
   }
 
   .text-balance {
@@ -215,11 +241,11 @@
   }
 
   .studio-title {
-    @apply text-3xl md:text-4xl lg:text-[3.2rem] font-sans font-medium tracking-tight leading-[1.1] text-foreground;
+    @apply text-3xl md:text-4xl lg:text-[3.2rem] font-serif font-bold tracking-tight-serif leading-[0.95] text-foreground;
   }
 
   .studio-subtitle {
-    @apply text-sm md:text-base text-muted-foreground leading-relaxed max-w-xl;
+    @apply text-sm md:text-base font-light text-muted-foreground leading-[1.8] max-w-xl;
   }
 
   .studio-rule {
@@ -284,7 +310,7 @@
   }
 
   .hero-chip {
-    @apply inline-flex items-center gap-2.5 rounded-full border border-border/50 bg-card/45 px-5 py-2.5 text-[11px] sm:text-[12.5px] font-medium tracking-[0.01em] text-muted-foreground/90 backdrop-blur-md transition-all duration-300 hover:border-accent/30 hover:bg-card/80 hover:text-foreground hover:shadow-[0_12px_24px_-12px_hsl(var(--foreground)/0.15)] cursor-default;
+    @apply inline-flex items-center gap-2.5 rounded-full border border-border/50 bg-card/45 px-5 py-2.5 text-[10px] font-bold uppercase tracking-prestige text-muted-foreground/90 backdrop-blur-md transition-all duration-300 hover:border-accent/30 hover:bg-card/80 hover:text-foreground hover:shadow-[0_12px_24px_-12px_hsl(var(--foreground)/0.15)] cursor-default;
   }
 
   .hero-image-shell {
@@ -313,15 +339,15 @@
   }
 
   .hero-floating-label {
-    @apply text-[10px] uppercase tracking-[0.16em] text-muted-foreground;
+    @apply font-sans text-[10px] font-bold uppercase tracking-prestige text-muted-foreground;
   }
 
   .hero-floating-value {
-    @apply mt-2 text-2xl font-cormorant leading-none text-foreground;
+    @apply mt-2 text-2xl font-serif font-bold tracking-tight-serif leading-[0.9] text-foreground;
   }
 
   .hero-floating-caption {
-    @apply mt-2 text-xs text-muted-foreground leading-relaxed;
+    @apply mt-2 text-xs font-light text-muted-foreground leading-[1.8];
   }
 
   .hero-corner-tag {
@@ -333,9 +359,10 @@
     border: 1px solid hsl(var(--border));
     background: hsl(var(--card) / 0.84);
     padding: 0.42rem 0.92rem;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
+    font-size: 10px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5em;
     text-transform: uppercase;
     color: hsl(var(--foreground) / 0.72);
     backdrop-filter: blur(8px);
@@ -374,11 +401,11 @@
   }
 
   .btn-primary-nordic {
-    @apply inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold tracking-[0.04em] transition-all duration-300 hover:bg-accent hover:-translate-y-[1px] hover:shadow-[0_14px_30px_-15px_hsla(var(--accent)/0.5)];
+    @apply inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground font-sans text-[10px] font-bold uppercase tracking-prestige transition-all duration-300 hover:bg-accent hover:-translate-y-[1px] hover:shadow-[0_14px_30px_-15px_hsla(var(--accent)/0.5)];
   }
 
   .btn-secondary-nordic {
-    @apply inline-flex items-center justify-center rounded-full border border-muted bg-transparent text-primary/60 font-medium transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:border-primary;
+    @apply inline-flex items-center justify-center rounded-full border border-muted bg-transparent text-primary/60 font-sans text-[10px] font-bold uppercase tracking-prestige transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:border-primary;
   }
 
   .grain-overlay {

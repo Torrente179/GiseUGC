@@ -182,15 +182,15 @@ const Portfolio = () => {
           <div className="text-center md:text-left">
             <div className="inline-flex items-center gap-2 mb-6">
               <span className="h-px w-8 bg-accent/40" />
-              <p className="section-label text-accent/80 tracking-[0.3em] font-medium">{t('portfolio.sectionSubtitle')}</p>
+              <p className="section-label text-accent/80">{t('portfolio.sectionSubtitle')}</p>
             </div>
-            <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-[-0.03em] leading-[0.95]">
+            <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95]">
               {t('portfolio.sectionTitle')}
               <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">{t('portfolio.sectionTitleAccent')}</span>
             </h2>
           </div>
           <div className="lg:max-w-xs text-center lg:text-right">
-            <p className="text-foreground/40 text-lg md:text-xl font-light leading-relaxed italic">
+            <p className="strategic-body text-foreground/40 text-lg md:text-xl italic">
               {t('portfolio.reelDescription')}
             </p>
           </div>
@@ -200,7 +200,7 @@ const Portfolio = () => {
 
         <div className="mb-12 md:mb-14">
           <div className="mb-5 md:mb-6">
-            <p className="section-label text-xs text-muted-foreground mb-2">{t('portfolio.reelSubtitle')}</p>
+            <p className="section-label text-muted-foreground mb-2">{t('portfolio.reelSubtitle')}</p>
             <h3 className="text-xl md:text-[1.9rem] font-sans font-medium tracking-tight text-foreground leading-tight">
               {t('portfolio.reelTitle')}
             </h3>
@@ -258,7 +258,7 @@ const Portfolio = () => {
 
                     <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-white">
                       <div>
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-white/75 mb-1">
+                        <p className="section-label text-white/75 mb-1">
                           {t(`portfolio.categories.${clip.category}`)}
                         </p>
                         <p className="text-sm font-light leading-tight tracking-tight">{t(clip.titleKey)}</p>
@@ -277,11 +277,11 @@ const Portfolio = () => {
 
         <div className="grid lg:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)] gap-8 lg:gap-10 items-center mb-14 md:mb-16">
           <div>
-            <p className="section-label text-sm text-muted-foreground mb-4">{t('portfolio.collageEyebrow')}</p>
+            <p className="section-label text-muted-foreground mb-4">{t('portfolio.collageEyebrow')}</p>
             <h3 className="text-3xl md:text-[2.4rem] font-sans font-medium tracking-tight leading-tight mb-5">
               {t('portfolio.collageTitle')}
             </h3>
-            <p className="text-muted-foreground leading-relaxed mb-6">{t('portfolio.collageDescription')}</p>
+            <p className="strategic-body text-muted-foreground mb-6">{t('portfolio.collageDescription')}</p>
 
             <ul className="space-y-3 text-foreground/85 mb-8">
               <li className="flex gap-3">
@@ -418,7 +418,7 @@ const Portfolio = () => {
               <X className="h-4 w-4 text-foreground" />
             </button>
 
-            <p className="section-label text-xs text-muted-foreground mb-1">{t('portfolio.reelPreviewLabel')}</p>
+            <p className="section-label text-muted-foreground mb-1">{t('portfolio.reelPreviewLabel')}</p>
             <h4 className="text-lg font-serif font-normal tracking-[-0.03em] pr-10 mb-3">{t(activeReelPreview.titleKey)}</h4>
 
             <div className="rounded-xl overflow-hidden bg-black">

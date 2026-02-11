@@ -94,7 +94,7 @@ const Contact = () => {
               <h3 className="text-[2rem] md:text-[2.2rem] font-sans font-medium tracking-tight mb-5 text-foreground leading-tight">
                 {t('contact.heading')}
               </h3>
-              <p className="text-muted-foreground leading-relaxed mb-7">{t('contact.description')}</p>
+              <p className="strategic-body text-muted-foreground mb-7">{t('contact.description')}</p>
 
               <div className="space-y-4">
                 <div className="rounded-xl border border-border/70 bg-background/55 px-4 py-3.5 flex items-center gap-3.5">

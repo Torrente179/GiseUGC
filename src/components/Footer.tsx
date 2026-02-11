@@ -14,7 +14,7 @@ const Footer = () => {
               {t('footer.brandName')}
               <span className="text-accent text-4xl">.</span>
             </h3>
-            <p className="text-white/60 leading-relaxed max-w-md">{t('footer.description')}</p>
+            <p className="strategic-body text-white/60 max-w-md">{t('footer.description')}</p>
 
             <div className="flex gap-3 mt-8">
               <a href="#" className="h-10 w-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white/70 hover:bg-accent hover:text-white transition-all duration-300">
@@ -34,7 +34,7 @@ const Footer = () => {
 
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
             <div>
-              <h4 className="section-label text-accent font-semibold mb-6">{t('footer.servicesTitle')}</h4>
+              <h4 className="section-label text-accent mb-6">{t('footer.servicesTitle')}</h4>
               <ul className="space-y-3.5 text-sm">
                 <li><a href="#services" className="text-white/50 hover:text-white transition-colors">{t('services.service1.title')}</a></li>
                 <li><a href="#services" className="text-white/50 hover:text-white transition-colors">{t('services.service2.title')}</a></li>
@@ -44,7 +44,7 @@ const Footer = () => {
             </div>
 
             <div>
-              <h4 className="section-label text-accent font-semibold mb-6">{t('footer.quickLinksTitle')}</h4>
+              <h4 className="section-label text-accent mb-6">{t('footer.quickLinksTitle')}</h4>
               <ul className="space-y-3.5 text-sm">
                 <li><a href="#home" className="text-white/50 hover:text-white transition-colors">{t('navbar.home')}</a></li>
                 <li><a href="#services" className="text-white/50 hover:text-white transition-colors">{t('navbar.services')}</a></li>
@@ -55,7 +55,7 @@ const Footer = () => {
             </div>
 
             <div>
-              <h4 className="section-label text-accent font-semibold mb-6">{t('footer.contactTitle')}</h4>
+              <h4 className="section-label text-accent mb-6">{t('footer.contactTitle')}</h4>
               <ul className="space-y-3 text-sm">
                 <li className="text-white/50">{t('contact.emailLabel')}: <span className="text-white">{t('contact.emailValue')}</span></li>
                 <li className="text-white/50">{t('contact.fiverrLabel')}: <span className="text-white">{t('contact.fiverrValue')}</span></li>
@@ -64,7 +64,7 @@ const Footer = () => {
                     href="https://www.fiverr.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-primary-nordic mt-5 px-6 py-3 hover-grow inline-flex text-xs uppercase tracking-widest"
+                    className="btn-primary-nordic mt-5 px-6 py-3 hover-grow inline-flex"
                   >
                     {t('footer.hireOnFiverrButton')}
                   </a>

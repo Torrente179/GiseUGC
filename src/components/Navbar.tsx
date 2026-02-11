@@ -37,7 +37,7 @@ const Navbar = () => {
   };
 
   const languageButtonClass = (language: string) =>
-    `rounded-full px-2.5 py-1 text-xs font-semibold tracking-[0.08em] transition-colors duration-300 ${
+    `rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.5em] transition-colors duration-300 ${
       i18n.resolvedLanguage === language
         ? 'bg-primary/15 text-primary'
         : 'text-foreground/70 hover:text-primary'
@@ -73,7 +73,7 @@ const Navbar = () => {
               >
                 <div className="flex items-center gap-4">
                   <span className="text-xs text-muted-foreground font-mono">{link.number}</span>
-                  <span className="text-3xl font-sans font-semibold tracking-[0.04em] text-foreground group-hover:text-primary transition-colors">
+                  <span className="section-label text-foreground group-hover:text-primary transition-colors">
                     {t(link.key)}
                   </span>
                 </div>
@@ -91,7 +91,7 @@ const Navbar = () => {
             <a
               href="#contact"
               onClick={closeMobileMenu}
-              className="btn-primary-nordic w-full py-4 text-sm uppercase tracking-[0.14em]"
+              className="btn-primary-nordic w-full py-4"
             >
               {t('navbar.hireMe')}
             </a>
@@ -99,7 +99,7 @@ const Navbar = () => {
               <span className="brand-logo text-2xl text-primary">
                 Gisela<span className="text-foreground font-normal">.UGC</span>
               </span>
-              <p className="text-xs text-muted-foreground mt-1 tracking-[0.08em] uppercase">Nordic UGC Studio</p>
+              <p className="section-label text-muted-foreground mt-2">Nordic UGC Studio</p>
             </div>
           </div>
         </div>
@@ -127,7 +127,7 @@ const Navbar = () => {
                 <a
                   key={link.key}
                   href={link.href}
-                  className="text-sm font-medium tracking-[0.06em] text-foreground/80 transition-colors hover:text-primary"
+                  className="section-label text-foreground/80 transition-colors hover:text-primary"
                 >
                   {t(link.key)}
                 </a>
@@ -152,7 +152,7 @@ const Navbar = () => {
                 </button>
               </div>
               <ThemeToggle />
-              <a href="#contact" className="btn-primary-nordic px-5 py-2.5 text-xs uppercase tracking-[0.14em]">
+              <a href="#contact" className="btn-primary-nordic px-5 py-2.5">
                 {t('navbar.hireMe')}
               </a>
             </div>

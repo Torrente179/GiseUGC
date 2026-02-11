@@ -225,10 +225,10 @@ const ServicesMarquee = () => {
         <div className="mt-16 md:mt-20 mb-12 md:mb-16 overflow-hidden">
             <div className="studio-container">
                 <div className="px-4 mb-12 md:mb-20 text-center mx-auto">
-                    <h3 className="text-3xl md:text-5xl lg:text-5xl font-sans font-medium tracking-tight leading-[1.1] text-foreground max-w-5xl mx-auto">
+                    <h3 className="text-3xl md:text-5xl lg:text-5xl font-serif font-bold tracking-tight-serif leading-[0.95] text-foreground max-w-5xl mx-auto">
                         El toolkit completo para anunciantes <span className="luxury-accent text-accent inline-block transform rotate-[-2deg] ml-2">modernos</span>
                     </h3>
-                    <p className="text-base md:text-xl text-muted-foreground mt-6 max-w-3xl mx-auto leading-relaxed">
+                    <p className="strategic-body text-base md:text-xl text-muted-foreground mt-6 max-w-3xl mx-auto">
                         {t('services.motionSubtitle')}
                     </p>
                 </div>
@@ -261,7 +261,7 @@ const ServicesMarquee = () => {
 
                 <div
                     ref={containerRef}
-                    className="relative z-10 overflow-hidden pt-10 md:pt-16 pb-20 select-none cursor-grab active:cursor-grabbing"
+                    className="relative z-10 overflow-hidden pt-10 md:pt-16 pb-10 select-none cursor-grab active:cursor-grabbing"
                     onDragStart={(e) => e.preventDefault()}
                 >
                     <div
@@ -296,12 +296,12 @@ const ServicesMarquee = () => {
                                     </div>
 
                                     <div className="w-full mt-6 px-3 text-center">
-                                        <h3 className="text-[10px] md:text-[11px] uppercase font-light text-foreground/80 leading-tight tracking-[0.25em] mb-2">
+                                        <h3 className="section-label text-foreground/80 mb-2">
                                             {t(card.titleKey)}
                                         </h3>
 
                                         <div className={`overflow-hidden transition-all duration-500 ease-out ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
-                                            <p className="text-sm leading-relaxed text-muted-foreground pt-1">
+                                            <p className="strategic-body text-sm text-muted-foreground pt-1">
                                                 {t(card.descriptionKey)}
                                             </p>
                                         </div>
