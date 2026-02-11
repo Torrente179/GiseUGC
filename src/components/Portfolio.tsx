@@ -1,8 +1,6 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, ArrowRight, Play, VolumeX, X } from 'lucide-react';
-
-
+import { Play, VolumeX, X } from 'lucide-react';
 
 interface ReelClip {
   id: number;
@@ -26,7 +24,6 @@ const Portfolio = () => {
   const [collagePlaying, setCollagePlaying] = useState(false);
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
 
-  const reelTrackRef = useRef<HTMLDivElement>(null);
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const reelClips: ReelClip[] = [
@@ -34,57 +31,57 @@ const Portfolio = () => {
       id: 1,
       titleKey: 'portfolio.items.item1',
       category: 'fashion',
-      videoSrc: 'https://cdn.pixabay.com/video/2021/08/30/86911-594991432_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2021/08/30/86911-594991432_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/42308/42308-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/42308/42308-thumb-720-0.jpg',
     },
     {
       id: 2,
       titleKey: 'portfolio.items.item2',
       category: 'beauty',
-      videoSrc: 'https://cdn.pixabay.com/video/2024/02/09/199958-911694865_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/02/09/199958-911694865_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/50423/50423-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/50423/50423-thumb-720-0.jpg',
     },
     {
       id: 3,
       titleKey: 'portfolio.items.item3',
       category: 'tech',
-      videoSrc: 'https://cdn.pixabay.com/video/2022/02/12/107492-678970856_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2022/02/12/107492-678970856_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/39774/39774-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/39774/39774-thumb-720-0.jpg',
     },
     {
       id: 4,
       titleKey: 'portfolio.items.item4',
       category: 'lifestyle',
-      videoSrc: 'https://cdn.pixabay.com/video/2024/05/25/213616_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/05/25/213616_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/34487/34487-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/34487/34487-thumb-720-0.jpg',
     },
     {
       id: 5,
       titleKey: 'portfolio.items.item5',
       category: 'beauty',
-      videoSrc: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
     },
     {
       id: 6,
       titleKey: 'portfolio.items.item6',
       category: 'fashion',
-      videoSrc: 'https://cdn.pixabay.com/video/2021/08/04/83869-584870610_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2021/08/04/83869-584870610_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/42293/42293-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/42293/42293-thumb-720-0.jpg',
     },
     {
       id: 7,
       titleKey: 'portfolio.items.item7',
       category: 'tech',
-      videoSrc: 'https://cdn.pixabay.com/video/2022/10/14/134796-760690958_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2022/10/14/134796-760690958_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/47002/47002-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/47002/47002-thumb-720-2.jpg',
     },
     {
       id: 8,
       titleKey: 'portfolio.items.item8',
       category: 'lifestyle',
-      videoSrc: 'https://cdn.pixabay.com/video/2024/06/09/216038_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/06/09/216038_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/49647/49647-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/49647/49647-thumb-720-0.jpg',
     },
   ];
 
@@ -92,50 +89,39 @@ const Portfolio = () => {
     {
       id: 1,
       labelKey: 'portfolio.items.item2',
-      videoSrc: 'https://cdn.pixabay.com/video/2023/06/20/168085-838533639_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2023/06/20/168085-838533639_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/50406/50406-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/50406/50406-thumb-720-0.jpg',
       className: 'top-8 left-10 w-[42%] -rotate-[3deg]',
     },
     {
       id: 2,
       labelKey: 'portfolio.items.item6',
-      videoSrc: 'https://cdn.pixabay.com/video/2024/05/23/213387_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/05/23/213387_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/50426/50426-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/50426/50426-thumb-720-0.jpg',
       className: 'top-3 right-12 w-[36%] rotate-[1deg]',
     },
     {
       id: 3,
       labelKey: 'portfolio.items.item3',
-      videoSrc: 'https://cdn.pixabay.com/video/2024/03/26/205691-927672681_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/03/26/205691-927672681_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
       className: 'top-[33%] left-[34%] w-[34%] z-20',
     },
     {
       id: 4,
       labelKey: 'portfolio.items.item8',
-      videoSrc: 'https://cdn.pixabay.com/video/2023/11/28/191126-889267474_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2023/11/28/191126-889267474_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
       className: 'bottom-8 right-14 w-[32%] rotate-[2deg]',
     },
     {
       id: 5,
       labelKey: 'portfolio.items.item4',
-      videoSrc: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.mp4',
-      poster: 'https://cdn.pixabay.com/video/2024/05/30/214582_tiny.jpg',
+      videoSrc: 'https://assets.mixkit.co/videos/51168/51168-720.mp4',
+      poster: 'https://assets.mixkit.co/videos/51168/51168-thumb-720-0.jpg',
       className: 'bottom-6 left-[10%] w-[30%] -rotate-[1deg]',
     },
   ];
-
-
-
-  const scrollReel = (direction: 'prev' | 'next') => {
-    if (!reelTrackRef.current) return;
-
-    reelTrackRef.current.scrollBy({
-      left: direction === 'next' ? 520 : -520,
-      behavior: 'smooth',
-    });
-  };
 
   const setCollagePlayback = async (shouldPlay: boolean) => {
     setCollagePlaying(shouldPlay);
@@ -169,14 +155,12 @@ const Portfolio = () => {
   const getCollageMotionClass = (clipId: number) => {
     if (!collagePlaying) return '';
 
-    if (clipId === 4) return '-translate-x-6 -translate-y-4 scale-[1.03]';
-    if (clipId === 5) return 'translate-x-6 -translate-y-4 scale-[1.03]';
-    if (clipId === 3) return '-translate-y-1 scale-[1.02]';
+    if (clipId === 4) return '-translate-x-11 -translate-y-6 scale-[1.05]';
+    if (clipId === 5) return 'translate-x-11 -translate-y-6 scale-[1.05]';
+    if (clipId === 3) return '-translate-y-2 scale-[1.03]';
 
-    return 'scale-[1.015]';
+    return 'scale-[1.02]';
   };
-
-
 
   return (
     <section id="portfolio" className="studio-section bg-secondary/14">
@@ -191,79 +175,58 @@ const Portfolio = () => {
 
         <div className="studio-rule mb-10 md:mb-12" />
 
-        <div className="studio-panel p-4 md:p-6 mb-12 md:mb-14">
-          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between mb-5 md:mb-6">
-            <div>
-              <p className="section-label text-xs text-muted-foreground mb-2">{t('portfolio.reelSubtitle')}</p>
-              <h3 className="text-xl md:text-[1.9rem] font-serif font-normal tracking-[-0.03em] text-foreground leading-tight">
-                {t('portfolio.reelTitle')}
-              </h3>
-            </div>
-
-            <div className="hidden sm:flex items-center gap-2">
-              <button
-                type="button"
-                aria-label={t('portfolio.reelAriaPrev')}
-                className="h-10 w-10 rounded-full border border-primary/20 bg-card/90 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-                onClick={() => scrollReel('prev')}
-              >
-                <ArrowLeft className="h-5 w-5 mx-auto" />
-              </button>
-              <button
-                type="button"
-                aria-label={t('portfolio.reelAriaNext')}
-                className="h-10 w-10 rounded-full border border-primary/20 bg-card/90 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
-                onClick={() => scrollReel('next')}
-              >
-                <ArrowRight className="h-5 w-5 mx-auto" />
-              </button>
-            </div>
+        <div className="mb-12 md:mb-14">
+          <div className="mb-5 md:mb-6">
+            <p className="section-label text-xs text-muted-foreground mb-2">{t('portfolio.reelSubtitle')}</p>
+            <h3 className="text-xl md:text-[1.9rem] font-serif font-normal tracking-[-0.03em] text-foreground leading-tight">
+              {t('portfolio.reelTitle')}
+            </h3>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-background/45">
-            <div className="absolute inset-y-0 left-0 w-12 md:w-16 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
-            <div className="absolute inset-y-0 right-0 w-12 md:w-16 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
+          <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-secondary/60 via-background to-secondary/60" />
+            <div className="absolute inset-y-0 left-0 w-8 sm:w-12 md:w-20 z-20 bg-gradient-to-r from-background via-background/95 to-transparent" />
+            <div className="absolute inset-y-0 right-0 w-8 sm:w-12 md:w-20 z-20 bg-gradient-to-l from-background via-background/95 to-transparent" />
 
-            <div
-              ref={reelTrackRef}
-              className="relative z-10 flex gap-4 md:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory py-4 md:py-5 px-3 md:px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-            >
-              {reelClips.map((clip) => (
-                <button
-                  type="button"
-                  key={clip.id}
-                  className="group relative shrink-0 snap-start w-[210px] sm:w-[225px] md:w-[245px] lg:w-[260px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors"
-                  onClick={() => setActiveReelPreview(clip)}
-                  aria-label={t(clip.titleKey)}
-                >
-                  <video
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    src={clip.videoSrc}
-                    poster={clip.poster}
-                    muted
-                    autoPlay
-                    loop
-                    playsInline
-                    preload="metadata"
-                    aria-hidden="true"
-                  />
+            <div className="relative z-10 mx-auto max-w-[1920px] px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+                {reelClips.map((clip) => (
+                  <button
+                    type="button"
+                    key={clip.id}
+                    className="group relative w-full aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors"
+                    onClick={() => setActiveReelPreview(clip)}
+                    aria-label={t(clip.titleKey)}
+                  >
+                    <video
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      src={clip.videoSrc}
+                      poster={clip.poster}
+                      muted
+                      autoPlay
+                      loop
+                      playsInline
+                      preload="metadata"
+                      aria-hidden="true"
+                    />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/24 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/24 to-transparent" />
 
-                  <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-white">
-                    <div>
-                      <p className="text-[10px] uppercase tracking-[0.2em] text-white/75 mb-1">
-                        {t(`portfolio.categories.${clip.category}`)}
-                      </p>
-                      <p className="text-sm font-medium leading-tight">{t(clip.titleKey)}</p>
+                    <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-white">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-white/75 mb-1">
+                          {t(`portfolio.categories.${clip.category}`)}
+                        </p>
+                        <p className="text-sm font-medium leading-tight">{t(clip.titleKey)}</p>
+                      </div>
+
+                      <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/24 backdrop-blur-md">
+                        <VolumeX className="h-4 w-4" />
+                      </span>
                     </div>
-
-                    <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/24 backdrop-blur-md">
-                      <VolumeX className="h-4 w-4" />
-                    </span>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -343,13 +306,15 @@ const Portfolio = () => {
                 />
 
                 <div
-                  className={`absolute inset-0 bg-black/35 backdrop-blur-[1px] transition-opacity duration-300 ${collagePlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
-                    }`}
+                  className={`absolute inset-0 bg-black/35 backdrop-blur-[1px] transition-opacity duration-300 ${
+                    collagePlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                  }`}
                 />
 
                 <span
-                  className={`absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full bg-card/90 text-primary transition-opacity duration-300 ${collagePlaying ? 'opacity-0' : 'opacity-100'
-                    }`}
+                  className={`absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full bg-card/90 text-primary transition-opacity duration-300 ${
+                    collagePlaying ? 'opacity-0' : 'opacity-100'
+                  }`}
                 >
                   <Play className="h-5 w-5 fill-current" />
                 </span>
@@ -361,10 +326,7 @@ const Portfolio = () => {
             </div>
           </div>
         </div>
-
-
       </div>
-
 
       {activeReelPreview && (
         <div
