@@ -245,6 +245,16 @@ const Portfolio = () => {
     void setCollagePlayback(false);
   };
 
+  const getCollageMotionClass = (clipId: number) => {
+    if (!collagePlaying) return '';
+
+    if (clipId === 4) return '-translate-x-8 -translate-y-6 scale-[1.04]';
+    if (clipId === 5) return 'translate-x-8 -translate-y-5 scale-[1.04]';
+    if (clipId === 3) return '-translate-y-2 scale-[1.03]';
+
+    return 'scale-[1.02]';
+  };
+
   return (
     <section id="portfolio" className="section-padding bg-secondary/20">
 
@@ -387,9 +397,7 @@ const Portfolio = () => {
             {collageClips.map((clip, index) => (
               <div
                 key={clip.id}
-                className={`absolute ${clip.className} rounded-2xl border border-border shadow-lg overflow-hidden transition-all duration-500 ${
-                  collagePlaying ? 'scale-[1.02]' : ''
-                }`}
+                className={`absolute ${clip.className} rounded-2xl border border-border shadow-lg overflow-hidden transition-all duration-700 ease-out ${getCollageMotionClass(clip.id)}`}
               >
                 <video
                   ref={(element) => {

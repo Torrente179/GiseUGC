@@ -46,7 +46,40 @@ const Services = () => {
     'services.service6.title'
   ];
 
-  const serviceCards = [...serviceTitleKeys, ...serviceTitleKeys];
+  const serviceVideoCards = [
+    {
+      titleKey: serviceTitleKeys[0],
+      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      poster: 'https://images.unsplash.com/photo-1557838923-2985c318be48?auto=format&fit=crop&w=1100&q=80'
+    },
+    {
+      titleKey: serviceTitleKeys[1],
+      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+      poster: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1100&q=80'
+    },
+    {
+      titleKey: serviceTitleKeys[2],
+      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+      poster: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1100&q=80'
+    },
+    {
+      titleKey: serviceTitleKeys[3],
+      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+      poster: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1100&q=80'
+    },
+    {
+      titleKey: serviceTitleKeys[4],
+      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+      poster: 'https://images.unsplash.com/photo-1544717305-996b815c338c?auto=format&fit=crop&w=1100&q=80'
+    },
+    {
+      titleKey: serviceTitleKeys[5],
+      videoSrc: 'https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+      poster: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=1100&q=80'
+    }
+  ];
+
+  const serviceCards = [...serviceVideoCards, ...serviceVideoCards];
 
   return (
     <section id="services" className="section-padding bg-background">
@@ -88,15 +121,26 @@ const Services = () => {
 
             <div className="relative z-10 service-corner-drift">
               <div className="service-marquee flex w-max gap-4 py-5">
-                {serviceCards.map((titleKey, index) => (
+                {serviceCards.map((card, index) => (
                   <article
-                    key={`${titleKey}-${index}`}
+                    key={`${card.titleKey}-${index}`}
                     className="shrink-0 w-[220px] sm:w-[260px] rounded-2xl border border-border bg-card p-3 shadow-sm"
-                    aria-label={t(titleKey)}
+                    aria-label={t(card.titleKey)}
                   >
-                    <div className="h-[130px] sm:h-[150px] rounded-xl bg-secondary mb-3" />
+                    <div className="h-[130px] sm:h-[150px] rounded-xl bg-secondary mb-3 overflow-hidden">
+                      <video
+                        className="h-full w-full object-cover"
+                        src={card.videoSrc}
+                        poster={card.poster}
+                        muted
+                        autoPlay
+                        loop
+                        playsInline
+                        preload="metadata"
+                      />
+                    </div>
                     <p className="text-xl sm:text-2xl font-cormorant text-foreground text-center leading-tight">
-                      {t(titleKey)}
+                      {t(card.titleKey)}
                     </p>
                   </article>
                 ))}
