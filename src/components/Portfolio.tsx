@@ -556,7 +556,7 @@ const Portfolio = () => {
             </h2>
           </div>
           <motion.div className="lg:max-w-xs text-center lg:text-right" variants={revealUp(20, 0.64)}>
-            <p className="strategic-body text-foreground/40 text-lg md:text-xl italic">
+            <p className="strategic-body text-foreground/45 text-lg md:text-xl italic">
               {t('portfolio.reelDescription')}
             </p>
           </motion.div>
