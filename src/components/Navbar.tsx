@@ -9,7 +9,7 @@ import {
   Linkedin,
   Facebook,
 } from 'lucide-react';
-import ThemeToggle from '@/components/ui/ThemeToggle';
+import ThemeToggle from '@/components/ThemeToggle';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/';

@@ -1,14 +1,23 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import SocialProof from '@/components/SocialProof';
-import Services from '@/components/Services';
-import Portfolio from '@/components/Portfolio';
-import Testimonials from '@/components/Testimonials';
-import ServicesMarquee from '@/components/ServicesMarquee';
-import Footer from '@/components/Footer';
-import FloatingContactDock from '@/components/FloatingContactDock';
 import { clearUrlHash } from '@/hooks/use-hashless-section-navigation';
+
+const SocialProofSection = lazy(() => import('@/components/SocialProof'));
+const ServicesSection = lazy(() => import('@/components/Services'));
+const PortfolioSection = lazy(() => import('@/components/Portfolio'));
+const TestimonialsSection = lazy(() => import('@/components/Testimonials'));
+const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
+const FooterSection = lazy(() => import('@/components/Footer'));
+const FloatingContactDockSection = lazy(() => import('@/components/FloatingContactDock'));
+
+const SectionFallback = ({ id, minHeightClass }: { id?: string; minHeightClass?: string }) => (
+  <section
+    id={id}
+    aria-hidden="true"
+    className={minHeightClass ?? 'min-h-[240px]'}
+  />
+);
 
 const Index = () => {
   useEffect(() => {
@@ -19,13 +28,27 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
-      <SocialProof />
-      <Services />
-      <Portfolio />
-      <Testimonials />
-      <ServicesMarquee />
-      <Footer />
-      <FloatingContactDock />
+      <Suspense fallback={<SectionFallback minHeightClass="min-h-[300px]" />}>
+        <SocialProofSection />
+      </Suspense>
+      <Suspense fallback={<SectionFallback id="services" minHeightClass="min-h-[560px]" />}>
+        <ServicesSection />
+      </Suspense>
+      <Suspense fallback={<SectionFallback id="portfolio" minHeightClass="min-h-[900px]" />}>
+        <PortfolioSection />
+      </Suspense>
+      <Suspense fallback={<SectionFallback id="testimonials" minHeightClass="min-h-[500px]" />}>
+        <TestimonialsSection />
+      </Suspense>
+      <Suspense fallback={<SectionFallback minHeightClass="min-h-[520px]" />}>
+        <ServicesMarqueeSection />
+      </Suspense>
+      <Suspense fallback={<SectionFallback id="contact" minHeightClass="min-h-[640px]" />}>
+        <FooterSection />
+      </Suspense>
+      <Suspense fallback={null}>
+        <FloatingContactDockSection />
+      </Suspense>
     </div>
   );
 };

@@ -5,10 +5,11 @@ import tailwindcssAnimate from "tailwindcss-animate";
 export default {
 	darkMode: ["class"],
 	content: [
-		"./pages/**/*.{ts,tsx}",
-		"./components/**/*.{ts,tsx}",
-		"./app/**/*.{ts,tsx}",
+		"./index.html",
 		"./src/**/*.{ts,tsx}",
+		"!./src/components/ui/**/*.{ts,tsx}",
+		"!./src/components/Contact.tsx",
+		"!./src/pages/NotFound.tsx",
 	],
 	prefix: "",
 	theme: {

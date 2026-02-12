@@ -144,15 +144,15 @@ const Hero = () => {
                 <picture>
                   <source
                     type="image/webp"
-                    srcSet="/uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
-                    sizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 44vw, 88vw"
+                    srcSet="/uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-640.webp 640w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
+                    sizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 43vw, 76vw"
                   />
                   <img
-                    src="/uploads/gisela-hero-800.jpg"
+                    src="/uploads/gisela-hero-585.jpg"
                     alt={t('hero.imageAlt')}
                     className="w-full aspect-[4/5] object-cover rounded-[1.5rem]"
-                    width={800}
-                    height={1000}
+                    width={585}
+                    height={731}
                     loading="eager"
                     fetchPriority="high"
                     decoding="async"
