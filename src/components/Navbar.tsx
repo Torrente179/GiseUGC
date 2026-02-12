@@ -1,7 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight, MessageCircle, Send } from 'lucide-react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+
+const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/';
+const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/';
+const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
+
+const FiverrIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20.39 3H3.61A.61.61 0 003 3.61v16.78c0 .34.27.61.61.61h16.78c.34 0 .61-.27.61-.61V3.61c0-.34-.27-.61-.61-.61zM17.12 17.07H14.4v-4.46h-1.13v4.46H7.74V9.4h2.72v1.13h.04A2.8 2.8 0 0112.94 9c1.56 0 2.54.96 2.54 2.65v1.97h1.64v3.45zm-4.18-7.4a1.58 1.58 0 01-1.63 1.28h-.04V9.4h.04c.87 0 1.5.5 1.63 1.27z" />
+  </svg>
+);
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -24,12 +34,40 @@ const Navbar = () => {
   const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
   const toggleMobileMenu = useCallback(() => setMobileMenuOpen((prev) => !prev), []);
 
-  const navLinkKeys = [
+  const desktopNavLinkKeys = [
     { key: 'navbar.home', href: '#home', number: '01' },
     { key: 'navbar.services', href: '#services', number: '02' },
     { key: 'navbar.portfolio', href: '#portfolio', number: '03' },
     { key: 'navbar.testimonials', href: '#testimonials', number: '04' },
     { key: 'navbar.contact', href: '#contact', number: '05' },
+  ];
+  const mobileNavLinkKeys = desktopNavLinkKeys.filter((link) => link.key !== 'navbar.contact');
+
+  const contactPlatforms = [
+    {
+      key: 'floatingContact.whatsappLabel',
+      ariaKey: 'floatingContact.whatsappAria',
+      href: whatsappUrl,
+      icon: <MessageCircle className="h-[18px] w-[18px]" />,
+      iconClass: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-300',
+      glowClass: 'from-emerald-400/70 via-emerald-500/40 to-emerald-600/70',
+    },
+    {
+      key: 'floatingContact.telegramLabel',
+      ariaKey: 'floatingContact.telegramAria',
+      href: telegramUrl,
+      icon: <Send className="h-[18px] w-[18px] -rotate-12" />,
+      iconClass: 'bg-sky-500/15 text-sky-600 dark:text-sky-300',
+      glowClass: 'from-sky-400/70 via-sky-500/40 to-blue-600/70',
+    },
+    {
+      key: 'floatingContact.fiverrLabel',
+      ariaKey: 'floatingContact.fiverrAria',
+      href: fiverrUrl,
+      icon: <FiverrIcon className="h-[18px] w-[18px]" />,
+      iconClass: 'bg-green-500/15 text-green-600 dark:text-green-300',
+      glowClass: 'from-green-400/70 via-green-500/40 to-emerald-600/70',
+    },
   ];
 
   const changeLanguage = (lng: string) => {
@@ -59,7 +97,7 @@ const Navbar = () => {
 
         <div className="relative h-full flex flex-col pt-24 px-6">
           <nav className="flex-1 flex flex-col justify-center gap-3">
-            {navLinkKeys.map((link, index) => (
+            {mobileNavLinkKeys.map((link, index) => (
               <a
                 key={link.key}
                 href={link.href}
@@ -88,13 +126,34 @@ const Navbar = () => {
             }`}
             style={{ transitionDelay: mobileMenuOpen ? '460ms' : '0ms' }}
           >
-            <a
-              href="#contact"
-              onClick={closeMobileMenu}
-              className="btn-primary-nordic w-full py-4"
-            >
-              {t('navbar.hireMe')}
-            </a>
+            <div className="relative overflow-hidden rounded-[1.7rem] border border-border/80 bg-gradient-to-br from-card via-card to-secondary/55 p-4 shadow-[0_28px_46px_-34px_hsl(var(--foreground)/0.85)]">
+              <div className="pointer-events-none absolute -left-8 -top-8 h-24 w-24 rounded-full bg-primary/15 blur-2xl" />
+              <div className="pointer-events-none absolute -right-6 -bottom-8 h-20 w-20 rounded-full bg-accent/15 blur-2xl" />
+              <p className="section-label text-muted-foreground">{t('navbar.hireMe')}</p>
+              <div className="mt-3 grid grid-cols-3 gap-2.5">
+                {contactPlatforms.map((platform) => (
+                  <a
+                    key={platform.key}
+                    href={platform.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={t(platform.ariaKey)}
+                    onClick={closeMobileMenu}
+                    className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/75 px-2.5 py-3 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_16px_28px_-20px_hsl(var(--foreground)/0.9)]"
+                  >
+                    <span
+                      className={`absolute inset-x-2 top-0 h-0.5 rounded-full bg-gradient-to-r ${platform.glowClass} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
+                    />
+                    <span className={`mx-auto inline-flex h-9 w-9 items-center justify-center rounded-full ${platform.iconClass}`}>
+                      {platform.icon}
+                    </span>
+                    <span className="mt-1.5 block text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/85">
+                      {t(platform.key)}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
             <div className="mt-8 pt-5 border-t border-border text-center">
               <span className="brand-logo text-2xl text-accent">
                 Gisela<span className="text-foreground font-normal">.UGC</span>
@@ -123,7 +182,7 @@ const Navbar = () => {
             </a>
 
             <div className="hidden md:flex items-center gap-7">
-              {navLinkKeys.map((link) => (
+              {desktopNavLinkKeys.map((link) => (
                 <a
                   key={link.key}
                   href={link.href}

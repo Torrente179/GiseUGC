@@ -10,7 +10,7 @@ import {
   ArrowUpRight,
 } from 'lucide-react';
 
-const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/';
+const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
 
 const fiverrRatingDistribution = [
   { stars: 5, count: 143 },
@@ -42,7 +42,7 @@ const Footer = () => {
               {t('footer.description')}
             </p>
 
-            <div className="flex gap-3 mt-7">
+            <div className="hidden md:flex gap-3 mt-7">
               <button type="button" aria-label="Instagram" className="h-11 w-11 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
                 <Instagram className="h-5 w-5" />
               </button>
@@ -146,6 +146,21 @@ const Footer = () => {
                   ))}
                 </div>
               </div>
+            </div>
+
+            <div className="flex md:hidden gap-3 mt-5 justify-center">
+              <button type="button" aria-label="Instagram" className="h-12 w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+                <Instagram className="h-5 w-5" />
+              </button>
+              <button type="button" aria-label="Twitter" className="h-12 w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+                <Twitter className="h-5 w-5" />
+              </button>
+              <button type="button" aria-label="LinkedIn" className="h-12 w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+                <Linkedin className="h-5 w-5" />
+              </button>
+              <button type="button" aria-label="Facebook" className="h-12 w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+                <Facebook className="h-5 w-5" />
+              </button>
             </div>
 
             <a
