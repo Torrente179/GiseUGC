@@ -170,6 +170,20 @@
     "emailLabel": "Email",
     "fiverrLabel": "Fiverr",
     "hireOnFiverrButton": "Contrátame en Fiverr",
+    "fiverr": {
+      "name": "Gisela",
+      "handle": "@gisela_sm",
+      "profileTitle": "Spokesperson Professional Presenter Voiceover Expert UGC Creator",
+      "country": "Colombia",
+      "language": "Español",
+      "reviewsTitle": "158 Reseñas",
+      "ratingBreakdown": "Desglose de calificación",
+      "metricCommunication": "Nivel de comunicación",
+      "metricQuality": "Calidad de entrega",
+      "metricValue": "Valor de entrega",
+      "visitProfile": "Ver perfil en Fiverr",
+      "profileAlt": "Foto de perfil de Fiverr de Gisela"
+    },
     "copyright": "© {{year}} Portafolio UGC. Todos los derechos reservados."
   },
   "socialProof": {
