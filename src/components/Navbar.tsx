@@ -4,7 +4,6 @@ import {
   Menu,
   X,
   ArrowRight,
-  Music2,
   Send,
   Instagram,
   Linkedin,
@@ -18,6 +17,7 @@ const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/';
 const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
 const fiverrLogoSrc = '/uploads/fiverr-logo-56.webp';
 const whatsappLogoSrc = '/uploads/whatsapp.png';
+const tiktokLogoSrc = '/uploads/TikTok-Icon-Logo.wine.svg';
 const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/';
 const tiktokUrl = import.meta.env.VITE_TIKTOK_URL ?? 'https://www.tiktok.com/';
 const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.net/';
@@ -120,8 +120,18 @@ const Navbar = () => {
       key: 'floatingContact.tiktokLabel',
       ariaKey: 'floatingContact.tiktokAria',
       href: tiktokUrl,
-      icon: <Music2 className="h-[18px] w-[18px]" />,
-      iconClass: 'bg-zinc-700/18 text-zinc-800 dark:text-zinc-100',
+      icon: (
+        <img
+          src={tiktokLogoSrc}
+          alt=""
+          width={56}
+          height={56}
+          loading="lazy"
+          decoding="async"
+          className="h-7 w-7 object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.28)]"
+        />
+      ),
+      iconClass: 'bg-white/90 dark:bg-white/95',
       glowClass: 'from-zinc-500/70 via-zinc-700/45 to-zinc-900/70',
     },
     {

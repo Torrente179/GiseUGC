@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import {
   ChevronUp,
   MessageCircle,
-  Music2,
   Send,
   Instagram,
   Linkedin,
@@ -16,6 +15,7 @@ const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/';
 const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
 const fiverrLogoSrc = '/uploads/fiverr-logo-56.webp';
 const whatsappLogoSrc = '/uploads/whatsapp.png';
+const tiktokLogoSrc = '/uploads/TikTok-Icon-Logo.wine.svg';
 const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/';
 const tiktokUrl = import.meta.env.VITE_TIKTOK_URL ?? 'https://www.tiktok.com/';
 const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.net/';
@@ -98,9 +98,19 @@ const FloatingContactDock = () => {
       id: 'tiktok',
       ariaKey: 'floatingContact.tiktokAria',
       href: tiktokUrl,
-      icon: <Music2 className="h-5 w-5" />,
-      toneClass: 'bg-zinc-700/24 text-zinc-900 dark:text-zinc-100',
-      hoverToneClass: 'hover:bg-zinc-700/30',
+      icon: (
+        <img
+          src={tiktokLogoSrc}
+          alt=""
+          width={56}
+          height={56}
+          loading="lazy"
+          decoding="async"
+          className="h-[22px] w-[22px] object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.28)]"
+        />
+      ),
+      toneClass: 'bg-white/78 dark:bg-white/88',
+      hoverToneClass: 'hover:bg-white',
     },
     {
       id: 'threads',
