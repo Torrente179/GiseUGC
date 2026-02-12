@@ -7,6 +7,7 @@
     <meta name="description" content="Gisela UGC - Especializada en la creación de contenido auténtico generado por usuarios." />
     <meta name="author" content="Gisela UGC" />
     <meta property="og:image" content="/og-image.png" />
+    <meta name="theme-color" content="#fffefe" />
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +15,15 @@
       rel="preload"
       as="style"
       href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:wght@300;700&family=Outfit:wght@500;700&family=Playfair+Display:wght@700&display=swap"
+    />
+    <link
+      rel="preload"
+      as="image"
+      type="image/webp"
+      href="/uploads/gisela-hero-585.webp"
+      imagesrcset="/uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-640.webp 640w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
+      imagesizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 43vw, 76vw"
+      fetchpriority="high"
     />
     <link
       rel="stylesheet"
@@ -27,10 +37,97 @@
         href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:wght@300;700&family=Outfit:wght@500;700&family=Playfair+Display:wght@700&display=swap"
       />
     </noscript>
+    <style>
+      .boot-shell {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 96px 24px 64px;
+        background: #fffefe;
+        color: #2f2a24;
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      .boot-grid {
+        width: min(1200px, 100%);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+        gap: 3rem;
+        align-items: center;
+      }
+      .boot-label {
+        margin: 0 0 0.9rem;
+        color: #9f9366;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+      .boot-title {
+        margin: 0;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(2.6rem, 6vw, 5rem);
+        line-height: 0.94;
+        letter-spacing: -0.04em;
+      }
+      .boot-accent {
+        color: #9f9366;
+        font-family: "Alex Brush", cursive;
+        font-size: 1.06em;
+      }
+      .boot-image-wrap {
+        justify-self: end;
+        width: min(25rem, 100%);
+        border-radius: 26px;
+        overflow: hidden;
+        box-shadow: 0 28px 64px -42px rgba(47, 42, 36, 0.42);
+      }
+      .boot-image {
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        display: block;
+        object-fit: cover;
+      }
+      @media (max-width: 1023px) {
+        .boot-shell {
+          padding-top: 88px;
+        }
+        .boot-grid {
+          grid-template-columns: 1fr;
+          gap: 2.2rem;
+        }
+        .boot-image-wrap {
+          justify-self: center;
+          width: min(24rem, 86vw);
+        }
+      }
+    </style>
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <section class="boot-shell" aria-hidden="true">
+        <div class="boot-grid">
+          <div>
+            <p class="boot-label">UGC Creator</p>
+            <h1 class="boot-title">Gisela <span class="boot-accent">Saldarriaga</span></h1>
+          </div>
+          <div class="boot-image-wrap">
+            <img
+              class="boot-image"
+              src="/uploads/gisela-hero-585.jpg"
+              srcset="/uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-640.webp 640w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
+              sizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 43vw, 76vw"
+              alt="Gisela Saldarriaga"
+              width="585"
+              height="731"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
     <!-- Script removido -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
