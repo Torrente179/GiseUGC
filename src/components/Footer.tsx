@@ -58,7 +58,8 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border/70 bg-card/80 backdrop-blur-sm p-4 md:p-5">
+          <div>
+            <div className="rounded-2xl border border-border/70 bg-card/80 backdrop-blur-sm p-4 md:p-5">
             <div className="grid grid-cols-[auto_1fr] gap-3.5 md:gap-4 items-start">
               <img
                 src="/uploads/E3AF5948-F6CB-4DEE-87AE-9383B816D3EC (1).jpg"
@@ -148,6 +149,17 @@ const Footer = () => {
               </div>
             </div>
 
+            <a
+              href={fiverrUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 mt-4 text-[11px] uppercase tracking-[0.17em] font-bold text-primary hover:text-accent transition-colors"
+            >
+              {t('footer.fiverr.visitProfile')}
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+            </div>
+
             <div className="flex md:hidden gap-3 mt-5 justify-center">
               <button type="button" aria-label="Instagram" className="h-12 w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
                 <Instagram className="h-5 w-5" />
@@ -162,16 +174,6 @@ const Footer = () => {
                 <Facebook className="h-5 w-5" />
               </button>
             </div>
-
-            <a
-              href={fiverrUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-4 text-[11px] uppercase tracking-[0.17em] font-bold text-primary hover:text-accent transition-colors"
-            >
-              {t('footer.fiverr.visitProfile')}
-              <ArrowUpRight className="h-3.5 w-3.5" />
-            </a>
           </div>
         </div>
 
