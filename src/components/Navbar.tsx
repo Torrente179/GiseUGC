@@ -26,8 +26,10 @@ const Navbar = () => {
 
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    document.body.classList.toggle('mobile-menu-open', mobileMenuOpen);
     return () => {
       document.body.style.overflow = '';
+      document.body.classList.remove('mobile-menu-open');
     };
   }, [mobileMenuOpen]);
 

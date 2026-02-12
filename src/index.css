@@ -516,6 +516,14 @@
     animation-delay: 0.3s;
   }
 
+  @media (max-width: 767px) {
+    body.mobile-menu-open .floating-contact-dock {
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+    }
+  }
+
   @keyframes stagger-in {
     to {
       opacity: 1;
