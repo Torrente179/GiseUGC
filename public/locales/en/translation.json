@@ -198,6 +198,14 @@
     "whatsappAria": "Chat on WhatsApp",
     "telegramAria": "Chat on Telegram",
     "fiverrLabel": "Fiverr",
-    "fiverrAria": "Hire me on Fiverr"
+    "fiverrAria": "Hire me on Fiverr",
+    "instagramLabel": "Instagram",
+    "instagramAria": "Open Instagram",
+    "twitterLabel": "Twitter",
+    "twitterAria": "Open Twitter",
+    "linkedinLabel": "LinkedIn",
+    "linkedinAria": "Open LinkedIn",
+    "facebookLabel": "Facebook",
+    "facebookAria": "Open Facebook"
   }
 }

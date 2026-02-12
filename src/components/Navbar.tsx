@@ -1,17 +1,26 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Menu, X, ArrowRight, MessageCircle, Send } from 'lucide-react';
+import {
+  Menu,
+  X,
+  ArrowRight,
+  MessageCircle,
+  Send,
+  Instagram,
+  Twitter,
+  Linkedin,
+  Facebook,
+} from 'lucide-react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/';
 const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
-
-const FiverrIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20.39 3H3.61A.61.61 0 003 3.61v16.78c0 .34.27.61.61.61h16.78c.34 0 .61-.27.61-.61V3.61c0-.34-.27-.61-.61-.61zM17.12 17.07H14.4v-4.46h-1.13v4.46H7.74V9.4h2.72v1.13h.04A2.8 2.8 0 0112.94 9c1.56 0 2.54.96 2.54 2.65v1.97h1.64v3.45zm-4.18-7.4a1.58 1.58 0 01-1.63 1.28h-.04V9.4h.04c.87 0 1.5.5 1.63 1.27z" />
-  </svg>
-);
+const fiverrLogoSrc = '/uploads/fiverr-logo-png_seeklogo-376328.png';
+const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/';
+const twitterUrl = import.meta.env.VITE_TWITTER_URL ?? 'https://twitter.com/';
+const linkedinUrl = import.meta.env.VITE_LINKEDIN_URL ?? 'https://www.linkedin.com/';
+const facebookUrl = import.meta.env.VITE_FACEBOOK_URL ?? 'https://www.facebook.com/';
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -66,9 +75,49 @@ const Navbar = () => {
       key: 'floatingContact.fiverrLabel',
       ariaKey: 'floatingContact.fiverrAria',
       href: fiverrUrl,
-      icon: <FiverrIcon className="h-[18px] w-[18px]" />,
-      iconClass: 'bg-green-500/15 text-green-600 dark:text-green-300',
+      icon: (
+        <img
+          src={fiverrLogoSrc}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-8 w-8 rounded-full object-cover shadow-[0_5px_12px_-7px_rgba(0,0,0,0.45)]"
+        />
+      ),
+      iconClass: 'bg-white/90 dark:bg-white/95',
       glowClass: 'from-green-400/70 via-green-500/40 to-emerald-600/70',
+    },
+    {
+      key: 'floatingContact.instagramLabel',
+      ariaKey: 'floatingContact.instagramAria',
+      href: instagramUrl,
+      icon: <Instagram className="h-[18px] w-[18px]" />,
+      iconClass: 'bg-pink-500/15 text-pink-600 dark:text-pink-300',
+      glowClass: 'from-pink-400/70 via-fuchsia-500/45 to-rose-500/70',
+    },
+    {
+      key: 'floatingContact.twitterLabel',
+      ariaKey: 'floatingContact.twitterAria',
+      href: twitterUrl,
+      icon: <Twitter className="h-[18px] w-[18px]" />,
+      iconClass: 'bg-slate-500/15 text-slate-600 dark:text-slate-300',
+      glowClass: 'from-slate-400/70 via-zinc-500/45 to-slate-600/70',
+    },
+    {
+      key: 'floatingContact.linkedinLabel',
+      ariaKey: 'floatingContact.linkedinAria',
+      href: linkedinUrl,
+      icon: <Linkedin className="h-[18px] w-[18px]" />,
+      iconClass: 'bg-blue-600/15 text-blue-700 dark:text-blue-300',
+      glowClass: 'from-blue-400/70 via-blue-600/45 to-indigo-600/70',
+    },
+    {
+      key: 'floatingContact.facebookLabel',
+      ariaKey: 'floatingContact.facebookAria',
+      href: facebookUrl,
+      icon: <Facebook className="h-[18px] w-[18px]" />,
+      iconClass: 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-300',
+      glowClass: 'from-indigo-400/70 via-indigo-500/45 to-blue-600/70',
     },
   ];
 
@@ -132,7 +181,7 @@ const Navbar = () => {
               <div className="pointer-events-none absolute -left-8 -top-8 h-24 w-24 rounded-full bg-primary/15 blur-2xl" />
               <div className="pointer-events-none absolute -right-6 -bottom-8 h-20 w-20 rounded-full bg-accent/15 blur-2xl" />
               <p className="section-label text-muted-foreground">{t('navbar.hireMe')}</p>
-              <div className="mt-3 grid grid-cols-3 gap-2.5">
+              <div className="mt-3 grid grid-cols-4 gap-2">
                 {contactPlatforms.map((platform) => (
                   <a
                     key={platform.key}
@@ -141,7 +190,7 @@ const Navbar = () => {
                     rel="noopener noreferrer"
                     aria-label={t(platform.ariaKey)}
                     onClick={closeMobileMenu}
-                    className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/75 px-2.5 py-3 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_16px_28px_-20px_hsl(var(--foreground)/0.9)]"
+                    className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/75 px-2 py-2.5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_16px_28px_-20px_hsl(var(--foreground)/0.9)]"
                   >
                     <span
                       className={`absolute inset-x-2 top-0 h-0.5 rounded-full bg-gradient-to-r ${platform.glowClass} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
@@ -149,7 +198,7 @@ const Navbar = () => {
                     <span className={`mx-auto inline-flex h-9 w-9 items-center justify-center rounded-full ${platform.iconClass}`}>
                       {platform.icon}
                     </span>
-                    <span className="mt-1.5 block text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/85">
+                    <span className="mt-1.5 block text-[9px] font-semibold uppercase tracking-[0.12em] text-foreground/85">
                       {t(platform.key)}
                     </span>
                   </a>

@@ -198,6 +198,14 @@
     "whatsappAria": "Chatear por WhatsApp",
     "telegramAria": "Chatear por Telegram",
     "fiverrLabel": "Fiverr",
-    "fiverrAria": "Contrátame en Fiverr"
+    "fiverrAria": "Contrátame en Fiverr",
+    "instagramLabel": "Instagram",
+    "instagramAria": "Ver Instagram",
+    "twitterLabel": "Twitter",
+    "twitterAria": "Ver Twitter",
+    "linkedinLabel": "LinkedIn",
+    "linkedinAria": "Ver LinkedIn",
+    "facebookLabel": "Facebook",
+    "facebookAria": "Ver Facebook"
   }
 }
