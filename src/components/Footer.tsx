@@ -3,85 +3,41 @@ import { Instagram, Twitter, Linkedin, Facebook } from 'lucide-react';
 
 const Footer = () => {
   const { t } = useTranslation();
-  const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#F6F3EE] text-foreground py-16 md:py-20">
+    <footer id="contact" className="bg-[#F6F3EE] text-foreground pt-16 md:pt-20 pb-10 md:pb-12">
       <div className="studio-container">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,0.58fr)] lg:items-start mb-16">
-          <div>
-            <h3 className="brand-logo text-3xl mb-6">
-              {t('footer.brandName')}
-              <span className="text-accent text-4xl">.</span>
-            </h3>
-            <p className="strategic-body text-foreground/70 max-w-md">{t('footer.description')}</p>
+        <div className="max-w-4xl">
+          <h3 className="brand-logo text-[clamp(2.8rem,7vw,4.6rem)] leading-none mb-7 text-primary">
+            Portafolio<span className="text-accent">.</span>
+          </h3>
+          <p className="strategic-body text-foreground/70 text-[clamp(1.5rem,2.2vw,3rem)] leading-[1.45] max-w-4xl">
+            {t('footer.description')}
+          </p>
 
-            <div className="flex gap-3 mt-8">
-              <button type="button" aria-label="Instagram" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
-                <Instagram className="h-4 w-4" />
-              </button>
-              <button type="button" aria-label="Twitter" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
-                <Twitter className="h-4 w-4" />
-              </button>
-              <button type="button" aria-label="LinkedIn" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
-                <Linkedin className="h-4 w-4" />
-              </button>
-              <button type="button" aria-label="Facebook" className="h-10 w-10 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
-                <Facebook className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            <div>
-              <h4 className="section-label text-accent mb-6">{t('footer.servicesTitle')}</h4>
-              <ul className="space-y-3.5 text-sm">
-                <li><a href="#services" className="text-foreground/70 hover:text-foreground transition-colors">{t('services.service1.title')}</a></li>
-                <li><a href="#services" className="text-foreground/70 hover:text-foreground transition-colors">{t('services.service2.title')}</a></li>
-                <li><a href="#services" className="text-foreground/70 hover:text-foreground transition-colors">{t('services.service3.title')}</a></li>
-                <li><a href="#services" className="text-foreground/70 hover:text-foreground transition-colors">{t('services.service4.title')}</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="section-label text-accent mb-6">{t('footer.quickLinksTitle')}</h4>
-              <ul className="space-y-3.5 text-sm">
-                <li><a href="#home" className="text-foreground/70 hover:text-foreground transition-colors">{t('navbar.home')}</a></li>
-                <li><a href="#services" className="text-foreground/70 hover:text-foreground transition-colors">{t('navbar.services')}</a></li>
-                <li><a href="#portfolio" className="text-foreground/70 hover:text-foreground transition-colors">{t('navbar.portfolio')}</a></li>
-                <li><a href="#testimonials" className="text-foreground/70 hover:text-foreground transition-colors">{t('navbar.testimonials')}</a></li>
-                <li><a href="#contact" className="text-foreground/70 hover:text-foreground transition-colors">{t('navbar.contact')}</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="section-label text-accent mb-6">{t('footer.contactTitle')}</h4>
-              <ul className="space-y-3 text-sm">
-                <li className="text-foreground/70">{t('contact.emailLabel')}: <span className="text-foreground">{t('contact.emailValue')}</span></li>
-                <li className="text-foreground/70">{t('contact.fiverrLabel')}: <span className="text-foreground">{t('contact.fiverrValue')}</span></li>
-                <li>
-                  <a
-                    href="https://www.fiverr.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-primary-nordic mt-5 px-6 py-3 hover-grow inline-flex"
-                  >
-                    {t('footer.hireOnFiverrButton')}
-                  </a>
-                </li>
-              </ul>
-            </div>
+          <div className="flex gap-4 mt-10">
+            <button type="button" aria-label="Instagram" className="h-16 w-16 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+              <Instagram className="h-7 w-7" />
+            </button>
+            <button type="button" aria-label="Twitter" className="h-16 w-16 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+              <Twitter className="h-7 w-7" />
+            </button>
+            <button type="button" aria-label="LinkedIn" className="h-16 w-16 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+              <Linkedin className="h-7 w-7" />
+            </button>
+            <button type="button" aria-label="Facebook" className="h-16 w-16 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300">
+              <Facebook className="h-7 w-7" />
+            </button>
           </div>
         </div>
 
         <div className="border-t border-foreground/15 pt-8 text-center">
           <p className="text-xs text-foreground/55 tracking-wider">
-            {t('footer.copyright', { year })}
+            © 2026 Portafolio UGC. Todos los derechos reservados.
           </p>
         </div>
       </div>
     </footer>
-
   );
 };
 

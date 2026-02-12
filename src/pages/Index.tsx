@@ -6,7 +6,6 @@ import Services from '@/components/Services';
 import Portfolio from '@/components/Portfolio';
 import Testimonials from '@/components/Testimonials';
 import ServicesMarquee from '@/components/ServicesMarquee';
-import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import FloatingContactDock from '@/components/FloatingContactDock';
 
@@ -20,7 +19,6 @@ const Index = () => {
       <Portfolio />
       <Testimonials />
       <ServicesMarquee />
-      <Contact />
       <Footer />
       <FloatingContactDock />
     </div>

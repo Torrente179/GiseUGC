@@ -510,13 +510,6 @@ const Portfolio = () => {
         <div className="studio-rule mb-10 md:mb-12" />
 
         <div className="mb-12 md:mb-14">
-          <div className="mb-5 md:mb-6">
-            <p className="section-label text-muted-foreground mb-2">{t('portfolio.reelSubtitle')}</p>
-            <h3 className="text-xl md:text-[1.9rem] font-sans font-medium tracking-tight text-foreground leading-tight">
-              {t('portfolio.reelTitle')}
-            </h3>
-          </div>
-
           <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-secondary/60 via-background to-secondary/60" />
             <div className="absolute inset-y-0 left-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
