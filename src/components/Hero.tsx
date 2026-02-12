@@ -89,7 +89,7 @@ const Hero = () => {
             <motion.div className="flex flex-col sm:flex-row gap-4 sm:gap-5" variants={revealUp(16, 0.6)}>
               <motion.a
                 href="#portfolio"
-                className="btn-primary-nordic px-8 py-3.5 btn-press"
+                className="btn-primary-nordic px-8 py-3.5"
                 whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.02 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
                 transition={springHoverTransition}

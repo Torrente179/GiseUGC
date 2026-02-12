@@ -690,7 +690,7 @@ const Portfolio = () => {
 
             <motion.a
               href="#contact"
-              className="btn-primary-nordic px-7 py-3 btn-press"
+              className="btn-primary-nordic px-7 py-3"
               whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.02 }}
               whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
               transition={springHoverTransition}
@@ -721,7 +721,7 @@ const Portfolio = () => {
             {COLLAGE_CLIPS.map((clip, index) => (
               <div
                 key={clip.id}
-                className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden origin-center will-change-transform transition-all duration-700 ${collageHovered ? clip.hoverClass : clip.cornerClass
+                className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden origin-center will-change-transform transition-[top,left,right,width,transform,opacity] duration-700 ${collageHovered ? clip.hoverClass : clip.cornerClass
                   }`}
                 style={{
                   aspectRatio: '9/16',
