@@ -165,15 +165,19 @@ const FloatingContactDock = () => {
           aria-expanded={mobileOpen}
           aria-label={mobileOpen ? t('floatingContact.toggleCloseAria') : t('floatingContact.toggleOpenAria')}
           onClick={() => setMobileOpen((prev) => !prev)}
-          className="group relative inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/45 bg-card/72 supports-[backdrop-filter]:bg-card/62 backdrop-blur-xl text-foreground shadow-[0_18px_34px_-20px_hsl(var(--foreground)/0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/45 hover:text-primary"
+          className="group relative inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/60 bg-card/80 supports-[backdrop-filter]:bg-card/66 backdrop-blur-xl text-foreground shadow-[0_24px_46px_-22px_hsl(var(--foreground)/0.95),0_0_0_1px_hsl(var(--primary)/0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/55 hover:text-primary"
         >
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-1 rounded-full bg-primary/18 blur-md opacity-70 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100"
+          />
           <MessageCircle
-            className={`absolute h-5 w-5 transition-all duration-300 ${
+            className={`absolute h-[22px] w-[22px] transition-all duration-300 ${
               mobileOpen ? 'opacity-0 scale-75 rotate-12' : 'opacity-100 scale-100 rotate-0'
             }`}
           />
           <ChevronUp
-            className={`absolute h-5 w-5 transition-all duration-300 ${
+            className={`absolute h-[22px] w-[22px] transition-all duration-300 ${
               mobileOpen ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-75 -rotate-12'
             }`}
           />
