@@ -85,7 +85,7 @@ const FloatingContactDock = () => {
         />
       ),
       toneClass: 'bg-white/78 dark:bg-white/88',
-      hoverToneClass: 'hover:bg-white',
+      hoverToneClass: 'hover:bg-emerald-500/25',
     },
     {
       id: 'instagram',
