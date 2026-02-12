@@ -20,7 +20,7 @@ const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagra
 const tiktokUrl = import.meta.env.VITE_TIKTOK_URL ?? 'https://www.tiktok.com/@giselasaldarriaga';
 const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.com/@sm_gisela';
 const linkedinUrl = import.meta.env.VITE_LINKEDIN_URL ?? 'https://www.linkedin.com/in/gisela-saldarriaga-molina-0417b8199/';
-const facebookUrl = import.meta.env.VITE_FACEBOOK_URL ?? 'https://www.facebook.com/';
+const facebookUrl = import.meta.env.VITE_FACEBOOK_URL ?? 'https://www.facebook.com/gisela.saldarriaga';
 
 const ThreadsIcon = ({ className }: { className?: string }) => (
   <span className={className} aria-hidden="true">
