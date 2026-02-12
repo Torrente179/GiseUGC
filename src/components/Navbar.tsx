@@ -18,10 +18,10 @@ const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gis
 const fiverrLogoSrc = '/uploads/fiverr-logo-56.webp';
 const whatsappLogoSrc = '/uploads/whatsapp.png';
 const tiktokLogoSrc = '/uploads/TikTok-Icon-Logo.wine.svg';
-const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/';
-const tiktokUrl = import.meta.env.VITE_TIKTOK_URL ?? 'https://www.tiktok.com/';
-const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.net/';
-const linkedinUrl = import.meta.env.VITE_LINKEDIN_URL ?? 'https://www.linkedin.com/';
+const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/sm_gisela/';
+const tiktokUrl = import.meta.env.VITE_TIKTOK_URL ?? 'https://www.tiktok.com/@giselasaldarriaga';
+const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.com/@sm_gisela';
+const linkedinUrl = import.meta.env.VITE_LINKEDIN_URL ?? 'https://www.linkedin.com/in/gisela-saldarriaga-molina-0417b8199/';
 const facebookUrl = import.meta.env.VITE_FACEBOOK_URL ?? 'https://www.facebook.com/';
 
 const ThreadsIcon = ({ className }: { className?: string }) => (
