@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import {
   ChevronUp,
   MessageCircle,
+  Music2,
   Send,
   Instagram,
   Linkedin,
@@ -16,16 +17,10 @@ const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gis
 const fiverrLogoSrc = '/uploads/fiverr-logo-56.webp';
 const whatsappLogoSrc = '/uploads/whatsapp.png';
 const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/';
-const xUrl = import.meta.env.VITE_X_URL ?? import.meta.env.VITE_TWITTER_URL ?? 'https://x.com/';
+const tiktokUrl = import.meta.env.VITE_TIKTOK_URL ?? 'https://www.tiktok.com/';
 const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.net/';
 const linkedinUrl = import.meta.env.VITE_LINKEDIN_URL ?? 'https://www.linkedin.com/';
 const facebookUrl = import.meta.env.VITE_FACEBOOK_URL ?? 'https://www.facebook.com/';
-
-const XBrandIcon = ({ className }: { className?: string }) => (
-  <span className={className} aria-hidden="true">
-    X
-  </span>
-);
 
 const ThreadsIcon = ({ className }: { className?: string }) => (
   <span className={className} aria-hidden="true">
@@ -100,12 +95,12 @@ const FloatingContactDock = () => {
       hoverToneClass: 'hover:bg-pink-500/25',
     },
     {
-      id: 'x',
-      ariaKey: 'floatingContact.twitterAria',
-      href: xUrl,
-      icon: <XBrandIcon className="text-[16px] font-black leading-none tracking-[-0.02em]" />,
-      toneClass: 'bg-slate-500/22 text-slate-700 dark:text-slate-200',
-      hoverToneClass: 'hover:bg-slate-500/25',
+      id: 'tiktok',
+      ariaKey: 'floatingContact.tiktokAria',
+      href: tiktokUrl,
+      icon: <Music2 className="h-5 w-5" />,
+      toneClass: 'bg-zinc-700/24 text-zinc-900 dark:text-zinc-100',
+      hoverToneClass: 'hover:bg-zinc-700/30',
     },
     {
       id: 'threads',
