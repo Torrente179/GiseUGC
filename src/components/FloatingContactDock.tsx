@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   ChevronUp,
-  MessageCircle,
   Send,
   Instagram,
   Linkedin,
@@ -14,6 +13,7 @@ const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/';
 const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
 const fiverrLogoSrc = '/uploads/fiverr-logo-png_seeklogo-376328.png';
+const whatsappLogoSrc = '/uploads/whatsapp.png';
 const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/';
 const xUrl = import.meta.env.VITE_X_URL ?? import.meta.env.VITE_TWITTER_URL ?? 'https://x.com/';
 const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.net/';
@@ -50,8 +50,16 @@ const FloatingContactDock = () => {
       id: 'whatsapp',
       ariaKey: 'floatingContact.whatsappAria',
       href: whatsappUrl,
-      icon: <MessageCircle className="h-5 w-5" />,
-      toneClass: 'bg-emerald-500/28 text-emerald-700 dark:text-emerald-200',
+      icon: (
+        <img
+          src={whatsappLogoSrc}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-[22px] w-[22px] rounded-full object-cover shadow-[0_5px_12px_-7px_rgba(0,0,0,0.45)]"
+        />
+      ),
+      toneClass: 'bg-white/72 dark:bg-white/80',
       hoverToneClass: 'hover:bg-emerald-500/25',
     },
     {
@@ -59,7 +67,7 @@ const FloatingContactDock = () => {
       ariaKey: 'floatingContact.telegramAria',
       href: telegramUrl,
       icon: <Send className="h-5 w-5 -rotate-12" />,
-      toneClass: 'bg-sky-500/28 text-sky-700 dark:text-sky-200',
+      toneClass: 'bg-sky-500/22 text-sky-700 dark:text-sky-200',
       hoverToneClass: 'hover:bg-sky-500/25',
     },
     {
@@ -75,7 +83,7 @@ const FloatingContactDock = () => {
           className="h-[22px] w-[22px] rounded-full object-cover shadow-[0_5px_12px_-7px_rgba(0,0,0,0.45)]"
         />
       ),
-      toneClass: 'bg-white dark:bg-white',
+      toneClass: 'bg-white/78 dark:bg-white/88',
       hoverToneClass: 'hover:bg-white',
     },
     {
@@ -83,7 +91,7 @@ const FloatingContactDock = () => {
       ariaKey: 'floatingContact.instagramAria',
       href: instagramUrl,
       icon: <Instagram className="h-5 w-5" />,
-      toneClass: 'bg-pink-500/28 text-pink-700 dark:text-pink-200',
+      toneClass: 'bg-pink-500/22 text-pink-700 dark:text-pink-200',
       hoverToneClass: 'hover:bg-pink-500/25',
     },
     {
@@ -91,7 +99,7 @@ const FloatingContactDock = () => {
       ariaKey: 'floatingContact.twitterAria',
       href: xUrl,
       icon: <XBrandIcon className="text-[16px] font-black leading-none tracking-[-0.02em]" />,
-      toneClass: 'bg-slate-500/28 text-slate-700 dark:text-slate-200',
+      toneClass: 'bg-slate-500/22 text-slate-700 dark:text-slate-200',
       hoverToneClass: 'hover:bg-slate-500/25',
     },
     {
@@ -99,7 +107,7 @@ const FloatingContactDock = () => {
       ariaKey: 'floatingContact.threadsAria',
       href: threadsUrl,
       icon: <ThreadsIcon className="text-[18px] font-black leading-none" />,
-      toneClass: 'bg-zinc-500/28 text-zinc-800 dark:text-zinc-100',
+      toneClass: 'bg-zinc-500/22 text-zinc-800 dark:text-zinc-100',
       hoverToneClass: 'hover:bg-zinc-500/25',
     },
     {
@@ -107,7 +115,7 @@ const FloatingContactDock = () => {
       ariaKey: 'floatingContact.linkedinAria',
       href: linkedinUrl,
       icon: <Linkedin className="h-5 w-5" />,
-      toneClass: 'bg-blue-600/28 text-blue-800 dark:text-blue-200',
+      toneClass: 'bg-blue-600/22 text-blue-800 dark:text-blue-200',
       hoverToneClass: 'hover:bg-blue-600/25',
     },
     {
@@ -115,7 +123,7 @@ const FloatingContactDock = () => {
       ariaKey: 'floatingContact.facebookAria',
       href: facebookUrl,
       icon: <Facebook className="h-5 w-5" />,
-      toneClass: 'bg-indigo-500/28 text-indigo-700 dark:text-indigo-200',
+      toneClass: 'bg-indigo-500/22 text-indigo-700 dark:text-indigo-200',
       hoverToneClass: 'hover:bg-indigo-500/25',
     },
   ];
@@ -131,7 +139,7 @@ const FloatingContactDock = () => {
       {/* Mobile: toggle + vertical reveal */}
       <div className="pointer-events-auto md:hidden flex flex-col items-end">
         <div
-          className={`mb-2.5 rounded-[1.3rem] border border-border bg-card p-2.5 shadow-[0_20px_38px_-22px_hsl(var(--foreground)/0.95)] flex flex-col items-end gap-2 transition-all duration-300 ${
+          className={`mb-2.5 rounded-[1.3rem] border border-white/45 bg-card/62 backdrop-blur-xl supports-[backdrop-filter]:bg-card/58 p-2.5 shadow-[0_20px_38px_-22px_hsl(var(--foreground)/0.85)] flex flex-col items-end gap-2 transition-all duration-300 ${
             mobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
           }`}
         >
@@ -142,7 +150,7 @@ const FloatingContactDock = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t(platform.ariaKey)}
-              className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-border ${platform.toneClass} ${platform.hoverToneClass} shadow-[0_12px_24px_-18px_hsl(var(--foreground)/0.95)] transition-all duration-300 hover:-translate-y-0.5`}
+              className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/45 ${platform.toneClass} ${platform.hoverToneClass} backdrop-blur-xl shadow-[0_12px_24px_-18px_hsl(var(--foreground)/0.9)] transition-all duration-300 hover:-translate-y-0.5`}
               style={{
                 transitionDelay: mobileOpen ? `${index * 25}ms` : '0ms',
               }}
@@ -156,9 +164,13 @@ const FloatingContactDock = () => {
           aria-expanded={mobileOpen}
           aria-label={mobileOpen ? t('floatingContact.toggleCloseAria') : t('floatingContact.toggleOpenAria')}
           onClick={() => setMobileOpen((prev) => !prev)}
-          className="group relative inline-flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-[0_18px_34px_-20px_hsl(var(--foreground)/0.95)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/45 hover:text-primary"
+          className="group relative inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/45 bg-card/72 supports-[backdrop-filter]:bg-card/62 backdrop-blur-xl text-foreground shadow-[0_18px_34px_-20px_hsl(var(--foreground)/0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/45 hover:text-primary"
         >
-          <MessageCircle
+          <img
+            src={whatsappLogoSrc}
+            alt=""
+            loading="lazy"
+            decoding="async"
             className={`absolute h-5 w-5 transition-all duration-300 ${
               mobileOpen ? 'opacity-0 scale-75 rotate-12' : 'opacity-100 scale-100 rotate-0'
             }`}

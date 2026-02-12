@@ -4,7 +4,6 @@ import {
   Menu,
   X,
   ArrowRight,
-  MessageCircle,
   Send,
   Instagram,
   Linkedin,
@@ -16,6 +15,7 @@ const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/';
 const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
 const fiverrLogoSrc = '/uploads/fiverr-logo-png_seeklogo-376328.png';
+const whatsappLogoSrc = '/uploads/whatsapp.png';
 const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/';
 const xUrl = import.meta.env.VITE_X_URL ?? import.meta.env.VITE_TWITTER_URL ?? 'https://x.com/';
 const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.net/';
@@ -71,8 +71,16 @@ const Navbar = () => {
       key: 'floatingContact.whatsappLabel',
       ariaKey: 'floatingContact.whatsappAria',
       href: whatsappUrl,
-      icon: <MessageCircle className="h-[18px] w-[18px]" />,
-      iconClass: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-300',
+      icon: (
+        <img
+          src={whatsappLogoSrc}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-8 w-8 rounded-full object-cover shadow-[0_5px_12px_-7px_rgba(0,0,0,0.45)]"
+        />
+      ),
+      iconClass: 'bg-white/90 dark:bg-white/95',
       glowClass: 'from-emerald-400/70 via-emerald-500/40 to-emerald-600/70',
     },
     {
