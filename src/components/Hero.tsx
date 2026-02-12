@@ -192,7 +192,7 @@ const Hero = () => {
                 {t('hero.introduction.eyebrow')}
               </motion.span>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-[0.95] tracking-tight-serif">
-                <SplitTextReveal text={t('hero.introduction.title')} delay={0.08} amount={0.45} />
+                <SplitTextReveal text={t('hero.introduction.title')} delay={0.08} />
               </h2>
             </div>
             <motion.div className="lg:pt-20" variants={revealUp(18, 0.66)}>

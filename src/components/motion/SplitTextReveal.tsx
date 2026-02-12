@@ -8,8 +8,7 @@ interface SplitTextRevealProps {
   wordClassName?: string;
   delay?: number;
   stagger?: number;
-  once?: boolean;
-  amount?: number;
+  animateOnMount?: boolean;
 }
 
 const SplitTextReveal = ({
@@ -18,22 +17,21 @@ const SplitTextReveal = ({
   wordClassName,
   delay = 0,
   stagger = 0.06,
-  once = true,
-  amount = 0.6,
+  animateOnMount = false,
 }: SplitTextRevealProps) => {
   const shouldReduceMotion = useReducedMotion();
-  const words = text.split(/\s+/).filter(Boolean);
+  const content = typeof text === 'string' ? text : String(text ?? '');
+  const words = content.split(/\s+/).filter(Boolean);
 
   if (shouldReduceMotion || words.length === 0) {
-    return <span className={className}>{text}</span>;
+    return <span className={className}>{content}</span>;
   }
 
   return (
     <motion.span
       className={cn('inline-block', className)}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, amount }}
+      initial={animateOnMount ? 'hidden' : undefined}
+      animate={animateOnMount ? 'visible' : undefined}
       variants={{
         hidden: {},
         visible: {

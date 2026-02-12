@@ -88,7 +88,7 @@ const Testimonials = () => {
               {t('testimonials.sectionSubtitle')}
             </motion.p>
             <h2 className="studio-title">
-              <SplitTextReveal text={t('testimonials.sectionTitle')} delay={0.08} amount={0.45} />
+              <SplitTextReveal text={t('testimonials.sectionTitle')} delay={0.08} />
             </h2>
           </div>
 

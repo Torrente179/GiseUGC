@@ -39,6 +39,109 @@ const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
 const REEL_CARD_TAP_SLOP_PX = 10;
 
+const REEL_CLIPS: ReelClip[] = [
+  {
+    id: 1,
+    titleKey: 'portfolio.items.item1',
+    category: 'fashion',
+    videoSrc: 'https://assets.mixkit.co/videos/42308/42308-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/42308/42308-thumb-720-0.jpg',
+  },
+  {
+    id: 2,
+    titleKey: 'portfolio.items.item2',
+    category: 'beauty',
+    videoSrc: 'https://assets.mixkit.co/videos/50423/50423-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/50423/50423-thumb-720-0.jpg',
+  },
+  {
+    id: 3,
+    titleKey: 'portfolio.items.item3',
+    category: 'tech',
+    videoSrc: 'https://assets.mixkit.co/videos/39774/39774-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/39774/39774-thumb-720-0.jpg',
+  },
+  {
+    id: 4,
+    titleKey: 'portfolio.items.item4',
+    category: 'lifestyle',
+    videoSrc: 'https://assets.mixkit.co/videos/34487/34487-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/34487/34487-thumb-720-0.jpg',
+  },
+  {
+    id: 5,
+    titleKey: 'portfolio.items.item5',
+    category: 'beauty',
+    videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
+  },
+  {
+    id: 6,
+    titleKey: 'portfolio.items.item6',
+    category: 'fashion',
+    videoSrc: 'https://assets.mixkit.co/videos/42293/42293-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/42293/42293-thumb-720-0.jpg',
+  },
+  {
+    id: 7,
+    titleKey: 'portfolio.items.item7',
+    category: 'tech',
+    videoSrc: 'https://assets.mixkit.co/videos/47002/47002-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/47002/47002-thumb-720-2.jpg',
+  },
+  {
+    id: 8,
+    titleKey: 'portfolio.items.item8',
+    category: 'lifestyle',
+    videoSrc: 'https://assets.mixkit.co/videos/49647/49647-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/49647/49647-thumb-720-0.jpg',
+  },
+  {
+    id: 9,
+    titleKey: 'portfolio.items.item9',
+    category: 'lifestyle',
+    videoSrc: 'https://assets.mixkit.co/videos/34487/34487-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/34487/34487-thumb-720-0.jpg',
+  },
+  {
+    id: 10,
+    titleKey: 'portfolio.items.item10',
+    category: 'beauty',
+    videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
+  },
+];
+
+const COLLAGE_CLIPS: CollageClip[] = [
+  {
+    id: 1,
+    labelKey: 'portfolio.items.item4',
+    videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
+    /* Left card */
+    cornerClass: 'top-[13%] left-[8%] w-[29%] -rotate-[6deg] z-30',
+    hoverClass: 'top-[12%] left-[16%] w-[29%] -rotate-[2deg] z-40',
+  },
+  {
+    id: 2,
+    labelKey: 'portfolio.items.item1',
+    videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
+    /* Center card */
+    cornerClass: 'top-[5%] left-[35%] w-[30%] rotate-0 z-50',
+    hoverClass: 'top-[7%] left-[35%] w-[30%] rotate-0 z-50 scale-[1.03]',
+  },
+  {
+    id: 3,
+    labelKey: 'portfolio.items.item5',
+    videoSrc: 'https://assets.mixkit.co/videos/51168/51168-720.mp4',
+    poster: 'https://assets.mixkit.co/videos/51168/51168-thumb-720-0.jpg',
+    /* Right card */
+    cornerClass: 'top-[13%] right-[8%] w-[29%] rotate-[6deg] z-30',
+    hoverClass: 'top-[12%] right-[16%] w-[29%] rotate-[2deg] z-40',
+  },
+];
+
 const Portfolio = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
@@ -130,8 +233,8 @@ const Portfolio = () => {
   const navigateReelPreview = useCallback(
     (direction: 1 | -1) => {
       if (activeReelIndex === null) return;
-      const nextIndex = (activeReelIndex + direction + reelClips.length) % reelClips.length;
-      const nextClip = reelClips[nextIndex];
+      const nextIndex = (activeReelIndex + direction + REEL_CLIPS.length) % REEL_CLIPS.length;
+      const nextClip = REEL_CLIPS[nextIndex];
       if (!nextClip) return;
       setActiveReelIndex(nextIndex);
       setActiveReelPreview(nextClip);
@@ -410,109 +513,6 @@ const Portfolio = () => {
     pauseCollageVideos();
   }, [pauseCollageVideos]);
 
-  const reelClips: ReelClip[] = [
-    {
-      id: 1,
-      titleKey: 'portfolio.items.item1',
-      category: 'fashion',
-      videoSrc: 'https://assets.mixkit.co/videos/42308/42308-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/42308/42308-thumb-720-0.jpg',
-    },
-    {
-      id: 2,
-      titleKey: 'portfolio.items.item2',
-      category: 'beauty',
-      videoSrc: 'https://assets.mixkit.co/videos/50423/50423-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/50423/50423-thumb-720-0.jpg',
-    },
-    {
-      id: 3,
-      titleKey: 'portfolio.items.item3',
-      category: 'tech',
-      videoSrc: 'https://assets.mixkit.co/videos/39774/39774-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/39774/39774-thumb-720-0.jpg',
-    },
-    {
-      id: 4,
-      titleKey: 'portfolio.items.item4',
-      category: 'lifestyle',
-      videoSrc: 'https://assets.mixkit.co/videos/34487/34487-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/34487/34487-thumb-720-0.jpg',
-    },
-    {
-      id: 5,
-      titleKey: 'portfolio.items.item5',
-      category: 'beauty',
-      videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
-    },
-    {
-      id: 6,
-      titleKey: 'portfolio.items.item6',
-      category: 'fashion',
-      videoSrc: 'https://assets.mixkit.co/videos/42293/42293-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/42293/42293-thumb-720-0.jpg',
-    },
-    {
-      id: 7,
-      titleKey: 'portfolio.items.item7',
-      category: 'tech',
-      videoSrc: 'https://assets.mixkit.co/videos/47002/47002-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/47002/47002-thumb-720-2.jpg',
-    },
-    {
-      id: 8,
-      titleKey: 'portfolio.items.item8',
-      category: 'lifestyle',
-      videoSrc: 'https://assets.mixkit.co/videos/49647/49647-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/49647/49647-thumb-720-0.jpg',
-    },
-    {
-      id: 9,
-      titleKey: 'portfolio.items.item9',
-      category: 'lifestyle',
-      videoSrc: 'https://assets.mixkit.co/videos/34487/34487-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/34487/34487-thumb-720-0.jpg',
-    },
-    {
-      id: 10,
-      titleKey: 'portfolio.items.item10',
-      category: 'beauty',
-      videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
-    },
-  ];
-
-  const collageClips: CollageClip[] = [
-    {
-      id: 1,
-      labelKey: 'portfolio.items.item4',
-      videoSrc: 'https://assets.mixkit.co/videos/42316/42316-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/42316/42316-thumb-720-0.jpg',
-      /* Left card */
-      cornerClass: 'top-[13%] left-[8%] w-[29%] -rotate-[6deg] z-30',
-      hoverClass: 'top-[12%] left-[16%] w-[29%] -rotate-[2deg] z-40',
-    },
-    {
-      id: 2,
-      labelKey: 'portfolio.items.item1',
-      videoSrc: 'https://assets.mixkit.co/videos/51253/51253-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/51253/51253-thumb-720-0.jpg',
-      /* Center card */
-      cornerClass: 'top-[5%] left-[35%] w-[30%] rotate-0 z-50',
-      hoverClass: 'top-[7%] left-[35%] w-[30%] rotate-0 z-50 scale-[1.03]',
-    },
-    {
-      id: 3,
-      labelKey: 'portfolio.items.item5',
-      videoSrc: 'https://assets.mixkit.co/videos/51168/51168-720.mp4',
-      poster: 'https://assets.mixkit.co/videos/51168/51168-thumb-720-0.jpg',
-      /* Right card */
-      cornerClass: 'top-[13%] right-[8%] w-[29%] rotate-[6deg] z-30',
-      hoverClass: 'top-[12%] right-[16%] w-[29%] rotate-[2deg] z-40',
-    },
-  ];
-
   const theaterDragDistance = Math.abs(theaterDragY);
   const theaterDragProgress = Math.min(theaterDragDistance / THEATER_MAX_DRAG_DISTANCE, 1);
   const theaterOverlayOpacity =
@@ -549,9 +549,9 @@ const Portfolio = () => {
               <p className="section-label text-accent text-sm md:text-base">{t('portfolio.sectionSubtitle')}</p>
             </motion.div>
             <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95]">
-              <SplitTextReveal text={t('portfolio.sectionTitle')} delay={0.06} amount={0.45} />
+              <SplitTextReveal text={t('portfolio.sectionTitle')} delay={0.06} />
               <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">
-                <SplitTextReveal text={t('portfolio.sectionTitleAccent')} delay={0.22} amount={0.45} />
+                <SplitTextReveal text={t('portfolio.sectionTitleAccent')} delay={0.22} />
               </span>
             </h2>
           </div>
@@ -606,7 +606,7 @@ const Portfolio = () => {
                 className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-proximity md:snap-none overscroll-x-contain scroll-smooth"
                 style={{ WebkitOverflowScrolling: 'touch' }}
               >
-                {reelClips.map((clip, index) => (
+                {REEL_CLIPS.map((clip, index) => (
                   <motion.button
                     type="button"
                     key={clip.id}
@@ -667,7 +667,7 @@ const Portfolio = () => {
               {t('portfolio.collageEyebrow')}
             </motion.p>
             <h3 className="text-3xl md:text-[2.4rem] font-sans font-medium tracking-tight leading-tight mb-5">
-              <SplitTextReveal text={t('portfolio.collageTitle')} delay={0.06} amount={0.45} />
+              <SplitTextReveal text={t('portfolio.collageTitle')} delay={0.06} />
             </h3>
             <motion.p className="strategic-body text-muted-foreground mb-6" variants={revealUp(16, 0.62)}>
               {t('portfolio.collageDescription')}
@@ -718,12 +718,15 @@ const Portfolio = () => {
             />
             <div className="absolute inset-0 bg-card/20" />
 
-            {collageClips.map((clip, index) => (
+            {COLLAGE_CLIPS.map((clip, index) => (
               <div
                 key={clip.id}
-                className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden origin-center will-change-transform transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${collageHovered ? clip.hoverClass : clip.cornerClass
+                className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden origin-center will-change-transform transition-all duration-700 ${collageHovered ? clip.hoverClass : clip.cornerClass
                   }`}
-                style={{ aspectRatio: '9/16' }}
+                style={{
+                  aspectRatio: '9/16',
+                  transitionTimingFunction: 'cubic-bezier(0.22,1,0.36,1)',
+                }}
               >
                 <video
                   ref={(element) => {
@@ -768,7 +771,7 @@ const Portfolio = () => {
             <div className="absolute inset-0 bg-card/15" />
 
             <div className="relative z-10 w-full h-[320px] sm:h-[360px]">
-              {collageClips.map((clip, index) => (
+              {COLLAGE_CLIPS.map((clip, index) => (
                 <div
                   key={clip.id}
                   className={`absolute rounded-xl border-2 border-white/85 shadow-md overflow-hidden ${index === 0
