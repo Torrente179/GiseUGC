@@ -36,7 +36,7 @@
     --secondary-foreground: var(--deep-ebony);
 
     --muted: var(--warm-sand);
-    --muted-foreground: var(--muted-earth);
+    --muted-foreground: 30 15% 39%;
 
     --accent: var(--washed-khaki);
     --accent-foreground: var(--deep-ebony);
@@ -418,7 +418,7 @@
   }
 
   .btn-primary-nordic {
-    @apply inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground font-sans text-[10px] font-bold uppercase tracking-prestige transition-[color,background-color,border-color,box-shadow] duration-300 hover:bg-accent hover:-translate-y-[1px] hover:shadow-[0_14px_30px_-15px_hsla(var(--accent)/0.5)];
+    @apply inline-flex items-center justify-center rounded-full bg-primary text-foreground font-sans text-[10px] font-bold uppercase tracking-prestige transition-[color,background-color,border-color,box-shadow] duration-300 hover:bg-accent hover:-translate-y-[1px] hover:shadow-[0_14px_30px_-15px_hsla(var(--accent)/0.5)];
   }
 
   .btn-secondary-nordic {

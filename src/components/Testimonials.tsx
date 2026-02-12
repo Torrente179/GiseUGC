@@ -183,12 +183,14 @@ const Testimonials = () => {
             <motion.button
               key={index}
               onClick={() => setActiveIndex(index)}
-              className={`h-2.5 rounded-full transition-all ${activeIndex === index ? 'w-8 bg-primary' : 'w-2.5 bg-primary/30'}`}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
               whileHover={shouldReduceMotion ? undefined : { scale: 1.2 }}
               whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
               transition={springHoverTransition}
-            />
+            >
+              <span className={`h-2.5 rounded-full transition-all ${activeIndex === index ? 'w-8 bg-primary' : 'w-2.5 bg-primary/30'}`} />
+            </motion.button>
           ))}
         </div>
       </div>

@@ -160,10 +160,10 @@ const Navbar = () => {
   };
 
   const languageButtonClass = (language: string) =>
-    `rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.5em] ${
+    `inline-flex min-h-10 min-w-10 items-center justify-center rounded-full px-2.5 py-2 text-[11px] font-bold uppercase tracking-[0.32em] ${
       i18n.resolvedLanguage === language
-        ? 'bg-primary/15 text-primary'
-        : 'text-foreground/70 hover:text-primary'
+        ? 'bg-primary/22 text-foreground shadow-[inset_0_0_0_1px_hsl(var(--primary)/0.35)]'
+        : 'text-foreground/85 hover:text-primary'
     }`;
 
   return (
@@ -322,7 +322,7 @@ const Navbar = () => {
               <ThemeToggle />
               <button
                 onClick={toggleMobileMenu}
-                className="rounded-full border border-border bg-card p-2 text-foreground transition-colors hover:text-primary"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:text-primary"
                 aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
                 aria-expanded={mobileMenuOpen}
               >
