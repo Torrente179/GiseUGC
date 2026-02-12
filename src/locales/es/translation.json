@@ -1,0 +1,215 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "services": "Servicios",
+    "portfolio": "Portafolio",
+    "testimonials": "Testimonios",
+    "contact": "Contacto",
+    "hireMe": "Contáctame",
+    "studioLabel": "Estudio de UGC y Publicidad"
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Cambiar Idioma"
+  },
+  "hero": {
+    "subtitle": "Creadora de UGC & Especialista en Contenido",
+    "signature": "User Generated Content",
+    "description": "Creo contenido auténtico y elegante que muestra la historia única de tu marca y conecta con tu audiencia a un nivel más profundo.",
+    "buttonPortfolio": "Ver Mi Trabajo",
+    "buttonContact": "Contactar",
+    "imageAlt": "Gisela Saldarriaga",
+    "scrollPrompt": "Explora Mis Servicios",
+    "pillStrategy": "Dirección creativa",
+    "pillAesthetic": "Estética premium",
+    "pillConversion": "Enfoque en conversión",
+    "proofLabel": "Campañas activas",
+    "proofValue": "+28 marcas",
+    "proofCaption": "Moda, belleza y lifestyle",
+    "tagline": "Editorial UGC",
+    "introduction": {
+      "eyebrow": "UGC Creativo",
+      "title": "Elevando marcas a través de narrativas auténticas",
+      "description": "Como especialista en contenido, cierro la brecha entre la identidad de tu marca y la conexión con el consumidor. Mi enfoque combina la estética editorial con estrategias de performance marketing para crear activos que no solo se ven bien, sino que venden."
+    }
+  },
+  "services": {
+    "sectionSubtitle": "Lo Que Ofrezco",
+    "sectionTitle": "Mis Servicios",
+    "motionTitle": "El toolkit completo para anunciantes modernos",
+    "motionSubtitle": "Creo contenido auténtico y elegante que muestra la historia única de tu marca y conecta con tu audiencia a un nivel más profundo.",
+    "videoPreviewLabel": "Vista previa en video",
+    "videoPreviewClose": "Cerrar vista previa de video",
+    "service1": {
+      "title": "UGC Ads",
+      "subtitle": "Videos para anuncios",
+      "description": "Creo videos UGC diseñados para convertir: hooks potentes, beneficios claros y llamado a la acción para campañas en Meta, TikTok y YouTube."
+    },
+    "service2": {
+      "title": "Testimoniales / Reseñas UGC",
+      "description": "Produzco reseñas auténticas y persuasivas que generan confianza, muestran resultados y ayudan a tu audiencia a tomar la decisión de compra."
+    },
+    "service3": {
+      "title": "Demo / How-to",
+      "subtitle": "Tutorial del producto",
+      "description": "Grabo demostraciones y tutoriales paso a paso para que tu cliente entienda cómo usar el producto, vea su valor y lo quiera desde el primer minuto."
+    },
+    "service4": {
+      "title": "Problem–Solution",
+      "subtitle": "Dolor → Solución",
+      "description": "Creo piezas que conectan desde el problema real del consumidor y muestran cómo tu producto lo resuelve de forma clara, creíble y atractiva."
+    },
+    "service5": {
+      "title": "Lifestyle UGC",
+      "subtitle": "Contenido orgánico para redes",
+      "description": "Integro tu producto en escenas de vida real con estética cuidada y narrativa natural, ideal para Reels, TikTok y contenido orgánico de marca."
+    },
+    "service6": {
+      "title": "B-Roll / UGC Footage",
+      "subtitle": "Clips para edición",
+      "description": "Entrego paquetes de tomas premium (close-ups, detalles, uso en acción y ambientes) para que tu equipo edite múltiples anuncios y publicaciones."
+    }
+  },
+  "portfolio": {
+    "sectionSubtitle": "Portafolio",
+    "sectionTitle": "Historias que ",
+    "sectionTitleAccent": "Convierten",
+    "reelDescription": "Cada reel esta pensado para captar atencion rapido, comunicar valor con claridad y elevar la intencion de compra.",
+    "reelAriaPrev": "Desplazar videos anteriores",
+    "reelAriaNext": "Desplazar videos siguientes",
+    "reelPreviewLabel": "Vista previa del reel",
+    "reelPreviewClose": "Cerrar vista previa del reel",
+    "reelPreviewPrev": "Reel abierto anterior",
+    "reelPreviewNext": "Siguiente reel abierto",
+    "reelPreviewSwipeHint": "Desliza arriba/abajo para cerrar, izquierda/derecha para navegar",
+    "collageEyebrow": "Ventaja del creador",
+    "collageTitle": "Cobertura UGC de alta conversion para todo tu funnel",
+    "collageDescription": "Desde la primera impresion hasta la decision final, creo activos liderados por creador que hacen tu marca mas creible, humana y lista para vender.",
+    "collagePoint1": "Hooks y storytelling nativos de plataforma para mejorar retencion en los primeros segundos.",
+    "collagePoint2": "Demostraciones de producto en multiples angulos para reducir dudas y aumentar confianza.",
+    "collagePoint3": "Un banco creativo reutilizable para testear ofertas, audiencias y mensajes con mayor velocidad.",
+    "collageCta": "Define tu paquete UGC",
+    "collageHintIdle": "UGC enfocado en conversion",
+    "collageHintPlaying": "Preview multiangulo de ads",
+    "categories": {
+      "all": "Todos",
+      "fashion": "Moda",
+      "beauty": "Belleza",
+      "tech": "Tecnología",
+      "lifestyle": "Estilo de Vida"
+    },
+    "items": {
+      "item1": "Colección de Moda Verano",
+      "item2": "Serie de Reseñas de Skincare",
+      "item3": "Showcase de Gadgets",
+      "item4": "Ideas de Decoración",
+      "item5": "Tutorial de Maquillaje",
+      "item6": "Colección Ropa Deportiva",
+      "item7": "Reseña de Smartphone",
+      "item8": "Rutina Matutina",
+      "item9": "Vlog de Viaje",
+      "item10": "Motivación Fitness"
+    }
+  },
+  "testimonials": {
+    "sectionSubtitle": "Comentarios de Clientes",
+    "sectionTitle": "Testimonios",
+    "testimonial1": {
+      "name": "Sara Jiménez",
+      "company": "Marca de Moda S.L.",
+      "role": "Directora de Marketing",
+      "text": "El contenido UGC creado para nuestra campaña de verano superó todas las expectativas. Nuestro engagement aumentó un 45% y vimos un aumento significativo en las ventas. Muy recomendable para cualquiera que busque elevar la presencia de su marca."
+    },
+    "testimonial2": {
+      "name": "Miguel Chen",
+      "company": "TechGadget Inc.",
+      "role": "Gerente de E-commerce",
+      "text": "Me quedé impresionado por la calidad y creatividad del contenido. Los videos de productos mostraron perfectamente nuestros nuevos gadgets tecnológicos y nos ayudaron a conectar con nuestro público objetivo de una manera que no habíamos logrado antes."
+    },
+    "testimonial3": {
+      "name": "Emma García",
+      "company": "BellezaRadiante",
+      "role": "Dueña de la Marca",
+      "text": "Trabajar con esta creadora de UGC ha transformado nuestra marca de cuidado de la piel. El enfoque auténtico para mostrar nuestros productos resultó en un aumento del 60% en las conversiones. El profesionalismo y la atención al detalle no tienen comparación."
+    },
+    "ariaPrev": "Testimonio anterior",
+    "ariaNext": "Siguiente testimonio",
+    "ariaGoTo": "Ir al testimonio {{index}}"
+  },
+  "contact": {
+    "sectionSubtitle": "Ponte en Contacto",
+    "sectionTitle": "Contáctame",
+    "heading": "Hablemos de tu Proyecto",
+    "description": "¿Listo para elevar tu marca con contenido UGC profesional? Me encantaría conocer tu proyecto y discutir cómo podemos colaborar para alcanzar tus objetivos.",
+    "emailLabel": "Email",
+    "emailValue": "contacto@ejemplo.com",
+    "fiverrLabel": "Fiverr",
+    "fiverrValue": "fiverr.com/gisela_sm",
+    "form": {
+      "nameLabel": "Tu Nombre",
+      "namePlaceholder": "Juan Pérez",
+      "emailLabel": "Tu Email",
+      "emailPlaceholder": "juan@ejemplo.com",
+      "subjectLabel": "Asunto",
+      "subjectPlaceholder": "Consulta sobre proyecto",
+      "messageLabel": "Mensaje",
+      "messagePlaceholder": "Cuéntame sobre tu proyecto...",
+      "submitButton": "Enviar Mensaje",
+      "submittingButton": "Enviando..."
+    },
+    "toast": {
+      "successTitle": "¡Mensaje enviado!",
+      "successDescription": "Gracias por tu mensaje. Me pondré en contacto contigo pronto."
+    }
+  },
+  "footer": {
+    "brandName": "Portafolio",
+    "description": "Creo contenido auténtico que impulsa el engagement y convierte a los espectadores en clientes.",
+    "servicesTitle": "Servicios",
+    "quickLinksTitle": "Enlaces Rápidos",
+    "contactTitle": "Contacto",
+    "emailLabel": "Email",
+    "fiverrLabel": "Fiverr",
+    "hireOnFiverrButton": "Contrátame en Fiverr",
+    "fiverr": {
+      "name": "Gisela",
+      "handle": "@gisela_sm",
+      "profileTitle": "Spokesperson Professional Presenter Voiceover Expert UGC Creator",
+      "country": "Colombia",
+      "language": "Español",
+      "reviewsTitle": "158 Reseñas",
+      "ratingBreakdown": "Desglose de calificación",
+      "metricCommunication": "Nivel de comunicación",
+      "metricQuality": "Calidad de entrega",
+      "metricValue": "Valor de entrega",
+      "visitProfile": "Ver perfil en Fiverr",
+      "profileAlt": "Foto de perfil de Fiverr de Gisela"
+    },
+    "copyright": "© {{year}} Portafolio UGC. Todos los derechos reservados."
+  },
+  "socialProof": {
+    "brands": "Marcas",
+    "views": "Vistas Generadas",
+    "satisfaction": "Satisfacción",
+    "contentPieces": "Piezas de Contenido"
+  },
+  "floatingContact": {
+    "whatsappLabel": "WhatsApp",
+    "telegramLabel": "Telegram",
+    "whatsappAria": "Chatear por WhatsApp",
+    "telegramAria": "Chatear por Telegram",
+    "fiverrLabel": "Fiverr",
+    "fiverrAria": "Contrátame en Fiverr",
+    "instagramLabel": "Instagram",
+    "instagramAria": "Ver Instagram",
+    "twitterLabel": "X",
+    "twitterAria": "Ver perfil en X",
+    "threadsLabel": "Threads",
+    "threadsAria": "Ver Threads",
+    "linkedinLabel": "LinkedIn",
+    "linkedinAria": "Ver LinkedIn",
+    "facebookLabel": "Facebook",
+    "facebookAria": "Ver Facebook",
+    "toggleOpenAria": "Abrir canales de contacto",
+    "toggleCloseAria": "Cerrar canales de contacto"
+  }
+}

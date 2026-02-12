@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import LazyVideo from '@/components/media/LazyVideo';
 
 interface ServiceVideoCard {
     titleKey: string;
@@ -282,7 +283,7 @@ const ServicesMarquee = () => {
                                 >
                                     {/* Compact Vertical Frame */}
                                     <div className={`relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card transition-all duration-500 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:border-primary/25 ${isExpanded ? '-translate-y-2' : ''}`}>
-                                        <video
+                                        <LazyVideo
                                             ref={(el) => { videoRefs.current[index] = el; }}
                                             className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                                             src={card.videoSrc}
@@ -290,7 +291,7 @@ const ServicesMarquee = () => {
                                             muted
                                             loop
                                             playsInline
-                                            preload="metadata"
+                                            preload="none"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-50" />
                                     </div>

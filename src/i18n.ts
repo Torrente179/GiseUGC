@@ -1,12 +1,10 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import HttpApi from 'i18next-http-backend';
+import enTranslation from '@/locales/en/translation.json';
+import esTranslation from '@/locales/es/translation.json';
 
 i18n
-  // load translation using http -> see /public/locales
-  // learn more: https://github.com/i18next/i18next-http-backend
-  .use(HttpApi)
   // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
   .use(LanguageDetector)
@@ -17,14 +15,15 @@ i18n
   .init({
     supportedLngs: ['en', 'es'],
     fallbackLng: 'es', // Default to Spanish
+    resources: {
+      en: { translation: enTranslation },
+      es: { translation: esTranslation },
+    },
     debug: import.meta.env.DEV, // Enable debug output in development
     detection: {
       order: ['querystring', 'cookie', 'localStorage', 'sessionStorage', 'navigator', 'htmlTag'],
       caches: ['cookie'],
       cookieOptions: { path: '/', sameSite: 'strict' },
-    },
-    backend: {
-      loadPath: '/locales/{{lng}}/translation.json', // Path to translation files relative to public folder
     },
     react: {
       useSuspense: false, // Keep false for simplicity for now

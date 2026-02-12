@@ -15,7 +15,7 @@ import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navig
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/';
 const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
-const fiverrLogoSrc = '/uploads/fiverr-logo-png_seeklogo-376328.png';
+const fiverrLogoSrc = '/uploads/fiverr-logo-56.webp';
 const whatsappLogoSrc = '/uploads/whatsapp.png';
 const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/';
 const xUrl = import.meta.env.VITE_X_URL ?? import.meta.env.VITE_TWITTER_URL ?? 'https://x.com/';
@@ -77,6 +77,8 @@ const Navbar = () => {
         <img
           src={whatsappLogoSrc}
           alt=""
+          width={56}
+          height={56}
           loading="lazy"
           decoding="async"
           className="h-8 w-8 rounded-full object-cover shadow-[0_5px_12px_-7px_rgba(0,0,0,0.45)]"
@@ -101,6 +103,8 @@ const Navbar = () => {
         <img
           src={fiverrLogoSrc}
           alt=""
+          width={56}
+          height={56}
           loading="lazy"
           decoding="async"
           className="h-8 w-8 rounded-full object-cover shadow-[0_5px_12px_-7px_rgba(0,0,0,0.45)]"
@@ -156,7 +160,7 @@ const Navbar = () => {
   };
 
   const languageButtonClass = (language: string) =>
-    `rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.5em] transition-colors duration-300 ${
+    `rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.5em] ${
       i18n.resolvedLanguage === language
         ? 'bg-primary/15 text-primary'
         : 'text-foreground/70 hover:text-primary'

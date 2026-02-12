@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
+import LazyVideo from '@/components/media/LazyVideo';
 
 interface ReelClip {
   id: number;
@@ -160,6 +161,7 @@ const Portfolio = () => {
 
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const reelScrollRef = useRef<HTMLDivElement>(null);
+  const reelScrollStepRef = useRef(212);
   const reelCardTouchStartRef = useRef<{ x: number; y: number } | null>(null);
   const reelCardDidDragRef = useRef(false);
   const theaterSwipeStartRef = useRef<TheaterSwipeGesture | null>(null);
@@ -434,17 +436,46 @@ const Portfolio = () => {
     };
   }, [isTheaterOpen]);
 
+  useEffect(() => {
+    const container = reelScrollRef.current;
+    if (!container) return;
+
+    const measureReelStep = () => {
+      const firstCard = container.querySelector<HTMLElement>('[data-reel-card="true"]');
+      const cardWidth = firstCard?.clientWidth ?? 200;
+      const containerStyles = window.getComputedStyle(container);
+      const gap =
+        Number.parseFloat(containerStyles.columnGap || containerStyles.gap || '0') ||
+        Number.parseFloat(containerStyles.gap || '0') ||
+        12;
+      reelScrollStepRef.current = cardWidth + gap;
+    };
+
+    measureReelStep();
+    window.addEventListener('resize', measureReelStep);
+
+    if (typeof ResizeObserver === 'undefined') {
+      return () => window.removeEventListener('resize', measureReelStep);
+    }
+
+    const resizeObserver = new ResizeObserver(measureReelStep);
+    resizeObserver.observe(container);
+
+    const firstCard = container.querySelector<HTMLElement>('[data-reel-card="true"]');
+    if (firstCard) {
+      resizeObserver.observe(firstCard);
+    }
+
+    return () => {
+      window.removeEventListener('resize', measureReelStep);
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   const scrollReels = (direction: 'left' | 'right') => {
     const container = reelScrollRef.current;
     if (!container) return;
-    const firstCard = container.querySelector<HTMLElement>('[data-reel-card="true"]');
-    const cardWidth = firstCard?.offsetWidth ?? 200;
-    const containerStyles = window.getComputedStyle(container);
-    const gap =
-      Number.parseFloat(containerStyles.columnGap || containerStyles.gap || '0') ||
-      Number.parseFloat(containerStyles.gap || '0') ||
-      12;
-    const scrollAmount = cardWidth + gap;
+    const scrollAmount = reelScrollStepRef.current;
     container.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
@@ -624,7 +655,7 @@ const Portfolio = () => {
                     whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
                     transition={springHoverTransition}
                   >
-                    <video
+                    <LazyVideo
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       src={clip.videoSrc}
                       poster={clip.poster}
@@ -632,7 +663,8 @@ const Portfolio = () => {
                       autoPlay
                       loop
                       playsInline
-                      preload="metadata"
+                      preload="none"
+                      rootMargin="100px 0px"
                       aria-hidden="true"
                     />
 
@@ -731,7 +763,7 @@ const Portfolio = () => {
                   transitionTimingFunction: 'cubic-bezier(0.22,1,0.36,1)',
                 }}
               >
-                <video
+                <LazyVideo
                   ref={(element) => {
                     collageVideoRefs.current[index] = element;
                   }}
@@ -741,7 +773,7 @@ const Portfolio = () => {
                   muted
                   loop
                   playsInline
-                  preload="metadata"
+                  preload="none"
                   aria-label={t(clip.labelKey)}
                 />
 
@@ -785,7 +817,7 @@ const Portfolio = () => {
                     } pointer-events-none`}
                   style={{ aspectRatio: '9/14' }}
                 >
-                  <video
+                  <LazyVideo
                     className="h-full w-full object-cover pointer-events-none"
                     src={clip.videoSrc}
                     poster={clip.poster}
@@ -793,15 +825,10 @@ const Portfolio = () => {
                     loop
                     playsInline
                     autoPlay
-                    preload="auto"
+                    preload="metadata"
                     disablePictureInPicture
                     disableRemotePlayback
-                    onLoadedData={(event) => {
-                      event.currentTarget.play().catch(() => undefined);
-                    }}
-                    onPause={(event) => {
-                      event.currentTarget.play().catch(() => undefined);
-                    }}
+                    rootMargin="120px 0px"
                     aria-label={t(clip.labelKey)}
                   />
                 </div>

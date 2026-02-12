@@ -62,9 +62,11 @@ const Footer = () => {
             <div className="rounded-2xl border border-border/70 bg-card/80 backdrop-blur-sm p-4 md:p-5">
             <div className="grid grid-cols-[auto_1fr] gap-3.5 md:gap-4 items-start">
               <img
-                src="/uploads/E3AF5948-F6CB-4DEE-87AE-9383B816D3EC (1).jpg"
+                src="/uploads/gisela-avatar-160.webp"
                 alt={t('footer.fiverr.profileAlt')}
                 className="h-16 w-16 md:h-20 md:w-20 rounded-full object-cover object-[center_18%] border border-border/60"
+                width={160}
+                height={200}
                 loading="lazy"
                 decoding="async"
               />

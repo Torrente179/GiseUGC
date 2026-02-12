@@ -69,10 +69,8 @@ const Hero = () => {
             </motion.div>
 
             <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3">
-              <SplitTextReveal text="Gisela" delay={0.1} />{' '}
-              <span className="text-accent luxury-accent inline-block align-baseline">
-                <SplitTextReveal text="Saldarriaga" delay={0.22} />
-              </span>
+              <span className="inline-block">Gisela</span>{' '}
+              <span className="text-accent luxury-accent inline-block align-baseline">Saldarriaga</span>
             </h1>
 
             <motion.p className="section-label text-foreground/55 mb-8" variants={revealUp(14, 0.6)}>
@@ -143,13 +141,23 @@ const Hero = () => {
             <div className="relative w-full max-w-[25rem]">
               <div className="hero-frame-glow absolute -inset-6 pointer-events-none" />
               <div className="hero-image-shell relative overflow-hidden p-3.5 bg-card/95">
-                <img
-                  src="/uploads/E3AF5948-F6CB-4DEE-87AE-9383B816D3EC (1).jpg"
-                  alt={t('hero.imageAlt')}
-                  className="w-full aspect-[4/5] object-cover rounded-[1.5rem]"
-                  fetchPriority="high"
-                  decoding="async"
-                />
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcSet="/uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
+                    sizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 44vw, 88vw"
+                  />
+                  <img
+                    src="/uploads/gisela-hero-800.jpg"
+                    alt={t('hero.imageAlt')}
+                    className="w-full aspect-[4/5] object-cover rounded-[1.5rem]"
+                    width={800}
+                    height={1000}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                </picture>
               </div>
 
               <motion.div
