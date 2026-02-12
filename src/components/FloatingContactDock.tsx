@@ -157,8 +157,6 @@ const FloatingContactDock = () => {
             <a
               key={platform.id}
               href={platform.href}
-              target="_blank"
-              rel="noopener noreferrer"
               aria-label={t(platform.ariaKey)}
               className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/45 ${platform.toneClass} ${platform.hoverToneClass} backdrop-blur-xl shadow-[0_12px_24px_-18px_hsl(var(--foreground)/0.9)] transition-all duration-300 hover:-translate-y-0.5`}
               style={{

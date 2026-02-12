@@ -226,8 +226,6 @@ const Navbar = () => {
                   <a
                     key={platform.key}
                     href={platform.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     aria-label={t(platform.ariaKey)}
                     onClick={closeMobileMenu}
                     className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/75 px-2 py-2.5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_16px_28px_-20px_hsl(var(--foreground)/0.9)]"
