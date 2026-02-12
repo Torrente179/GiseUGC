@@ -16,6 +16,7 @@ CSS `transition-all` on elements that also use framer-motion `whileHover`/`while
 
 ### `src/components/motion/SplitTextReveal.tsx`
 - Restored `initial="hidden"` + `whileInView="visible"` with `viewport={{ once: true, amount: 0.15 }}`
+- Added `key={content}` to force remount when translation text arrives — fixes race condition where `whileInView` + `once: true` fires before i18next HTTP backend loads, leaving new word spans stuck invisible after re-render
 - Lower `amount` threshold (0.15 vs old 0.45) triggers earlier and more reliably
 - Removed `will-change-transform` from individual word spans (too many compositing layers)
 - Removed broken `animateOnMount` prop; restored `once` and `amount` props

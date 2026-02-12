@@ -31,6 +31,7 @@ const SplitTextReveal = ({
 
   return (
     <motion.span
+      key={content}
       className={cn('inline-block', className)}
       initial="hidden"
       whileInView="visible"
