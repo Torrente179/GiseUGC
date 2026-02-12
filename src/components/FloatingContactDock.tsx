@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   ChevronUp,
+  MessageCircle,
   Send,
   Instagram,
   Linkedin,
@@ -166,11 +167,7 @@ const FloatingContactDock = () => {
           onClick={() => setMobileOpen((prev) => !prev)}
           className="group relative inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/45 bg-card/72 supports-[backdrop-filter]:bg-card/62 backdrop-blur-xl text-foreground shadow-[0_18px_34px_-20px_hsl(var(--foreground)/0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/45 hover:text-primary"
         >
-          <img
-            src={whatsappLogoSrc}
-            alt=""
-            loading="lazy"
-            decoding="async"
+          <MessageCircle
             className={`absolute h-5 w-5 transition-all duration-300 ${
               mobileOpen ? 'opacity-0 scale-75 rotate-12' : 'opacity-100 scale-100 rotate-0'
             }`}
@@ -184,7 +181,7 @@ const FloatingContactDock = () => {
       </div>
 
       {/* Desktop: horizontal row */}
-      <div className="hidden md:flex items-center gap-3 rounded-full border border-border bg-card px-3 py-2.5 shadow-lg pointer-events-auto">
+      <div className="hidden md:flex items-center gap-3 rounded-full border border-white/40 bg-card/62 supports-[backdrop-filter]:bg-card/48 backdrop-blur-2xl px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] pointer-events-auto">
         {contactPlatforms.map((platform) => (
           <a
             key={platform.id}
