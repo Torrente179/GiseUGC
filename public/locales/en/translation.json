@@ -201,11 +201,15 @@
     "fiverrAria": "Hire me on Fiverr",
     "instagramLabel": "Instagram",
     "instagramAria": "Open Instagram",
-    "twitterLabel": "Twitter",
-    "twitterAria": "Open Twitter",
+    "twitterLabel": "X",
+    "twitterAria": "Open X profile",
+    "threadsLabel": "Threads",
+    "threadsAria": "Open Threads",
     "linkedinLabel": "LinkedIn",
     "linkedinAria": "Open LinkedIn",
     "facebookLabel": "Facebook",
-    "facebookAria": "Open Facebook"
+    "facebookAria": "Open Facebook",
+    "toggleOpenAria": "Open contact channels",
+    "toggleCloseAria": "Close contact channels"
   }
 }

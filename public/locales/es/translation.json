@@ -201,11 +201,15 @@
     "fiverrAria": "Contrátame en Fiverr",
     "instagramLabel": "Instagram",
     "instagramAria": "Ver Instagram",
-    "twitterLabel": "Twitter",
-    "twitterAria": "Ver Twitter",
+    "twitterLabel": "X",
+    "twitterAria": "Ver perfil en X",
+    "threadsLabel": "Threads",
+    "threadsAria": "Ver Threads",
     "linkedinLabel": "LinkedIn",
     "linkedinAria": "Ver LinkedIn",
     "facebookLabel": "Facebook",
-    "facebookAria": "Ver Facebook"
+    "facebookAria": "Ver Facebook",
+    "toggleOpenAria": "Abrir canales de contacto",
+    "toggleCloseAria": "Cerrar canales de contacto"
   }
 }

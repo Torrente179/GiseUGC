@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
+  ChevronUp,
   MessageCircle,
   Send,
   Instagram,
-  Twitter,
   Linkedin,
   Facebook,
 } from 'lucide-react';
@@ -14,14 +15,52 @@ const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/';
 const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
 const fiverrLogoSrc = '/uploads/fiverr-logo-png_seeklogo-376328.png';
 const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/';
-const twitterUrl = import.meta.env.VITE_TWITTER_URL ?? 'https://twitter.com/';
+const xUrl = import.meta.env.VITE_X_URL ?? import.meta.env.VITE_TWITTER_URL ?? 'https://x.com/';
+const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.net/';
 const linkedinUrl = import.meta.env.VITE_LINKEDIN_URL ?? 'https://www.linkedin.com/';
 const facebookUrl = import.meta.env.VITE_FACEBOOK_URL ?? 'https://www.facebook.com/';
 
+const XBrandIcon = ({ className }: { className?: string }) => (
+  <span className={className} aria-hidden="true">
+    X
+  </span>
+);
+
+const ThreadsIcon = ({ className }: { className?: string }) => (
+  <span className={className} aria-hidden="true">
+    @
+  </span>
+);
+
 const FloatingContactDock = () => {
   const { t } = useTranslation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const handleOutsideTap = (event: PointerEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest('[data-mobile-contact-dock]')) return;
+      setMobileOpen(false);
+    };
+
+    document.addEventListener('pointerdown', handleOutsideTap);
+    return () => document.removeEventListener('pointerdown', handleOutsideTap);
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    const closeOnDesktop = () => {
+      if (window.innerWidth >= 768) setMobileOpen(false);
+    };
+
+    window.addEventListener('resize', closeOnDesktop);
+    return () => window.removeEventListener('resize', closeOnDesktop);
+  }, []);
+
   const contactPlatforms = [
     {
+      id: 'whatsapp',
       ariaKey: 'floatingContact.whatsappAria',
       href: whatsappUrl,
       icon: <MessageCircle className="h-5 w-5" />,
@@ -29,6 +68,7 @@ const FloatingContactDock = () => {
       hoverToneClass: 'hover:bg-emerald-500/25',
     },
     {
+      id: 'telegram',
       ariaKey: 'floatingContact.telegramAria',
       href: telegramUrl,
       icon: <Send className="h-5 w-5 -rotate-12" />,
@@ -36,6 +76,7 @@ const FloatingContactDock = () => {
       hoverToneClass: 'hover:bg-sky-500/25',
     },
     {
+      id: 'fiverr',
       ariaKey: 'floatingContact.fiverrAria',
       href: fiverrUrl,
       icon: (
@@ -51,6 +92,7 @@ const FloatingContactDock = () => {
       hoverToneClass: 'hover:bg-white',
     },
     {
+      id: 'instagram',
       ariaKey: 'floatingContact.instagramAria',
       href: instagramUrl,
       icon: <Instagram className="h-5 w-5" />,
@@ -58,13 +100,23 @@ const FloatingContactDock = () => {
       hoverToneClass: 'hover:bg-pink-500/25',
     },
     {
+      id: 'x',
       ariaKey: 'floatingContact.twitterAria',
-      href: twitterUrl,
-      icon: <Twitter className="h-5 w-5" />,
+      href: xUrl,
+      icon: <XBrandIcon className="text-[16px] font-black leading-none tracking-[-0.02em]" />,
       toneClass: 'bg-slate-500/15 text-slate-600 dark:text-slate-300',
       hoverToneClass: 'hover:bg-slate-500/25',
     },
     {
+      id: 'threads',
+      ariaKey: 'floatingContact.threadsAria',
+      href: threadsUrl,
+      icon: <ThreadsIcon className="text-[18px] font-black leading-none" />,
+      toneClass: 'bg-zinc-500/15 text-zinc-700 dark:text-zinc-200',
+      hoverToneClass: 'hover:bg-zinc-500/25',
+    },
+    {
+      id: 'linkedin',
       ariaKey: 'floatingContact.linkedinAria',
       href: linkedinUrl,
       icon: <Linkedin className="h-5 w-5" />,
@@ -72,6 +124,7 @@ const FloatingContactDock = () => {
       hoverToneClass: 'hover:bg-blue-600/25',
     },
     {
+      id: 'facebook',
       ariaKey: 'floatingContact.facebookAria',
       href: facebookUrl,
       icon: <Facebook className="h-5 w-5" />,
@@ -88,29 +141,55 @@ const FloatingContactDock = () => {
         paddingRight: 'env(safe-area-inset-right, 0px)',
       }}
     >
-      {/* Mobile: compact bubble panel */}
-      <div className="pointer-events-auto md:hidden rounded-[1.35rem] border border-border/90 bg-card/95 p-2.5 shadow-[0_20px_38px_-28px_hsl(var(--foreground)/0.9)] backdrop-blur-md">
-        <div className="grid grid-cols-4 gap-2">
-          {contactPlatforms.map((platform) => (
+      {/* Mobile: toggle + vertical reveal */}
+      <div data-mobile-contact-dock className="pointer-events-auto md:hidden flex flex-col items-end">
+        <div
+          className={`mb-2.5 flex flex-col items-end gap-2 transition-all duration-300 ${
+            mobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
+          }`}
+        >
+          {contactPlatforms.map((platform, index) => (
             <a
-              key={platform.ariaKey}
+              key={platform.id}
               href={platform.href}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t(platform.ariaKey)}
-              className={`inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/70 ${platform.toneClass} transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md`}
+              onClick={() => setMobileOpen(false)}
+              className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-border/70 ${platform.toneClass} ${platform.hoverToneClass} shadow-[0_14px_28px_-18px_hsl(var(--foreground)/0.95)] transition-all duration-300 hover:-translate-y-0.5`}
+              style={{
+                transitionDelay: mobileOpen ? `${index * 25}ms` : '0ms',
+              }}
             >
               {platform.icon}
             </a>
           ))}
         </div>
+        <button
+          type="button"
+          aria-expanded={mobileOpen}
+          aria-label={mobileOpen ? t('floatingContact.toggleCloseAria') : t('floatingContact.toggleOpenAria')}
+          onClick={() => setMobileOpen((prev) => !prev)}
+          className="group relative inline-flex h-12 w-12 items-center justify-center rounded-full border border-border/80 bg-card/95 text-foreground shadow-[0_18px_34px_-20px_hsl(var(--foreground)/0.95)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/45 hover:text-primary"
+        >
+          <MessageCircle
+            className={`absolute h-5 w-5 transition-all duration-300 ${
+              mobileOpen ? 'opacity-0 scale-75 rotate-12' : 'opacity-100 scale-100 rotate-0'
+            }`}
+          />
+          <ChevronUp
+            className={`absolute h-5 w-5 transition-all duration-300 ${
+              mobileOpen ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-75 -rotate-12'
+            }`}
+          />
+        </button>
       </div>
 
       {/* Desktop: horizontal row */}
       <div className="hidden md:flex items-center gap-3 rounded-full border border-border bg-card px-3 py-2.5 shadow-lg pointer-events-auto">
         {contactPlatforms.map((platform) => (
           <a
-            key={platform.ariaKey}
+            key={platform.id}
             href={platform.href}
             target="_blank"
             rel="noopener noreferrer"

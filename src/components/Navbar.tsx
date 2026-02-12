@@ -7,7 +7,6 @@ import {
   MessageCircle,
   Send,
   Instagram,
-  Twitter,
   Linkedin,
   Facebook,
 } from 'lucide-react';
@@ -18,9 +17,22 @@ const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/';
 const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
 const fiverrLogoSrc = '/uploads/fiverr-logo-png_seeklogo-376328.png';
 const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/';
-const twitterUrl = import.meta.env.VITE_TWITTER_URL ?? 'https://twitter.com/';
+const xUrl = import.meta.env.VITE_X_URL ?? import.meta.env.VITE_TWITTER_URL ?? 'https://x.com/';
+const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.net/';
 const linkedinUrl = import.meta.env.VITE_LINKEDIN_URL ?? 'https://www.linkedin.com/';
 const facebookUrl = import.meta.env.VITE_FACEBOOK_URL ?? 'https://www.facebook.com/';
+
+const XBrandIcon = ({ className }: { className?: string }) => (
+  <span className={className} aria-hidden="true">
+    X
+  </span>
+);
+
+const ThreadsIcon = ({ className }: { className?: string }) => (
+  <span className={className} aria-hidden="true">
+    @
+  </span>
+);
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -98,10 +110,18 @@ const Navbar = () => {
     {
       key: 'floatingContact.twitterLabel',
       ariaKey: 'floatingContact.twitterAria',
-      href: twitterUrl,
-      icon: <Twitter className="h-[18px] w-[18px]" />,
+      href: xUrl,
+      icon: <XBrandIcon className="text-[16px] font-black leading-none tracking-[-0.02em]" />,
       iconClass: 'bg-slate-500/15 text-slate-600 dark:text-slate-300',
       glowClass: 'from-slate-400/70 via-zinc-500/45 to-slate-600/70',
+    },
+    {
+      key: 'floatingContact.threadsLabel',
+      ariaKey: 'floatingContact.threadsAria',
+      href: threadsUrl,
+      icon: <ThreadsIcon className="text-[18px] font-black leading-none" />,
+      iconClass: 'bg-zinc-500/15 text-zinc-700 dark:text-zinc-200',
+      glowClass: 'from-zinc-400/70 via-zinc-500/45 to-zinc-600/70',
     },
     {
       key: 'floatingContact.linkedinLabel',
