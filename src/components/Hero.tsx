@@ -131,7 +131,8 @@ const Hero = () => {
             </div>
 
             <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3">
-              <LiteSplitTextReveal text="Gisela Saldarriaga" delay={0.18} stagger={0.09} wordClassName="text-accent luxury-accent [&:first-child]:text-foreground [&:first-child]:font-serif [&:first-child]:font-bold [&:first-child]:tracking-[-0.05em] [&:first-child]:text-[1em] align-baseline" />
+              <LiteSplitTextReveal text="Gisela" delay={0.18} stagger={0.09} />{' '}
+              <LiteSplitTextReveal text="Saldarriaga" delay={0.27} stagger={0.09} className="text-accent luxury-accent align-baseline" />
             </h1>
 
             <p className="hero-reveal hero-reveal-2 section-label text-foreground/55 mb-8">{t('hero.signature')}</p>
