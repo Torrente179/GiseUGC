@@ -106,7 +106,7 @@ const FloatingContactDock = () => {
           height={56}
           loading="lazy"
           decoding="async"
-          className="h-[22px] w-[22px] object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.28)]"
+          className="h-[26px] w-[26px] object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.28)]"
         />
       ),
       toneClass: 'bg-white/78 dark:bg-white/88',

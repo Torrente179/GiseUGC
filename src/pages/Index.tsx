@@ -27,10 +27,15 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setShouldLoadBelowFold(true);
-    }, 450);
+    const load = () => setShouldLoadBelowFold(true);
 
+    if (typeof window.requestIdleCallback === 'function') {
+      const idleId = window.requestIdleCallback(load, { timeout: 1500 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    // Safari <17 fallback
+    const timeoutId = window.setTimeout(load, 300);
     return () => window.clearTimeout(timeoutId);
   }, []);
 

@@ -118,6 +118,7 @@ const Navbar = () => {
     },
     {
       key: 'floatingContact.tiktokLabel',
+      fallbackLabel: 'TikTok',
       ariaKey: 'floatingContact.tiktokAria',
       href: tiktokUrl,
       icon: (
@@ -128,7 +129,7 @@ const Navbar = () => {
           height={56}
           loading="lazy"
           decoding="async"
-          className="h-7 w-7 object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.28)]"
+          className="h-9 w-9 object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.28)]"
         />
       ),
       iconClass: 'bg-white/90 dark:bg-white/95',
@@ -238,7 +239,7 @@ const Navbar = () => {
                       {platform.icon}
                     </span>
                     <span className="mt-1.5 block text-[9px] font-semibold uppercase tracking-[0.12em] text-foreground/85">
-                      {t(platform.key)}
+                      {t(platform.key, { defaultValue: platform.fallbackLabel ?? platform.key })}
                     </span>
                   </a>
                 ))}

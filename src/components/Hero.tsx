@@ -1,10 +1,16 @@
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Diamond, Sparkles, Zap } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
+import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
 
 const Hero = () => {
   const { t } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
+  const sectionRef = useRef<HTMLElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null);
+  const floatingCardRef = useRef<HTMLDivElement>(null);
+  const cornerTagRef = useRef<HTMLDivElement>(null);
 
   const heroPills = [
     { icon: Sparkles, labelKey: 'hero.pillStrategy' },
@@ -12,8 +18,105 @@ const Hero = () => {
     { icon: Zap, labelKey: 'hero.pillConversion' },
   ];
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    const media = mediaRef.current;
+    const floatingCard = floatingCardRef.current;
+    const cornerTag = cornerTagRef.current;
+    if (!section || !media || !floatingCard || !cornerTag) return;
+
+    const motionReadyTimer = window.setTimeout(() => {
+      section.dataset.motion = 'ready';
+    }, 220);
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+
+    if (prefersReducedMotion || !isDesktop) {
+      media.style.transform = '';
+      floatingCard.style.transform = '';
+      cornerTag.style.transform = '';
+      return () => {
+        window.clearTimeout(motionReadyTimer);
+        delete section.dataset.motion;
+      };
+    }
+
+    let sectionTop = 0;
+    let sectionHeight = 1;
+    let viewportHeight = window.innerHeight;
+    let frameId: number | null = null;
+
+    const measure = () => {
+      const rect = section.getBoundingClientRect();
+      sectionTop = window.scrollY + rect.top;
+      sectionHeight = rect.height;
+      viewportHeight = window.innerHeight;
+    };
+
+    const updateParallax = () => {
+      frameId = null;
+      const start = sectionTop - viewportHeight;
+      const end = sectionTop + sectionHeight;
+      const progress = Math.max(0, Math.min(1, (window.scrollY - start) / (end - start)));
+
+      const imageY = 46 - 92 * progress;
+      const imageRotate = -1.4 + 2.8 * progress;
+      const cardY = 22 - 48 * progress;
+      const tagY = 14 - 34 * progress;
+
+      media.style.transform = `translate3d(0, ${imageY.toFixed(2)}px, 0) rotate(${imageRotate.toFixed(2)}deg)`;
+      floatingCard.style.transform = `translate3d(0, ${cardY.toFixed(2)}px, 0)`;
+      cornerTag.style.transform = `translate3d(0, ${tagY.toFixed(2)}px, 0)`;
+    };
+
+    const queueParallaxUpdate = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(updateParallax);
+    };
+
+    const handleScroll = () => {
+      queueParallaxUpdate();
+    };
+
+    const handleResize = () => {
+      measure();
+      queueParallaxUpdate();
+    };
+
+    measure();
+    queueParallaxUpdate();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        measure();
+        queueParallaxUpdate();
+      });
+      resizeObserver.observe(section);
+    }
+
+    return () => {
+      window.clearTimeout(motionReadyTimer);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+      resizeObserver?.disconnect();
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+      media.style.transform = '';
+      floatingCard.style.transform = '';
+      cornerTag.style.transform = '';
+      delete section.dataset.motion;
+    };
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="home"
       className="hero-section relative isolate min-h-[92svh] flex items-center pt-24 md:pt-28 pb-16 md:pb-20 overflow-hidden grain-overlay"
     >
@@ -22,25 +125,24 @@ const Hero = () => {
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="hero-shell grid lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] gap-12 lg:gap-16 items-center">
           <div className="order-2 lg:order-1">
-            <div className="inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/70 px-4 py-2 backdrop-blur-sm">
+            <div className="hero-reveal hero-reveal-1 inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/70 px-4 py-2 backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
               <p className="section-label font-outfit text-muted-foreground/95">{t('hero.subtitle')}</p>
             </div>
 
             <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3">
-              <span className="inline-block">Gisela</span>{' '}
-              <span className="text-accent luxury-accent inline-block align-baseline">Saldarriaga</span>
+              <LiteSplitTextReveal text="Gisela Saldarriaga" delay={0.18} stagger={0.09} wordClassName="text-accent luxury-accent [&:first-child]:text-foreground [&:first-child]:font-serif [&:first-child]:font-bold [&:first-child]:tracking-[-0.05em] [&:first-child]:text-[1em] align-baseline" />
             </h1>
 
-            <p className="section-label text-foreground/55 mb-8">{t('hero.signature')}</p>
+            <p className="hero-reveal hero-reveal-2 section-label text-foreground/55 mb-8">{t('hero.signature')}</p>
 
-            <div className="w-44 h-px signature-line mb-8" />
+            <div className="hero-reveal hero-reveal-2 w-44 h-px signature-line mb-8" />
 
-            <p className="strategic-body text-foreground/80 text-lg md:text-xl mb-10 max-w-xl">
+            <p className="hero-reveal hero-reveal-3 strategic-body text-foreground/80 text-lg md:text-xl mb-10 max-w-xl">
               {t('hero.description')}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+            <div className="hero-reveal hero-reveal-4 flex flex-col sm:flex-row gap-4 sm:gap-5">
               <a
                 href="#portfolio"
                 onClick={handleHashLinkClick}
@@ -57,7 +159,7 @@ const Hero = () => {
               </a>
             </div>
 
-            <div className="mt-10 hidden md:flex md:flex-wrap gap-3">
+            <div className="hero-reveal hero-reveal-5 mt-10 hidden md:flex md:flex-wrap gap-3">
               {heroPills.map(({ icon: Icon, labelKey }) => (
                 <div
                   key={labelKey}
@@ -70,14 +172,14 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+          <div ref={mediaRef} className="order-1 lg:order-2 flex justify-center lg:justify-end hero-parallax-media">
             <div className="relative w-full max-w-[25rem]">
               <div className="hero-frame-glow absolute -inset-6 pointer-events-none" />
               <div className="hero-image-shell relative overflow-hidden p-3.5 bg-card/95">
                 <picture>
                   <source
                     type="image/webp"
-                    srcSet="/uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-640.webp 640w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
+                    srcSet="/uploads/gisela-hero-400.webp 400w, /uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-640.webp 640w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
                     sizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 43vw, 76vw"
                   />
                   <img
@@ -93,13 +195,13 @@ const Hero = () => {
                 </picture>
               </div>
 
-              <div className="hero-floating-card">
+              <div ref={floatingCardRef} className="hero-floating-card hero-parallax-floating-card">
                 <p className="hero-floating-label">{t('hero.proofLabel')}</p>
                 <p className="hero-floating-value">{t('hero.proofValue')}</p>
                 <p className="hero-floating-caption">{t('hero.proofCaption')}</p>
               </div>
 
-              <div className="hero-corner-tag">
+              <div ref={cornerTagRef} className="hero-corner-tag hero-parallax-corner-tag">
                 <span>{t('hero.tagline')}</span>
               </div>
             </div>
@@ -111,7 +213,7 @@ const Hero = () => {
             <div className="space-y-6">
               <span className="section-label">{t('hero.introduction.eyebrow')}</span>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-[0.95] tracking-tight-serif">
-                {t('hero.introduction.title')}
+                <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} />
               </h2>
             </div>
             <div className="lg:pt-20">
