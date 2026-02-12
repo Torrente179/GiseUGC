@@ -10,6 +10,7 @@ import {
   Facebook,
 } from 'lucide-react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/';
@@ -38,6 +39,7 @@ const Navbar = () => {
   const { t, i18n } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { handleHashLinkClick } = useHashlessSectionNavigation();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 24);
@@ -180,7 +182,7 @@ const Navbar = () => {
               <a
                 key={link.key}
                 href={link.href}
-                onClick={closeMobileMenu}
+                onClick={(event) => handleHashLinkClick(event, closeMobileMenu)}
                 className={`group flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 transition-all duration-500 ${
                   mobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'
                 }`}
@@ -255,7 +257,7 @@ const Navbar = () => {
             <a
               href="#home"
               className="brand-logo text-xl md:text-2xl text-accent"
-              onClick={closeMobileMenu}
+              onClick={(event) => handleHashLinkClick(event, closeMobileMenu)}
             >
               Gisela<span className="text-foreground font-medium">.UGC</span>
             </a>
@@ -265,6 +267,7 @@ const Navbar = () => {
                 <a
                   key={link.key}
                   href={link.href}
+                  onClick={handleHashLinkClick}
                   className="section-label text-foreground/80 transition-colors hover:text-primary"
                 >
                   {t(link.key)}
@@ -290,7 +293,7 @@ const Navbar = () => {
                 </button>
               </div>
               <ThemeToggle />
-              <a href="#contact" className="btn-primary-nordic px-5 py-2.5">
+              <a href="#contact" onClick={handleHashLinkClick} className="btn-primary-nordic px-5 py-2.5">
                 {t('navbar.hireMe')}
               </a>
             </div>

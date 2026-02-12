@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Play, VolumeX, X } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
+import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 
 interface ReelClip {
   id: number;
@@ -145,6 +146,7 @@ const COLLAGE_CLIPS: CollageClip[] = [
 const Portfolio = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const { handleHashLinkClick } = useHashlessSectionNavigation();
 
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
   const [activeReelIndex, setActiveReelIndex] = useState<number | null>(null);
@@ -690,6 +692,7 @@ const Portfolio = () => {
 
             <motion.a
               href="#contact"
+              onClick={handleHashLinkClick}
               className="btn-primary-nordic px-7 py-3"
               whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.02 }}
               whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}

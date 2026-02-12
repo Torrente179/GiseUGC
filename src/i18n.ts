@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
 
-i18n
+const i18nInitPromise = i18n
   // load translation using http -> see /public/locales
   // learn more: https://github.com/i18next/i18next-http-backend
   .use(HttpApi)
@@ -16,8 +16,10 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     supportedLngs: ['en', 'es'],
+    nonExplicitSupportedLngs: true,
+    load: 'languageOnly',
     fallbackLng: 'es', // Default to Spanish
-    debug: import.meta.env.DEV, // Enable debug output in development
+    debug: import.meta.env.DEV && import.meta.env.VITE_I18N_DEBUG === 'true',
     detection: {
       order: ['querystring', 'cookie', 'localStorage', 'sessionStorage', 'navigator', 'htmlTag'],
       caches: ['cookie'],
@@ -31,4 +33,5 @@ i18n
     },
   });
 
+export { i18nInitPromise };
 export default i18n;

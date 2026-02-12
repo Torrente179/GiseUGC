@@ -1,4 +1,4 @@
-
+import { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import SocialProof from '@/components/SocialProof';
@@ -8,8 +8,13 @@ import Testimonials from '@/components/Testimonials';
 import ServicesMarquee from '@/components/ServicesMarquee';
 import Footer from '@/components/Footer';
 import FloatingContactDock from '@/components/FloatingContactDock';
+import { clearUrlHash } from '@/hooks/use-hashless-section-navigation';
 
 const Index = () => {
+  useEffect(() => {
+    clearUrlHash();
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Navbar />

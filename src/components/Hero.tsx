@@ -4,11 +4,13 @@ import { Diamond, Sparkles, Zap } from 'lucide-react';
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
+import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 
 const Hero = () => {
   const { t } = useTranslation();
   const sectionRef = useRef<HTMLElement>(null);
   const shouldReduceMotion = useReducedMotion();
+  const { handleHashLinkClick } = useHashlessSectionNavigation();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -89,6 +91,7 @@ const Hero = () => {
             <motion.div className="flex flex-col sm:flex-row gap-4 sm:gap-5" variants={revealUp(16, 0.6)}>
               <motion.a
                 href="#portfolio"
+                onClick={handleHashLinkClick}
                 className="btn-primary-nordic px-8 py-3.5"
                 whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.02 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
@@ -98,6 +101,7 @@ const Hero = () => {
               </motion.a>
               <motion.a
                 href="#contact"
+                onClick={handleHashLinkClick}
                 className="btn-secondary-nordic px-8 py-3.5"
                 whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.02 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
