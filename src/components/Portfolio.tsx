@@ -37,6 +37,7 @@ const THEATER_SWIPE_VELOCITY_THRESHOLD = 0.45;
 const THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
+const REEL_CARD_TAP_SLOP_PX = 10;
 
 const Portfolio = () => {
   const { t } = useTranslation();
@@ -54,6 +55,8 @@ const Portfolio = () => {
 
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const reelScrollRef = useRef<HTMLDivElement>(null);
+  const reelCardTouchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const reelCardDidDragRef = useRef(false);
   const theaterSwipeStartRef = useRef<TheaterSwipeGesture | null>(null);
   const theaterCloseTimerRef = useRef<number | null>(null);
   const theaterDragFrameRef = useRef<number | null>(null);
@@ -329,14 +332,54 @@ const Portfolio = () => {
   const scrollReels = (direction: 'left' | 'right') => {
     const container = reelScrollRef.current;
     if (!container) return;
-    const cardWidth = container.querySelector('button')?.offsetWidth ?? 200;
-    const gap = 12;
+    const firstCard = container.querySelector<HTMLElement>('[data-reel-card="true"]');
+    const cardWidth = firstCard?.offsetWidth ?? 200;
+    const containerStyles = window.getComputedStyle(container);
+    const gap =
+      Number.parseFloat(containerStyles.columnGap || containerStyles.gap || '0') ||
+      Number.parseFloat(containerStyles.gap || '0') ||
+      12;
     const scrollAmount = cardWidth + gap;
     container.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
     });
   };
+
+  const handleReelCardTouchStart = useCallback((event: TouchEvent<HTMLButtonElement>) => {
+    const touch = event.touches[0];
+    if (!touch) return;
+    reelCardTouchStartRef.current = { x: touch.clientX, y: touch.clientY };
+    reelCardDidDragRef.current = false;
+  }, []);
+
+  const handleReelCardTouchMove = useCallback((event: TouchEvent<HTMLButtonElement>) => {
+    const start = reelCardTouchStartRef.current;
+    const touch = event.touches[0];
+    if (!start || !touch) return;
+
+    if (
+      Math.abs(touch.clientX - start.x) > REEL_CARD_TAP_SLOP_PX ||
+      Math.abs(touch.clientY - start.y) > REEL_CARD_TAP_SLOP_PX
+    ) {
+      reelCardDidDragRef.current = true;
+    }
+  }, []);
+
+  const handleReelCardTouchEnd = useCallback(() => {
+    reelCardTouchStartRef.current = null;
+  }, []);
+
+  const handleReelCardClick = useCallback(
+    (clip: ReelClip, index: number) => {
+      if (reelCardDidDragRef.current) {
+        reelCardDidDragRef.current = false;
+        return;
+      }
+      openReelPreview(clip, index);
+    },
+    [openReelPreview],
+  );
 
   /* Play all collage videos */
   const playCollageVideos = useCallback(() => {
@@ -560,14 +603,20 @@ const Portfolio = () => {
             <div className="relative z-10 mx-auto px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
               <div
                 ref={reelScrollRef}
-                className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory md:snap-none"
+                className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-proximity md:snap-none overscroll-x-contain scroll-smooth"
+                style={{ WebkitOverflowScrolling: 'touch' }}
               >
                 {reelClips.map((clip, index) => (
                   <motion.button
                     type="button"
                     key={clip.id}
-                    className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-pan-y"
-                    onClick={() => openReelPreview(clip, index)}
+                    data-reel-card="true"
+                    className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-manipulation"
+                    onTouchStart={handleReelCardTouchStart}
+                    onTouchMove={handleReelCardTouchMove}
+                    onTouchEnd={handleReelCardTouchEnd}
+                    onTouchCancel={handleReelCardTouchEnd}
+                    onClick={() => handleReelCardClick(clip, index)}
                     aria-label={t(clip.titleKey)}
                     whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.02 }}
                     whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
