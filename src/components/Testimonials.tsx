@@ -1,9 +1,13 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import SplitTextReveal from '@/components/motion/SplitTextReveal';
+import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 
 const Testimonials = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
 
   const testimonialData = [
     {
@@ -72,42 +76,65 @@ const Testimonials = () => {
   return (
     <section id="testimonials" className="studio-section bg-background">
       <div className="studio-container">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-10 md:mb-12">
+        <motion.div
+          className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-10 md:mb-12"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={staggerContainer(0.12, 0.04)}
+        >
           <div>
-            <p className="section-label text-muted-foreground mb-3">{t('testimonials.sectionSubtitle')}</p>
-            <h2 className="studio-title">{t('testimonials.sectionTitle')}</h2>
+            <motion.p className="section-label text-muted-foreground mb-3" variants={revealUp(14, 0.56)}>
+              {t('testimonials.sectionSubtitle')}
+            </motion.p>
+            <h2 className="studio-title">
+              <SplitTextReveal text={t('testimonials.sectionTitle')} delay={0.08} amount={0.45} />
+            </h2>
           </div>
 
-          <div className="hidden md:flex items-center gap-3">
-            <button
+          <motion.div className="hidden md:flex items-center gap-3" variants={revealUp(18, 0.62)}>
+            <motion.button
               onClick={prevTestimonial}
-              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
+              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
               aria-label={t('testimonials.ariaPrev')}
+              whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.06 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+              transition={springHoverTransition}
             >
               <ChevronLeft className="h-5 w-5 text-primary" />
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={nextTestimonial}
-              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm hover-grow"
+              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
               aria-label={t('testimonials.ariaNext')}
+              whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.06 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+              transition={springHoverTransition}
             >
               <ChevronRight className="h-5 w-5 text-primary" />
-            </button>
-          </div>
-        </div>
+            </motion.button>
+          </motion.div>
+        </motion.div>
 
-        <div className="studio-rule mb-8 md:mb-10" />
+        <motion.div
+          className="studio-rule mb-8 md:mb-10"
+          initial={{ opacity: 0, scaleX: 0.7 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.62 }}
+        />
 
-        <div
+        <motion.div
           className="relative overflow-hidden"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.68 }}
         >
-          <div
-            className="flex transition-transform duration-500"
-            style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-          >
+          <div className="flex transition-transform duration-500" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
             {testimonialData.map((testimonial) => (
               <article key={testimonial.id} className="min-w-full">
                 <div className="studio-panel p-6 md:p-8 lg:p-10">
@@ -149,15 +176,18 @@ const Testimonials = () => {
               </article>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         <div className="flex justify-center mt-7 md:mt-8 gap-2.5">
           {testimonialData.map((_, index) => (
-            <button
+            <motion.button
               key={index}
               onClick={() => setActiveIndex(index)}
               className={`h-2.5 rounded-full transition-all ${activeIndex === index ? 'w-8 bg-primary' : 'w-2.5 bg-primary/30'}`}
               aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.2 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+              transition={springHoverTransition}
             />
           ))}
         </div>

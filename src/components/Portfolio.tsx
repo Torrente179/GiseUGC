@@ -1,6 +1,9 @@
 import { useRef, useState, useCallback, useEffect, type TouchEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Play, VolumeX, X } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import SplitTextReveal from '@/components/motion/SplitTextReveal';
+import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 
 interface ReelClip {
   id: number;
@@ -37,6 +40,7 @@ const THEATER_MAX_DRAG_DISTANCE = 260;
 
 const Portfolio = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
 
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
   const [activeReelIndex, setActiveReelIndex] = useState<number | null>(null);
@@ -489,27 +493,47 @@ const Portfolio = () => {
   return (
     <section id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
       <div className="studio-container">
-        <div className="studio-header mb-10 md:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
+        <motion.div
+          className="studio-header mb-10 md:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.32 }}
+          variants={staggerContainer(0.12, 0.05)}
+        >
           <div className="text-center md:text-left">
-            <div className="inline-flex items-center gap-2 mb-6">
+            <motion.div className="inline-flex items-center gap-2 mb-6" variants={revealUp(14, 0.56)}>
               <span className="h-px w-8 bg-accent/40" />
               <p className="section-label text-accent text-sm md:text-base">{t('portfolio.sectionSubtitle')}</p>
-            </div>
+            </motion.div>
             <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95]">
-              {t('portfolio.sectionTitle')}
-              <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">{t('portfolio.sectionTitleAccent')}</span>
+              <SplitTextReveal text={t('portfolio.sectionTitle')} delay={0.06} amount={0.45} />
+              <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">
+                <SplitTextReveal text={t('portfolio.sectionTitleAccent')} delay={0.22} amount={0.45} />
+              </span>
             </h2>
           </div>
-          <div className="lg:max-w-xs text-center lg:text-right">
+          <motion.div className="lg:max-w-xs text-center lg:text-right" variants={revealUp(20, 0.64)}>
             <p className="strategic-body text-foreground/40 text-lg md:text-xl italic">
               {t('portfolio.reelDescription')}
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="studio-rule mb-10 md:mb-12" />
+        <motion.div
+          className="studio-rule mb-10 md:mb-12"
+          initial={{ opacity: 0, scaleX: 0.7 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.66 }}
+        />
 
-        <div className="mb-12 md:mb-14">
+        <motion.div
+          className="mb-12 md:mb-14"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={revealUp(20, 0.62)}
+        >
           <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-secondary/60 via-background to-secondary/60" />
             <div className="absolute inset-y-0 left-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
@@ -539,12 +563,15 @@ const Portfolio = () => {
                 className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory md:snap-none"
               >
                 {reelClips.map((clip, index) => (
-                  <button
+                  <motion.button
                     type="button"
                     key={clip.id}
                     className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-pan-y"
                     onClick={() => openReelPreview(clip, index)}
                     aria-label={t(clip.titleKey)}
+                    whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.02 }}
+                    whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
+                    transition={springHoverTransition}
                   >
                     <video
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -572,47 +599,66 @@ const Portfolio = () => {
                         <VolumeX className="h-4 w-4" />
                       </span>
                     </div>
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="grid lg:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)] gap-8 lg:gap-10 items-center mb-14 md:mb-16">
-          <div>
-            <p className="section-label text-muted-foreground mb-4">{t('portfolio.collageEyebrow')}</p>
+        <motion.div
+          className="grid lg:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)] gap-8 lg:gap-10 items-center mb-14 md:mb-16"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.25 }}
+          variants={staggerContainer(0.12, 0.05)}
+        >
+          <motion.div variants={staggerContainer(0.1, 0.04)}>
+            <motion.p className="section-label text-muted-foreground mb-4" variants={revealUp(14, 0.56)}>
+              {t('portfolio.collageEyebrow')}
+            </motion.p>
             <h3 className="text-3xl md:text-[2.4rem] font-sans font-medium tracking-tight leading-tight mb-5">
-              {t('portfolio.collageTitle')}
+              <SplitTextReveal text={t('portfolio.collageTitle')} delay={0.06} amount={0.45} />
             </h3>
-            <p className="strategic-body text-muted-foreground mb-6">{t('portfolio.collageDescription')}</p>
+            <motion.p className="strategic-body text-muted-foreground mb-6" variants={revealUp(16, 0.62)}>
+              {t('portfolio.collageDescription')}
+            </motion.p>
 
-            <ul className="space-y-3 text-foreground/85 mb-8">
-              <li className="flex gap-3">
+            <motion.ul className="space-y-3 text-foreground/85 mb-8" variants={staggerContainer(0.08, 0.02)}>
+              <motion.li className="flex gap-3" variants={revealUp(10, 0.5)}>
                 <span className="mt-[0.5rem] h-1.5 w-1.5 rounded-full bg-primary" />
                 <span>{t('portfolio.collagePoint1')}</span>
-              </li>
-              <li className="flex gap-3">
+              </motion.li>
+              <motion.li className="flex gap-3" variants={revealUp(10, 0.5)}>
                 <span className="mt-[0.5rem] h-1.5 w-1.5 rounded-full bg-primary" />
                 <span>{t('portfolio.collagePoint2')}</span>
-              </li>
-              <li className="flex gap-3">
+              </motion.li>
+              <motion.li className="flex gap-3" variants={revealUp(10, 0.5)}>
                 <span className="mt-[0.5rem] h-1.5 w-1.5 rounded-full bg-primary" />
                 <span>{t('portfolio.collagePoint3')}</span>
-              </li>
-            </ul>
+              </motion.li>
+            </motion.ul>
 
-            <a href="#contact" className="btn-primary-nordic px-7 py-3 hover-grow btn-press">
+            <motion.a
+              href="#contact"
+              className="btn-primary-nordic px-7 py-3 btn-press"
+              whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.02 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+              transition={springHoverTransition}
+            >
               {t('portfolio.collageCta')}
-            </a>
-          </div>
+            </motion.a>
+          </motion.div>
 
           {/* Desktop: Absolute-positioned collage with hover interaction */}
-          <div
+          <motion.div
             className="hidden lg:block relative h-[530px] xl:h-[560px] w-full max-w-[720px] mx-auto rounded-[1.75rem] border border-border/60 overflow-hidden cursor-pointer shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.4)]"
             role="presentation"
             onMouseEnter={handleCollageMouseEnter}
             onMouseLeave={handleCollageMouseLeave}
+            variants={revealUp(24, 0.72)}
+            whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
+            transition={springHoverTransition}
           >
             {/* Sunset gradient background matching the reference */}
             <div
@@ -655,12 +701,13 @@ const Portfolio = () => {
                 </div>
               </div>
             ))}
-          </div>
+          </motion.div>
 
           {/* Mobile: Collage layout with always-on looping videos */}
-          <div
+          <motion.div
             className="lg:hidden relative w-full max-w-[440px] rounded-[1.25rem] border border-border/60 p-4 overflow-hidden shadow-lg mx-auto pointer-events-none select-none"
             role="presentation"
+            variants={revealUp(20, 0.6)}
           >
             {/* Sunset gradient background for mobile too */}
             <div
@@ -705,8 +752,8 @@ const Portfolio = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
 
       {activeReelPreview && (

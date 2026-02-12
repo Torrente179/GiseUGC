@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Users, Eye, Star, Briefcase } from 'lucide-react';
+import { Briefcase, Eye, Star, Users } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 
 interface CounterProps {
   end: number;
@@ -54,6 +56,7 @@ const AnimatedCounter = ({ end, suffix = '', duration = 2000 }: CounterProps) =>
 
 const SocialProof = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
 
   const stats = [
     {
@@ -83,16 +86,24 @@ const SocialProof = () => {
   ];
 
   return (
-    <section className="relative z-20 py-20 bg-secondary/35 border-y border-muted/30">
+    <motion.section
+      className="relative z-20 py-20 bg-secondary/35 border-y border-muted/30"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.32 }}
+      variants={staggerContainer(0.1, 0.04)}
+    >
       <div className="max-w-6xl mx-auto px-6">
         <div className="relative overflow-hidden group">
           <div className="grid grid-cols-2 lg:grid-cols-4 items-center gap-y-12 lg:gap-0">
             {stats.map((stat, index) => (
-              <div
-                key={index}
+              <motion.div
+                key={stat.labelKey}
                 className="flex flex-col items-center px-4 relative group/item"
+                variants={revealUp(18, 0.62)}
+                whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.03 }}
+                transition={springHoverTransition}
               >
-                {/* Vertical separator for desktop */}
                 {index !== 0 && (
                   <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-16 bg-gradient-to-b from-transparent via-muted to-transparent" />
                 )}
@@ -105,17 +116,14 @@ const SocialProof = () => {
                   <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                 </span>
 
-                <span className="section-label text-muted-foreground">
-                  {t(stat.labelKey)}
-                </span>
-              </div>
+                <span className="section-label text-muted-foreground">{t(stat.labelKey)}</span>
+              </motion.div>
             ))}
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
-
 
 export default SocialProof;
