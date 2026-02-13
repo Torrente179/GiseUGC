@@ -117,27 +117,27 @@ const REEL_CLIPS: ReelClip[] = [
 const COLLAGE_CLIPS: CollageClip[] = [
   {
     id: 1,
-    labelKey: 'portfolio.items.item4',
-    videoSrc: '/uploads/videos/ugc-creatine-supplement-review.mp4',
-    poster: '/uploads/videos/ugc-creatine-supplement-review-poster.jpg',
+    labelKey: 'portfolio.collageClip1',
+    videoSrc: '/uploads/videos/ugc-clothing-showcase-1.mp4',
+    poster: '/uploads/videos/ugc-clothing-showcase-1-poster.jpg',
     /* Left card */
     cornerClass: 'top-[13%] left-[8%] w-[29%] -rotate-[6deg] z-30',
     hoverClass: 'top-[12%] left-[16%] w-[29%] -rotate-[2deg] z-40',
   },
   {
     id: 2,
-    labelKey: 'portfolio.items.item2',
-    videoSrc: '/uploads/videos/ugc-brand-spokesperson.mp4',
-    poster: '/uploads/videos/ugc-brand-spokesperson-poster.jpg',
+    labelKey: 'portfolio.collageClip2',
+    videoSrc: '/uploads/videos/ugc-clothing-showcase-2.mp4',
+    poster: '/uploads/videos/ugc-clothing-showcase-2-poster.jpg',
     /* Center card */
     cornerClass: 'top-[5%] left-[35%] w-[30%] rotate-0 z-50',
     hoverClass: 'top-[7%] left-[35%] w-[30%] rotate-0 z-50 scale-[1.03]',
   },
   {
     id: 3,
-    labelKey: 'portfolio.items.item5',
-    videoSrc: '/uploads/videos/ugc-business-promotion.mp4',
-    poster: '/uploads/videos/ugc-business-promotion-poster.jpg',
+    labelKey: 'portfolio.collageClip3',
+    videoSrc: '/uploads/videos/ugc-clothing-showcase-3.mp4',
+    poster: '/uploads/videos/ugc-clothing-showcase-3-poster.jpg',
     /* Right card */
     cornerClass: 'top-[13%] right-[8%] w-[29%] rotate-[6deg] z-30',
     hoverClass: 'top-[12%] right-[16%] w-[29%] rotate-[2deg] z-40',
@@ -671,15 +671,15 @@ const Portfolio = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/24 to-transparent" />
 
                     <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-end justify-between gap-2 text-white">
-                      <div className="rounded-xl bg-black/45 backdrop-blur-md px-3 py-2">
-                        <p className="section-label text-white/80 mb-0.5">
+                      <div className="rounded-2xl bg-white/18 backdrop-blur-xl border border-white/28 shadow-[0_4px_20px_-6px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.25)] px-3 py-2">
+                        <p className="section-label text-white/85 mb-0.5">
                           {t(`portfolio.categories.${clip.category}`)}
                         </p>
-                        <p className="text-sm font-light leading-tight tracking-tight">{t(clip.titleKey)}</p>
+                        <p className="text-sm font-light leading-tight tracking-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">{t(clip.titleKey)}</p>
                       </div>
 
-                      <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black/40 backdrop-blur-md">
-                        <VolumeX className="h-4 w-4" />
+                      <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/18 backdrop-blur-xl border border-white/28 shadow-[0_4px_16px_-6px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.25)]">
+                        <VolumeX className="h-4 w-4 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]" />
                       </span>
                     </div>
                   </motion.button>
