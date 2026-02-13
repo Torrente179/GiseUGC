@@ -1,6 +1,6 @@
-import { useRef, useState, useCallback, useEffect, type TouchEvent } from 'react';
+import { useRef, useState, useCallback, useEffect, type TouchEvent, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight, Play, VolumeX, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Pause, Play, X } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
@@ -143,6 +143,64 @@ const COLLAGE_CLIPS: CollageClip[] = [
     hoverClass: 'top-[12%] right-[16%] w-[29%] rotate-[2deg] z-40',
   },
 ];
+
+const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlay = () => setIsPlaying(true);
+  const handlePause = () => setIsPlaying(false);
+  const handleWaiting = () => setIsPlaying(false);
+  const handlePlaying = () => setIsPlaying(true);
+
+  const togglePlayback = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      video.play().catch(() => undefined);
+    } else {
+      video.pause();
+    }
+  }, []);
+
+  const handleTimeUpdate = useCallback((e: SyntheticEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    if (!video.paused && !isPlaying) setIsPlaying(true);
+  }, [isPlaying]);
+
+  return (
+    <div className="relative overflow-hidden rounded-[1.25rem] border border-white/25 bg-black shadow-[0_20px_52px_-30px_hsl(var(--foreground)/0.9)]">
+      <video
+        ref={videoRef}
+        className="w-full aspect-[9/16] object-cover"
+        src={src}
+        poster={poster}
+        autoPlay
+        playsInline
+        onPlay={handlePlay}
+        onPause={handlePause}
+        onWaiting={handleWaiting}
+        onPlaying={handlePlaying}
+        onTimeUpdate={handleTimeUpdate}
+      />
+      <button
+        type="button"
+        className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        onClick={togglePlayback}
+        aria-label={isPlaying ? 'Pause' : 'Play'}
+      >
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/80 backdrop-blur-md shadow-lg">
+          {isPlaying ? (
+            <Pause className="h-6 w-6 text-foreground/80" fill="currentColor" />
+          ) : (
+            <Play className="h-6 w-6 text-foreground/80 ml-1" fill="currentColor" />
+          )}
+        </span>
+      </button>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent" />
+    </div>
+  );
+};
 
 const Portfolio = () => {
   const { t } = useTranslation();
@@ -911,17 +969,11 @@ const Portfolio = () => {
                 {t(activeReelPreview.titleKey)}
               </h4>
 
-              <div className="relative overflow-hidden rounded-[1.25rem] border border-white/25 bg-black shadow-[0_20px_52px_-30px_hsl(var(--foreground)/0.9)]">
-                <video
-                  className="w-full aspect-[9/16] object-cover"
-                  src={activeReelPreview.videoSrc}
-                  poster={activeReelPreview.poster}
-                  controls
-                  autoPlay
-                  playsInline
-                />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent" />
-              </div>
+              <TheaterVideo
+                key={activeReelPreview.id}
+                src={activeReelPreview.videoSrc}
+                poster={activeReelPreview.poster}
+              />
 
               <p className="mt-3 section-label text-[9px] text-foreground/45">
                 {t('portfolio.reelPreviewSwipeHint')}
