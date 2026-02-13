@@ -670,15 +670,15 @@ const Portfolio = () => {
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/24 to-transparent" />
 
-                    <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2 text-white">
-                      <div>
-                        <p className="section-label text-white/75 mb-1">
+                    <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-end justify-between gap-2 text-white">
+                      <div className="rounded-xl bg-black/45 backdrop-blur-md px-3 py-2">
+                        <p className="section-label text-white/80 mb-0.5">
                           {t(`portfolio.categories.${clip.category}`)}
                         </p>
                         <p className="text-sm font-light leading-tight tracking-tight">{t(clip.titleKey)}</p>
                       </div>
 
-                      <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/24 backdrop-blur-md">
+                      <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black/40 backdrop-blur-md">
                         <VolumeX className="h-4 w-4" />
                       </span>
                     </div>
