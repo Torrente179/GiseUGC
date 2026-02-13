@@ -670,17 +670,8 @@ const Portfolio = () => {
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/24 to-transparent" />
 
-                    <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-end justify-between gap-2 text-white">
-                      <div className="rounded-2xl bg-black/60 backdrop-blur-xl border border-white/15 shadow-[0_4px_20px_-6px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] px-3 py-2">
-                        <p className="luxury-accent text-white/90 text-sm mb-0.5">
-                          {t(`portfolio.categories.${clip.category}`)}
-                        </p>
-                        <p className="strategic-body text-white text-[11px] italic leading-tight">{t(clip.titleKey)}</p>
-                      </div>
-
-                      <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black/60 backdrop-blur-xl border border-white/15 shadow-[0_4px_16px_-6px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)]">
-                        <VolumeX className="h-4 w-4" />
-                      </span>
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <p className="font-serif text-white text-sm leading-snug tracking-tight drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">{t(clip.titleKey)}</p>
                     </div>
                   </motion.button>
                 ))}
