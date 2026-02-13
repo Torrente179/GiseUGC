@@ -668,11 +668,6 @@ const Portfolio = () => {
                       aria-hidden="true"
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/62 via-black/24 to-transparent" />
-
-                    <div className="absolute bottom-3 left-3 right-3">
-                      <p className="font-serif text-white text-sm leading-snug tracking-tight drop-shadow-[0_1px_4px_rgba(0,0,0,0.7)]">{t(clip.titleKey)}</p>
-                    </div>
                   </motion.button>
                 ))}
               </div>
