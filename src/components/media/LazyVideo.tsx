@@ -14,6 +14,7 @@ type LazyVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poste
   poster?: string;
   rootMargin?: string;
   loadWhenVisible?: boolean;
+  pauseOffscreen?: boolean;
 };
 
 const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
@@ -25,6 +26,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       autoPlay = false,
       rootMargin = '240px 0px',
       loadWhenVisible = true,
+      pauseOffscreen = false,
       onMouseEnter,
       onTouchStart,
       onFocus,
@@ -67,6 +69,28 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
         playPromise.catch(() => undefined);
       }
     }, [autoPlay, shouldLoad]);
+
+    useEffect(() => {
+      if (!pauseOffscreen || !autoPlay) return;
+      const node = internalRef.current;
+      if (!node || typeof IntersectionObserver === 'undefined') return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (!entry) return;
+          if (entry.isIntersecting) {
+            node.play().catch(() => undefined);
+          } else {
+            node.pause();
+          }
+        },
+        { rootMargin: '50px 0px' },
+      );
+
+      observer.observe(node);
+      return () => observer.disconnect();
+    }, [pauseOffscreen, autoPlay]);
 
     const assignRef = (node: HTMLVideoElement | null) => {
       internalRef.current = node;
