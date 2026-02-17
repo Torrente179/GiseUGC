@@ -160,6 +160,8 @@ const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
   const togglePlayback = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
+    video.defaultPlaybackRate = 1;
+    video.playbackRate = 1;
     if (video.paused) {
       video.play().catch(() => undefined);
     } else {
@@ -176,6 +178,8 @@ const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
     const video = videoRef.current;
     if (!video) return;
 
+    video.defaultPlaybackRate = 1;
+    video.playbackRate = 1;
     setIsPlaying(false);
     const playPromise = video.play();
     if (playPromise) {
@@ -193,6 +197,10 @@ const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
         preload="auto"
         autoPlay
         playsInline
+        onLoadedMetadata={(event) => {
+          event.currentTarget.defaultPlaybackRate = 1;
+          event.currentTarget.playbackRate = 1;
+        }}
         onPlay={handlePlay}
         onPause={handlePause}
         onWaiting={handleWaiting}
@@ -654,6 +662,8 @@ const Portfolio = () => {
   const playCollageVideos = useCallback(() => {
     collageVideoRefs.current.forEach((video) => {
       if (video) {
+        video.defaultPlaybackRate = 1;
+        video.playbackRate = 1;
         video.play().catch(() => undefined);
       }
     });

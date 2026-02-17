@@ -61,6 +61,8 @@ const ServicesMarquee = () => {
     const handleVideoHover = (index: number) => {
         const video = videoRefs.current[index];
         if (video) {
+            video.defaultPlaybackRate = 1;
+            video.playbackRate = 1;
             const p = video.play();
             if (p) p.catch(() => undefined);
         }
@@ -97,6 +99,8 @@ const ServicesMarquee = () => {
                 video.pause();
                 video.currentTime = 0;
             } else {
+                video.defaultPlaybackRate = 1;
+                video.playbackRate = 1;
                 const p = video.play();
                 if (p) p.catch(() => undefined);
             }

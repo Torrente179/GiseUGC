@@ -7,6 +7,7 @@ import {
   type TouchEvent,
   type VideoHTMLAttributes,
   type MouseEvent,
+  type SyntheticEvent,
 } from 'react';
 
 type LazyVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poster'> & {
@@ -37,6 +38,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       onTouchStart,
       onFocus,
       onCanPlay,
+      onLoadedMetadata,
       ...props
     },
     forwardedRef,
@@ -49,6 +51,16 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       shouldLoad &&
       (!unloadWhenOffscreen || isInViewport) &&
       (!unloadWhenForcedPause || !forcePause);
+
+    const normalizePlaybackRate = (node: HTMLVideoElement | null) => {
+      if (!node) return;
+      if (node.playbackRate !== 1) {
+        node.playbackRate = 1;
+      }
+      if (node.defaultPlaybackRate !== 1) {
+        node.defaultPlaybackRate = 1;
+      }
+    };
 
     useEffect(() => {
       if (!loadWhenVisible || shouldLoad) return;
@@ -77,6 +89,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       if (pauseOffscreen && !isInViewportRef.current) return;
       const node = internalRef.current;
       if (!node) return;
+      normalizePlaybackRate(node);
       const playPromise = node.play();
       if (playPromise) {
         playPromise.catch(() => undefined);
@@ -119,6 +132,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
 
     const assignRef = (node: HTMLVideoElement | null) => {
       internalRef.current = node;
+      normalizePlaybackRate(node);
       if (typeof forwardedRef === 'function') {
         forwardedRef(node);
       } else if (forwardedRef) {
@@ -147,6 +161,11 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       onFocus?.(event);
     };
 
+    const handleLoadedMetadata = (event: SyntheticEvent<HTMLVideoElement>) => {
+      normalizePlaybackRate(event.currentTarget);
+      onLoadedMetadata?.(event);
+    };
+
     return (
       <video
         {...props}
@@ -156,6 +175,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
         preload={shouldAttachSource ? preload : 'none'}
         autoPlay={autoPlay}
         onCanPlay={onCanPlay}
+        onLoadedMetadata={handleLoadedMetadata}
         onMouseEnter={handleMouseEnter}
         onTouchStart={handleTouchStart}
         onFocus={handleFocus}
