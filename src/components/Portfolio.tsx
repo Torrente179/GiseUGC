@@ -13,6 +13,7 @@ interface ReelClip {
   titleKey: string;
   category: 'fashion' | 'beauty' | 'tech' | 'lifestyle';
   mainSrc: string;
+  mobileSrc: string;
   previewSrc: string;
   posterSrc: string;
 }
@@ -45,8 +46,11 @@ const REEL_CARD_TAP_SLOP_PX = 10;
 const THEATER_PRELOAD_OFFSETS = [-2, -1, 1, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
+const THEATER_FAST_FALLBACK_MS = 1400;
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
+const r2MobileVideo = (filename: string) =>
+  `${R2_MEDIA_BASE_URL}/videos/mobile/${filename.replace(/\.mp4$/, '-mobile.mp4')}`;
 const r2PreviewVideo = (filename: string) =>
   `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
 const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
@@ -57,6 +61,7 @@ const REEL_CLIPS: ReelClip[] = [
     titleKey: 'portfolio.items.item1',
     category: 'lifestyle',
     mainSrc: r2MainVideo('ugc-lifestyle-review.mp4'),
+    mobileSrc: r2MobileVideo('ugc-lifestyle-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-lifestyle-review.mp4'),
     posterSrc: r2Poster('ugc-lifestyle-review-poster.jpg'),
   },
@@ -65,6 +70,7 @@ const REEL_CLIPS: ReelClip[] = [
     titleKey: 'portfolio.items.item2',
     category: 'fashion',
     mainSrc: r2MainVideo('ugc-brand-spokesperson.mp4'),
+    mobileSrc: r2MobileVideo('ugc-brand-spokesperson.mp4'),
     previewSrc: r2PreviewVideo('ugc-brand-spokesperson.mp4'),
     posterSrc: r2Poster('ugc-brand-spokesperson-poster.jpg'),
   },
@@ -73,6 +79,7 @@ const REEL_CLIPS: ReelClip[] = [
     titleKey: 'portfolio.items.item3',
     category: 'tech',
     mainSrc: r2MainVideo('ugc-voicebot-review.mp4'),
+    mobileSrc: r2MobileVideo('ugc-voicebot-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-voicebot-review.mp4'),
     posterSrc: r2Poster('ugc-voicebot-review-poster.jpg'),
   },
@@ -81,6 +88,7 @@ const REEL_CLIPS: ReelClip[] = [
     titleKey: 'portfolio.items.item4',
     category: 'beauty',
     mainSrc: r2MainVideo('ugc-creatine-supplement-review.mp4'),
+    mobileSrc: r2MobileVideo('ugc-creatine-supplement-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-creatine-supplement-review.mp4'),
     posterSrc: r2Poster('ugc-creatine-supplement-review-poster.jpg'),
   },
@@ -89,6 +97,7 @@ const REEL_CLIPS: ReelClip[] = [
     titleKey: 'portfolio.items.item5',
     category: 'lifestyle',
     mainSrc: r2MainVideo('ugc-business-promotion.mp4'),
+    mobileSrc: r2MobileVideo('ugc-business-promotion.mp4'),
     previewSrc: r2PreviewVideo('ugc-business-promotion.mp4'),
     posterSrc: r2Poster('ugc-business-promotion-poster.jpg'),
   },
@@ -97,6 +106,7 @@ const REEL_CLIPS: ReelClip[] = [
     titleKey: 'portfolio.items.item6',
     category: 'fashion',
     mainSrc: r2MainVideo('ugc-services-presentation.mp4'),
+    mobileSrc: r2MobileVideo('ugc-services-presentation.mp4'),
     previewSrc: r2PreviewVideo('ugc-services-presentation.mp4'),
     posterSrc: r2Poster('ugc-services-presentation-poster.jpg'),
   },
@@ -105,6 +115,7 @@ const REEL_CLIPS: ReelClip[] = [
     titleKey: 'portfolio.items.item7',
     category: 'tech',
     mainSrc: r2MainVideo('ugc-ai-services-review.mp4'),
+    mobileSrc: r2MobileVideo('ugc-ai-services-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-ai-services-review.mp4'),
     posterSrc: r2Poster('ugc-ai-services-review-poster.jpg'),
   },
@@ -113,6 +124,7 @@ const REEL_CLIPS: ReelClip[] = [
     titleKey: 'portfolio.items.item8',
     category: 'lifestyle',
     mainSrc: r2MainVideo('ugc-lifestyle-review-2.mp4'),
+    mobileSrc: r2MobileVideo('ugc-lifestyle-review-2.mp4'),
     previewSrc: r2PreviewVideo('ugc-lifestyle-review-2.mp4'),
     posterSrc: r2Poster('ugc-lifestyle-review-2-poster.jpg'),
   },
@@ -121,6 +133,7 @@ const REEL_CLIPS: ReelClip[] = [
     titleKey: 'portfolio.items.item9',
     category: 'tech',
     mainSrc: r2MainVideo('ugc-voiceover-bots-review.mp4'),
+    mobileSrc: r2MobileVideo('ugc-voiceover-bots-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-voiceover-bots-review.mp4'),
     posterSrc: r2Poster('ugc-voiceover-bots-review-poster.jpg'),
   },
@@ -129,6 +142,7 @@ const REEL_CLIPS: ReelClip[] = [
     titleKey: 'portfolio.items.item10',
     category: 'lifestyle',
     mainSrc: r2MainVideo('ugc-lifestyle-review-3.mp4'),
+    mobileSrc: r2MobileVideo('ugc-lifestyle-review-3.mp4'),
     previewSrc: r2PreviewVideo('ugc-lifestyle-review-3.mp4'),
     posterSrc: r2Poster('ugc-lifestyle-review-3-poster.jpg'),
   },
@@ -164,14 +178,78 @@ const COLLAGE_CLIPS: CollageClip[] = [
   },
 ];
 
-const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
+const TheaterVideo = ({ sources, poster }: { sources: string[]; poster: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const startupTimeoutRef = useRef<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [activeSourceIndex, setActiveSourceIndex] = useState(0);
+  const sourceKey = sources.join('|');
+  const activeSource = sources[activeSourceIndex] ?? sources[0] ?? '';
 
-  const handlePlay = () => setIsPlaying(true);
+  const clearStartupTimeout = useCallback(() => {
+    if (startupTimeoutRef.current !== null) {
+      window.clearTimeout(startupTimeoutRef.current);
+      startupTimeoutRef.current = null;
+    }
+  }, []);
+
+  const promoteFallbackSource = useCallback(() => {
+    setActiveSourceIndex((previousIndex) => {
+      if (previousIndex + 1 >= sources.length) return previousIndex;
+      return previousIndex + 1;
+    });
+  }, [sources.length]);
+
+  const attemptPlay = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.defaultPlaybackRate = 1;
+    video.playbackRate = 1;
+
+    const run = async () => {
+      try {
+        await video.play();
+      } catch {
+        if (!video.muted) {
+          video.muted = true;
+        }
+        try {
+          await video.play();
+        } catch {
+          promoteFallbackSource();
+        }
+      }
+    };
+
+    void run();
+  }, [promoteFallbackSource]);
+
+  const scheduleStartupFallback = useCallback(() => {
+    clearStartupTimeout();
+    if (activeSourceIndex + 1 >= sources.length) return;
+    startupTimeoutRef.current = window.setTimeout(() => {
+      const video = videoRef.current;
+      if (!video || !video.paused) return;
+      promoteFallbackSource();
+    }, THEATER_FAST_FALLBACK_MS);
+  }, [activeSourceIndex, clearStartupTimeout, promoteFallbackSource, sources.length]);
+
+  const handlePlay = () => {
+    clearStartupTimeout();
+    setIsPlaying(true);
+  };
   const handlePause = () => setIsPlaying(false);
   const handleWaiting = () => setIsPlaying(false);
-  const handlePlaying = () => setIsPlaying(true);
+  const handlePlaying = () => {
+    clearStartupTimeout();
+    setIsPlaying(true);
+  };
+
+  const handleError = useCallback(() => {
+    clearStartupTimeout();
+    promoteFallbackSource();
+  }, [clearStartupTimeout, promoteFallbackSource]);
 
   const togglePlayback = useCallback(() => {
     const video = videoRef.current;
@@ -179,11 +257,12 @@ const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
     video.defaultPlaybackRate = 1;
     video.playbackRate = 1;
     if (video.paused) {
-      video.play().catch(() => undefined);
+      video.muted = false;
+      attemptPlay();
     } else {
       video.pause();
     }
-  }, []);
+  }, [attemptPlay]);
 
   const handleTimeUpdate = useCallback((e: SyntheticEvent<HTMLVideoElement>) => {
     const video = e.currentTarget;
@@ -191,24 +270,32 @@ const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
   }, [isPlaying]);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    setActiveSourceIndex(0);
+  }, [sourceKey]);
 
-    video.defaultPlaybackRate = 1;
-    video.playbackRate = 1;
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !activeSource) return;
+
     setIsPlaying(false);
-    const playPromise = video.play();
-    if (playPromise) {
-      playPromise.catch(() => undefined);
-    }
-  }, [src]);
+    scheduleStartupFallback();
+    attemptPlay();
+
+    return () => {
+      clearStartupTimeout();
+    };
+  }, [activeSource, attemptPlay, clearStartupTimeout, scheduleStartupFallback]);
+
+  useEffect(() => {
+    return () => clearStartupTimeout();
+  }, [clearStartupTimeout]);
 
   return (
     <div className="relative overflow-hidden rounded-[1.25rem] border border-white/25 bg-black shadow-[0_20px_52px_-30px_hsl(var(--foreground)/0.9)]">
       <video
         ref={videoRef}
         className="w-full aspect-[9/16] object-cover"
-        src={src}
+        src={activeSource}
         poster={poster}
         preload="auto"
         autoPlay
@@ -221,6 +308,7 @@ const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
         onPause={handlePause}
         onWaiting={handleWaiting}
         onPlaying={handlePlaying}
+        onError={handleError}
         onTimeUpdate={handleTimeUpdate}
       />
       <button
@@ -1079,8 +1167,8 @@ const Portfolio = () => {
                 {theaterPreloadClips.map((clip) => (
                   <video
                     key={`theater-preload-${clip.id}`}
-                    src={clip.mainSrc}
-                    preload="auto"
+                    src={clip.mobileSrc}
+                    preload="metadata"
                     muted
                     playsInline
                     tabIndex={-1}
@@ -1102,7 +1190,7 @@ const Portfolio = () => {
               </h4>
 
               <TheaterVideo
-                src={activeReelPreview.mainSrc}
+                sources={[activeReelPreview.mainSrc, activeReelPreview.mobileSrc]}
                 poster={activeReelPreview.posterSrc}
               />
             </div>
