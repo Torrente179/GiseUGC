@@ -292,7 +292,6 @@ const ServicesMarquee = () => {
                                             loop
                                             playsInline
                                             preload="none"
-                                            rootMargin="0px 0px"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-50" />
                                     </div>

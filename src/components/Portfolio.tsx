@@ -144,8 +144,6 @@ const COLLAGE_CLIPS: CollageClip[] = [
   },
 ];
 
-const toPreview = (src: string) => src.replace(/\.mp4$/, '-preview.mp4');
-
 const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -717,7 +715,7 @@ const Portfolio = () => {
                   >
                     <LazyVideo
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      src={toPreview(clip.videoSrc)}
+                      src={clip.videoSrc}
                       poster={clip.poster}
                       muted
                       autoPlay
@@ -725,7 +723,6 @@ const Portfolio = () => {
                       playsInline
                       preload="none"
                       rootMargin="100px 0px"
-                      pauseOffscreen
                       aria-hidden="true"
                     />
 
@@ -815,7 +812,7 @@ const Portfolio = () => {
                     collageVideoRefs.current[index] = element;
                   }}
                   className="h-full w-full object-cover"
-                  src={toPreview(clip.videoSrc)}
+                  src={clip.videoSrc}
                   poster={clip.poster}
                   muted
                   loop
@@ -866,7 +863,7 @@ const Portfolio = () => {
                 >
                   <LazyVideo
                     className="h-full w-full object-cover pointer-events-none"
-                    src={toPreview(clip.videoSrc)}
+                    src={clip.videoSrc}
                     poster={clip.poster}
                     muted
                     loop
@@ -876,7 +873,6 @@ const Portfolio = () => {
                     disablePictureInPicture
                     disableRemotePlayback
                     rootMargin="120px 0px"
-                    pauseOffscreen
                     aria-label={t(clip.labelKey)}
                   />
                 </div>
