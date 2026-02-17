@@ -36,7 +36,7 @@
     "sectionSubtitle": "Lo Que Ofrezco",
     "sectionTitle": "Mis Servicios",
     "motionTitle": "El toolkit completo para anunciantes modernos",
-    "motionSubtitle": "Creo contenido auténtico y elegante que muestra la historia única de tu marca y conecta con tu audiencia a un nivel más profundo.",
+    "motionSubtitle": "Creo contenido UGC y de portavoz para marcas que buscan primero audiencia hispana en Estados Unidos, luego Canadá y Europa hispana (incluida España), después mercados de habla inglesa y finalmente países hispanohablantes.",
     "videoPreviewLabel": "Vista previa en video",
     "videoPreviewClose": "Cerrar vista previa de video",
     "service1": {
@@ -67,6 +67,56 @@
       "title": "B-Roll / UGC Footage",
       "subtitle": "Clips para edición",
       "description": "Entrego paquetes de tomas premium (close-ups, detalles, uso en acción y ambientes) para que tu equipo edite múltiples anuncios y publicaciones."
+    },
+    "marqueeCards": {
+      "card1": {
+        "title": "UGC Ads para TikTok y Meta",
+        "description": "Creativos orientados a conversión con hooks fuertes y CTA claros para campañas de performance."
+      },
+      "card2": {
+        "title": "Videos de Portavoz (Spokesperson)",
+        "description": "Presentación profesional frente a cámara para explicar tu oferta, lanzamientos y promociones."
+      },
+      "card3": {
+        "title": "Brand Ambassador UGC (ES/EN)",
+        "description": "Contenido recurrente para representar tu marca en español e inglés con tono auténtico."
+      },
+      "card4": {
+        "title": "Testimoniales y Reseñas UGC",
+        "description": "Pruebas sociales creíbles que aumentan confianza y ayudan a acelerar la decisión de compra."
+      },
+      "card5": {
+        "title": "Demo y How-to de Producto",
+        "description": "Explicaciones paso a paso para e-commerce, apps y servicios digitales con enfoque educativo."
+      },
+      "card6": {
+        "title": "Voiceover + On-Camera (ES/EN)",
+        "description": "Piezas con voz en off y speaking a cámara para anuncios, landing creatives y social orgánico."
+      },
+      "card7": {
+        "title": "Social Media Videos (Reels/TikTok)",
+        "description": "Videos verticales nativos para mejorar retención, alcance y engagement en redes sociales."
+      },
+      "card8": {
+        "title": "UGC para Beauty y Skincare",
+        "description": "Rutinas, beneficios y resultados en formato creator-led para marcas de belleza y cuidado personal."
+      },
+      "card9": {
+        "title": "UGC para SaaS, AI y Tech",
+        "description": "Contenido demostrativo para comunicar valor de herramientas digitales de forma simple y persuasiva."
+      },
+      "card10": {
+        "title": "UGC para Moda y Lifestyle",
+        "description": "Integración de producto en escenas reales con estética premium para posicionamiento aspiracional."
+      },
+      "card11": {
+        "title": "B-Roll y Footage para Edición",
+        "description": "Banco de clips reutilizable para variaciones creativas, A/B testing y producción continua."
+      },
+      "card12": {
+        "title": "Producción Local + Global desde Medellín",
+        "description": "Contenido con enfoque latino y proyección internacional para marcas de habla hispana y mercado anglo."
+      }
     }
   },
   "portfolio": {
@@ -177,8 +227,8 @@
       "name": "Gisela",
       "handle": "@gisela_sm",
       "profileTitle": "Spokesperson Professional Presenter Voiceover Expert UGC Creator",
-      "country": "Colombia",
-      "language": "Español",
+      "country": "Medellín, Colombia",
+      "language": "Español, English",
       "reviewsTitle": "158 Reseñas",
       "ratingBreakdown": "Desglose de calificación",
       "metricCommunication": "Nivel de comunicación",

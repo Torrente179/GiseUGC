@@ -36,34 +36,76 @@ const ServicesMarquee = () => {
 
     const serviceVideoCards: ServiceVideoCard[] = [
         {
-            titleKey: 'services.service1.title',
-            descriptionKey: 'services.service1.description',
+            titleKey: 'services.marqueeCards.card1.title',
+            descriptionKey: 'services.marqueeCards.card1.description',
             videoSrc: r2PreviewVideo('ugc-lifestyle-review.mp4'),
             poster: r2Poster('ugc-lifestyle-review-poster.jpg'),
         },
         {
-            titleKey: 'services.service2.title',
-            descriptionKey: 'services.service2.description',
+            titleKey: 'services.marqueeCards.card2.title',
+            descriptionKey: 'services.marqueeCards.card2.description',
             videoSrc: r2PreviewVideo('ugc-brand-spokesperson.mp4'),
             poster: r2Poster('ugc-brand-spokesperson-poster.jpg'),
         },
         {
-            titleKey: 'services.service3.title',
-            descriptionKey: 'services.service3.description',
+            titleKey: 'services.marqueeCards.card3.title',
+            descriptionKey: 'services.marqueeCards.card3.description',
             videoSrc: r2PreviewVideo('ugc-voicebot-review.mp4'),
             poster: r2Poster('ugc-voicebot-review-poster.jpg'),
         },
         {
-            titleKey: 'services.service4.title',
-            descriptionKey: 'services.service4.description',
+            titleKey: 'services.marqueeCards.card4.title',
+            descriptionKey: 'services.marqueeCards.card4.description',
             videoSrc: r2PreviewVideo('ugc-creatine-supplement-review.mp4'),
             poster: r2Poster('ugc-creatine-supplement-review-poster.jpg'),
         },
         {
-            titleKey: 'services.service5.title',
-            descriptionKey: 'services.service5.description',
+            titleKey: 'services.marqueeCards.card5.title',
+            descriptionKey: 'services.marqueeCards.card5.description',
             videoSrc: r2PreviewVideo('ugc-business-promotion.mp4'),
             poster: r2Poster('ugc-business-promotion-poster.jpg'),
+        },
+        {
+            titleKey: 'services.marqueeCards.card6.title',
+            descriptionKey: 'services.marqueeCards.card6.description',
+            videoSrc: r2PreviewVideo('ugc-services-presentation.mp4'),
+            poster: r2Poster('ugc-services-presentation-poster.jpg'),
+        },
+        {
+            titleKey: 'services.marqueeCards.card7.title',
+            descriptionKey: 'services.marqueeCards.card7.description',
+            videoSrc: r2PreviewVideo('ugc-ai-services-review.mp4'),
+            poster: r2Poster('ugc-ai-services-review-poster.jpg'),
+        },
+        {
+            titleKey: 'services.marqueeCards.card8.title',
+            descriptionKey: 'services.marqueeCards.card8.description',
+            videoSrc: r2PreviewVideo('ugc-lifestyle-review-2.mp4'),
+            poster: r2Poster('ugc-lifestyle-review-2-poster.jpg'),
+        },
+        {
+            titleKey: 'services.marqueeCards.card9.title',
+            descriptionKey: 'services.marqueeCards.card9.description',
+            videoSrc: r2PreviewVideo('ugc-voiceover-bots-review.mp4'),
+            poster: r2Poster('ugc-voiceover-bots-review-poster.jpg'),
+        },
+        {
+            titleKey: 'services.marqueeCards.card10.title',
+            descriptionKey: 'services.marqueeCards.card10.description',
+            videoSrc: r2PreviewVideo('ugc-lifestyle-review-3.mp4'),
+            poster: r2Poster('ugc-lifestyle-review-3-poster.jpg'),
+        },
+        {
+            titleKey: 'services.marqueeCards.card11.title',
+            descriptionKey: 'services.marqueeCards.card11.description',
+            videoSrc: r2PreviewVideo('ugc-clothing-showcase-1.mp4'),
+            poster: r2Poster('ugc-clothing-showcase-1-poster.jpg'),
+        },
+        {
+            titleKey: 'services.marqueeCards.card12.title',
+            descriptionKey: 'services.marqueeCards.card12.description',
+            videoSrc: r2PreviewVideo('ugc-clothing-showcase-2.mp4'),
+            poster: r2Poster('ugc-clothing-showcase-2-poster.jpg'),
         },
     ];
 
