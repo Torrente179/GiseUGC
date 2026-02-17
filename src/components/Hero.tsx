@@ -46,7 +46,6 @@ const Hero = () => {
     let sectionHeight = 1;
     let viewportHeight = window.innerHeight;
     let frameId: number | null = null;
-    let isParallaxActive = true;
 
     const measure = () => {
       const rect = section.getBoundingClientRect();
@@ -72,7 +71,6 @@ const Hero = () => {
     };
 
     const queueParallaxUpdate = () => {
-      if (!isParallaxActive) return;
       if (frameId !== null) return;
       frameId = window.requestAnimationFrame(updateParallax);
     };
@@ -92,21 +90,6 @@ const Hero = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize);
 
-    let visibilityObserver: IntersectionObserver | null = null;
-    if (typeof IntersectionObserver !== 'undefined') {
-      visibilityObserver = new IntersectionObserver(
-        ([entry]) => {
-          isParallaxActive = entry?.isIntersecting ?? false;
-          if (isParallaxActive) {
-            measure();
-            queueParallaxUpdate();
-          }
-        },
-        { rootMargin: '320px 0px' },
-      );
-      visibilityObserver.observe(section);
-    }
-
     let resizeObserver: ResizeObserver | null = null;
     if (typeof ResizeObserver !== 'undefined') {
       resizeObserver = new ResizeObserver(() => {
@@ -120,7 +103,6 @@ const Hero = () => {
       window.clearTimeout(motionReadyTimer);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
-      visibilityObserver?.disconnect();
       resizeObserver?.disconnect();
       if (frameId !== null) {
         window.cancelAnimationFrame(frameId);
