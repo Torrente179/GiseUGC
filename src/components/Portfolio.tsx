@@ -542,26 +542,13 @@ const Portfolio = () => {
 
     const updateActiveCard = () => {
       frameId = null;
-      const cards = Array.from(container.querySelectorAll<HTMLElement>('[data-reel-card="true"]'));
-      if (!cards.length) return;
-
-      const containerRect = container.getBoundingClientRect();
-      const containerCenter = containerRect.left + containerRect.width / 2;
-      let closestIndex = 0;
-      let closestDistance = Number.POSITIVE_INFINITY;
-
-      cards.forEach((card, index) => {
-        const cardRect = card.getBoundingClientRect();
-        const cardCenter = cardRect.left + cardRect.width / 2;
-        const distance = Math.abs(cardCenter - containerCenter);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
+      const step = reelScrollStepRef.current;
+      if (!Number.isFinite(step) || step <= 0) return;
+      const closestIndex = Math.round(container.scrollLeft / step);
+      const clampedIndex = Math.max(0, Math.min(REEL_CLIPS.length - 1, closestIndex));
 
       setActiveMobileReelIndex((previousIndex) =>
-        previousIndex === closestIndex ? previousIndex : closestIndex,
+        previousIndex === clampedIndex ? previousIndex : clampedIndex,
       );
     };
 
@@ -777,7 +764,7 @@ const Portfolio = () => {
                       preload="none"
                       rootMargin="100px 0px"
                       pauseOffscreen
-                      forcePause={isTheaterOpen || (isMobile && Math.abs(activeMobileReelIndex - index) > 1)}
+                      forcePause={isTheaterOpen || (isMobile && activeMobileReelIndex !== index)}
                       aria-hidden="true"
                     />
 
