@@ -42,6 +42,8 @@ const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
 const REEL_CARD_TAP_SLOP_PX = 10;
 const THEATER_PRELOAD_OFFSETS = [-2, -1, 1, 2] as const;
+const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
+const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
 
 const REEL_CLIPS: ReelClip[] = [
   {
@@ -354,6 +356,7 @@ const Portfolio = () => {
 
       if (swipeStart.axis === 'vertical') {
         event.preventDefault();
+        if (isMobile) return;
         const resistance = 0.92 - Math.min(Math.abs(deltaY) / 900, 0.28);
         queueTheaterDrag(deltaY * resistance);
         return;
@@ -363,7 +366,7 @@ const Portfolio = () => {
         event.preventDefault();
       }
     },
-    [isTheaterDismissing, queueTheaterDrag],
+    [isMobile, isTheaterDismissing, queueTheaterDrag],
   );
 
   const handleTheaterTouchEnd = useCallback(
@@ -392,9 +395,28 @@ const Portfolio = () => {
       const crossedHorizontalThreshold =
         Math.abs(deltaX) >= THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD ||
         Math.abs(velocityX) >= THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD;
-      const crossedThreshold =
+      const crossedVerticalDismissThreshold =
         Math.abs(deltaY) >= THEATER_SWIPE_DISTANCE_THRESHOLD ||
         Math.abs(velocityY) >= THEATER_SWIPE_VELOCITY_THRESHOLD;
+      const crossedVerticalNavigateThreshold =
+        Math.abs(deltaY) >= THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD ||
+        Math.abs(velocityY) >= THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD;
+
+      if (isMobile) {
+        if (isVerticalSwipe && crossedVerticalNavigateThreshold) {
+          queueTheaterDrag(0);
+          navigateReelPreview(deltaY < 0 ? 1 : -1);
+          return;
+        }
+
+        if (isHorizontalSwipe && crossedHorizontalThreshold) {
+          dismissReelPreview(deltaX < 0 ? 1 : -1);
+          return;
+        }
+
+        queueTheaterDrag(0);
+        return;
+      }
 
       if (isHorizontalSwipe && crossedHorizontalThreshold) {
         queueTheaterDrag(0);
@@ -402,14 +424,14 @@ const Portfolio = () => {
         return;
       }
 
-      if (isVerticalSwipe && crossedThreshold) {
+      if (isVerticalSwipe && crossedVerticalDismissThreshold) {
         dismissReelPreview(deltaY < 0 ? -1 : 1);
         return;
       }
 
       queueTheaterDrag(0);
     },
-    [dismissReelPreview, navigateReelPreview, queueTheaterDrag],
+    [dismissReelPreview, isMobile, navigateReelPreview, queueTheaterDrag],
   );
 
   const resetTheaterSwipe = useCallback(() => {
