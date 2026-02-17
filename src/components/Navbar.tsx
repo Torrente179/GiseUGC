@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Menu,
@@ -30,11 +30,31 @@ const ThreadsIcon = ({ className }: { className?: string }) => (
   </span>
 );
 
+const MENU_SWIPE_CLOSE_DISTANCE = 94;
+const MENU_SWIPE_CLOSE_VELOCITY = 0.48;
+const MENU_MAX_DRAG_DISTANCE = 220;
+const MENU_AXIS_LOCK_THRESHOLD = 8;
+const MENU_SWIPE_DISMISS_DURATION_MS = 220;
+
+type MobileMenuSwipeState = {
+  startX: number;
+  startY: number;
+  lastY: number;
+  lastTimestamp: number;
+  velocityY: number;
+  axis: 'pending' | 'horizontal' | 'vertical';
+};
+
 const Navbar = () => {
   const { t, i18n } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuDragOffset, setMobileMenuDragOffset] = useState(0);
+  const [isMobileMenuDragging, setIsMobileMenuDragging] = useState(false);
+  const [isMobileMenuSwipeDismissing, setIsMobileMenuSwipeDismissing] = useState(false);
   const { handleHashLinkClick } = useHashlessSectionNavigation();
+  const mobileMenuSwipeRef = useRef<MobileMenuSwipeState | null>(null);
+  const swipeDismissTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 24);
@@ -51,8 +71,137 @@ const Navbar = () => {
     };
   }, [mobileMenuOpen]);
 
-  const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
-  const toggleMobileMenu = useCallback(() => setMobileMenuOpen((prev) => !prev), []);
+  const clearSwipeDismissTimeout = useCallback(() => {
+    if (swipeDismissTimeoutRef.current !== null) {
+      window.clearTimeout(swipeDismissTimeoutRef.current);
+      swipeDismissTimeoutRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      clearSwipeDismissTimeout();
+    };
+  }, [clearSwipeDismissTimeout]);
+
+  const resetMobileMenuSwipe = useCallback(() => {
+    mobileMenuSwipeRef.current = null;
+    setIsMobileMenuDragging(false);
+    setIsMobileMenuSwipeDismissing(false);
+    setMobileMenuDragOffset(0);
+  }, []);
+
+  const closeMobileMenu = useCallback(() => {
+    clearSwipeDismissTimeout();
+    resetMobileMenuSwipe();
+    setMobileMenuOpen(false);
+  }, [clearSwipeDismissTimeout, resetMobileMenuSwipe]);
+
+  const toggleMobileMenu = useCallback(() => {
+    clearSwipeDismissTimeout();
+    resetMobileMenuSwipe();
+    setMobileMenuOpen((prev) => !prev);
+  }, [clearSwipeDismissTimeout, resetMobileMenuSwipe]);
+
+  const closeMobileMenuWithSwipe = useCallback(() => {
+    clearSwipeDismissTimeout();
+    setIsMobileMenuDragging(false);
+    setIsMobileMenuSwipeDismissing(true);
+    const dismissDistance =
+      typeof window === 'undefined'
+        ? -MENU_MAX_DRAG_DISTANCE
+        : -Math.max(MENU_MAX_DRAG_DISTANCE, Math.round(window.innerHeight * 0.28));
+    setMobileMenuDragOffset(dismissDistance);
+    swipeDismissTimeoutRef.current = window.setTimeout(() => {
+      setMobileMenuOpen(false);
+      resetMobileMenuSwipe();
+      swipeDismissTimeoutRef.current = null;
+    }, MENU_SWIPE_DISMISS_DURATION_MS);
+  }, [clearSwipeDismissTimeout, resetMobileMenuSwipe]);
+
+  const handleMobileMenuTouchStart = useCallback(
+    (event: React.TouchEvent<HTMLDivElement>) => {
+      if (!mobileMenuOpen || isMobileMenuSwipeDismissing) return;
+      const touch = event.touches[0];
+      mobileMenuSwipeRef.current = {
+        startX: touch.clientX,
+        startY: touch.clientY,
+        lastY: touch.clientY,
+        lastTimestamp: performance.now(),
+        velocityY: 0,
+        axis: 'pending',
+      };
+      setIsMobileMenuDragging(false);
+    },
+    [mobileMenuOpen, isMobileMenuSwipeDismissing],
+  );
+
+  const handleMobileMenuTouchMove = useCallback(
+    (event: React.TouchEvent<HTMLDivElement>) => {
+      const swipeState = mobileMenuSwipeRef.current;
+      if (!swipeState || !mobileMenuOpen || isMobileMenuSwipeDismissing) return;
+
+      const touch = event.touches[0];
+      const deltaX = touch.clientX - swipeState.startX;
+      const deltaY = touch.clientY - swipeState.startY;
+
+      if (
+        swipeState.axis === 'pending' &&
+        Math.max(Math.abs(deltaX), Math.abs(deltaY)) > MENU_AXIS_LOCK_THRESHOLD
+      ) {
+        swipeState.axis = Math.abs(deltaY) >= Math.abs(deltaX) ? 'vertical' : 'horizontal';
+      }
+
+      if (swipeState.axis === 'horizontal' || deltaY >= 0) {
+        if (deltaY >= 0 && mobileMenuDragOffset !== 0) {
+          setMobileMenuDragOffset(0);
+          setIsMobileMenuDragging(false);
+        }
+        return;
+      }
+
+      const now = performance.now();
+      const elapsed = Math.max(1, now - swipeState.lastTimestamp);
+      swipeState.velocityY = (touch.clientY - swipeState.lastY) / elapsed;
+      swipeState.lastY = touch.clientY;
+      swipeState.lastTimestamp = now;
+
+      const dragDistance = Math.min(MENU_MAX_DRAG_DISTANCE, Math.abs(deltaY) * 0.92);
+      setIsMobileMenuDragging(true);
+      setMobileMenuDragOffset(-dragDistance);
+      event.preventDefault();
+    },
+    [mobileMenuDragOffset, mobileMenuOpen, isMobileMenuSwipeDismissing],
+  );
+
+  const handleMobileMenuTouchEnd = useCallback(() => {
+    const swipeState = mobileMenuSwipeRef.current;
+    mobileMenuSwipeRef.current = null;
+    if (!swipeState || !mobileMenuOpen || isMobileMenuSwipeDismissing) return;
+
+    const dragDistance = Math.abs(mobileMenuDragOffset);
+    const releaseVelocity = Math.max(0, -swipeState.velocityY);
+    const shouldClose =
+      dragDistance >= MENU_SWIPE_CLOSE_DISTANCE || releaseVelocity >= MENU_SWIPE_CLOSE_VELOCITY;
+
+    if (shouldClose) {
+      closeMobileMenuWithSwipe();
+      return;
+    }
+
+    setIsMobileMenuDragging(false);
+    setMobileMenuDragOffset(0);
+  }, [
+    closeMobileMenuWithSwipe,
+    mobileMenuDragOffset,
+    mobileMenuOpen,
+    isMobileMenuSwipeDismissing,
+  ]);
+
+  const swipeProgress = Math.min(1, Math.abs(mobileMenuDragOffset) / MENU_MAX_DRAG_DISTANCE);
+  const mobileMenuBackdropOpacity = mobileMenuOpen ? Math.max(0, 1 - swipeProgress * 0.6) : 0;
+  const mobileMenuPanelScale = 1 - swipeProgress * 0.035;
+  const mobileMenuPanelOpacity = mobileMenuOpen ? Math.max(0, 1 - swipeProgress * 0.26) : 0;
 
   const desktopNavLinkKeys = [
     { key: 'navbar.home', href: '#home', number: '01' },
@@ -183,10 +332,26 @@ const Navbar = () => {
           className={`absolute inset-0 bg-background/96 backdrop-blur-md transition-opacity duration-500 ${
             mobileMenuOpen ? 'opacity-100' : 'opacity-0'
           }`}
+          style={mobileMenuOpen ? { opacity: mobileMenuBackdropOpacity } : undefined}
           onClick={closeMobileMenu}
         />
 
-        <div className="relative h-full flex flex-col pt-24 px-6">
+        <div
+          className="relative h-full flex flex-col pt-24 px-6 [touch-action:pan-x] will-change-transform"
+          style={{
+            transform: `translate3d(0, ${mobileMenuDragOffset}px, 0) scale(${mobileMenuPanelScale})`,
+            opacity: mobileMenuPanelOpacity,
+            transition: isMobileMenuDragging
+              ? 'none'
+              : isMobileMenuSwipeDismissing
+                ? 'transform 220ms cubic-bezier(0.3, 0, 0.2, 1), opacity 180ms ease-out'
+                : 'transform 460ms cubic-bezier(0.16, 1, 0.3, 1), opacity 320ms ease-out',
+          }}
+          onTouchStart={handleMobileMenuTouchStart}
+          onTouchMove={handleMobileMenuTouchMove}
+          onTouchEnd={handleMobileMenuTouchEnd}
+          onTouchCancel={handleMobileMenuTouchEnd}
+        >
           <nav className="flex-1 flex flex-col justify-center gap-3">
             {mobileNavLinkKeys.map((link, index) => (
               <a
