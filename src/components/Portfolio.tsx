@@ -723,6 +723,7 @@ const Portfolio = () => {
                       playsInline
                       preload="none"
                       rootMargin="100px 0px"
+                      pauseOffscreen
                       aria-hidden="true"
                     />
 
@@ -873,6 +874,7 @@ const Portfolio = () => {
                     disablePictureInPicture
                     disableRemotePlayback
                     rootMargin="120px 0px"
+                    pauseOffscreen
                     aria-label={t(clip.labelKey)}
                   />
                 </div>
