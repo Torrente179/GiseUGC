@@ -51,6 +51,38 @@ La aplicación estará disponible en `http://localhost:8080`
 | `npm run build` | Genera la build de producción |
 | `npm run preview` | Vista previa de la build de producción |
 | `npm run lint` | Ejecuta el linter |
+| `npm run video:encode` | Genera versiones `preview` y `mobile` de los MP4 |
+| `npm run video:encode:dry` | Muestra comandos ffmpeg sin ejecutar |
+
+## 🎬 Pipeline de Video (R2/CDN)
+
+Genera dos salidas por cada clip en `public/uploads/videos`:
+
+- `*-preview.mp4`: loop corto (4s por defecto), pensado para tarjetas/carruseles.
+- `*-mobile.mp4`: versión completa optimizada para modal/theater en móvil.
+- Defaults actuales (prioridad calidad + velocidad):
+  - Preview: `~700 KB`, ancho máximo `480px`
+  - Mobile: `~5 MB`, ancho máximo `720px`, audio `96 kbps`
+
+Comando base:
+
+```bash
+npm run video:encode
+```
+
+Opciones útiles:
+
+```bash
+# Ajustar presupuesto y sobreescribir salidas
+npm run video:encode -- --mobile-target-mb 6 --preview-target-kb 820 --overwrite
+
+# Procesar solo clips específicos
+npm run video:encode -- ugc-lifestyle-review.mp4 ugc-brand-spokesperson.mp4
+```
+
+Salida:
+- Videos en `tmp/video-encodes/`
+- Reporte CSV en `tmp/video-encodes/manifest.csv`
 
 ## 📂 Estructura del Proyecto
 
