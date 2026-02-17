@@ -51,12 +51,6 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       (!unloadWhenForcedPause || !forcePause);
 
     useEffect(() => {
-      if (!loadWhenVisible && !shouldLoad) {
-        setShouldLoad(true);
-      }
-    }, [loadWhenVisible, shouldLoad]);
-
-    useEffect(() => {
       if (!loadWhenVisible || shouldLoad) return;
       const node = internalRef.current;
       if (!node || typeof IntersectionObserver === 'undefined') {
@@ -104,11 +98,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
           const entry = entries[0];
           if (!entry) return;
           isInViewportRef.current = entry.isIntersecting;
-          if (unloadWhenOffscreen) {
-            setIsInViewport((prev) =>
-              prev === entry.isIntersecting ? prev : entry.isIntersecting,
-            );
-          }
+          setIsInViewport((prev) => (prev === entry.isIntersecting ? prev : entry.isIntersecting));
           if (forcePause) {
             node.pause();
             return;
