@@ -46,10 +46,10 @@ const THEATER_PRELOAD_OFFSETS = [-2, -1, 1, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
-const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/main/${filename}`;
+const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
 const r2PreviewVideo = (filename: string) =>
-  `${R2_MEDIA_BASE_URL}/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
-const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/posters/${filename}`;
+  `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
+const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
 
 const REEL_CLIPS: ReelClip[] = [
   {
