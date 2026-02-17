@@ -36,6 +36,11 @@ type TheaterSwipeGesture = {
   axis: 'pending' | 'vertical' | 'horizontal';
 };
 
+type NavigatorConnection = {
+  effectiveType?: 'slow-2g' | '2g' | '3g' | '4g';
+  saveData?: boolean;
+};
+
 const THEATER_CLOSE_DURATION_MS = 320;
 const THEATER_SWIPE_DISTANCE_THRESHOLD = 110;
 const THEATER_SWIPE_VELOCITY_THRESHOLD = 0.45;
@@ -832,6 +837,22 @@ const Portfolio = () => {
     }).filter((clip, index, clips) => clips.findIndex((candidate) => candidate.id === clip.id) === index);
   }, [activeReelIndex]);
 
+  const shouldPreferMobileTheaterSource = useMemo(() => {
+    if (!isMobile || typeof navigator === 'undefined') return false;
+    const connection = (navigator as Navigator & { connection?: NavigatorConnection }).connection;
+    if (!connection) return false;
+    if (connection.saveData) return true;
+    return connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g' || connection.effectiveType === '3g';
+  }, [isMobile]);
+
+  const theaterSources = useMemo(() => {
+    if (!activeReelPreview) return [];
+    if (isMobile && shouldPreferMobileTheaterSource) {
+      return [activeReelPreview.mobileSrc, activeReelPreview.mainSrc];
+    }
+    return [activeReelPreview.mainSrc, activeReelPreview.mobileSrc];
+  }, [activeReelPreview, isMobile, shouldPreferMobileTheaterSource]);
+
 
   return (
     <section id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
@@ -1221,11 +1242,7 @@ const Portfolio = () => {
               </h4>
 
               <TheaterVideo
-                sources={
-                  isMobile
-                    ? [activeReelPreview.mobileSrc, activeReelPreview.mainSrc]
-                    : [activeReelPreview.mainSrc, activeReelPreview.mobileSrc]
-                }
+                sources={theaterSources}
                 poster={activeReelPreview.posterSrc}
               />
             </div>
