@@ -737,39 +737,44 @@ const Portfolio = () => {
                 className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-proximity md:snap-none overscroll-x-contain scroll-smooth"
                 style={{ WebkitOverflowScrolling: 'touch' }}
               >
-                {REEL_CLIPS.map((clip, index) => (
-                  <motion.button
-                    type="button"
-                    key={clip.id}
-                    data-reel-card="true"
-                    className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-manipulation"
-                    onTouchStart={handleReelCardTouchStart}
-                    onTouchMove={handleReelCardTouchMove}
-                    onTouchEnd={handleReelCardTouchEnd}
-                    onTouchCancel={handleReelCardTouchEnd}
-                    onClick={() => handleReelCardClick(clip, index)}
-                    aria-label={t(clip.titleKey)}
-                    whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.02 }}
-                    whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
-                    transition={springHoverTransition}
-                  >
-                    <LazyVideo
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      src={clip.videoSrc}
-                      poster={clip.poster}
-                      muted
-                      autoPlay
-                      loop
-                      playsInline
-                      preload="none"
-                      rootMargin="100px 0px"
-                      pauseOffscreen
-                      forcePause={isTheaterOpen || (isMobile && activeMobileReelIndex !== index)}
-                      aria-hidden="true"
-                    />
+                {REEL_CLIPS.map((clip, index) => {
+                  const mobileCardDistance = Math.abs(activeMobileReelIndex - index);
+                  const isActiveMobileCard = !isMobile || mobileCardDistance === 0;
+                  const isWarmMobileCard = isMobile && mobileCardDistance <= 1;
 
-                  </motion.button>
-                ))}
+                  return (
+                    <motion.button
+                      type="button"
+                      key={clip.id}
+                      data-reel-card="true"
+                      className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-manipulation"
+                      onTouchStart={handleReelCardTouchStart}
+                      onTouchMove={handleReelCardTouchMove}
+                      onTouchEnd={handleReelCardTouchEnd}
+                      onTouchCancel={handleReelCardTouchEnd}
+                      onClick={() => handleReelCardClick(clip, index)}
+                      aria-label={t(clip.titleKey)}
+                      whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.02 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
+                      transition={springHoverTransition}
+                    >
+                      <LazyVideo
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        src={clip.videoSrc}
+                        poster={clip.poster}
+                        muted
+                        autoPlay
+                        loop
+                        playsInline
+                        preload={isWarmMobileCard ? 'auto' : 'none'}
+                        rootMargin="100px 0px"
+                        pauseOffscreen
+                        forcePause={isTheaterOpen || !isActiveMobileCard}
+                        aria-hidden="true"
+                      />
+                    </motion.button>
+                  );
+                })}
               </div>
             </div>
           </div>
