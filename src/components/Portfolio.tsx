@@ -778,8 +778,6 @@ const Portfolio = () => {
                       rootMargin="100px 0px"
                       pauseOffscreen
                       forcePause={isTheaterOpen || (isMobile && Math.abs(activeMobileReelIndex - index) > 1)}
-                      unloadWhenOffscreen={isMobile}
-                      unloadWhenForcedPause={isMobile}
                       aria-hidden="true"
                     />
 
@@ -932,8 +930,6 @@ const Portfolio = () => {
                     rootMargin="120px 0px"
                     pauseOffscreen
                     forcePause={isTheaterOpen}
-                    unloadWhenOffscreen={isMobile}
-                    unloadWhenForcedPause={isMobile}
                     aria-label={t(clip.labelKey)}
                   />
                 </div>
