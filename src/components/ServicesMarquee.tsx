@@ -14,6 +14,11 @@ const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2PreviewVideo = (filename: string) =>
     `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
 const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
+const MOBILE_BREAKPOINT_PX = 768;
+const AUTO_SCROLL_SPEED_DESKTOP = 0.45;
+const AUTO_SCROLL_SPEED_MOBILE = 0.62;
+const MOBILE_TOUCH_DRAG_MULTIPLIER = 1.28;
+const TOUCH_AXIS_LOCK_THRESHOLD_PX = 6;
 
 const ServicesMarquee = () => {
     const { t } = useTranslation();
@@ -25,8 +30,9 @@ const ServicesMarquee = () => {
     const isDraggingRef = useRef(false);
     const offsetRef = useRef(0);
     const setWidthRef = useRef(0);
-    const dragStartRef = useRef({ x: 0, offset: 0 });
+    const dragStartRef = useRef({ x: 0, y: 0, offset: 0 });
     const hasDraggedRef = useRef(false);
+    const touchAxisRef = useRef<'pending' | 'horizontal' | 'vertical'>('pending');
 
     const serviceVideoCards: ServiceVideoCard[] = [
         {
@@ -143,6 +149,10 @@ const ServicesMarquee = () => {
         const container = containerRef.current;
         const track = trackRef.current;
         if (!container || !track) return;
+        let isMobileViewport = window.innerWidth < MOBILE_BREAKPOINT_PX;
+        const updateViewportMode = () => {
+            isMobileViewport = window.innerWidth < MOBILE_BREAKPOINT_PX;
+        };
 
         // Measure one set width and start at the middle set
         const measure = () => {
@@ -151,6 +161,7 @@ const ServicesMarquee = () => {
             track.style.transform = `translateX(-${offsetRef.current}px)`;
         };
         const initTimeout = setTimeout(measure, 50);
+        window.addEventListener('resize', updateViewportMode);
 
         let animationFrameId: number;
 
@@ -159,7 +170,9 @@ const ServicesMarquee = () => {
             if (sw > 0) {
                 // Auto-scroll when not paused and not dragging
                 if (!isPausedRef.current && !isDraggingRef.current) {
-                    offsetRef.current += 0.45;
+                    offsetRef.current += isMobileViewport
+                        ? AUTO_SCROLL_SPEED_MOBILE
+                        : AUTO_SCROLL_SPEED_DESKTOP;
                 }
 
                 // Wrap boundaries — runs every frame regardless
@@ -178,7 +191,7 @@ const ServicesMarquee = () => {
         const handleMouseDown = (e: MouseEvent) => {
             isDraggingRef.current = true;
             hasDraggedRef.current = false;
-            dragStartRef.current = { x: e.clientX, offset: offsetRef.current };
+            dragStartRef.current = { x: e.clientX, y: 0, offset: offsetRef.current };
         };
         const handleMouseMove = (e: MouseEvent) => {
             if (!isDraggingRef.current) return;
@@ -192,18 +205,47 @@ const ServicesMarquee = () => {
 
         // Touch drag
         const handleTouchStart = (e: TouchEvent) => {
+            const touch = e.touches[0];
+            if (!touch) return;
             isDraggingRef.current = true;
             hasDraggedRef.current = false;
-            dragStartRef.current = { x: e.touches[0].clientX, offset: offsetRef.current };
+            touchAxisRef.current = 'pending';
+            dragStartRef.current = { x: touch.clientX, y: touch.clientY, offset: offsetRef.current };
         };
         const handleTouchMove = (e: TouchEvent) => {
             if (!isDraggingRef.current) return;
-            const dx = dragStartRef.current.x - e.touches[0].clientX;
+            const touch = e.touches[0];
+            if (!touch) return;
+
+            const dx = dragStartRef.current.x - touch.clientX;
+            const dy = dragStartRef.current.y - touch.clientY;
+
+            if (touchAxisRef.current === 'pending') {
+                if (
+                    Math.abs(dx) < TOUCH_AXIS_LOCK_THRESHOLD_PX &&
+                    Math.abs(dy) < TOUCH_AXIS_LOCK_THRESHOLD_PX
+                ) {
+                    return;
+                }
+                touchAxisRef.current = Math.abs(dx) >= Math.abs(dy) ? 'horizontal' : 'vertical';
+            }
+
+            if (touchAxisRef.current === 'vertical') {
+                isDraggingRef.current = false;
+                return;
+            }
+
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+
             if (Math.abs(dx) > 5) hasDraggedRef.current = true;
-            offsetRef.current = dragStartRef.current.offset + dx;
+            const dragMultiplier = isMobileViewport ? MOBILE_TOUCH_DRAG_MULTIPLIER : 1;
+            offsetRef.current = dragStartRef.current.offset + dx * dragMultiplier;
         };
         const handleTouchEnd = () => {
             isDraggingRef.current = false;
+            touchAxisRef.current = 'pending';
         };
 
         animationFrameId = requestAnimationFrame(animate);
@@ -212,18 +254,21 @@ const ServicesMarquee = () => {
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
         container.addEventListener('touchstart', handleTouchStart, { passive: true });
-        window.addEventListener('touchmove', handleTouchMove, { passive: true });
+        window.addEventListener('touchmove', handleTouchMove, { passive: false });
         window.addEventListener('touchend', handleTouchEnd);
+        window.addEventListener('touchcancel', handleTouchEnd);
 
         return () => {
             clearTimeout(initTimeout);
             cancelAnimationFrame(animationFrameId);
+            window.removeEventListener('resize', updateViewportMode);
             container.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
             container.removeEventListener('touchstart', handleTouchStart);
             window.removeEventListener('touchmove', handleTouchMove);
             window.removeEventListener('touchend', handleTouchEnd);
+            window.removeEventListener('touchcancel', handleTouchEnd);
         };
     }, []);
 
@@ -273,6 +318,7 @@ const ServicesMarquee = () => {
                     ref={containerRef}
                     className="relative z-10 overflow-hidden pt-10 md:pt-16 pb-10 select-none cursor-grab active:cursor-grabbing"
                     onDragStart={(e) => e.preventDefault()}
+                    style={{ touchAction: 'pan-x' }}
                 >
                     <div
                         ref={trackRef}
