@@ -1221,7 +1221,11 @@ const Portfolio = () => {
               </h4>
 
               <TheaterVideo
-                sources={[activeReelPreview.mainSrc, activeReelPreview.mobileSrc]}
+                sources={
+                  isMobile
+                    ? [activeReelPreview.mobileSrc, activeReelPreview.mainSrc]
+                    : [activeReelPreview.mainSrc, activeReelPreview.mobileSrc]
+                }
                 poster={activeReelPreview.posterSrc}
               />
             </div>
