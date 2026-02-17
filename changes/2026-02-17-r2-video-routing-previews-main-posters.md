@@ -108,3 +108,23 @@ Updated media URLs so playback assets are served from Cloudflare R2 with explici
 - If you want theater to use mobile-optimized full clips instead of originals:
   - Update the `r2MainVideo(...)` helper to point to `/mobile/<name>-mobile.mp4`.
 - No component structure change is needed; only helper output changes.
+
+## Local upload-pack folder structure created
+To simplify drag/drop upload to R2, a local staging pack was created at:
+- `tmp/r2-upload/`
+
+It contains:
+- `tmp/r2-upload/main/` -> source full clips (`*.mp4`) for `videos/main/`
+- `tmp/r2-upload/mobile/` -> optimized mobile clips (`*-mobile.mp4`) for `videos/mobile/`
+- `tmp/r2-upload/previews/` -> preview loops (`*-preview.mp4`) for `videos/previews/`
+- `tmp/r2-upload/posters/` -> poster images (`*-poster.jpg`) for `videos/posters/`
+- `tmp/r2-upload/manifest.csv` -> latest encode report copy
+
+Counts at creation:
+- `main`: 13 files
+- `mobile`: 13 files
+- `previews`: 13 files
+- `posters`: 13 files
+
+Git hygiene:
+- Added `tmp/r2-upload/` to `.gitignore` to prevent large media from being committed.
