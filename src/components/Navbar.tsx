@@ -31,21 +31,21 @@ const ThreadsIcon = ({ className }: { className?: string }) => (
   </span>
 );
 
-const MENU_SWIPE_CLOSE_DISTANCE = 82;
-const MENU_SWIPE_CLOSE_VELOCITY = 0.42;
+const MENU_SWIPE_CLOSE_DISTANCE = 98;
+const MENU_SWIPE_CLOSE_VELOCITY = 0.52;
 const MENU_MAX_DRAG_DISTANCE = 220;
 const MENU_AXIS_LOCK_THRESHOLD = 8;
-const MENU_SWIPE_DISMISS_DURATION_MS = 180;
-const MENU_OPEN_START_OFFSET = -14;
-const MENU_STANDARD_CLOSE_OFFSET = -34;
-const MENU_STANDARD_CLOSE_DURATION_S = 0.18;
-const MENU_IOS_CLOSE_EASE: [number, number, number, number] = [0.4, 0, 0.2, 1];
-const MENU_OPEN_SPRING = { type: 'spring', stiffness: 560, damping: 46, mass: 0.56 } as const;
+const MENU_SWIPE_DISMISS_DURATION_MS = 260;
+const MENU_OPEN_START_OFFSET = -24;
+const MENU_STANDARD_CLOSE_OFFSET = -26;
+const MENU_STANDARD_CLOSE_DURATION_S = 0.3;
+const MENU_IOS_CLOSE_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+const MENU_OPEN_SPRING = { type: 'spring', stiffness: 340, damping: 34, mass: 0.86 } as const;
 const MENU_SNAPBACK_SPRING = {
   type: 'spring',
-  stiffness: 620,
-  damping: 48,
-  mass: 0.52,
+  stiffness: 380,
+  damping: 35,
+  mass: 0.8,
 } as const;
 
 type MobileMenuSwipeState = {
@@ -66,17 +66,17 @@ const Navbar = () => {
   const mobileMenuBackdropOpacity = useTransform(
     mobileMenuY,
     [-MENU_MAX_DRAG_DISTANCE, 0],
-    [0.4, 1],
+    [0.5, 1],
   );
   const mobileMenuPanelScale = useTransform(
     mobileMenuY,
     [-MENU_MAX_DRAG_DISTANCE, 0],
-    [0.965, 1],
+    [0.95, 1],
   );
   const mobileMenuPanelOpacity = useTransform(
     mobileMenuY,
     [-MENU_MAX_DRAG_DISTANCE, 0],
-    [0.74, 1],
+    [0.7, 1],
   );
   const mobileMenuSwipeRef = useRef<MobileMenuSwipeState | null>(null);
   const swipeDismissTimeoutRef = useRef<number | null>(null);
@@ -86,9 +86,28 @@ const Navbar = () => {
   const isMobileMenuSwipeDismissingRef = useRef(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 24);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    let frameId: number | null = null;
+
+    const updateScrolledState = () => {
+      frameId = null;
+      const nextScrolled = window.scrollY > 24;
+      setIsScrolled((previous) => (previous === nextScrolled ? previous : nextScrolled));
+    };
+
+    const queueScrolledStateUpdate = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(updateScrolledState);
+    };
+
+    queueScrolledStateUpdate();
+    window.addEventListener('scroll', queueScrolledStateUpdate, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', queueScrolledStateUpdate);
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -431,8 +450,8 @@ const Navbar = () => {
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         style={{
-          transitionDuration: '300ms',
-          transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)',
+          transitionDuration: '460ms',
+          transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
         <motion.div
@@ -441,8 +460,8 @@ const Navbar = () => {
           }`}
           style={{
             opacity: mobileMenuOpen ? mobileMenuBackdropOpacity : 0,
-            transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)',
-            transitionDuration: '260ms',
+            transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            transitionDuration: '420ms',
           }}
           onClick={closeMobileMenu}
         />
@@ -465,9 +484,9 @@ const Navbar = () => {
                   mobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'
                 }`}
                 style={{
-                  transitionDelay: mobileMenuOpen ? `${80 + index * 44}ms` : '0ms',
-                  transitionDuration: '300ms',
-                  transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)',
+                  transitionDelay: mobileMenuOpen ? `${130 + index * 62}ms` : '0ms',
+                  transitionDuration: '420ms',
+                  transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
                 }}
               >
                 <div className="flex items-center gap-4">
@@ -486,9 +505,9 @@ const Navbar = () => {
               mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
             style={{
-              transitionDelay: mobileMenuOpen ? '300ms' : '0ms',
-              transitionDuration: '320ms',
-              transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)',
+              transitionDelay: mobileMenuOpen ? '520ms' : '0ms',
+              transitionDuration: '460ms',
+              transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
             }}
           >
             <div className="relative overflow-hidden rounded-[1.7rem] border border-border/80 bg-gradient-to-br from-card via-card to-secondary/55 p-4 shadow-[0_28px_46px_-34px_hsl(var(--foreground)/0.85)]">
@@ -606,14 +625,16 @@ const Navbar = () => {
               >
                 <div className="relative w-6 h-6">
                   <Menu
-                    className={`absolute inset-0 w-6 h-6 transition-[opacity,transform] duration-200 ${
+                    className={`absolute inset-0 w-6 h-6 transition-[opacity,transform] duration-300 ${
                       mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
                     }`}
+                    style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
                   />
                   <X
-                    className={`absolute inset-0 w-6 h-6 transition-[opacity,transform] duration-200 ${
+                    className={`absolute inset-0 w-6 h-6 transition-[opacity,transform] duration-300 ${
                       mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
                     }`}
+                    style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
                   />
                 </div>
               </button>

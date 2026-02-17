@@ -98,7 +98,11 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
           const entry = entries[0];
           if (!entry) return;
           isInViewportRef.current = entry.isIntersecting;
-          setIsInViewport((prev) => (prev === entry.isIntersecting ? prev : entry.isIntersecting));
+          if (unloadWhenOffscreen) {
+            setIsInViewport((prev) =>
+              prev === entry.isIntersecting ? prev : entry.isIntersecting,
+            );
+          }
           if (forcePause) {
             node.pause();
             return;

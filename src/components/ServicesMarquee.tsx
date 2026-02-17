@@ -22,6 +22,10 @@ const ServicesMarquee = () => {
     const setWidthRef = useRef(0);
     const dragStartRef = useRef({ x: 0, offset: 0 });
     const hasDraggedRef = useRef(false);
+    const animationFrameRef = useRef<number | null>(null);
+    const lastFrameTimeRef = useRef<number | null>(null);
+    const isInViewportRef = useRef(true);
+    const isDocumentVisibleRef = useRef(typeof document === 'undefined' ? true : !document.hidden);
 
     const serviceVideoCards: ServiceVideoCard[] = [
         {
@@ -77,7 +81,10 @@ const ServicesMarquee = () => {
 
     const handleCardClick = (index: number) => {
         // Ignore click if user was dragging
-        if (hasDraggedRef.current) return;
+        if (hasDraggedRef.current) {
+            hasDraggedRef.current = false;
+            return;
+        }
 
         const isClosing = expandedCard === index;
 
@@ -129,97 +136,208 @@ const ServicesMarquee = () => {
         };
     }, [expandedCard]);
 
-    // Transform-based infinite scroll — no native scroll, full control
+    // Transform-based infinite scroll with viewport/visibility gating
     useEffect(() => {
         const container = containerRef.current;
         const track = trackRef.current;
         if (!container || !track) return;
 
-        // Measure one set width and start at the middle set
-        const measure = () => {
-            setWidthRef.current = track.scrollWidth / 3;
-            offsetRef.current = setWidthRef.current;
-            track.style.transform = `translateX(-${offsetRef.current}px)`;
+        const AUTO_SCROLL_PX_PER_SECOND = 27;
+
+        const applyTrackTransform = () => {
+            track.style.transform = `translate3d(-${offsetRef.current}px, 0, 0)`;
         };
-        const initTimeout = setTimeout(measure, 50);
 
-        let animationFrameId: number;
-
-        const animate = () => {
+        const wrapOffset = () => {
             const sw = setWidthRef.current;
-            if (sw > 0) {
-                // Auto-scroll when not paused and not dragging
-                if (!isPausedRef.current && !isDraggingRef.current) {
-                    offsetRef.current += 0.45;
-                }
-
-                // Wrap boundaries — runs every frame regardless
-                if (offsetRef.current >= sw * 2) {
-                    offsetRef.current -= sw;
-                } else if (offsetRef.current <= 0) {
-                    offsetRef.current += sw;
-                }
-
-                track.style.transform = `translateX(-${offsetRef.current}px)`;
+            if (sw <= 0) return;
+            if (offsetRef.current >= sw * 2) {
+                offsetRef.current -= sw;
+            } else if (offsetRef.current <= 0) {
+                offsetRef.current += sw;
             }
-            animationFrameId = requestAnimationFrame(animate);
         };
 
-        // Mouse drag
-        const handleMouseDown = (e: MouseEvent) => {
+        const stopAnimation = () => {
+            if (animationFrameRef.current !== null) {
+                window.cancelAnimationFrame(animationFrameRef.current);
+                animationFrameRef.current = null;
+            }
+            lastFrameTimeRef.current = null;
+        };
+
+        const canAnimate = () => isInViewportRef.current && isDocumentVisibleRef.current;
+
+        const animate = (timestamp: number) => {
+            animationFrameRef.current = null;
+            if (!canAnimate()) {
+                stopAnimation();
+                return;
+            }
+
+            const previousTimestamp = lastFrameTimeRef.current;
+            const deltaSeconds =
+                previousTimestamp === null
+                    ? 1 / 60
+                    : Math.min((timestamp - previousTimestamp) / 1000, 0.05);
+            lastFrameTimeRef.current = timestamp;
+
+            if (!isPausedRef.current && !isDraggingRef.current) {
+                offsetRef.current += AUTO_SCROLL_PX_PER_SECOND * deltaSeconds;
+                wrapOffset();
+                applyTrackTransform();
+            }
+
+            animationFrameRef.current = window.requestAnimationFrame(animate);
+        };
+
+        const startAnimation = () => {
+            if (animationFrameRef.current !== null || !canAnimate()) return;
+            animationFrameRef.current = window.requestAnimationFrame(animate);
+        };
+
+        const measure = () => {
+            const nextSetWidth = track.scrollWidth / 3;
+            if (!Number.isFinite(nextSetWidth) || nextSetWidth <= 0) return;
+            const previousSetWidth = setWidthRef.current;
+            setWidthRef.current = nextSetWidth;
+
+            if (previousSetWidth <= 0) {
+                offsetRef.current = nextSetWidth;
+            } else {
+                const positionRatio = offsetRef.current / previousSetWidth;
+                offsetRef.current = positionRatio * nextSetWidth;
+            }
+
+            wrapOffset();
+            applyTrackTransform();
+        };
+
+        const removeDragListeners = () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handlePointerUp);
+            window.removeEventListener('touchmove', handleTouchMove);
+            window.removeEventListener('touchend', handlePointerUp);
+            window.removeEventListener('touchcancel', handlePointerUp);
+        };
+
+        const beginDrag = (clientX: number) => {
             isDraggingRef.current = true;
             hasDraggedRef.current = false;
-            dragStartRef.current = { x: e.clientX, offset: offsetRef.current };
+            dragStartRef.current = { x: clientX, offset: offsetRef.current };
+            startAnimation();
         };
-        const handleMouseMove = (e: MouseEvent) => {
+
+        const updateDrag = (clientX: number) => {
             if (!isDraggingRef.current) return;
-            const dx = dragStartRef.current.x - e.clientX;
+            const dx = dragStartRef.current.x - clientX;
             if (Math.abs(dx) > 5) hasDraggedRef.current = true;
             offsetRef.current = dragStartRef.current.offset + dx;
+            wrapOffset();
+            applyTrackTransform();
         };
-        const handleMouseUp = () => {
+
+        const handlePointerUp = () => {
             isDraggingRef.current = false;
+            removeDragListeners();
+            startAnimation();
         };
 
-        // Touch drag
-        const handleTouchStart = (e: TouchEvent) => {
-            isDraggingRef.current = true;
-            hasDraggedRef.current = false;
-            dragStartRef.current = { x: e.touches[0].clientX, offset: offsetRef.current };
-        };
-        const handleTouchMove = (e: TouchEvent) => {
-            if (!isDraggingRef.current) return;
-            const dx = dragStartRef.current.x - e.touches[0].clientX;
-            if (Math.abs(dx) > 5) hasDraggedRef.current = true;
-            offsetRef.current = dragStartRef.current.offset + dx;
-        };
-        const handleTouchEnd = () => {
-            isDraggingRef.current = false;
+        const handleMouseDown = (event: MouseEvent) => {
+            beginDrag(event.clientX);
+            window.addEventListener('mousemove', handleMouseMove, { passive: true });
+            window.addEventListener('mouseup', handlePointerUp, { passive: true });
         };
 
-        animationFrameId = requestAnimationFrame(animate);
+        const handleMouseMove = (event: MouseEvent) => {
+            updateDrag(event.clientX);
+        };
 
+        const handleTouchStart = (event: TouchEvent) => {
+            const touch = event.touches[0];
+            if (!touch) return;
+            beginDrag(touch.clientX);
+            window.addEventListener('touchmove', handleTouchMove, { passive: true });
+            window.addEventListener('touchend', handlePointerUp, { passive: true });
+            window.addEventListener('touchcancel', handlePointerUp, { passive: true });
+        };
+
+        const handleTouchMove = (event: TouchEvent) => {
+            const touch = event.touches[0];
+            if (!touch) return;
+            updateDrag(touch.clientX);
+        };
+
+        const handleVisibilityChange = () => {
+            isDocumentVisibleRef.current = !document.hidden;
+            if (isDocumentVisibleRef.current) {
+                startAnimation();
+            } else {
+                stopAnimation();
+            }
+        };
+
+        const initTimeout = window.setTimeout(() => {
+            measure();
+            startAnimation();
+        }, 50);
+
+        let resizeObserver: ResizeObserver | null = null;
+        if (typeof ResizeObserver !== 'undefined') {
+            resizeObserver = new ResizeObserver(() => {
+                measure();
+                startAnimation();
+            });
+            resizeObserver.observe(container);
+            resizeObserver.observe(track);
+        } else {
+            window.addEventListener('resize', measure);
+        }
+
+        let visibilityObserver: IntersectionObserver | null = null;
+        if (typeof IntersectionObserver !== 'undefined') {
+            visibilityObserver = new IntersectionObserver(
+                ([entry]) => {
+                    isInViewportRef.current = entry?.isIntersecting ?? true;
+                    if (isInViewportRef.current) {
+                        startAnimation();
+                    } else {
+                        stopAnimation();
+                    }
+                },
+                { threshold: 0.05, rootMargin: '120px 0px' },
+            );
+            visibilityObserver.observe(container);
+        }
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
         container.addEventListener('mousedown', handleMouseDown);
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseup', handleMouseUp);
         container.addEventListener('touchstart', handleTouchStart, { passive: true });
-        window.addEventListener('touchmove', handleTouchMove, { passive: true });
-        window.addEventListener('touchend', handleTouchEnd);
 
         return () => {
-            clearTimeout(initTimeout);
-            cancelAnimationFrame(animationFrameId);
+            window.clearTimeout(initTimeout);
+            stopAnimation();
+            removeDragListeners();
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
             container.removeEventListener('mousedown', handleMouseDown);
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
             container.removeEventListener('touchstart', handleTouchStart);
-            window.removeEventListener('touchmove', handleTouchMove);
-            window.removeEventListener('touchend', handleTouchEnd);
+            visibilityObserver?.disconnect();
+            resizeObserver?.disconnect();
+            window.removeEventListener('resize', measure);
         };
     }, []);
 
     const scroll = (direction: 'left' | 'right') => {
         offsetRef.current += direction === 'left' ? -300 : 300;
+        const track = trackRef.current;
+        const setWidth = setWidthRef.current;
+        if (!track || setWidth <= 0) return;
+        if (offsetRef.current >= setWidth * 2) {
+            offsetRef.current -= setWidth;
+        } else if (offsetRef.current <= 0) {
+            offsetRef.current += setWidth;
+        }
+        track.style.transform = `translate3d(-${offsetRef.current}px, 0, 0)`;
     };
 
     return (

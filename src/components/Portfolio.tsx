@@ -784,7 +784,14 @@ const Portfolio = () => {
                 {REEL_CLIPS.map((clip, index) => {
                   const mobileCardDistance = Math.abs(activeMobileReelIndex - index);
                   const isActiveMobileCard = !isMobile || mobileCardDistance === 0;
-                  const isWarmMobileCard = isMobile && mobileCardDistance <= 1;
+                  const isWarmMobileCard = isMobile && mobileCardDistance <= 2;
+                  const preloadStrategy = isMobile
+                    ? isActiveMobileCard
+                      ? 'auto'
+                      : isWarmMobileCard
+                        ? 'metadata'
+                        : 'none'
+                    : 'none';
 
                   return (
                     <motion.button
@@ -810,7 +817,7 @@ const Portfolio = () => {
                         autoPlay
                         loop
                         playsInline
-                        preload={isWarmMobileCard ? 'auto' : 'none'}
+                        preload={preloadStrategy}
                         rootMargin="100px 0px"
                         pauseOffscreen
                         forcePause={isTheaterOpen || !isActiveMobileCard}
