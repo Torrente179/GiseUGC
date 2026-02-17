@@ -43,10 +43,11 @@ const THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
 const REEL_CARD_TAP_SLOP_PX = 10;
-const THEATER_PRELOAD_OFFSETS = [-2, -1, 1, 2] as const;
+const THEATER_WARM_PRELOAD_OFFSETS = [-1, 1] as const;
+const THEATER_HINT_PRELOAD_OFFSETS = [-2, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
-const THEATER_FAST_FALLBACK_MS = 1400;
+const THEATER_FAST_FALLBACK_MS = 420;
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
 const r2MobileVideo = (filename: string) =>
@@ -230,7 +231,7 @@ const TheaterVideo = ({ sources, poster }: { sources: string[]; poster: string }
     if (activeSourceIndex + 1 >= sources.length) return;
     startupTimeoutRef.current = window.setTimeout(() => {
       const video = videoRef.current;
-      if (!video || !video.paused) return;
+      if (!video || !video.paused || video.readyState >= 2) return;
       promoteFallbackSource();
     }, THEATER_FAST_FALLBACK_MS);
   }, [activeSourceIndex, clearStartupTimeout, promoteFallbackSource, sources.length]);
@@ -278,6 +279,7 @@ const TheaterVideo = ({ sources, poster }: { sources: string[]; poster: string }
     if (!video || !activeSource) return;
 
     setIsPlaying(false);
+    video.load();
     scheduleStartupFallback();
     attemptPlay();
 
@@ -812,10 +814,19 @@ const Portfolio = () => {
       ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.32,0.72,0,1), opacity 250ms ease`
       : 'transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease';
 
-  const theaterPreloadClips = useMemo(() => {
+  const theaterWarmPreloadClips = useMemo(() => {
     if (activeReelIndex === null) return [];
 
-    return THEATER_PRELOAD_OFFSETS.map((offset) => {
+    return THEATER_WARM_PRELOAD_OFFSETS.map((offset) => {
+      const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
+      return REEL_CLIPS[index];
+    }).filter((clip, index, clips) => clips.findIndex((candidate) => candidate.id === clip.id) === index);
+  }, [activeReelIndex]);
+
+  const theaterHintPreloadClips = useMemo(() => {
+    if (activeReelIndex === null) return [];
+
+    return THEATER_HINT_PRELOAD_OFFSETS.map((offset) => {
       const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
       return REEL_CLIPS[index];
     }).filter((clip, index, clips) => clips.findIndex((candidate) => candidate.id === clip.id) === index);
@@ -1164,9 +1175,29 @@ const Portfolio = () => {
 
             <div className="relative rounded-[1.55rem] border border-border/70 bg-card/75 px-4 pb-4 pt-5 shadow-[inset_0_1px_0_hsl(var(--background)/0.45)]">
               <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
-                {theaterPreloadClips.map((clip) => (
+                {theaterWarmPreloadClips.map((clip) => (
                   <video
-                    key={`theater-preload-${clip.id}`}
+                    key={`theater-preload-mobile-warm-${clip.id}`}
+                    src={clip.mobileSrc}
+                    preload="auto"
+                    muted
+                    playsInline
+                    tabIndex={-1}
+                  />
+                ))}
+                {theaterWarmPreloadClips.map((clip) => (
+                  <video
+                    key={`theater-preload-main-warm-${clip.id}`}
+                    src={clip.mainSrc}
+                    preload="metadata"
+                    muted
+                    playsInline
+                    tabIndex={-1}
+                  />
+                ))}
+                {theaterHintPreloadClips.map((clip) => (
+                  <video
+                    key={`theater-preload-mobile-hint-${clip.id}`}
                     src={clip.mobileSrc}
                     preload="metadata"
                     muted
