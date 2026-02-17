@@ -184,7 +184,15 @@ const COLLAGE_CLIPS: CollageClip[] = [
   },
 ];
 
-const TheaterVideo = ({ sources, poster }: { sources: string[]; poster: string }) => {
+const TheaterVideo = ({
+  sources,
+  poster,
+  enableStartupFallback,
+}: {
+  sources: string[];
+  poster: string;
+  enableStartupFallback: boolean;
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const startupTimeoutRef = useRef<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -233,13 +241,14 @@ const TheaterVideo = ({ sources, poster }: { sources: string[]; poster: string }
 
   const scheduleStartupFallback = useCallback(() => {
     clearStartupTimeout();
+    if (!enableStartupFallback) return;
     if (activeSourceIndex + 1 >= sources.length) return;
     startupTimeoutRef.current = window.setTimeout(() => {
       const video = videoRef.current;
       if (!video || !video.paused || video.readyState >= 2) return;
       promoteFallbackSource();
     }, THEATER_FAST_FALLBACK_MS);
-  }, [activeSourceIndex, clearStartupTimeout, promoteFallbackSource, sources.length]);
+  }, [activeSourceIndex, clearStartupTimeout, enableStartupFallback, promoteFallbackSource, sources.length]);
 
   const handlePlay = () => {
     clearStartupTimeout();
@@ -1244,6 +1253,7 @@ const Portfolio = () => {
               <TheaterVideo
                 sources={theaterSources}
                 poster={activeReelPreview.posterSrc}
+                enableStartupFallback={isMobile}
               />
             </div>
           </div>
