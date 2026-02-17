@@ -789,7 +789,7 @@ const Portfolio = () => {
                     ? isActiveMobileCard
                       ? 'auto'
                       : isWarmMobileCard
-                        ? 'metadata'
+                        ? 'auto'
                         : 'none'
                     : 'none';
 
@@ -818,7 +818,8 @@ const Portfolio = () => {
                         loop
                         playsInline
                         preload={preloadStrategy}
-                        rootMargin="100px 0px"
+                        rootMargin="140px 220px"
+                        loadWhenVisible={!isMobile || !isWarmMobileCard}
                         pauseOffscreen
                         forcePause={isTheaterOpen || !isActiveMobileCard}
                         aria-hidden="true"

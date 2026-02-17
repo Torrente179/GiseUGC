@@ -51,6 +51,12 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       (!unloadWhenForcedPause || !forcePause);
 
     useEffect(() => {
+      if (!loadWhenVisible && !shouldLoad) {
+        setShouldLoad(true);
+      }
+    }, [loadWhenVisible, shouldLoad]);
+
+    useEffect(() => {
       if (!loadWhenVisible || shouldLoad) return;
       const node = internalRef.current;
       if (!node || typeof IntersectionObserver === 'undefined') {
