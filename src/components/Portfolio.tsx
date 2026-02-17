@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect, type TouchEvent, type SyntheticEvent } from 'react';
+import { useRef, useState, useCallback, useEffect, useMemo, type TouchEvent, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Pause, Play, X } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -41,6 +41,7 @@ const THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
 const REEL_CARD_TAP_SLOP_PX = 10;
+const THEATER_PRELOAD_OFFSETS = [-2, -1, 1, 2] as const;
 
 const REEL_CLIPS: ReelClip[] = [
   {
@@ -169,6 +170,17 @@ const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
     if (!video.paused && !isPlaying) setIsPlaying(true);
   }, [isPlaying]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    setIsPlaying(false);
+    const playPromise = video.play();
+    if (playPromise) {
+      playPromise.catch(() => undefined);
+    }
+  }, [src]);
+
   return (
     <div className="relative overflow-hidden rounded-[1.25rem] border border-white/25 bg-black shadow-[0_20px_52px_-30px_hsl(var(--foreground)/0.9)]">
       <video
@@ -176,6 +188,7 @@ const TheaterVideo = ({ src, poster }: { src: string; poster: string }) => {
         className="w-full aspect-[9/16] object-cover"
         src={src}
         poster={poster}
+        preload="auto"
         autoPlay
         playsInline
         onPlay={handlePlay}
@@ -663,6 +676,15 @@ const Portfolio = () => {
       ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.32,0.72,0,1), opacity 250ms ease`
       : 'transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease';
 
+  const theaterPreloadClips = useMemo(() => {
+    if (activeReelIndex === null) return [];
+
+    return THEATER_PRELOAD_OFFSETS.map((offset) => {
+      const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
+      return REEL_CLIPS[index];
+    }).filter((clip, index, clips) => clips.findIndex((candidate) => candidate.id === clip.id) === index);
+  }, [activeReelIndex]);
+
 
   return (
     <section id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
@@ -1005,6 +1027,19 @@ const Portfolio = () => {
             </button>
 
             <div className="relative rounded-[1.55rem] border border-border/70 bg-card/75 px-4 pb-4 pt-5 shadow-[inset_0_1px_0_hsl(var(--background)/0.45)]">
+              <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
+                {theaterPreloadClips.map((clip) => (
+                  <video
+                    key={`theater-preload-${clip.id}`}
+                    src={clip.videoSrc}
+                    preload="auto"
+                    muted
+                    playsInline
+                    tabIndex={-1}
+                  />
+                ))}
+              </div>
+
               <div className="mb-2 pr-12">
                 <p className="brand-logo text-[1.6rem] leading-[0.9] text-foreground">
                   Gise<span className="text-foreground font-medium">.UGC</span>
@@ -1019,14 +1054,9 @@ const Portfolio = () => {
               </h4>
 
               <TheaterVideo
-                key={activeReelPreview.id}
                 src={activeReelPreview.videoSrc}
                 poster={activeReelPreview.poster}
               />
-
-              <p className="mt-3 section-label text-[9px] text-foreground/45">
-                {t('portfolio.reelPreviewSwipeHint')}
-              </p>
             </div>
           </div>
           </div>
