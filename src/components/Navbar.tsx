@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
   Menu,
@@ -30,11 +31,22 @@ const ThreadsIcon = ({ className }: { className?: string }) => (
   </span>
 );
 
-const MENU_SWIPE_CLOSE_DISTANCE = 94;
-const MENU_SWIPE_CLOSE_VELOCITY = 0.48;
+const MENU_SWIPE_CLOSE_DISTANCE = 82;
+const MENU_SWIPE_CLOSE_VELOCITY = 0.42;
 const MENU_MAX_DRAG_DISTANCE = 220;
 const MENU_AXIS_LOCK_THRESHOLD = 8;
-const MENU_SWIPE_DISMISS_DURATION_MS = 220;
+const MENU_SWIPE_DISMISS_DURATION_MS = 180;
+const MENU_OPEN_START_OFFSET = -14;
+const MENU_STANDARD_CLOSE_OFFSET = -34;
+const MENU_STANDARD_CLOSE_DURATION_S = 0.18;
+const MENU_IOS_CLOSE_EASE: [number, number, number, number] = [0.4, 0, 0.2, 1];
+const MENU_OPEN_SPRING = { type: 'spring', stiffness: 560, damping: 46, mass: 0.56 } as const;
+const MENU_SNAPBACK_SPRING = {
+  type: 'spring',
+  stiffness: 620,
+  damping: 48,
+  mass: 0.52,
+} as const;
 
 type MobileMenuSwipeState = {
   startX: number;
@@ -49,12 +61,29 @@ const Navbar = () => {
   const { t, i18n } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileMenuDragOffset, setMobileMenuDragOffset] = useState(0);
-  const [isMobileMenuDragging, setIsMobileMenuDragging] = useState(false);
-  const [isMobileMenuSwipeDismissing, setIsMobileMenuSwipeDismissing] = useState(false);
   const { handleHashLinkClick } = useHashlessSectionNavigation();
+  const mobileMenuY = useMotionValue(0);
+  const mobileMenuBackdropOpacity = useTransform(
+    mobileMenuY,
+    [-MENU_MAX_DRAG_DISTANCE, 0],
+    [0.4, 1],
+  );
+  const mobileMenuPanelScale = useTransform(
+    mobileMenuY,
+    [-MENU_MAX_DRAG_DISTANCE, 0],
+    [0.965, 1],
+  );
+  const mobileMenuPanelOpacity = useTransform(
+    mobileMenuY,
+    [-MENU_MAX_DRAG_DISTANCE, 0],
+    [0.74, 1],
+  );
   const mobileMenuSwipeRef = useRef<MobileMenuSwipeState | null>(null);
   const swipeDismissTimeoutRef = useRef<number | null>(null);
+  const closeMenuResetTimeoutRef = useRef<number | null>(null);
+  const openMenuAnimationFrameRef = useRef<number | null>(null);
+  const mobileMenuAnimationRef = useRef<ReturnType<typeof animate> | null>(null);
+  const isMobileMenuSwipeDismissingRef = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 24);
@@ -71,6 +100,11 @@ const Navbar = () => {
     };
   }, [mobileMenuOpen]);
 
+  const stopMobileMenuAnimation = useCallback(() => {
+    mobileMenuAnimationRef.current?.stop();
+    mobileMenuAnimationRef.current = null;
+  }, []);
+
   const clearSwipeDismissTimeout = useCallback(() => {
     if (swipeDismissTimeoutRef.current !== null) {
       window.clearTimeout(swipeDismissTimeoutRef.current);
@@ -78,50 +112,127 @@ const Navbar = () => {
     }
   }, []);
 
+  const clearCloseMenuResetTimeout = useCallback(() => {
+    if (closeMenuResetTimeoutRef.current !== null) {
+      window.clearTimeout(closeMenuResetTimeoutRef.current);
+      closeMenuResetTimeoutRef.current = null;
+    }
+  }, []);
+
+  const clearOpenMenuAnimationFrame = useCallback(() => {
+    if (openMenuAnimationFrameRef.current !== null) {
+      window.cancelAnimationFrame(openMenuAnimationFrameRef.current);
+      openMenuAnimationFrameRef.current = null;
+    }
+  }, []);
+
   useEffect(() => {
     return () => {
       clearSwipeDismissTimeout();
+      clearCloseMenuResetTimeout();
+      clearOpenMenuAnimationFrame();
+      stopMobileMenuAnimation();
     };
-  }, [clearSwipeDismissTimeout]);
+  }, [
+    clearCloseMenuResetTimeout,
+    clearOpenMenuAnimationFrame,
+    clearSwipeDismissTimeout,
+    stopMobileMenuAnimation,
+  ]);
 
   const resetMobileMenuSwipe = useCallback(() => {
     mobileMenuSwipeRef.current = null;
-    setIsMobileMenuDragging(false);
-    setIsMobileMenuSwipeDismissing(false);
-    setMobileMenuDragOffset(0);
+    isMobileMenuSwipeDismissingRef.current = false;
   }, []);
 
   const closeMobileMenu = useCallback(() => {
     clearSwipeDismissTimeout();
+    clearCloseMenuResetTimeout();
+    clearOpenMenuAnimationFrame();
     resetMobileMenuSwipe();
+    stopMobileMenuAnimation();
+    mobileMenuAnimationRef.current = animate(mobileMenuY, MENU_STANDARD_CLOSE_OFFSET, {
+      duration: MENU_STANDARD_CLOSE_DURATION_S,
+      ease: MENU_IOS_CLOSE_EASE,
+    });
     setMobileMenuOpen(false);
-  }, [clearSwipeDismissTimeout, resetMobileMenuSwipe]);
+    closeMenuResetTimeoutRef.current = window.setTimeout(() => {
+      stopMobileMenuAnimation();
+      mobileMenuY.set(0);
+      closeMenuResetTimeoutRef.current = null;
+    }, MENU_SWIPE_DISMISS_DURATION_MS + 40);
+  }, [
+    clearCloseMenuResetTimeout,
+    clearOpenMenuAnimationFrame,
+    clearSwipeDismissTimeout,
+    mobileMenuY,
+    resetMobileMenuSwipe,
+    stopMobileMenuAnimation,
+  ]);
 
   const toggleMobileMenu = useCallback(() => {
+    if (mobileMenuOpen) {
+      closeMobileMenu();
+      return;
+    }
+
     clearSwipeDismissTimeout();
+    clearCloseMenuResetTimeout();
+    clearOpenMenuAnimationFrame();
     resetMobileMenuSwipe();
-    setMobileMenuOpen((prev) => !prev);
-  }, [clearSwipeDismissTimeout, resetMobileMenuSwipe]);
+    stopMobileMenuAnimation();
+    mobileMenuY.set(MENU_OPEN_START_OFFSET);
+    setMobileMenuOpen(true);
+    openMenuAnimationFrameRef.current = window.requestAnimationFrame(() => {
+      mobileMenuAnimationRef.current = animate(mobileMenuY, 0, MENU_OPEN_SPRING);
+      openMenuAnimationFrameRef.current = null;
+    });
+  }, [
+    clearCloseMenuResetTimeout,
+    clearOpenMenuAnimationFrame,
+    clearSwipeDismissTimeout,
+    closeMobileMenu,
+    mobileMenuOpen,
+    mobileMenuY,
+    resetMobileMenuSwipe,
+    stopMobileMenuAnimation,
+  ]);
 
   const closeMobileMenuWithSwipe = useCallback(() => {
     clearSwipeDismissTimeout();
-    setIsMobileMenuDragging(false);
-    setIsMobileMenuSwipeDismissing(true);
+    clearCloseMenuResetTimeout();
+    clearOpenMenuAnimationFrame();
+    stopMobileMenuAnimation();
+    isMobileMenuSwipeDismissingRef.current = true;
     const dismissDistance =
       typeof window === 'undefined'
         ? -MENU_MAX_DRAG_DISTANCE
         : -Math.max(MENU_MAX_DRAG_DISTANCE, Math.round(window.innerHeight * 0.28));
-    setMobileMenuDragOffset(dismissDistance);
+    mobileMenuAnimationRef.current = animate(mobileMenuY, dismissDistance, {
+      duration: MENU_SWIPE_DISMISS_DURATION_MS / 1000,
+      ease: MENU_IOS_CLOSE_EASE,
+    });
     swipeDismissTimeoutRef.current = window.setTimeout(() => {
       setMobileMenuOpen(false);
       resetMobileMenuSwipe();
+      stopMobileMenuAnimation();
+      mobileMenuY.set(0);
       swipeDismissTimeoutRef.current = null;
     }, MENU_SWIPE_DISMISS_DURATION_MS);
-  }, [clearSwipeDismissTimeout, resetMobileMenuSwipe]);
+  }, [
+    clearCloseMenuResetTimeout,
+    clearOpenMenuAnimationFrame,
+    clearSwipeDismissTimeout,
+    mobileMenuY,
+    resetMobileMenuSwipe,
+    stopMobileMenuAnimation,
+  ]);
 
   const handleMobileMenuTouchStart = useCallback(
     (event: React.TouchEvent<HTMLDivElement>) => {
-      if (!mobileMenuOpen || isMobileMenuSwipeDismissing) return;
+      if (!mobileMenuOpen || isMobileMenuSwipeDismissingRef.current) return;
+      clearCloseMenuResetTimeout();
+      stopMobileMenuAnimation();
       const touch = event.touches[0];
       mobileMenuSwipeRef.current = {
         startX: touch.clientX,
@@ -131,15 +242,14 @@ const Navbar = () => {
         velocityY: 0,
         axis: 'pending',
       };
-      setIsMobileMenuDragging(false);
     },
-    [mobileMenuOpen, isMobileMenuSwipeDismissing],
+    [clearCloseMenuResetTimeout, mobileMenuOpen, stopMobileMenuAnimation],
   );
 
   const handleMobileMenuTouchMove = useCallback(
     (event: React.TouchEvent<HTMLDivElement>) => {
       const swipeState = mobileMenuSwipeRef.current;
-      if (!swipeState || !mobileMenuOpen || isMobileMenuSwipeDismissing) return;
+      if (!swipeState || !mobileMenuOpen || isMobileMenuSwipeDismissingRef.current) return;
 
       const touch = event.touches[0];
       const deltaX = touch.clientX - swipeState.startX;
@@ -153,9 +263,8 @@ const Navbar = () => {
       }
 
       if (swipeState.axis === 'horizontal' || deltaY >= 0) {
-        if (deltaY >= 0 && mobileMenuDragOffset !== 0) {
-          setMobileMenuDragOffset(0);
-          setIsMobileMenuDragging(false);
+        if (deltaY >= 0 && mobileMenuY.get() !== 0) {
+          mobileMenuY.set(0);
         }
         return;
       }
@@ -167,19 +276,18 @@ const Navbar = () => {
       swipeState.lastTimestamp = now;
 
       const dragDistance = Math.min(MENU_MAX_DRAG_DISTANCE, Math.abs(deltaY) * 0.92);
-      setIsMobileMenuDragging(true);
-      setMobileMenuDragOffset(-dragDistance);
+      mobileMenuY.set(-dragDistance);
       event.preventDefault();
     },
-    [mobileMenuDragOffset, mobileMenuOpen, isMobileMenuSwipeDismissing],
+    [mobileMenuOpen, mobileMenuY],
   );
 
   const handleMobileMenuTouchEnd = useCallback(() => {
     const swipeState = mobileMenuSwipeRef.current;
     mobileMenuSwipeRef.current = null;
-    if (!swipeState || !mobileMenuOpen || isMobileMenuSwipeDismissing) return;
+    if (!swipeState || !mobileMenuOpen || isMobileMenuSwipeDismissingRef.current) return;
 
-    const dragDistance = Math.abs(mobileMenuDragOffset);
+    const dragDistance = Math.abs(mobileMenuY.get());
     const releaseVelocity = Math.max(0, -swipeState.velocityY);
     const shouldClose =
       dragDistance >= MENU_SWIPE_CLOSE_DISTANCE || releaseVelocity >= MENU_SWIPE_CLOSE_VELOCITY;
@@ -189,19 +297,14 @@ const Navbar = () => {
       return;
     }
 
-    setIsMobileMenuDragging(false);
-    setMobileMenuDragOffset(0);
+    stopMobileMenuAnimation();
+    mobileMenuAnimationRef.current = animate(mobileMenuY, 0, MENU_SNAPBACK_SPRING);
   }, [
     closeMobileMenuWithSwipe,
-    mobileMenuDragOffset,
     mobileMenuOpen,
-    isMobileMenuSwipeDismissing,
+    mobileMenuY,
+    stopMobileMenuAnimation,
   ]);
-
-  const swipeProgress = Math.min(1, Math.abs(mobileMenuDragOffset) / MENU_MAX_DRAG_DISTANCE);
-  const mobileMenuBackdropOpacity = mobileMenuOpen ? Math.max(0, 1 - swipeProgress * 0.6) : 0;
-  const mobileMenuPanelScale = 1 - swipeProgress * 0.035;
-  const mobileMenuPanelOpacity = mobileMenuOpen ? Math.max(0, 1 - swipeProgress * 0.26) : 0;
 
   const desktopNavLinkKeys = [
     { key: 'navbar.home', href: '#home', number: '01' },
@@ -324,29 +427,29 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`fixed inset-0 z-[100] md:hidden transition-all duration-500 ${
+        className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-300 ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
+        style={{
+          transitionDuration: '300ms',
+          transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)',
+        }}
       >
-        <div
-          className={`absolute inset-0 bg-background/96 backdrop-blur-md transition-opacity duration-500 ${
+        <motion.div
+          className={`absolute inset-0 bg-background/96 backdrop-blur-md transition-opacity duration-300 ${
             mobileMenuOpen ? 'opacity-100' : 'opacity-0'
           }`}
-          style={mobileMenuOpen ? { opacity: mobileMenuBackdropOpacity } : undefined}
+          style={{
+            opacity: mobileMenuOpen ? mobileMenuBackdropOpacity : 0,
+            transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)',
+            transitionDuration: '260ms',
+          }}
           onClick={closeMobileMenu}
         />
 
-        <div
-          className="relative h-full flex flex-col pt-24 px-6 [touch-action:pan-x] will-change-transform"
-          style={{
-            transform: `translate3d(0, ${mobileMenuDragOffset}px, 0) scale(${mobileMenuPanelScale})`,
-            opacity: mobileMenuPanelOpacity,
-            transition: isMobileMenuDragging
-              ? 'none'
-              : isMobileMenuSwipeDismissing
-                ? 'transform 220ms cubic-bezier(0.3, 0, 0.2, 1), opacity 180ms ease-out'
-                : 'transform 460ms cubic-bezier(0.16, 1, 0.3, 1), opacity 320ms ease-out',
-          }}
+        <motion.div
+          className="relative h-full flex flex-col pt-24 px-6 [touch-action:pan-x] transform-gpu will-change-transform"
+          style={{ y: mobileMenuY, scale: mobileMenuPanelScale, opacity: mobileMenuPanelOpacity }}
           onTouchStart={handleMobileMenuTouchStart}
           onTouchMove={handleMobileMenuTouchMove}
           onTouchEnd={handleMobileMenuTouchEnd}
@@ -358,11 +461,13 @@ const Navbar = () => {
                 key={link.key}
                 href={link.href}
                 onClick={(event) => handleHashLinkClick(event, closeMobileMenu)}
-                className={`group flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 transition-all duration-500 ${
+                className={`group flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 transition-[opacity,transform,border-color,background-color] duration-300 ${
                   mobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'
                 }`}
                 style={{
-                  transitionDelay: mobileMenuOpen ? `${120 + index * 60}ms` : '0ms',
+                  transitionDelay: mobileMenuOpen ? `${80 + index * 44}ms` : '0ms',
+                  transitionDuration: '300ms',
+                  transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)',
                 }}
               >
                 <div className="flex items-center gap-4">
@@ -371,16 +476,20 @@ const Navbar = () => {
                     {t(link.key)}
                   </span>
                 </div>
-                <ArrowRight className="w-5 h-5 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                <ArrowRight className="w-5 h-5 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-[opacity,transform] duration-300" />
               </a>
             ))}
           </nav>
 
           <div
-            className={`pb-10 transition-all duration-500 ${
+            className={`pb-10 transition-[opacity,transform] duration-300 ${
               mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
-            style={{ transitionDelay: mobileMenuOpen ? '460ms' : '0ms' }}
+            style={{
+              transitionDelay: mobileMenuOpen ? '300ms' : '0ms',
+              transitionDuration: '320ms',
+              transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)',
+            }}
           >
             <div className="relative overflow-hidden rounded-[1.7rem] border border-border/80 bg-gradient-to-br from-card via-card to-secondary/55 p-4 shadow-[0_28px_46px_-34px_hsl(var(--foreground)/0.85)]">
               <div className="pointer-events-none absolute -left-8 -top-8 h-24 w-24 rounded-full bg-primary/15 blur-2xl" />
@@ -393,7 +502,7 @@ const Navbar = () => {
                     href={platform.href}
                     aria-label={t(platform.ariaKey)}
                     onClick={closeMobileMenu}
-                    className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/75 px-2 py-2.5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_16px_28px_-20px_hsl(var(--foreground)/0.9)]"
+                    className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/75 px-2 py-2.5 text-center transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_16px_28px_-20px_hsl(var(--foreground)/0.9)]"
                   >
                     <span
                       className={`absolute inset-x-2 top-0 h-0.5 rounded-full bg-gradient-to-r ${platform.glowClass} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
@@ -415,7 +524,7 @@ const Navbar = () => {
               <p className="section-label text-muted-foreground mt-2">{t('navbar.studioLabel')}</p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <nav className={`fixed top-0 left-0 w-full z-[110] transition-all duration-500 ${isScrolled ? 'py-3' : 'py-5'}`}>
@@ -497,12 +606,12 @@ const Navbar = () => {
               >
                 <div className="relative w-6 h-6">
                   <Menu
-                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
+                    className={`absolute inset-0 w-6 h-6 transition-[opacity,transform] duration-200 ${
                       mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
                     }`}
                   />
                   <X
-                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
+                    className={`absolute inset-0 w-6 h-6 transition-[opacity,transform] duration-200 ${
                       mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
                     }`}
                   />
