@@ -31,6 +31,7 @@ const ThreadsIcon = ({ className }: { className?: string }) => (
 const FloatingContactDock = () => {
   const { t } = useTranslation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDesktopDockGhosted, setIsDesktopDockGhosted] = useState(false);
 
   useEffect(() => {
     const closeOnDesktop = () => {
@@ -39,6 +40,63 @@ const FloatingContactDock = () => {
 
     window.addEventListener('resize', closeOnDesktop);
     return () => window.removeEventListener('resize', closeOnDesktop);
+  }, []);
+
+  useEffect(() => {
+    const desktopMediaQuery = window.matchMedia('(min-width: 768px)');
+    let rafId: number | null = null;
+
+    const evaluateDockState = () => {
+      rafId = null;
+
+      if (!desktopMediaQuery.matches) {
+        setIsDesktopDockGhosted(false);
+        return;
+      }
+
+      const viewportBottom = window.scrollY + window.innerHeight;
+      const documentHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      );
+      const isAtAbsoluteBottom = documentHeight - viewportBottom <= 1;
+
+      setIsDesktopDockGhosted((previous) =>
+        previous === isAtAbsoluteBottom ? previous : isAtAbsoluteBottom
+      );
+    };
+
+    const requestDockStateUpdate = () => {
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(evaluateDockState);
+    };
+
+    const handleMediaChange = () => {
+      requestDockStateUpdate();
+    };
+
+    window.addEventListener('scroll', requestDockStateUpdate, { passive: true });
+    window.addEventListener('resize', requestDockStateUpdate);
+    if (typeof desktopMediaQuery.addEventListener === 'function') {
+      desktopMediaQuery.addEventListener('change', handleMediaChange);
+    } else {
+      desktopMediaQuery.addListener(handleMediaChange);
+    }
+    requestDockStateUpdate();
+
+    return () => {
+      window.removeEventListener('scroll', requestDockStateUpdate);
+      window.removeEventListener('resize', requestDockStateUpdate);
+      if (typeof desktopMediaQuery.removeEventListener === 'function') {
+        desktopMediaQuery.removeEventListener('change', handleMediaChange);
+      } else {
+        desktopMediaQuery.removeListener(handleMediaChange);
+      }
+
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
   }, []);
 
   const contactPlatforms = [
@@ -192,7 +250,14 @@ const FloatingContactDock = () => {
       </div>
 
       {/* Desktop: horizontal row */}
-      <div className="hidden md:flex items-center gap-3 rounded-full border border-white/40 bg-card/62 supports-[backdrop-filter]:bg-card/48 backdrop-blur-2xl px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] pointer-events-auto">
+      <div
+        className={`hidden md:flex items-center gap-3 rounded-full border border-white/40 bg-card/62 supports-[backdrop-filter]:bg-card/48 backdrop-blur-2xl px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform,filter] duration-500 ${
+          isDesktopDockGhosted
+            ? 'opacity-20 scale-[0.94] translate-y-2 blur-[1px] pointer-events-none'
+            : 'opacity-100 scale-100 translate-y-0 blur-0 pointer-events-auto'
+        }`}
+        style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
+      >
         {contactPlatforms.map((platform) => (
           <a
             key={platform.id}

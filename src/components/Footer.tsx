@@ -239,7 +239,7 @@ const Footer = () => {
 
             </div>
 
-            <div className="flex md:hidden flex-wrap gap-3 mt-5 justify-center">
+            <div className="flex md:hidden flex-nowrap gap-1 mt-5 justify-center">
               {footerContactPlatforms.map((platform) => (
                 <a
                   key={platform.id}
@@ -247,7 +247,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={platform.ariaLabel}
-                  className="h-12 w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300"
+                  className="h-9 w-9 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300"
                 >
                   {platform.icon}
                 </a>
