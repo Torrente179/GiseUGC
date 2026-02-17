@@ -15,6 +15,9 @@ type LazyVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poste
   rootMargin?: string;
   loadWhenVisible?: boolean;
   pauseOffscreen?: boolean;
+  forcePause?: boolean;
+  unloadWhenOffscreen?: boolean;
+  unloadWhenForcedPause?: boolean;
 };
 
 const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
@@ -27,6 +30,9 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       rootMargin = '240px 0px',
       loadWhenVisible = true,
       pauseOffscreen = false,
+      forcePause = false,
+      unloadWhenOffscreen = false,
+      unloadWhenForcedPause = false,
       onMouseEnter,
       onTouchStart,
       onFocus,
@@ -36,7 +42,13 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
     forwardedRef,
   ) => {
     const internalRef = useRef<HTMLVideoElement | null>(null);
+    const isInViewportRef = useRef(true);
+    const [isInViewport, setIsInViewport] = useState(true);
     const [shouldLoad, setShouldLoad] = useState(!loadWhenVisible);
+    const shouldAttachSource =
+      shouldLoad &&
+      (!unloadWhenOffscreen || isInViewport) &&
+      (!unloadWhenForcedPause || !forcePause);
 
     useEffect(() => {
       if (!loadWhenVisible || shouldLoad) return;
@@ -61,17 +73,23 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
     }, [loadWhenVisible, rootMargin, shouldLoad]);
 
     useEffect(() => {
-      if (!shouldLoad || !autoPlay) return;
+      if (!shouldAttachSource || !autoPlay || forcePause) return;
+      if (pauseOffscreen && !isInViewportRef.current) return;
       const node = internalRef.current;
       if (!node) return;
       const playPromise = node.play();
       if (playPromise) {
         playPromise.catch(() => undefined);
       }
-    }, [autoPlay, shouldLoad]);
+    }, [autoPlay, forcePause, pauseOffscreen, shouldAttachSource]);
 
     useEffect(() => {
-      if (!pauseOffscreen || !autoPlay) return;
+      if (!forcePause) return;
+      internalRef.current?.pause();
+    }, [forcePause]);
+
+    useEffect(() => {
+      if (!pauseOffscreen && !unloadWhenOffscreen) return;
       const node = internalRef.current;
       if (!node || typeof IntersectionObserver === 'undefined') return;
 
@@ -79,6 +97,13 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
         (entries) => {
           const entry = entries[0];
           if (!entry) return;
+          isInViewportRef.current = entry.isIntersecting;
+          setIsInViewport((prev) => (prev === entry.isIntersecting ? prev : entry.isIntersecting));
+          if (forcePause) {
+            node.pause();
+            return;
+          }
+          if (!pauseOffscreen || !autoPlay) return;
           if (entry.isIntersecting) {
             node.play().catch(() => undefined);
           } else {
@@ -90,7 +115,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
 
       observer.observe(node);
       return () => observer.disconnect();
-    }, [pauseOffscreen, autoPlay]);
+    }, [pauseOffscreen, autoPlay, forcePause, unloadWhenOffscreen]);
 
     const assignRef = (node: HTMLVideoElement | null) => {
       internalRef.current = node;
@@ -126,9 +151,9 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       <video
         {...props}
         ref={assignRef}
-        src={shouldLoad ? src : undefined}
+        src={shouldAttachSource ? src : undefined}
         poster={shouldLoad ? poster : undefined}
-        preload={shouldLoad ? preload : 'none'}
+        preload={shouldAttachSource ? preload : 'none'}
         autoPlay={autoPlay}
         onCanPlay={onCanPlay}
         onMouseEnter={handleMouseEnter}

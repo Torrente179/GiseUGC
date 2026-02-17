@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
+import { useIsMobile } from '@/hooks/use-mobile';
 import LazyVideo from '@/components/media/LazyVideo';
 
 interface ReelClip {
@@ -206,9 +207,11 @@ const Portfolio = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
+  const isMobile = useIsMobile();
 
   const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
   const [activeReelIndex, setActiveReelIndex] = useState<number | null>(null);
+  const [activeMobileReelIndex, setActiveMobileReelIndex] = useState(0);
   const isTheaterOpen = activeReelPreview !== null;
   const [collageHovered, setCollageHovered] = useState(false);
   const [theaterDragY, setTheaterDragY] = useState(0);
@@ -530,6 +533,56 @@ const Portfolio = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isMobile) return;
+    const container = reelScrollRef.current;
+    if (!container) return;
+
+    let frameId: number | null = null;
+
+    const updateActiveCard = () => {
+      frameId = null;
+      const cards = Array.from(container.querySelectorAll<HTMLElement>('[data-reel-card="true"]'));
+      if (!cards.length) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const containerCenter = containerRect.left + containerRect.width / 2;
+      let closestIndex = 0;
+      let closestDistance = Number.POSITIVE_INFINITY;
+
+      cards.forEach((card, index) => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + cardRect.width / 2;
+        const distance = Math.abs(cardCenter - containerCenter);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      setActiveMobileReelIndex((previousIndex) =>
+        previousIndex === closestIndex ? previousIndex : closestIndex,
+      );
+    };
+
+    const queueActiveCardUpdate = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(updateActiveCard);
+    };
+
+    queueActiveCardUpdate();
+    container.addEventListener('scroll', queueActiveCardUpdate, { passive: true });
+    window.addEventListener('resize', queueActiveCardUpdate);
+
+    return () => {
+      container.removeEventListener('scroll', queueActiveCardUpdate);
+      window.removeEventListener('resize', queueActiveCardUpdate);
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
+  }, [isMobile]);
+
   const scrollReels = (direction: 'left' | 'right') => {
     const container = reelScrollRef.current;
     if (!container) return;
@@ -724,6 +777,9 @@ const Portfolio = () => {
                       preload="none"
                       rootMargin="100px 0px"
                       pauseOffscreen
+                      forcePause={isTheaterOpen || (isMobile && Math.abs(activeMobileReelIndex - index) > 1)}
+                      unloadWhenOffscreen={isMobile}
+                      unloadWhenForcedPause={isMobile}
                       aria-hidden="true"
                     />
 
@@ -875,6 +931,9 @@ const Portfolio = () => {
                     disableRemotePlayback
                     rootMargin="120px 0px"
                     pauseOffscreen
+                    forcePause={isTheaterOpen}
+                    unloadWhenOffscreen={isMobile}
+                    unloadWhenForcedPause={isMobile}
                     aria-label={t(clip.labelKey)}
                   />
                 </div>
