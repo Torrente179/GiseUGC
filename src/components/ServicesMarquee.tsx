@@ -10,6 +10,11 @@ interface ServiceVideoCard {
     poster: string;
 }
 
+const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
+const r2PreviewVideo = (filename: string) =>
+    `${R2_MEDIA_BASE_URL}/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
+const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/posters/${filename}`;
+
 const ServicesMarquee = () => {
     const { t } = useTranslation();
     const [expandedCard, setExpandedCard] = useState<number | null>(null);
@@ -27,32 +32,32 @@ const ServicesMarquee = () => {
         {
             titleKey: 'services.service1.title',
             descriptionKey: 'services.service1.description',
-            videoSrc: 'https://assets.mixkit.co/videos/50423/50423-720.mp4',
-            poster: 'https://assets.mixkit.co/videos/50423/50423-thumb-720-0.jpg',
+            videoSrc: r2PreviewVideo('ugc-lifestyle-review.mp4'),
+            poster: r2Poster('ugc-lifestyle-review-poster.jpg'),
         },
         {
             titleKey: 'services.service2.title',
             descriptionKey: 'services.service2.description',
-            videoSrc: 'https://assets.mixkit.co/videos/50417/50417-720.mp4',
-            poster: 'https://assets.mixkit.co/videos/50417/50417-thumb-720-0.jpg',
+            videoSrc: r2PreviewVideo('ugc-brand-spokesperson.mp4'),
+            poster: r2Poster('ugc-brand-spokesperson-poster.jpg'),
         },
         {
             titleKey: 'services.service3.title',
             descriptionKey: 'services.service3.description',
-            videoSrc: 'https://assets.mixkit.co/videos/50406/50406-720.mp4',
-            poster: 'https://assets.mixkit.co/videos/50406/50406-thumb-720-0.jpg',
+            videoSrc: r2PreviewVideo('ugc-voicebot-review.mp4'),
+            poster: r2Poster('ugc-voicebot-review-poster.jpg'),
         },
         {
             titleKey: 'services.service4.title',
             descriptionKey: 'services.service4.description',
-            videoSrc: 'https://assets.mixkit.co/videos/42308/42308-720.mp4',
-            poster: 'https://assets.mixkit.co/videos/42308/42308-thumb-720-0.jpg',
+            videoSrc: r2PreviewVideo('ugc-creatine-supplement-review.mp4'),
+            poster: r2Poster('ugc-creatine-supplement-review-poster.jpg'),
         },
         {
             titleKey: 'services.service5.title',
             descriptionKey: 'services.service5.description',
-            videoSrc: 'https://assets.mixkit.co/videos/42293/42293-720.mp4',
-            poster: 'https://assets.mixkit.co/videos/42293/42293-thumb-720-0.jpg',
+            videoSrc: r2PreviewVideo('ugc-business-promotion.mp4'),
+            poster: r2Poster('ugc-business-promotion-poster.jpg'),
         },
     ];
 

@@ -12,15 +12,16 @@ interface ReelClip {
   id: number;
   titleKey: string;
   category: 'fashion' | 'beauty' | 'tech' | 'lifestyle';
-  videoSrc: string;
-  poster: string;
+  mainSrc: string;
+  previewSrc: string;
+  posterSrc: string;
 }
 
 interface CollageClip {
   id: number;
   labelKey: string;
-  videoSrc: string;
-  poster: string;
+  previewSrc: string;
+  posterSrc: string;
   /* Corner position (spread out, paused state) */
   cornerClass: string;
   /* Hovered position (gathered together, playing state) */
@@ -44,77 +45,92 @@ const REEL_CARD_TAP_SLOP_PX = 10;
 const THEATER_PRELOAD_OFFSETS = [-2, -1, 1, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
+const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
+const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/main/${filename}`;
+const r2PreviewVideo = (filename: string) =>
+  `${R2_MEDIA_BASE_URL}/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
+const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/posters/${filename}`;
 
 const REEL_CLIPS: ReelClip[] = [
   {
     id: 1,
     titleKey: 'portfolio.items.item1',
     category: 'lifestyle',
-    videoSrc: '/uploads/videos/ugc-lifestyle-review.mp4',
-    poster: '/uploads/videos/ugc-lifestyle-review-poster.jpg',
+    mainSrc: r2MainVideo('ugc-lifestyle-review.mp4'),
+    previewSrc: r2PreviewVideo('ugc-lifestyle-review.mp4'),
+    posterSrc: r2Poster('ugc-lifestyle-review-poster.jpg'),
   },
   {
     id: 2,
     titleKey: 'portfolio.items.item2',
     category: 'fashion',
-    videoSrc: '/uploads/videos/ugc-brand-spokesperson.mp4',
-    poster: '/uploads/videos/ugc-brand-spokesperson-poster.jpg',
+    mainSrc: r2MainVideo('ugc-brand-spokesperson.mp4'),
+    previewSrc: r2PreviewVideo('ugc-brand-spokesperson.mp4'),
+    posterSrc: r2Poster('ugc-brand-spokesperson-poster.jpg'),
   },
   {
     id: 3,
     titleKey: 'portfolio.items.item3',
     category: 'tech',
-    videoSrc: '/uploads/videos/ugc-voicebot-review.mp4',
-    poster: '/uploads/videos/ugc-voicebot-review-poster.jpg',
+    mainSrc: r2MainVideo('ugc-voicebot-review.mp4'),
+    previewSrc: r2PreviewVideo('ugc-voicebot-review.mp4'),
+    posterSrc: r2Poster('ugc-voicebot-review-poster.jpg'),
   },
   {
     id: 4,
     titleKey: 'portfolio.items.item4',
     category: 'beauty',
-    videoSrc: '/uploads/videos/ugc-creatine-supplement-review.mp4',
-    poster: '/uploads/videos/ugc-creatine-supplement-review-poster.jpg',
+    mainSrc: r2MainVideo('ugc-creatine-supplement-review.mp4'),
+    previewSrc: r2PreviewVideo('ugc-creatine-supplement-review.mp4'),
+    posterSrc: r2Poster('ugc-creatine-supplement-review-poster.jpg'),
   },
   {
     id: 5,
     titleKey: 'portfolio.items.item5',
     category: 'lifestyle',
-    videoSrc: '/uploads/videos/ugc-business-promotion.mp4',
-    poster: '/uploads/videos/ugc-business-promotion-poster.jpg',
+    mainSrc: r2MainVideo('ugc-business-promotion.mp4'),
+    previewSrc: r2PreviewVideo('ugc-business-promotion.mp4'),
+    posterSrc: r2Poster('ugc-business-promotion-poster.jpg'),
   },
   {
     id: 6,
     titleKey: 'portfolio.items.item6',
     category: 'fashion',
-    videoSrc: '/uploads/videos/ugc-services-presentation.mp4',
-    poster: '/uploads/videos/ugc-services-presentation-poster.jpg',
+    mainSrc: r2MainVideo('ugc-services-presentation.mp4'),
+    previewSrc: r2PreviewVideo('ugc-services-presentation.mp4'),
+    posterSrc: r2Poster('ugc-services-presentation-poster.jpg'),
   },
   {
     id: 7,
     titleKey: 'portfolio.items.item7',
     category: 'tech',
-    videoSrc: '/uploads/videos/ugc-ai-services-review.mp4',
-    poster: '/uploads/videos/ugc-ai-services-review-poster.jpg',
+    mainSrc: r2MainVideo('ugc-ai-services-review.mp4'),
+    previewSrc: r2PreviewVideo('ugc-ai-services-review.mp4'),
+    posterSrc: r2Poster('ugc-ai-services-review-poster.jpg'),
   },
   {
     id: 8,
     titleKey: 'portfolio.items.item8',
     category: 'lifestyle',
-    videoSrc: '/uploads/videos/ugc-lifestyle-review-2.mp4',
-    poster: '/uploads/videos/ugc-lifestyle-review-2-poster.jpg',
+    mainSrc: r2MainVideo('ugc-lifestyle-review-2.mp4'),
+    previewSrc: r2PreviewVideo('ugc-lifestyle-review-2.mp4'),
+    posterSrc: r2Poster('ugc-lifestyle-review-2-poster.jpg'),
   },
   {
     id: 9,
     titleKey: 'portfolio.items.item9',
     category: 'tech',
-    videoSrc: '/uploads/videos/ugc-voiceover-bots-review.mp4',
-    poster: '/uploads/videos/ugc-voiceover-bots-review-poster.jpg',
+    mainSrc: r2MainVideo('ugc-voiceover-bots-review.mp4'),
+    previewSrc: r2PreviewVideo('ugc-voiceover-bots-review.mp4'),
+    posterSrc: r2Poster('ugc-voiceover-bots-review-poster.jpg'),
   },
   {
     id: 10,
     titleKey: 'portfolio.items.item10',
     category: 'lifestyle',
-    videoSrc: '/uploads/videos/ugc-lifestyle-review-3.mp4',
-    poster: '/uploads/videos/ugc-lifestyle-review-3-poster.jpg',
+    mainSrc: r2MainVideo('ugc-lifestyle-review-3.mp4'),
+    previewSrc: r2PreviewVideo('ugc-lifestyle-review-3.mp4'),
+    posterSrc: r2Poster('ugc-lifestyle-review-3-poster.jpg'),
   },
 ];
 
@@ -122,8 +138,8 @@ const COLLAGE_CLIPS: CollageClip[] = [
   {
     id: 1,
     labelKey: 'portfolio.collageClip1',
-    videoSrc: '/uploads/videos/ugc-clothing-showcase-1.mp4',
-    poster: '/uploads/videos/ugc-clothing-showcase-1-poster.jpg',
+    previewSrc: r2PreviewVideo('ugc-clothing-showcase-1.mp4'),
+    posterSrc: r2Poster('ugc-clothing-showcase-1-poster.jpg'),
     /* Left card */
     cornerClass: 'top-[13%] left-[8%] w-[29%] -rotate-[6deg] z-30',
     hoverClass: 'top-[12%] left-[16%] w-[29%] -rotate-[2deg] z-40',
@@ -131,8 +147,8 @@ const COLLAGE_CLIPS: CollageClip[] = [
   {
     id: 2,
     labelKey: 'portfolio.collageClip2',
-    videoSrc: '/uploads/videos/ugc-clothing-showcase-2.mp4',
-    poster: '/uploads/videos/ugc-clothing-showcase-2-poster.jpg',
+    previewSrc: r2PreviewVideo('ugc-clothing-showcase-2.mp4'),
+    posterSrc: r2Poster('ugc-clothing-showcase-2-poster.jpg'),
     /* Center card */
     cornerClass: 'top-[5%] left-[35%] w-[30%] rotate-0 z-50',
     hoverClass: 'top-[7%] left-[35%] w-[30%] rotate-0 z-50 scale-[1.03]',
@@ -140,8 +156,8 @@ const COLLAGE_CLIPS: CollageClip[] = [
   {
     id: 3,
     labelKey: 'portfolio.collageClip3',
-    videoSrc: '/uploads/videos/ugc-clothing-showcase-3.mp4',
-    poster: '/uploads/videos/ugc-clothing-showcase-3-poster.jpg',
+    previewSrc: r2PreviewVideo('ugc-clothing-showcase-3.mp4'),
+    posterSrc: r2Poster('ugc-clothing-showcase-3-poster.jpg'),
     /* Right card */
     cornerClass: 'top-[13%] right-[8%] w-[29%] rotate-[6deg] z-30',
     hoverClass: 'top-[12%] right-[16%] w-[29%] rotate-[2deg] z-40',
@@ -814,8 +830,8 @@ const Portfolio = () => {
                     >
                       <LazyVideo
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        src={clip.videoSrc}
-                        poster={clip.poster}
+                        src={clip.previewSrc}
+                        poster={clip.posterSrc}
                         muted
                         autoPlay
                         loop
@@ -913,8 +929,8 @@ const Portfolio = () => {
                     collageVideoRefs.current[index] = element;
                   }}
                   className="h-full w-full object-cover"
-                  src={clip.videoSrc}
-                  poster={clip.poster}
+                  src={clip.previewSrc}
+                  poster={clip.posterSrc}
                   muted
                   loop
                   playsInline
@@ -964,8 +980,8 @@ const Portfolio = () => {
                 >
                   <LazyVideo
                     className="h-full w-full object-cover pointer-events-none"
-                    src={clip.videoSrc}
-                    poster={clip.poster}
+                    src={clip.previewSrc}
+                    poster={clip.posterSrc}
                     muted
                     loop
                     playsInline
@@ -1063,7 +1079,7 @@ const Portfolio = () => {
                 {theaterPreloadClips.map((clip) => (
                   <video
                     key={`theater-preload-${clip.id}`}
-                    src={clip.videoSrc}
+                    src={clip.mainSrc}
                     preload="auto"
                     muted
                     playsInline
@@ -1086,8 +1102,8 @@ const Portfolio = () => {
               </h4>
 
               <TheaterVideo
-                src={activeReelPreview.videoSrc}
-                poster={activeReelPreview.poster}
+                src={activeReelPreview.mainSrc}
+                poster={activeReelPreview.posterSrc}
               />
             </div>
           </div>
