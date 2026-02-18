@@ -63,3 +63,31 @@ Tuned theater playback for faster swipe/arrow transitions and faster first-frame
 - Faster first theater open and faster first reel interactions.
 - Preserves current animations/UX and avoids “preload everything on boot” network spikes.
 - Keeps main-first quality logic on normal mobile/desktop; still prefers mobile source on constrained mobile networks.
+
+## 2026-02-18 Update - Mobile Smoothness Micro-Tuning
+
+### Goal
+- Make theater open/switch feel even snappier on mobile while keeping page performance stable.
+
+### What changed
+- File: `src/components/Portfolio.tsx`
+
+1. Direction-aware theater prewarm
+- Theater now tracks the last navigation direction (`next` or `previous`).
+- Prewarm prioritizes that direction first (primary warm clip).
+- Secondary direction is still warmed, but with a lighter budget.
+
+2. Lower contention during theater mode
+- Mobile no longer preloads `±2` hint clips while theater is open.
+- On slow mobile networks (`3g` / constrained), theater warms only one directional neighbor.
+- This cuts concurrent media pressure and reduces stutter risk during swipes.
+
+3. Interaction-triggered prewarm before open
+- On reel card hover/touch start, the selected clip is prewarmed briefly (~2.8s) in a hidden video element.
+- If user drags instead of taps, that prewarm is canceled.
+- This improves first-frame startup when user taps a reel card.
+
+### Expected impact
+- Faster perceived first-frame response when opening theater from reel cards.
+- Smoother next/previous transitions on mobile due to less preload contention.
+- No removals of hero/theater animations; behavior remains performance-first with existing visuals intact.

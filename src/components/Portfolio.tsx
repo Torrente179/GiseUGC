@@ -48,7 +48,6 @@ const THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
 const REEL_CARD_TAP_SLOP_PX = 10;
-const THEATER_WARM_PRELOAD_OFFSETS = [-1, 1] as const;
 const THEATER_HINT_PRELOAD_OFFSETS = [-2, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
@@ -364,7 +363,9 @@ const Portfolio = () => {
   const [isTheaterVisible, setIsTheaterVisible] = useState(false);
   const [isTheaterDismissing, setIsTheaterDismissing] = useState(false);
   const [theaterDismissDirection, setTheaterDismissDirection] = useState<1 | -1>(1);
+  const [theaterPrewarmDirection, setTheaterPrewarmDirection] = useState<1 | -1>(1);
   const [startupPrewarmEnabled, setStartupPrewarmEnabled] = useState(false);
+  const [interactionPrewarmClip, setInteractionPrewarmClip] = useState<ReelClip | null>(null);
 
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const reelScrollRef = useRef<HTMLDivElement>(null);
@@ -375,6 +376,7 @@ const Portfolio = () => {
   const theaterCloseTimerRef = useRef<number | null>(null);
   const theaterDragFrameRef = useRef<number | null>(null);
   const theaterPendingDragYRef = useRef(0);
+  const interactionPrewarmTimerRef = useRef<number | null>(null);
 
   const clearTheaterCloseTimer = useCallback(() => {
     if (theaterCloseTimerRef.current !== null) {
@@ -382,6 +384,28 @@ const Portfolio = () => {
       theaterCloseTimerRef.current = null;
     }
   }, []);
+
+  const clearInteractionPrewarm = useCallback(() => {
+    if (interactionPrewarmTimerRef.current !== null) {
+      window.clearTimeout(interactionPrewarmTimerRef.current);
+      interactionPrewarmTimerRef.current = null;
+    }
+    setInteractionPrewarmClip(null);
+  }, []);
+
+  const scheduleInteractionPrewarm = useCallback(
+    (clip: ReelClip) => {
+      setInteractionPrewarmClip((previousClip) => (previousClip?.id === clip.id ? previousClip : clip));
+      if (interactionPrewarmTimerRef.current !== null) {
+        window.clearTimeout(interactionPrewarmTimerRef.current);
+      }
+      interactionPrewarmTimerRef.current = window.setTimeout(() => {
+        setInteractionPrewarmClip(null);
+        interactionPrewarmTimerRef.current = null;
+      }, 2800);
+    },
+    [],
+  );
 
   const queueTheaterDrag = useCallback((dragY: number) => {
     const clampedDrag = Math.max(-THEATER_MAX_DRAG_DISTANCE, Math.min(THEATER_MAX_DRAG_DISTANCE, dragY));
@@ -429,8 +453,10 @@ const Portfolio = () => {
   const openReelPreview = useCallback(
     (clip: ReelClip, index: number) => {
       clearTheaterCloseTimer();
+      clearInteractionPrewarm();
       theaterSwipeStartRef.current = null;
       setTheaterDismissDirection(1);
+      setTheaterPrewarmDirection(1);
       setIsTheaterDismissing(false);
       setIsTheaterDragging(false);
       setIsTheaterVisible(false);
@@ -438,12 +464,13 @@ const Portfolio = () => {
       setActiveReelPreview(clip);
       setActiveReelIndex(index);
     },
-    [clearTheaterCloseTimer, queueTheaterDrag],
+    [clearInteractionPrewarm, clearTheaterCloseTimer, queueTheaterDrag],
   );
 
   const navigateReelPreview = useCallback(
     (direction: 1 | -1) => {
       if (activeReelIndex === null) return;
+      setTheaterPrewarmDirection(direction);
       const nextIndex = (activeReelIndex + direction + REEL_CLIPS.length) % REEL_CLIPS.length;
       const nextClip = REEL_CLIPS[nextIndex];
       if (!nextClip) return;
@@ -595,6 +622,15 @@ const Portfolio = () => {
       }
     };
   }, [clearTheaterCloseTimer]);
+
+  useEffect(() => {
+    return () => {
+      if (interactionPrewarmTimerRef.current !== null) {
+        window.clearTimeout(interactionPrewarmTimerRef.current);
+        interactionPrewarmTimerRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!activeReelPreview) return;
@@ -749,12 +785,16 @@ const Portfolio = () => {
     });
   };
 
-  const handleReelCardTouchStart = useCallback((event: TouchEvent<HTMLButtonElement>) => {
-    const touch = event.touches[0];
-    if (!touch) return;
-    reelCardTouchStartRef.current = { x: touch.clientX, y: touch.clientY };
-    reelCardDidDragRef.current = false;
-  }, []);
+  const handleReelCardTouchStart = useCallback(
+    (event: TouchEvent<HTMLButtonElement>, clip: ReelClip) => {
+      const touch = event.touches[0];
+      if (!touch) return;
+      reelCardTouchStartRef.current = { x: touch.clientX, y: touch.clientY };
+      reelCardDidDragRef.current = false;
+      scheduleInteractionPrewarm(clip);
+    },
+    [scheduleInteractionPrewarm],
+  );
 
   const handleReelCardTouchMove = useCallback((event: TouchEvent<HTMLButtonElement>) => {
     const start = reelCardTouchStartRef.current;
@@ -766,8 +806,9 @@ const Portfolio = () => {
       Math.abs(touch.clientY - start.y) > REEL_CARD_TAP_SLOP_PX
     ) {
       reelCardDidDragRef.current = true;
+      clearInteractionPrewarm();
     }
-  }, []);
+  }, [clearInteractionPrewarm]);
 
   const handleReelCardTouchEnd = useCallback(() => {
     reelCardTouchStartRef.current = null;
@@ -779,9 +820,10 @@ const Portfolio = () => {
         reelCardDidDragRef.current = false;
         return;
       }
+      clearInteractionPrewarm();
       openReelPreview(clip, index);
     },
-    [openReelPreview],
+    [clearInteractionPrewarm, openReelPreview],
   );
 
   /* Play all collage videos */
@@ -864,23 +906,36 @@ const Portfolio = () => {
       ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.32,0.72,0,1), opacity 250ms ease`
       : 'transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease';
 
+  const theaterWarmPreloadOffsets = useMemo(() => {
+    if (isMobile && connectionProfile.slow) {
+      return [theaterPrewarmDirection] as const;
+    }
+    return [theaterPrewarmDirection, (theaterPrewarmDirection * -1) as 1 | -1] as const;
+  }, [connectionProfile.slow, isMobile, theaterPrewarmDirection]);
+
   const theaterWarmPreloadClips = useMemo(() => {
     if (activeReelIndex === null) return [];
 
-    return THEATER_WARM_PRELOAD_OFFSETS.map((offset) => {
-      const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
-      return REEL_CLIPS[index];
-    }).filter((clip, index, clips) => clips.findIndex((candidate) => candidate.id === clip.id) === index);
-  }, [activeReelIndex]);
+    return theaterWarmPreloadOffsets
+      .map((offset) => {
+        const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
+        return REEL_CLIPS[index];
+      })
+      .filter(
+        (clip, index, clips) =>
+          clips.findIndex((candidate) => candidate.id === clip.id) === index,
+      );
+  }, [activeReelIndex, theaterWarmPreloadOffsets]);
 
   const theaterHintPreloadClips = useMemo(() => {
     if (activeReelIndex === null) return [];
+    if (isMobile || connectionProfile.slow) return [];
 
     return THEATER_HINT_PRELOAD_OFFSETS.map((offset) => {
       const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
       return REEL_CLIPS[index];
     }).filter((clip, index, clips) => clips.findIndex((candidate) => candidate.id === clip.id) === index);
-  }, [activeReelIndex]);
+  }, [activeReelIndex, connectionProfile.slow, isMobile]);
 
   const startupPreviewPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
@@ -900,6 +955,9 @@ const Portfolio = () => {
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
+  const primaryWarmPreloadClip = theaterWarmPreloadClips[0] ?? null;
+  const secondaryWarmPreloadClip = theaterWarmPreloadClips[1] ?? null;
+
   const shouldPreferMobileTheaterSource = isMobile && connectionProfile.slow;
 
   const theaterSources = useMemo(() => {
@@ -909,6 +967,17 @@ const Portfolio = () => {
     }
     return [activeReelPreview.mainSrc, activeReelPreview.mobileSrc];
   }, [activeReelPreview, isMobile, shouldPreferMobileTheaterSource]);
+
+  const interactionPrewarmSources = useMemo(() => {
+    if (!interactionPrewarmClip) return [];
+    if (isMobile && shouldPreferMobileTheaterSource) {
+      return [interactionPrewarmClip.mobileSrc, interactionPrewarmClip.mainSrc];
+    }
+    if (isMobile) {
+      return [interactionPrewarmClip.mainSrc, interactionPrewarmClip.mobileSrc];
+    }
+    return [interactionPrewarmClip.mainSrc];
+  }, [interactionPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
 
 
   return (
@@ -939,6 +1008,20 @@ const Portfolio = () => {
             <video
               key={`startup-prewarm-mobile-${clip.id}`}
               src={clip.mobileSrc}
+              preload={index === 0 ? 'auto' : 'metadata'}
+              muted
+              playsInline
+              tabIndex={-1}
+            />
+          ))}
+        </div>
+      )}
+      {interactionPrewarmClip && (
+        <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
+          {interactionPrewarmSources.map((src, index) => (
+            <video
+              key={`interaction-prewarm-${interactionPrewarmClip.id}-${index}`}
+              src={src}
               preload={index === 0 ? 'auto' : 'metadata'}
               muted
               playsInline
@@ -1029,7 +1112,9 @@ const Portfolio = () => {
                       key={clip.id}
                       data-reel-card="true"
                       className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-manipulation"
-                      onTouchStart={handleReelCardTouchStart}
+                      onMouseEnter={() => scheduleInteractionPrewarm(clip)}
+                      onMouseLeave={clearInteractionPrewarm}
+                      onTouchStart={(event) => handleReelCardTouchStart(event, clip)}
                       onTouchMove={handleReelCardTouchMove}
                       onTouchEnd={handleReelCardTouchEnd}
                       onTouchCancel={handleReelCardTouchEnd}
@@ -1287,26 +1372,46 @@ const Portfolio = () => {
 
             <div className="relative rounded-[1.55rem] border border-border/70 bg-card/75 px-4 pb-4 pt-5 shadow-[inset_0_1px_0_hsl(var(--background)/0.45)]">
               <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
-                {theaterWarmPreloadClips.map((clip) => (
+                {primaryWarmPreloadClip && (
                   <video
-                    key={`theater-preload-mobile-warm-${clip.id}`}
-                    src={clip.mobileSrc}
-                    preload="auto"
+                    key={`theater-preload-mobile-primary-${primaryWarmPreloadClip.id}`}
+                    src={primaryWarmPreloadClip.mobileSrc}
+                    preload={connectionProfile.slow ? 'metadata' : 'auto'}
                     muted
                     playsInline
                     tabIndex={-1}
                   />
-                ))}
-                {theaterWarmPreloadClips.map((clip) => (
+                )}
+                {primaryWarmPreloadClip && (
                   <video
-                    key={`theater-preload-main-warm-${clip.id}`}
-                    src={clip.mainSrc}
+                    key={`theater-preload-main-primary-${primaryWarmPreloadClip.id}`}
+                    src={primaryWarmPreloadClip.mainSrc}
                     preload="metadata"
                     muted
                     playsInline
                     tabIndex={-1}
                   />
-                ))}
+                )}
+                {secondaryWarmPreloadClip && (
+                  <video
+                    key={`theater-preload-mobile-secondary-${secondaryWarmPreloadClip.id}`}
+                    src={secondaryWarmPreloadClip.mobileSrc}
+                    preload={isMobile ? 'metadata' : 'auto'}
+                    muted
+                    playsInline
+                    tabIndex={-1}
+                  />
+                )}
+                {secondaryWarmPreloadClip && !isMobile && (
+                  <video
+                    key={`theater-preload-main-secondary-${secondaryWarmPreloadClip.id}`}
+                    src={secondaryWarmPreloadClip.mainSrc}
+                    preload="metadata"
+                    muted
+                    playsInline
+                    tabIndex={-1}
+                  />
+                )}
                 {theaterHintPreloadClips.map((clip) => (
                   <video
                     key={`theater-preload-mobile-hint-${clip.id}`}
