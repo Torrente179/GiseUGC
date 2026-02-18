@@ -5,7 +5,7 @@ import './index.css'
 import './i18n'; // Import i18n configuration
 
 createRoot(document.getElementById("root")!).render(
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <App />
     </ThemeProvider>
 );

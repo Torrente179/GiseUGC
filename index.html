@@ -11,6 +11,25 @@
     <meta name="author" content="Gisela Saldarriaga" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fffefe" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f121a" />
+    <script>
+      (function () {
+        const root = document.documentElement;
+        const storageKey = 'theme';
+
+        try {
+          const storedTheme = localStorage.getItem(storageKey);
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const shouldUseDark = storedTheme === 'dark' || ((storedTheme === null || storedTheme === 'system') && prefersDark);
+
+          root.classList.toggle('dark', shouldUseDark);
+          root.style.colorScheme = shouldUseDark ? 'dark' : 'light';
+        } catch (_) {
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          root.classList.toggle('dark', prefersDark);
+          root.style.colorScheme = prefersDark ? 'dark' : 'light';
+        }
+      })();
+    </script>
     <meta name="robots" content="index,follow" />
     <meta name="keywords" content="ugc creator colombia, ugc creator medellin, spokesperson video, brand ambassador, ugc ads tiktok, ugc reels instagram, meta ads ugc, creadora ugc en espanol e ingles" />
     <meta name="geo.region" content="CO-ANT" />
