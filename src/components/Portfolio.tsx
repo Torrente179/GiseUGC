@@ -634,6 +634,7 @@ const Portfolio = () => {
     const previousHtmlStyles = {
       overflow: htmlElement.style.overflow,
       overscrollBehavior: htmlElement.style.overscrollBehavior,
+      scrollBehavior: htmlElement.style.scrollBehavior,
     };
 
     document.body.style.position = 'fixed';
@@ -656,7 +657,9 @@ const Portfolio = () => {
       document.body.style.overscrollBehavior = previousStyles.overscrollBehavior;
       htmlElement.style.overflow = previousHtmlStyles.overflow;
       htmlElement.style.overscrollBehavior = previousHtmlStyles.overscrollBehavior;
+      htmlElement.style.scrollBehavior = 'auto';
       window.scrollTo(0, scrollY);
+      htmlElement.style.scrollBehavior = previousHtmlStyles.scrollBehavior;
     };
   }, [isTheaterOpen]);
 
