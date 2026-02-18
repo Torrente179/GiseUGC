@@ -117,7 +117,10 @@ const Footer = () => {
   ];
 
   return (
-    <footer id="contact" className="bg-[#F6F3EE] text-foreground pt-12 md:pt-14 pb-8 md:pb-10">
+    <footer
+      id="contact"
+      className="bg-[#F6F3EE] dark:bg-background text-foreground pt-12 md:pt-14 pb-8 md:pb-10 transition-colors duration-300"
+    >
       <div className="studio-container">
         <div className="grid gap-8 lg:gap-10 xl:grid-cols-[minmax(0,0.5fr)_minmax(0,0.5fr)] xl:items-start mb-8">
           <div>
