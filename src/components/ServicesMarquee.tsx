@@ -16,8 +16,8 @@ const r2PreviewVideo = (filename: string) =>
 const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
 const MOBILE_BREAKPOINT_PX = 768;
 const AUTO_SCROLL_SPEED_DESKTOP = 0.45;
-const AUTO_SCROLL_SPEED_MOBILE = 0.62;
-const MOBILE_TOUCH_DRAG_MULTIPLIER = 1.28;
+const AUTO_SCROLL_SPEED_MOBILE = 0.82;
+const MOBILE_TOUCH_DRAG_MULTIPLIER = 1.45;
 const TOUCH_AXIS_LOCK_THRESHOLD_PX = 6;
 
 const ServicesMarquee = () => {
