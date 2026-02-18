@@ -29,3 +29,37 @@ Tuned theater playback for faster swipe/arrow transitions and faster first-frame
 ## Result
 - Next/previous theater videos are prewarmed, reducing startup delay during swipe/arrow navigation.
 - Active clip reaches first frame faster when `main` is slow or missing, while preserving main-first playback preference.
+
+## 2026-02-18 Update - Deferred Startup Prewarm Budget
+
+### Why this was added
+- You requested faster click/swipe startup without hurting overall page performance.
+- Preloading every video at boot would compete with first paint / LCP and can hurt mobile score.
+
+### What changed
+- File: `src/components/Portfolio.tsx`
+- Added a delayed startup prewarm pass that only runs after initial load:
+  - Desktop delay: `900ms`
+  - Mobile delay: `1400ms`
+- Added network-aware budgeting (via `navigator.connection`):
+  - Constrained (`saveData`, `2g`, `slow-2g`): skip startup prewarm
+  - Slow (`3g`): tiny prewarm budget
+  - Normal/Wi-Fi/4g: larger but still capped budget
+
+### Startup prewarm scope
+- Preview loops (`/videos/previews`):
+  - desktop: first 4 clips
+  - mobile: first 2 clips
+  - slow: first 1 clip
+- Main theater files (`/videos/main`) metadata-only:
+  - desktop: first 2 clips
+  - mobile: first 1 clip
+  - slow: none
+- Mobile theater files (`/videos/mobile`):
+  - first warmed clip uses `preload="auto"` for faster first open
+  - additional warmed clips use `preload="metadata"`
+
+### Expected behavior impact
+- Faster first theater open and faster first reel interactions.
+- Preserves current animations/UX and avoids “preload everything on boot” network spikes.
+- Keeps main-first quality logic on normal mobile/desktop; still prefers mobile source on constrained mobile networks.

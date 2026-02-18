@@ -53,6 +53,8 @@ const THEATER_HINT_PRELOAD_OFFSETS = [-2, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_FAST_FALLBACK_MS = 420;
+const STARTUP_PREWARM_DELAY_DESKTOP_MS = 900;
+const STARTUP_PREWARM_DELAY_MOBILE_MS = 1400;
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
 const r2MobileVideo = (filename: string) =>
@@ -362,6 +364,7 @@ const Portfolio = () => {
   const [isTheaterVisible, setIsTheaterVisible] = useState(false);
   const [isTheaterDismissing, setIsTheaterDismissing] = useState(false);
   const [theaterDismissDirection, setTheaterDismissDirection] = useState<1 | -1>(1);
+  const [startupPrewarmEnabled, setStartupPrewarmEnabled] = useState(false);
 
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const reelScrollRef = useRef<HTMLDivElement>(null);
@@ -812,6 +815,36 @@ const Portfolio = () => {
     pauseCollageVideos();
   }, [pauseCollageVideos]);
 
+  const connectionProfile = useMemo(() => {
+    if (typeof navigator === 'undefined') {
+      return { constrained: false, slow: false };
+    }
+    const connection = (navigator as Navigator & { connection?: NavigatorConnection }).connection;
+    if (!connection) {
+      return { constrained: false, slow: false };
+    }
+    const constrained =
+      Boolean(connection.saveData) ||
+      connection.effectiveType === 'slow-2g' ||
+      connection.effectiveType === '2g';
+    const slow = constrained || connection.effectiveType === '3g';
+    return { constrained, slow };
+  }, []);
+
+  useEffect(() => {
+    if (startupPrewarmEnabled) return;
+    if (connectionProfile.constrained) return;
+
+    const timeoutId = window.setTimeout(
+      () => {
+        setStartupPrewarmEnabled(true);
+      },
+      isMobile ? STARTUP_PREWARM_DELAY_MOBILE_MS : STARTUP_PREWARM_DELAY_DESKTOP_MS,
+    );
+
+    return () => window.clearTimeout(timeoutId);
+  }, [connectionProfile.constrained, isMobile, startupPrewarmEnabled]);
+
   const theaterDragDistance = Math.abs(theaterDragY);
   const theaterDragProgress = Math.min(theaterDragDistance / THEATER_MAX_DRAG_DISTANCE, 1);
   const theaterOverlayOpacity =
@@ -849,13 +882,25 @@ const Portfolio = () => {
     }).filter((clip, index, clips) => clips.findIndex((candidate) => candidate.id === clip.id) === index);
   }, [activeReelIndex]);
 
-  const shouldPreferMobileTheaterSource = useMemo(() => {
-    if (!isMobile || typeof navigator === 'undefined') return false;
-    const connection = (navigator as Navigator & { connection?: NavigatorConnection }).connection;
-    if (!connection) return false;
-    if (connection.saveData) return true;
-    return connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g' || connection.effectiveType === '3g';
-  }, [isMobile]);
+  const startupPreviewPreloadClips = useMemo(() => {
+    if (!startupPrewarmEnabled) return [];
+    const clipCount = connectionProfile.slow ? 1 : isMobile ? 2 : 4;
+    return REEL_CLIPS.slice(0, clipCount);
+  }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
+
+  const startupMainPreloadClips = useMemo(() => {
+    if (!startupPrewarmEnabled) return [];
+    const clipCount = connectionProfile.slow ? 0 : isMobile ? 1 : 2;
+    return REEL_CLIPS.slice(0, clipCount);
+  }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
+
+  const startupMobilePreloadClips = useMemo(() => {
+    if (!startupPrewarmEnabled) return [];
+    const clipCount = connectionProfile.slow ? 1 : isMobile ? 2 : 1;
+    return REEL_CLIPS.slice(0, clipCount);
+  }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
+
+  const shouldPreferMobileTheaterSource = isMobile && connectionProfile.slow;
 
   const theaterSources = useMemo(() => {
     if (!activeReelPreview) return [];
@@ -868,6 +913,40 @@ const Portfolio = () => {
 
   return (
     <section id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
+      {startupPrewarmEnabled && (
+        <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
+          {startupPreviewPreloadClips.map((clip) => (
+            <video
+              key={`startup-prewarm-preview-${clip.id}`}
+              src={clip.previewSrc}
+              preload="auto"
+              muted
+              playsInline
+              tabIndex={-1}
+            />
+          ))}
+          {startupMainPreloadClips.map((clip) => (
+            <video
+              key={`startup-prewarm-main-${clip.id}`}
+              src={clip.mainSrc}
+              preload="metadata"
+              muted
+              playsInline
+              tabIndex={-1}
+            />
+          ))}
+          {startupMobilePreloadClips.map((clip, index) => (
+            <video
+              key={`startup-prewarm-mobile-${clip.id}`}
+              src={clip.mobileSrc}
+              preload={index === 0 ? 'auto' : 'metadata'}
+              muted
+              playsInline
+              tabIndex={-1}
+            />
+          ))}
+        </div>
+      )}
       <div className="studio-container">
         <motion.div
           className="studio-header mb-10 md:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10"
