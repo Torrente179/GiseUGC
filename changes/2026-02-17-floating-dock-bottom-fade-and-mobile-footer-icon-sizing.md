@@ -13,6 +13,7 @@ Added a desktop-only ghost fade effect for the floating contact dock at the abso
   - subtle blur
 - The state reverts immediately and smoothly as soon as scrolling up begins.
 - Mobile dock behavior is unchanged.
+- Reliability fix: switched bottom detection to the footer edge (`#contact` bottom vs viewport bottom) with a small tolerance so the ghost trigger works consistently in real browser scroll conditions.
 
 2. Mobile footer contact icon sizing
 - Updated the mobile footer icon row to keep all contact icons in one line:
