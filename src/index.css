@@ -61,40 +61,40 @@
 
   /* Dark mode variables */
   .dark {
-    --background: 30 12% 10.5%;
-    --foreground: 40 36% 90%;
+    --background: 222 28% 8%;
+    --foreground: 42 38% 92%;
 
-    --card: 30 11% 13.5%;
-    --card-foreground: 40 36% 90%;
+    --card: 222 24% 11%;
+    --card-foreground: 42 34% 90%;
 
-    --popover: 30 11% 13.5%;
-    --popover-foreground: 40 36% 90%;
+    --popover: 222 24% 11%;
+    --popover-foreground: 42 34% 90%;
 
-    --primary: 193 56% 56%;
-    --primary-foreground: var(--deep-ebony);
+    --primary: 191 57% 46%;
+    --primary-foreground: 42 48% 96%;
 
-    --secondary: 31 12% 20%;
-    --secondary-foreground: 40 36% 90%;
+    --secondary: 223 19% 16%;
+    --secondary-foreground: 42 34% 90%;
 
-    --muted: 31 10% 22%;
-    --muted-foreground: var(--soft-stone);
+    --muted: 223 17% 19%;
+    --muted-foreground: 38 20% 70%;
 
-    --accent: var(--washed-khaki);
-    --accent-foreground: var(--deep-ebony);
+    --accent: 42 28% 60%;
+    --accent-foreground: 222 30% 12%;
 
-    --destructive: 0 84% 50%;
+    --destructive: 0 80% 58%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 30 10% 28%;
-    --input: 30 10% 28%;
-    --ring: 193 56% 56%;
+    --border: 223 15% 24%;
+    --input: 223 15% 24%;
+    --ring: 191 60% 54%;
 
-    --brand-teal: var(--coastal-teal);
-    --brand-olive: var(--washed-khaki);
-    --brand-sand: var(--warm-sand);
-    --brand-cocoa: var(--muted-earth);
-    --brand-cream: var(--pure-linen);
-    --brand-gold: var(--soft-stone);
+    --brand-teal: 191 57% 46%;
+    --brand-olive: 44 20% 46%;
+    --brand-sand: 36 30% 64%;
+    --brand-cocoa: 28 16% 42%;
+    --brand-cream: 40 34% 88%;
+    --brand-gold: 40 28% 60%;
   }
 
   * {
