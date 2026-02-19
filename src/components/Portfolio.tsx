@@ -653,6 +653,22 @@ const Portfolio = () => {
     queueTheaterDrag(0);
   }, [queueTheaterDrag]);
 
+  const connectionProfile = useMemo(() => {
+    if (typeof navigator === 'undefined') {
+      return { constrained: false, slow: false };
+    }
+    const connection = (navigator as Navigator & { connection?: NavigatorConnection }).connection;
+    if (!connection) {
+      return { constrained: false, slow: false };
+    }
+    const constrained =
+      Boolean(connection.saveData) ||
+      connection.effectiveType === 'slow-2g' ||
+      connection.effectiveType === '2g';
+    const slow = constrained || connection.effectiveType === '3g';
+    return { constrained, slow };
+  }, []);
+
   useEffect(() => {
     if (!activeReelPreview) {
       setIsTheaterVisible(false);
@@ -952,22 +968,6 @@ const Portfolio = () => {
     setCollageHovered(false);
     pauseCollageVideos();
   }, [pauseCollageVideos]);
-
-  const connectionProfile = useMemo(() => {
-    if (typeof navigator === 'undefined') {
-      return { constrained: false, slow: false };
-    }
-    const connection = (navigator as Navigator & { connection?: NavigatorConnection }).connection;
-    if (!connection) {
-      return { constrained: false, slow: false };
-    }
-    const constrained =
-      Boolean(connection.saveData) ||
-      connection.effectiveType === 'slow-2g' ||
-      connection.effectiveType === '2g';
-    const slow = constrained || connection.effectiveType === '3g';
-    return { constrained, slow };
-  }, []);
 
   useEffect(() => {
     const section = portfolioSectionRef.current;
