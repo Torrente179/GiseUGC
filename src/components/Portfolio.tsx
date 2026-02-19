@@ -710,12 +710,14 @@ const Portfolio = () => {
 
       const signedMainSource = getSignedMediaUrl(mediaSession, clip.mainSrc);
       const signedMobileSource = getSignedMediaUrl(mediaSession, clip.mobileSrc);
+      const mainSource = signedMainSource ?? clip.mainSrc;
+      const mobileSource = signedMobileSource ?? clip.mobileSrc;
 
       const orderedSources = isMobile
         ? shouldPreferMobileTheaterSource
-          ? [signedMobileSource, signedMainSource]
-          : [signedMainSource, signedMobileSource]
-        : [signedMainSource];
+          ? [mobileSource, mainSource]
+          : [mainSource, mobileSource]
+        : [mainSource];
 
       return orderedSources.filter((source, index, sources): source is string => {
         if (!source) return false;
