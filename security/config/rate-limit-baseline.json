@@ -1,0 +1,36 @@
+{
+  "rules": [
+    {
+      "id": "media-session",
+      "description": "[giseugc-cost] /api/media/session",
+      "expression": "(http.request.uri.path eq \"/api/media/session\" and not cf.client.bot)",
+      "period": 60,
+      "requests_per_period": 8,
+      "mitigation_timeout": 900
+    },
+    {
+      "id": "main-videos",
+      "description": "[giseugc-cost] /videos/main/*",
+      "expression": "(starts_with(http.request.uri.path, \"/videos/main/\") and not cf.client.bot)",
+      "period": 60,
+      "requests_per_period": 180,
+      "mitigation_timeout": 600
+    },
+    {
+      "id": "html-documents",
+      "description": "[giseugc-cost] HTML documents",
+      "expression": "((http.request.uri.path eq \"/\" or ends_with(http.request.uri.path, \".html\")) and not cf.client.bot)",
+      "period": 10,
+      "requests_per_period": 120,
+      "mitigation_timeout": 600
+    },
+    {
+      "id": "static-burst",
+      "description": "[giseugc-cost] static js/css/woff2",
+      "expression": "((ends_with(http.request.uri.path, \".js\") or ends_with(http.request.uri.path, \".css\") or ends_with(http.request.uri.path, \".woff2\")) and not cf.client.bot)",
+      "period": 60,
+      "requests_per_period": 600,
+      "mitigation_timeout": 300
+    }
+  ]
+}

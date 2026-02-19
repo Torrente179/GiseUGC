@@ -25,6 +25,7 @@ dist-ssr
 
 # Environment variables
 .env*
+!.env.example
 
 # Local video transcode outputs (upload these to R2/CDN, do not commit)
 tmp/video-encodes/

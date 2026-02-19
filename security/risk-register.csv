@@ -1,0 +1,11 @@
+id,title,severity,likelihood,impact,status,owner,mitigation,verification
+R-001,Public full-video scraping/rehosting,High,High,High,Mitigating,Platform,Protect /videos/main/* with signed URLs + Worker validation,Unsigned URL returns 403
+R-002,Fake traffic cost spikes to origin,High,High,High,Mitigating,Platform,Cloudflare baseline rate limits + scheduled monitor + emergency under_attack mode,Origin request volume drops during synthetic spike
+R-003,Missing hardened edge headers,Medium,Medium,Medium,Mitigated,Web,Deploy vercel.json security headers,Header checks show policy keys present
+R-004,Session token abuse on /api/media/session,Medium,Medium,High,Mitigating,Platform,Rate-limit endpoint by IP and monitor anomalies,Repeated endpoint hits trigger blocks
+R-005,Worker not deployed or misrouted,High,Medium,High,Open,Platform,Deploy worker route to media domain /videos/main/*,Signed endpoint enforcement active in prod
+R-006,Main domain not proxied through Cloudflare,High,Medium,High,Open,Platform,Enable orange-cloud proxy for www hostname,Traffic observed via Cloudflare analytics
+R-007,Credential leakage in CI/cloud APIs,High,Low,High,Open,Ops,Use least-privilege tokens + rotate + 2FA + secret scanning,Quarterly access review and rotation logs
+R-008,Dependency CVE accumulation,Medium,High,Medium,Open,Web,Run controlled dependency upgrade/patch cycle,Audit findings reduced and build regression tests pass
+R-009,False positives blocking legit users,Medium,Low,Medium,Monitoring,Platform,Use block-only high-confidence policy and tune thresholds weekly,No meaningful increase in legit block reports
+R-010,Delayed incident response,Medium,Medium,High,Mitigating,Ops,Adopt cost-spike playbook and alerting webhook,Incident drill completed with <=15 min response

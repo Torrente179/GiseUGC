@@ -1,0 +1,31 @@
+name: Cloudflare Spike Monitor
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-spike-monitor
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.CF_API_TOKEN != '' && secrets.CF_ZONE_ID != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run spike monitor
+        run: node security/scripts/monitor-cloudflare-spike.mjs --apply
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_BASE_SECURITY_LEVEL: ${{ vars.CF_BASE_SECURITY_LEVEL || 'medium' }}
+          CF_ALERT_WEBHOOK: ${{ secrets.CF_ALERT_WEBHOOK }}

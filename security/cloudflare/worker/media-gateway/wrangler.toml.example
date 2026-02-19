@@ -1,0 +1,15 @@
+name = "giseugc-media-gateway"
+main = "src/index.ts"
+compatibility_date = "2026-02-19"
+
+route = { pattern = "media.giselasaldarriaga.com/videos/main/*", zone_name = "giselasaldarriaga.com" }
+
+[[r2_buckets]]
+binding = "MEDIA_BUCKET"
+bucket_name = "REPLACE_WITH_PRIVATE_MEDIA_BUCKET"
+preview_bucket_name = "REPLACE_WITH_PRIVATE_MEDIA_BUCKET"
+
+[vars]
+# Keep this empty in production and configure the secret with:
+# wrangler secret put MEDIA_SIGNING_SECRET
+MEDIA_SIGNING_SECRET = "replace-in-local-dev-only"
