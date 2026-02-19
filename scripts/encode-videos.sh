@@ -257,7 +257,7 @@ for source_path in "${SOURCES[@]}"; do
       -ss 0 -t "$PREVIEW_SECONDS" -i "$source_path" \
       -map 0:v:0 -an \
       -vf "$preview_filter" \
-      -c:v libx264 -preset medium -profile:v high -tune fastdecode \
+      -c:v libx264 -preset medium -profile:v high \
       -b:v "${preview_video_kbps}k" -maxrate "${preview_maxrate_kbps}k" -bufsize "${preview_bufsize_kbps}k" \
       -x264-params "keyint=24:min-keyint=24:scenecut=0" \
       -movflags +faststart \
