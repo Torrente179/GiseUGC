@@ -364,8 +364,10 @@ const Portfolio = () => {
   const [theaterDismissDirection, setTheaterDismissDirection] = useState<1 | -1>(1);
   const [theaterPrewarmDirection, setTheaterPrewarmDirection] = useState<1 | -1>(1);
   const [startupPrewarmEnabled, setStartupPrewarmEnabled] = useState(false);
+  const [isPortfolioNearViewport, setIsPortfolioNearViewport] = useState(false);
   const [interactionPrewarmClip, setInteractionPrewarmClip] = useState<ReelClip | null>(null);
 
+  const portfolioSectionRef = useRef<HTMLElement | null>(null);
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const reelScrollRef = useRef<HTMLDivElement>(null);
   const reelScrollStepRef = useRef(212);
@@ -873,8 +875,30 @@ const Portfolio = () => {
   }, []);
 
   useEffect(() => {
+    const section = portfolioSectionRef.current;
+    if (!section || typeof IntersectionObserver === 'undefined') {
+      setIsPortfolioNearViewport(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry?.isIntersecting) return;
+        setIsPortfolioNearViewport(true);
+        observer.disconnect();
+      },
+      { rootMargin: '900px 0px' },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     if (startupPrewarmEnabled) return;
     if (connectionProfile.constrained) return;
+    if (!isPortfolioNearViewport) return;
 
     const timeoutId = window.setTimeout(
       () => {
@@ -884,7 +908,7 @@ const Portfolio = () => {
     );
 
     return () => window.clearTimeout(timeoutId);
-  }, [connectionProfile.constrained, isMobile, startupPrewarmEnabled]);
+  }, [connectionProfile.constrained, isMobile, isPortfolioNearViewport, startupPrewarmEnabled]);
 
   const theaterDragDistance = Math.abs(theaterDragY);
   const theaterDragProgress = Math.min(theaterDragDistance / THEATER_MAX_DRAG_DISTANCE, 1);
@@ -980,14 +1004,14 @@ const Portfolio = () => {
 
 
   return (
-    <section id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
+    <section ref={portfolioSectionRef} id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
       {startupPrewarmEnabled && (
         <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
-          {startupPreviewPreloadClips.map((clip) => (
+          {startupPreviewPreloadClips.map((clip, index) => (
             <video
               key={`startup-prewarm-preview-${clip.id}`}
               src={clip.previewSrc}
-              preload="auto"
+              preload={index === 0 ? 'auto' : 'metadata'}
               muted
               playsInline
               tabIndex={-1}
