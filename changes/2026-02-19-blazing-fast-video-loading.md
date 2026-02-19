@@ -22,7 +22,6 @@ Seven-step optimization pass targeting first-video frame speed on both desktop a
 - **Impact**: 200–400ms faster theater playback start on slow connections.
 
 ### 4. Preview encoding flags (`scripts/encode-videos.sh`)
-- Added `-tune fastdecode` to the preview encode command — optimizes H.264 decode on mobile CPUs.
 - Added `-x264-params "keyint=24:min-keyint=24:scenecut=0"` — guarantees first frame is an I-frame for instant decode start.
 - Width (480px), fps (24), bitrate target (~700 KB), and all quality settings unchanged.
 - **Requires re-encoding previews and re-uploading to R2** to take effect.
