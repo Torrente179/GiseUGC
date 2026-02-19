@@ -55,7 +55,7 @@ const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_FAST_FALLBACK_MS_SLOW = 250;
 const THEATER_FAST_FALLBACK_MS_DEFAULT = 400;
 const STARTUP_PREWARM_DELAY_DESKTOP_MS = 520;
-const STARTUP_PREWARM_DELAY_MOBILE_MS = 760;
+const STARTUP_PREWARM_DELAY_MOBILE_MS = 400;
 const PORTFOLIO_PREWARM_ROOT_MARGIN = '1200px 0px';
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
@@ -1038,14 +1038,14 @@ const Portfolio = () => {
 
   const startupMobilePreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 0 : isMobile ? 1 : 0;
+    const clipCount = connectionProfile.slow ? 0 : isMobile ? 2 : 0;
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
   const primaryWarmPreloadClip = theaterWarmPreloadClips[0] ?? null;
   const secondaryWarmPreloadClip = theaterWarmPreloadClips[1] ?? null;
 
-  const shouldPreferMobileTheaterSource = isMobile && connectionProfile.slow;
+  const shouldPreferMobileTheaterSource = isMobile;
 
   const theaterStartupFallbackMs = useMemo(
     () => (connectionProfile.slow ? THEATER_FAST_FALLBACK_MS_SLOW : THEATER_FAST_FALLBACK_MS_DEFAULT),
