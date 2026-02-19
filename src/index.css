@@ -56,6 +56,17 @@
     --brand-cream: var(--pure-linen);
     --brand-gold: var(--soft-stone);
 
+    --theater-backdrop: 220 26% 9%;
+    --theater-backdrop-glow: 220 20% 94%;
+    --theater-edge: 0 0% 86%;
+    --theater-control-bg: 0 0% 100%;
+    --theater-control-border: 0 0% 74%;
+    --theater-control-fg: 220 12% 20%;
+    --theater-chip-bg: 0 0% 98%;
+    --theater-chip-border: 0 0% 78%;
+    --theater-chip-fg: 220 10% 24%;
+    --theater-overlay-title: 0 0% 98%;
+
     --radius: 1.25rem;
   }
 
@@ -95,6 +106,17 @@
     --brand-cocoa: 28 16% 42%;
     --brand-cream: 40 34% 88%;
     --brand-gold: 40 28% 60%;
+
+    --theater-backdrop: 220 40% 4%;
+    --theater-backdrop-glow: 220 18% 16%;
+    --theater-edge: 220 15% 28%;
+    --theater-control-bg: 220 18% 12%;
+    --theater-control-border: 220 12% 30%;
+    --theater-control-fg: 0 0% 96%;
+    --theater-chip-bg: 220 19% 11%;
+    --theater-chip-border: 220 13% 34%;
+    --theater-chip-fg: 0 0% 94%;
+    --theater-overlay-title: 0 0% 97%;
   }
 
   * {
@@ -228,6 +250,47 @@
   .glass-dark {
     @apply backdrop-blur-md border border-border/80;
     background-color: hsl(var(--card) / 0.82);
+  }
+
+  .theater-control {
+    @apply flex items-center justify-center rounded-full transition-[background-color,border-color,color] duration-200;
+    background-color: hsl(var(--theater-control-bg) / 0.82);
+    border: 1px solid hsl(var(--theater-control-border) / 0.88);
+    color: hsl(var(--theater-control-fg));
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 22px -16px rgba(0, 0, 0, 0.75);
+  }
+
+  .theater-control:hover {
+    background-color: hsl(var(--theater-control-bg) / 0.95);
+    border-color: hsl(var(--theater-control-border));
+  }
+
+  .theater-control:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  .theater-meta-chip {
+    color: hsl(var(--theater-chip-fg));
+    background-color: hsl(var(--theater-chip-bg) / 0.88);
+    border: 1px solid hsl(var(--theater-chip-border) / 0.9);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    line-height: 1;
+    backdrop-filter: blur(6px);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.14);
+  }
+
+  .theater-meta-title {
+    color: hsl(var(--theater-overlay-title));
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    text-shadow: 0 1px 14px rgba(0, 0, 0, 0.62);
   }
 
   .section-padding {

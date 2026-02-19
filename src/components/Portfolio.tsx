@@ -308,7 +308,7 @@ const TheaterVideo = ({
   }, [clearStartupTimeout]);
 
   return (
-    <div className="relative overflow-hidden rounded-[1.25rem] border border-white/25 bg-black shadow-[0_20px_52px_-30px_hsl(var(--foreground)/0.9)]">
+    <div className="relative overflow-hidden bg-black">
       <video
         ref={videoRef}
         className="w-full aspect-[9/16] object-cover"
@@ -334,15 +334,14 @@ const TheaterVideo = ({
         onClick={togglePlayback}
         aria-label={isPlaying ? 'Pause' : 'Play'}
       >
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/80 backdrop-blur-md shadow-lg">
+        <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/45 bg-black/40 backdrop-blur-sm shadow-[0_10px_24px_-16px_rgba(0,0,0,0.88)]">
           {isPlaying ? (
-            <Pause className="h-6 w-6 text-foreground/80" fill="currentColor" />
+            <Pause className="h-5 w-5 text-white/90" fill="currentColor" />
           ) : (
-            <Play className="h-6 w-6 text-foreground/80 ml-1" fill="currentColor" />
+            <Play className="h-5 w-5 text-white/90 ml-0.5" fill="currentColor" />
           )}
         </span>
       </button>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/50 to-transparent" />
     </div>
   );
 };
@@ -891,20 +890,20 @@ const Portfolio = () => {
   const theaterDragProgress = Math.min(theaterDragDistance / THEATER_MAX_DRAG_DISTANCE, 1);
   const theaterOverlayOpacity =
     (isTheaterVisible && !isTheaterDismissing ? 1 : 0) * (1 - theaterDragProgress * 0.5);
-  const theaterCardScale = 1 - theaterDragProgress * 0.07;
-  const theaterCardRotation = theaterDragY * 0.012;
+  const theaterCardScale = 1 - theaterDragProgress * 0.04;
+  const theaterCardRotation = theaterDragY * 0.0045;
 
   const theaterCardTransform = isTheaterDismissing
-    ? `translate3d(0, ${theaterDismissDirection * 120}vh, 0) scale(0.88) rotate(${theaterDismissDirection * 3.8}deg)`
+    ? `translate3d(0, ${theaterDismissDirection * 112}vh, 0) scale(0.94) rotate(${theaterDismissDirection * 1.25}deg)`
     : isTheaterVisible
       ? `translate3d(0, ${theaterDragY}px, 0) scale(${theaterCardScale}) rotate(${theaterCardRotation}deg)`
-      : 'translate3d(0, 36px, 0) scale(0.95)';
+      : 'translate3d(0, 18px, 0) scale(0.985)';
 
   const theaterCardTransition = isTheaterDragging
     ? 'transform 0ms linear, opacity 120ms linear'
     : isTheaterDismissing
-      ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.32,0.72,0,1), opacity 250ms ease`
-      : 'transform 460ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease';
+      ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.3, 0.72, 0.08, 1), opacity 220ms ease`
+      : 'transform 360ms cubic-bezier(0.24, 0.92, 0.38, 1), opacity 240ms ease';
 
   const theaterWarmPreloadOffsets = useMemo(() => {
     if (isMobile && connectionProfile.slow) {
@@ -1303,8 +1302,9 @@ const Portfolio = () => {
           onClick={() => dismissReelPreview()}
         >
           <div
-            className="absolute inset-0 bg-foreground/65 backdrop-blur-[14px]"
+            className="absolute inset-0 backdrop-blur-[10px]"
             style={{
+              backgroundColor: 'hsl(var(--theater-backdrop) / 0.74)',
               opacity: theaterOverlayOpacity,
               transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 280ms ease',
             }}
@@ -1315,7 +1315,7 @@ const Portfolio = () => {
               opacity: theaterOverlayOpacity,
               transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 320ms ease',
               background:
-                'radial-gradient(circle at 14% 12%, hsl(var(--accent) / 0.24) 0%, transparent 48%), radial-gradient(circle at 84% 88%, hsl(var(--primary) / 0.26) 0%, transparent 52%)',
+                'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)',
             }}
           />
           <div
@@ -1327,7 +1327,7 @@ const Portfolio = () => {
           >
             <button
               type="button"
-              className="absolute left-0 top-1/2 -translate-x-[122%] -translate-y-1/2 z-[220] h-6 w-6 md:h-11 md:w-11 rounded-full border border-white/35 bg-black/55 text-white shadow-[0_12px_26px_-14px_rgba(0,0,0,0.9)] backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/70"
+              className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -1335,11 +1335,11 @@ const Portfolio = () => {
               }}
               aria-label={t('portfolio.reelPreviewPrev')}
             >
-              <ChevronLeft className="h-3 w-3 md:h-5 md:w-5" />
+              <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
             </button>
             <button
               type="button"
-              className="absolute right-0 top-1/2 translate-x-[122%] -translate-y-1/2 z-[220] h-6 w-6 md:h-11 md:w-11 rounded-full border border-white/35 bg-black/55 text-white shadow-[0_12px_26px_-14px_rgba(0,0,0,0.9)] backdrop-blur-md flex items-center justify-center transition-colors hover:bg-black/70"
+              className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -1347,10 +1347,10 @@ const Portfolio = () => {
               }}
               aria-label={t('portfolio.reelPreviewNext')}
             >
-              <ChevronRight className="h-3 w-3 md:h-5 md:w-5" />
+              <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
             </button>
             <div
-              className="relative w-full overflow-hidden rounded-[2rem] border border-white/25 bg-card/80 p-[10px] shadow-[0_38px_92px_-42px_hsl(var(--foreground)/0.9)] backdrop-blur-2xl"
+              className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]"
               onClick={(event) => event.stopPropagation()}
               style={{
                 transform: theaterCardTransform,
@@ -1358,92 +1358,88 @@ const Portfolio = () => {
                 transition: theaterCardTransition,
               }}
             >
-            <div className="pointer-events-none absolute inset-0 rounded-[inherit] border border-white/20" />
-            <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[linear-gradient(180deg,hsl(var(--card)/0.42)_0%,hsl(var(--card)/0.08)_40%,transparent_100%)]" />
+              <button
+                type="button"
+                className="theater-control absolute right-3 top-3 z-30 h-9 w-9"
+                onClick={() => dismissReelPreview()}
+                aria-label={t('portfolio.reelPreviewClose')}
+              >
+                <X className="h-4 w-4" />
+              </button>
 
-            <button
-              type="button"
-              className="absolute top-4 right-4 z-20 h-9 w-9 rounded-full border border-border/80 bg-card/90 flex items-center justify-center text-foreground/90 hover:bg-secondary transition-colors"
-              onClick={() => dismissReelPreview()}
-              aria-label={t('portfolio.reelPreviewClose')}
-            >
-              <X className="h-4 w-4 text-foreground" />
-            </button>
+              <div className="relative">
+                <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
+                  {primaryWarmPreloadClip && (
+                    <video
+                      key={`theater-preload-mobile-primary-${primaryWarmPreloadClip.id}`}
+                      src={primaryWarmPreloadClip.mobileSrc}
+                      preload={connectionProfile.slow ? 'metadata' : 'auto'}
+                      muted
+                      playsInline
+                      tabIndex={-1}
+                    />
+                  )}
+                  {primaryWarmPreloadClip && (
+                    <video
+                      key={`theater-preload-main-primary-${primaryWarmPreloadClip.id}`}
+                      src={primaryWarmPreloadClip.mainSrc}
+                      preload="metadata"
+                      muted
+                      playsInline
+                      tabIndex={-1}
+                    />
+                  )}
+                  {secondaryWarmPreloadClip && (
+                    <video
+                      key={`theater-preload-mobile-secondary-${secondaryWarmPreloadClip.id}`}
+                      src={secondaryWarmPreloadClip.mobileSrc}
+                      preload={isMobile ? 'metadata' : 'auto'}
+                      muted
+                      playsInline
+                      tabIndex={-1}
+                    />
+                  )}
+                  {secondaryWarmPreloadClip && !isMobile && (
+                    <video
+                      key={`theater-preload-main-secondary-${secondaryWarmPreloadClip.id}`}
+                      src={secondaryWarmPreloadClip.mainSrc}
+                      preload="metadata"
+                      muted
+                      playsInline
+                      tabIndex={-1}
+                    />
+                  )}
+                  {theaterHintPreloadClips.map((clip) => (
+                    <video
+                      key={`theater-preload-mobile-hint-${clip.id}`}
+                      src={clip.mobileSrc}
+                      preload="metadata"
+                      muted
+                      playsInline
+                      tabIndex={-1}
+                    />
+                  ))}
+                </div>
 
-            <div className="relative rounded-[1.55rem] border border-border/70 bg-card/75 px-4 pb-4 pt-5 shadow-[inset_0_1px_0_hsl(var(--background)/0.45)]">
-              <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
-                {primaryWarmPreloadClip && (
-                  <video
-                    key={`theater-preload-mobile-primary-${primaryWarmPreloadClip.id}`}
-                    src={primaryWarmPreloadClip.mobileSrc}
-                    preload={connectionProfile.slow ? 'metadata' : 'auto'}
-                    muted
-                    playsInline
-                    tabIndex={-1}
-                  />
-                )}
-                {primaryWarmPreloadClip && (
-                  <video
-                    key={`theater-preload-main-primary-${primaryWarmPreloadClip.id}`}
-                    src={primaryWarmPreloadClip.mainSrc}
-                    preload="metadata"
-                    muted
-                    playsInline
-                    tabIndex={-1}
-                  />
-                )}
-                {secondaryWarmPreloadClip && (
-                  <video
-                    key={`theater-preload-mobile-secondary-${secondaryWarmPreloadClip.id}`}
-                    src={secondaryWarmPreloadClip.mobileSrc}
-                    preload={isMobile ? 'metadata' : 'auto'}
-                    muted
-                    playsInline
-                    tabIndex={-1}
-                  />
-                )}
-                {secondaryWarmPreloadClip && !isMobile && (
-                  <video
-                    key={`theater-preload-main-secondary-${secondaryWarmPreloadClip.id}`}
-                    src={secondaryWarmPreloadClip.mainSrc}
-                    preload="metadata"
-                    muted
-                    playsInline
-                    tabIndex={-1}
-                  />
-                )}
-                {theaterHintPreloadClips.map((clip) => (
-                  <video
-                    key={`theater-preload-mobile-hint-${clip.id}`}
-                    src={clip.mobileSrc}
-                    preload="metadata"
-                    muted
-                    playsInline
-                    tabIndex={-1}
-                  />
-                ))}
+                <TheaterVideo
+                  sources={theaterSources}
+                  poster={activeReelPreview.posterSrc}
+                  enableStartupFallback={isMobile}
+                />
+
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
+                  <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
+                    <p className="theater-meta-chip inline-flex max-w-[78%] items-center rounded-full px-2.5 py-1">
+                      {t(`portfolio.categories.${activeReelPreview.category}`)}
+                    </p>
+                    <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">
+                      {t(activeReelPreview.titleKey)}
+                    </h4>
+                  </div>
+                </div>
               </div>
-
-              <div className="mb-2 pr-12">
-                <p className="brand-logo text-[1.6rem] leading-[0.9] text-foreground">
-                  Gise<span className="text-foreground font-medium">.UGC</span>
-                </p>
-                <p className="section-label mt-2 text-foreground/55">
-                  {t(`portfolio.categories.${activeReelPreview.category}`)}
-                </p>
-              </div>
-
-              <h4 className="text-xl font-serif font-normal tracking-[-0.03em] leading-tight text-foreground mb-3">
-                {t(activeReelPreview.titleKey)}
-              </h4>
-
-              <TheaterVideo
-                sources={theaterSources}
-                poster={activeReelPreview.posterSrc}
-                enableStartupFallback={isMobile}
-              />
             </div>
-          </div>
           </div>
         </div>
       )}
