@@ -6,12 +6,10 @@ usage() {
 Batch transcode source MP4 videos into:
 1) short preview loops (for cards) and
 2) mobile-friendly full videos (for theater/modal playback)
-3) high-quality starter clips (for instant theater open)
 
 Defaults are tuned for "quality-first instant feel":
 - preview: 4 seconds, ~700 KB target, no audio
 - mobile full: ~5 MB target per clip, AAC audio, faststart enabled
-- starter: first 1.2 seconds, no audio, dense keyframes, faststart enabled
 
 Usage:
   bash scripts/encode-videos.sh [options] [file1.mp4 file2.mp4 ...]
@@ -24,8 +22,6 @@ Options:
   --preview-width N        Max preview width in px (default: 480)
   --mobile-target-mb N     Mobile full size target in MB (default: 5)
   --mobile-width N         Max mobile full width in px (default: 720)
-  --starter-seconds N      Starter clip duration (default: 1.2)
-  --starter-width N        Max starter width in px (default: 720)
   --audio-bitrate-k N      Audio bitrate in kbps for mobile full (default: 96)
   --overwrite              Overwrite existing outputs
   --dry-run                Print commands without running ffmpeg
@@ -85,8 +81,6 @@ PREVIEW_TARGET_KB=700
 PREVIEW_WIDTH=480
 MOBILE_TARGET_MB=5
 MOBILE_WIDTH=720
-STARTER_SECONDS=1.2
-STARTER_WIDTH=720
 AUDIO_BITRATE_K=96
 OVERWRITE=0
 DRY_RUN=0
@@ -120,14 +114,6 @@ while (($#)); do
       ;;
     --mobile-width)
       MOBILE_WIDTH="$2"
-      shift 2
-      ;;
-    --starter-seconds)
-      STARTER_SECONDS="$2"
-      shift 2
-      ;;
-    --starter-width)
-      STARTER_WIDTH="$2"
       shift 2
       ;;
     --audio-bitrate-k)
@@ -174,7 +160,6 @@ if [[ ! -d "$INPUT_DIR" ]]; then
 fi
 
 mkdir -p "$OUTPUT_DIR"
-mkdir -p "$OUTPUT_DIR/starter"
 
 declare -a SOURCES=()
 
@@ -198,7 +183,7 @@ else
     SOURCES+=("$source_file")
   done < <(
     find "$INPUT_DIR" -maxdepth 1 -type f -name '*.mp4' \
-      ! -name '*-preview.mp4' ! -name '*-mobile.mp4' ! -name '*-starter.mp4' | sort
+      ! -name '*-preview.mp4' ! -name '*-mobile.mp4' | sort
   )
 fi
 
@@ -209,7 +194,7 @@ fi
 
 manifest_path="$OUTPUT_DIR/manifest.csv"
 if [[ "$DRY_RUN" -eq 0 ]]; then
-  printf 'source,preview,mobile,starter,duration_seconds,source_bytes,preview_bytes,mobile_bytes,starter_bytes\n' > "$manifest_path"
+  printf 'source,preview,mobile,duration_seconds,source_bytes,preview_bytes,mobile_bytes\n' > "$manifest_path"
 fi
 
 overwrite_flag="-n"
@@ -220,7 +205,6 @@ fi
 total_source_bytes=0
 total_preview_bytes=0
 total_mobile_bytes=0
-total_starter_bytes=0
 processed_count=0
 
 for source_path in "${SOURCES[@]}"; do
@@ -228,7 +212,6 @@ for source_path in "${SOURCES[@]}"; do
   basename_no_ext="${filename%.mp4}"
   preview_path="$OUTPUT_DIR/${basename_no_ext}-preview.mp4"
   mobile_path="$OUTPUT_DIR/${basename_no_ext}-mobile.mp4"
-  starter_path="$OUTPUT_DIR/starter/${basename_no_ext}-starter.mp4"
 
   duration="$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$source_path" || true)"
   if [[ -z "$duration" ]]; then
@@ -252,25 +235,20 @@ for source_path in "${SOURCES[@]}"; do
     if (video > 4200) video = 4200;
     printf "%.0f", video;
   }')"
-  starter_video_kbps="$mobile_video_kbps"
 
   preview_maxrate_kbps=$((preview_video_kbps * 12 / 10))
   preview_bufsize_kbps=$((preview_video_kbps * 2))
   mobile_maxrate_kbps=$((mobile_video_kbps * 13 / 10))
   mobile_bufsize_kbps=$((mobile_video_kbps * 2))
-  starter_maxrate_kbps=$((starter_video_kbps * 13 / 10))
-  starter_bufsize_kbps=$((starter_video_kbps * 2))
 
   preview_filter="scale='min(${PREVIEW_WIDTH},iw)':-2:flags=lanczos,fps=24,format=yuv420p"
   mobile_filter="scale='min(${MOBILE_WIDTH},iw)':-2:flags=lanczos,fps=30,format=yuv420p"
-  starter_filter="scale='min(${STARTER_WIDTH},iw)':-2:flags=lanczos,fps=30,format=yuv420p"
 
   echo ""
   echo "Source: $source_path"
   echo "  Duration: ${duration}s"
   echo "  Preview target bitrate: ${preview_video_kbps}k"
   echo "  Mobile target bitrate: ${mobile_video_kbps}k (+ ${AUDIO_BITRATE_K}k audio)"
-  echo "  Starter target bitrate: ${starter_video_kbps}k (no audio)"
 
   if [[ -f "$preview_path" && "$OVERWRITE" -eq 0 ]]; then
     echo "  Preview exists, skipping: $preview_path"
@@ -301,34 +279,18 @@ for source_path in "${SOURCES[@]}"; do
       "$mobile_path"
   fi
 
-  if [[ -f "$starter_path" && "$OVERWRITE" -eq 0 ]]; then
-    echo "  Starter exists, skipping: $starter_path"
-  else
-    run_cmd ffmpeg -hide_banner -loglevel error "$overwrite_flag" \
-      -ss 0 -t "$STARTER_SECONDS" -i "$source_path" \
-      -map 0:v:0 -an \
-      -vf "$starter_filter" \
-      -c:v libx264 -preset slow -profile:v high -level 4.0 \
-      -b:v "${starter_video_kbps}k" -maxrate "${starter_maxrate_kbps}k" -bufsize "${starter_bufsize_kbps}k" \
-      -x264-params "keyint=15:min-keyint=15:scenecut=0" \
-      -movflags +faststart \
-      "$starter_path"
-  fi
-
   if [[ "$DRY_RUN" -eq 1 ]]; then
     source_bytes="$(file_size_bytes "$source_path")"
     total_source_bytes=$((total_source_bytes + source_bytes))
     processed_count=$((processed_count + 1))
     echo "  Output preview: $preview_path (dry-run)"
     echo "  Output mobile : $mobile_path (dry-run)"
-    echo "  Output starter: $starter_path (dry-run)"
     continue
   fi
 
   source_bytes="$(file_size_bytes "$source_path")"
   preview_bytes=0
   mobile_bytes=0
-  starter_bytes=0
 
   if [[ -f "$preview_path" ]]; then
     preview_bytes="$(file_size_bytes "$preview_path")"
@@ -336,24 +298,19 @@ for source_path in "${SOURCES[@]}"; do
   if [[ -f "$mobile_path" ]]; then
     mobile_bytes="$(file_size_bytes "$mobile_path")"
   fi
-  if [[ -f "$starter_path" ]]; then
-    starter_bytes="$(file_size_bytes "$starter_path")"
-  fi
 
   total_source_bytes=$((total_source_bytes + source_bytes))
   total_preview_bytes=$((total_preview_bytes + preview_bytes))
   total_mobile_bytes=$((total_mobile_bytes + mobile_bytes))
-  total_starter_bytes=$((total_starter_bytes + starter_bytes))
   processed_count=$((processed_count + 1))
 
   echo "  Output preview: $preview_path ($(human_size "$preview_bytes"))"
   echo "  Output mobile : $mobile_path ($(human_size "$mobile_bytes"))"
-  echo "  Output starter: $starter_path ($(human_size "$starter_bytes"))"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
-    printf '%s,%s,%s,%s,%s,%s,%s,%s,%s\n' \
-      "$source_path" "$preview_path" "$mobile_path" "$starter_path" "$duration" \
-      "$source_bytes" "$preview_bytes" "$mobile_bytes" "$starter_bytes" >> "$manifest_path"
+    printf '%s,%s,%s,%s,%s,%s,%s\n' \
+      "$source_path" "$preview_path" "$mobile_path" "$duration" \
+      "$source_bytes" "$preview_bytes" "$mobile_bytes" >> "$manifest_path"
   fi
 done
 
@@ -363,7 +320,6 @@ echo "Processed clips : $processed_count"
 echo "Source total    : $(human_size "$total_source_bytes")"
 echo "Preview total   : $(human_size "$total_preview_bytes")"
 echo "Mobile total    : $(human_size "$total_mobile_bytes")"
-echo "Starter total   : $(human_size "$total_starter_bytes")"
 if [[ "$DRY_RUN" -eq 0 ]]; then
   echo "Manifest        : $manifest_path"
 else

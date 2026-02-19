@@ -15,7 +15,6 @@ interface ReelClip {
   category: 'fashion' | 'beauty' | 'tech' | 'lifestyle';
   mainSrc: string;
   mobileSrc: string;
-  starterSrc: string;
   previewSrc: string;
   posterSrc: string;
 }
@@ -50,6 +49,7 @@ const THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
 const REEL_CARD_TAP_SLOP_PX = 10;
+const THEATER_HINT_PRELOAD_OFFSETS = [-2, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_FAST_FALLBACK_MS_SLOW = 250;
@@ -57,14 +57,10 @@ const THEATER_FAST_FALLBACK_MS_DEFAULT = 400;
 const STARTUP_PREWARM_DELAY_DESKTOP_MS = 520;
 const STARTUP_PREWARM_DELAY_MOBILE_MS = 400;
 const PORTFOLIO_PREWARM_ROOT_MARGIN = '1200px 0px';
-const THEATER_HD_CROSSFADE_MS = 150;
-const THEATER_HD_READY_GUARD_MS = 2500;
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
 const r2MobileVideo = (filename: string) =>
   `${R2_MEDIA_BASE_URL}/videos/mobile/${filename.replace(/\.mp4$/, '-mobile.mp4')}`;
-const r2StarterVideo = (filename: string) =>
-  `${R2_MEDIA_BASE_URL}/videos/starter/${filename.replace(/\.mp4$/, '-starter.mp4')}`;
 const r2PreviewVideo = (filename: string) =>
   `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
 const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
@@ -81,7 +77,6 @@ const REEL_CLIPS: ReelClip[] = [
     category: 'lifestyle',
     mainSrc: r2MainVideo('ugc-lifestyle-review.mp4'),
     mobileSrc: r2MobileVideo('ugc-lifestyle-review.mp4'),
-    starterSrc: r2StarterVideo('ugc-lifestyle-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-lifestyle-review.mp4'),
     posterSrc: r2Poster('ugc-lifestyle-review-poster.jpg'),
   },
@@ -91,7 +86,6 @@ const REEL_CLIPS: ReelClip[] = [
     category: 'fashion',
     mainSrc: r2MainVideo('ugc-brand-spokesperson.mp4'),
     mobileSrc: r2MobileVideo('ugc-brand-spokesperson.mp4'),
-    starterSrc: r2StarterVideo('ugc-brand-spokesperson.mp4'),
     previewSrc: r2PreviewVideo('ugc-brand-spokesperson.mp4'),
     posterSrc: r2Poster('ugc-brand-spokesperson-poster.jpg'),
   },
@@ -101,7 +95,6 @@ const REEL_CLIPS: ReelClip[] = [
     category: 'tech',
     mainSrc: r2MainVideo('ugc-voicebot-review.mp4'),
     mobileSrc: r2MobileVideo('ugc-voicebot-review.mp4'),
-    starterSrc: r2StarterVideo('ugc-voicebot-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-voicebot-review.mp4'),
     posterSrc: r2Poster('ugc-voicebot-review-poster.jpg'),
   },
@@ -111,7 +104,6 @@ const REEL_CLIPS: ReelClip[] = [
     category: 'beauty',
     mainSrc: r2MainVideo('ugc-creatine-supplement-review.mp4'),
     mobileSrc: r2MobileVideo('ugc-creatine-supplement-review.mp4'),
-    starterSrc: r2StarterVideo('ugc-creatine-supplement-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-creatine-supplement-review.mp4'),
     posterSrc: r2Poster('ugc-creatine-supplement-review-poster.jpg'),
   },
@@ -121,7 +113,6 @@ const REEL_CLIPS: ReelClip[] = [
     category: 'lifestyle',
     mainSrc: r2MainVideo('ugc-business-promotion.mp4'),
     mobileSrc: r2MobileVideo('ugc-business-promotion.mp4'),
-    starterSrc: r2StarterVideo('ugc-business-promotion.mp4'),
     previewSrc: r2PreviewVideo('ugc-business-promotion.mp4'),
     posterSrc: r2Poster('ugc-business-promotion-poster.jpg'),
   },
@@ -131,7 +122,6 @@ const REEL_CLIPS: ReelClip[] = [
     category: 'fashion',
     mainSrc: r2MainVideo('ugc-services-presentation.mp4'),
     mobileSrc: r2MobileVideo('ugc-services-presentation.mp4'),
-    starterSrc: r2StarterVideo('ugc-services-presentation.mp4'),
     previewSrc: r2PreviewVideo('ugc-services-presentation.mp4'),
     posterSrc: r2Poster('ugc-services-presentation-poster.jpg'),
   },
@@ -141,7 +131,6 @@ const REEL_CLIPS: ReelClip[] = [
     category: 'tech',
     mainSrc: r2MainVideo('ugc-ai-services-review.mp4'),
     mobileSrc: r2MobileVideo('ugc-ai-services-review.mp4'),
-    starterSrc: r2StarterVideo('ugc-ai-services-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-ai-services-review.mp4'),
     posterSrc: r2Poster('ugc-ai-services-review-poster.jpg'),
   },
@@ -151,7 +140,6 @@ const REEL_CLIPS: ReelClip[] = [
     category: 'lifestyle',
     mainSrc: r2MainVideo('ugc-lifestyle-review-2.mp4'),
     mobileSrc: r2MobileVideo('ugc-lifestyle-review-2.mp4'),
-    starterSrc: r2StarterVideo('ugc-lifestyle-review-2.mp4'),
     previewSrc: r2PreviewVideo('ugc-lifestyle-review-2.mp4'),
     posterSrc: r2Poster('ugc-lifestyle-review-2-poster.jpg'),
   },
@@ -161,7 +149,6 @@ const REEL_CLIPS: ReelClip[] = [
     category: 'tech',
     mainSrc: r2MainVideo('ugc-voiceover-bots-review.mp4'),
     mobileSrc: r2MobileVideo('ugc-voiceover-bots-review.mp4'),
-    starterSrc: r2StarterVideo('ugc-voiceover-bots-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-voiceover-bots-review.mp4'),
     posterSrc: r2Poster('ugc-voiceover-bots-review-poster.jpg'),
   },
@@ -171,7 +158,6 @@ const REEL_CLIPS: ReelClip[] = [
     category: 'lifestyle',
     mainSrc: r2MainVideo('ugc-lifestyle-review-3.mp4'),
     mobileSrc: r2MobileVideo('ugc-lifestyle-review-3.mp4'),
-    starterSrc: r2StarterVideo('ugc-lifestyle-review-3.mp4'),
     previewSrc: r2PreviewVideo('ugc-lifestyle-review-3.mp4'),
     posterSrc: r2Poster('ugc-lifestyle-review-3-poster.jpg'),
   },
@@ -209,53 +195,27 @@ const COLLAGE_CLIPS: CollageClip[] = [
 
 const TheaterVideo = memo(({
   sources,
-  starterSrc,
-  useStarter,
   poster,
   enableStartupFallback,
   startupFallbackMs,
 }: {
   sources: string[];
-  starterSrc?: string;
-  useStarter: boolean;
   poster: string;
   enableStartupFallback: boolean;
   startupFallbackMs: number;
 }) => {
-  const hdVideoRef = useRef<HTMLVideoElement>(null);
-  const starterVideoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const startupTimeoutRef = useRef<number | null>(null);
-  const hdReadyGuardRef = useRef<number | null>(null);
-  const starterTeardownTimeoutRef = useRef<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [activeSourceIndex, setActiveSourceIndex] = useState(0);
-  const [starterSource, setStarterSource] = useState('');
-  const [isStarterVisible, setIsStarterVisible] = useState(false);
-  const [isHdVisible, setIsHdVisible] = useState(true);
-  const [starterFailed, setStarterFailed] = useState(false);
   const sourceKey = sources.join('|');
   const activeSource = sources[activeSourceIndex] ?? sources[0] ?? '';
-  const shouldUseStarter = useStarter && Boolean(starterSrc) && !starterFailed;
 
   const clearStartupTimeout = useCallback(() => {
     if (startupTimeoutRef.current !== null) {
       window.clearTimeout(startupTimeoutRef.current);
       startupTimeoutRef.current = null;
-    }
-  }, []);
-
-  const clearHdReadyGuard = useCallback(() => {
-    if (hdReadyGuardRef.current !== null) {
-      window.clearTimeout(hdReadyGuardRef.current);
-      hdReadyGuardRef.current = null;
-    }
-  }, []);
-
-  const clearStarterTeardownTimeout = useCallback(() => {
-    if (starterTeardownTimeoutRef.current !== null) {
-      window.clearTimeout(starterTeardownTimeoutRef.current);
-      starterTeardownTimeoutRef.current = null;
     }
   }, []);
 
@@ -266,119 +226,44 @@ const TheaterVideo = memo(({
     });
   }, [sources.length]);
 
-  const attemptHdPlay = useCallback(async (preferAudio: boolean) => {
-    const video = hdVideoRef.current;
+  const attemptPlay = useCallback(() => {
+    const video = videoRef.current;
     if (!video) return;
 
     video.defaultPlaybackRate = 1;
     video.playbackRate = 1;
 
-    if (preferAudio) {
-      video.muted = false;
-      setIsMuted(false);
-    }
-
-    try {
-      await video.play();
-      setIsPlaying(true);
-      setIsMuted(video.muted);
-    } catch {
-      if (!video.muted) {
-        video.muted = true;
-        setIsMuted(true);
-      }
+    const run = async () => {
       try {
         await video.play();
-        setIsPlaying(true);
         setIsMuted(video.muted);
       } catch {
-        throw new Error('HD play failed');
+        if (!video.muted) {
+          video.muted = true;
+          setIsMuted(true);
+        }
+        try {
+          await video.play();
+          setIsMuted(video.muted);
+        } catch {
+          promoteFallbackSource();
+        }
       }
-    }
-  }, []);
+    };
+
+    void run();
+  }, [promoteFallbackSource]);
 
   const scheduleStartupFallback = useCallback(() => {
     clearStartupTimeout();
     if (!enableStartupFallback) return;
-    if (shouldUseStarter) return;
     if (activeSourceIndex + 1 >= sources.length) return;
     startupTimeoutRef.current = window.setTimeout(() => {
-      const video = hdVideoRef.current;
+      const video = videoRef.current;
       if (!video || !video.paused || video.readyState >= 2) return;
       promoteFallbackSource();
     }, startupFallbackMs);
-  }, [
-    activeSourceIndex,
-    clearStartupTimeout,
-    enableStartupFallback,
-    promoteFallbackSource,
-    shouldUseStarter,
-    sources.length,
-    startupFallbackMs,
-  ]);
-
-  const teardownStarterLayer = useCallback(() => {
-    const starterVideo = starterVideoRef.current;
-    if (starterVideo) {
-      starterVideo.pause();
-      starterVideo.removeAttribute('src');
-      starterVideo.load();
-    }
-    setStarterSource('');
-    setIsStarterVisible(false);
-  }, []);
-
-  const switchToHd = useCallback(() => {
-    const hdVideo = hdVideoRef.current;
-    if (!hdVideo || isHdVisible) return;
-
-    const starterVideo = starterVideoRef.current;
-    if (starterVideo) {
-      const starterTime = Number.isFinite(starterVideo.currentTime) ? starterVideo.currentTime : 0;
-      const hdDuration = Number.isFinite(hdVideo.duration) ? hdVideo.duration : 0;
-      const clampedTime =
-        hdDuration > 0 ? Math.min(starterTime, Math.max(0, hdDuration - 0.05)) : Math.max(0, starterTime);
-      try {
-        hdVideo.currentTime = clampedTime;
-      } catch {
-        // Some mobile browsers may block currentTime jumps before enough data is parsed.
-      }
-    }
-
-    const run = async () => {
-      try {
-        await attemptHdPlay(true);
-      } catch {
-        const video = hdVideoRef.current;
-        if (!video) return;
-        video.muted = true;
-        setIsMuted(true);
-        try {
-          await video.play();
-          setIsPlaying(true);
-        } catch {
-          return;
-        }
-      }
-
-      clearStartupTimeout();
-      clearHdReadyGuard();
-      clearStarterTeardownTimeout();
-      setIsHdVisible(true);
-      starterTeardownTimeoutRef.current = window.setTimeout(() => {
-        teardownStarterLayer();
-      }, THEATER_HD_CROSSFADE_MS + 40);
-    };
-
-    void run();
-  }, [
-    attemptHdPlay,
-    clearHdReadyGuard,
-    clearStartupTimeout,
-    clearStarterTeardownTimeout,
-    isHdVisible,
-    teardownStarterLayer,
-  ]);
+  }, [activeSourceIndex, clearStartupTimeout, enableStartupFallback, promoteFallbackSource, sources.length, startupFallbackMs]);
 
   const handlePlay = () => {
     clearStartupTimeout();
@@ -389,73 +274,43 @@ const TheaterVideo = memo(({
   const handlePlaying = () => {
     clearStartupTimeout();
     setIsPlaying(true);
-    const video = hdVideoRef.current;
+    const video = videoRef.current;
     if (video) setIsMuted(video.muted);
   };
 
+  const handleCanPlayThrough = useCallback(() => {
+    clearStartupTimeout();
+  }, [clearStartupTimeout]);
+
   const handleError = useCallback(() => {
     clearStartupTimeout();
-    clearHdReadyGuard();
     promoteFallbackSource();
-  }, [clearHdReadyGuard, clearStartupTimeout, promoteFallbackSource]);
+  }, [clearStartupTimeout, promoteFallbackSource]);
 
   const togglePlayback = useCallback(() => {
-    const video = hdVideoRef.current;
+    const video = videoRef.current;
     if (!video) return;
     video.defaultPlaybackRate = 1;
     video.playbackRate = 1;
     if (video.paused) {
-      if (shouldUseStarter && !isHdVisible) {
-        switchToHd();
-        const starterVideo = starterVideoRef.current;
-        if (starterVideo?.paused) {
-          void starterVideo.play().catch(() => undefined);
-        }
-        return;
-      }
-
-      void attemptHdPlay(true).catch(() => {
-        promoteFallbackSource();
-      });
+      video.muted = false;
+      setIsMuted(false);
+      attemptPlay();
     } else {
       video.pause();
-      starterVideoRef.current?.pause();
-      setIsPlaying(false);
     }
-  }, [attemptHdPlay, isHdVisible, promoteFallbackSource, shouldUseStarter, switchToHd]);
+  }, [attemptPlay]);
 
   const toggleMute = useCallback(() => {
-    const video = hdVideoRef.current;
+    const video = videoRef.current;
     if (!video) return;
     const nextMuted = !video.muted;
     video.muted = nextMuted;
     setIsMuted(nextMuted);
     if (!nextMuted) {
-      void attemptHdPlay(true).catch(() => undefined);
+      attemptPlay();
     }
-  }, [attemptHdPlay]);
-
-  const handleHdLoadedData = useCallback((event: SyntheticEvent<HTMLVideoElement>) => {
-    const video = event.currentTarget;
-    if (video.readyState < 2) return;
-    if (shouldUseStarter && !isHdVisible) {
-      switchToHd();
-      return;
-    }
-    clearStartupTimeout();
-    void attemptHdPlay(true).catch(() => {
-      promoteFallbackSource();
-    });
-  }, [attemptHdPlay, clearStartupTimeout, isHdVisible, promoteFallbackSource, shouldUseStarter, switchToHd]);
-
-  const handleStarterError = useCallback(() => {
-    setStarterFailed(true);
-    teardownStarterLayer();
-    setIsHdVisible(true);
-    void attemptHdPlay(true).catch(() => {
-      promoteFallbackSource();
-    });
-  }, [attemptHdPlay, promoteFallbackSource, teardownStarterLayer]);
+  }, [attemptPlay]);
 
   const handleTimeUpdate = useCallback((e: SyntheticEvent<HTMLVideoElement>) => {
     const video = e.currentTarget;
@@ -463,104 +318,38 @@ const TheaterVideo = memo(({
   }, [isPlaying]);
 
   useEffect(() => {
-    setStarterFailed(false);
     setActiveSourceIndex(0);
-    if (useStarter && starterSrc) {
-      setStarterSource(starterSrc);
-      setIsStarterVisible(true);
-      setIsHdVisible(false);
-    } else {
-      setStarterSource('');
-      setIsStarterVisible(false);
-      setIsHdVisible(true);
-    }
-  }, [sourceKey, starterSrc, useStarter]);
+  }, [sourceKey]);
 
   useEffect(() => {
-    const video = hdVideoRef.current;
+    const video = videoRef.current;
     if (!video || !activeSource) return;
 
-    clearHdReadyGuard();
-    clearStarterTeardownTimeout();
     setIsPlaying(false);
     video.muted = false;
     setIsMuted(false);
     video.load();
-
-    if (shouldUseStarter && starterSource) {
-      clearStartupTimeout();
-      hdReadyGuardRef.current = window.setTimeout(() => {
-        // Keep starter visible while HD continues buffering. No-op guard avoids black frames.
-      }, THEATER_HD_READY_GUARD_MS);
-      const starterVideo = starterVideoRef.current;
-      if (starterVideo) {
-        starterVideo.defaultPlaybackRate = 1;
-        starterVideo.playbackRate = 1;
-        void starterVideo.play().catch(() => undefined);
-        setIsPlaying(true);
-      }
-    } else {
-      scheduleStartupFallback();
-      void attemptHdPlay(true).catch(() => {
-        promoteFallbackSource();
-      });
-    }
+    scheduleStartupFallback();
+    attemptPlay();
 
     return () => {
       clearStartupTimeout();
-      clearHdReadyGuard();
-      clearStarterTeardownTimeout();
     };
-  }, [
-    activeSource,
-    attemptHdPlay,
-    clearHdReadyGuard,
-    clearStartupTimeout,
-    clearStarterTeardownTimeout,
-    promoteFallbackSource,
-    scheduleStartupFallback,
-    shouldUseStarter,
-    starterSource,
-  ]);
+  }, [activeSource, attemptPlay, clearStartupTimeout, scheduleStartupFallback]);
 
   useEffect(() => {
-    return () => {
-      clearStartupTimeout();
-      clearHdReadyGuard();
-      clearStarterTeardownTimeout();
-    };
-  }, [clearHdReadyGuard, clearStartupTimeout, clearStarterTeardownTimeout]);
+    return () => clearStartupTimeout();
+  }, [clearStartupTimeout]);
 
   return (
     <div className="relative overflow-hidden bg-black">
-      {shouldUseStarter && starterSource && (
-        <video
-          ref={starterVideoRef}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity ${isStarterVisible ? 'opacity-100' : 'opacity-0'}`}
-          style={{ transitionDuration: `${THEATER_HD_CROSSFADE_MS}ms` }}
-          src={starterSource}
-          poster={poster}
-          preload="auto"
-          muted
-          autoPlay
-          loop
-          playsInline
-          disablePictureInPicture
-          disableRemotePlayback
-          onPlay={() => {
-            if (!isHdVisible) setIsPlaying(true);
-          }}
-          onError={handleStarterError}
-          aria-hidden="true"
-        />
-      )}
       <video
-        ref={hdVideoRef}
-        className={`w-full aspect-[9/16] object-cover transition-opacity ${isHdVisible ? 'opacity-100' : 'opacity-0'}`}
-        style={{ transitionDuration: `${THEATER_HD_CROSSFADE_MS}ms` }}
+        ref={videoRef}
+        className="w-full aspect-[9/16] object-cover"
         src={activeSource}
         poster={poster}
         preload="auto"
+        autoPlay
         playsInline
         disablePictureInPicture
         disableRemotePlayback
@@ -569,11 +358,11 @@ const TheaterVideo = memo(({
           event.currentTarget.playbackRate = 1;
           setIsMuted(event.currentTarget.muted);
         }}
-        onLoadedData={handleHdLoadedData}
         onPlay={handlePlay}
         onPause={handlePause}
         onWaiting={handleWaiting}
         onPlaying={handlePlaying}
+        onCanPlayThrough={handleCanPlayThrough}
         onError={handleError}
         onTimeUpdate={handleTimeUpdate}
       />
@@ -638,7 +427,7 @@ const Portfolio = () => {
   const theaterDragFrameRef = useRef<number | null>(null);
   const theaterPendingDragYRef = useRef(0);
   const interactionPrewarmTimerRef = useRef<number | null>(null);
-  const linkPreloadRefs = useRef<HTMLLinkElement[]>([]);
+  const linkPreloadRef = useRef<HTMLLinkElement | null>(null);
 
   const clearTheaterCloseTimer = useCallback(() => {
     if (theaterCloseTimerRef.current !== null) {
@@ -927,43 +716,33 @@ const Portfolio = () => {
     };
   }, []);
 
-  const clearLinkPreloads = useCallback(() => {
-    if (linkPreloadRefs.current.length === 0) return;
-    linkPreloadRefs.current.forEach((link) => link.remove());
-    linkPreloadRefs.current = [];
-  }, []);
-
-  // Keep intent prewarm starter-first so theater can render motion instantly,
-  // then warm preferred HD source right after.
+  // Inject <link rel="preload" as="video"> on interaction prewarm.
+  // More reliable than hidden <video> elements on mobile — browsers always
+  // honor link preloads at full priority regardless of element visibility.
   useEffect(() => {
-    clearLinkPreloads();
+    const prevLink = linkPreloadRef.current;
+    if (prevLink) {
+      prevLink.remove();
+      linkPreloadRef.current = null;
+    }
     if (!interactionPrewarmClip || connectionProfile.constrained) return;
 
-    const preferredHdSrc = isMobile ? interactionPrewarmClip.mobileSrc : interactionPrewarmClip.mainSrc;
-    const preloadSources = [interactionPrewarmClip.starterSrc, preferredHdSrc].filter(
-      (source, index, list): source is string =>
-        Boolean(source) && list.indexOf(source) === index,
-    );
+    const src = (isMobile && connectionProfile.slow)
+      ? interactionPrewarmClip.mobileSrc
+      : interactionPrewarmClip.mainSrc;
 
-    preloadSources.forEach((src) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'video';
-      link.href = src;
-      document.head.appendChild(link);
-      linkPreloadRefs.current.push(link);
-    });
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'video';
+    link.href = src;
+    document.head.appendChild(link);
+    linkPreloadRef.current = link;
 
     return () => {
-      clearLinkPreloads();
+      link.remove();
+      if (linkPreloadRef.current === link) linkPreloadRef.current = null;
     };
-  }, [clearLinkPreloads, connectionProfile.constrained, interactionPrewarmClip, isMobile]);
-
-  useEffect(() => {
-    return () => {
-      clearLinkPreloads();
-    };
-  }, [clearLinkPreloads]);
+  }, [interactionPrewarmClip, isMobile, connectionProfile.slow, connectionProfile.constrained]);
 
   useEffect(() => {
     if (!activeReelPreview) return;
@@ -1245,21 +1024,36 @@ const Portfolio = () => {
       ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.3, 0.72, 0.08, 1), opacity 220ms ease`
       : 'transform 360ms cubic-bezier(0.24, 0.92, 0.38, 1), opacity 240ms ease';
 
-  const shouldPreferMobileTheaterSource = isMobile;
-
-  const getOrderedTheaterSources = useCallback((clip: ReelClip | null) => {
-    if (!clip) return [];
-    if (shouldPreferMobileTheaterSource) {
-      return [clip.mobileSrc, clip.mainSrc];
+  const theaterWarmPreloadOffsets = useMemo(() => {
+    if (isMobile && connectionProfile.slow) {
+      return [theaterPrewarmDirection] as const;
     }
-    return [clip.mainSrc, clip.mobileSrc];
-  }, [shouldPreferMobileTheaterSource]);
+    return [theaterPrewarmDirection, (theaterPrewarmDirection * -1) as 1 | -1] as const;
+  }, [connectionProfile.slow, isMobile, theaterPrewarmDirection]);
 
-  const likelyNextTheaterClip = useMemo(() => {
-    if (activeReelIndex === null) return null;
-    const index = (activeReelIndex + theaterPrewarmDirection + REEL_CLIPS.length) % REEL_CLIPS.length;
-    return REEL_CLIPS[index] ?? null;
-  }, [activeReelIndex, theaterPrewarmDirection]);
+  const theaterWarmPreloadClips = useMemo(() => {
+    if (activeReelIndex === null) return [];
+
+    return theaterWarmPreloadOffsets
+      .map((offset) => {
+        const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
+        return REEL_CLIPS[index];
+      })
+      .filter(
+        (clip, index, clips) =>
+          clips.findIndex((candidate) => candidate.id === clip.id) === index,
+      );
+  }, [activeReelIndex, theaterWarmPreloadOffsets]);
+
+  const theaterHintPreloadClips = useMemo(() => {
+    if (activeReelIndex === null) return [];
+    if (isMobile || connectionProfile.slow) return [];
+
+    return THEATER_HINT_PRELOAD_OFFSETS.map((offset) => {
+      const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
+      return REEL_CLIPS[index];
+    }).filter((clip, index, clips) => clips.findIndex((candidate) => candidate.id === clip.id) === index);
+  }, [activeReelIndex, connectionProfile.slow, isMobile]);
 
   const startupPreviewPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
@@ -1269,7 +1063,7 @@ const Portfolio = () => {
 
   const startupMainPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow || isMobile ? 0 : 1;
+    const clipCount = connectionProfile.slow ? 0 : 1;
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
@@ -1279,41 +1073,34 @@ const Portfolio = () => {
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
+  const primaryWarmPreloadClip = theaterWarmPreloadClips[0] ?? null;
+  const secondaryWarmPreloadClip = theaterWarmPreloadClips[1] ?? null;
+
+  const shouldPreferMobileTheaterSource = isMobile && connectionProfile.slow;
+
   const theaterStartupFallbackMs = useMemo(
     () => (connectionProfile.slow ? THEATER_FAST_FALLBACK_MS_SLOW : THEATER_FAST_FALLBACK_MS_DEFAULT),
     [connectionProfile.slow],
   );
 
   const theaterSources = useMemo(() => {
-    return getOrderedTheaterSources(activeReelPreview);
-  }, [activeReelPreview, getOrderedTheaterSources]);
-
-  const currentTheaterPrewarmSources = useMemo(() => {
     if (!activeReelPreview) return [];
-    const preferredHdSource = getOrderedTheaterSources(activeReelPreview)[0];
-    return [activeReelPreview.starterSrc, preferredHdSource].filter(
-      (source, index, list): source is string =>
-        Boolean(source) && list.indexOf(source) === index,
-    );
-  }, [activeReelPreview, getOrderedTheaterSources]);
-
-  const nextTheaterPrewarmSources = useMemo(() => {
-    if (!likelyNextTheaterClip) return [];
-    const preferredHdSource = getOrderedTheaterSources(likelyNextTheaterClip)[0];
-    return [likelyNextTheaterClip.starterSrc, preferredHdSource].filter(
-      (source, index, list): source is string =>
-        Boolean(source) && list.indexOf(source) === index,
-    );
-  }, [getOrderedTheaterSources, likelyNextTheaterClip]);
+    if (isMobile && shouldPreferMobileTheaterSource) {
+      return [activeReelPreview.mobileSrc, activeReelPreview.mainSrc];
+    }
+    return [activeReelPreview.mainSrc, activeReelPreview.mobileSrc];
+  }, [activeReelPreview, isMobile, shouldPreferMobileTheaterSource]);
 
   const interactionPrewarmSources = useMemo(() => {
     if (!interactionPrewarmClip) return [];
-    const preferredHdSource = getOrderedTheaterSources(interactionPrewarmClip)[0];
-    return [interactionPrewarmClip.starterSrc, preferredHdSource].filter(
-      (source, index, list): source is string =>
-        Boolean(source) && list.indexOf(source) === index,
-    );
-  }, [getOrderedTheaterSources, interactionPrewarmClip]);
+    if (isMobile && shouldPreferMobileTheaterSource) {
+      return [interactionPrewarmClip.mobileSrc, interactionPrewarmClip.mainSrc];
+    }
+    if (isMobile) {
+      return [interactionPrewarmClip.mainSrc, interactionPrewarmClip.mobileSrc];
+    }
+    return [interactionPrewarmClip.mainSrc];
+  }, [interactionPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
 
   const instantPrewarmClip = useMemo(() => {
     if (!isPortfolioNearViewport || connectionProfile.slow) return null;
@@ -1323,12 +1110,14 @@ const Portfolio = () => {
 
   const instantPrewarmSources = useMemo(() => {
     if (!instantPrewarmClip) return [];
-    const preferredHdSource = getOrderedTheaterSources(instantPrewarmClip)[0];
-    return [instantPrewarmClip.starterSrc, preferredHdSource].filter(
-      (source, index, list): source is string =>
-        Boolean(source) && list.indexOf(source) === index,
-    );
-  }, [getOrderedTheaterSources, instantPrewarmClip]);
+    if (isMobile && shouldPreferMobileTheaterSource) {
+      return [instantPrewarmClip.mobileSrc, instantPrewarmClip.mainSrc];
+    }
+    if (isMobile) {
+      return [instantPrewarmClip.mainSrc, instantPrewarmClip.mobileSrc];
+    }
+    return [instantPrewarmClip.mainSrc];
+  }, [instantPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
 
 
   return (
@@ -1750,39 +1539,71 @@ const Portfolio = () => {
               </button>
 
               <div className="relative">
-                {theaterPreloadsReady && (
-                  <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
-                    {currentTheaterPrewarmSources.map((src, index) => (
-                      <video
-                        key={`theater-preload-current-${activeReelPreview.id}-${index}`}
-                        src={src}
-                        preload={index === 0 ? 'auto' : 'metadata'}
-                        muted
-                        playsInline
-                        disablePictureInPicture
-                        disableRemotePlayback
-                        tabIndex={-1}
-                      />
-                    ))}
-                    {nextTheaterPrewarmSources.map((src, index) => (
-                      <video
-                        key={`theater-preload-next-${likelyNextTheaterClip?.id ?? 'none'}-${index}`}
-                        src={src}
-                        preload="metadata"
-                        muted
-                        playsInline
-                        disablePictureInPicture
-                        disableRemotePlayback
-                        tabIndex={-1}
-                      />
-                    ))}
-                  </div>
-                )}
+                {theaterPreloadsReady && <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
+                  {primaryWarmPreloadClip && (
+                    <video
+                      key={`theater-preload-primary-preferred-${primaryWarmPreloadClip.id}`}
+                      src={shouldPreferMobileTheaterSource ? primaryWarmPreloadClip.mobileSrc : primaryWarmPreloadClip.mainSrc}
+                      preload="auto"
+                      muted
+                      playsInline
+                      disablePictureInPicture
+                      disableRemotePlayback
+                      tabIndex={-1}
+                    />
+                  )}
+                  {primaryWarmPreloadClip && (
+                    <video
+                      key={`theater-preload-primary-fallback-${primaryWarmPreloadClip.id}`}
+                      src={shouldPreferMobileTheaterSource ? primaryWarmPreloadClip.mainSrc : primaryWarmPreloadClip.mobileSrc}
+                      preload="metadata"
+                      muted
+                      playsInline
+                      disablePictureInPicture
+                      disableRemotePlayback
+                      tabIndex={-1}
+                    />
+                  )}
+                  {secondaryWarmPreloadClip && (
+                    <video
+                      key={`theater-preload-secondary-preferred-${secondaryWarmPreloadClip.id}`}
+                      src={shouldPreferMobileTheaterSource ? secondaryWarmPreloadClip.mobileSrc : secondaryWarmPreloadClip.mainSrc}
+                      preload={isMobile ? 'metadata' : 'auto'}
+                      muted
+                      playsInline
+                      disablePictureInPicture
+                      disableRemotePlayback
+                      tabIndex={-1}
+                    />
+                  )}
+                  {secondaryWarmPreloadClip && (
+                    <video
+                      key={`theater-preload-secondary-fallback-${secondaryWarmPreloadClip.id}`}
+                      src={shouldPreferMobileTheaterSource ? secondaryWarmPreloadClip.mainSrc : secondaryWarmPreloadClip.mobileSrc}
+                      preload="metadata"
+                      muted
+                      playsInline
+                      disablePictureInPicture
+                      disableRemotePlayback
+                      tabIndex={-1}
+                    />
+                  )}
+                  {theaterHintPreloadClips.map((clip) => (
+                    <video
+                      key={`theater-preload-hint-${clip.id}`}
+                      src={shouldPreferMobileTheaterSource ? clip.mobileSrc : clip.mainSrc}
+                      preload="metadata"
+                      muted
+                      playsInline
+                      disablePictureInPicture
+                      disableRemotePlayback
+                      tabIndex={-1}
+                    />
+                  ))}
+                </div>}
 
                 <TheaterVideo
                   sources={theaterSources}
-                  starterSrc={activeReelPreview.starterSrc}
-                  useStarter={isMobile}
                   poster={activeReelPreview.posterSrc}
                   enableStartupFallback={isMobile}
                   startupFallbackMs={theaterStartupFallbackMs}
