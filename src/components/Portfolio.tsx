@@ -52,8 +52,9 @@ const THEATER_HINT_PRELOAD_OFFSETS = [-2, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_FAST_FALLBACK_MS = 420;
-const STARTUP_PREWARM_DELAY_DESKTOP_MS = 900;
-const STARTUP_PREWARM_DELAY_MOBILE_MS = 1400;
+const STARTUP_PREWARM_DELAY_DESKTOP_MS = 260;
+const STARTUP_PREWARM_DELAY_MOBILE_MS = 380;
+const PORTFOLIO_PREWARM_ROOT_MARGIN = '1600px 0px';
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
 const r2MobileVideo = (filename: string) =>
@@ -888,7 +889,7 @@ const Portfolio = () => {
         setIsPortfolioNearViewport(true);
         observer.disconnect();
       },
-      { rootMargin: '900px 0px' },
+      { rootMargin: PORTFOLIO_PREWARM_ROOT_MARGIN },
     );
 
     observer.observe(section);
@@ -1002,9 +1003,40 @@ const Portfolio = () => {
     return [interactionPrewarmClip.mainSrc];
   }, [interactionPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
 
+  const instantPrewarmClip = useMemo(() => {
+    if (!isPortfolioNearViewport || connectionProfile.constrained) return null;
+    const clipIndex = isMobile ? activeMobileReelIndex : 0;
+    return REEL_CLIPS[clipIndex] ?? REEL_CLIPS[0] ?? null;
+  }, [activeMobileReelIndex, connectionProfile.constrained, isMobile, isPortfolioNearViewport]);
+
+  const instantPrewarmSources = useMemo(() => {
+    if (!instantPrewarmClip) return [];
+    if (isMobile && shouldPreferMobileTheaterSource) {
+      return [instantPrewarmClip.mobileSrc, instantPrewarmClip.mainSrc];
+    }
+    if (isMobile) {
+      return [instantPrewarmClip.mainSrc, instantPrewarmClip.mobileSrc];
+    }
+    return [instantPrewarmClip.mainSrc];
+  }, [instantPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
+
 
   return (
     <section ref={portfolioSectionRef} id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
+      {!startupPrewarmEnabled && !isTheaterOpen && instantPrewarmSources.length > 0 && (
+        <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
+          {instantPrewarmSources.map((src, index) => (
+            <video
+              key={`instant-prewarm-${instantPrewarmClip?.id ?? 'fallback'}-${index}`}
+              src={src}
+              preload={index === 0 ? 'auto' : 'metadata'}
+              muted
+              playsInline
+              tabIndex={-1}
+            />
+          ))}
+        </div>
+      )}
       {startupPrewarmEnabled && (
         <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
           {startupPreviewPreloadClips.map((clip, index) => (
