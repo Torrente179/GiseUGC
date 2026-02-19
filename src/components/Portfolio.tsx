@@ -52,9 +52,9 @@ const THEATER_HINT_PRELOAD_OFFSETS = [-2, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_FAST_FALLBACK_MS_SLOW = 420;
-const THEATER_FAST_FALLBACK_MS_DEFAULT = 760;
-const STARTUP_PREWARM_DELAY_DESKTOP_MS = 640;
-const STARTUP_PREWARM_DELAY_MOBILE_MS = 920;
+const THEATER_FAST_FALLBACK_MS_DEFAULT = 620;
+const STARTUP_PREWARM_DELAY_DESKTOP_MS = 520;
+const STARTUP_PREWARM_DELAY_MOBILE_MS = 760;
 const PORTFOLIO_PREWARM_ROOT_MARGIN = '1200px 0px';
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
@@ -219,17 +219,25 @@ const TheaterVideo = ({
     });
   }, [sources.length]);
 
-  const attemptPlay = useCallback(() => {
+  const attemptPlay = useCallback((options?: { preferMuted?: boolean }) => {
     const video = videoRef.current;
     if (!video) return;
+    const preferMuted = options?.preferMuted ?? false;
 
     video.defaultPlaybackRate = 1;
     video.playbackRate = 1;
 
     const run = async () => {
+      if (preferMuted && !video.muted) {
+        video.muted = true;
+      }
       try {
         await video.play();
       } catch {
+        if (preferMuted) {
+          promoteFallbackSource();
+          return;
+        }
         if (!video.muted) {
           video.muted = true;
         }
@@ -278,7 +286,7 @@ const TheaterVideo = ({
     video.playbackRate = 1;
     if (video.paused) {
       video.muted = false;
-      attemptPlay();
+      attemptPlay({ preferMuted: false });
     } else {
       video.pause();
     }
@@ -298,9 +306,10 @@ const TheaterVideo = ({
     if (!video || !activeSource) return;
 
     setIsPlaying(false);
+    video.muted = true;
     video.load();
     scheduleStartupFallback();
-    attemptPlay();
+    attemptPlay({ preferMuted: true });
 
     return () => {
       clearStartupTimeout();
@@ -1002,7 +1011,12 @@ const Portfolio = () => {
 
   const interactionPrewarmSources = useMemo(() => {
     if (!interactionPrewarmClip) return [];
-    if (isMobile && shouldPreferMobileTheaterSource) return [interactionPrewarmClip.mobileSrc];
+    if (isMobile && shouldPreferMobileTheaterSource) {
+      return [interactionPrewarmClip.mobileSrc, interactionPrewarmClip.mainSrc];
+    }
+    if (isMobile) {
+      return [interactionPrewarmClip.mainSrc, interactionPrewarmClip.mobileSrc];
+    }
     return [interactionPrewarmClip.mainSrc];
   }, [interactionPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
 
@@ -1014,14 +1028,19 @@ const Portfolio = () => {
 
   const instantPrewarmSources = useMemo(() => {
     if (!instantPrewarmClip) return [];
-    if (isMobile && shouldPreferMobileTheaterSource) return [instantPrewarmClip.mobileSrc];
+    if (isMobile && shouldPreferMobileTheaterSource) {
+      return [instantPrewarmClip.mobileSrc, instantPrewarmClip.mainSrc];
+    }
+    if (isMobile) {
+      return [instantPrewarmClip.mainSrc, instantPrewarmClip.mobileSrc];
+    }
     return [instantPrewarmClip.mainSrc];
   }, [instantPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
 
 
   return (
     <section ref={portfolioSectionRef} id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
-      {!startupPrewarmEnabled && !isTheaterOpen && instantPrewarmSources.length > 0 && (
+      {!isTheaterOpen && instantPrewarmSources.length > 0 && (
         <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
           {instantPrewarmSources.map((src, index) => (
             <video

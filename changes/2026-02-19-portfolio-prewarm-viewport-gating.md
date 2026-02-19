@@ -117,3 +117,37 @@ Improved page-speed behavior by reducing eager R2 video prewarm pressure before 
 - Faster theater first-frame behavior than the previous recovery pass.
 - Keeps the new modern theater skin unchanged.
 - Maintains controlled preload pressure so initial page metrics stay stable.
+
+## 2026-02-19 Update - Instant-Load Recovery Pass 3
+
+### Goal
+- Push theater startup closer to “instant” on both desktop and mobile without reverting the new theater design.
+
+### What was tuned
+1. Muted-first theater startup path (faster autoplay resolution)
+- File: `src/components/Portfolio.tsx`
+- `TheaterVideo` now uses a muted-first startup play attempt on source changes.
+- This reduces autoplay permission fallback overhead and improves first-frame start consistency.
+- User-triggered play toggle still attempts unmuted play as before.
+
+2. Persistent single-clip instant prewarm
+- File: `src/components/Portfolio.tsx`
+- The lightweight instant prewarm path no longer turns off after staged startup prewarm begins.
+- While theater is closed, one likely clip remains warmed continuously, improving open latency during normal browsing.
+
+3. Stronger intent prewarm
+- File: `src/components/Portfolio.tsx`
+- Interaction prewarm and instant prewarm now include preferred source + fallback source on mobile.
+- This improves resilience when the preferred source startup is slower than expected.
+
+4. Faster warmup timing
+- File: `src/components/Portfolio.tsx`
+- Startup prewarm delay tightened again:
+  - desktop: `520ms`
+  - mobile: `760ms`
+- Default startup fallback timeout tightened to `620ms` (`420ms` on slow path remains).
+
+### Result expectation
+- Faster first-frame startup when opening theater from reel cards on both desktop and mobile.
+- Less startup jitter from autoplay permission handling.
+- New theater visual design remains unchanged.
