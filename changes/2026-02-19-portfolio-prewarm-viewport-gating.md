@@ -151,3 +151,25 @@ Improved page-speed behavior by reducing eager R2 video prewarm pressure before 
 - Faster first-frame startup when opening theater from reel cards on both desktop and mobile.
 - Less startup jitter from autoplay permission handling.
 - New theater visual design remains unchanged.
+
+## 2026-02-19 Update - Audio Restore + Mobile Instant Open Fix
+
+### Goal
+- Restore theater audio behavior and remove the mobile startup bottleneck that was still preventing “instant” feel.
+
+### What was tuned
+1. Audio restore path
+- File: `src/components/Portfolio.tsx`
+- Added muted-first startup for fast first frame, then immediate auto-unmute attempt when playback is running.
+- Added explicit theater mute/unmute button so users can always enable audio instantly if browser autoplay policy keeps audio muted.
+
+2. Fixed interaction prewarm cancellation on open
+- File: `src/components/Portfolio.tsx`
+- Interaction prewarm is no longer cleared when opening theater.
+- On card click/open, the selected clip is now explicitly re-marked for prewarm instead of being canceled.
+- This prevents aborting the exact request needed for fast mobile startup.
+
+### Result expectation
+- Theater audio is available again with direct user control.
+- Better mobile first-frame response when tapping a reel card.
+- Desktop instant behavior remains, with no design rollback.

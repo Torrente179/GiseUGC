@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useEffect, useMemo, type TouchEvent, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight, Pause, Play, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Pause, Play, Volume2, VolumeX, X } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
@@ -200,7 +200,9 @@ const TheaterVideo = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const startupTimeoutRef = useRef<number | null>(null);
+  const autoUnmuteAttemptedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [activeSourceIndex, setActiveSourceIndex] = useState(0);
   const sourceKey = sources.join('|');
   const activeSource = sources[activeSourceIndex] ?? sources[0] ?? '';
@@ -270,8 +272,27 @@ const TheaterVideo = ({
   const handlePause = () => setIsPlaying(false);
   const handleWaiting = () => setIsPlaying(false);
   const handlePlaying = () => {
+    const video = videoRef.current;
     clearStartupTimeout();
     setIsPlaying(true);
+    if (!video) return;
+    setIsMuted(video.muted);
+    if (!video.muted || autoUnmuteAttemptedRef.current) return;
+    autoUnmuteAttemptedRef.current = true;
+    video.muted = false;
+    const playPromise = video.play();
+    if (playPromise) {
+      playPromise
+        .then(() => {
+          setIsMuted(false);
+        })
+        .catch(() => {
+          video.muted = true;
+          setIsMuted(true);
+        });
+    } else {
+      setIsMuted(video.muted);
+    }
   };
 
   const handleError = useCallback(() => {
@@ -286,9 +307,21 @@ const TheaterVideo = ({
     video.playbackRate = 1;
     if (video.paused) {
       video.muted = false;
+      setIsMuted(false);
       attemptPlay({ preferMuted: false });
     } else {
       video.pause();
+    }
+  }, [attemptPlay]);
+
+  const toggleMute = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const nextMuted = !video.muted;
+    video.muted = nextMuted;
+    setIsMuted(nextMuted);
+    if (!nextMuted) {
+      attemptPlay({ preferMuted: false });
     }
   }, [attemptPlay]);
 
@@ -306,6 +339,8 @@ const TheaterVideo = ({
     if (!video || !activeSource) return;
 
     setIsPlaying(false);
+    setIsMuted(true);
+    autoUnmuteAttemptedRef.current = false;
     video.muted = true;
     video.load();
     scheduleStartupFallback();
@@ -333,6 +368,7 @@ const TheaterVideo = ({
         onLoadedMetadata={(event) => {
           event.currentTarget.defaultPlaybackRate = 1;
           event.currentTarget.playbackRate = 1;
+          setIsMuted(event.currentTarget.muted);
         }}
         onPlay={handlePlay}
         onPause={handlePause}
@@ -354,6 +390,14 @@ const TheaterVideo = ({
             <Play className="h-5 w-5 text-white/90 ml-0.5" fill="currentColor" />
           )}
         </span>
+      </button>
+      <button
+        type="button"
+        className="absolute top-3 left-3 z-20 h-9 w-9 rounded-full border border-white/40 bg-black/40 text-white backdrop-blur-sm flex items-center justify-center transition-colors hover:bg-black/55"
+        onClick={toggleMute}
+        aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+      >
+        {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
       </button>
     </div>
   );
@@ -467,7 +511,7 @@ const Portfolio = () => {
   const openReelPreview = useCallback(
     (clip: ReelClip, index: number) => {
       clearTheaterCloseTimer();
-      clearInteractionPrewarm();
+      scheduleInteractionPrewarm(clip);
       theaterSwipeStartRef.current = null;
       setTheaterDismissDirection(1);
       setTheaterPrewarmDirection(1);
@@ -478,7 +522,7 @@ const Portfolio = () => {
       setActiveReelPreview(clip);
       setActiveReelIndex(index);
     },
-    [clearInteractionPrewarm, clearTheaterCloseTimer, queueTheaterDrag],
+    [clearTheaterCloseTimer, queueTheaterDrag, scheduleInteractionPrewarm],
   );
 
   const navigateReelPreview = useCallback(
@@ -834,10 +878,10 @@ const Portfolio = () => {
         reelCardDidDragRef.current = false;
         return;
       }
-      clearInteractionPrewarm();
+      scheduleInteractionPrewarm(clip);
       openReelPreview(clip, index);
     },
-    [clearInteractionPrewarm, openReelPreview],
+    [openReelPreview, scheduleInteractionPrewarm],
   );
 
   /* Play all collage videos */
