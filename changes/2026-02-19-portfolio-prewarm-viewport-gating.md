@@ -188,3 +188,30 @@ Improved page-speed behavior by reducing eager R2 video prewarm pressure before 
 ### Result expectation
 - No more “video starts silent then audio appears” behavior.
 - Audio remains in normal sync with playback start, matching prior expected behavior.
+
+## 2026-02-19 Update - Restore Instant Mobile Theater Path (No Starter Layer)
+
+### Goal
+- Recover the previous instant-feel mobile theater startup without reintroducing the starter-clip crossfade path.
+- Keep the current theater card design unchanged.
+
+### What was changed
+- File: `src/components/Portfolio.tsx`
+
+1. Mobile source preference restored to always-mobile
+- `shouldPreferMobileTheaterSource` was set back to `isMobile`.
+- Mobile theater now consistently prioritizes:
+  - `mobileSrc` first
+  - `mainSrc` fallback second
+- This applies to theater playback source order and hidden video prewarm order.
+
+2. Interaction link preload now uses mobile source on all mobile
+- Interaction-triggered `<link rel="preload" as="video">` now preloads `mobileSrc` whenever `isMobile` is true.
+- Removed the `connectionProfile.slow` condition from that preload decision, so normal mobile networks no longer prewarm heavier `mainSrc` first.
+
+### Why this was needed
+- The prior condition (`isMobile && connectionProfile.slow`) caused normal mobile devices to still prioritize `mainSrc`, which increased first-frame startup delay in theater after the card/theater rework.
+
+### Result expectation
+- Faster theater startup on mobile, aligned with the earlier “instant” behavior baseline.
+- No starter-related handoff glitch risk, since playback remains single-stream.

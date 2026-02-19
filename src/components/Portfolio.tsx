@@ -727,7 +727,7 @@ const Portfolio = () => {
     }
     if (!interactionPrewarmClip || connectionProfile.constrained) return;
 
-    const src = (isMobile && connectionProfile.slow)
+    const src = isMobile
       ? interactionPrewarmClip.mobileSrc
       : interactionPrewarmClip.mainSrc;
 
@@ -742,7 +742,7 @@ const Portfolio = () => {
       link.remove();
       if (linkPreloadRef.current === link) linkPreloadRef.current = null;
     };
-  }, [interactionPrewarmClip, isMobile, connectionProfile.slow, connectionProfile.constrained]);
+  }, [interactionPrewarmClip, isMobile, connectionProfile.constrained]);
 
   useEffect(() => {
     if (!activeReelPreview) return;
@@ -1076,7 +1076,7 @@ const Portfolio = () => {
   const primaryWarmPreloadClip = theaterWarmPreloadClips[0] ?? null;
   const secondaryWarmPreloadClip = theaterWarmPreloadClips[1] ?? null;
 
-  const shouldPreferMobileTheaterSource = isMobile && connectionProfile.slow;
+  const shouldPreferMobileTheaterSource = isMobile;
 
   const theaterStartupFallbackMs = useMemo(
     () => (connectionProfile.slow ? THEATER_FAST_FALLBACK_MS_SLOW : THEATER_FAST_FALLBACK_MS_DEFAULT),
