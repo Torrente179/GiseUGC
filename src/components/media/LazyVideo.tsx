@@ -13,6 +13,7 @@ import {
 type LazyVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poster'> & {
   src: string;
   poster?: string;
+  lqip?: string;
   rootMargin?: string;
   loadWhenVisible?: boolean;
   pauseOffscreen?: boolean;
@@ -26,6 +27,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
     {
       src,
       poster,
+      lqip,
       preload = 'metadata',
       autoPlay = false,
       rootMargin = '240px 0px',
@@ -39,6 +41,8 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       onFocus,
       onCanPlay,
       onLoadedMetadata,
+      style,
+      className,
       ...props
     },
     forwardedRef,
@@ -47,10 +51,22 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
     const isInViewportRef = useRef(true);
     const [isInViewport, setIsInViewport] = useState(true);
     const [shouldLoad, setShouldLoad] = useState(!loadWhenVisible);
+    const [mediaReady, setMediaReady] = useState(false);
     const shouldAttachSource =
       shouldLoad &&
       (!unloadWhenOffscreen || isInViewport) &&
       (!unloadWhenForcedPause || !forcePause);
+
+    useEffect(() => {
+      return () => {
+        const node = internalRef.current;
+        if (node) {
+          node.pause();
+          node.removeAttribute('src');
+          node.load();
+        }
+      };
+    }, []);
 
     const normalizePlaybackRate = (node: HTMLVideoElement | null) => {
       if (!node) return;
@@ -166,15 +182,38 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       onLoadedMetadata?.(event);
     };
 
+    const handleCanPlay = (event: SyntheticEvent<HTMLVideoElement>) => {
+      if (!mediaReady) setMediaReady(true);
+      onCanPlay?.(event);
+    };
+
+    const showLqip = !!lqip && !mediaReady;
+    const effectivePoster = shouldLoad ? poster : (lqip || undefined);
+
+    const lqipStyle: React.CSSProperties | undefined = showLqip
+      ? {
+          ...style,
+          filter: 'blur(12px)',
+          transform: 'scale(1.05)',
+          transition: 'filter 0.4s ease, transform 0.4s ease',
+        }
+      : style
+        ? { ...style, transition: 'filter 0.4s ease, transform 0.4s ease' }
+        : { transition: 'filter 0.4s ease, transform 0.4s ease' };
+
     return (
       <video
         {...props}
         ref={assignRef}
+        className={className}
+        style={lqipStyle}
         src={shouldAttachSource ? src : undefined}
-        poster={shouldLoad ? poster : undefined}
+        poster={effectivePoster}
         preload={shouldAttachSource ? preload : 'none'}
         autoPlay={autoPlay}
-        onCanPlay={onCanPlay}
+        disablePictureInPicture
+        disableRemotePlayback
+        onCanPlay={handleCanPlay}
         onLoadedMetadata={handleLoadedMetadata}
         onMouseEnter={handleMouseEnter}
         onTouchStart={handleTouchStart}

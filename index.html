@@ -175,6 +175,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://media.giselasaldarriaga.com" crossorigin />
     <link rel="dns-prefetch" href="//media.giselasaldarriaga.com" />
+    <script>
+      (function () {
+        try {
+          var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+          if (conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) return;
+        } catch (_) {}
+        var preloadVideo = document.createElement('link');
+        preloadVideo.rel = 'preload';
+        preloadVideo.as = 'video';
+        preloadVideo.href = 'https://media.giselasaldarriaga.com/videos/previews/ugc-lifestyle-review-preview.mp4';
+        preloadVideo.crossOrigin = '';
+        preloadVideo.fetchPriority = 'high';
+        document.head.appendChild(preloadVideo);
+        var preloadPoster = document.createElement('link');
+        preloadPoster.rel = 'preload';
+        preloadPoster.as = 'image';
+        preloadPoster.href = 'https://media.giselasaldarriaga.com/videos/posters/ugc-lifestyle-review-poster.jpg';
+        preloadPoster.crossOrigin = '';
+        document.head.appendChild(preloadPoster);
+      })();
+    </script>
     <link
       rel="preload"
       as="style"

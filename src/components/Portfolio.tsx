@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect, useMemo, type TouchEvent, type SyntheticEvent } from 'react';
+import { useRef, useState, useCallback, useEffect, useMemo, memo, startTransition, type TouchEvent, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Pause, Play, Volume2, VolumeX, X } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -7,6 +7,7 @@ import { revealUp, springHoverTransition, staggerContainer } from '@/components/
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import LazyVideo from '@/components/media/LazyVideo';
+import VIDEO_LQIP from '@/data/video-lqip';
 
 interface ReelClip {
   id: number;
@@ -51,8 +52,8 @@ const REEL_CARD_TAP_SLOP_PX = 10;
 const THEATER_HINT_PRELOAD_OFFSETS = [-2, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
-const THEATER_FAST_FALLBACK_MS_SLOW = 420;
-const THEATER_FAST_FALLBACK_MS_DEFAULT = 620;
+const THEATER_FAST_FALLBACK_MS_SLOW = 250;
+const THEATER_FAST_FALLBACK_MS_DEFAULT = 400;
 const STARTUP_PREWARM_DELAY_DESKTOP_MS = 520;
 const STARTUP_PREWARM_DELAY_MOBILE_MS = 760;
 const PORTFOLIO_PREWARM_ROOT_MARGIN = '1200px 0px';
@@ -63,6 +64,11 @@ const r2MobileVideo = (filename: string) =>
 const r2PreviewVideo = (filename: string) =>
   `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
 const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
+const getLqip = (url: string) => {
+  const filename = url.split('/').pop() ?? '';
+  const key = filename.replace(/-preview\.mp4$/, '').replace(/-poster\.jpg$/, '').replace(/\.mp4$/, '');
+  return VIDEO_LQIP[key] || undefined;
+};
 
 const REEL_CLIPS: ReelClip[] = [
   {
@@ -187,7 +193,7 @@ const COLLAGE_CLIPS: CollageClip[] = [
   },
 ];
 
-const TheaterVideo = ({
+const TheaterVideo = memo(({
   sources,
   poster,
   enableStartupFallback,
@@ -272,6 +278,10 @@ const TheaterVideo = ({
     if (video) setIsMuted(video.muted);
   };
 
+  const handleCanPlayThrough = useCallback(() => {
+    clearStartupTimeout();
+  }, [clearStartupTimeout]);
+
   const handleError = useCallback(() => {
     clearStartupTimeout();
     promoteFallbackSource();
@@ -341,6 +351,8 @@ const TheaterVideo = ({
         preload="auto"
         autoPlay
         playsInline
+        disablePictureInPicture
+        disableRemotePlayback
         onLoadedMetadata={(event) => {
           event.currentTarget.defaultPlaybackRate = 1;
           event.currentTarget.playbackRate = 1;
@@ -350,6 +362,7 @@ const TheaterVideo = ({
         onPause={handlePause}
         onWaiting={handleWaiting}
         onPlaying={handlePlaying}
+        onCanPlayThrough={handleCanPlayThrough}
         onError={handleError}
         onTimeUpdate={handleTimeUpdate}
       />
@@ -377,7 +390,9 @@ const TheaterVideo = ({
       </button>
     </div>
   );
-};
+});
+
+TheaterVideo.displayName = 'TheaterVideo';
 
 const Portfolio = () => {
   const { t } = useTranslation();
@@ -399,6 +414,7 @@ const Portfolio = () => {
   const [startupPrewarmEnabled, setStartupPrewarmEnabled] = useState(false);
   const [isPortfolioNearViewport, setIsPortfolioNearViewport] = useState(false);
   const [interactionPrewarmClip, setInteractionPrewarmClip] = useState<ReelClip | null>(null);
+  const [theaterPreloadsReady, setTheaterPreloadsReady] = useState(false);
 
   const portfolioSectionRef = useRef<HTMLElement | null>(null);
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -489,14 +505,16 @@ const Portfolio = () => {
       clearTheaterCloseTimer();
       scheduleInteractionPrewarm(clip);
       theaterSwipeStartRef.current = null;
-      setTheaterDismissDirection(1);
-      setTheaterPrewarmDirection(1);
-      setIsTheaterDismissing(false);
-      setIsTheaterDragging(false);
-      setIsTheaterVisible(false);
-      queueTheaterDrag(0);
-      setActiveReelPreview(clip);
-      setActiveReelIndex(index);
+      startTransition(() => {
+        setTheaterDismissDirection(1);
+        setTheaterPrewarmDirection(1);
+        setIsTheaterDismissing(false);
+        setIsTheaterDragging(false);
+        setIsTheaterVisible(false);
+        queueTheaterDrag(0);
+        setActiveReelPreview(clip);
+        setActiveReelIndex(index);
+      });
     },
     [clearTheaterCloseTimer, queueTheaterDrag, scheduleInteractionPrewarm],
   );
@@ -635,6 +653,7 @@ const Portfolio = () => {
   useEffect(() => {
     if (!activeReelPreview) {
       setIsTheaterVisible(false);
+      setTheaterPreloadsReady(false);
       return;
     }
 
@@ -642,8 +661,20 @@ const Portfolio = () => {
       setIsTheaterVisible(true);
     });
 
+    const schedulePreloads = typeof requestIdleCallback === 'function'
+      ? requestIdleCallback
+      : (cb: () => void) => setTimeout(cb, 150);
+    const cancelPreloads = typeof cancelIdleCallback === 'function'
+      ? cancelIdleCallback
+      : clearTimeout;
+
+    const preloadId = schedulePreloads(() => {
+      setTheaterPreloadsReady(true);
+    });
+
     return () => {
       window.cancelAnimationFrame(frameId);
+      cancelPreloads(preloadId);
     };
   }, [activeReelPreview]);
 
@@ -1069,6 +1100,8 @@ const Portfolio = () => {
               preload={index === 0 ? 'auto' : 'metadata'}
               muted
               playsInline
+              disablePictureInPicture
+              disableRemotePlayback
               tabIndex={-1}
             />
           ))}
@@ -1083,6 +1116,8 @@ const Portfolio = () => {
               preload={index === 0 ? 'auto' : 'metadata'}
               muted
               playsInline
+              disablePictureInPicture
+              disableRemotePlayback
               tabIndex={-1}
             />
           ))}
@@ -1093,6 +1128,8 @@ const Portfolio = () => {
               preload="metadata"
               muted
               playsInline
+              disablePictureInPicture
+              disableRemotePlayback
               tabIndex={-1}
             />
           ))}
@@ -1103,6 +1140,8 @@ const Portfolio = () => {
               preload="metadata"
               muted
               playsInline
+              disablePictureInPicture
+              disableRemotePlayback
               tabIndex={-1}
             />
           ))}
@@ -1117,6 +1156,8 @@ const Portfolio = () => {
               preload={index === 0 ? 'auto' : 'metadata'}
               muted
               playsInline
+              disablePictureInPicture
+              disableRemotePlayback
               tabIndex={-1}
             />
           ))}
@@ -1223,6 +1264,7 @@ const Portfolio = () => {
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         src={clip.previewSrc}
                         poster={clip.posterSrc}
+                        lqip={getLqip(clip.previewSrc)}
                         muted
                         autoPlay
                         loop
@@ -1322,6 +1364,7 @@ const Portfolio = () => {
                   className="h-full w-full object-cover"
                   src={clip.previewSrc}
                   poster={clip.posterSrc}
+                  lqip={getLqip(clip.previewSrc)}
                   muted
                   loop
                   playsInline
@@ -1373,6 +1416,7 @@ const Portfolio = () => {
                     className="h-full w-full object-cover pointer-events-none"
                     src={clip.previewSrc}
                     poster={clip.posterSrc}
+                    lqip={getLqip(clip.previewSrc)}
                     muted
                     loop
                     playsInline
@@ -1464,7 +1508,7 @@ const Portfolio = () => {
               </button>
 
               <div className="relative">
-                <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
+                {theaterPreloadsReady && <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
                   {primaryWarmPreloadClip && (
                     <video
                       key={`theater-preload-primary-preferred-${primaryWarmPreloadClip.id}`}
@@ -1472,6 +1516,8 @@ const Portfolio = () => {
                       preload="auto"
                       muted
                       playsInline
+                      disablePictureInPicture
+                      disableRemotePlayback
                       tabIndex={-1}
                     />
                   )}
@@ -1482,6 +1528,8 @@ const Portfolio = () => {
                       preload="metadata"
                       muted
                       playsInline
+                      disablePictureInPicture
+                      disableRemotePlayback
                       tabIndex={-1}
                     />
                   )}
@@ -1492,6 +1540,8 @@ const Portfolio = () => {
                       preload={isMobile ? 'metadata' : 'auto'}
                       muted
                       playsInline
+                      disablePictureInPicture
+                      disableRemotePlayback
                       tabIndex={-1}
                     />
                   )}
@@ -1502,6 +1552,8 @@ const Portfolio = () => {
                       preload="metadata"
                       muted
                       playsInline
+                      disablePictureInPicture
+                      disableRemotePlayback
                       tabIndex={-1}
                     />
                   )}
@@ -1512,10 +1564,12 @@ const Portfolio = () => {
                       preload="metadata"
                       muted
                       playsInline
+                      disablePictureInPicture
+                      disableRemotePlayback
                       tabIndex={-1}
                     />
                   ))}
-                </div>
+                </div>}
 
                 <TheaterVideo
                   sources={theaterSources}
