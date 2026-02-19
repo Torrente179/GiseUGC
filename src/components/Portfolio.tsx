@@ -427,6 +427,7 @@ const Portfolio = () => {
   const theaterDragFrameRef = useRef<number | null>(null);
   const theaterPendingDragYRef = useRef(0);
   const interactionPrewarmTimerRef = useRef<number | null>(null);
+  const linkPreloadRef = useRef<HTMLLinkElement | null>(null);
 
   const clearTheaterCloseTimer = useCallback(() => {
     if (theaterCloseTimerRef.current !== null) {
@@ -505,6 +506,10 @@ const Portfolio = () => {
       clearTheaterCloseTimer();
       scheduleInteractionPrewarm(clip);
       theaterSwipeStartRef.current = null;
+      // Critical: mount TheaterVideo immediately so video src is assigned ASAP
+      setActiveReelPreview(clip);
+      setActiveReelIndex(index);
+      // Cosmetic state: defer so animation bookkeeping doesn't block video mount
       startTransition(() => {
         setTheaterDismissDirection(1);
         setTheaterPrewarmDirection(1);
@@ -512,8 +517,6 @@ const Portfolio = () => {
         setIsTheaterDragging(false);
         setIsTheaterVisible(false);
         queueTheaterDrag(0);
-        setActiveReelPreview(clip);
-        setActiveReelIndex(index);
       });
     },
     [clearTheaterCloseTimer, queueTheaterDrag, scheduleInteractionPrewarm],
@@ -696,6 +699,34 @@ const Portfolio = () => {
       }
     };
   }, []);
+
+  // Inject <link rel="preload" as="video"> on interaction prewarm.
+  // More reliable than hidden <video> elements on mobile — browsers always
+  // honor link preloads at full priority regardless of element visibility.
+  useEffect(() => {
+    const prevLink = linkPreloadRef.current;
+    if (prevLink) {
+      prevLink.remove();
+      linkPreloadRef.current = null;
+    }
+    if (!interactionPrewarmClip || connectionProfile.constrained) return;
+
+    const src = (isMobile && connectionProfile.slow)
+      ? interactionPrewarmClip.mobileSrc
+      : interactionPrewarmClip.mainSrc;
+
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'video';
+    link.href = src;
+    document.head.appendChild(link);
+    linkPreloadRef.current = link;
+
+    return () => {
+      link.remove();
+      if (linkPreloadRef.current === link) linkPreloadRef.current = null;
+    };
+  }, [interactionPrewarmClip, isMobile, connectionProfile.slow, connectionProfile.constrained]);
 
   useEffect(() => {
     if (!activeReelPreview) return;
@@ -1045,7 +1076,7 @@ const Portfolio = () => {
   const primaryWarmPreloadClip = theaterWarmPreloadClips[0] ?? null;
   const secondaryWarmPreloadClip = theaterWarmPreloadClips[1] ?? null;
 
-  const shouldPreferMobileTheaterSource = isMobile;
+  const shouldPreferMobileTheaterSource = isMobile && connectionProfile.slow;
 
   const theaterStartupFallbackMs = useMemo(
     () => (connectionProfile.slow ? THEATER_FAST_FALLBACK_MS_SLOW : THEATER_FAST_FALLBACK_MS_DEFAULT),
