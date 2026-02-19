@@ -215,3 +215,49 @@ Improved page-speed behavior by reducing eager R2 video prewarm pressure before 
 ### Result expectation
 - Faster theater startup on mobile, aligned with the earlier “instant” behavior baseline.
 - No starter-related handoff glitch risk, since playback remains single-stream.
+
+## 2026-02-19 Update - Main-First Mobile Theater + Aggressive R2 Prewarm
+
+### Goal
+- Use `main` videos as primary source on mobile theater.
+- Increase R2 video preloading before click/tap to maximize instant theater feel.
+
+### What was changed
+- File: `src/components/Portfolio.tsx`
+
+1. Mobile theater source preference switched to main-first
+- `shouldPreferMobileTheaterSource` is now disabled (`false`), so theater prefers:
+  - `mainSrc` first
+  - `mobileSrc` fallback second
+- This applies to theater playback source order and theater hidden prewarm order.
+
+2. Interaction preload now warms both main + mobile on mobile
+- Interaction intent (`hover/touch/focus`) now injects multiple `<link rel="preload" as="video">` tags on mobile:
+  - primary: `mainSrc`
+  - fallback: `mobileSrc`
+- Desktop keeps preloading `mainSrc` only.
+
+3. Earlier startup prewarm trigger
+- Increased portfolio viewport prewarm gate distance:
+  - `PORTFOLIO_PREWARM_ROOT_MARGIN`: `1200px` -> `1800px`
+- Reduced startup prewarm delays:
+  - desktop: `520ms` -> `300ms`
+  - mobile: `400ms` -> `220ms`
+
+4. Larger startup prewarm budget
+- Startup hidden warmups now preload more clips:
+  - previews: desktop `4`, mobile `3`, slow `1`
+  - main: desktop/mobile `2`, slow `0`
+  - mobile fallback: mobile `2`, desktop `1`, slow `0`
+
+5. Stronger theater-open neighbor warming
+- Theater warm offsets now include an additional forward candidate (`+2` direction), not just adjacent clips.
+- Theater hint warmups are now allowed on mobile non-slow networks (not desktop-only).
+
+6. Instant prewarm also active on slow mobile (metadata-safe)
+- Instant prewarm no longer disables entirely on slow connections.
+- On slow networks, first instant-prewarm source uses `metadata` instead of `auto` to avoid overloading the connection.
+
+### Result expectation
+- Mobile theater opens on `main` while still keeping `mobile` as warm fallback.
+- More R2 videos are warmed before click/tap, improving perceived “instant” startup in theater navigation.

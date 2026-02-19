@@ -49,14 +49,14 @@ const THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_MAX_DRAG_DISTANCE = 260;
 const REEL_CARD_TAP_SLOP_PX = 10;
-const THEATER_HINT_PRELOAD_OFFSETS = [-2, 2] as const;
+const THEATER_HINT_PRELOAD_OFFSETS = [-3, -2, 2, 3] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_FAST_FALLBACK_MS_SLOW = 250;
 const THEATER_FAST_FALLBACK_MS_DEFAULT = 400;
-const STARTUP_PREWARM_DELAY_DESKTOP_MS = 520;
-const STARTUP_PREWARM_DELAY_MOBILE_MS = 400;
-const PORTFOLIO_PREWARM_ROOT_MARGIN = '1200px 0px';
+const STARTUP_PREWARM_DELAY_DESKTOP_MS = 300;
+const STARTUP_PREWARM_DELAY_MOBILE_MS = 220;
+const PORTFOLIO_PREWARM_ROOT_MARGIN = '1800px 0px';
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
 const r2MobileVideo = (filename: string) =>
@@ -427,7 +427,7 @@ const Portfolio = () => {
   const theaterDragFrameRef = useRef<number | null>(null);
   const theaterPendingDragYRef = useRef(0);
   const interactionPrewarmTimerRef = useRef<number | null>(null);
-  const linkPreloadRef = useRef<HTMLLinkElement | null>(null);
+  const linkPreloadRefs = useRef<HTMLLinkElement[]>([]);
 
   const clearTheaterCloseTimer = useCallback(() => {
     if (theaterCloseTimerRef.current !== null) {
@@ -720,27 +720,31 @@ const Portfolio = () => {
   // More reliable than hidden <video> elements on mobile — browsers always
   // honor link preloads at full priority regardless of element visibility.
   useEffect(() => {
-    const prevLink = linkPreloadRef.current;
-    if (prevLink) {
-      prevLink.remove();
-      linkPreloadRef.current = null;
+    if (linkPreloadRefs.current.length > 0) {
+      linkPreloadRefs.current.forEach((link) => link.remove());
+      linkPreloadRefs.current = [];
     }
     if (!interactionPrewarmClip || connectionProfile.constrained) return;
 
-    const src = isMobile
-      ? interactionPrewarmClip.mobileSrc
-      : interactionPrewarmClip.mainSrc;
+    const preloadSources = isMobile
+      ? [interactionPrewarmClip.mainSrc, interactionPrewarmClip.mobileSrc]
+      : [interactionPrewarmClip.mainSrc];
+    const uniqueSources = preloadSources.filter((source, index, sources) =>
+      sources.indexOf(source) === index,
+    );
 
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'video';
-    link.href = src;
-    document.head.appendChild(link);
-    linkPreloadRef.current = link;
+    uniqueSources.forEach((src) => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'video';
+      link.href = src;
+      document.head.appendChild(link);
+      linkPreloadRefs.current.push(link);
+    });
 
     return () => {
-      link.remove();
-      if (linkPreloadRef.current === link) linkPreloadRef.current = null;
+      linkPreloadRefs.current.forEach((link) => link.remove());
+      linkPreloadRefs.current = [];
     };
   }, [interactionPrewarmClip, isMobile, connectionProfile.constrained]);
 
@@ -1026,9 +1030,9 @@ const Portfolio = () => {
 
   const theaterWarmPreloadOffsets = useMemo(() => {
     if (isMobile && connectionProfile.slow) {
-      return [theaterPrewarmDirection] as const;
+      return [theaterPrewarmDirection];
     }
-    return [theaterPrewarmDirection, (theaterPrewarmDirection * -1) as 1 | -1] as const;
+    return [theaterPrewarmDirection, theaterPrewarmDirection * -1, theaterPrewarmDirection * 2];
   }, [connectionProfile.slow, isMobile, theaterPrewarmDirection]);
 
   const theaterWarmPreloadClips = useMemo(() => {
@@ -1047,7 +1051,7 @@ const Portfolio = () => {
 
   const theaterHintPreloadClips = useMemo(() => {
     if (activeReelIndex === null) return [];
-    if (isMobile || connectionProfile.slow) return [];
+    if (connectionProfile.slow) return [];
 
     return THEATER_HINT_PRELOAD_OFFSETS.map((offset) => {
       const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
@@ -1057,26 +1061,26 @@ const Portfolio = () => {
 
   const startupPreviewPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 1 : isMobile ? 2 : 3;
+    const clipCount = connectionProfile.slow ? 1 : isMobile ? 3 : 4;
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
   const startupMainPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 0 : 1;
+    const clipCount = connectionProfile.slow ? 0 : 2;
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
   const startupMobilePreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 0 : isMobile ? 2 : 0;
+    const clipCount = connectionProfile.slow ? 0 : isMobile ? 2 : 1;
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
   const primaryWarmPreloadClip = theaterWarmPreloadClips[0] ?? null;
   const secondaryWarmPreloadClip = theaterWarmPreloadClips[1] ?? null;
 
-  const shouldPreferMobileTheaterSource = isMobile;
+  const shouldPreferMobileTheaterSource = false;
 
   const theaterStartupFallbackMs = useMemo(
     () => (connectionProfile.slow ? THEATER_FAST_FALLBACK_MS_SLOW : THEATER_FAST_FALLBACK_MS_DEFAULT),
@@ -1103,10 +1107,10 @@ const Portfolio = () => {
   }, [interactionPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
 
   const instantPrewarmClip = useMemo(() => {
-    if (!isPortfolioNearViewport || connectionProfile.slow) return null;
+    if (!isPortfolioNearViewport) return null;
     const clipIndex = isMobile ? activeMobileReelIndex : 0;
     return REEL_CLIPS[clipIndex] ?? REEL_CLIPS[0] ?? null;
-  }, [activeMobileReelIndex, connectionProfile.slow, isMobile, isPortfolioNearViewport]);
+  }, [activeMobileReelIndex, isMobile, isPortfolioNearViewport]);
 
   const instantPrewarmSources = useMemo(() => {
     if (!instantPrewarmClip) return [];
@@ -1128,7 +1132,7 @@ const Portfolio = () => {
             <video
               key={`instant-prewarm-${instantPrewarmClip?.id ?? 'fallback'}-${index}`}
               src={src}
-              preload={index === 0 ? 'auto' : 'metadata'}
+              preload={index === 0 ? (connectionProfile.slow ? 'metadata' : 'auto') : 'metadata'}
               muted
               playsInline
               disablePictureInPicture
