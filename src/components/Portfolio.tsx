@@ -52,9 +52,9 @@ const THEATER_HINT_PRELOAD_OFFSETS = [-2, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_FAST_FALLBACK_MS = 420;
-const STARTUP_PREWARM_DELAY_DESKTOP_MS = 260;
-const STARTUP_PREWARM_DELAY_MOBILE_MS = 380;
-const PORTFOLIO_PREWARM_ROOT_MARGIN = '1600px 0px';
+const STARTUP_PREWARM_DELAY_DESKTOP_MS = 900;
+const STARTUP_PREWARM_DELAY_MOBILE_MS = 1400;
+const PORTFOLIO_PREWARM_ROOT_MARGIN = '1200px 0px';
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
 const r2MobileVideo = (filename: string) =>
@@ -963,19 +963,19 @@ const Portfolio = () => {
 
   const startupPreviewPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 1 : isMobile ? 2 : 4;
+    const clipCount = connectionProfile.slow ? 1 : isMobile ? 1 : 2;
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
   const startupMainPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 0 : isMobile ? 1 : 2;
+    const clipCount = connectionProfile.slow ? 0 : isMobile ? 0 : 1;
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
   const startupMobilePreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 1 : isMobile ? 2 : 1;
+    const clipCount = connectionProfile.slow ? 0 : isMobile ? 1 : 0;
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
@@ -1004,10 +1004,10 @@ const Portfolio = () => {
   }, [interactionPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
 
   const instantPrewarmClip = useMemo(() => {
-    if (!isPortfolioNearViewport || connectionProfile.constrained) return null;
+    if (!isPortfolioNearViewport || connectionProfile.slow) return null;
     const clipIndex = isMobile ? activeMobileReelIndex : 0;
     return REEL_CLIPS[clipIndex] ?? REEL_CLIPS[0] ?? null;
-  }, [activeMobileReelIndex, connectionProfile.constrained, isMobile, isPortfolioNearViewport]);
+  }, [activeMobileReelIndex, connectionProfile.slow, isMobile, isPortfolioNearViewport]);
 
   const instantPrewarmSources = useMemo(() => {
     if (!instantPrewarmClip) return [];
@@ -1029,7 +1029,7 @@ const Portfolio = () => {
             <video
               key={`instant-prewarm-${instantPrewarmClip?.id ?? 'fallback'}-${index}`}
               src={src}
-              preload={index === 0 ? 'auto' : 'metadata'}
+              preload={index === 0 ? (isMobile ? 'metadata' : 'auto') : 'metadata'}
               muted
               playsInline
               tabIndex={-1}
@@ -1043,7 +1043,7 @@ const Portfolio = () => {
             <video
               key={`startup-prewarm-preview-${clip.id}`}
               src={clip.previewSrc}
-              preload={index === 0 ? 'auto' : 'metadata'}
+              preload={index === 0 && !isMobile ? 'auto' : 'metadata'}
               muted
               playsInline
               tabIndex={-1}
@@ -1059,11 +1059,11 @@ const Portfolio = () => {
               tabIndex={-1}
             />
           ))}
-          {startupMobilePreloadClips.map((clip, index) => (
+          {startupMobilePreloadClips.map((clip) => (
             <video
               key={`startup-prewarm-mobile-${clip.id}`}
               src={clip.mobileSrc}
-              preload={index === 0 ? 'auto' : 'metadata'}
+              preload="metadata"
               muted
               playsInline
               tabIndex={-1}
@@ -1358,7 +1358,7 @@ const Portfolio = () => {
           onClick={() => dismissReelPreview()}
         >
           <div
-            className="absolute inset-0 backdrop-blur-[10px]"
+            className="absolute inset-0 backdrop-blur-[6px] md:backdrop-blur-[10px]"
             style={{
               backgroundColor: 'hsl(var(--theater-backdrop) / 0.74)',
               opacity: theaterOverlayOpacity,

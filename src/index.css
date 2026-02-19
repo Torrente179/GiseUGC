@@ -257,7 +257,7 @@
     background-color: hsl(var(--theater-control-bg) / 0.82);
     border: 1px solid hsl(var(--theater-control-border) / 0.88);
     color: hsl(var(--theater-control-fg));
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
     box-shadow: 0 10px 22px -16px rgba(0, 0, 0, 0.75);
   }
 
@@ -291,6 +291,17 @@
     font-weight: 600;
     letter-spacing: -0.015em;
     text-shadow: 0 1px 14px rgba(0, 0, 0, 0.62);
+  }
+
+  @media (max-width: 767px) {
+    .theater-control {
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 18px -14px rgba(0, 0, 0, 0.66);
+    }
+
+    .theater-meta-chip {
+      backdrop-filter: blur(4px);
+    }
   }
 
   .section-padding {
