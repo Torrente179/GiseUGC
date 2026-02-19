@@ -51,9 +51,10 @@ const REEL_CARD_TAP_SLOP_PX = 10;
 const THEATER_HINT_PRELOAD_OFFSETS = [-2, 2] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
-const THEATER_FAST_FALLBACK_MS = 420;
-const STARTUP_PREWARM_DELAY_DESKTOP_MS = 900;
-const STARTUP_PREWARM_DELAY_MOBILE_MS = 1400;
+const THEATER_FAST_FALLBACK_MS_SLOW = 420;
+const THEATER_FAST_FALLBACK_MS_DEFAULT = 760;
+const STARTUP_PREWARM_DELAY_DESKTOP_MS = 640;
+const STARTUP_PREWARM_DELAY_MOBILE_MS = 920;
 const PORTFOLIO_PREWARM_ROOT_MARGIN = '1200px 0px';
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
@@ -190,10 +191,12 @@ const TheaterVideo = ({
   sources,
   poster,
   enableStartupFallback,
+  startupFallbackMs,
 }: {
   sources: string[];
   poster: string;
   enableStartupFallback: boolean;
+  startupFallbackMs: number;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const startupTimeoutRef = useRef<number | null>(null);
@@ -249,8 +252,8 @@ const TheaterVideo = ({
       const video = videoRef.current;
       if (!video || !video.paused || video.readyState >= 2) return;
       promoteFallbackSource();
-    }, THEATER_FAST_FALLBACK_MS);
-  }, [activeSourceIndex, clearStartupTimeout, enableStartupFallback, promoteFallbackSource, sources.length]);
+    }, startupFallbackMs);
+  }, [activeSourceIndex, clearStartupTimeout, enableStartupFallback, promoteFallbackSource, sources.length, startupFallbackMs]);
 
   const handlePlay = () => {
     clearStartupTimeout();
@@ -963,13 +966,13 @@ const Portfolio = () => {
 
   const startupPreviewPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 1 : isMobile ? 1 : 2;
+    const clipCount = connectionProfile.slow ? 1 : isMobile ? 2 : 3;
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
   const startupMainPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 0 : isMobile ? 0 : 1;
+    const clipCount = connectionProfile.slow ? 0 : 1;
     return REEL_CLIPS.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
 
@@ -984,6 +987,11 @@ const Portfolio = () => {
 
   const shouldPreferMobileTheaterSource = isMobile && connectionProfile.slow;
 
+  const theaterStartupFallbackMs = useMemo(
+    () => (connectionProfile.slow ? THEATER_FAST_FALLBACK_MS_SLOW : THEATER_FAST_FALLBACK_MS_DEFAULT),
+    [connectionProfile.slow],
+  );
+
   const theaterSources = useMemo(() => {
     if (!activeReelPreview) return [];
     if (isMobile && shouldPreferMobileTheaterSource) {
@@ -994,12 +1002,7 @@ const Portfolio = () => {
 
   const interactionPrewarmSources = useMemo(() => {
     if (!interactionPrewarmClip) return [];
-    if (isMobile && shouldPreferMobileTheaterSource) {
-      return [interactionPrewarmClip.mobileSrc, interactionPrewarmClip.mainSrc];
-    }
-    if (isMobile) {
-      return [interactionPrewarmClip.mainSrc, interactionPrewarmClip.mobileSrc];
-    }
+    if (isMobile && shouldPreferMobileTheaterSource) return [interactionPrewarmClip.mobileSrc];
     return [interactionPrewarmClip.mainSrc];
   }, [interactionPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
 
@@ -1011,12 +1014,7 @@ const Portfolio = () => {
 
   const instantPrewarmSources = useMemo(() => {
     if (!instantPrewarmClip) return [];
-    if (isMobile && shouldPreferMobileTheaterSource) {
-      return [instantPrewarmClip.mobileSrc, instantPrewarmClip.mainSrc];
-    }
-    if (isMobile) {
-      return [instantPrewarmClip.mainSrc, instantPrewarmClip.mobileSrc];
-    }
+    if (isMobile && shouldPreferMobileTheaterSource) return [instantPrewarmClip.mobileSrc];
     return [instantPrewarmClip.mainSrc];
   }, [instantPrewarmClip, isMobile, shouldPreferMobileTheaterSource]);
 
@@ -1029,7 +1027,7 @@ const Portfolio = () => {
             <video
               key={`instant-prewarm-${instantPrewarmClip?.id ?? 'fallback'}-${index}`}
               src={src}
-              preload={index === 0 ? (isMobile ? 'metadata' : 'auto') : 'metadata'}
+              preload={index === 0 ? 'auto' : 'metadata'}
               muted
               playsInline
               tabIndex={-1}
@@ -1043,7 +1041,7 @@ const Portfolio = () => {
             <video
               key={`startup-prewarm-preview-${clip.id}`}
               src={clip.previewSrc}
-              preload={index === 0 && !isMobile ? 'auto' : 'metadata'}
+              preload={index === 0 ? 'auto' : 'metadata'}
               muted
               playsInline
               tabIndex={-1}
@@ -1169,6 +1167,9 @@ const Portfolio = () => {
                       className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-manipulation"
                       onMouseEnter={() => scheduleInteractionPrewarm(clip)}
                       onMouseLeave={clearInteractionPrewarm}
+                      onPointerDown={() => scheduleInteractionPrewarm(clip)}
+                      onFocus={() => scheduleInteractionPrewarm(clip)}
+                      onBlur={clearInteractionPrewarm}
                       onTouchStart={(event) => handleReelCardTouchStart(event, clip)}
                       onTouchMove={handleReelCardTouchMove}
                       onTouchEnd={handleReelCardTouchEnd}
@@ -1427,9 +1428,9 @@ const Portfolio = () => {
                 <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
                   {primaryWarmPreloadClip && (
                     <video
-                      key={`theater-preload-mobile-primary-${primaryWarmPreloadClip.id}`}
-                      src={primaryWarmPreloadClip.mobileSrc}
-                      preload={connectionProfile.slow ? 'metadata' : 'auto'}
+                      key={`theater-preload-primary-preferred-${primaryWarmPreloadClip.id}`}
+                      src={shouldPreferMobileTheaterSource ? primaryWarmPreloadClip.mobileSrc : primaryWarmPreloadClip.mainSrc}
+                      preload="auto"
                       muted
                       playsInline
                       tabIndex={-1}
@@ -1437,8 +1438,8 @@ const Portfolio = () => {
                   )}
                   {primaryWarmPreloadClip && (
                     <video
-                      key={`theater-preload-main-primary-${primaryWarmPreloadClip.id}`}
-                      src={primaryWarmPreloadClip.mainSrc}
+                      key={`theater-preload-primary-fallback-${primaryWarmPreloadClip.id}`}
+                      src={shouldPreferMobileTheaterSource ? primaryWarmPreloadClip.mainSrc : primaryWarmPreloadClip.mobileSrc}
                       preload="metadata"
                       muted
                       playsInline
@@ -1447,18 +1448,18 @@ const Portfolio = () => {
                   )}
                   {secondaryWarmPreloadClip && (
                     <video
-                      key={`theater-preload-mobile-secondary-${secondaryWarmPreloadClip.id}`}
-                      src={secondaryWarmPreloadClip.mobileSrc}
+                      key={`theater-preload-secondary-preferred-${secondaryWarmPreloadClip.id}`}
+                      src={shouldPreferMobileTheaterSource ? secondaryWarmPreloadClip.mobileSrc : secondaryWarmPreloadClip.mainSrc}
                       preload={isMobile ? 'metadata' : 'auto'}
                       muted
                       playsInline
                       tabIndex={-1}
                     />
                   )}
-                  {secondaryWarmPreloadClip && !isMobile && (
+                  {secondaryWarmPreloadClip && (
                     <video
-                      key={`theater-preload-main-secondary-${secondaryWarmPreloadClip.id}`}
-                      src={secondaryWarmPreloadClip.mainSrc}
+                      key={`theater-preload-secondary-fallback-${secondaryWarmPreloadClip.id}`}
+                      src={shouldPreferMobileTheaterSource ? secondaryWarmPreloadClip.mainSrc : secondaryWarmPreloadClip.mobileSrc}
                       preload="metadata"
                       muted
                       playsInline
@@ -1467,8 +1468,8 @@ const Portfolio = () => {
                   )}
                   {theaterHintPreloadClips.map((clip) => (
                     <video
-                      key={`theater-preload-mobile-hint-${clip.id}`}
-                      src={clip.mobileSrc}
+                      key={`theater-preload-hint-${clip.id}`}
+                      src={shouldPreferMobileTheaterSource ? clip.mobileSrc : clip.mainSrc}
                       preload="metadata"
                       muted
                       playsInline
@@ -1481,6 +1482,7 @@ const Portfolio = () => {
                   sources={theaterSources}
                   poster={activeReelPreview.posterSrc}
                   enableStartupFallback={isMobile}
+                  startupFallbackMs={theaterStartupFallbackMs}
                 />
 
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">

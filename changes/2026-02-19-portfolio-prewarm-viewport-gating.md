@@ -77,3 +77,43 @@ Improved page-speed behavior by reducing eager R2 video prewarm pressure before 
 - Better mobile and desktop page-speed consistency by lowering early R2 video contention.
 - New theater design remains intact (layout, controls, overlay metadata, motion style).
 - Theater interactions stay fast through instant + interaction-triggered prewarm, but with less startup overhead.
+
+## 2026-02-19 Update - Fastness Recovery Pass 2
+
+### Goal
+- Bring theater open/switch speed back closer to the previous “snappy” baseline while keeping the new theater design.
+
+### What was tuned
+1. Source-priority-aware theater warming
+- File: `src/components/Portfolio.tsx`
+- Theater neighbor prewarm now warms the **actual preferred playback source** first:
+  - normal mobile/desktop: `main` first
+  - constrained mobile path: `mobile` first
+- Fallback source still warms with `metadata` for resilience.
+
+2. Smarter startup fallback timing
+- File: `src/components/Portfolio.tsx`
+- Theater fallback timeout is now network-aware:
+  - slow path: `420ms`
+  - default path: `760ms`
+- This avoids overly early source switching on healthy networks while keeping fast rescue on weak ones.
+
+3. Balanced prewarm budget for speed + page performance
+- File: `src/components/Portfolio.tsx`
+- Startup prewarm is moderately re-accelerated:
+  - desktop delay: `640ms`
+  - mobile delay: `920ms`
+- Startup clip budget:
+  - previews: desktop `3`, mobile `2`, slow `1`
+  - main: `1` on non-slow networks
+  - mobile: `1` on mobile non-slow networks
+
+4. Faster intent-based warmup
+- File: `src/components/Portfolio.tsx`
+- Added reel-card prewarm trigger on `pointerdown` and keyboard `focus` (in addition to hover/touch start).
+- This warms likely theater media before modal mount for faster perceived open.
+
+### Result expectation
+- Faster theater first-frame behavior than the previous recovery pass.
+- Keeps the new modern theater skin unchanged.
+- Maintains controlled preload pressure so initial page metrics stay stable.
