@@ -200,9 +200,8 @@ const TheaterVideo = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const startupTimeoutRef = useRef<number | null>(null);
-  const autoUnmuteAttemptedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [activeSourceIndex, setActiveSourceIndex] = useState(0);
   const sourceKey = sources.join('|');
   const activeSource = sources[activeSourceIndex] ?? sources[0] ?? '';
@@ -221,30 +220,25 @@ const TheaterVideo = ({
     });
   }, [sources.length]);
 
-  const attemptPlay = useCallback((options?: { preferMuted?: boolean }) => {
+  const attemptPlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
-    const preferMuted = options?.preferMuted ?? false;
 
     video.defaultPlaybackRate = 1;
     video.playbackRate = 1;
 
     const run = async () => {
-      if (preferMuted && !video.muted) {
-        video.muted = true;
-      }
       try {
         await video.play();
+        setIsMuted(video.muted);
       } catch {
-        if (preferMuted) {
-          promoteFallbackSource();
-          return;
-        }
         if (!video.muted) {
           video.muted = true;
+          setIsMuted(true);
         }
         try {
           await video.play();
+          setIsMuted(video.muted);
         } catch {
           promoteFallbackSource();
         }
@@ -272,27 +266,10 @@ const TheaterVideo = ({
   const handlePause = () => setIsPlaying(false);
   const handleWaiting = () => setIsPlaying(false);
   const handlePlaying = () => {
-    const video = videoRef.current;
     clearStartupTimeout();
     setIsPlaying(true);
-    if (!video) return;
-    setIsMuted(video.muted);
-    if (!video.muted || autoUnmuteAttemptedRef.current) return;
-    autoUnmuteAttemptedRef.current = true;
-    video.muted = false;
-    const playPromise = video.play();
-    if (playPromise) {
-      playPromise
-        .then(() => {
-          setIsMuted(false);
-        })
-        .catch(() => {
-          video.muted = true;
-          setIsMuted(true);
-        });
-    } else {
-      setIsMuted(video.muted);
-    }
+    const video = videoRef.current;
+    if (video) setIsMuted(video.muted);
   };
 
   const handleError = useCallback(() => {
@@ -308,7 +285,7 @@ const TheaterVideo = ({
     if (video.paused) {
       video.muted = false;
       setIsMuted(false);
-      attemptPlay({ preferMuted: false });
+      attemptPlay();
     } else {
       video.pause();
     }
@@ -321,7 +298,7 @@ const TheaterVideo = ({
     video.muted = nextMuted;
     setIsMuted(nextMuted);
     if (!nextMuted) {
-      attemptPlay({ preferMuted: false });
+      attemptPlay();
     }
   }, [attemptPlay]);
 
@@ -339,12 +316,11 @@ const TheaterVideo = ({
     if (!video || !activeSource) return;
 
     setIsPlaying(false);
-    setIsMuted(true);
-    autoUnmuteAttemptedRef.current = false;
-    video.muted = true;
+    video.muted = false;
+    setIsMuted(false);
     video.load();
     scheduleStartupFallback();
-    attemptPlay({ preferMuted: true });
+    attemptPlay();
 
     return () => {
       clearStartupTimeout();

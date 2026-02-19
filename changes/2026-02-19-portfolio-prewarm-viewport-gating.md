@@ -173,3 +173,18 @@ Improved page-speed behavior by reducing eager R2 video prewarm pressure before 
 - Theater audio is available again with direct user control.
 - Better mobile first-frame response when tapping a reel card.
 - Desktop instant behavior remains, with no design rollback.
+
+## 2026-02-19 Update - Audio Sync Normalization
+
+### Goal
+- Remove delayed audio onset and restore normal single-stream video behavior.
+
+### What was changed
+- File: `src/components/Portfolio.tsx`
+- Removed the muted-first + auto-unmute handoff behavior in theater startup.
+- Theater now attempts normal playback first; only falls back to muted if browser policy blocks autoplay with sound.
+- Kept explicit mute/unmute control for user override.
+
+### Result expectation
+- No more “video starts silent then audio appears” behavior.
+- Audio remains in normal sync with playback start, matching prior expected behavior.
