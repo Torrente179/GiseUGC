@@ -8,7 +8,6 @@ import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navig
 import { useIsMobile } from '@/hooks/use-mobile';
 import LazyVideo from '@/components/media/LazyVideo';
 import VIDEO_LQIP from '@/data/video-lqip';
-import { getMediaSession, getSignedMediaUrl, type MediaSession } from '@/lib/media-session';
 
 interface ReelClip {
   id: number;
@@ -415,7 +414,6 @@ const Portfolio = () => {
   const [theaterPrewarmDirection, setTheaterPrewarmDirection] = useState<1 | -1>(1);
   const [startupPrewarmEnabled, setStartupPrewarmEnabled] = useState(false);
   const [isPortfolioNearViewport, setIsPortfolioNearViewport] = useState(false);
-  const [mediaSession, setMediaSession] = useState<MediaSession | null>(null);
   const [interactionPrewarmClip, setInteractionPrewarmClip] = useState<ReelClip | null>(null);
   const [theaterPreloadsReady, setTheaterPreloadsReady] = useState(false);
 
@@ -429,7 +427,6 @@ const Portfolio = () => {
   const theaterCloseTimerRef = useRef<number | null>(null);
   const theaterDragFrameRef = useRef<number | null>(null);
   const theaterPendingDragYRef = useRef(0);
-  const mediaSessionRefreshTimerRef = useRef<number | null>(null);
   const interactionPrewarmTimerRef = useRef<number | null>(null);
   const linkPreloadRefs = useRef<HTMLLinkElement[]>([]);
 
@@ -437,35 +434,6 @@ const Portfolio = () => {
     if (theaterCloseTimerRef.current !== null) {
       window.clearTimeout(theaterCloseTimerRef.current);
       theaterCloseTimerRef.current = null;
-    }
-  }, []);
-
-  const clearMediaSessionRefreshTimer = useCallback(() => {
-    if (mediaSessionRefreshTimerRef.current !== null) {
-      window.clearTimeout(mediaSessionRefreshTimerRef.current);
-      mediaSessionRefreshTimerRef.current = null;
-    }
-  }, []);
-
-  const fetchMediaSession = useCallback(async (forceRefresh = false) => {
-    try {
-      const session = await getMediaSession({ forceRefresh });
-      setMediaSession((previousSession) => {
-        if (
-          previousSession?.expiresAt === session.expiresAt &&
-          previousSession.refreshAfterMs === session.refreshAfterMs
-        ) {
-          return previousSession;
-        }
-        return session;
-      });
-      return session;
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        // Keep noisy errors out of production console while still visible in development.
-        console.error('Unable to fetch media session', error);
-      }
-      return null;
     }
   }, []);
 
@@ -483,13 +451,12 @@ const Portfolio = () => {
       if (interactionPrewarmTimerRef.current !== null) {
         window.clearTimeout(interactionPrewarmTimerRef.current);
       }
-      void fetchMediaSession(false);
       interactionPrewarmTimerRef.current = window.setTimeout(() => {
         setInteractionPrewarmClip(null);
         interactionPrewarmTimerRef.current = null;
       }, 2800);
     },
-    [fetchMediaSession],
+    [],
   );
 
   const queueTheaterDrag = useCallback((dragY: number) => {
@@ -539,7 +506,6 @@ const Portfolio = () => {
     (clip: ReelClip, index: number) => {
       clearTheaterCloseTimer();
       scheduleInteractionPrewarm(clip);
-      void fetchMediaSession(false);
       theaterSwipeStartRef.current = null;
       // Critical: mount TheaterVideo immediately so video src is assigned ASAP
       setActiveReelPreview(clip);
@@ -554,7 +520,7 @@ const Portfolio = () => {
         queueTheaterDrag(0);
       });
     },
-    [clearTheaterCloseTimer, fetchMediaSession, queueTheaterDrag, scheduleInteractionPrewarm],
+    [clearTheaterCloseTimer, queueTheaterDrag, scheduleInteractionPrewarm],
   );
 
   const navigateReelPreview = useCallback(
@@ -708,23 +674,18 @@ const Portfolio = () => {
     (clip: ReelClip | null) => {
       if (!clip) return [];
 
-      const signedMainSource = getSignedMediaUrl(mediaSession, clip.mainSrc);
-      const signedMobileSource = getSignedMediaUrl(mediaSession, clip.mobileSrc);
-      const mainSource = signedMainSource ?? clip.mainSrc;
-      const mobileSource = signedMobileSource ?? clip.mobileSrc;
-
       const orderedSources = isMobile
         ? shouldPreferMobileTheaterSource
-          ? [mobileSource, mainSource]
-          : [mainSource, mobileSource]
-        : [mainSource];
+          ? [clip.mobileSrc, clip.mainSrc]
+          : [clip.mainSrc, clip.mobileSrc]
+        : [clip.mainSrc];
 
       return orderedSources.filter((source, index, sources): source is string => {
         if (!source) return false;
         return sources.indexOf(source) === index;
       });
     },
-    [isMobile, mediaSession],
+    [isMobile],
   );
 
   useEffect(() => {
@@ -756,52 +717,14 @@ const Portfolio = () => {
   }, [activeReelPreview]);
 
   useEffect(() => {
-    if (connectionProfile.constrained || !isPortfolioNearViewport) return;
-
-    const warmSession = () => {
-      void fetchMediaSession(false);
-    };
-
-    if (typeof window.requestIdleCallback === 'function') {
-      const idleId = window.requestIdleCallback(warmSession, { timeout: 1300 });
-      return () => window.cancelIdleCallback(idleId);
-    }
-
-    const timeoutId = window.setTimeout(warmSession, 260);
-    return () => window.clearTimeout(timeoutId);
-  }, [connectionProfile.constrained, fetchMediaSession, isPortfolioNearViewport]);
-
-  useEffect(() => {
-    clearMediaSessionRefreshTimer();
-    if (!mediaSession) return;
-
-    const expiryMs = Date.parse(mediaSession.expiresAt);
-    const nowMs = Date.now();
-    const maxDelayBeforeExpiry = Number.isFinite(expiryMs)
-      ? Math.max(2_000, expiryMs - nowMs - 10_000)
-      : mediaSession.refreshAfterMs;
-    const refreshDelay = Math.max(
-      2_000,
-      Math.min(Math.max(8_000, mediaSession.refreshAfterMs), maxDelayBeforeExpiry),
-    );
-
-    mediaSessionRefreshTimerRef.current = window.setTimeout(() => {
-      void fetchMediaSession(true);
-    }, refreshDelay);
-
-    return clearMediaSessionRefreshTimer;
-  }, [clearMediaSessionRefreshTimer, fetchMediaSession, mediaSession]);
-
-  useEffect(() => {
     return () => {
       clearTheaterCloseTimer();
-      clearMediaSessionRefreshTimer();
       if (theaterDragFrameRef.current !== null) {
         window.cancelAnimationFrame(theaterDragFrameRef.current);
         theaterDragFrameRef.current = null;
       }
     };
-  }, [clearMediaSessionRefreshTimer, clearTheaterCloseTimer]);
+  }, [clearTheaterCloseTimer]);
 
   useEffect(() => {
     return () => {

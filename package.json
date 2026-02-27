@@ -10,11 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "video:encode": "bash scripts/encode-videos.sh",
-    "video:encode:dry": "bash scripts/encode-videos.sh --dry-run",
-    "security:cf:baseline:dry": "node security/scripts/apply-cloudflare-baseline.mjs",
-    "security:cf:baseline:apply": "node security/scripts/apply-cloudflare-baseline.mjs --apply",
-    "security:cf:monitor:dry": "node security/scripts/monitor-cloudflare-spike.mjs",
-    "security:cf:monitor:apply": "node security/scripts/monitor-cloudflare-spike.mjs --apply"
+    "video:encode:dry": "bash scripts/encode-videos.sh --dry-run"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

@@ -53,10 +53,6 @@ La aplicación estará disponible en `http://localhost:8080`
 | `npm run lint` | Ejecuta el linter |
 | `npm run video:encode` | Genera versiones `preview` y `mobile` de los MP4 |
 | `npm run video:encode:dry` | Muestra comandos ffmpeg sin ejecutar |
-| `npm run security:cf:baseline:dry` | Muestra payload de reglas Cloudflare (sin aplicar) |
-| `npm run security:cf:baseline:apply` | Aplica baseline de rate-limit/firewall en Cloudflare |
-| `npm run security:cf:monitor:dry` | Ejecuta monitoreo de spike (solo reporte) |
-| `npm run security:cf:monitor:apply` | Ejecuta monitoreo de spike con acciones |
 
 ## 🎬 Pipeline de Video (R2/CDN)
 
@@ -87,17 +83,6 @@ npm run video:encode -- ugc-lifestyle-review.mp4 ugc-brand-spokesperson.mp4
 Salida:
 - Videos en `tmp/video-encodes/`
 - Reporte CSV en `tmp/video-encodes/manifest.csv`
-
-## 🔐 Seguridad (anti-cost spike + media firmada)
-
-Se agregó un kit de hardening en `security/` con:
-
-- Endpoint de sesión de media firmada: `/api/media/session`
-- Scripts de Cloudflare para baseline y modo emergencia
-- Workflow programado cada 5 minutos para activar/desactivar protección automáticamente
-- Plantilla de Worker para proteger `videos/main/*` con token `st` + `exp`
-
-Ver guía completa en `security/README.md`.
 
 ## 📂 Estructura del Proyecto
 
