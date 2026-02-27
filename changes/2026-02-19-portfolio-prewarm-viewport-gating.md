@@ -261,3 +261,11 @@ Improved page-speed behavior by reducing eager R2 video prewarm pressure before 
 ### Result expectation
 - Mobile theater opens on `main` while still keeping `mobile` as warm fallback.
 - More R2 videos are warmed before click/tap, improving perceived “instant” startup in theater navigation.
+
+## 2026-02-19 Validation Note - User Confirmed Final Runtime
+
+### Outcome
+- After runtime/cache settled, user confirmed the site is now blazing fast, including mobile theater behavior.
+
+### Tracking note
+- This confirms the main-first mobile theater + aggressive R2 prewarm pass reached the intended “instant feel” target in real usage.
