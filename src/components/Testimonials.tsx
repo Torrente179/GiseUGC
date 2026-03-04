@@ -224,7 +224,7 @@ const Testimonials = () => {
                   <button
                     type="button"
                     onClick={() => setZoomedIndex(index)}
-                    className="mx-auto block w-full max-w-[980px] overflow-hidden rounded-2xl border border-border/70 bg-background/55 transition-colors hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="mx-auto block w-full max-w-[980px] overflow-hidden rounded-2xl border border-border/70 bg-background/55 transition-colors hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:max-w-[760px] lg:max-w-[820px]"
                     aria-label={`Open testimonial image ${index + 1}`}
                   >
                     <img
@@ -232,7 +232,7 @@ const Testimonials = () => {
                       alt={testimonial.alt}
                       width={testimonial.width}
                       height={testimonial.height}
-                      className="mx-auto h-auto max-h-[70vh] w-full object-contain md:max-h-[58vh] lg:max-h-[56vh]"
+                      className="mx-auto h-auto max-h-[70vh] w-full object-contain md:max-h-[44vh] lg:max-h-[42vh]"
                       loading={index === activeIndex ? 'eager' : 'lazy'}
                       decoding="async"
                     />

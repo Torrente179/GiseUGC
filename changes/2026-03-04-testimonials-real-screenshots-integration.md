@@ -82,3 +82,19 @@ After initial deployment, desktop-specific visual issues were reported and fixed
 
 ### Follow-up Validation
 - `npm run build` completed successfully after the desktop fixes.
+
+---
+
+## Follow-up 2: Desktop Scale Tightening
+
+Desktop cards were still visually too dominant versus section headings, so sizing was tightened again while keeping mobile behavior unchanged.
+
+- Added stricter desktop max-width constraints on the main testimonial screenshot container.
+- Reduced desktop viewport-height caps for the main screenshot image.
+- Kept mobile sizing as-is to preserve the approved mobile balance.
+
+### Follow-up 2 Files Updated
+- `src/components/Testimonials.tsx`
+
+### Follow-up 2 Validation
+- `npm run build` completed successfully after this sizing pass.
