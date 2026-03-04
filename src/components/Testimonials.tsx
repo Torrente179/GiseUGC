@@ -1,62 +1,143 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type TouchEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
+
+interface TestimonialImage {
+  id: number;
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+const TESTIMONIAL_IMAGES: TestimonialImage[] = [
+  {
+    id: 1,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8667.PNG',
+    alt: 'Original testimonial screenshot 1',
+    width: 1284,
+    height: 488,
+  },
+  {
+    id: 2,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8668.PNG',
+    alt: 'Original testimonial screenshot 2',
+    width: 1284,
+    height: 791,
+  },
+  {
+    id: 3,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8669.PNG',
+    alt: 'Original testimonial screenshot 3',
+    width: 1284,
+    height: 853,
+  },
+  {
+    id: 4,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8670.PNG',
+    alt: 'Original testimonial screenshot 4',
+    width: 1284,
+    height: 689,
+  },
+  {
+    id: 5,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8671.PNG',
+    alt: 'Original testimonial screenshot 5',
+    width: 1284,
+    height: 970,
+  },
+  {
+    id: 6,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8672.PNG',
+    alt: 'Original testimonial screenshot 6',
+    width: 1284,
+    height: 945,
+  },
+  {
+    id: 7,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8673.PNG',
+    alt: 'Original testimonial screenshot 7',
+    width: 1284,
+    height: 724,
+  },
+  {
+    id: 8,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8674.PNG',
+    alt: 'Original testimonial screenshot 8',
+    width: 1284,
+    height: 838,
+  },
+  {
+    id: 9,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8675.PNG',
+    alt: 'Original testimonial screenshot 9',
+    width: 1284,
+    height: 635,
+  },
+  {
+    id: 10,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8676.PNG',
+    alt: 'Original testimonial screenshot 10',
+    width: 1284,
+    height: 718,
+  },
+  {
+    id: 11,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8677.PNG',
+    alt: 'Original testimonial screenshot 11',
+    width: 1284,
+    height: 842,
+  },
+  {
+    id: 12,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8678.PNG',
+    alt: 'Original testimonial screenshot 12',
+    width: 1284,
+    height: 707,
+  },
+  {
+    id: 13,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8679.PNG',
+    alt: 'Original testimonial screenshot 13',
+    width: 1284,
+    height: 603,
+  },
+  {
+    id: 14,
+    src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8680.PNG',
+    alt: 'Original testimonial screenshot 14',
+    width: 1284,
+    height: 1054,
+  },
+];
 
 const Testimonials = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
 
-  const testimonialData = [
-    {
-      id: 1,
-      nameKey: 'testimonials.testimonial1.name',
-      companyKey: 'testimonials.testimonial1.company',
-      roleKey: 'testimonials.testimonial1.role',
-      textKey: 'testimonials.testimonial1.text',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80',
-      stars: 5,
-    },
-    {
-      id: 2,
-      nameKey: 'testimonials.testimonial2.name',
-      companyKey: 'testimonials.testimonial2.company',
-      roleKey: 'testimonials.testimonial2.role',
-      textKey: 'testimonials.testimonial2.text',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80',
-      stars: 5,
-    },
-    {
-      id: 3,
-      nameKey: 'testimonials.testimonial3.name',
-      companyKey: 'testimonials.testimonial3.company',
-      roleKey: 'testimonials.testimonial3.role',
-      textKey: 'testimonials.testimonial3.text',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80',
-      stars: 5,
-    },
-  ];
-
   const [activeIndex, setActiveIndex] = useState(0);
+  const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
   const nextTestimonial = () => {
-    setActiveIndex((prevIndex) => (prevIndex + 1) % testimonialData.length);
+    setActiveIndex((prevIndex) => (prevIndex + 1) % TESTIMONIAL_IMAGES.length);
   };
 
   const prevTestimonial = () => {
-    setActiveIndex((prevIndex) => (prevIndex - 1 + testimonialData.length) % testimonialData.length);
+    setActiveIndex((prevIndex) => (prevIndex - 1 + TESTIMONIAL_IMAGES.length) % TESTIMONIAL_IMAGES.length);
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     touchStartX.current = e.touches[0].clientX;
     touchEndX.current = null;
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
     touchEndX.current = e.touches[0].clientX;
   };
 
@@ -72,6 +153,8 @@ const Testimonials = () => {
     touchStartX.current = null;
     touchEndX.current = null;
   };
+
+  const zoomedTestimonial = zoomedIndex === null ? null : TESTIMONIAL_IMAGES[zoomedIndex];
 
   return (
     <section id="testimonials" className="studio-section bg-background">
@@ -135,65 +218,78 @@ const Testimonials = () => {
           transition={{ duration: 0.68 }}
         >
           <div className="flex transition-transform duration-500" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
-            {testimonialData.map((testimonial) => (
+            {TESTIMONIAL_IMAGES.map((testimonial, index) => (
               <article key={testimonial.id} className="min-w-full">
-                <div className="studio-panel p-6 md:p-8 lg:p-10">
-                  <div className="grid gap-8 lg:grid-cols-[minmax(0,0.34fr)_minmax(0,0.66fr)] lg:items-start">
-                    <div className="rounded-2xl border border-border/70 bg-background/55 p-5 md:p-6">
-                      <div className="flex items-center gap-4 mb-5">
-                        <div className="h-16 w-16 rounded-full overflow-hidden flex-shrink-0 border border-border">
-                          <img
-                            src={testimonial.image}
-                            alt={t(testimonial.nameKey)}
-                            className="h-full w-full object-cover"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-medium leading-tight text-foreground">{t(testimonial.nameKey)}</h3>
-                          <p className="text-sm text-muted-foreground mt-1">{t(testimonial.roleKey)}</p>
-                          <p className="text-sm text-muted-foreground">{t(testimonial.companyKey)}</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-1">
-                        {[...Array(5)].map((_, index) => (
-                          <Star
-                            key={index}
-                            className={`h-4 w-4 ${index < testimonial.stars ? 'text-primary fill-primary' : 'text-muted'}`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-
-                    <blockquote className="relative text-lg md:text-[1.45rem] font-sans font-light italic text-foreground/90 leading-[1.8]">
-                      <span className="absolute -top-5 md:-top-7 -left-2 text-5xl md:text-6xl text-primary/20 not-italic leading-none">“</span>
-                      <span className="relative z-10">{t(testimonial.textKey)}</span>
-                    </blockquote>
-                  </div>
+                <div className="studio-panel p-4 md:p-6 lg:p-8">
+                  <button
+                    type="button"
+                    onClick={() => setZoomedIndex(index)}
+                    className="block w-full overflow-hidden rounded-2xl border border-border/70 bg-background/55 transition-colors hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    aria-label={`Open testimonial image ${index + 1}`}
+                  >
+                    <img
+                      src={testimonial.src}
+                      alt={testimonial.alt}
+                      width={testimonial.width}
+                      height={testimonial.height}
+                      className="h-auto w-full object-contain"
+                      loading={index === activeIndex ? 'eager' : 'lazy'}
+                      decoding="async"
+                    />
+                  </button>
                 </div>
               </article>
             ))}
           </div>
         </motion.div>
 
-        <div className="flex justify-center mt-7 md:mt-8 gap-2.5">
-          {testimonialData.map((_, index) => (
-            <motion.button
-              key={index}
-              onClick={() => setActiveIndex(index)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
-              whileHover={shouldReduceMotion ? undefined : { scale: 1.2 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
-              transition={springHoverTransition}
-            >
-              <span className={`h-2.5 rounded-full transition-all ${activeIndex === index ? 'w-8 bg-primary' : 'w-2.5 bg-primary/30'}`} />
-            </motion.button>
-          ))}
+        <div className="mt-7 md:mt-8">
+          <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 md:justify-center">
+            {TESTIMONIAL_IMAGES.map((testimonial, index) => (
+              <motion.button
+                key={testimonial.id}
+                onClick={() => setActiveIndex(index)}
+                className={`relative h-16 w-24 shrink-0 snap-start overflow-hidden rounded-lg border bg-background/55 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:h-20 md:w-32 ${
+                  activeIndex === index ? 'border-primary/70 ring-1 ring-primary/40' : 'border-border/65 hover:border-primary/30'
+                }`}
+                aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.03 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                transition={springHoverTransition}
+              >
+                <img
+                  src={testimonial.src}
+                  alt=""
+                  width={testimonial.width}
+                  height={testimonial.height}
+                  className="h-full w-full object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </motion.button>
+            ))}
+          </div>
         </div>
       </div>
+
+      <Dialog open={zoomedIndex !== null} onOpenChange={(isOpen) => !isOpen && setZoomedIndex(null)}>
+        <DialogContent className="max-h-[95vh] max-w-[95vw] border-border/70 bg-card/95 p-3 md:p-4">
+          <DialogTitle className="sr-only">Testimonial image preview</DialogTitle>
+          {zoomedTestimonial && (
+            <div className="flex max-h-[90vh] items-center justify-center overflow-auto">
+              <img
+                src={zoomedTestimonial.src}
+                alt={zoomedTestimonial.alt}
+                width={zoomedTestimonial.width}
+                height={zoomedTestimonial.height}
+                className="h-auto max-h-[90vh] w-auto max-w-[95vw] rounded-lg object-contain"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
