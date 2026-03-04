@@ -136,8 +136,13 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     measure();
     queueParallaxUpdate();
 
+    const handleResize = () => {
+      measure();
+      queueParallaxUpdate();
+    };
+
     window.addEventListener('scroll', queueParallaxUpdate, { passive: true });
-    window.addEventListener('resize', () => { measure(); queueParallaxUpdate(); });
+    window.addEventListener('resize', handleResize);
 
     let resizeObserver: ResizeObserver | null = null;
     if (typeof ResizeObserver !== 'undefined') {
@@ -148,7 +153,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     return () => {
       window.clearTimeout(motionReadyTimer);
       window.removeEventListener('scroll', queueParallaxUpdate);
-      window.removeEventListener('resize', queueParallaxUpdate);
+      window.removeEventListener('resize', handleResize);
       resizeObserver?.disconnect();
       if (frameId !== null) window.cancelAnimationFrame(frameId);
       media.style.transform = '';

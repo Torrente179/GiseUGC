@@ -51,7 +51,6 @@ type MobileMenuSwipeState = {
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
-  const [scrollProgress, setScrollProgress] = useState(0);
   const shouldReduceMotion = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileMenuDragOffset, setMobileMenuDragOffset] = useState(0);
@@ -62,18 +61,41 @@ const Navbar = () => {
   const swipeDismissTimeoutRef = useRef<number | null>(null);
   const ignoreNextMenuButtonClickRef = useRef(false);
   const scrollRafRef = useRef<number | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
+  const navShellRef = useRef<HTMLDivElement | null>(null);
+  const scrollProgressRef = useRef(0);
 
   useEffect(() => {
+    const applyScrollProgressStyles = (p: number) => {
+      const nav = navRef.current;
+      const shell = navShellRef.current;
+      if (!nav || !shell) return;
+
+      nav.style.padding = `${20 - p * 8}px 0`;
+      shell.style.padding = `${12 - p * 4}px 16px`;
+      shell.style.backgroundColor = `hsl(var(--card) / ${0.45 + p * 0.47})`;
+      shell.style.backdropFilter = `blur(${4 + p * 8}px)`;
+      shell.style.setProperty('-webkit-backdrop-filter', `blur(${4 + p * 8}px)`);
+      shell.style.borderColor = `hsl(var(--border) / ${p * 0.9})`;
+      shell.style.boxShadow =
+        p > 0.05
+          ? `0 ${16 * p}px ${36 * p}px -28px hsl(var(--foreground) / ${0.7 * p})`
+          : 'none';
+    };
+
     const updateScrollProgress = () => {
       scrollRafRef.current = null;
       const p = Math.min(1, Math.max(0, window.scrollY / SCROLL_RANGE));
-      setScrollProgress((prev) => (Math.abs(prev - p) < 0.01 ? prev : p));
+      if (Math.abs(scrollProgressRef.current - p) < 0.01) return;
+      scrollProgressRef.current = p;
+      applyScrollProgressStyles(p);
     };
     const handleScroll = () => {
       if (scrollRafRef.current !== null) return;
       scrollRafRef.current = requestAnimationFrame(updateScrollProgress);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
+    applyScrollProgressStyles(scrollProgressRef.current);
     updateScrollProgress();
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -456,26 +478,26 @@ const Navbar = () => {
       </div>
 
       <motion.nav
+        ref={navRef}
         className="fixed top-0 left-0 w-full z-[110]"
-        style={{ padding: `${20 - scrollProgress * 8}px 0` }}
+        style={{ padding: '20px 0' }}
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
       >
         <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
           <div
+            ref={navShellRef}
             className="flex items-center justify-between rounded-[1.15rem] px-4 md:px-6 transition-[box-shadow] duration-300"
             style={{
-              padding: `${12 - scrollProgress * 4}px ${16}px`,
-              backgroundColor: `hsl(var(--card) / ${0.45 + scrollProgress * 0.47})`,
-              backdropFilter: `blur(${4 + scrollProgress * 8}px)`,
-              WebkitBackdropFilter: `blur(${4 + scrollProgress * 8}px)`,
+              padding: '12px 16px',
+              backgroundColor: 'hsl(var(--card) / 0.45)',
+              backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
               borderWidth: 1,
               borderStyle: 'solid',
-              borderColor: `hsl(var(--border) / ${scrollProgress * 0.9})`,
-              boxShadow: scrollProgress > 0.05
-                ? `0 ${16 * scrollProgress}px ${36 * scrollProgress}px -28px hsl(var(--foreground) / ${0.7 * scrollProgress})`
-                : 'none',
+              borderColor: 'hsl(var(--border) / 0)',
+              boxShadow: 'none',
             }}
           >
             <a

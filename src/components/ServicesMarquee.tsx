@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import LazyVideo from '@/components/media/LazyVideo';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
+import { mark, measure } from '@/lib/perf-debug';
 
 interface ServiceVideoCard {
     titleKey: string;
@@ -19,7 +20,10 @@ const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2PreviewVideo = (filename: string) =>
     `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
 const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
-const AUTO_SCROLL_SPEED_PX_PER_SECOND = 27;
+const MOBILE_BREAKPOINT_PX = 768;
+const AUTO_SCROLL_SPEED_DESKTOP_PX_PER_SECOND = 27;
+const AUTO_SCROLL_SPEED_MOBILE_PX_PER_SECOND = 49;
+const MOBILE_TOUCH_DRAG_MULTIPLIER = 1.45;
 const MAX_FRAME_DELTA_MS = 64;
 const TOUCH_AXIS_LOCK_THRESHOLD_PX = 6;
 
@@ -50,6 +54,12 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
     const dragStartRef = useRef({ x: 0, y: 0, offset: 0 });
     const hasDraggedRef = useRef(false);
     const touchAxisRef = useRef<'pending' | 'horizontal' | 'vertical'>('pending');
+    const isTouchTrackingRef = useRef(false);
+    const isSectionVisibleRef = useRef(true);
+    const isDocumentVisibleRef = useRef(true);
+    const isMobileViewportRef = useRef(false);
+    const touchSessionCounterRef = useRef(0);
+    const activeTouchSessionRef = useRef<number | null>(null);
 
     const serviceVideoCards: ServiceVideoCard[] = [
         {
@@ -215,6 +225,19 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
         const track = trackRef.current;
         if (!container || !track) return;
 
+        const updateViewportMode = () => {
+            isMobileViewportRef.current = window.innerWidth < MOBILE_BREAKPOINT_PX;
+        };
+        updateViewportMode();
+
+        const syncDocumentVisibility = () => {
+            isDocumentVisibleRef.current = document.visibilityState === 'visible';
+            if (isDocumentVisibleRef.current) {
+                mark('services-marquee:document-visible');
+            }
+            syncAnimationLoop();
+        };
+
         // Measure one set width and start at the middle set
         const measure = () => {
             setWidthRef.current = track.scrollWidth / 3;
@@ -222,32 +245,62 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             track.style.transform = `translateX(-${offsetRef.current}px)`;
         };
         const initTimeout = setTimeout(measure, 50);
+        window.addEventListener('resize', updateViewportMode);
+        window.addEventListener('resize', measure);
+        document.addEventListener('visibilitychange', syncDocumentVisibility);
 
-        let animationFrameId: number;
+        let animationFrameId: number | null = null;
         let previousTimestamp: number | null = null;
+        let sectionObserver: IntersectionObserver | null = null;
+
+        const stopAnimationLoop = () => {
+            if (animationFrameId !== null) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            previousTimestamp = null;
+        };
+
+        const syncAnimationLoop = () => {
+            const shouldRun = isSectionVisibleRef.current && isDocumentVisibleRef.current;
+            if (!shouldRun) {
+                stopAnimationLoop();
+                return;
+            }
+            if (animationFrameId === null) {
+                animationFrameId = requestAnimationFrame(animate);
+            }
+        };
 
         const animate = (timestamp: number) => {
+            animationFrameId = null;
             const sw = setWidthRef.current;
-            if (sw > 0) {
-                const rawDeltaMs = previousTimestamp === null ? 16.67 : timestamp - previousTimestamp;
-                const deltaMs = Math.min(Math.max(rawDeltaMs, 0), MAX_FRAME_DELTA_MS);
-                previousTimestamp = timestamp;
-
-                // Auto-scroll when not paused and not dragging
-                if (!isPausedRef.current && !isDraggingRef.current) {
-                    offsetRef.current += AUTO_SCROLL_SPEED_PX_PER_SECOND * (deltaMs / 1000);
-                }
-
-                // Wrap boundaries — runs every frame regardless
-                if (offsetRef.current >= sw * 2) {
-                    offsetRef.current -= sw;
-                } else if (offsetRef.current <= 0) {
-                    offsetRef.current += sw;
-                }
-
-                track.style.transform = `translateX(-${offsetRef.current}px)`;
+            if (sw <= 0) {
+                syncAnimationLoop();
+                return;
             }
-            animationFrameId = requestAnimationFrame(animate);
+
+            const rawDeltaMs = previousTimestamp === null ? 16.67 : timestamp - previousTimestamp;
+            const deltaMs = Math.min(Math.max(rawDeltaMs, 0), MAX_FRAME_DELTA_MS);
+            previousTimestamp = timestamp;
+
+            // Auto-scroll when not paused and not dragging.
+            if (!isPausedRef.current && !isDraggingRef.current) {
+                const autoScrollSpeed = isMobileViewportRef.current
+                    ? AUTO_SCROLL_SPEED_MOBILE_PX_PER_SECOND
+                    : AUTO_SCROLL_SPEED_DESKTOP_PX_PER_SECOND;
+                offsetRef.current += autoScrollSpeed * (deltaMs / 1000);
+            }
+
+            // Wrap boundaries — runs every frame regardless
+            if (offsetRef.current >= sw * 2) {
+                offsetRef.current -= sw;
+            } else if (offsetRef.current <= 0) {
+                offsetRef.current += sw;
+            }
+
+            track.style.transform = `translateX(-${offsetRef.current}px)`;
+            syncAnimationLoop();
         };
 
         // Mouse drag
@@ -270,13 +323,19 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
         const handleTouchStart = (e: TouchEvent) => {
             const touch = e.touches[0];
             if (!touch) return;
-            isDraggingRef.current = true;
+            touchSessionCounterRef.current += 1;
+            const sessionId = touchSessionCounterRef.current;
+            activeTouchSessionRef.current = sessionId;
+            mark(`services-marquee:touch:${sessionId}:start`);
+
+            isTouchTrackingRef.current = true;
+            isDraggingRef.current = false;
             hasDraggedRef.current = false;
             touchAxisRef.current = 'pending';
             dragStartRef.current = { x: touch.clientX, y: touch.clientY, offset: offsetRef.current };
         };
         const handleTouchMove = (e: TouchEvent) => {
-            if (!isDraggingRef.current) return;
+            if (!isTouchTrackingRef.current) return;
             const touch = e.touches[0];
             if (!touch) return;
 
@@ -291,26 +350,56 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                     return;
                 }
                 touchAxisRef.current = Math.abs(dx) >= Math.abs(dy) ? 'horizontal' : 'vertical';
+                const sessionId = activeTouchSessionRef.current;
+                if (sessionId !== null) {
+                    mark(`services-marquee:touch:${sessionId}:axis-${touchAxisRef.current}`);
+                }
             }
 
             if (touchAxisRef.current === 'vertical') {
+                isTouchTrackingRef.current = false;
                 isDraggingRef.current = false;
                 return;
             }
 
+            isDraggingRef.current = true;
             if (e.cancelable) {
                 e.preventDefault();
             }
 
-            if (Math.abs(dx) > 5) hasDraggedRef.current = true;
-            offsetRef.current = dragStartRef.current.offset + dx;
+            const dragMultiplier = isMobileViewportRef.current ? MOBILE_TOUCH_DRAG_MULTIPLIER : 1;
+            const dragDelta = dx * dragMultiplier;
+            if (Math.abs(dragDelta) > 5) hasDraggedRef.current = true;
+            offsetRef.current = dragStartRef.current.offset + dragDelta;
         };
         const handleTouchEnd = () => {
+            const sessionId = activeTouchSessionRef.current;
+            if (sessionId !== null) {
+                const startMark = `services-marquee:touch:${sessionId}:start`;
+                const endMark = `services-marquee:touch:${sessionId}:end`;
+                mark(endMark);
+                measure(startMark, endMark, `services-marquee:touch:${sessionId}:duration`);
+            }
+            activeTouchSessionRef.current = null;
+            isTouchTrackingRef.current = false;
             isDraggingRef.current = false;
             touchAxisRef.current = 'pending';
         };
 
-        animationFrameId = requestAnimationFrame(animate);
+        if (typeof IntersectionObserver !== 'undefined') {
+            sectionObserver = new IntersectionObserver(
+                (entries) => {
+                    const entry = entries[0];
+                    isSectionVisibleRef.current = Boolean(entry?.isIntersecting);
+                    syncAnimationLoop();
+                },
+                { rootMargin: '420px 0px' },
+            );
+            sectionObserver.observe(container);
+        }
+
+        syncDocumentVisibility();
+        syncAnimationLoop();
 
         container.addEventListener('mousedown', handleMouseDown);
         window.addEventListener('mousemove', handleMouseMove);
@@ -322,7 +411,11 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
 
         return () => {
             clearTimeout(initTimeout);
-            cancelAnimationFrame(animationFrameId);
+            stopAnimationLoop();
+            sectionObserver?.disconnect();
+            window.removeEventListener('resize', updateViewportMode);
+            window.removeEventListener('resize', measure);
+            document.removeEventListener('visibilitychange', syncDocumentVisibility);
             container.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
@@ -379,7 +472,7 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                     ref={containerRef}
                     className="relative z-10 overflow-hidden pt-10 md:pt-16 pb-10 select-none cursor-grab active:cursor-grabbing"
                     onDragStart={(e) => e.preventDefault()}
-                    style={{ touchAction: 'pan-x' }}
+                    style={{ touchAction: 'pan-y' }}
                 >
                     <div
                         ref={trackRef}
