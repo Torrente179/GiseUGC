@@ -242,6 +242,52 @@
     "satisfaction": "Satisfacción",
     "contentPieces": "Piezas de Contenido"
   },
+  "faq": {
+    "sectionSubtitle": "Preguntas Frecuentes",
+    "sectionTitle": "FAQ",
+    "items": [
+      {
+        "question": "¿Qué es una creadora UGC y cómo puede ayudar a mi marca?",
+        "answer": "Una creadora UGC (User Generated Content) produce videos auténticos estilo consumidor real para tus campañas publicitarias. Este tipo de contenido genera hasta 4 veces más engagement que los anuncios tradicionales. Creo UGC ads, testimoniales, demos y contenido lifestyle en español e inglés para TikTok, Instagram Reels y Meta Ads."
+      },
+      {
+        "question": "¿Qué tipos de contenido UGC ofreces para TikTok y Meta Ads?",
+        "answer": "Ofrezco 11 tipos de contenido UGC: ads para TikTok y Meta con hooks potentes, videos de portavoz (spokesperson), contenido de brand ambassador bilingüe, testimoniales y reseñas, demos de producto y how-to, voiceover y on-camera en español e inglés, videos para Reels y TikTok, UGC para belleza y skincare, UGC para SaaS y tech, UGC para moda y lifestyle, y paquetes de B-Roll."
+      },
+      {
+        "question": "¿Trabajas con marcas fuera de Colombia?",
+        "answer": "Sí, trabajo con marcas en más de 30 países. Mi prioridad es el mercado hispano en Estados Unidos, seguido de Canadá y Europa (incluyendo España), luego Australia, Nueva Zelanda y Asia, y después toda Latinoamérica. Con más de 28 campañas activas y 158 reseñas en Fiverr (4.8/5 estrellas), ofrezco producción remota con estándares internacionales desde Medellín."
+      },
+      {
+        "question": "¿Cómo es el proceso para crear contenido UGC para mi marca?",
+        "answer": "El proceso es simple: 1) Me compartes el brief de tu marca y objetivos, 2) Presento conceptos creativos adaptados a tu audiencia, 3) Produzco el contenido con estética editorial y enfoque en conversión, 4) Entrego los videos listos para publicar. Todo el proceso es remoto y profesional."
+      },
+      {
+        "question": "¿Puedes crear contenido en español e inglés para la misma campaña?",
+        "answer": "Sí, soy creadora UGC completamente bilingüe (español nativo e inglés fluido). Puedo producir la misma campaña en ambos idiomas manteniendo el tono auténtico y la adaptación cultural para cada mercado. Ideal para marcas que buscan audiencias hispanas en USA y mercados angloparlantes."
+      },
+      {
+        "question": "¿Qué incluye un paquete de videos UGC?",
+        "answer": "Un paquete típico incluye videos listos para publicar en formato vertical (9:16) optimizados para TikTok, Reels o Meta Ads. Según el tipo de contenido, puede incluir hooks, storytelling, demostraciones de producto, llamados a acción, y variaciones para A/B testing."
+      },
+      {
+        "question": "¿Cuánto tiempo toma recibir el contenido UGC?",
+        "answer": "Los tiempos varían según el alcance del proyecto. En general, los videos individuales se entregan en pocos días hábiles y los paquetes más grandes en una a dos semanas. Para campañas urgentes, puedo adaptar los plazos según la necesidad."
+      },
+      {
+        "question": "¿Qué resultados han tenido tus clientes con contenido UGC?",
+        "answer": "Mis clientes reportan un aumento del 45% en engagement para campañas de moda, un incremento del 60% en conversiones para marcas de skincare, y conexiones más efectivas con audiencias objetivo para productos tecnológicos. Tengo 158 reseñas en Fiverr con una calificación de 4.8 sobre 5 estrellas."
+      },
+      {
+        "question": "¿Ofreces videos de portavoz (spokesperson) para marcas?",
+        "answer": "Sí, los videos de portavoz son uno de mis servicios principales. Incluyen presentación profesional frente a cámara para explicar tu oferta, lanzamientos y promociones en español, inglés o ambos idiomas. Ideal para landing pages, anuncios y contenido corporativo."
+      },
+      {
+        "question": "¿Qué hace diferente a tu contenido UGC?",
+        "answer": "Mi enfoque combina estética editorial con estrategias de performance marketing. No solo se ve bien, sino que vende. Soy una de las pocas creadoras UGC bilingües (ES/EN) con experiencia en más de 28 campañas activas y una reputación de 4.8/5 en Fiverr con 158 reseñas."
+      }
+    ]
+  },
   "floatingContact": {
     "whatsappLabel": "WhatsApp",
     "telegramLabel": "Telegram",

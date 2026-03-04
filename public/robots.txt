@@ -1,3 +1,58 @@
+# === Traditional Search ===
+User-agent: Googlebot
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+# === OpenAI (ChatGPT, Copilot) ===
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# === Anthropic (Claude) ===
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: claude-web
+Allow: /
+
+# === Perplexity ===
+User-agent: PerplexityBot
+Allow: /
+
+# === Google AI Training (allow for Gemini inclusion) ===
+User-agent: Google-Extended
+Allow: /
+
+# === Apple Intelligence ===
+User-agent: Applebot-Extended
+Allow: /
+
+# === Amazon Alexa ===
+User-agent: Amazonbot
+Allow: /
+
+# === Meta AI ===
+User-agent: meta-externalagent
+Allow: /
+
+# === ByteDance (Doubao AI) ===
+User-agent: Bytespider
+Allow: /
+
+# === Default ===
 User-agent: *
 Allow: /
 Allow: /llms.txt

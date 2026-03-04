@@ -245,6 +245,52 @@
     "satisfaction": "Satisfaction",
     "contentPieces": "Content Pieces"
   },
+  "faq": {
+    "sectionSubtitle": "Frequently Asked Questions",
+    "sectionTitle": "FAQ",
+    "items": [
+      {
+        "question": "What is a UGC creator and how can it help my brand?",
+        "answer": "A UGC (User Generated Content) creator produces authentic, consumer-style videos for your ad campaigns. This type of content drives up to 4x more engagement than traditional ads. I create UGC ads, testimonials, demos, and lifestyle content in both Spanish and English for TikTok, Instagram Reels, and Meta Ads."
+      },
+      {
+        "question": "What types of UGC content do you offer for TikTok and Meta Ads?",
+        "answer": "I offer 11 types of UGC content: conversion-focused ads for TikTok and Meta with strong hooks, spokesperson videos, bilingual brand ambassador content, testimonials and reviews, product demos and how-tos, Spanish and English voiceover and on-camera pieces, Reels and TikTok videos, beauty and skincare UGC, SaaS and tech UGC, fashion and lifestyle UGC, and B-Roll footage packs."
+      },
+      {
+        "question": "Do you work with brands outside Colombia?",
+        "answer": "Yes, I work with brands across 30+ countries. My priority is the Hispanic market in the United States, followed by Canada and Europe (including Spain), then Australia, New Zealand, and Asia, and then all of Latin America. With 28+ active campaigns and 158 Fiverr reviews (4.8/5 stars), I offer remote production with international standards from Medellin."
+      },
+      {
+        "question": "What is the process for creating UGC content for my brand?",
+        "answer": "The process is simple: 1) Share your brand brief and goals, 2) I present creative concepts tailored to your audience, 3) I produce the content with editorial aesthetics and a conversion focus, 4) I deliver publish-ready videos. The entire process is remote and professional."
+      },
+      {
+        "question": "Can you create content in both Spanish and English for the same campaign?",
+        "answer": "Yes, I am a fully bilingual UGC creator (native Spanish and fluent English). I can produce the same campaign in both languages while maintaining authentic tone and cultural adaptation for each market. Ideal for brands targeting Hispanic audiences in the US and English-speaking markets."
+      },
+      {
+        "question": "What does a UGC video package include?",
+        "answer": "A typical package includes publish-ready videos in vertical format (9:16) optimized for TikTok, Reels, or Meta Ads. Depending on the content type, it may include hooks, storytelling, product demonstrations, calls to action, and variations for A/B testing."
+      },
+      {
+        "question": "How long does it take to receive UGC content?",
+        "answer": "Timelines vary based on project scope. Generally, individual videos are delivered within a few business days and larger packages within one to two weeks. For urgent campaigns, I can adjust timelines to meet your needs."
+      },
+      {
+        "question": "What results have your clients achieved with UGC content?",
+        "answer": "My clients report a 45% increase in engagement for fashion campaigns, a 60% boost in conversions for skincare brands, and more effective connections with target audiences for tech products. I have 158 reviews on Fiverr with a rating of 4.8 out of 5 stars."
+      },
+      {
+        "question": "Do you offer spokesperson videos for brands?",
+        "answer": "Yes, spokesperson videos are one of my core services. They include professional on-camera delivery to explain your offer, launches, and promotions in Spanish, English, or both languages. Ideal for landing pages, ads, and corporate content."
+      },
+      {
+        "question": "What makes your UGC content different?",
+        "answer": "My approach combines editorial aesthetics with performance marketing strategies. It doesn't just look good — it sells. I'm one of the few bilingual UGC creators (ES/EN) with experience across 28+ active campaigns and a reputation of 4.8/5 on Fiverr with 158 reviews."
+      }
+    ]
+  },
   "floatingContact": {
     "whatsappLabel": "WhatsApp",
     "telegramLabel": "Telegram",
