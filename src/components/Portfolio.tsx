@@ -8,16 +8,8 @@ import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navig
 import { useIsMobile } from '@/hooks/use-mobile';
 import LazyVideo from '@/components/media/LazyVideo';
 import VIDEO_LQIP from '@/data/video-lqip';
-
-interface ReelClip {
-  id: number;
-  titleKey: string;
-  category: 'fashion' | 'beauty' | 'tech' | 'lifestyle';
-  mainSrc: string;
-  mobileSrc: string;
-  previewSrc: string;
-  posterSrc: string;
-}
+import { LEGACY_REEL_CLIPS, r2Poster, r2PreviewVideo, type ReelClip } from '@/data/portfolio-clips';
+import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 
 interface CollageClip {
   id: number;
@@ -58,111 +50,39 @@ const STARTUP_PREWARM_DELAY_DESKTOP_MS = 300;
 const STARTUP_PREWARM_DELAY_MOBILE_MS = 220;
 const PORTFOLIO_PREWARM_ROOT_MARGIN = '1800px 0px';
 const shouldPreferMobileTheaterSource = false;
-const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
-const r2MainVideo = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/main/${filename}`;
-const r2MobileVideo = (filename: string) =>
-  `${R2_MEDIA_BASE_URL}/videos/mobile/${filename.replace(/\.mp4$/, '-mobile.mp4')}`;
-const r2PreviewVideo = (filename: string) =>
-  `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
-const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
 const getLqip = (url: string) => {
   const filename = url.split('/').pop() ?? '';
   const key = filename.replace(/-preview\.mp4$/, '').replace(/-poster\.jpg$/, '').replace(/\.mp4$/, '');
   return VIDEO_LQIP[key] || undefined;
 };
+const DAILY_REEL_SHOWCASE_COUNT = 10;
+const DAY_MS = 86_400_000;
+const getUtcDayBucket = () => Math.floor(Date.now() / DAY_MS);
 
-const REEL_CLIPS: ReelClip[] = [
-  {
-    id: 1,
-    titleKey: 'portfolio.items.item1',
-    category: 'lifestyle',
-    mainSrc: r2MainVideo('ugc-lifestyle-review.mp4'),
-    mobileSrc: r2MobileVideo('ugc-lifestyle-review.mp4'),
-    previewSrc: r2PreviewVideo('ugc-lifestyle-review.mp4'),
-    posterSrc: r2Poster('ugc-lifestyle-review-poster.jpg'),
-  },
-  {
-    id: 2,
-    titleKey: 'portfolio.items.item2',
-    category: 'fashion',
-    mainSrc: r2MainVideo('ugc-brand-spokesperson.mp4'),
-    mobileSrc: r2MobileVideo('ugc-brand-spokesperson.mp4'),
-    previewSrc: r2PreviewVideo('ugc-brand-spokesperson.mp4'),
-    posterSrc: r2Poster('ugc-brand-spokesperson-poster.jpg'),
-  },
-  {
-    id: 3,
-    titleKey: 'portfolio.items.item3',
-    category: 'tech',
-    mainSrc: r2MainVideo('ugc-voicebot-review.mp4'),
-    mobileSrc: r2MobileVideo('ugc-voicebot-review.mp4'),
-    previewSrc: r2PreviewVideo('ugc-voicebot-review.mp4'),
-    posterSrc: r2Poster('ugc-voicebot-review-poster.jpg'),
-  },
-  {
-    id: 4,
-    titleKey: 'portfolio.items.item4',
-    category: 'beauty',
-    mainSrc: r2MainVideo('ugc-creatine-supplement-review.mp4'),
-    mobileSrc: r2MobileVideo('ugc-creatine-supplement-review.mp4'),
-    previewSrc: r2PreviewVideo('ugc-creatine-supplement-review.mp4'),
-    posterSrc: r2Poster('ugc-creatine-supplement-review-poster.jpg'),
-  },
-  {
-    id: 5,
-    titleKey: 'portfolio.items.item5',
-    category: 'lifestyle',
-    mainSrc: r2MainVideo('ugc-business-promotion.mp4'),
-    mobileSrc: r2MobileVideo('ugc-business-promotion.mp4'),
-    previewSrc: r2PreviewVideo('ugc-business-promotion.mp4'),
-    posterSrc: r2Poster('ugc-business-promotion-poster.jpg'),
-  },
-  {
-    id: 6,
-    titleKey: 'portfolio.items.item6',
-    category: 'fashion',
-    mainSrc: r2MainVideo('ugc-services-presentation.mp4'),
-    mobileSrc: r2MobileVideo('ugc-services-presentation.mp4'),
-    previewSrc: r2PreviewVideo('ugc-services-presentation.mp4'),
-    posterSrc: r2Poster('ugc-services-presentation-poster.jpg'),
-  },
-  {
-    id: 7,
-    titleKey: 'portfolio.items.item7',
-    category: 'tech',
-    mainSrc: r2MainVideo('ugc-ai-services-review.mp4'),
-    mobileSrc: r2MobileVideo('ugc-ai-services-review.mp4'),
-    previewSrc: r2PreviewVideo('ugc-ai-services-review.mp4'),
-    posterSrc: r2Poster('ugc-ai-services-review-poster.jpg'),
-  },
-  {
-    id: 8,
-    titleKey: 'portfolio.items.item8',
-    category: 'lifestyle',
-    mainSrc: r2MainVideo('ugc-lifestyle-review-2.mp4'),
-    mobileSrc: r2MobileVideo('ugc-lifestyle-review-2.mp4'),
-    previewSrc: r2PreviewVideo('ugc-lifestyle-review-2.mp4'),
-    posterSrc: r2Poster('ugc-lifestyle-review-2-poster.jpg'),
-  },
-  {
-    id: 9,
-    titleKey: 'portfolio.items.item9',
-    category: 'tech',
-    mainSrc: r2MainVideo('ugc-voiceover-bots-review.mp4'),
-    mobileSrc: r2MobileVideo('ugc-voiceover-bots-review.mp4'),
-    previewSrc: r2PreviewVideo('ugc-voiceover-bots-review.mp4'),
-    posterSrc: r2Poster('ugc-voiceover-bots-review-poster.jpg'),
-  },
-  {
-    id: 10,
-    titleKey: 'portfolio.items.item10',
-    category: 'lifestyle',
-    mainSrc: r2MainVideo('ugc-lifestyle-review-3.mp4'),
-    mobileSrc: r2MobileVideo('ugc-lifestyle-review-3.mp4'),
-    previewSrc: r2PreviewVideo('ugc-lifestyle-review-3.mp4'),
-    posterSrc: r2Poster('ugc-lifestyle-review-3-poster.jpg'),
-  },
-];
+const shuffleWithSeed = <T,>(items: T[], seed: number): T[] => {
+  const result = [...items];
+  let state = seed >>> 0;
+  const random = () => {
+    state += 0x6d2b79f5;
+    let t = state;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+
+  for (let i = result.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+};
+
+const pickDailyShowcaseClips = (clips: ReelClip[], count: number, daySeed: number): ReelClip[] => {
+  if (clips.length === 0 || count <= 0) return [];
+  return shuffleWithSeed(clips, daySeed).slice(0, Math.min(count, clips.length));
+};
+
+const ALL_REEL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS];
 
 const COLLAGE_CLIPS: CollageClip[] = [
   {
@@ -416,6 +336,7 @@ const Portfolio = () => {
   const [isPortfolioNearViewport, setIsPortfolioNearViewport] = useState(false);
   const [interactionPrewarmClip, setInteractionPrewarmClip] = useState<ReelClip | null>(null);
   const [theaterPreloadsReady, setTheaterPreloadsReady] = useState(false);
+  const [utcDayBucket, setUtcDayBucket] = useState(() => getUtcDayBucket());
 
   const portfolioSectionRef = useRef<HTMLElement | null>(null);
   const collageVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -429,6 +350,29 @@ const Portfolio = () => {
   const theaterPendingDragYRef = useRef(0);
   const interactionPrewarmTimerRef = useRef<number | null>(null);
   const linkPreloadRefs = useRef<HTMLLinkElement[]>([]);
+  const showcaseReelClips = useMemo(
+    () => pickDailyShowcaseClips(ALL_REEL_CLIPS, DAILY_REEL_SHOWCASE_COUNT, utcDayBucket),
+    [utcDayBucket],
+  );
+  const allReelIndexById = useMemo(
+    () => new Map(ALL_REEL_CLIPS.map((clip, index) => [clip.id, index])),
+    [],
+  );
+  const getReelTitle = useCallback(
+    (clip: ReelClip) => (clip.titleKey ? t(clip.titleKey) : clip.title ?? `Clip ${clip.id}`),
+    [t],
+  );
+
+  useEffect(() => {
+    const now = Date.now();
+    const nextUtcBoundary = (utcDayBucket + 1) * DAY_MS;
+    const boundaryDelayMs = Math.max(nextUtcBoundary - now, 1000);
+    const timeoutId = window.setTimeout(() => {
+      setUtcDayBucket(getUtcDayBucket());
+    }, boundaryDelayMs + 20);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [utcDayBucket]);
 
   const clearTheaterCloseTimer = useCallback(() => {
     if (theaterCloseTimerRef.current !== null) {
@@ -527,8 +471,8 @@ const Portfolio = () => {
     (direction: 1 | -1) => {
       if (activeReelIndex === null) return;
       setTheaterPrewarmDirection(direction);
-      const nextIndex = (activeReelIndex + direction + REEL_CLIPS.length) % REEL_CLIPS.length;
-      const nextClip = REEL_CLIPS[nextIndex];
+      const nextIndex = (activeReelIndex + direction + ALL_REEL_CLIPS.length) % ALL_REEL_CLIPS.length;
+      const nextClip = ALL_REEL_CLIPS[nextIndex];
       if (!nextClip) return;
       setActiveReelIndex(nextIndex);
       setActiveReelPreview(nextClip);
@@ -881,7 +825,7 @@ const Portfolio = () => {
       const step = reelScrollStepRef.current;
       if (!Number.isFinite(step) || step <= 0) return;
       const closestIndex = Math.round(container.scrollLeft / step);
-      const clampedIndex = Math.max(0, Math.min(REEL_CLIPS.length - 1, closestIndex));
+      const clampedIndex = Math.max(0, Math.min(showcaseReelClips.length - 1, closestIndex));
 
       setActiveMobileReelIndex((previousIndex) =>
         previousIndex === clampedIndex ? previousIndex : clampedIndex,
@@ -904,7 +848,7 @@ const Portfolio = () => {
         window.cancelAnimationFrame(frameId);
       }
     };
-  }, [isMobile]);
+  }, [isMobile, showcaseReelClips.length]);
 
   const scrollReels = (direction: 'left' | 'right') => {
     const container = reelScrollRef.current;
@@ -946,15 +890,16 @@ const Portfolio = () => {
   }, []);
 
   const handleReelCardClick = useCallback(
-    (clip: ReelClip, index: number) => {
+    (clip: ReelClip) => {
       if (reelCardDidDragRef.current) {
         reelCardDidDragRef.current = false;
         return;
       }
+      const reelIndex = allReelIndexById.get(clip.id) ?? 0;
       scheduleInteractionPrewarm(clip);
-      openReelPreview(clip, index);
+      openReelPreview(clip, reelIndex);
     },
-    [openReelPreview, scheduleInteractionPrewarm],
+    [allReelIndexById, openReelPreview, scheduleInteractionPrewarm],
   );
 
   /* Play all collage videos */
@@ -1055,8 +1000,8 @@ const Portfolio = () => {
 
     return theaterWarmPreloadOffsets
       .map((offset) => {
-        const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
-        return REEL_CLIPS[index];
+        const index = (activeReelIndex + offset + ALL_REEL_CLIPS.length) % ALL_REEL_CLIPS.length;
+        return ALL_REEL_CLIPS[index];
       })
       .filter(
         (clip, index, clips) =>
@@ -1069,28 +1014,28 @@ const Portfolio = () => {
     if (connectionProfile.slow) return [];
 
     return THEATER_HINT_PRELOAD_OFFSETS.map((offset) => {
-      const index = (activeReelIndex + offset + REEL_CLIPS.length) % REEL_CLIPS.length;
-      return REEL_CLIPS[index];
+      const index = (activeReelIndex + offset + ALL_REEL_CLIPS.length) % ALL_REEL_CLIPS.length;
+      return ALL_REEL_CLIPS[index];
     }).filter((clip, index, clips) => clips.findIndex((candidate) => candidate.id === clip.id) === index);
   }, [activeReelIndex, connectionProfile.slow]);
 
   const startupPreviewPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
     const clipCount = connectionProfile.slow ? 1 : isMobile ? 3 : 4;
-    return REEL_CLIPS.slice(0, clipCount);
-  }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
+    return showcaseReelClips.slice(0, clipCount);
+  }, [connectionProfile.slow, isMobile, showcaseReelClips, startupPrewarmEnabled]);
 
   const startupMainPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
     const clipCount = connectionProfile.slow ? 0 : 2;
-    return REEL_CLIPS.slice(0, clipCount);
-  }, [connectionProfile.slow, startupPrewarmEnabled]);
+    return showcaseReelClips.slice(0, clipCount);
+  }, [connectionProfile.slow, showcaseReelClips, startupPrewarmEnabled]);
 
   const startupMobilePreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
     const clipCount = connectionProfile.slow ? 0 : isMobile ? 2 : 1;
-    return REEL_CLIPS.slice(0, clipCount);
-  }, [connectionProfile.slow, isMobile, startupPrewarmEnabled]);
+    return showcaseReelClips.slice(0, clipCount);
+  }, [connectionProfile.slow, isMobile, showcaseReelClips, startupPrewarmEnabled]);
 
   const primaryWarmPreloadClip = theaterWarmPreloadClips[0] ?? null;
   const secondaryWarmPreloadClip = theaterWarmPreloadClips[1] ?? null;
@@ -1131,8 +1076,8 @@ const Portfolio = () => {
   const instantPrewarmClip = useMemo(() => {
     if (!isPortfolioNearViewport) return null;
     const clipIndex = isMobile ? activeMobileReelIndex : 0;
-    return REEL_CLIPS[clipIndex] ?? REEL_CLIPS[0] ?? null;
-  }, [activeMobileReelIndex, isMobile, isPortfolioNearViewport]);
+    return showcaseReelClips[clipIndex] ?? showcaseReelClips[0] ?? null;
+  }, [activeMobileReelIndex, isMobile, isPortfolioNearViewport, showcaseReelClips]);
 
   const instantPrewarmSources = useMemo(() => {
     return getProtectedSourcesForClip(instantPrewarmClip);
@@ -1292,7 +1237,7 @@ const Portfolio = () => {
                 className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-proximity md:snap-none overscroll-x-contain scroll-smooth"
                 style={{ WebkitOverflowScrolling: 'touch' }}
               >
-                {REEL_CLIPS.map((clip, index) => {
+                {showcaseReelClips.map((clip, index) => {
                   const mobileCardDistance = Math.abs(activeMobileReelIndex - index);
                   const isActiveMobileCard = !isMobile || mobileCardDistance === 0;
                   const isWarmMobileCard = isMobile && mobileCardDistance <= 1;
@@ -1312,8 +1257,8 @@ const Portfolio = () => {
                       onTouchMove={handleReelCardTouchMove}
                       onTouchEnd={handleReelCardTouchEnd}
                       onTouchCancel={handleReelCardTouchEnd}
-                      onClick={() => handleReelCardClick(clip, index)}
-                      aria-label={t(clip.titleKey)}
+                      onClick={() => handleReelCardClick(clip)}
+                      aria-label={getReelTitle(clip)}
                       whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.02 }}
                       whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
                       transition={springHoverTransition}
@@ -1643,7 +1588,7 @@ const Portfolio = () => {
                       {t(`portfolio.categories.${activeReelPreview.category}`)}
                     </p>
                     <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">
-                      {t(activeReelPreview.titleKey)}
+                      {getReelTitle(activeReelPreview)}
                     </h4>
                   </div>
                 </div>

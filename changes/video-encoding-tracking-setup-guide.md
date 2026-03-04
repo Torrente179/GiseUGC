@@ -9,6 +9,7 @@ Canonical source of truth as of `2026-03-04`.
 If an older `changes/*.md` entry conflicts with this file, follow this file and current runtime code:
 - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/src/components/Portfolio.tsx`
 - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/scripts/encode-videos.sh`
+- `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/scripts/generate-nuevos-r2-catalog.mjs`
 
 Historical notes with superseded details:
 - `2026-02-17-r2-video-routing-previews-main-posters.md` (pre-`/videos/` path examples)
@@ -48,6 +49,10 @@ Given source file: `ugc-example.mp4`
    - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/scripts/encode-videos.sh`
 4. Manifest (tracking):
    - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/tmp/video-encodes/manifest.csv`
+5. Nuevos manifest (candidate clips for strict R2 gating):
+   - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/public/uploads/videos/nuevos/manifest.csv`
+6. Generated strict-gating catalog used at runtime:
+   - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/src/data/nuevos-r2-ready.ts`
 
 ## Encoding Workflow
 1. Put source `.mp4` files into:
@@ -95,21 +100,38 @@ aws s3 sync /local/path s3://<bucket>/videos/<folder> \
   --endpoint-url https://<account_id>.r2.cloudflarestorage.com
 ```
 
+## Strict R2 Gating for `nuevos`
+1. `nuevos` clips are included in runtime portfolio only if all four R2 assets return `200`:
+   - `videos/main/<original-name>`
+   - `videos/mobile/<base>-mobile.mp4`
+   - `videos/previews/<base>-preview.mp4`
+   - `videos/posters/<base>-poster.jpg`
+2. Local `/uploads/videos/nuevos/*` files are not used as runtime fallback.
+3. Regenerate the runtime catalog after any upload/update:
+   ```bash
+   npm --prefix /Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC run video:catalog
+   ```
+   Note: this is also executed automatically during `npm run build` and `npm run build:dev` via `prebuild` hooks.
+4. The generator reads `public/uploads/videos/nuevos/manifest.csv` and writes:
+   - `src/data/nuevos-r2-ready.ts`
+5. The generated report `NUEVOS_R2_BLOCK_REPORT` is the local source of truth for readiness counts.
+
 ## Code Wiring (Portfolio)
 File:
 - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/src/components/Portfolio.tsx`
 
-Key URL builders:
-1. `r2MainVideo()`
-2. `r2MobileVideo()`
-3. `r2PreviewVideo()`
-4. `r2Poster()`
+Related data modules:
+1. `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/src/data/portfolio-clips.ts`
+   - `LEGACY_REEL_CLIPS`
+   - `r2MainVideo()`, `r2MobileVideo()`, `r2PreviewVideo()`, `r2Poster()`
+2. `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/src/data/nuevos-r2-ready.ts`
+   - `NUEVOS_R2_READY_CLIPS`
+   - `NUEVOS_R2_BLOCK_REPORT`
 
-Per clip in `REEL_CLIPS`:
-1. `mainSrc`
-2. `mobileSrc`
-3. `previewSrc`
-4. `posterSrc`
+Runtime clip library:
+1. `ALL_REEL_CLIPS = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS]`
+2. Theater navigation uses `ALL_REEL_CLIPS`.
+3. Non-theater reel cards use UTC 24h bucket randomization from `ALL_REEL_CLIPS`.
 
 ## Performance/Prewarm Behavior
 1. Intent prewarm (hover/touch/focus) injects video preload links.
@@ -135,3 +157,4 @@ After any video/perf changes:
 4. Audio works normally in theater.
 5. Fallback path works if a source is unavailable.
 6. URLs resolve from `media.giselasaldarriaga.com`.
+7. `npm run video:catalog` updates `NUEVOS_R2_BLOCK_REPORT` as expected.

@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm run video:catalog",
     "build": "vite build",
+    "prebuild:dev": "npm run video:catalog",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "video:encode": "bash scripts/encode-videos.sh",
-    "video:encode:dry": "bash scripts/encode-videos.sh --dry-run"
+    "video:encode:dry": "bash scripts/encode-videos.sh --dry-run",
+    "video:catalog": "node scripts/generate-nuevos-r2-catalog.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

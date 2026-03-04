@@ -3,7 +3,7 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Batch transcode source MP4 videos into:
+Batch transcode source videos into:
 1) short preview loops (for cards) and
 2) mobile-friendly full videos (for theater/modal playback)
 
@@ -12,10 +12,10 @@ Defaults are tuned for "quality-first instant feel":
 - mobile full: ~5 MB target per clip, AAC audio, faststart enabled
 
 Usage:
-  bash scripts/encode-videos.sh [options] [file1.mp4 file2.mp4 ...]
+  bash scripts/encode-videos.sh [options] [file1.mp4 file2.mov ...]
 
 Options:
-  --input-dir DIR          Input directory (default: public/uploads/videos)
+  --input-dir DIR          Input directory containing .mp4/.mov files (default: public/uploads/videos)
   --output-dir DIR         Output directory (default: tmp/video-encodes)
   --preview-seconds N      Preview clip duration (default: 4)
   --preview-target-kb N    Preview size target in KB (default: 700)
@@ -30,7 +30,7 @@ Options:
 Examples:
   npm run video:encode
   npm run video:encode -- --mobile-target-mb 6 --preview-target-kb 820
-  npm run video:encode -- ugc-lifestyle-review.mp4 ugc-brand-spokesperson.mp4
+  npm run video:encode -- ugc-lifestyle-review.mp4 ugc-brand-spokesperson.mov
 EOF
 }
 
@@ -169,8 +169,17 @@ if [[ "${#FILES[@]}" -gt 0 ]]; then
     if [[ ! -f "$candidate" ]]; then
       candidate="$INPUT_DIR/$entry"
     fi
-    if [[ ! -f "$candidate" && ! "$entry" =~ \.mp4$ ]]; then
+    if [[ ! -f "$candidate" && ! "$entry" =~ \.[mM][pP]4$ && ! "$entry" =~ \.[mM][oO][vV]$ ]]; then
       candidate="$INPUT_DIR/$entry.mp4"
+    fi
+    if [[ ! -f "$candidate" && ! "$entry" =~ \.[mM][pP]4$ && ! "$entry" =~ \.[mM][oO][vV]$ ]]; then
+      candidate="$INPUT_DIR/$entry.MP4"
+    fi
+    if [[ ! -f "$candidate" && ! "$entry" =~ \.[mM][pP]4$ && ! "$entry" =~ \.[mM][oO][vV]$ ]]; then
+      candidate="$INPUT_DIR/$entry.mov"
+    fi
+    if [[ ! -f "$candidate" && ! "$entry" =~ \.[mM][pP]4$ && ! "$entry" =~ \.[mM][oO][vV]$ ]]; then
+      candidate="$INPUT_DIR/$entry.MOV"
     fi
     if [[ -f "$candidate" ]]; then
       SOURCES+=("$candidate")
@@ -182,13 +191,13 @@ else
   while IFS= read -r source_file; do
     SOURCES+=("$source_file")
   done < <(
-    find "$INPUT_DIR" -maxdepth 1 -type f -name '*.mp4' \
-      ! -name '*-preview.mp4' ! -name '*-mobile.mp4' | sort
+    find "$INPUT_DIR" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) \
+      ! -iname '*-preview.mp4' ! -iname '*-mobile.mp4' | sort
   )
 fi
 
 if [[ "${#SOURCES[@]}" -eq 0 ]]; then
-  echo "No source MP4 files found."
+  echo "No source video files (.mp4/.mov) found."
   exit 0
 fi
 
@@ -209,7 +218,7 @@ processed_count=0
 
 for source_path in "${SOURCES[@]}"; do
   filename="$(basename "$source_path")"
-  basename_no_ext="${filename%.mp4}"
+  basename_no_ext="${filename%.*}"
   preview_path="$OUTPUT_DIR/${basename_no_ext}-preview.mp4"
   mobile_path="$OUTPUT_DIR/${basename_no_ext}-mobile.mp4"
 

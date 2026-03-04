@@ -51,8 +51,9 @@ La aplicación estará disponible en `http://localhost:8080`
 | `npm run build` | Genera la build de producción |
 | `npm run preview` | Vista previa de la build de producción |
 | `npm run lint` | Ejecuta el linter |
-| `npm run video:encode` | Genera versiones `preview` y `mobile` de los MP4 |
+| `npm run video:encode` | Genera versiones `preview` y `mobile` de los videos `.mp4/.mov` |
 | `npm run video:encode:dry` | Muestra comandos ffmpeg sin ejecutar |
+| `npm run video:catalog` | Genera catálogo runtime de `nuevos` con validación estricta en R2 |
 
 ## 🎬 Pipeline de Video (R2/CDN)
 
@@ -83,6 +84,16 @@ npm run video:encode -- ugc-lifestyle-review.mp4 ugc-brand-spokesperson.mp4
 Salida:
 - Videos en `tmp/video-encodes/`
 - Reporte CSV en `tmp/video-encodes/manifest.csv`
+
+Catálogo estricto para `public/uploads/videos/nuevos`:
+
+```bash
+npm run video:catalog
+```
+
+- Incluye clips en runtime solo si existen en R2 (`main`, `mobile`, `preview`, `poster`)
+- Genera `src/data/nuevos-r2-ready.ts`
+- También se ejecuta automáticamente antes de `npm run build` / `npm run build:dev`
 
 ## 📂 Estructura del Proyecto
 
