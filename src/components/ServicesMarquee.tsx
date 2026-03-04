@@ -60,6 +60,7 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
     const isSectionVisibleRef = useRef(true);
     const isDocumentVisibleRef = useRef(true);
     const isMobileViewportRef = useRef(false);
+    const viewportWidthRef = useRef(0);
     const touchSessionCounterRef = useRef(0);
     const activeTouchSessionRef = useRef<number | null>(null);
 
@@ -231,6 +232,7 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             isMobileViewportRef.current = window.innerWidth < MOBILE_BREAKPOINT_PX;
         };
         updateViewportMode();
+        viewportWidthRef.current = window.innerWidth;
 
         const syncDocumentVisibility = () => {
             isDocumentVisibleRef.current = document.visibilityState === 'visible';
@@ -240,15 +242,50 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             syncAnimationLoop();
         };
 
-        // Measure one set width and start at the middle set
-        const measure = () => {
-            setWidthRef.current = track.scrollWidth / 3;
-            offsetRef.current = setWidthRef.current;
+        const normalizeOffsetWithinSet = (offset: number, setWidth: number) => {
+            if (setWidth <= 0) return 0;
+            const normalized = offset % setWidth;
+            return normalized < 0 ? normalized + setWidth : normalized;
+        };
+
+        // Measure one set width. On resize, preserve relative position instead of hard-resetting.
+        const measure = (preserveOffset = true) => {
+            const nextSetWidth = track.scrollWidth / 3;
+            if (!Number.isFinite(nextSetWidth) || nextSetWidth <= 0) return;
+
+            const previousSetWidth = setWidthRef.current;
+            const shouldInitialize = !preserveOffset || previousSetWidth <= 0;
+
+            if (shouldInitialize) {
+                offsetRef.current = nextSetWidth;
+            } else {
+                const previousNormalized = normalizeOffsetWithinSet(offsetRef.current, previousSetWidth);
+                const progress = previousSetWidth > 0 ? previousNormalized / previousSetWidth : 0;
+                offsetRef.current = nextSetWidth + progress * nextSetWidth;
+            }
+
+            setWidthRef.current = nextSetWidth;
             track.style.transform = `translateX(-${offsetRef.current}px)`;
         };
-        const initTimeout = setTimeout(measure, 50);
-        window.addEventListener('resize', updateViewportMode);
-        window.addEventListener('resize', measure);
+
+        let resizeRafId: number | null = null;
+        const handleResize = () => {
+            if (resizeRafId !== null) return;
+            resizeRafId = window.requestAnimationFrame(() => {
+                resizeRafId = null;
+                const nextViewportWidth = window.innerWidth;
+                const viewportWidthChanged = Math.abs(nextViewportWidth - viewportWidthRef.current) >= 1;
+                viewportWidthRef.current = nextViewportWidth;
+                updateViewportMode();
+                if (!viewportWidthChanged) return;
+                measure(true);
+            });
+        };
+
+        const initTimeout = setTimeout(() => {
+            measure(false);
+        }, 50);
+        window.addEventListener('resize', handleResize);
         document.addEventListener('visibilitychange', syncDocumentVisibility);
 
         let animationFrameId: number | null = null;
@@ -419,9 +456,11 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
         return () => {
             clearTimeout(initTimeout);
             stopAnimationLoop();
+            if (resizeRafId !== null) {
+                window.cancelAnimationFrame(resizeRafId);
+            }
             sectionObserver?.disconnect();
-            window.removeEventListener('resize', updateViewportMode);
-            window.removeEventListener('resize', measure);
+            window.removeEventListener('resize', handleResize);
             document.removeEventListener('visibilitychange', syncDocumentVisibility);
             container.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mousemove', handleMouseMove);
