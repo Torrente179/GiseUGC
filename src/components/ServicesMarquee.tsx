@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import LazyVideo from '@/components/media/LazyVideo';
@@ -130,53 +130,59 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
 
     const marqueeCards = [...serviceVideoCards, ...serviceVideoCards, ...serviceVideoCards];
 
-    const handleVideoHover = (index: number) => {
-        const video = videoRefs.current[index];
-        if (video) {
-            video.defaultPlaybackRate = 1;
-            video.playbackRate = 1;
-            const p = video.play();
-            if (p) p.catch(() => undefined);
+    const playLoopingVideo = useCallback((video: HTMLVideoElement | null) => {
+        if (!video) return;
+        video.defaultPlaybackRate = 1;
+        video.playbackRate = 1;
+        const playPromise = video.play();
+        if (playPromise) {
+            playPromise.catch(() => undefined);
         }
-    };
-
-    const handleVideoLeave = (index: number) => {
-        if (expandedCard === index) return;
-        const video = videoRefs.current[index];
-        if (video) {
-            video.pause();
-            video.currentTime = 0;
-        }
-    };
+    }, []);
 
     const handleCardClick = (index: number) => {
         // Ignore click if user was dragging
         if (hasDraggedRef.current) return;
 
-        const isClosing = expandedCard === index;
-
-        if (!isClosing && expandedCard !== null) {
-            const prevVideo = videoRefs.current[expandedCard];
-            if (prevVideo) {
-                prevVideo.pause();
-                prevVideo.currentTime = 0;
+        setExpandedCard((currentExpanded) => {
+            const nextExpanded = currentExpanded === index ? null : index;
+            if (nextExpanded !== null) {
+                playLoopingVideo(videoRefs.current[nextExpanded]);
             }
-        }
+            return nextExpanded;
+        });
+    };
 
-        setExpandedCard(isClosing ? null : index);
+    useEffect(() => {
+        if (expandedCard !== null) return;
+        videoRefs.current.forEach((video) => {
+            playLoopingVideo(video);
+        });
+    }, [expandedCard, playLoopingVideo]);
 
-        const video = videoRefs.current[index];
-        if (video) {
-            if (isClosing) {
-                video.pause();
-                video.currentTime = 0;
-            } else {
-                video.defaultPlaybackRate = 1;
-                video.playbackRate = 1;
-                const p = video.play();
-                if (p) p.catch(() => undefined);
+    useEffect(() => {
+        if (expandedCard === null) return;
+        videoRefs.current.forEach((video, index) => {
+            if (!video) return;
+            if (index === expandedCard) {
+                playLoopingVideo(video);
+                return;
             }
+            video.pause();
+        });
+    }, [expandedCard, playLoopingVideo]);
+
+    const assignVideoRef = (index: number, element: HTMLVideoElement | null) => {
+        videoRefs.current[index] = element;
+        if (!element) {
+            return;
         }
+        const shouldPause = expandedCard !== null && expandedCard !== index;
+        if (shouldPause) {
+            element.pause();
+            return;
+        }
+        playLoopingVideo(element);
     };
 
     // Sync pause state with expanded card
@@ -393,20 +399,22 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                                     key={`${card.titleKey}-${index}`}
                                     data-carousel-card
                                     className="relative shrink-0 w-[200px] sm:w-[220px] lg:w-[240px] flex flex-col items-center cursor-pointer"
-                                    onMouseEnter={() => handleVideoHover(index)}
-                                    onMouseLeave={() => handleVideoLeave(index)}
                                     onClick={() => handleCardClick(index)}
                                 >
                                     {/* Compact Vertical Frame */}
                                     <div className={`relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card transition-all duration-500 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:border-primary/25 ${isExpanded ? '-translate-y-2' : ''}`}>
                                         <LazyVideo
-                                            ref={(el) => { videoRefs.current[index] = el; }}
+                                            ref={(el) => {
+                                                assignVideoRef(index, el);
+                                            }}
                                             className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                                             src={card.videoSrc}
                                             poster={card.poster}
+                                            autoPlay
                                             muted
                                             loop
                                             playsInline
+                                            forcePause={expandedCard !== null && expandedCard !== index}
                                             preload="none"
                                             rootMargin="0px 0px"
                                         />
