@@ -11,6 +11,10 @@ interface ServiceVideoCard {
     poster: string;
 }
 
+interface ServicesMarqueeProps {
+    sectionId?: string;
+}
+
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2PreviewVideo = (filename: string) =>
     `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
@@ -35,7 +39,7 @@ const nuevosAutomotrizVoiceDemoClip = findNuevosClipByMainFilename('IMG_5793.MOV
 const nuevosWhatsAppVentasClip = findNuevosClipByMainFilename('IMG_8435.MOV');
 const nuevosVoicebotCierraVentasClip = findNuevosClipByMainFilename('WhatsApp Video 2026-02-13 at 00.39.53.mp4');
 
-const ServicesMarquee = () => {
+const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
     const { t } = useTranslation();
     const [expandedCard, setExpandedCard] = useState<number | null>(null);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -334,7 +338,7 @@ const ServicesMarquee = () => {
     };
 
     return (
-        <div className="mt-16 md:mt-20 mb-12 md:mb-16 overflow-hidden">
+        <div id={sectionId} className="mt-16 md:mt-20 mb-12 md:mb-16 overflow-hidden">
             <div className="studio-container">
                 <div className="px-4 mb-12 md:mb-20 text-center mx-auto">
                     <h3 className="text-3xl md:text-5xl lg:text-5xl font-serif font-bold tracking-tight-serif leading-[0.95] text-foreground max-w-5xl mx-auto">

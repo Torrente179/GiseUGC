@@ -4,7 +4,11 @@ import { Diamond, Sparkles, Zap } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
 
-const Hero = () => {
+interface HeroProps {
+  showIntroduction?: boolean;
+}
+
+const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { t } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const sectionRef = useRef<HTMLElement>(null);
@@ -209,21 +213,23 @@ const Hero = () => {
           </div>
         </div>
 
-        <div className="mt-24 mb-16 pt-16 border-t border-border/40">
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-12 items-start">
-            <div className="space-y-6">
-              <span className="section-label">{t('hero.introduction.eyebrow')}</span>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-[0.95] tracking-tight-serif">
-                <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} />
-              </h2>
-            </div>
-            <div className="lg:pt-20">
-              <p className="strategic-body text-foreground/60 text-lg md:text-xl max-w-2xl">
-                {t('hero.introduction.description')}
-              </p>
+        {showIntroduction && (
+          <div className="mt-24 mb-16 pt-16 border-t border-border/40">
+            <div className="grid lg:grid-cols-[1fr_2fr] gap-12 items-start">
+              <div className="space-y-6">
+                <span className="section-label">{t('hero.introduction.eyebrow')}</span>
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-[0.95] tracking-tight-serif">
+                  <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} />
+                </h2>
+              </div>
+              <div className="lg:pt-20">
+                <p className="strategic-body text-foreground/60 text-lg md:text-xl max-w-2xl">
+                  {t('hero.introduction.description')}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
