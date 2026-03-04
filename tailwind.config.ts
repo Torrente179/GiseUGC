@@ -22,8 +22,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				serif: ['"Playfair Display"', 'serif'],
-				sans: ['"Inter"', 'sans-serif'],
+				serif: ['"Anthropic Sans"', '"Styrene B"', '"Public Sans"', '"Inter"', 'sans-serif'],
+				sans: ['"Anthropic Sans"', '"Styrene B"', '"Public Sans"', '"Inter"', 'sans-serif'],
 				script: ['"Alex Brush"', 'cursive'],
 			},
 			letterSpacing: {

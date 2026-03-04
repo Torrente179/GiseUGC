@@ -213,7 +213,7 @@
   },
   "footer": {
     "brandName": "Tu próxima campaña empieza aquí",
-    "description": "Hablemos de una estrategia creativa enfocada en resultados.",
+    "description": "Tu próxima campaña empieza aquí.",
     "servicesTitle": "Servicios",
     "quickLinksTitle": "Enlaces Rápidos",
     "contactTitle": "Contacto",
@@ -244,7 +244,7 @@
   },
   "faq": {
     "sectionSubtitle": "Preguntas Frecuentes",
-    "sectionTitle": "FAQ",
+    "sectionTitle": "All the questions and answers",
     "items": [
       {
         "question": "¿Qué es el UGC y cómo puede ayudar a mi marca?",
