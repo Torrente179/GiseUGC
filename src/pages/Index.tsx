@@ -9,6 +9,7 @@ const ServicesSection = lazy(() => import('@/components/Services'));
 const PortfolioSection = lazy(() => import('@/components/Portfolio'));
 const HeroIntroductionSection = lazy(() => import('@/components/HeroIntroduction'));
 const MobileFiverrRatingSection = lazy(() => import('@/components/MobileFiverrRatingSection'));
+const DesktopFiverrRatingSection = lazy(() => import('@/components/DesktopFiverrRatingSection'));
 const TestimonialsSection = lazy(() => import('@/components/Testimonials'));
 const FAQSection = lazy(() => import('@/components/FAQ'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
@@ -83,11 +84,14 @@ const Index = () => {
             <Suspense fallback={<SectionFallback minHeightClass="min-h-[300px]" />}>
               <SocialProofSection />
             </Suspense>
+            <Suspense fallback={<SectionFallback id="portfolio" minHeightClass="min-h-[900px]" />}>
+              <PortfolioSection />
+            </Suspense>
             <Suspense fallback={<SectionFallback id="services" minHeightClass="min-h-[560px]" />}>
               <ServicesSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="portfolio" minHeightClass="min-h-[900px]" />}>
-              <PortfolioSection />
+            <Suspense fallback={<SectionFallback id="desktop-rating-card" minHeightClass="min-h-[460px]" />}>
+              <DesktopFiverrRatingSection />
             </Suspense>
             <Suspense fallback={<SectionFallback id="testimonials" minHeightClass="min-h-[500px]" />}>
               <TestimonialsSection />
@@ -117,8 +121,9 @@ const Index = () => {
         ) : (
           <>
             <SectionFallback minHeightClass="min-h-[300px]" />
-            <SectionFallback id="services" minHeightClass="min-h-[560px]" />
             <SectionFallback id="portfolio" minHeightClass="min-h-[900px]" />
+            <SectionFallback id="services" minHeightClass="min-h-[560px]" />
+            <SectionFallback id="desktop-rating-card" minHeightClass="min-h-[460px]" />
             <SectionFallback id="testimonials" minHeightClass="min-h-[500px]" />
             <SectionFallback id="faq" minHeightClass="min-h-[640px]" />
             <SectionFallback minHeightClass="min-h-[520px]" />
