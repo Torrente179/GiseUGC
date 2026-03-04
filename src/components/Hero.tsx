@@ -1,17 +1,60 @@
 import { useEffect, useRef, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Diamond, Sparkles, Zap } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
+import {
+  premiumEase,
+  easeOutExpo,
+  scaleIn,
+  blurRevealUp,
+  springSmooth,
+  springSnappy,
+} from '@/components/motion/variants';
 
 interface HeroProps {
   showIntroduction?: boolean;
 }
 
+/* ─── Orchestration variants ─── */
+
+const heroContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const heroItemVariants = {
+  hidden: { opacity: 0, y: 18, filter: 'blur(6px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.7, ease: easeOutExpo },
+  },
+};
+
+const heroLineVariants = {
+  hidden: { opacity: 0, scaleX: 0.3 },
+  visible: {
+    opacity: 1,
+    scaleX: 1,
+    transition: { duration: 0.8, ease: premiumEase },
+  },
+};
+
+const heroImageVariants = scaleIn(0.95, 0.9, 0);
+
 const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { t } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
+  const shouldReduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
   const floatingCardRef = useRef<HTMLDivElement>(null);
@@ -29,10 +72,10 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       toggleContactDock();
       return;
     }
-
     handleHashLinkClick(event);
   };
 
+  /* ─── Parallax effect (desktop only, scroll-linked) ─── */
   useEffect(() => {
     const section = sectionRef.current;
     const media = mediaRef.current;
@@ -90,38 +133,24 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       frameId = window.requestAnimationFrame(updateParallax);
     };
 
-    const handleScroll = () => {
-      queueParallaxUpdate();
-    };
-
-    const handleResize = () => {
-      measure();
-      queueParallaxUpdate();
-    };
-
     measure();
     queueParallaxUpdate();
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', queueParallaxUpdate, { passive: true });
+    window.addEventListener('resize', () => { measure(); queueParallaxUpdate(); });
 
     let resizeObserver: ResizeObserver | null = null;
     if (typeof ResizeObserver !== 'undefined') {
-      resizeObserver = new ResizeObserver(() => {
-        measure();
-        queueParallaxUpdate();
-      });
+      resizeObserver = new ResizeObserver(() => { measure(); queueParallaxUpdate(); });
       resizeObserver.observe(section);
     }
 
     return () => {
       window.clearTimeout(motionReadyTimer);
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', queueParallaxUpdate);
+      window.removeEventListener('resize', queueParallaxUpdate);
       resizeObserver?.disconnect();
-      if (frameId !== null) {
-        window.cancelAnimationFrame(frameId);
-      }
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
       media.style.transform = '';
       floatingCard.style.transform = '';
       cornerTag.style.transform = '';
@@ -139,56 +168,104 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="hero-shell grid lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] gap-12 lg:gap-16 items-center">
-          <div className="order-2 lg:order-1">
-            <div className="hero-reveal hero-reveal-1 inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/70 px-4 py-2 backdrop-blur-sm">
+          {/* ─── Left Column: Orchestrated Text Content ─── */}
+          <motion.div
+            className="order-2 lg:order-1"
+            initial="hidden"
+            animate="visible"
+            variants={shouldReduceMotion ? undefined : heroContainerVariants}
+          >
+            {/* Subtitle badge */}
+            <motion.div
+              className="inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/70 px-4 py-2 backdrop-blur-sm"
+              variants={shouldReduceMotion ? undefined : heroItemVariants}
+            >
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
               <p className="section-label font-outfit text-muted-foreground/95">{t('hero.subtitle')}</p>
-            </div>
+            </motion.div>
 
+            {/* Name */}
             <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3">
-              <LiteSplitTextReveal text="Gisela" delay={0.18} stagger={0.09} />{' '}
-              <LiteSplitTextReveal text="Saldarriaga" delay={0.27} stagger={0.09} className="text-accent luxury-accent align-baseline" />
+              <LiteSplitTextReveal text="Gisela" delay={0.3} stagger={0.09} />{' '}
+              <LiteSplitTextReveal text="Saldarriaga" delay={0.4} stagger={0.09} className="text-accent luxury-accent align-baseline" />
             </h1>
 
-            <p className="hero-reveal hero-reveal-2 section-label text-foreground/55 mb-8">{t('hero.signature')}</p>
+            {/* Signature */}
+            <motion.p
+              className="section-label text-foreground/55 mb-8"
+              variants={shouldReduceMotion ? undefined : heroItemVariants}
+            >
+              {t('hero.signature')}
+            </motion.p>
 
-            <div className="hero-reveal hero-reveal-2 w-44 h-px signature-line mb-8" />
+            <motion.div
+              className="w-44 h-px signature-line mb-8 origin-left"
+              variants={shouldReduceMotion ? undefined : heroLineVariants}
+            />
 
-            <p className="hero-reveal hero-reveal-3 strategic-body text-foreground/80 text-lg md:text-xl mb-10 max-w-xl">
+            {/* Description */}
+            <motion.p
+              className="strategic-body text-foreground/80 text-lg md:text-xl mb-10 max-w-xl"
+              variants={shouldReduceMotion ? undefined : heroItemVariants}
+            >
               {t('hero.description')}
-            </p>
+            </motion.p>
 
-            <div className="hero-reveal hero-reveal-4 hidden md:flex flex-col sm:flex-row gap-4 sm:gap-5">
-              <a
+            {/* CTAs */}
+            <motion.div
+              className="hidden md:flex flex-col sm:flex-row gap-4 sm:gap-5"
+              variants={shouldReduceMotion ? undefined : heroItemVariants}
+            >
+              <motion.a
                 href="#portfolio"
                 onClick={handleHashLinkClick}
-                className="btn-primary-nordic px-8 py-3.5 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
+                className="btn-primary-nordic btn-shimmer px-8 py-3.5"
+                whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.02 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                transition={springSnappy}
               >
                 {t('hero.buttonPortfolio')}
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 href="#contact"
                 onClick={handleContactCtaClick}
-                className="btn-primary-nordic px-8 py-3.5 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
+                className="btn-primary-nordic btn-shimmer px-8 py-3.5"
+                whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.02 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                transition={springSnappy}
               >
                 {t('hero.buttonContact')}
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
 
-            <div className="hero-reveal hero-reveal-5 mt-10 hidden md:flex md:flex-wrap gap-3">
+            {/* Pills */}
+            <motion.div
+              className="mt-10 hidden md:flex md:flex-wrap gap-3"
+              variants={shouldReduceMotion ? undefined : heroItemVariants}
+            >
               {heroPills.map(({ icon: Icon, labelKey }) => (
-                <div
+                <motion.div
                   key={labelKey}
-                  className="hero-chip group transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
+                  className="hero-chip group"
+                  whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.03 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                  transition={springSmooth}
                 >
                   <Icon className="h-3 w-3 text-accent/70 group-hover:text-accent transition-colors" />
                   <span>{t(labelKey)}</span>
-                </div>
+                </motion.div>
               ))}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          <div ref={mediaRef} className="order-1 lg:order-2 flex justify-center lg:justify-end hero-parallax-media">
+          {/* ─── Right Column: Hero Image ─── */}
+          <motion.div
+            ref={mediaRef}
+            className="order-1 lg:order-2 flex justify-center lg:justify-end hero-parallax-media"
+            initial="hidden"
+            animate="visible"
+            variants={shouldReduceMotion ? undefined : heroImageVariants}
+          >
             <div className="relative w-full max-w-[25rem]">
               <div className="hero-frame-glow absolute -inset-6 pointer-events-none" />
               <div className="hero-image-shell relative overflow-hidden p-3.5 bg-card/95">
@@ -221,25 +298,35 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <span>{t('hero.tagline')}</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
+        {/* ─── Introduction (desktop only, below hero) ─── */}
         {showIntroduction && (
-          <div className="mt-24 mb-16 pt-16 border-t border-border/40">
+          <motion.div
+            className="mt-24 mb-16 pt-16 border-t border-border/40"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
+            }}
+          >
             <div className="grid lg:grid-cols-[1fr_2fr] gap-12 items-start">
-              <div className="space-y-6">
+              <motion.div className="space-y-6" variants={blurRevealUp()}>
                 <span className="section-label">{t('hero.introduction.eyebrow')}</span>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-[0.95] tracking-tight-serif">
                   <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} />
                 </h2>
-              </div>
-              <div className="lg:pt-20">
+              </motion.div>
+              <motion.div className="lg:pt-20" variants={blurRevealUp(20, 0.8, 0.15)}>
                 <p className="strategic-body text-foreground/60 text-lg md:text-xl max-w-2xl">
                   {t('hero.introduction.description')}
                 </p>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </section>

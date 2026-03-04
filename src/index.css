@@ -764,5 +764,112 @@
       opacity: 1;
       transition: none;
     }
+
+    .skeleton-shimmer {
+      animation: none;
+    }
+  }
+
+  /* ─── Skeleton Shimmer ─── */
+  @keyframes skeleton-shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted) / 0.15) 0%,
+      hsl(var(--muted) / 0.35) 40%,
+      hsl(var(--muted) / 0.15) 80%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.8s ease-in-out infinite;
+  }
+
+  /* ─── Nav Link Animated Underline ─── */
+  .nav-link-underline {
+    position: relative;
+  }
+
+  .nav-link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    right: 50%;
+    height: 1.5px;
+    background: hsl(var(--primary));
+    border-radius: 9999px;
+    transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nav-link-underline:hover::after {
+    left: 0;
+    right: 0;
+  }
+
+  /* ─── CTA Button Shimmer ─── */
+  @keyframes cta-shimmer {
+    0% {
+      transform: translateX(-100%) skewX(-15deg);
+    }
+    100% {
+      transform: translateX(200%) skewX(-15deg);
+    }
+  }
+
+  .btn-shimmer {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .btn-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--pure-linen) / 0.18),
+      transparent
+    );
+    transform: translateX(-100%) skewX(-15deg);
+    animation: cta-shimmer 3.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    animation-delay: 1.5s;
+    pointer-events: none;
+  }
+
+  /* ─── Dock Breathe ─── */
+  @keyframes dock-breathe {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.015);
+    }
+  }
+
+  .dock-breathe {
+    animation: dock-breathe 4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dock-breathe {
+      animation: none;
+    }
+
+    .btn-shimmer::after {
+      animation: none;
+    }
   }
 }

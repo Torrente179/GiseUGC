@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { clearUrlHash } from '@/hooks/use-hashless-section-navigation';
+import SectionSkeleton from '@/components/motion/SectionSkeleton';
 
 const SocialProofSection = lazy(() => import('@/components/SocialProof'));
 const ServicesSection = lazy(() => import('@/components/Services'));
@@ -16,14 +17,6 @@ const FAQSection = lazy(() => import('@/components/FAQ'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
 const FooterSection = lazy(() => import('@/components/Footer'));
 const FloatingContactDockSection = lazy(() => import('@/components/FloatingContactDock'));
-
-const SectionFallback = ({ id, minHeightClass }: { id?: string; minHeightClass?: string }) => (
-  <section
-    id={id}
-    aria-hidden="true"
-    className={minHeightClass ?? 'min-h-[240px]'}
-  />
-);
 
 const Index = () => {
   const [shouldLoadBelowFold, setShouldLoadBelowFold] = useState(false);
@@ -58,55 +51,55 @@ const Index = () => {
       {shouldLoadBelowFold ? (
         isMobile ? (
           <>
-            <Suspense fallback={<SectionFallback id="portfolio" minHeightClass="min-h-[900px]" />}>
+            <Suspense fallback={<SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />}>
               <PortfolioSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="hero-introduction" minHeightClass="min-h-[420px]" />}>
+            <Suspense fallback={<SectionSkeleton id="hero-introduction" minHeightClass="min-h-[420px]" variant="hero-intro" />}>
               <HeroIntroductionSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="mobile-rating-card" minHeightClass="min-h-[460px]" />}>
+            <Suspense fallback={<SectionSkeleton id="mobile-rating-card" minHeightClass="min-h-[460px]" />}>
               <MobileFiverrRatingSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="testimonials" minHeightClass="min-h-[500px]" />}>
+            <Suspense fallback={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}>
               <TestimonialsSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="mobile-contact-cta" minHeightClass="min-h-[120px]" />}>
+            <Suspense fallback={<SectionSkeleton id="mobile-contact-cta" minHeightClass="min-h-[120px]" />}>
               <MobileContactCtaSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="faq" minHeightClass="min-h-[640px]" />}>
+            <Suspense fallback={<SectionSkeleton id="faq" minHeightClass="min-h-[640px]" />}>
               <FAQSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="services" minHeightClass="min-h-[520px]" />}>
+            <Suspense fallback={<SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />}>
               <ServicesMarqueeSection sectionId="services" />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="contact" minHeightClass="min-h-[640px]" />}>
+            <Suspense fallback={<SectionSkeleton id="contact" minHeightClass="min-h-[640px]" variant="footer" />}>
               <FooterSection />
             </Suspense>
           </>
         ) : (
           <>
-            <Suspense fallback={<SectionFallback minHeightClass="min-h-[300px]" />}>
+            <Suspense fallback={<SectionSkeleton minHeightClass="min-h-[300px]" />}>
               <SocialProofSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="portfolio" minHeightClass="min-h-[900px]" />}>
+            <Suspense fallback={<SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />}>
               <PortfolioSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="services" minHeightClass="min-h-[560px]" />}>
+            <Suspense fallback={<SectionSkeleton id="services" minHeightClass="min-h-[560px]" variant="cards" />}>
               <ServicesSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="desktop-rating-card" minHeightClass="min-h-[460px]" />}>
+            <Suspense fallback={<SectionSkeleton id="desktop-rating-card" minHeightClass="min-h-[460px]" />}>
               <DesktopFiverrRatingSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="testimonials" minHeightClass="min-h-[500px]" />}>
+            <Suspense fallback={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}>
               <TestimonialsSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="faq" minHeightClass="min-h-[640px]" />}>
+            <Suspense fallback={<SectionSkeleton id="faq" minHeightClass="min-h-[640px]" />}>
               <FAQSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback minHeightClass="min-h-[520px]" />}>
+            <Suspense fallback={<SectionSkeleton minHeightClass="min-h-[520px]" variant="cards" />}>
               <ServicesMarqueeSection />
             </Suspense>
-            <Suspense fallback={<SectionFallback id="contact" minHeightClass="min-h-[640px]" />}>
+            <Suspense fallback={<SectionSkeleton id="contact" minHeightClass="min-h-[640px]" variant="footer" />}>
               <FooterSection />
             </Suspense>
           </>
@@ -114,25 +107,25 @@ const Index = () => {
       ) : (
         isMobile ? (
           <>
-            <SectionFallback id="portfolio" minHeightClass="min-h-[900px]" />
-            <SectionFallback id="hero-introduction" minHeightClass="min-h-[420px]" />
-            <SectionFallback id="mobile-rating-card" minHeightClass="min-h-[460px]" />
-            <SectionFallback id="testimonials" minHeightClass="min-h-[500px]" />
-            <SectionFallback id="mobile-contact-cta" minHeightClass="min-h-[120px]" />
-            <SectionFallback id="faq" minHeightClass="min-h-[640px]" />
-            <SectionFallback id="services" minHeightClass="min-h-[520px]" />
-            <SectionFallback id="contact" minHeightClass="min-h-[640px]" />
+            <SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />
+            <SectionSkeleton id="hero-introduction" minHeightClass="min-h-[420px]" variant="hero-intro" />
+            <SectionSkeleton id="mobile-rating-card" minHeightClass="min-h-[460px]" />
+            <SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />
+            <SectionSkeleton id="mobile-contact-cta" minHeightClass="min-h-[120px]" />
+            <SectionSkeleton id="faq" minHeightClass="min-h-[640px]" />
+            <SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />
+            <SectionSkeleton id="contact" minHeightClass="min-h-[640px]" variant="footer" />
           </>
         ) : (
           <>
-            <SectionFallback minHeightClass="min-h-[300px]" />
-            <SectionFallback id="portfolio" minHeightClass="min-h-[900px]" />
-            <SectionFallback id="services" minHeightClass="min-h-[560px]" />
-            <SectionFallback id="desktop-rating-card" minHeightClass="min-h-[460px]" />
-            <SectionFallback id="testimonials" minHeightClass="min-h-[500px]" />
-            <SectionFallback id="faq" minHeightClass="min-h-[640px]" />
-            <SectionFallback minHeightClass="min-h-[520px]" />
-            <SectionFallback id="contact" minHeightClass="min-h-[640px]" />
+            <SectionSkeleton minHeightClass="min-h-[300px]" />
+            <SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />
+            <SectionSkeleton id="services" minHeightClass="min-h-[560px]" variant="cards" />
+            <SectionSkeleton id="desktop-rating-card" minHeightClass="min-h-[460px]" />
+            <SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />
+            <SectionSkeleton id="faq" minHeightClass="min-h-[640px]" />
+            <SectionSkeleton minHeightClass="min-h-[520px]" variant="cards" />
+            <SectionSkeleton id="contact" minHeightClass="min-h-[640px]" variant="footer" />
           </>
         )
       )}

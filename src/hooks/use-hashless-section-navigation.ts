@@ -14,6 +14,51 @@ export const clearUrlHash = () => {
   stripHashFromUrl();
 };
 
+/**
+ * Custom easing function matching the site's premiumEase curve [0.22, 1, 0.36, 1].
+ * Uses a cubic-bezier approximation for JS-powered smooth scroll.
+ */
+const premiumEaseScroll = (t: number): number => {
+  // Approximation of cubic-bezier(0.22, 1, 0.36, 1) — fast start, long settle
+  return t < 0.5
+    ? 4 * t * t * t
+    : 1 - Math.pow(-2 * t + 2, 3) / 2;
+};
+
+/**
+ * JS-powered smooth scroll with custom easing for a premium, consistent feel
+ * across all browsers (native smooth scroll uses different easing per browser).
+ */
+const smoothScrollTo = (targetY: number, duration = 900) => {
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+
+  if (Math.abs(distance) < 1) return;
+
+  // Respect reduced motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.scrollTo(0, targetY);
+    return;
+  }
+
+  let startTime: number | null = null;
+
+  const step = (timestamp: number) => {
+    if (startTime === null) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = premiumEaseScroll(progress);
+
+    window.scrollTo(0, startY + distance * eased);
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  };
+
+  requestAnimationFrame(step);
+};
+
 export const useHashlessSectionNavigation = () => {
   const navigateToSection = useCallback((targetId: string) => {
     if (!targetId) {
@@ -25,7 +70,8 @@ export const useHashlessSectionNavigation = () => {
       return false;
     }
 
-    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const targetY = targetElement.getBoundingClientRect().top + window.scrollY;
+    smoothScrollTo(targetY);
     stripHashFromUrl();
     return true;
   }, []);

@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
+import { blurRevealUp, easeOutExpo, springHoverTransition, springSmooth, springSnappy, staggerContainer } from '@/components/motion/variants';
 
 interface TestimonialImage {
   id: number;
@@ -219,7 +219,7 @@ const Testimonials = () => {
           variants={staggerContainer(0.12, 0.04)}
         >
           <div>
-            <motion.p className="section-label text-muted-foreground mb-3" variants={revealUp(14, 0.56)}>
+            <motion.p className="section-label text-muted-foreground mb-3" variants={blurRevealUp(14, 0.56)}>
               {t('testimonials.sectionSubtitle')}
             </motion.p>
             <h2 className="studio-title">
@@ -227,14 +227,14 @@ const Testimonials = () => {
             </h2>
           </div>
 
-          <motion.div className="hidden md:flex items-center gap-3" variants={revealUp(18, 0.62)}>
+          <motion.div className="hidden md:flex items-center gap-3" variants={blurRevealUp(18, 0.62)}>
             <motion.button
               onClick={prevTestimonial}
               className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
               aria-label={t('testimonials.ariaPrev')}
               whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.06 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
-              transition={springHoverTransition}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
+              transition={springSnappy}
             >
               <ChevronLeft className="h-5 w-5 text-primary" />
             </motion.button>
@@ -243,8 +243,8 @@ const Testimonials = () => {
               className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
               aria-label={t('testimonials.ariaNext')}
               whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.06 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
-              transition={springHoverTransition}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
+              transition={springSnappy}
             >
               <ChevronRight className="h-5 w-5 text-primary" />
             </motion.button>
@@ -269,7 +269,11 @@ const Testimonials = () => {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.68 }}
         >
-          <div className="flex transition-transform duration-500" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
+          <motion.div
+            className="flex"
+            animate={{ x: `-${activeIndex * 100}%` }}
+            transition={{ type: 'spring', stiffness: 220, damping: 28, mass: 0.9 }}
+          >
             {TESTIMONIAL_IMAGES.map((testimonial, index) => (
               <article key={testimonial.id} className="min-w-full">
                 <div className="rounded-[1.5rem] border border-border/80 bg-card/70 p-3 md:p-4 lg:p-5">
@@ -292,7 +296,7 @@ const Testimonials = () => {
                 </div>
               </article>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
 
         <div className="mt-3 md:mt-4">

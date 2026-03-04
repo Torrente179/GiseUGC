@@ -9,6 +9,8 @@ import {
   Facebook,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { springSnappy } from '@/components/motion/variants';
 import {
   consumePendingContactDockAction,
   isMobileViewport,
@@ -35,8 +37,17 @@ const ThreadsIcon = ({ className }: { className?: string }) => (
 
 const FloatingContactDock = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktopDockGhosted, setIsDesktopDockGhosted] = useState(false);
+  const [hasEntrance, setHasEntrance] = useState(false);
+
+  // Delayed entrance — dock slides up after page settles
+  useEffect(() => {
+    const delay = shouldReduceMotion ? 200 : 1500;
+    const timeoutId = window.setTimeout(() => setHasEntrance(true), delay);
+    return () => window.clearTimeout(timeoutId);
+  }, [shouldReduceMotion]);
 
   useEffect(() => {
     const handleDockAction = (action: 'open' | 'toggle') => {
@@ -230,8 +241,11 @@ const FloatingContactDock = () => {
   ];
 
   return createPortal(
-    <div
-      className="floating-contact-dock fixed bottom-5 md:bottom-8 right-5 md:right-8 z-[9999] pointer-events-none transition-all duration-300"
+    <motion.div
+      className="floating-contact-dock fixed bottom-5 md:bottom-8 right-5 md:right-8 z-[9999] pointer-events-none"
+      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      animate={hasEntrance ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ type: 'spring', stiffness: 180, damping: 22, mass: 0.8 }}
       style={{
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         paddingRight: 'env(safe-area-inset-right, 0px)',
@@ -284,27 +298,32 @@ const FloatingContactDock = () => {
 
       {/* Desktop: horizontal row */}
       <div
-        className={`hidden md:flex items-center gap-3 rounded-full border border-white/40 bg-card/62 supports-[backdrop-filter]:bg-card/48 backdrop-blur-2xl px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform,filter] duration-500 ${
+        className={`hidden md:flex dock-breathe items-center gap-3 rounded-full border border-white/40 bg-card/62 supports-[backdrop-filter]:bg-card/48 backdrop-blur-2xl px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform,filter] duration-500 ${
           isDesktopDockGhosted
             ? 'opacity-10 scale-[0.94] translate-y-2 blur-[1.5px] pointer-events-none'
             : 'opacity-100 scale-100 translate-y-0 blur-0 pointer-events-auto'
         }`}
         style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
       >
-        {contactPlatforms.map((platform) => (
-          <a
+        {contactPlatforms.map((platform, index) => (
+          <motion.a
             key={platform.id}
             href={platform.href}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={t(platform.ariaKey)}
-            className={`inline-flex h-11 w-11 items-center justify-center rounded-full ${platform.toneClass} ${platform.hoverToneClass} transition-all duration-300 hover:scale-110`}
+            className={`inline-flex h-11 w-11 items-center justify-center rounded-full ${platform.toneClass} ${platform.hoverToneClass} transition-colors duration-300`}
+            initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.6 }}
+            animate={hasEntrance ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 22, delay: index * 0.04 }}
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
+            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
           >
             {platform.icon}
-          </a>
+          </motion.a>
         ))}
       </div>
-    </div>,
+    </motion.div>,
     document.body
   );
 };

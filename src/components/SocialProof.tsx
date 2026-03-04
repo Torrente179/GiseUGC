@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Briefcase, Eye, Star, Users } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
+import { blurRevealUp, springSmooth, staggerContainer } from '@/components/motion/variants';
 
 interface CounterProps {
   end: number;
@@ -100,9 +100,10 @@ const SocialProof = () => {
               <motion.div
                 key={stat.labelKey}
                 className="flex flex-col items-center px-4 relative group/item"
-                variants={revealUp(18, 0.62)}
+                variants={blurRevealUp(18, 0.62)}
                 whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.03 }}
-                transition={springHoverTransition}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                transition={springSmooth}
               >
                 {index !== 0 && (
                   <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-16 bg-gradient-to-b from-transparent via-muted to-transparent" />

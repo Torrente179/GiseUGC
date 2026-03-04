@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { revealUp, staggerContainer } from '@/components/motion/variants';
+import { blurRevealUp, springSmooth, staggerContainer } from '@/components/motion/variants';
 
 interface FAQItem {
   question: string;
@@ -32,7 +32,7 @@ const FAQ = () => {
         >
           <motion.p
             className="section-label text-muted-foreground mb-3"
-            variants={revealUp(14, 0.56)}
+            variants={blurRevealUp(14, 0.56)}
           >
             {t('faq.sectionSubtitle')}
           </motion.p>
@@ -50,10 +50,10 @@ const FAQ = () => {
         />
 
         <motion.div
-          initial={shouldReduceMotion ? undefined : { opacity: 0, y: 22 }}
-          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.68 }}
+          variants={staggerContainer(0.06, 0.08)}
         >
           <Accordion
             type="single"
@@ -62,18 +62,22 @@ const FAQ = () => {
           >
             {Array.isArray(items) &&
               items.map((item, index) => (
-                <AccordionItem
+                <motion.div
                   key={index}
-                  value={`item-${index}`}
-                  className="faq-answer border-b border-border/70 last:border-b-0"
+                  variants={blurRevealUp(14, 0.52)}
                 >
-                  <AccordionTrigger className="text-left text-base md:text-lg font-semibold text-foreground py-5 md:py-6 hover:no-underline hover:text-primary transition-colors [&[data-state=open]]:text-primary [&>svg]:text-foreground/70">
-                    {item.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-foreground/80 text-sm md:text-base leading-relaxed pb-5 md:pb-6 max-w-[72ch]">
-                    {item.answer}
-                  </AccordionContent>
-                </AccordionItem>
+                  <AccordionItem
+                    value={`item-${index}`}
+                    className="faq-answer border-b border-border/70 last:border-b-0"
+                  >
+                    <AccordionTrigger className="text-left text-base md:text-lg font-semibold text-foreground py-5 md:py-6 hover:no-underline hover:text-primary transition-colors duration-300 [&[data-state=open]]:text-primary [&>svg]:text-foreground/70 [&>svg]:transition-transform [&>svg]:duration-300">
+                      {item.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-foreground/80 text-sm md:text-base leading-relaxed pb-5 md:pb-6 max-w-[72ch]">
+                      {item.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                </motion.div>
               ))}
           </Accordion>
         </motion.div>

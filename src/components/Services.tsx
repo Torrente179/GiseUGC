@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Film, Lightbulb, Megaphone, PlayCircle, Sparkles, Star } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
-import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
+import { blurRevealUp, revealUp, springHoverTransition, springSmooth, staggerContainer } from '@/components/motion/variants';
 
 const Services = () => {
   const { t } = useTranslation();
@@ -57,7 +57,7 @@ const Services = () => {
           variants={staggerContainer(0.12, 0.04)}
         >
           <div className="text-center md:text-left">
-            <motion.p className="section-label text-muted-foreground mb-4" variants={revealUp(14, 0.56)}>
+            <motion.p className="section-label text-muted-foreground mb-4" variants={blurRevealUp(14, 0.56)}>
               {t('services.sectionSubtitle')}
             </motion.p>
             <h2 className="studio-title">
@@ -66,7 +66,7 @@ const Services = () => {
           </div>
           <motion.p
             className="studio-subtitle lg:justify-self-end text-center md:text-right max-w-lg"
-            variants={revealUp(18, 0.62)}
+            variants={blurRevealUp(18, 0.62)}
           >
             {t('services.motionSubtitle')}
           </motion.p>
@@ -91,9 +91,10 @@ const Services = () => {
             <motion.article
               key={service.titleKey}
               className="group rounded-[1.25rem] md:rounded-[1.5rem] border border-border/70 bg-card/50 p-5 md:p-8 backdrop-blur-md transition-[border-color,box-shadow] duration-500 hover:border-primary/30 hover:shadow-xl"
-              variants={revealUp(18, 0.58)}
-              whileHover={shouldReduceMotion ? undefined : { y: -8, scale: 1.015 }}
-              transition={springHoverTransition}
+              variants={blurRevealUp(18, 0.58)}
+              whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.015 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+              transition={springSmooth}
             >
               <motion.div
                 className="mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110"

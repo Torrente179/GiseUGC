@@ -5,6 +5,8 @@ import {
   Facebook,
   Send,
 } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { blurRevealUp, fadeIn, springSmooth, staggerContainer } from '@/components/motion/variants';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101';
@@ -19,6 +21,7 @@ const whatsappLogoSrc = '/uploads/whatsapp.png';
 
 const Footer = () => {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
   const footerContactPlatforms = [
     {
       id: 'whatsapp',
@@ -104,35 +107,60 @@ const Footer = () => {
       className="bg-[#F6F3EE] dark:bg-background text-foreground pt-12 md:pt-14 pb-8 md:pb-10 transition-colors duration-300"
     >
       <div className="studio-container">
-        <div className="mb-8 text-center">
-          <h3 className="brand-logo text-[clamp(2.25rem,4.5vw,3.75rem)] leading-[0.95] mb-4 text-primary">
+        <motion.div
+          className="mb-8 text-center"
+          initial={shouldReduceMotion ? undefined : 'hidden'}
+          whileInView={shouldReduceMotion ? undefined : 'visible'}
+          viewport={{ once: true, amount: 0.3 }}
+          variants={staggerContainer(0.12, 0.06)}
+        >
+          <motion.h3
+            className="brand-logo text-[clamp(2.25rem,4.5vw,3.75rem)] leading-[0.95] mb-4 text-primary"
+            variants={blurRevealUp(22, 0.7)}
+          >
             {t('footer.brandName')}<span className="text-accent">.</span>
-          </h3>
-          <p className="strategic-body text-foreground/72 text-[clamp(1.2rem,1.8vw,1.85rem)] leading-[1.5] max-w-2xl mx-auto">
+          </motion.h3>
+          <motion.p
+            className="strategic-body text-foreground/72 text-[clamp(1.2rem,1.8vw,1.85rem)] leading-[1.5] max-w-2xl mx-auto"
+            variants={blurRevealUp(16, 0.68)}
+          >
             {t('footer.description')}
-          </p>
+          </motion.p>
 
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-2 md:gap-3">
+          <motion.div
+            className="mt-7 flex flex-wrap items-center justify-center gap-2 md:gap-3"
+            variants={staggerContainer(0.04, 0.15)}
+          >
             {footerContactPlatforms.map((platform) => (
-              <a
+              <motion.a
                 key={platform.id}
                 href={platform.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={platform.ariaLabel}
-                className="h-9 w-9 md:h-12 md:w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300"
+                className="h-9 w-9 md:h-12 md:w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-colors duration-300"
+                variants={blurRevealUp(12, 0.5)}
+                whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.1 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.93 }}
+                transition={springSmooth}
               >
                 {platform.icon}
-              </a>
+              </motion.a>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="border-t border-foreground/15 pt-8 text-center">
+        <motion.div
+          className="border-t border-foreground/15 pt-8 text-center"
+          initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
           <p className="text-xs text-foreground/55 tracking-wider">
             © 2026 Portafolio UGC. Todos los derechos reservados.
           </p>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );
