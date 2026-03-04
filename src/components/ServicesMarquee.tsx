@@ -19,10 +19,8 @@ const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2PreviewVideo = (filename: string) =>
     `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
 const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
-const MOBILE_BREAKPOINT_PX = 768;
-const AUTO_SCROLL_SPEED_DESKTOP = 0.45;
-const AUTO_SCROLL_SPEED_MOBILE = 0.82;
-const MOBILE_TOUCH_DRAG_MULTIPLIER = 1.45;
+const AUTO_SCROLL_SPEED_PX_PER_SECOND = 27;
+const MAX_FRAME_DELTA_MS = 64;
 const TOUCH_AXIS_LOCK_THRESHOLD_PX = 6;
 
 const findNuevosClipByMainFilename = (filename: string) =>
@@ -216,10 +214,6 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
         const container = containerRef.current;
         const track = trackRef.current;
         if (!container || !track) return;
-        let isMobileViewport = window.innerWidth < MOBILE_BREAKPOINT_PX;
-        const updateViewportMode = () => {
-            isMobileViewport = window.innerWidth < MOBILE_BREAKPOINT_PX;
-        };
 
         // Measure one set width and start at the middle set
         const measure = () => {
@@ -228,18 +222,20 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             track.style.transform = `translateX(-${offsetRef.current}px)`;
         };
         const initTimeout = setTimeout(measure, 50);
-        window.addEventListener('resize', updateViewportMode);
 
         let animationFrameId: number;
+        let previousTimestamp: number | null = null;
 
-        const animate = () => {
+        const animate = (timestamp: number) => {
             const sw = setWidthRef.current;
             if (sw > 0) {
+                const rawDeltaMs = previousTimestamp === null ? 16.67 : timestamp - previousTimestamp;
+                const deltaMs = Math.min(Math.max(rawDeltaMs, 0), MAX_FRAME_DELTA_MS);
+                previousTimestamp = timestamp;
+
                 // Auto-scroll when not paused and not dragging
                 if (!isPausedRef.current && !isDraggingRef.current) {
-                    offsetRef.current += isMobileViewport
-                        ? AUTO_SCROLL_SPEED_MOBILE
-                        : AUTO_SCROLL_SPEED_DESKTOP;
+                    offsetRef.current += AUTO_SCROLL_SPEED_PX_PER_SECOND * (deltaMs / 1000);
                 }
 
                 // Wrap boundaries — runs every frame regardless
@@ -307,8 +303,7 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             }
 
             if (Math.abs(dx) > 5) hasDraggedRef.current = true;
-            const dragMultiplier = isMobileViewport ? MOBILE_TOUCH_DRAG_MULTIPLIER : 1;
-            offsetRef.current = dragStartRef.current.offset + dx * dragMultiplier;
+            offsetRef.current = dragStartRef.current.offset + dx;
         };
         const handleTouchEnd = () => {
             isDraggingRef.current = false;
@@ -328,7 +323,6 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
         return () => {
             clearTimeout(initTimeout);
             cancelAnimationFrame(animationFrameId);
-            window.removeEventListener('resize', updateViewportMode);
             container.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
@@ -414,6 +408,7 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                                             muted
                                             loop
                                             playsInline
+                                            pauseOffscreen
                                             forcePause={expandedCard !== null && expandedCard !== index}
                                             preload="none"
                                             rootMargin="0px 0px"
