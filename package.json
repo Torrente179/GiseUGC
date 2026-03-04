@@ -10,6 +10,7 @@
     "prebuild:dev": "npm run video:catalog",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "check:mobile-regression": "node scripts/mobile-regression-check.mjs",
     "preview": "vite preview",
     "video:encode": "bash scripts/encode-videos.sh",
     "video:encode:dry": "bash scripts/encode-videos.sh --dry-run",

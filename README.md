@@ -51,6 +51,7 @@ La aplicación estará disponible en `http://localhost:8080`
 | `npm run build` | Genera la build de producción |
 | `npm run preview` | Vista previa de la build de producción |
 | `npm run lint` | Ejecuta el linter |
+| `npm run check:mobile-regression` | Ejecuta checks automáticos de regresión móvil y genera checklist en `tmp/mobile-regression/latest.md` |
 | `npm run video:encode` | Genera versiones `preview` y `mobile` de los videos `.mp4/.mov` |
 | `npm run video:encode:dry` | Muestra comandos ffmpeg sin ejecutar |
 | `npm run video:catalog` | Genera catálogo runtime de `nuevos` con validación estricta en R2 |
