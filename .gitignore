@@ -30,3 +30,7 @@ dist-ssr
 # Local video transcode outputs (upload these to R2/CDN, do not commit)
 tmp/video-encodes/
 tmp/r2-upload/
+
+# Keep only the manifest for nuevos in git (no raw/encoded binaries)
+public/uploads/videos/nuevos/*
+!public/uploads/videos/nuevos/manifest.csv

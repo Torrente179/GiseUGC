@@ -53,6 +53,8 @@ Given source file: `ugc-example.mp4`
    - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/public/uploads/videos/nuevos/manifest.csv`
 6. Generated strict-gating catalog used at runtime:
    - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/src/data/nuevos-r2-ready.ts`
+7. `nuevos` manifest must be committed to keep CI builds deterministic:
+   - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/public/uploads/videos/nuevos/manifest.csv`
 
 ## Encoding Workflow
 1. Put source `.mp4` files into:
@@ -115,6 +117,7 @@ aws s3 sync /local/path s3://<bucket>/videos/<folder> \
 4. The generator reads `public/uploads/videos/nuevos/manifest.csv` and writes:
    - `src/data/nuevos-r2-ready.ts`
 5. The generated report `NUEVOS_R2_BLOCK_REPORT` is the local source of truth for readiness counts.
+6. If manifest is missing, generator fails open by producing an empty catalog (build-safe fallback).
 
 ## Code Wiring (Portfolio)
 File:

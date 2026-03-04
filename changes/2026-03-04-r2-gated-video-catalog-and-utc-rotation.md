@@ -51,6 +51,12 @@ Implemented a strict R2-gated video catalog pipeline for `nuevos` clips and refa
   - generated catalog workflow
   - updated source-of-truth references
 
+### 7. CI hardening for catalog generation
+- `scripts/generate-nuevos-r2-catalog.mjs` now handles missing manifest gracefully:
+  - if `public/uploads/videos/nuevos/manifest.csv` is absent (e.g., CI mismatch), generator writes an empty catalog instead of failing the build.
+- Added git hygiene to keep only the manifest in repo for `nuevos`:
+  - `.gitignore` now ignores all `public/uploads/videos/nuevos/*` binaries but allows `public/uploads/videos/nuevos/manifest.csv`.
+
 ## Validation
 1. `npm run video:catalog` (pre-upload baseline)
 - Result:
@@ -80,3 +86,4 @@ Implemented a strict R2-gated video catalog pipeline for `nuevos` clips and refa
 ## Notes
 - This change intentionally does not introduce local-file fallback for `nuevos` clips.
 - New clips appear only when their full R2 asset set exists; catalog refresh is now automatic on build/deploy.
+- For CI parity, `public/uploads/videos/nuevos/manifest.csv` must remain committed.
