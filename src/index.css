@@ -68,8 +68,6 @@
     --theater-overlay-title: 0 0% 98%;
 
     --radius: 1.25rem;
-    --font-anthropic-sans: "Anthropic Sans", "Styrene B", "Public Sans", "Inter", sans-serif;
-    --font-anthropic-serif: "Anthropic Serif", "Tiempos Text", "Source Serif 4", Georgia, serif;
   }
 
   /* Dark mode variables */
@@ -131,7 +129,7 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: var(--font-anthropic-serif);
+    font-family: 'Inter', sans-serif;
     font-weight: 300;
     letter-spacing: 0;
     line-height: 1.8;
@@ -143,7 +141,7 @@
   }
 
   .brand-logo {
-    font-family: var(--font-anthropic-sans);
+    font-family: 'Playfair Display', serif;
     font-weight: 700;
     letter-spacing: -0.05em;
     text-transform: none;
@@ -153,7 +151,7 @@
   h1,
   h2,
   .hero-title {
-    font-family: var(--font-anthropic-sans);
+    font-family: 'Playfair Display', serif;
     font-weight: 700;
     letter-spacing: -0.05em;
     color: hsl(var(--foreground));
@@ -169,7 +167,7 @@
   }
 
   .section-label {
-    font-family: var(--font-anthropic-sans);
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 10px;
     text-transform: uppercase;
@@ -188,7 +186,7 @@
   }
 
   p {
-    font-family: var(--font-anthropic-serif);
+    font-family: 'Inter', sans-serif;
     font-weight: 300;
     line-height: 1.8;
     color: hsl(var(--foreground) / 0.82);
@@ -212,15 +210,15 @@
 
 @layer utilities {
   .font-playfair {
-    font-family: var(--font-anthropic-sans);
+    font-family: 'Playfair Display', serif;
   }
 
   .font-cormorant {
-    font-family: var(--font-anthropic-sans);
+    font-family: 'Playfair Display', serif;
   }
 
   .font-outfit {
-    font-family: var(--font-anthropic-sans);
+    font-family: 'Outfit', sans-serif;
   }
 
   .editorial-label {
@@ -277,7 +275,7 @@
     color: hsl(var(--theater-chip-fg));
     background-color: hsl(var(--theater-chip-bg) / 0.88);
     border: 1px solid hsl(var(--theater-chip-border) / 0.9);
-    font-family: var(--font-anthropic-sans);
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 10px;
     text-transform: uppercase;
@@ -289,7 +287,7 @@
 
   .theater-meta-title {
     color: hsl(var(--theater-overlay-title));
-    font-family: var(--font-anthropic-sans);
+    font-family: 'Inter', sans-serif;
     font-weight: 600;
     letter-spacing: -0.015em;
     text-shadow: 0 1px 14px rgba(0, 0, 0, 0.62);
@@ -459,7 +457,7 @@
     background: hsl(var(--card) / 0.84);
     padding: 0.42rem 0.92rem;
     font-size: 10px;
-    font-family: var(--font-anthropic-sans);
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
