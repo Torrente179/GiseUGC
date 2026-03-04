@@ -98,3 +98,20 @@ Desktop cards were still visually too dominant versus section headings, so sizin
 
 ### Follow-up 2 Validation
 - `npm run build` completed successfully after this sizing pass.
+
+---
+
+## Follow-up 3: Thumbnail Rail Scrolling UX
+
+Improved horizontal navigation behavior for the testimonial thumbnail rail on both desktop and mobile.
+
+- Added dedicated left/right scroll controls for the thumbnail rail.
+- Enabled vertical mouse-wheel to scroll thumbnails horizontally on desktop.
+- Added automatic smooth repositioning of the rail so the selected thumbnail stays visible and does not feel stuck against margins.
+- Preserved tap-to-select behavior and existing active-state highlighting.
+
+### Follow-up 3 Files Updated
+- `src/components/Testimonials.tsx`
+
+### Follow-up 3 Validation
+- `npm run build` completed successfully after the scrolling UX update.

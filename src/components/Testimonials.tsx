@@ -1,4 +1,4 @@
-import { useRef, useState, type TouchEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type TouchEvent, type WheelEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -123,6 +123,8 @@ const Testimonials = () => {
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+  const thumbnailRailRef = useRef<HTMLDivElement | null>(null);
+  const thumbnailButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const nextTestimonial = () => {
     setActiveIndex((prevIndex) => (prevIndex + 1) % TESTIMONIAL_IMAGES.length);
@@ -155,6 +157,56 @@ const Testimonials = () => {
   };
 
   const zoomedTestimonial = zoomedIndex === null ? null : TESTIMONIAL_IMAGES[zoomedIndex];
+
+  const setThumbnailButtonRef = useCallback(
+    (index: number) => (node: HTMLButtonElement | null) => {
+      thumbnailButtonRefs.current[index] = node;
+    },
+    [],
+  );
+
+  const keepActiveThumbnailVisible = useCallback(
+    (behavior: ScrollBehavior = 'smooth') => {
+      const rail = thumbnailRailRef.current;
+      const activeButton = thumbnailButtonRefs.current[activeIndex];
+      if (!rail || !activeButton) return;
+
+      const railRect = rail.getBoundingClientRect();
+      const buttonRect = activeButton.getBoundingClientRect();
+      const edgeThreshold = 44;
+      const nearLeftEdge = buttonRect.left < railRect.left + edgeThreshold;
+      const nearRightEdge = buttonRect.right > railRect.right - edgeThreshold;
+
+      if (!nearLeftEdge && !nearRightEdge) return;
+
+      const centeredLeft = activeButton.offsetLeft - rail.clientWidth / 2 + activeButton.clientWidth / 2;
+      rail.scrollTo({
+        left: Math.max(0, centeredLeft),
+        behavior,
+      });
+    },
+    [activeIndex],
+  );
+
+  useEffect(() => {
+    keepActiveThumbnailVisible('smooth');
+  }, [activeIndex, keepActiveThumbnailVisible]);
+
+  const scrollThumbnailRail = (direction: 'left' | 'right') => {
+    const rail = thumbnailRailRef.current;
+    if (!rail) return;
+    const amount = Math.max(rail.clientWidth * 0.6, 160);
+    rail.scrollBy({
+      left: direction === 'left' ? -amount : amount,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleThumbnailWheel = (event: WheelEvent<HTMLDivElement>) => {
+    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+    event.preventDefault();
+    event.currentTarget.scrollLeft += event.deltaY;
+  };
 
   return (
     <section id="testimonials" className="studio-section bg-background">
@@ -244,30 +296,55 @@ const Testimonials = () => {
         </motion.div>
 
         <div className="mt-3 md:mt-4">
-          <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 md:justify-center">
-            {TESTIMONIAL_IMAGES.map((testimonial, index) => (
-              <motion.button
-                key={testimonial.id}
-                onClick={() => setActiveIndex(index)}
-                className={`relative h-16 w-24 shrink-0 snap-start overflow-hidden rounded-lg border bg-background/55 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:h-20 md:w-32 ${
-                  activeIndex === index ? 'border-primary/70 ring-1 ring-primary/40' : 'border-border/65 hover:border-primary/30'
-                }`}
-                aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
-                whileHover={shouldReduceMotion ? undefined : { scale: 1.03 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
-                transition={springHoverTransition}
-              >
-                <img
-                  src={testimonial.src}
-                  alt=""
-                  width={testimonial.width}
-                  height={testimonial.height}
-                  className="h-full w-full object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </motion.button>
-            ))}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => scrollThumbnailRail('left')}
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-card text-primary transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              aria-label="Scroll testimonials left"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+
+            <div
+              ref={thumbnailRailRef}
+              className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1"
+              onWheel={handleThumbnailWheel}
+            >
+              {TESTIMONIAL_IMAGES.map((testimonial, index) => (
+                <motion.button
+                  key={testimonial.id}
+                  ref={setThumbnailButtonRef(index)}
+                  onClick={() => setActiveIndex(index)}
+                  className={`relative h-16 w-24 shrink-0 snap-start overflow-hidden rounded-lg border bg-background/55 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:h-20 md:w-32 ${
+                    activeIndex === index ? 'border-primary/70 ring-1 ring-primary/40' : 'border-border/65 hover:border-primary/30'
+                  }`}
+                  aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.03 }}
+                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                  transition={springHoverTransition}
+                >
+                  <img
+                    src={testimonial.src}
+                    alt=""
+                    width={testimonial.width}
+                    height={testimonial.height}
+                    className="h-full w-full object-contain"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </motion.button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => scrollThumbnailRail('right')}
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-card text-primary transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              aria-label="Scroll testimonials right"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </div>
