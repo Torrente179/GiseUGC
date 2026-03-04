@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import LazyVideo from '@/components/media/LazyVideo';
+import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 
 interface ServiceVideoCard {
     titleKey: string;
@@ -19,6 +20,20 @@ const AUTO_SCROLL_SPEED_DESKTOP = 0.45;
 const AUTO_SCROLL_SPEED_MOBILE = 0.82;
 const MOBILE_TOUCH_DRAG_MULTIPLIER = 1.45;
 const TOUCH_AXIS_LOCK_THRESHOLD_PX = 6;
+
+const findNuevosClipByMainFilename = (filename: string) =>
+    NUEVOS_R2_READY_CLIPS.find((clip) => {
+        const encodedFilename = clip.mainSrc.split('/').pop() ?? '';
+        try {
+            return decodeURIComponent(encodedFilename) === filename;
+        } catch {
+            return encodedFilename === filename;
+        }
+    });
+
+const nuevosAutomotrizVoiceDemoClip = findNuevosClipByMainFilename('IMG_5793.MOV');
+const nuevosWhatsAppVentasClip = findNuevosClipByMainFilename('IMG_8435.MOV');
+const nuevosVoicebotCierraVentasClip = findNuevosClipByMainFilename('WhatsApp Video 2026-02-13 at 00.39.53.mp4');
 
 const ServicesMarquee = () => {
     const { t } = useTranslation();
@@ -62,8 +77,8 @@ const ServicesMarquee = () => {
         {
             titleKey: 'services.marqueeCards.card5.title',
             descriptionKey: 'services.marqueeCards.card5.description',
-            videoSrc: r2PreviewVideo('ugc-business-promotion.mp4'),
-            poster: r2Poster('ugc-business-promotion-poster.jpg'),
+            videoSrc: r2PreviewVideo('ugc-voiceover-bots-review.mp4'),
+            poster: r2Poster('ugc-voiceover-bots-review-poster.jpg'),
         },
         {
             titleKey: 'services.marqueeCards.card6.title',
@@ -74,8 +89,8 @@ const ServicesMarquee = () => {
         {
             titleKey: 'services.marqueeCards.card7.title',
             descriptionKey: 'services.marqueeCards.card7.description',
-            videoSrc: r2PreviewVideo('ugc-ai-services-review.mp4'),
-            poster: r2Poster('ugc-ai-services-review-poster.jpg'),
+            videoSrc: nuevosVoicebotCierraVentasClip?.previewSrc ?? r2PreviewVideo('ugc-ai-services-review.mp4'),
+            poster: nuevosVoicebotCierraVentasClip?.posterSrc ?? r2Poster('ugc-ai-services-review-poster.jpg'),
         },
         {
             titleKey: 'services.marqueeCards.card8.title',
@@ -86,8 +101,8 @@ const ServicesMarquee = () => {
         {
             titleKey: 'services.marqueeCards.card9.title',
             descriptionKey: 'services.marqueeCards.card9.description',
-            videoSrc: r2PreviewVideo('ugc-voiceover-bots-review.mp4'),
-            poster: r2Poster('ugc-voiceover-bots-review-poster.jpg'),
+            videoSrc: nuevosWhatsAppVentasClip?.previewSrc ?? r2PreviewVideo('ugc-voiceover-bots-review.mp4'),
+            poster: nuevosWhatsAppVentasClip?.posterSrc ?? r2Poster('ugc-voiceover-bots-review-poster.jpg'),
         },
         {
             titleKey: 'services.marqueeCards.card10.title',
@@ -104,8 +119,8 @@ const ServicesMarquee = () => {
         {
             titleKey: 'services.marqueeCards.card12.title',
             descriptionKey: 'services.marqueeCards.card12.description',
-            videoSrc: r2PreviewVideo('ugc-clothing-showcase-2.mp4'),
-            poster: r2Poster('ugc-clothing-showcase-2-poster.jpg'),
+            videoSrc: nuevosAutomotrizVoiceDemoClip?.previewSrc ?? r2PreviewVideo('ugc-clothing-showcase-2.mp4'),
+            poster: nuevosAutomotrizVoiceDemoClip?.posterSrc ?? r2Poster('ugc-clothing-showcase-2-poster.jpg'),
         },
     ];
 
