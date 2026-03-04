@@ -95,20 +95,18 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
         <div>
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-semibold text-primary">{t('footer.fiverr.ratingBreakdown')}</p>
-            <span className="inline-flex items-center gap-0.5 text-accent">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Star key={index} className="h-3.5 w-3.5 fill-current" />
-              ))}
-              <span className="ml-1 text-sm font-semibold text-primary">4.8</span>
-            </span>
           </div>
           <div className="space-y-2.5">
             {fiverrRatingBreakdown.map((item) => (
               <div key={item.labelKey} className="flex items-center justify-between text-sm">
                 <span className="text-accent/95">{t(item.labelKey)}</span>
                 <span className="inline-flex items-center gap-1 text-primary font-semibold">
-                  <Star className="h-3.5 w-3.5 fill-current text-accent" />
-                  {item.value}
+                  <span className="inline-flex items-center gap-0.5 text-accent">
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <Star key={index} className="h-3.5 w-3.5 fill-current" />
+                    ))}
+                  </span>
+                  <span className="text-primary">{item.value}</span>
                 </span>
               </div>
             ))}
