@@ -55,6 +55,8 @@ Given source file: `ugc-example.mp4`
    - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/src/data/nuevos-r2-ready.ts`
 7. `nuevos` manifest must be committed to keep CI builds deterministic:
    - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/public/uploads/videos/nuevos/manifest.csv`
+8. Optional SEO title/category overrides for `nuevos` display metadata:
+   - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/scripts/nuevos-seo-overrides.json`
 
 ## Encoding Workflow
 1. Put source `.mp4` files into:
@@ -114,7 +116,7 @@ aws s3 sync /local/path s3://<bucket>/videos/<folder> \
    npm --prefix /Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC run video:catalog
    ```
    Note: this is also executed automatically during `npm run build` and `npm run build:dev` via `prebuild` hooks.
-4. The generator reads `public/uploads/videos/nuevos/manifest.csv` and writes:
+4. The generator reads `public/uploads/videos/nuevos/manifest.csv`, applies optional SEO overrides from `scripts/nuevos-seo-overrides.json`, and writes:
    - `src/data/nuevos-r2-ready.ts`
 5. The generated report `NUEVOS_R2_BLOCK_REPORT` is the local source of truth for readiness counts.
 6. If manifest is missing, generator fails open by producing an empty catalog (build-safe fallback).

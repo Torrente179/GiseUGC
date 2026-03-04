@@ -6,10 +6,17 @@ import process from 'node:process';
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const DEFAULT_MANIFEST_PATH = 'public/uploads/videos/nuevos/manifest.csv';
 const DEFAULT_OUTPUT_PATH = 'src/data/nuevos-r2-ready.ts';
+const DEFAULT_SEO_OVERRIDES_PATH = 'scripts/nuevos-seo-overrides.json';
 const DAY_MS = 86_400_000;
+const VALID_REEL_CATEGORIES = new Set(['fashion', 'beauty', 'tech', 'lifestyle']);
 
 function parseArgs(argv) {
-  const args = { manifest: DEFAULT_MANIFEST_PATH, output: DEFAULT_OUTPUT_PATH, timeoutMs: 8000 };
+  const args = {
+    manifest: DEFAULT_MANIFEST_PATH,
+    output: DEFAULT_OUTPUT_PATH,
+    seoOverrides: DEFAULT_SEO_OVERRIDES_PATH,
+    timeoutMs: 8000,
+  };
 
   for (let i = 0; i < argv.length; i += 1) {
     const token = argv[i];
@@ -23,6 +30,11 @@ function parseArgs(argv) {
       i += 1;
       continue;
     }
+    if (token === '--seo-overrides') {
+      args.seoOverrides = argv[i + 1];
+      i += 1;
+      continue;
+    }
     if (token === '--timeout-ms') {
       const parsed = Number.parseInt(argv[i + 1] ?? '', 10);
       if (Number.isFinite(parsed) && parsed > 0) args.timeoutMs = parsed;
@@ -30,7 +42,9 @@ function parseArgs(argv) {
       continue;
     }
     if (token === '-h' || token === '--help') {
-      console.log('Usage: node scripts/generate-nuevos-r2-catalog.mjs [--manifest FILE] [--output FILE] [--timeout-ms N]');
+      console.log(
+        'Usage: node scripts/generate-nuevos-r2-catalog.mjs [--manifest FILE] [--output FILE] [--seo-overrides FILE] [--timeout-ms N]',
+      );
       process.exit(0);
     }
     throw new Error(`Unknown argument: ${token}`);
@@ -89,6 +103,47 @@ function inferVideoCategory(filename) {
   return 'lifestyle';
 }
 
+function sanitizeOverrideTitle(value) {
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
+function sanitizeOverrideCategory(value) {
+  if (typeof value !== 'string') return undefined;
+  return VALID_REEL_CATEGORIES.has(value) ? value : undefined;
+}
+
+function loadSeoOverrides(overridesPath) {
+  if (!existsSync(overridesPath)) {
+    return { overrides: new Map(), loadedCount: 0 };
+  }
+
+  const raw = JSON.parse(readFileSync(overridesPath, 'utf8'));
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    throw new Error(`SEO overrides must be a JSON object: ${overridesPath}`);
+  }
+
+  const overrides = new Map();
+  let loadedCount = 0;
+  Object.entries(raw).forEach(([filenameKey, value]) => {
+    if (typeof filenameKey !== 'string' || filenameKey.trim().length === 0) return;
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return;
+
+    const title = sanitizeOverrideTitle(value.title);
+    const category = sanitizeOverrideCategory(value.category);
+
+    const normalizedNfc = filenameKey.normalize('NFC');
+    const normalizedNfd = filenameKey.normalize('NFD');
+    const override = { title, category };
+    overrides.set(normalizedNfc, override);
+    overrides.set(normalizedNfd, override);
+    loadedCount += 1;
+  });
+
+  return { overrides, loadedCount };
+}
+
 function escapeSingleQuotes(value) {
   return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 }
@@ -120,6 +175,8 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const manifestPath = path.resolve(process.cwd(), args.manifest);
   const outputPath = path.resolve(process.cwd(), args.output);
+  const seoOverridesPath = path.resolve(process.cwd(), args.seoOverrides);
+  const { overrides: seoOverrides, loadedCount: seoOverridesCount } = loadSeoOverrides(seoOverridesPath);
 
   if (!existsSync(manifestPath)) {
     const generatedAtIso = new Date().toISOString();
@@ -132,6 +189,7 @@ async function main() {
  * UTC day bucket at generation: ${utcDayBucket}
  *
  * Source manifest: ${args.manifest}
+ * Source SEO overrides: ${args.seoOverrides}
  * Note: source manifest was not found during generation.
  */
 
@@ -192,12 +250,14 @@ export const NUEVOS_R2_BLOCK_REPORT: {
       const sourceFilename = path.basename(sourcePath);
       if (!sourceFilename) return null;
       const baseName = stripExtension(sourceFilename);
+      const override =
+        seoOverrides.get(sourceFilename.normalize('NFC')) ?? seoOverrides.get(sourceFilename.normalize('NFD'));
 
       return {
         originalIndex: index,
         sourceFilename,
-        title: toReadableVideoTitle(sourceFilename),
-        category: inferVideoCategory(sourceFilename),
+        title: override?.title ?? toReadableVideoTitle(sourceFilename),
+        category: override?.category ?? inferVideoCategory(sourceFilename),
         assets: {
           main: toR2VideoUrl('main', sourceFilename),
           mobile: toR2VideoUrl('mobile', `${baseName}-mobile.mp4`),
@@ -299,6 +359,7 @@ export const NUEVOS_R2_BLOCK_REPORT: {
  * UTC day bucket at generation: ${utcDayBucket}
  *
  * Source manifest: ${args.manifest}
+ * Source SEO overrides: ${args.seoOverrides}
  */
 
 import type { ReelClip } from '@/data/portfolio-clips';
@@ -333,6 +394,7 @@ export const NUEVOS_R2_BLOCK_REPORT: {
   writeFileSync(outputPath, output, 'utf8');
 
   console.log(`Generated ${path.relative(process.cwd(), outputPath)}`);
+  console.log(`SEO title overrides loaded: ${seoOverridesCount}`);
   console.log(
     `R2 readiness: ${blockReport.ready}/${blockReport.totalCandidates} ready, ${blockReport.blocked} blocked`,
   );

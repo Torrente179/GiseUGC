@@ -33,3 +33,6 @@ Reviewed the latest SEO implementation and generated machine transcripts plus SE
 ## Notes
 - This pass generates a naming plan and transcripts; it does not rename runtime files or modify `src/components/Portfolio.tsx`.
 - If applying these names in production, update source files, re-run `scripts/encode-videos.sh`, upload to R2 (`videos/main|mobile|previews|posters`), and update clip paths in code.
+
+## Follow-up Applied
+- See `changes/2026-03-04-transcript-driven-seo-video-titles-for-nuevos.md` for the implementation that wired transcript-aligned SEO titles into `scripts/generate-nuevos-r2-catalog.mjs` and `src/data/nuevos-r2-ready.ts`.
