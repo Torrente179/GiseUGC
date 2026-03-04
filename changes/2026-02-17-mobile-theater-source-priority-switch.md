@@ -1,5 +1,12 @@
 # 2026-02-17 - Mobile Theater Source Priority Switch
 
+## Status
+Historical interim tuning note.
+
+Superseded by later same-topic updates, with final runtime captured in:
+- `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/changes/video-encoding-tracking-setup-guide.md`
+- `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/changes/2026-02-19-portfolio-prewarm-viewport-gating.md` (final section + validation note)
+
 ## Summary
 Adjusted theater playback source priority for better mobile sharpness while preserving fast fallback behavior.
 

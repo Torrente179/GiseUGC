@@ -1,5 +1,12 @@
 # 2026-02-19 - Mobile Theater Source Priority Fix
 
+## Status
+Historical interim tuning note.
+
+Superseded later on `2026-02-19` by the final main-first mobile theater policy documented in:
+- `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/changes/2026-02-19-portfolio-prewarm-viewport-gating.md` (Main-First update + validation)
+- `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/changes/video-encoding-tracking-setup-guide.md`
+
 ## Summary
 Identified and fixed three stacked root causes preventing mobile theater video from loading as fast as desktop.
 

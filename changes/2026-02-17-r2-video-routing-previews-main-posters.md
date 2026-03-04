@@ -1,5 +1,15 @@
 # 2026-02-17 - R2 Video Routing (Previews / Main / Posters)
 
+## Status
+Historical implementation snapshot.
+
+Current canonical reference:
+- `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/changes/video-encoding-tracking-setup-guide.md`
+
+Superseded details in this note were later corrected by:
+- `2026-02-17-r2-videos-prefix-hotfix.md` (`/videos/` path prefix)
+- subsequent portfolio theater source tuning notes
+
 ## Summary
 Updated media URLs so playback assets are served from Cloudflare R2 with explicit routing by use case.
 
@@ -10,10 +20,10 @@ Updated media URLs so playback assets are served from Cloudflare R2 with explici
 ## R2 object structure used
 - Base domain: `https://media.giselasaldarriaga.com`
 - Folder mapping:
-  - `previews/` -> short preview files (`*-preview.mp4`)
-  - `main/` -> full main playback files (`*.mp4`)
-  - `mobile/` -> mobile-optimized full files (`*-mobile.mp4`) (uploaded but not currently wired in theater)
-  - `posters/` -> poster thumbnails (`*-poster.jpg`)
+  - `videos/previews/` -> short preview files (`*-preview.mp4`)
+  - `videos/main/` -> full main playback files (`*.mp4`)
+  - `videos/mobile/` -> mobile-optimized full files (`*-mobile.mp4`)
+  - `videos/posters/` -> poster thumbnails (`*-poster.jpg`)
 
 ## Specific code actions completed
 1. `src/components/Portfolio.tsx` media model refactor
@@ -29,9 +39,9 @@ Updated media URLs so playback assets are served from Cloudflare R2 with explici
 2. `src/components/Portfolio.tsx` URL helper layer
 - Added:
   - `R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com'`
-  - `r2MainVideo(filename)` -> `/main/<filename>`
-  - `r2PreviewVideo(filename)` -> `/previews/<filename-with--preview.mp4>`
-  - `r2Poster(filename)` -> `/posters/<filename>`
+  - `r2MainVideo(filename)` -> `/videos/main/<filename>`
+  - `r2PreviewVideo(filename)` -> `/videos/previews/<filename-with--preview.mp4>`
+  - `r2Poster(filename)` -> `/videos/posters/<filename>`
 - This guarantees naming consistency and avoids hardcoding full URLs everywhere.
 
 3. `src/components/Portfolio.tsx` runtime wiring
@@ -100,9 +110,9 @@ Updated media URLs so playback assets are served from Cloudflare R2 with explici
 
 6. Verify in browser network panel:
 - Video requests should resolve to:
-  - `https://media.giselasaldarriaga.com/previews/...`
-  - `https://media.giselasaldarriaga.com/main/...`
-  - `https://media.giselasaldarriaga.com/posters/...`
+  - `https://media.giselasaldarriaga.com/videos/previews/...`
+  - `https://media.giselasaldarriaga.com/videos/main/...`
+  - `https://media.giselasaldarriaga.com/videos/posters/...`
 
 ## Optional switch: theater `main/` -> `mobile/`
 - If you want theater to use mobile-optimized full clips instead of originals:

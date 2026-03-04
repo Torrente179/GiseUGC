@@ -3,6 +3,19 @@
 ## Summary
 Improved page-speed behavior by reducing eager R2 video prewarm pressure before the portfolio section is near view, while preserving theater quality and all existing UI/animation behavior.
 
+## Status
+This file is an iterative same-day tuning log with multiple passes.
+
+Current effective runtime (see `src/components/Portfolio.tsx`):
+- Mobile + desktop theater now prefer `mainSrc` first, with `mobileSrc` fallback.
+- R2 media paths resolve under `/videos/*`.
+- Final behavior for this timeline is captured by:
+  - `## 2026-02-19 Update - Main-First Mobile Theater + Aggressive R2 Prewarm`
+  - `## 2026-02-19 Validation Note - User Confirmed Final Runtime`
+
+Superseded earlier section in this file:
+- `## 2026-02-19 Update - Restore Instant Mobile Theater Path (No Starter Layer)`
+
 ## What Changed
 1. Viewport-gated startup prewarm
 - Added an IntersectionObserver gate on the portfolio section.
@@ -189,7 +202,7 @@ Improved page-speed behavior by reducing eager R2 video prewarm pressure before 
 - No more “video starts silent then audio appears” behavior.
 - Audio remains in normal sync with playback start, matching prior expected behavior.
 
-## 2026-02-19 Update - Restore Instant Mobile Theater Path (No Starter Layer)
+## 2026-02-19 Update - Restore Instant Mobile Theater Path (No Starter Layer) [Superseded Later Same Day]
 
 ### Goal
 - Recover the previous instant-feel mobile theater startup without reintroducing the starter-clip crossfade path.

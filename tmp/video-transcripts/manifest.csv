@@ -1,0 +1,14 @@
+file,language,language_probability,duration,duration_after_vad,segments,chars,transcript_file,note
+ugc-ai-services-review.mp4,es,0.9560,23.06,20.69,6,339,tmp/video-transcripts/ugc-ai-services-review.txt,
+ugc-brand-spokesperson.mp4,es,0.9949,23.50,20.38,5,341,tmp/video-transcripts/ugc-brand-spokesperson.txt,
+ugc-business-promotion.mp4,es,0.9913,42.24,42.24,12,714,tmp/video-transcripts/ugc-business-promotion.txt,
+ugc-clothing-showcase-1.mp4,none,0.0000,,,0,0,tmp/video-transcripts/ugc-clothing-showcase-1.txt,no audio stream
+ugc-clothing-showcase-2.mp4,none,0.0000,,,0,0,tmp/video-transcripts/ugc-clothing-showcase-2.txt,no audio stream
+ugc-clothing-showcase-3.mp4,none,0.0000,,,0,0,tmp/video-transcripts/ugc-clothing-showcase-3.txt,no audio stream
+ugc-creatine-supplement-review.mp4,es,0.9942,41.45,38.02,5,449,tmp/video-transcripts/ugc-creatine-supplement-review.txt,
+ugc-lifestyle-review-2.mp4,es,0.9886,40.05,39.97,6,561,tmp/video-transcripts/ugc-lifestyle-review-2.txt,
+ugc-lifestyle-review-3.mp4,es,0.9678,7.38,4.67,1,65,tmp/video-transcripts/ugc-lifestyle-review-3.txt,
+ugc-lifestyle-review.mp4,es,0.9997,72.93,72.93,11,1167,tmp/video-transcripts/ugc-lifestyle-review.txt,
+ugc-services-presentation.mp4,es,0.9841,38.85,38.51,9,616,tmp/video-transcripts/ugc-services-presentation.txt,
+ugc-voicebot-review.mp4,es,0.9814,59.09,54.91,10,743,tmp/video-transcripts/ugc-voicebot-review.txt,
+ugc-voiceover-bots-review.mp4,es,0.9975,27.61,25.50,6,404,tmp/video-transcripts/ugc-voiceover-bots-review.txt,

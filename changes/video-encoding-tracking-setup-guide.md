@@ -3,6 +3,19 @@
 ## Purpose
 Single reference for how videos are prepared, uploaded, wired in code, and tracked in changes.
 
+## Status
+Canonical source of truth as of `2026-03-04`.
+
+If an older `changes/*.md` entry conflicts with this file, follow this file and current runtime code:
+- `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/src/components/Portfolio.tsx`
+- `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/scripts/encode-videos.sh`
+
+Historical notes with superseded details:
+- `2026-02-17-r2-video-routing-previews-main-posters.md` (pre-`/videos/` path examples)
+- `2026-02-17-mobile-theater-source-priority-switch.md` (interim strategy)
+- `2026-02-19-mobile-theater-source-priority-fix.md` (interim strategy)
+- Earlier sections inside `2026-02-19-portfolio-prewarm-viewport-gating.md` (iterative same-day tuning)
+
 ## Current Architecture (Production)
 1. `main` videos are the primary source for theater playback on desktop and mobile.
 2. `mobile` videos are fallback for theater playback.
@@ -53,6 +66,22 @@ Given source file: `ugc-example.mp4`
 5. Verify manifest:
    - `/Users/juanpabloramirez/Desktop/GiseUGC/GiseUGC/tmp/video-encodes/manifest.csv`
 
+## Current Encode Defaults (Script)
+From `scripts/encode-videos.sh`:
+1. Preview outputs (`*-preview.mp4`):
+   - 4 seconds
+   - width up to `480`
+   - `fps=24`
+   - no audio (`-an`)
+   - `libx264` + `-movflags +faststart`
+   - `x264 keyint=24:min-keyint=24:scenecut=0`
+2. Mobile outputs (`*-mobile.mp4`):
+   - width up to `720`
+   - `fps=30`
+   - AAC audio `96k` (stereo, 48kHz)
+   - `libx264` + `-movflags +faststart`
+   - `x264 keyint=30:min-keyint=30:scenecut=0`
+
 ## Upload Workflow (Cloudflare R2)
 Upload by folder:
 1. `tmp/video-encodes/*-preview.mp4` -> `videos/previews/`
@@ -86,7 +115,7 @@ Per clip in `REEL_CLIPS`:
 1. Intent prewarm (hover/touch/focus) injects video preload links.
 2. Startup hidden prewarm warms preview/main/mobile sets with configured budgets.
 3. Theater-neighbor prewarm warms likely next/adjacent clips.
-4. Theater source order is main-first with mobile fallback.
+4. Theater source order is main-first with mobile fallback (`shouldPreferMobileTheaterSource = false`).
 
 ## Tracking Process (Required)
 After any video/perf changes:
