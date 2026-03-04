@@ -73,7 +73,7 @@ const FAQ = () => {
                     <AccordionTrigger className="text-left text-base md:text-lg font-semibold text-foreground py-5 md:py-6 hover:no-underline hover:text-primary transition-colors duration-300 [&[data-state=open]]:text-primary [&>svg]:text-foreground/70 [&>svg]:transition-transform [&>svg]:duration-300">
                       {item.question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-foreground/80 text-sm md:text-base leading-relaxed pb-5 md:pb-6 max-w-[72ch]">
+                    <AccordionContent className="text-foreground/80 text-sm md:text-base leading-relaxed pb-5 md:pb-6">
                       {item.answer}
                     </AccordionContent>
                   </AccordionItem>
