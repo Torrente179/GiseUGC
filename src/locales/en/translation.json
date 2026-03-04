@@ -215,8 +215,8 @@
     }
   },
   "footer": {
-    "brandName": "Your next campaign starts here",
-    "description": "Contact me now to start your next campaign.",
+    "brandName": "Contact me now to start your next campaign.",
+    "description": "Your next campaign starts here.",
     "servicesTitle": "Services",
     "quickLinksTitle": "Quick Links",
     "contactTitle": "Contact",
