@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState, startTransition } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import { clearUrlHash } from '@/hooks/use-hashless-section-navigation';
@@ -28,7 +28,12 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    const load = () => setShouldLoadBelowFold(true);
+    const load = () => {
+      // Deprioritize below-the-fold mounting so tap/click interactions stay responsive.
+      startTransition(() => {
+        setShouldLoadBelowFold(true);
+      });
+    };
 
     if (typeof window.requestIdleCallback === 'function') {
       const idleId = window.requestIdleCallback(load, { timeout: 1500 });

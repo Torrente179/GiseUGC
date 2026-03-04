@@ -55,6 +55,7 @@ const Navbar = () => {
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const mobileMenuSwipeRef = useRef<MobileMenuSwipeState | null>(null);
   const swipeDismissTimeoutRef = useRef<number | null>(null);
+  const ignoreNextMenuButtonClickRef = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 24);
@@ -102,6 +103,24 @@ const Navbar = () => {
     resetMobileMenuSwipe();
     setMobileMenuOpen((prev) => !prev);
   }, [clearSwipeDismissTimeout, resetMobileMenuSwipe]);
+
+  const handleMobileMenuButtonPointerDown = useCallback(
+    (event: React.PointerEvent<HTMLButtonElement>) => {
+      if (event.pointerType !== 'touch') return;
+      ignoreNextMenuButtonClickRef.current = true;
+      event.preventDefault();
+      toggleMobileMenu();
+    },
+    [toggleMobileMenu],
+  );
+
+  const handleMobileMenuButtonClick = useCallback(() => {
+    if (ignoreNextMenuButtonClickRef.current) {
+      ignoreNextMenuButtonClickRef.current = false;
+      return;
+    }
+    toggleMobileMenu();
+  }, [toggleMobileMenu]);
 
   const closeMobileMenuWithSwipe = useCallback(() => {
     clearSwipeDismissTimeout();
@@ -490,7 +509,8 @@ const Navbar = () => {
               </div>
               <ThemeToggle />
               <button
-                onClick={toggleMobileMenu}
+                onPointerDown={handleMobileMenuButtonPointerDown}
+                onClick={handleMobileMenuButtonClick}
                 className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:text-primary"
                 aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
                 aria-expanded={mobileMenuOpen}
