@@ -55,7 +55,6 @@ const getLqip = (url: string) => {
   const key = filename.replace(/-preview\.mp4$/, '').replace(/-poster\.jpg$/, '').replace(/\.mp4$/, '');
   return VIDEO_LQIP[key] || undefined;
 };
-const DAILY_REEL_SHOWCASE_COUNT = 10;
 const DAY_MS = 86_400_000;
 const getUtcDayBucket = () => Math.floor(Date.now() / DAY_MS);
 
@@ -75,11 +74,6 @@ const shuffleWithSeed = <T,>(items: T[], seed: number): T[] => {
     [result[i], result[j]] = [result[j], result[i]];
   }
   return result;
-};
-
-const pickDailyShowcaseClips = (clips: ReelClip[], count: number, daySeed: number): ReelClip[] => {
-  if (clips.length === 0 || count <= 0) return [];
-  return shuffleWithSeed(clips, daySeed).slice(0, Math.min(count, clips.length));
 };
 
 const ALL_REEL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS];
@@ -351,7 +345,7 @@ const Portfolio = () => {
   const interactionPrewarmTimerRef = useRef<number | null>(null);
   const linkPreloadRefs = useRef<HTMLLinkElement[]>([]);
   const showcaseReelClips = useMemo(
-    () => pickDailyShowcaseClips(ALL_REEL_CLIPS, DAILY_REEL_SHOWCASE_COUNT, utcDayBucket),
+    () => shuffleWithSeed(ALL_REEL_CLIPS, utcDayBucket),
     [utcDayBucket],
   );
   const allReelIndexById = useMemo(
