@@ -36,17 +36,17 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
           decoding="async"
         />
         <div>
-          <p className="text-[1.7rem] md:text-[1.95rem] leading-none font-semibold tracking-tight text-foreground">
+          <p className="text-[1.7rem] md:text-[1.95rem] leading-none font-semibold tracking-tight text-primary">
             {t('footer.fiverr.name')}{' '}
-            <span className="text-foreground/62 font-normal text-[1.5rem] md:text-[1.7rem]">
+            <span className="text-accent/90 font-normal text-[1.5rem] md:text-[1.7rem]">
               {t('footer.fiverr.handle')}
             </span>
           </p>
 
-          <div className="mt-1.5 flex items-center gap-2.5 text-foreground/85">
-            <Star className="h-4 w-4 fill-current" />
-            <span className="text-xl font-semibold leading-none">4.8</span>
-            <span className="text-xl text-foreground/55 leading-none">(158)</span>
+          <div className="mt-1.5 flex items-center gap-2.5">
+            <Star className="h-4 w-4 fill-current text-accent" />
+            <span className="text-xl font-semibold leading-none text-primary">4.8</span>
+            <span className="text-xl text-accent/85 leading-none">(158)</span>
           </div>
 
           <p className="text-sm md:text-[15px] leading-[1.45] text-foreground/82 mt-2.5">
@@ -70,7 +70,7 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
 
       <div className="grid gap-4 md:grid-cols-[minmax(0,0.52fr)_minmax(0,0.48fr)]">
         <div>
-          <p className="text-sm font-semibold text-foreground mb-2">{t('footer.fiverr.reviewsTitle')}</p>
+          <p className="text-sm font-semibold text-primary mb-2">{t('footer.fiverr.reviewsTitle')}</p>
           <div className="space-y-2">
             {fiverrRatingDistribution.map((item) => {
               const width = `${Math.round((item.count / maxRatingCount) * 100)}%`;
@@ -78,14 +78,14 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
 
               return (
                 <div key={item.stars} className="grid grid-cols-[2.2rem_1fr_auto] items-center gap-2.5">
-                  <span className={`text-sm ${muted ? 'text-foreground/32' : 'text-foreground/78'}`}>{item.stars}★</span>
+                  <span className={`text-sm ${muted ? 'text-foreground/32' : 'text-accent/95 font-medium'}`}>{item.stars}★</span>
                   <span className="h-2 rounded-full bg-foreground/10 overflow-hidden">
                     <span
-                      className={`block h-full rounded-full ${muted ? 'bg-foreground/18' : 'bg-foreground/85'}`}
+                      className={`block h-full rounded-full ${muted ? 'bg-foreground/18' : 'bg-primary/85'}`}
                       style={{ width }}
                     />
                   </span>
-                  <span className={`text-sm ${muted ? 'text-foreground/32' : 'text-foreground/72'}`}>({item.count})</span>
+                  <span className={`text-sm ${muted ? 'text-foreground/32' : 'text-primary/72'}`}>({item.count})</span>
                 </div>
               );
             })}
@@ -94,20 +94,20 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
 
         <div>
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-semibold text-foreground">{t('footer.fiverr.ratingBreakdown')}</p>
-            <span className="inline-flex items-center gap-0.5 text-foreground">
+            <p className="text-sm font-semibold text-primary">{t('footer.fiverr.ratingBreakdown')}</p>
+            <span className="inline-flex items-center gap-0.5 text-accent">
               {Array.from({ length: 5 }).map((_, index) => (
                 <Star key={index} className="h-3.5 w-3.5 fill-current" />
               ))}
-              <span className="ml-1 text-sm font-semibold">4.8</span>
+              <span className="ml-1 text-sm font-semibold text-primary">4.8</span>
             </span>
           </div>
           <div className="space-y-2.5">
             {fiverrRatingBreakdown.map((item) => (
               <div key={item.labelKey} className="flex items-center justify-between text-sm">
-                <span className="text-foreground/62">{t(item.labelKey)}</span>
-                <span className="inline-flex items-center gap-1 text-foreground/88 font-semibold">
-                  <Star className="h-3.5 w-3.5 fill-current" />
+                <span className="text-accent/95">{t(item.labelKey)}</span>
+                <span className="inline-flex items-center gap-1 text-primary font-semibold">
+                  <Star className="h-3.5 w-3.5 fill-current text-accent" />
                   {item.value}
                 </span>
               </div>
