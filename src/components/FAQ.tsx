@@ -24,7 +24,7 @@ const FAQ = () => {
     <section id="faq" className="studio-section bg-muted/30">
       <div className="studio-container">
         <motion.div
-          className="mb-10 md:mb-12"
+          className="mb-8 md:mb-10"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
@@ -36,7 +36,7 @@ const FAQ = () => {
           >
             {t('faq.sectionSubtitle')}
           </motion.p>
-          <h2 className="studio-title">
+          <h2 className="studio-title text-[clamp(2.2rem,7vw,3.6rem)] leading-[0.94]">
             <SplitTextReveal text={t('faq.sectionTitle')} delay={0.08} />
           </h2>
         </motion.div>
@@ -55,18 +55,22 @@ const FAQ = () => {
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.68 }}
         >
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full rounded-[1.25rem] border border-border/70 bg-card/70 px-5 md:px-7 backdrop-blur-[1px]"
+          >
             {Array.isArray(items) &&
               items.map((item, index) => (
                 <AccordionItem
                   key={index}
                   value={`item-${index}`}
-                  className="faq-answer border-b border-border/60"
+                  className="faq-answer border-b border-border/70 last:border-b-0"
                 >
-                  <AccordionTrigger className="text-left text-base md:text-lg font-medium py-5 hover:no-underline hover:text-primary transition-colors [&[data-state=open]]:text-primary">
+                  <AccordionTrigger className="text-left text-base md:text-lg font-semibold text-foreground py-5 md:py-6 hover:no-underline hover:text-primary transition-colors [&[data-state=open]]:text-primary [&>svg]:text-foreground/70">
                     {item.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground text-sm md:text-base leading-relaxed pb-5">
+                  <AccordionContent className="text-foreground/80 text-sm md:text-base leading-relaxed pb-5 md:pb-6 max-w-[72ch]">
                     {item.answer}
                   </AccordionContent>
                 </AccordionItem>
