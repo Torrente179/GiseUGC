@@ -38,15 +38,15 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
         <div>
           <p className="text-[1.7rem] md:text-[1.95rem] leading-none font-semibold tracking-tight text-primary">
             {t('footer.fiverr.name')}{' '}
-            <span className="text-accent/90 font-normal text-[1.5rem] md:text-[1.7rem]">
+            <span className="text-accent/90 dark:text-accent/80 font-normal text-[1.5rem] md:text-[1.7rem]">
               {t('footer.fiverr.handle')}
             </span>
           </p>
 
           <div className="mt-1.5 flex items-center gap-2.5">
-            <Star className="h-4 w-4 fill-current text-accent" />
+            <Star className="h-4 w-4 fill-current text-accent dark:text-accent/80" />
             <span className="text-xl font-semibold leading-none text-primary">4.8</span>
-            <span className="text-xl text-accent/85 leading-none">(158)</span>
+            <span className="text-xl text-accent/85 dark:text-accent/75 leading-none">(158)</span>
           </div>
 
           <p className="text-sm md:text-[15px] leading-[1.45] text-foreground/82 mt-2.5">
@@ -78,14 +78,14 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
 
               return (
                 <div key={item.stars} className="grid grid-cols-[2.2rem_1fr_auto] items-center gap-2.5">
-                  <span className={`text-sm ${muted ? 'text-foreground/32' : 'text-accent/95 font-medium'}`}>{item.stars}★</span>
+                  <span className={`text-sm ${muted ? 'text-foreground/32' : 'text-accent/95 dark:text-accent/80 font-medium'}`}>{item.stars}★</span>
                   <span className="h-2 rounded-full bg-foreground/10 overflow-hidden">
                     <span
-                      className={`block h-full rounded-full ${muted ? 'bg-foreground/18' : 'bg-primary/85'}`}
+                      className={`block h-full rounded-full ${muted ? 'bg-foreground/18' : 'bg-primary/85 dark:bg-primary/75'}`}
                       style={{ width }}
                     />
                   </span>
-                  <span className={`text-sm ${muted ? 'text-foreground/32' : 'text-primary/72'}`}>({item.count})</span>
+                  <span className={`text-sm ${muted ? 'text-foreground/32' : 'text-primary/72 dark:text-primary/88'}`}>({item.count})</span>
                 </div>
               );
             })}
@@ -99,9 +99,9 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
           <div className="space-y-2.5">
             {fiverrRatingBreakdown.map((item) => (
               <div key={item.labelKey} className="flex items-center justify-between text-sm">
-                <span className="text-accent/95">{t(item.labelKey)}</span>
+                <span className="text-accent/95 dark:text-accent/80">{t(item.labelKey)}</span>
                 <span className="inline-flex items-center gap-1 text-primary font-semibold">
-                  <span className="inline-flex items-center gap-0.5 text-accent">
+                  <span className="inline-flex items-center gap-0.5 text-accent dark:text-accent/80">
                     {Array.from({ length: 5 }).map((_, index) => (
                       <Star key={index} className="h-3.5 w-3.5 fill-current" />
                     ))}
