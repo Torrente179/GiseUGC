@@ -158,16 +158,14 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               {t('hero.description')}
             </p>
 
-            <div className="hero-reveal hero-reveal-4 flex flex-col sm:flex-row gap-4 sm:gap-5">
-              <div className="hidden md:block">
-                <a
-                  href="#portfolio"
-                  onClick={handleHashLinkClick}
-                  className="btn-primary-nordic px-8 py-3.5 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
-                >
-                  {t('hero.buttonPortfolio')}
-                </a>
-              </div>
+            <div className="hero-reveal hero-reveal-4 hidden md:flex flex-col sm:flex-row gap-4 sm:gap-5">
+              <a
+                href="#portfolio"
+                onClick={handleHashLinkClick}
+                className="btn-primary-nordic px-8 py-3.5 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
+              >
+                {t('hero.buttonPortfolio')}
+              </a>
               <a
                 href="#contact"
                 onClick={handleContactCtaClick}
