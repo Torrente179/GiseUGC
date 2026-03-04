@@ -5,7 +5,6 @@ import {
   Facebook,
   Send,
 } from 'lucide-react';
-import FiverrRatingCard from '@/components/FiverrRatingCard';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101';
@@ -105,48 +104,27 @@ const Footer = () => {
       className="bg-[#F6F3EE] dark:bg-background text-foreground pt-12 md:pt-14 pb-8 md:pb-10 transition-colors duration-300"
     >
       <div className="studio-container">
-        <div className="grid gap-8 lg:gap-10 xl:grid-cols-[minmax(0,0.5fr)_minmax(0,0.5fr)] xl:items-start mb-8">
-          <div>
-            <h3 className="brand-logo text-[clamp(2.25rem,4.5vw,3.75rem)] leading-[0.95] mb-4 text-primary">
-              {t('footer.brandName')}<span className="text-accent">.</span>
-            </h3>
-            <p className="strategic-body text-foreground/72 text-[clamp(1.2rem,1.8vw,1.85rem)] leading-[1.5] max-w-2xl">
-              {t('footer.description')}
-            </p>
+        <div className="mb-8 text-center">
+          <h3 className="brand-logo text-[clamp(2.25rem,4.5vw,3.75rem)] leading-[0.95] mb-4 text-primary">
+            {t('footer.brandName')}<span className="text-accent">.</span>
+          </h3>
+          <p className="strategic-body text-foreground/72 text-[clamp(1.2rem,1.8vw,1.85rem)] leading-[1.5] max-w-2xl mx-auto">
+            {t('footer.description')}
+          </p>
 
-            <div className="hidden md:flex gap-3 mt-7 flex-wrap">
-              {footerContactPlatforms.map((platform) => (
-                <a
-                  key={platform.id}
-                  href={platform.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={platform.ariaLabel}
-                  className="h-12 w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300"
-                >
-                  {platform.icon}
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <FiverrRatingCard className="hidden md:block" />
-
-            <div className="flex md:hidden flex-nowrap gap-1 mt-5 justify-center">
-              {footerContactPlatforms.map((platform) => (
-                <a
-                  key={platform.id}
-                  href={platform.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={platform.ariaLabel}
-                  className="h-9 w-9 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300"
-                >
-                  {platform.icon}
-                </a>
-              ))}
-            </div>
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-2 md:gap-3">
+            {footerContactPlatforms.map((platform) => (
+              <a
+                key={platform.id}
+                href={platform.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={platform.ariaLabel}
+                className="h-9 w-9 md:h-12 md:w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-all duration-300"
+              >
+                {platform.icon}
+              </a>
+            ))}
           </div>
         </div>
 
