@@ -97,9 +97,6 @@ const Index = () => {
             <Suspense fallback={<SectionFallback id="contact" minHeightClass="min-h-[640px]" />}>
               <FooterSection />
             </Suspense>
-            <Suspense fallback={null}>
-              <FloatingContactDockSection />
-            </Suspense>
           </>
         )
       ) : (
@@ -124,6 +121,9 @@ const Index = () => {
           </>
         )
       )}
+      <Suspense fallback={null}>
+        <FloatingContactDockSection />
+      </Suspense>
     </div>
   );
 };

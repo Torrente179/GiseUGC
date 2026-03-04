@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect, useMemo, memo, startTransition, type TouchEvent, type SyntheticEvent } from 'react';
+import { useRef, useState, useCallback, useEffect, useMemo, memo, startTransition, type TouchEvent, type SyntheticEvent, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Pause, Play, Volume2, VolumeX, X } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -6,6 +6,7 @@ import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { isMobileViewport, openContactDock } from '@/lib/contact-dock';
 import LazyVideo from '@/components/media/LazyVideo';
 import VIDEO_LQIP from '@/data/video-lqip';
 import { LEGACY_REEL_CLIPS, r2Poster, r2PreviewVideo, type ReelClip } from '@/data/portfolio-clips';
@@ -348,6 +349,16 @@ const Portfolio = () => {
     () => shuffleWithSeed(ALL_REEL_CLIPS, utcDayBucket),
     [utcDayBucket],
   );
+
+  const handleContactCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (isMobileViewport()) {
+      event.preventDefault();
+      openContactDock();
+      return;
+    }
+
+    handleHashLinkClick(event);
+  };
   const allReelIndexById = useMemo(
     () => new Map(ALL_REEL_CLIPS.map((clip, index) => [clip.id, index])),
     [],
@@ -1315,7 +1326,7 @@ const Portfolio = () => {
 
             <motion.a
               href="#contact"
-              onClick={handleHashLinkClick}
+              onClick={handleContactCtaClick}
               className="btn-primary-nordic px-7 py-3"
               whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.02 }}
               whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}

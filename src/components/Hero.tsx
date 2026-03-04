@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Diamond, Sparkles, Zap } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
+import { isMobileViewport, openContactDock } from '@/lib/contact-dock';
 
 interface HeroProps {
   showIntroduction?: boolean;
@@ -21,6 +22,16 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     { icon: Diamond, labelKey: 'hero.pillAesthetic' },
     { icon: Zap, labelKey: 'hero.pillConversion' },
   ];
+
+  const handleContactCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (isMobileViewport()) {
+      event.preventDefault();
+      openContactDock();
+      return;
+    }
+
+    handleHashLinkClick(event);
+  };
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -151,14 +162,14 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               <a
                 href="#portfolio"
                 onClick={handleHashLinkClick}
-                className="btn-primary-nordic px-8 py-3.5 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
+                className="hidden md:inline-flex btn-primary-nordic px-8 py-3.5 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
               >
                 {t('hero.buttonPortfolio')}
               </a>
               <a
                 href="#contact"
-                onClick={handleHashLinkClick}
-                className="btn-secondary-nordic px-8 py-3.5 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
+                onClick={handleContactCtaClick}
+                className="btn-primary-nordic px-8 py-3.5 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
               >
                 {t('hero.buttonContact')}
               </a>

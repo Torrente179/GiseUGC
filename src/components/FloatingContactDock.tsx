@@ -9,6 +9,11 @@ import {
   Facebook,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import {
+  consumePendingContactDockOpen,
+  isMobileViewport,
+  onOpenContactDock,
+} from '@/lib/contact-dock';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101';
@@ -32,6 +37,26 @@ const FloatingContactDock = () => {
   const { t } = useTranslation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktopDockGhosted, setIsDesktopDockGhosted] = useState(false);
+
+  useEffect(() => {
+    const openDock = () => {
+      if (!isMobileViewport()) {
+        consumePendingContactDockOpen();
+        return;
+      }
+
+      setMobileOpen(true);
+      consumePendingContactDockOpen();
+    };
+
+    const unsubscribe = onOpenContactDock(openDock);
+
+    if (consumePendingContactDockOpen()) {
+      openDock();
+    }
+
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     const closeOnDesktop = () => {
