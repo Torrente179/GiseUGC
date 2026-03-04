@@ -65,3 +65,20 @@ The implementation keeps screenshots 100% original (no pixel edits, no OCR, no r
 ## Validation
 - `npm run build` completed successfully.
 - `npm run lint` reports pre-existing lint errors in unrelated UI files.
+
+---
+
+## Follow-up: Desktop Layout Polish
+
+After initial deployment, desktop-specific visual issues were reported and fixed:
+
+- Reduced the main screenshot card visual size on desktop by constraining width and viewport-relative height.
+- Removed the heavy inherited panel shadow under the main testimonial card.
+- Tightened spacing between the main card and thumbnail rail.
+- Reduced horizontal gap between thumbnail cards for denser desktop navigation.
+
+### Follow-up Files Updated
+- `src/components/Testimonials.tsx`
+
+### Follow-up Validation
+- `npm run build` completed successfully after the desktop fixes.

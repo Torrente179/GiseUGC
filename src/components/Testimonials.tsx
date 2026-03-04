@@ -220,11 +220,11 @@ const Testimonials = () => {
           <div className="flex transition-transform duration-500" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
             {TESTIMONIAL_IMAGES.map((testimonial, index) => (
               <article key={testimonial.id} className="min-w-full">
-                <div className="studio-panel p-4 md:p-6 lg:p-8">
+                <div className="rounded-[1.5rem] border border-border/80 bg-card/70 p-3 md:p-4 lg:p-5">
                   <button
                     type="button"
                     onClick={() => setZoomedIndex(index)}
-                    className="block w-full overflow-hidden rounded-2xl border border-border/70 bg-background/55 transition-colors hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="mx-auto block w-full max-w-[980px] overflow-hidden rounded-2xl border border-border/70 bg-background/55 transition-colors hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     aria-label={`Open testimonial image ${index + 1}`}
                   >
                     <img
@@ -232,7 +232,7 @@ const Testimonials = () => {
                       alt={testimonial.alt}
                       width={testimonial.width}
                       height={testimonial.height}
-                      className="h-auto w-full object-contain"
+                      className="mx-auto h-auto max-h-[70vh] w-full object-contain md:max-h-[58vh] lg:max-h-[56vh]"
                       loading={index === activeIndex ? 'eager' : 'lazy'}
                       decoding="async"
                     />
@@ -243,8 +243,8 @@ const Testimonials = () => {
           </div>
         </motion.div>
 
-        <div className="mt-7 md:mt-8">
-          <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 md:justify-center">
+        <div className="mt-3 md:mt-4">
+          <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 md:justify-center">
             {TESTIMONIAL_IMAGES.map((testimonial, index) => (
               <motion.button
                 key={testimonial.id}
