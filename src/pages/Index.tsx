@@ -131,8 +131,8 @@ const Index = () => {
       <DeferredSection
         enabled={isMobile}
         mountId="services-marquee-mobile"
-        rootMargin="700px 0px"
-        queueDelayMs={320}
+        rootMargin="1250px 0px"
+        queueDelayMs={280}
         skeleton={<SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />}
       >
         <ServicesMarqueeSection sectionId="services" />

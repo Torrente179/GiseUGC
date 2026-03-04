@@ -26,6 +26,8 @@ const AUTO_SCROLL_SPEED_MOBILE_PX_PER_SECOND = 49;
 const MOBILE_TOUCH_DRAG_MULTIPLIER = 1.45;
 const MAX_FRAME_DELTA_MS = 64;
 const TOUCH_AXIS_LOCK_THRESHOLD_PX = 6;
+const TOUCH_GESTURE_SLOP_PX = 4;
+const HORIZONTAL_AXIS_BIAS = 1.15;
 
 const findNuevosClipByMainFilename = (filename: string) =>
     NUEVOS_R2_READY_CLIPS.find((clip) => {
@@ -341,6 +343,9 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
 
             const dx = dragStartRef.current.x - touch.clientX;
             const dy = dragStartRef.current.y - touch.clientY;
+            if (Math.abs(dx) > TOUCH_GESTURE_SLOP_PX || Math.abs(dy) > TOUCH_GESTURE_SLOP_PX) {
+                hasDraggedRef.current = true;
+            }
 
             if (touchAxisRef.current === 'pending') {
                 if (
@@ -349,7 +354,8 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                 ) {
                     return;
                 }
-                touchAxisRef.current = Math.abs(dx) >= Math.abs(dy) ? 'horizontal' : 'vertical';
+                touchAxisRef.current =
+                    Math.abs(dx) > Math.abs(dy) * HORIZONTAL_AXIS_BIAS ? 'horizontal' : 'vertical';
                 const sessionId = activeTouchSessionRef.current;
                 if (sessionId !== null) {
                     mark(`services-marquee:touch:${sessionId}:axis-${touchAxisRef.current}`);
@@ -359,6 +365,7 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             if (touchAxisRef.current === 'vertical') {
                 isTouchTrackingRef.current = false;
                 isDraggingRef.current = false;
+                hasDraggedRef.current = true;
                 return;
             }
 
@@ -481,6 +488,10 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                     >
                         {marqueeCards.map((card, index) => {
                             const isExpanded = expandedCard === index;
+                            const middleSetStart = serviceVideoCards.length;
+                            const isPriorityWarmCard =
+                                index >= middleSetStart - 2 &&
+                                index <= middleSetStart + 8;
                             return (
                                 <div
                                     key={`${card.titleKey}-${index}`}
@@ -503,8 +514,9 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                                             playsInline
                                             pauseOffscreen
                                             forcePause={expandedCard !== null && expandedCard !== index}
-                                            preload="none"
-                                            rootMargin="0px 0px"
+                                            loadWhenVisible={!isPriorityWarmCard}
+                                            preload={isPriorityWarmCard ? 'metadata' : 'none'}
+                                            rootMargin={isPriorityWarmCard ? '520px 0px' : '120px 0px'}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-50" />
                                     </div>
