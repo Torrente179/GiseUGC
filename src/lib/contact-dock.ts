@@ -1,39 +1,57 @@
-const OPEN_CONTACT_DOCK_EVENT = 'ugc:open-contact-dock';
-const CONTACT_DOCK_PENDING_ATTR = 'data-contact-dock-open-pending';
+type ContactDockAction = 'open' | 'toggle';
 
-export const openContactDock = () => {
+const CONTACT_DOCK_ACTION_EVENT = 'ugc:contact-dock-action';
+const CONTACT_DOCK_PENDING_ATTR = 'data-contact-dock-pending-action';
+
+const dispatchContactDockAction = (action: ContactDockAction) => {
   if (typeof window === 'undefined' || typeof document === 'undefined') {
     return;
   }
 
-  document.body.setAttribute(CONTACT_DOCK_PENDING_ATTR, 'true');
-  window.dispatchEvent(new Event(OPEN_CONTACT_DOCK_EVENT));
+  document.body.setAttribute(CONTACT_DOCK_PENDING_ATTR, action);
+  window.dispatchEvent(
+    new CustomEvent<ContactDockAction>(CONTACT_DOCK_ACTION_EVENT, {
+      detail: action,
+    }),
+  );
 };
 
-export const onOpenContactDock = (callback: () => void) => {
+export const openContactDock = () => {
+  dispatchContactDockAction('open');
+};
+
+export const toggleContactDock = () => {
+  dispatchContactDockAction('toggle');
+};
+
+export const onContactDockAction = (callback: (action: ContactDockAction) => void) => {
   if (typeof window === 'undefined') {
     return () => undefined;
   }
 
-  const handleOpen = () => callback();
-  window.addEventListener(OPEN_CONTACT_DOCK_EVENT, handleOpen);
+  const handleAction = (event: Event) => {
+    const customEvent = event as CustomEvent<ContactDockAction>;
+    callback(customEvent.detail ?? 'open');
+  };
+  window.addEventListener(CONTACT_DOCK_ACTION_EVENT, handleAction);
 
   return () => {
-    window.removeEventListener(OPEN_CONTACT_DOCK_EVENT, handleOpen);
+    window.removeEventListener(CONTACT_DOCK_ACTION_EVENT, handleAction);
   };
 };
 
-export const consumePendingContactDockOpen = () => {
+export const consumePendingContactDockAction = () => {
   if (typeof document === 'undefined') {
-    return false;
+    return null;
   }
 
-  const hasPendingRequest = document.body.getAttribute(CONTACT_DOCK_PENDING_ATTR) === 'true';
-  if (hasPendingRequest) {
+  const pendingAction = document.body.getAttribute(CONTACT_DOCK_PENDING_ATTR) as ContactDockAction | null;
+  if (pendingAction === 'open' || pendingAction === 'toggle') {
     document.body.removeAttribute(CONTACT_DOCK_PENDING_ATTR);
+    return pendingAction;
   }
 
-  return hasPendingRequest;
+  return null;
 };
 
 export const isMobileViewport = () =>

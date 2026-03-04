@@ -6,7 +6,7 @@ import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { isMobileViewport, openContactDock } from '@/lib/contact-dock';
+import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import LazyVideo from '@/components/media/LazyVideo';
 import VIDEO_LQIP from '@/data/video-lqip';
 import { LEGACY_REEL_CLIPS, r2Poster, r2PreviewVideo, type ReelClip } from '@/data/portfolio-clips';
@@ -353,7 +353,7 @@ const Portfolio = () => {
   const handleContactCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (isMobileViewport()) {
       event.preventDefault();
-      openContactDock();
+      toggleContactDock();
       return;
     }
 

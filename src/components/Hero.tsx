@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Diamond, Sparkles, Zap } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
-import { isMobileViewport, openContactDock } from '@/lib/contact-dock';
+import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 
 interface HeroProps {
   showIntroduction?: boolean;
@@ -26,7 +26,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   const handleContactCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (isMobileViewport()) {
       event.preventDefault();
-      openContactDock();
+      toggleContactDock();
       return;
     }
 
@@ -159,13 +159,15 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             </p>
 
             <div className="hero-reveal hero-reveal-4 flex flex-col sm:flex-row gap-4 sm:gap-5">
-              <a
-                href="#portfolio"
-                onClick={handleHashLinkClick}
-                className="hidden md:inline-flex btn-primary-nordic px-8 py-3.5 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
-              >
-                {t('hero.buttonPortfolio')}
-              </a>
+              <div className="hidden md:block">
+                <a
+                  href="#portfolio"
+                  onClick={handleHashLinkClick}
+                  className="btn-primary-nordic px-8 py-3.5 transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
+                >
+                  {t('hero.buttonPortfolio')}
+                </a>
+              </div>
               <a
                 href="#contact"
                 onClick={handleContactCtaClick}

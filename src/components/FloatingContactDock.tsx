@@ -10,9 +10,9 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
-  consumePendingContactDockOpen,
+  consumePendingContactDockAction,
   isMobileViewport,
-  onOpenContactDock,
+  onContactDockAction,
 } from '@/lib/contact-dock';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
@@ -39,20 +39,26 @@ const FloatingContactDock = () => {
   const [isDesktopDockGhosted, setIsDesktopDockGhosted] = useState(false);
 
   useEffect(() => {
-    const openDock = () => {
+    const handleDockAction = (action: 'open' | 'toggle') => {
       if (!isMobileViewport()) {
-        consumePendingContactDockOpen();
+        consumePendingContactDockAction();
         return;
       }
 
-      setMobileOpen(true);
-      consumePendingContactDockOpen();
+      if (action === 'toggle') {
+        setMobileOpen((previous) => !previous);
+      } else {
+        setMobileOpen(true);
+      }
+
+      consumePendingContactDockAction();
     };
 
-    const unsubscribe = onOpenContactDock(openDock);
+    const unsubscribe = onContactDockAction(handleDockAction);
 
-    if (consumePendingContactDockOpen()) {
-      openDock();
+    const pendingAction = consumePendingContactDockAction();
+    if (pendingAction) {
+      handleDockAction(pendingAction);
     }
 
     return unsubscribe;

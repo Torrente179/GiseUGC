@@ -8,6 +8,7 @@ const SocialProofSection = lazy(() => import('@/components/SocialProof'));
 const ServicesSection = lazy(() => import('@/components/Services'));
 const PortfolioSection = lazy(() => import('@/components/Portfolio'));
 const HeroIntroductionSection = lazy(() => import('@/components/HeroIntroduction'));
+const MobileFiverrRatingSection = lazy(() => import('@/components/MobileFiverrRatingSection'));
 const TestimonialsSection = lazy(() => import('@/components/Testimonials'));
 const FAQSection = lazy(() => import('@/components/FAQ'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
@@ -61,6 +62,9 @@ const Index = () => {
             <Suspense fallback={<SectionFallback id="hero-introduction" minHeightClass="min-h-[420px]" />}>
               <HeroIntroductionSection />
             </Suspense>
+            <Suspense fallback={<SectionFallback id="mobile-rating-card" minHeightClass="min-h-[460px]" />}>
+              <MobileFiverrRatingSection />
+            </Suspense>
             <Suspense fallback={<SectionFallback id="testimonials" minHeightClass="min-h-[500px]" />}>
               <TestimonialsSection />
             </Suspense>
@@ -104,6 +108,7 @@ const Index = () => {
           <>
             <SectionFallback id="portfolio" minHeightClass="min-h-[900px]" />
             <SectionFallback id="hero-introduction" minHeightClass="min-h-[420px]" />
+            <SectionFallback id="mobile-rating-card" minHeightClass="min-h-[460px]" />
             <SectionFallback id="testimonials" minHeightClass="min-h-[500px]" />
             <SectionFallback id="faq" minHeightClass="min-h-[640px]" />
             <SectionFallback id="services" minHeightClass="min-h-[520px]" />
