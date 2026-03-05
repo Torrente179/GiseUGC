@@ -1,7 +1,6 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { premiumEase } from '@/components/motion/variants';
-import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 
 interface SplitTextRevealProps {
   text: string;
@@ -22,7 +21,7 @@ const SplitTextReveal = ({
   once = true,
   amount = 0.15,
 }: SplitTextRevealProps) => {
-  const shouldReduceMotion = usePrefersReducedMotion();
+  const shouldReduceMotion = useReducedMotion();
   const content = typeof text === 'string' ? text : String(text ?? '');
   const words = content.split(/\s+/).filter(Boolean);
 
@@ -60,7 +59,7 @@ const SplitTextReveal = ({
                 y: '0%',
                 opacity: 1,
                 transition: {
-                  duration: 0.58,
+                  duration: 0.72,
                   ease: premiumEase,
                 },
               },

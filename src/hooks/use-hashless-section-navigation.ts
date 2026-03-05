@@ -25,13 +25,11 @@ const premiumEaseScroll = (t: number): number => {
     : 1 - Math.pow(-2 * t + 2, 3) / 2;
 };
 
-let cancelActiveScroll: (() => void) | null = null;
-
 /**
  * JS-powered smooth scroll with custom easing for a premium, consistent feel
  * across all browsers (native smooth scroll uses different easing per browser).
  */
-const smoothScrollTo = (targetY: number, duration = 620) => {
+const smoothScrollTo = (targetY: number, duration = 900) => {
   const startY = window.scrollY;
   const distance = targetY - startY;
 
@@ -44,38 +42,8 @@ const smoothScrollTo = (targetY: number, duration = 620) => {
   }
 
   let startTime: number | null = null;
-  let frameId: number | null = null;
-  let cancelled = false;
-
-  const stop = () => {
-    cancelled = true;
-    if (frameId !== null) {
-      window.cancelAnimationFrame(frameId);
-      frameId = null;
-    }
-    removeCancelListeners();
-    if (cancelActiveScroll === stop) {
-      cancelActiveScroll = null;
-    }
-  };
-
-  const cancelEvents: Array<keyof WindowEventMap> = ['wheel', 'touchstart', 'keydown'];
-  const handleUserCancel = () => stop();
-
-  const removeCancelListeners = () => {
-    cancelEvents.forEach((eventName) => {
-      window.removeEventListener(eventName, handleUserCancel);
-    });
-  };
-
-  cancelActiveScroll?.();
-  cancelActiveScroll = stop;
-  cancelEvents.forEach((eventName) => {
-    window.addEventListener(eventName, handleUserCancel, { passive: true });
-  });
 
   const step = (timestamp: number) => {
-    if (cancelled) return;
     if (startTime === null) startTime = timestamp;
     const elapsed = timestamp - startTime;
     const progress = Math.min(elapsed / duration, 1);
@@ -84,14 +52,11 @@ const smoothScrollTo = (targetY: number, duration = 620) => {
     window.scrollTo(0, startY + distance * eased);
 
     if (progress < 1) {
-      frameId = requestAnimationFrame(step);
-      return;
+      requestAnimationFrame(step);
     }
-
-    stop();
   };
 
-  frameId = requestAnimationFrame(step);
+  requestAnimationFrame(step);
 };
 
 export const useHashlessSectionNavigation = () => {

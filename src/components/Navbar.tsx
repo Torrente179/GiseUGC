@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   Menu,
   X,
@@ -10,8 +11,8 @@ import {
   Facebook,
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
-import { useMotionProfile } from '@/components/motion/profile';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
+import { springSnappy } from '@/components/motion/variants';
 
 const SCROLL_RANGE = 80; // px over which the glass effect intensifies
 
@@ -50,8 +51,7 @@ type MobileMenuSwipeState = {
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
-  const motionProfile = useMotionProfile('hero');
-  const desktopCtaClass = motionProfile.mobile || motionProfile.reduce ? 'btn-primary-nordic px-5 py-2.5' : 'btn-primary-nordic btn-shimmer px-5 py-2.5';
+  const shouldReduceMotion = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileMenuDragOffset, setMobileMenuDragOffset] = useState(0);
   const [isMobileMenuDragging, setIsMobileMenuDragging] = useState(false);
@@ -383,12 +383,12 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`fixed inset-0 z-[100] md:hidden transition-[opacity] duration-150 ${
+        className={`fixed inset-0 z-[100] md:hidden transition-all duration-500 ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
         <div
-          className={`absolute inset-0 bg-background/96 transition-opacity duration-150 ${
+          className={`absolute inset-0 bg-background/96 backdrop-blur-md transition-opacity duration-500 ${
             mobileMenuOpen ? 'opacity-100' : 'opacity-0'
           }`}
           style={mobileMenuOpen ? { opacity: mobileMenuBackdropOpacity } : undefined}
@@ -396,15 +396,15 @@ const Navbar = () => {
         />
 
         <div
-          className="relative flex h-full flex-col px-6 pt-24 [touch-action:pan-x]"
+          className="relative h-full flex flex-col pt-24 px-6 [touch-action:pan-x] will-change-transform"
           style={{
             transform: `translate3d(0, ${mobileMenuDragOffset}px, 0) scale(${mobileMenuPanelScale})`,
             opacity: mobileMenuPanelOpacity,
             transition: isMobileMenuDragging
               ? 'none'
               : isMobileMenuSwipeDismissing
-                ? 'transform 220ms cubic-bezier(0.3, 0, 0.2, 1), opacity 160ms ease-out'
-                : 'transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1), opacity 150ms ease-out',
+                ? 'transform 220ms cubic-bezier(0.3, 0, 0.2, 1), opacity 180ms ease-out'
+                : 'transform 460ms cubic-bezier(0.16, 1, 0.3, 1), opacity 320ms ease-out',
           }}
           onTouchStart={handleMobileMenuTouchStart}
           onTouchMove={handleMobileMenuTouchMove}
@@ -417,27 +417,33 @@ const Navbar = () => {
                 key={link.key}
                 href={link.href}
                 onClick={(event) => handleHashLinkClick(event, closeMobileMenu)}
-                className={`group flex items-center justify-between rounded-2xl border border-border/70 bg-card px-5 py-4 transition-[transform,opacity,border-color] duration-200 ${
-                  mobileMenuOpen ? 'translate-x-0 opacity-100' : 'pointer-events-none -translate-x-2 opacity-0'
+                className={`group flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 transition-all duration-500 ${
+                  mobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'
                 }`}
+                style={{
+                  transitionDelay: mobileMenuOpen ? `${120 + index * 60}ms` : '0ms',
+                }}
               >
                 <div className="flex items-center gap-4">
                   <span className="text-xs text-muted-foreground font-mono">{link.number}</span>
-                  <span className="section-label text-foreground transition-colors group-hover:text-primary">
+                  <span className="section-label text-foreground group-hover:text-primary transition-colors">
                     {t(link.key)}
                   </span>
                 </div>
-                <ArrowRight className="h-5 w-5 text-primary/70 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-primary" />
+                <ArrowRight className="w-5 h-5 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
               </a>
             ))}
           </nav>
 
           <div
-            className={`pb-10 transition-[transform,opacity] duration-200 ${
-              mobileMenuOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'
+            className={`pb-10 transition-all duration-500 ${
+              mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
+            style={{ transitionDelay: mobileMenuOpen ? '460ms' : '0ms' }}
           >
-            <div className="rounded-[1.7rem] border border-border/80 bg-card p-4 shadow-[0_18px_36px_-28px_hsl(var(--foreground)/0.6)]">
+            <div className="relative overflow-hidden rounded-[1.7rem] border border-border/80 bg-gradient-to-br from-card via-card to-secondary/55 p-4 shadow-[0_28px_46px_-34px_hsl(var(--foreground)/0.85)]">
+              <div className="pointer-events-none absolute -left-8 -top-8 h-24 w-24 rounded-full bg-primary/15 blur-2xl" />
+              <div className="pointer-events-none absolute -right-6 -bottom-8 h-20 w-20 rounded-full bg-accent/15 blur-2xl" />
               <p className="section-label text-muted-foreground">{t('navbar.hireMe')}</p>
               <div className="mt-3 grid grid-cols-4 gap-2">
                 {contactPlatforms.map((platform) => (
@@ -446,10 +452,10 @@ const Navbar = () => {
                     href={platform.href}
                     aria-label={t(platform.ariaKey)}
                     onClick={closeMobileMenu}
-                    className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background px-2 py-2.5 text-center transition-[transform,border-color,box-shadow] duration-180 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_12px_24px_-20px_hsl(var(--foreground)/0.7)]"
+                    className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/75 px-2 py-2.5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_16px_28px_-20px_hsl(var(--foreground)/0.9)]"
                   >
                     <span
-                      className={`absolute inset-x-2 top-0 h-0.5 rounded-full bg-gradient-to-r ${platform.glowClass} opacity-0 transition-opacity duration-180 group-hover:opacity-100`}
+                      className={`absolute inset-x-2 top-0 h-0.5 rounded-full bg-gradient-to-r ${platform.glowClass} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
                     />
                     <span className={`mx-auto inline-flex h-9 w-9 items-center justify-center rounded-full ${platform.iconClass}`}>
                       {platform.icon}
@@ -471,15 +477,18 @@ const Navbar = () => {
         </div>
       </div>
 
-      <nav
+      <motion.nav
         ref={navRef}
         className="fixed top-0 left-0 w-full z-[110]"
         style={{ padding: '20px 0' }}
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
       >
         <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
           <div
             ref={navShellRef}
-            className="flex items-center justify-between rounded-[1.15rem] px-4 md:px-6 transition-[box-shadow,border-color,background-color] duration-200"
+            className="flex items-center justify-between rounded-[1.15rem] px-4 md:px-6 transition-[box-shadow] duration-300"
             style={{
               padding: '12px 16px',
               backgroundColor: 'hsl(var(--card) / 0.45)',
@@ -530,13 +539,16 @@ const Navbar = () => {
                 </button>
               </div>
               <ThemeToggle />
-              <a
+              <motion.a
                 href="#contact"
                 onClick={handleHashLinkClick}
-                className={desktopCtaClass}
+                className="btn-primary-nordic btn-shimmer px-5 py-2.5"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+                transition={springSnappy}
               >
                 {t('navbar.hireMe')}
-              </a>
+              </motion.a>
             </div>
 
             <div className="md:hidden flex items-center gap-2">
@@ -560,19 +572,18 @@ const Navbar = () => {
               <button
                 onPointerDown={handleMobileMenuButtonPointerDown}
                 onClick={handleMobileMenuButtonClick}
-                data-testid="nav-menu-toggle"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground transition-[color,border-color] duration-150 hover:border-primary/40 hover:text-primary"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:text-primary"
                 aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
                 aria-expanded={mobileMenuOpen}
               >
                 <div className="relative w-6 h-6">
                   <Menu
-                    className={`absolute inset-0 w-6 h-6 transition-[transform,opacity] duration-150 ${
+                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
                       mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
                     }`}
                   />
                   <X
-                    className={`absolute inset-0 w-6 h-6 transition-[transform,opacity] duration-150 ${
+                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
                       mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
                     }`}
                   />
@@ -581,7 +592,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
     </>
   );
 };

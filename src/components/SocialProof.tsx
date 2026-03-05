@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Briefcase, Eye, Star, Users } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { blurRevealUp, revealUp, staggerContainer } from '@/components/motion/variants';
-import { MOTION_BUDGETS, useMotionProfile } from '@/components/motion/profile';
+import { motion, useReducedMotion } from 'framer-motion';
+import { blurRevealUp, springSmooth, staggerContainer } from '@/components/motion/variants';
 
 interface CounterProps {
   end: number;
@@ -57,10 +56,7 @@ const AnimatedCounter = ({ end, suffix = '', duration = 2000 }: CounterProps) =>
 
 const SocialProof = () => {
   const { t } = useTranslation();
-  const motionProfile = useMotionProfile();
-  const sectionReveal = motionProfile.blurAllowed
-    ? blurRevealUp(18, MOTION_BUDGETS.section)
-    : revealUp(18, MOTION_BUDGETS.section);
+  const shouldReduceMotion = useReducedMotion();
 
   const stats = [
     {
@@ -92,24 +88,28 @@ const SocialProof = () => {
   return (
     <motion.section
       className="relative z-20 py-20 bg-secondary/35 border-y border-muted/30"
-      initial={motionProfile.sectionMode === 'none' ? undefined : 'hidden'}
-      whileInView={motionProfile.sectionMode === 'none' ? undefined : 'visible'}
+      initial="hidden"
+      whileInView="visible"
       viewport={{ once: true, amount: 0.32 }}
-      variants={staggerContainer(0.06, 0.02)}
+      variants={staggerContainer(0.1, 0.04)}
     >
       <div className="max-w-6xl mx-auto px-6">
-        <motion.div className="relative overflow-hidden" variants={sectionReveal}>
+        <div className="relative overflow-hidden group">
           <div className="grid grid-cols-2 lg:grid-cols-4 items-center gap-y-12 lg:gap-0">
             {stats.map((stat, index) => (
-              <div
+              <motion.div
                 key={stat.labelKey}
-                className="flex flex-col items-center px-4 relative"
+                className="flex flex-col items-center px-4 relative group/item"
+                variants={blurRevealUp(18, 0.62)}
+                whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.03 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                transition={springSmooth}
               >
                 {index !== 0 && (
                   <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 w-px h-16 bg-gradient-to-b from-transparent via-muted to-transparent" />
                 )}
 
-                <div className="mb-4 text-accent/40">
+                <div className="mb-4 text-accent/40 group-hover/item:text-accent transition-colors duration-500">
                   {stat.icon}
                 </div>
 
@@ -118,10 +118,10 @@ const SocialProof = () => {
                 </span>
 
                 <span className="section-label text-muted-foreground">{t(stat.labelKey)}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </motion.section>
   );

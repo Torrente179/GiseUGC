@@ -5,9 +5,8 @@ import {
   Facebook,
   Send,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { blurRevealUp, revealUp, staggerContainer } from '@/components/motion/variants';
-import { MOTION_BUDGETS, useMotionProfile } from '@/components/motion/profile';
+import { motion, useReducedMotion } from 'framer-motion';
+import { blurRevealUp, fadeIn, springSmooth, staggerContainer } from '@/components/motion/variants';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101';
@@ -22,10 +21,7 @@ const whatsappLogoSrc = '/uploads/whatsapp.png';
 
 const Footer = () => {
   const { t } = useTranslation();
-  const motionProfile = useMotionProfile();
-  const footerReveal = motionProfile.blurAllowed
-    ? blurRevealUp(18, MOTION_BUDGETS.section)
-    : revealUp(18, MOTION_BUDGETS.section);
+  const shouldReduceMotion = useReducedMotion();
   const footerContactPlatforms = [
     {
       id: 'whatsapp',
@@ -113,46 +109,53 @@ const Footer = () => {
       <div className="studio-container">
         <motion.div
           className="mb-8 text-center"
-          initial={motionProfile.sectionMode === 'none' ? undefined : 'hidden'}
-          whileInView={motionProfile.sectionMode === 'none' ? undefined : 'visible'}
+          initial={shouldReduceMotion ? undefined : 'hidden'}
+          whileInView={shouldReduceMotion ? undefined : 'visible'}
           viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer(0.08, 0.02)}
+          variants={staggerContainer(0.12, 0.06)}
         >
           <motion.h3
             className="brand-logo text-[clamp(2.25rem,4.5vw,3.75rem)] leading-[0.95] mb-4 text-primary"
-            variants={footerReveal}
+            variants={blurRevealUp(22, 0.7)}
           >
             {t('footer.brandName')}<span className="text-accent">.</span>
           </motion.h3>
           <motion.p
             className="strategic-body text-foreground/72 text-[clamp(1.2rem,1.8vw,1.85rem)] leading-[1.5] max-w-2xl mx-auto"
-            variants={revealUp(14, MOTION_BUDGETS.section, 0.04)}
+            variants={blurRevealUp(16, 0.68)}
           >
             {t('footer.description')}
           </motion.p>
 
-          <motion.div className="mt-7 flex flex-wrap items-center justify-center gap-2 md:gap-3" variants={revealUp(12, MOTION_BUDGETS.section, 0.06)}>
+          <motion.div
+            className="mt-7 flex flex-wrap items-center justify-center gap-2 md:gap-3"
+            variants={staggerContainer(0.04, 0.15)}
+          >
             {footerContactPlatforms.map((platform) => (
-              <a
+              <motion.a
                 key={platform.id}
                 href={platform.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={platform.ariaLabel}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-foreground/15 bg-foreground/5 text-foreground/70 transition-[transform,color,background-color,border-color] duration-180 hover:-translate-y-0.5 hover:bg-accent hover:text-accent-foreground md:h-12 md:w-12"
+                className="h-9 w-9 md:h-12 md:w-12 rounded-full border border-foreground/15 bg-foreground/5 flex items-center justify-center text-foreground/70 hover:bg-accent hover:text-accent-foreground transition-colors duration-300"
+                variants={blurRevealUp(12, 0.5)}
+                whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.1 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.93 }}
+                transition={springSmooth}
               >
                 {platform.icon}
-              </a>
+              </motion.a>
             ))}
           </motion.div>
         </motion.div>
 
         <motion.div
           className="border-t border-foreground/15 pt-8 text-center"
-          initial={motionProfile.sectionMode === 'none' ? undefined : { opacity: 0, y: 10 }}
-          whileInView={motionProfile.sectionMode === 'none' ? undefined : { opacity: 1, y: 0 }}
+          initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1 }}
           viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: MOTION_BUDGETS.section, delay: 0.08 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
         >
           <p className="text-xs text-foreground/55 tracking-wider">
             © 2026 Portafolio UGC. Todos los derechos reservados.

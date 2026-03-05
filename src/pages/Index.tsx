@@ -29,12 +29,6 @@ type DeferredSectionProps = {
   children: ReactNode;
 };
 
-type ImmediateSectionProps = {
-  enabled: boolean;
-  skeleton: ReactNode;
-  children: ReactNode;
-};
-
 const DeferredSection = ({
   enabled,
   mountId,
@@ -66,11 +60,6 @@ const DeferredSection = ({
   return <div ref={placeholderRef}>{skeleton}</div>;
 };
 
-const ImmediateSection = ({ enabled, skeleton, children }: ImmediateSectionProps) => {
-  if (!enabled) return null;
-  return <Suspense fallback={skeleton}>{children}</Suspense>;
-};
-
 const Index = () => {
   const isMobile = useIsMobile();
 
@@ -88,50 +77,62 @@ const Index = () => {
       <DeferredSection
         enabled={isMobile}
         mountId="portfolio-mobile"
-        rootMargin="1400px 0px"
-        queueDelayMs={180}
+        rootMargin="1100px 0px"
+        queueDelayMs={260}
         skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />}
       >
         <PortfolioSection />
       </DeferredSection>
-      <ImmediateSection
+      <DeferredSection
         enabled={isMobile}
+        mountId="hero-introduction-mobile"
+        rootMargin="950px 0px"
+        queueDelayMs={300}
         skeleton={<SectionSkeleton id="hero-introduction" minHeightClass="min-h-[420px]" variant="hero-intro" />}
       >
         <HeroIntroductionSection />
-      </ImmediateSection>
-      <ImmediateSection
+      </DeferredSection>
+      <DeferredSection
         enabled={isMobile}
+        mountId="mobile-rating-card"
+        rootMargin="900px 0px"
+        queueDelayMs={300}
         skeleton={<SectionSkeleton id="mobile-rating-card" minHeightClass="min-h-[460px]" />}
       >
         <MobileFiverrRatingSection />
-      </ImmediateSection>
+      </DeferredSection>
       <DeferredSection
         enabled={isMobile}
         mountId="testimonials-mobile"
         rootMargin="850px 0px"
-        queueDelayMs={220}
+        queueDelayMs={300}
         skeleton={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}
       >
         <TestimonialsSection />
       </DeferredSection>
-      <ImmediateSection
+      <DeferredSection
         enabled={isMobile}
+        mountId="mobile-contact-cta"
+        rootMargin="800px 0px"
+        queueDelayMs={300}
         skeleton={<SectionSkeleton id="mobile-contact-cta" minHeightClass="min-h-[120px]" />}
       >
         <MobileContactCtaSection />
-      </ImmediateSection>
-      <ImmediateSection
+      </DeferredSection>
+      <DeferredSection
         enabled={isMobile}
+        mountId="faq-mobile"
+        rootMargin="760px 0px"
+        queueDelayMs={300}
         skeleton={<SectionSkeleton id="faq" minHeightClass="min-h-[640px]" />}
       >
         <FAQSection />
-      </ImmediateSection>
+      </DeferredSection>
       <DeferredSection
         enabled={isMobile}
         mountId="services-marquee-mobile"
-        rootMargin="1350px 0px"
-        queueDelayMs={220}
+        rootMargin="1250px 0px"
+        queueDelayMs={280}
         skeleton={<SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />}
       >
         <ServicesMarqueeSection sectionId="services" />
@@ -140,59 +141,71 @@ const Index = () => {
         enabled={isMobile}
         mountId="footer-mobile"
         rootMargin="650px 0px"
-        queueDelayMs={240}
+        queueDelayMs={320}
         skeleton={<SectionSkeleton id="contact" minHeightClass="min-h-[640px]" variant="footer" />}
       >
         <FooterSection />
       </DeferredSection>
 
-      <ImmediateSection
+      <DeferredSection
         enabled={!isMobile}
+        mountId="social-proof-desktop"
+        rootMargin="900px 0px"
+        queueDelayMs={250}
         skeleton={<SectionSkeleton minHeightClass="min-h-[300px]" />}
       >
         <SocialProofSection />
-      </ImmediateSection>
+      </DeferredSection>
       <DeferredSection
         enabled={!isMobile}
         mountId="portfolio-desktop"
         rootMargin="950px 0px"
-        queueDelayMs={220}
+        queueDelayMs={300}
         skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />}
       >
         <PortfolioSection />
       </DeferredSection>
-      <ImmediateSection
+      <DeferredSection
         enabled={!isMobile}
+        mountId="services-desktop"
+        rootMargin="900px 0px"
+        queueDelayMs={300}
         skeleton={<SectionSkeleton id="services" minHeightClass="min-h-[560px]" variant="cards" />}
       >
         <ServicesSection />
-      </ImmediateSection>
-      <ImmediateSection
+      </DeferredSection>
+      <DeferredSection
         enabled={!isMobile}
+        mountId="desktop-rating-card"
+        rootMargin="850px 0px"
+        queueDelayMs={300}
         skeleton={<SectionSkeleton id="desktop-rating-card" minHeightClass="min-h-[460px]" />}
       >
         <DesktopFiverrRatingSection />
-      </ImmediateSection>
+      </DeferredSection>
       <DeferredSection
         enabled={!isMobile}
         mountId="testimonials-desktop"
         rootMargin="800px 0px"
-        queueDelayMs={220}
+        queueDelayMs={320}
         skeleton={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}
       >
         <TestimonialsSection />
       </DeferredSection>
-      <ImmediateSection
+      <DeferredSection
         enabled={!isMobile}
+        mountId="faq-desktop"
+        rootMargin="760px 0px"
+        queueDelayMs={320}
         skeleton={<SectionSkeleton id="faq" minHeightClass="min-h-[640px]" />}
       >
         <FAQSection />
-      </ImmediateSection>
+      </DeferredSection>
       <DeferredSection
         enabled={!isMobile}
         mountId="services-marquee-desktop"
         rootMargin="700px 0px"
-        queueDelayMs={240}
+        queueDelayMs={320}
         skeleton={<SectionSkeleton minHeightClass="min-h-[520px]" variant="cards" />}
       >
         <ServicesMarqueeSection />
@@ -201,7 +214,7 @@ const Index = () => {
         enabled={!isMobile}
         mountId="footer-desktop"
         rootMargin="650px 0px"
-        queueDelayMs={240}
+        queueDelayMs={320}
         skeleton={<SectionSkeleton id="contact" minHeightClass="min-h-[640px]" variant="footer" />}
       >
         <FooterSection />

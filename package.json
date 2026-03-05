@@ -11,7 +11,6 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "check:mobile-regression": "node scripts/mobile-regression-check.mjs",
-    "test:smoke": "playwright test",
     "preview": "vite preview",
     "video:encode": "bash scripts/encode-videos.sh",
     "video:encode:dry": "bash scripts/encode-videos.sh --dry-run",
@@ -78,7 +77,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
-    "@playwright/test": "^1.58.2",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.3",
