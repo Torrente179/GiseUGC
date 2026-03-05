@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import LazyVideo from '@/components/media/LazyVideo';
+import { useMotionProfile } from '@/components/motion/profile';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import { mark, measure } from '@/lib/perf-debug';
 
@@ -22,7 +23,7 @@ const r2PreviewVideo = (filename: string) =>
 const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
 const MOBILE_BREAKPOINT_PX = 768;
 const AUTO_SCROLL_SPEED_DESKTOP_PX_PER_SECOND = 27;
-const AUTO_SCROLL_SPEED_MOBILE_PX_PER_SECOND = 49;
+const AUTO_SCROLL_SPEED_MOBILE_PX_PER_SECOND = 0;
 const MOBILE_TOUCH_DRAG_MULTIPLIER = 1.45;
 const MAX_FRAME_DELTA_MS = 64;
 const TOUCH_AXIS_LOCK_THRESHOLD_PX = 6;
@@ -45,6 +46,7 @@ const nuevosVoicebotCierraVentasClip = findNuevosClipByMainFilename('WhatsApp Vi
 
 const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
     const { t } = useTranslation();
+    const motionProfile = useMotionProfile();
     const [expandedCard, setExpandedCard] = useState<number | null>(null);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -495,19 +497,19 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                 <div className="absolute inset-y-0 right-0 w-10 md:w-24 z-20 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none" />
 
                 {/* Navigation Arrows */}
-                <div className="absolute inset-y-0 left-4 md:left-12 z-30 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-y-0 left-4 z-30 hidden items-center transition-opacity duration-200 md:left-12 md:flex md:opacity-0 md:group-hover:opacity-100">
                     <button
                         onClick={() => scroll('left')}
-                        className="h-12 w-12 rounded-full bg-card/80 border border-border/50 flex items-center justify-center text-primary backdrop-blur-md shadow-lg hover:bg-primary hover:text-white transition-all hover:scale-110"
+                        className="flex h-12 w-12 items-center justify-center rounded-full border border-border/50 bg-card text-primary shadow-lg transition-[transform,color,background-color,border-color] duration-180 hover:scale-105 hover:bg-primary hover:text-white"
                         aria-label="Scroll left"
                     >
                         <ChevronLeft className="h-6 w-6" />
                     </button>
                 </div>
-                <div className="absolute inset-y-0 right-4 md:right-12 z-30 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-y-0 right-4 z-30 hidden items-center transition-opacity duration-200 md:right-12 md:flex md:opacity-0 md:group-hover:opacity-100">
                     <button
                         onClick={() => scroll('right')}
-                        className="h-12 w-12 rounded-full bg-card/80 border border-border/50 flex items-center justify-center text-primary backdrop-blur-md shadow-lg hover:bg-primary hover:text-white transition-all hover:scale-110"
+                        className="flex h-12 w-12 items-center justify-center rounded-full border border-border/50 bg-card text-primary shadow-lg transition-[transform,color,background-color,border-color] duration-180 hover:scale-105 hover:bg-primary hover:text-white"
                         aria-label="Scroll right"
                     >
                         <ChevronRight className="h-6 w-6" />
@@ -516,14 +518,15 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
 
                 <div
                     ref={containerRef}
+                    data-testid="services-marquee-viewport"
                     className="relative z-10 overflow-hidden pt-10 md:pt-16 pb-10 select-none cursor-grab active:cursor-grabbing"
                     onDragStart={(e) => e.preventDefault()}
                     style={{ touchAction: 'pan-y' }}
                 >
                     <div
                         ref={trackRef}
+                        data-testid="services-marquee-track"
                         className="flex w-max gap-6 lg:gap-8 px-4 md:px-20"
-                        style={{ willChange: 'transform' }}
                     >
                         {marqueeCards.map((card, index) => {
                             const isExpanded = expandedCard === index;
@@ -539,12 +542,12 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                                     onClick={() => handleCardClick(index)}
                                 >
                                     {/* Compact Vertical Frame */}
-                                    <div className={`relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card transition-all duration-500 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:border-primary/25 ${isExpanded ? '-translate-y-2' : ''}`}>
+                                    <div className={`relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 bg-card shadow-lg transition-[transform,border-color,box-shadow] duration-200 ease-out ${motionProfile.mobile ? '' : 'hover:border-primary/25 hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)]'} ${isExpanded ? '-translate-y-1' : ''}`}>
                                         <LazyVideo
                                             ref={(el) => {
                                                 assignVideoRef(index, el);
                                             }}
-                                            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                                            className="h-full w-full object-cover transition-transform duration-300 md:hover:scale-[1.02]"
                                             src={card.videoSrc}
                                             poster={card.poster}
                                             autoPlay
@@ -565,7 +568,7 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                                             {t(card.titleKey)}
                                         </h3>
 
-                                        <div className={`overflow-hidden transition-all duration-500 ease-out ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                        <div className={`overflow-hidden transition-[max-height,opacity] duration-200 ease-out ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
                                             <p className="strategic-body text-sm text-muted-foreground pt-1">
                                                 {t(card.descriptionKey)}
                                             </p>

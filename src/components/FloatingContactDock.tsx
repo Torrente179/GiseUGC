@@ -9,8 +9,7 @@ import {
   Facebook,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { springSnappy } from '@/components/motion/variants';
+import { useMotionProfile } from '@/components/motion/profile';
 import {
   consumePendingContactDockAction,
   isMobileViewport,
@@ -37,17 +36,10 @@ const ThreadsIcon = ({ className }: { className?: string }) => (
 
 const FloatingContactDock = () => {
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
+  const motionProfile = useMotionProfile('utility');
+  const transitionDurationClass = motionProfile.reduce ? 'duration-0' : 'duration-180';
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktopDockGhosted, setIsDesktopDockGhosted] = useState(false);
-  const [hasEntrance, setHasEntrance] = useState(false);
-
-  // Delayed entrance — dock slides up after page settles
-  useEffect(() => {
-    const delay = shouldReduceMotion ? 200 : 1500;
-    const timeoutId = window.setTimeout(() => setHasEntrance(true), delay);
-    return () => window.clearTimeout(timeoutId);
-  }, [shouldReduceMotion]);
 
   useEffect(() => {
     const handleDockAction = (action: 'open' | 'toggle') => {
@@ -241,11 +233,8 @@ const FloatingContactDock = () => {
   ];
 
   return createPortal(
-    <motion.div
+    <div
       className="floating-contact-dock fixed bottom-5 md:bottom-8 right-5 md:right-8 z-[9999] pointer-events-none"
-      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      animate={hasEntrance ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ type: 'spring', stiffness: 180, damping: 22, mass: 0.8 }}
       style={{
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         paddingRight: 'env(safe-area-inset-right, 0px)',
@@ -254,19 +243,16 @@ const FloatingContactDock = () => {
       {/* Mobile: toggle + vertical reveal */}
       <div className="pointer-events-auto md:hidden flex flex-col items-end">
         <div
-          className={`mb-2.5 rounded-[1.3rem] border border-white/45 bg-card/62 backdrop-blur-xl supports-[backdrop-filter]:bg-card/58 p-2.5 shadow-[0_20px_38px_-22px_hsl(var(--foreground)/0.85)] flex flex-col items-end gap-2 transition-all duration-300 ${
+          className={`mb-2.5 flex flex-col items-end gap-2 rounded-[1.3rem] border border-border/70 bg-card p-2.5 shadow-[0_18px_34px_-26px_hsl(var(--foreground)/0.6)] transition-[transform,opacity] ${transitionDurationClass} ${
             mobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
           }`}
         >
-          {contactPlatforms.map((platform, index) => (
+          {contactPlatforms.map((platform) => (
             <a
               key={platform.id}
               href={platform.href}
               aria-label={t(platform.ariaKey)}
-              className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/45 ${platform.toneClass} ${platform.hoverToneClass} backdrop-blur-xl shadow-[0_12px_24px_-18px_hsl(var(--foreground)/0.9)] transition-all duration-300 hover:-translate-y-0.5`}
-              style={{
-                transitionDelay: mobileOpen ? `${index * 25}ms` : '0ms',
-              }}
+              className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-border/70 ${platform.toneClass} ${platform.hoverToneClass} shadow-[0_10px_18px_-16px_hsl(var(--foreground)/0.65)] transition-[transform,border-color,background-color] ${transitionDurationClass} hover:-translate-y-0.5`}
             >
               {platform.icon}
             </a>
@@ -277,19 +263,15 @@ const FloatingContactDock = () => {
           aria-expanded={mobileOpen}
           aria-label={mobileOpen ? t('floatingContact.toggleCloseAria') : t('floatingContact.toggleOpenAria')}
           onClick={() => setMobileOpen((prev) => !prev)}
-          className="group relative inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/60 bg-card/80 supports-[backdrop-filter]:bg-card/66 backdrop-blur-xl text-foreground shadow-[0_24px_46px_-22px_hsl(var(--foreground)/0.95),0_0_0_1px_hsl(var(--primary)/0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/55 hover:text-primary"
+          className={`group relative inline-flex h-14 w-14 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-[0_20px_38px_-24px_hsl(var(--foreground)/0.75)] transition-[transform,border-color,color] ${transitionDurationClass} hover:-translate-y-0.5 hover:border-primary/55 hover:text-primary`}
         >
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute -inset-1 rounded-full bg-primary/18 blur-md opacity-70 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100"
-          />
           <MessageCircle
-            className={`absolute h-[22px] w-[22px] transition-all duration-300 ${
+            className={`absolute h-[22px] w-[22px] transition-[transform,opacity] ${motionProfile.reduce ? 'duration-0' : 'duration-150'} ${
               mobileOpen ? 'opacity-0 scale-75 rotate-12' : 'opacity-100 scale-100 rotate-0'
             }`}
           />
           <ChevronUp
-            className={`absolute h-[22px] w-[22px] transition-all duration-300 ${
+            className={`absolute h-[22px] w-[22px] transition-[transform,opacity] ${motionProfile.reduce ? 'duration-0' : 'duration-150'} ${
               mobileOpen ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-75 -rotate-12'
             }`}
           />
@@ -298,32 +280,26 @@ const FloatingContactDock = () => {
 
       {/* Desktop: horizontal row */}
       <div
-        className={`hidden md:flex dock-breathe items-center gap-3 rounded-full border border-white/40 bg-card/62 supports-[backdrop-filter]:bg-card/48 backdrop-blur-2xl px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform,filter] duration-500 ${
+        className={`hidden md:flex items-center gap-3 rounded-full border border-border/70 bg-card px-3 py-2.5 shadow-[0_20px_38px_-30px_hsl(var(--foreground)/0.72)] transition-[opacity,transform] ${transitionDurationClass} ${
           isDesktopDockGhosted
-            ? 'opacity-10 scale-[0.94] translate-y-2 blur-[1.5px] pointer-events-none'
-            : 'opacity-100 scale-100 translate-y-0 blur-0 pointer-events-auto'
+            ? 'pointer-events-none translate-y-1.5 scale-[0.98] opacity-20'
+            : 'pointer-events-auto translate-y-0 scale-100 opacity-100'
         }`}
-        style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
       >
-        {contactPlatforms.map((platform, index) => (
-          <motion.a
+        {contactPlatforms.map((platform) => (
+          <a
             key={platform.id}
             href={platform.href}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={t(platform.ariaKey)}
-            className={`inline-flex h-11 w-11 items-center justify-center rounded-full ${platform.toneClass} ${platform.hoverToneClass} transition-colors duration-300`}
-            initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.6 }}
-            animate={hasEntrance ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 22, delay: index * 0.04 }}
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
-            whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
+            className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-transparent ${platform.toneClass} ${platform.hoverToneClass} transition-[transform,color,background-color,border-color] ${transitionDurationClass} hover:-translate-y-0.5 hover:border-primary/20`}
           >
             {platform.icon}
-          </motion.a>
+          </a>
         ))}
       </div>
-    </motion.div>,
+    </div>,
     document.body
   );
 };

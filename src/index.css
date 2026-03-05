@@ -123,10 +123,6 @@
     @apply border-border;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
@@ -401,17 +397,11 @@
   }
 
   .hero-chip {
-    @apply inline-flex items-center gap-2.5 rounded-full border border-border/50 bg-card/45 px-5 py-2.5 text-[10px] font-bold uppercase tracking-prestige text-muted-foreground/90 backdrop-blur-md transition-[border-color,background-color,color,box-shadow] duration-300 hover:border-accent/30 hover:bg-card/80 hover:text-foreground hover:shadow-[0_12px_24px_-12px_hsl(var(--foreground)/0.15)] cursor-default;
+    @apply inline-flex items-center gap-2.5 rounded-full border border-border/50 bg-card/90 px-5 py-2.5 text-[10px] font-bold uppercase tracking-prestige text-muted-foreground/90 transition-[transform,border-color,background-color,color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-accent/30 hover:bg-card hover:text-foreground hover:shadow-[0_12px_24px_-12px_hsl(var(--foreground)/0.15)] cursor-default;
   }
 
   .hero-image-shell {
     @apply rounded-[2rem] border border-border/90 shadow-[0_36px_70px_-46px_hsl(var(--foreground)/0.55)] backdrop-blur-sm;
-  }
-
-  .hero-parallax-media,
-  .hero-parallax-floating-card,
-  .hero-parallax-corner-tag {
-    will-change: transform;
   }
 
   .hero-frame-glow {
@@ -431,7 +421,6 @@
     background: hsl(var(--card) / 0.9);
     box-shadow: 0 26px 46px -34px hsl(var(--foreground) / 0.6);
     padding: 0.9rem 1rem;
-    backdrop-filter: blur(8px);
     max-width: 220px;
   }
 
@@ -462,7 +451,6 @@
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: hsl(var(--foreground) / 0.72);
-    backdrop-filter: blur(8px);
   }
 
   .dark .hero-ambient {
@@ -498,7 +486,7 @@
   }
 
   .btn-primary-nordic {
-    @apply inline-flex items-center justify-center rounded-full bg-primary text-foreground font-sans text-[10px] font-bold uppercase tracking-prestige transition-[color,background-color,border-color,box-shadow] duration-300 hover:bg-accent hover:-translate-y-[1px] hover:shadow-[0_14px_30px_-15px_hsla(var(--accent)/0.5)];
+    @apply inline-flex items-center justify-center rounded-full bg-primary text-foreground font-sans text-[10px] font-bold uppercase tracking-prestige transition-[transform,color,background-color,border-color,box-shadow] duration-200 hover:bg-accent hover:-translate-y-[1px] hover:shadow-[0_14px_30px_-15px_hsla(var(--accent)/0.5)];
   }
 
   .btn-secondary-nordic {
@@ -703,8 +691,7 @@
 
     .service-marquee,
     .service-corner-drift,
-    .hero-section[data-motion='ready'] .hero-parallax-floating-card,
-    .hero-section[data-motion='ready'] .hero-parallax-corner-tag {
+    .hero-section[data-motion='ready'] .hero-parallax-floating-card {
       animation: none;
       transform: none;
     }
@@ -713,10 +700,6 @@
   @media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
     .hero-section[data-motion='ready'] .hero-parallax-floating-card {
       animation: hero-float-soft 7.5s ease-in-out infinite;
-    }
-
-    .hero-section[data-motion='ready'] .hero-parallax-corner-tag {
-      animation: hero-float-soft-reverse 8.2s ease-in-out infinite;
     }
   }
 
@@ -731,7 +714,7 @@
     display: inline-block;
     transform: translateY(112%);
     opacity: 0;
-    transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.58s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.58s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .lite-split-root[data-visible='true'] .lite-split-word {
@@ -743,7 +726,7 @@
   .hero-reveal {
     transform: translateY(16px);
     opacity: 0;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.58s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.58s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .hero-section[data-motion='ready'] .hero-reveal {
@@ -751,11 +734,12 @@
     opacity: 1;
   }
 
-  .hero-reveal-1 { transition-delay: 0.08s; }
-  .hero-reveal-2 { transition-delay: 0.18s; }
-  .hero-reveal-3 { transition-delay: 0.28s; }
-  .hero-reveal-4 { transition-delay: 0.38s; }
-  .hero-reveal-5 { transition-delay: 0.48s; }
+  .hero-reveal-1 { transition-delay: 0.06s; }
+  .hero-reveal-2 { transition-delay: 0.12s; }
+  .hero-reveal-3 { transition-delay: 0.18s; }
+  .hero-reveal-4 { transition-delay: 0.24s; }
+  .hero-reveal-5 { transition-delay: 0.3s; }
+  .hero-reveal-6 { transition-delay: 0.36s; }
 
   @media (prefers-reduced-motion: reduce) {
     .lite-split-word,
@@ -805,8 +789,8 @@
     height: 1.5px;
     background: hsl(var(--primary));
     border-radius: 9999px;
-    transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-                right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: left 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                right 0.22s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .nav-link-underline:hover::after {
@@ -849,25 +833,7 @@
     pointer-events: none;
   }
 
-  /* ─── Dock Breathe ─── */
-  @keyframes dock-breathe {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.015);
-    }
-  }
-
-  .dock-breathe {
-    animation: dock-breathe 4s ease-in-out infinite;
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .dock-breathe {
-      animation: none;
-    }
-
     .btn-shimmer::after {
       animation: none;
     }

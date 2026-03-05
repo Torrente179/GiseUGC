@@ -1,12 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { Film, Lightbulb, Megaphone, PlayCircle, Sparkles, Star } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
-import { blurRevealUp, revealUp, springHoverTransition, springSmooth, staggerContainer } from '@/components/motion/variants';
+import { blurRevealUp, revealUp, staggerContainer } from '@/components/motion/variants';
+import { MOTION_BUDGETS, useMotionProfile } from '@/components/motion/profile';
 
 const Services = () => {
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
+  const motionProfile = useMotionProfile();
+  const headerReveal = motionProfile.blurAllowed
+    ? blurRevealUp(18, MOTION_BUDGETS.section)
+    : revealUp(18, MOTION_BUDGETS.section);
+  const bodyReveal = motionProfile.blurAllowed
+    ? blurRevealUp(12, MOTION_BUDGETS.section, 0.04)
+    : revealUp(12, MOTION_BUDGETS.section, 0.04);
 
   const serviceData = [
     {
@@ -51,22 +58,22 @@ const Services = () => {
       <div className="studio-container">
         <motion.div
           className="studio-header mb-12"
-          initial="hidden"
-          whileInView="visible"
+          initial={motionProfile.sectionMode === 'none' ? undefined : 'hidden'}
+          whileInView={motionProfile.sectionMode === 'none' ? undefined : 'visible'}
           viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer(0.12, 0.04)}
+          variants={staggerContainer(0.08, 0.02)}
         >
           <div className="text-center md:text-left">
-            <motion.p className="section-label text-muted-foreground mb-4" variants={blurRevealUp(14, 0.56)}>
+            <motion.p className="section-label text-muted-foreground mb-4" variants={headerReveal}>
               {t('services.sectionSubtitle')}
             </motion.p>
             <h2 className="studio-title">
-              <SplitTextReveal text={t('services.sectionTitle')} delay={0.08} />
+              {motionProfile.mobile ? t('services.sectionTitle') : <SplitTextReveal text={t('services.sectionTitle')} delay={0.04} />}
             </h2>
           </div>
           <motion.p
             className="studio-subtitle lg:justify-self-end text-center md:text-right max-w-lg"
-            variants={blurRevealUp(18, 0.62)}
+            variants={bodyReveal}
           >
             {t('services.motionSubtitle')}
           </motion.p>
@@ -74,35 +81,27 @@ const Services = () => {
 
         <motion.div
           className="studio-rule mb-16 md:mb-20"
-          initial={{ opacity: 0, scaleX: 0.7 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
+          initial={motionProfile.sectionMode === 'none' ? undefined : { opacity: 0, scaleX: 0.7 }}
+          whileInView={motionProfile.sectionMode === 'none' ? undefined : { opacity: 1, scaleX: 1 }}
           viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.68 }}
+          transition={{ duration: MOTION_BUDGETS.section }}
         />
 
         <motion.div
           className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-3"
-          initial="hidden"
-          whileInView="visible"
+          initial={motionProfile.sectionMode === 'none' ? undefined : 'hidden'}
+          whileInView={motionProfile.sectionMode === 'none' ? undefined : 'visible'}
           viewport={{ once: true, amount: 0.2 }}
-          variants={staggerContainer(0.09, 0.03)}
+          variants={revealUp(16, MOTION_BUDGETS.section)}
         >
           {serviceData.map((service) => (
-            <motion.article
+            <article
               key={service.titleKey}
-              className="group rounded-[1.25rem] md:rounded-[1.5rem] border border-border/70 bg-card/50 p-5 md:p-8 backdrop-blur-md transition-[border-color,box-shadow] duration-500 hover:border-primary/30 hover:shadow-xl"
-              variants={blurRevealUp(18, 0.58)}
-              whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.015 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-              transition={springSmooth}
+              className="group rounded-[1.25rem] border border-border/70 bg-card/70 p-5 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-primary/25 hover:shadow-[0_18px_34px_-28px_hsl(var(--foreground)/0.45)] md:rounded-[1.5rem] md:p-8"
             >
-              <motion.div
-                className="mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110"
-                whileHover={shouldReduceMotion ? undefined : { rotate: -6, scale: 1.08 }}
-                transition={springHoverTransition}
-              >
+              <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border/60 bg-background text-primary transition-transform duration-200 group-hover:scale-105 md:mb-6 md:h-14 md:w-14 md:rounded-2xl">
                 {service.icon}
-              </motion.div>
+              </div>
               <h3 className="text-lg md:text-2xl font-sans font-medium tracking-tight text-foreground mb-1 leading-tight">
                 {t(service.titleKey)}
               </h3>
@@ -115,7 +114,7 @@ const Services = () => {
               <p className="strategic-body text-muted-foreground text-sm md:text-base line-clamp-3 md:line-clamp-none">
                 {t(service.descriptionKey)}
               </p>
-            </motion.article>
+            </article>
           ))}
         </motion.div>
       </div>

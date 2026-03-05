@@ -1,60 +1,19 @@
 import { useEffect, useRef, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion, useReducedMotion } from 'framer-motion';
 import { Diamond, Sparkles, Zap } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
+import { useMotionProfile } from '@/components/motion/profile';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
-import {
-  premiumEase,
-  easeOutExpo,
-  scaleIn,
-  blurRevealUp,
-  springSmooth,
-  springSnappy,
-} from '@/components/motion/variants';
 
 interface HeroProps {
   showIntroduction?: boolean;
 }
 
-/* ─── Orchestration variants ─── */
-
-const heroContainerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const heroItemVariants = {
-  hidden: { opacity: 0, y: 18, filter: 'blur(6px)' },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.7, ease: easeOutExpo },
-  },
-};
-
-const heroLineVariants = {
-  hidden: { opacity: 0, scaleX: 0.3 },
-  visible: {
-    opacity: 1,
-    scaleX: 1,
-    transition: { duration: 0.8, ease: premiumEase },
-  },
-};
-
-const heroImageVariants = scaleIn(0.95, 0.9, 0);
-
 const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { t } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
-  const shouldReduceMotion = useReducedMotion();
+  const motionProfile = useMotionProfile('hero');
   const sectionRef = useRef<HTMLElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
   const floatingCardRef = useRef<HTMLDivElement>(null);
@@ -66,6 +25,8 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     { icon: Zap, labelKey: 'hero.pillConversion' },
   ];
 
+  const shouldAnimateHero = motionProfile.heroEnabled;
+
   const handleContactCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (isMobileViewport()) {
       event.preventDefault();
@@ -75,7 +36,6 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     handleHashLinkClick(event);
   };
 
-  /* ─── Parallax effect (desktop only, scroll-linked) ─── */
   useEffect(() => {
     const section = sectionRef.current;
     const media = mediaRef.current;
@@ -83,27 +43,39 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     const cornerTag = cornerTagRef.current;
     if (!section || !media || !floatingCard || !cornerTag) return;
 
+    let frameId: number | null = null;
+    let resizeObserver: ResizeObserver | null = null;
+    let sectionTop = 0;
+    let sectionHeight = 1;
+    let viewportHeight = window.innerHeight;
+
     const motionReadyTimer = window.setTimeout(() => {
-      section.dataset.motion = 'ready';
-    }, 220);
+      if (!motionProfile.reduce) {
+        section.dataset.motion = 'ready';
+      }
+    }, shouldAnimateHero ? 180 : 120);
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
-
-    if (prefersReducedMotion || !isDesktop) {
-      media.style.transform = '';
-      floatingCard.style.transform = '';
-      cornerTag.style.transform = '';
+    if (motionProfile.reduce) {
       return () => {
         window.clearTimeout(motionReadyTimer);
         delete section.dataset.motion;
       };
     }
 
-    let sectionTop = 0;
-    let sectionHeight = 1;
-    let viewportHeight = window.innerHeight;
-    let frameId: number | null = null;
+    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+    if (!isDesktop) {
+      return () => {
+        window.clearTimeout(motionReadyTimer);
+        media.style.transform = '';
+        floatingCard.style.transform = '';
+        cornerTag.style.transform = '';
+        delete section.dataset.motion;
+      };
+    }
+
+    media.style.willChange = 'transform';
+    floatingCard.style.willChange = 'transform';
+    cornerTag.style.willChange = 'transform';
 
     const measure = () => {
       const rect = section.getBoundingClientRect();
@@ -118,10 +90,10 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       const end = sectionTop + sectionHeight;
       const progress = Math.max(0, Math.min(1, (window.scrollY - start) / (end - start)));
 
-      const imageY = 46 - 92 * progress;
-      const imageRotate = -1.4 + 2.8 * progress;
-      const cardY = 22 - 48 * progress;
-      const tagY = 14 - 34 * progress;
+      const imageY = 40 - 82 * progress;
+      const imageRotate = -1.1 + 2.2 * progress;
+      const cardY = 18 - 42 * progress;
+      const tagY = 12 - 26 * progress;
 
       media.style.transform = `translate3d(0, ${imageY.toFixed(2)}px, 0) rotate(${imageRotate.toFixed(2)}deg)`;
       floatingCard.style.transform = `translate3d(0, ${cardY.toFixed(2)}px, 0)`;
@@ -144,9 +116,11 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     window.addEventListener('scroll', queueParallaxUpdate, { passive: true });
     window.addEventListener('resize', handleResize);
 
-    let resizeObserver: ResizeObserver | null = null;
     if (typeof ResizeObserver !== 'undefined') {
-      resizeObserver = new ResizeObserver(() => { measure(); queueParallaxUpdate(); });
+      resizeObserver = new ResizeObserver(() => {
+        measure();
+        queueParallaxUpdate();
+      });
       resizeObserver.observe(section);
     }
 
@@ -159,121 +133,108 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       media.style.transform = '';
       floatingCard.style.transform = '';
       cornerTag.style.transform = '';
+      media.style.willChange = '';
+      floatingCard.style.willChange = '';
+      cornerTag.style.willChange = '';
       delete section.dataset.motion;
     };
-  }, []);
+  }, [motionProfile.reduce, shouldAnimateHero]);
 
   return (
     <section
       ref={sectionRef}
       id="home"
-      className="hero-section relative isolate min-h-[92svh] flex items-center pt-24 md:pt-28 pb-16 md:pb-20 overflow-hidden grain-overlay"
+      className="hero-section relative isolate flex min-h-[92svh] items-center overflow-hidden pb-16 pt-24 md:pb-20 md:pt-28 grain-overlay"
     >
       <div className="hero-ambient absolute inset-0" />
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="hero-shell grid lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] gap-12 lg:gap-16 items-center">
-          {/* ─── Left Column: Orchestrated Text Content ─── */}
-          <motion.div
-            className="order-2 lg:order-1"
-            initial="hidden"
-            animate="visible"
-            variants={shouldReduceMotion ? undefined : heroContainerVariants}
-          >
-            {/* Subtitle badge */}
-            <motion.div
-              className="inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/70 px-4 py-2 backdrop-blur-sm"
-              variants={shouldReduceMotion ? undefined : heroItemVariants}
+        <div className="hero-shell grid items-center gap-12 lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] lg:gap-16">
+          <div className="order-2 lg:order-1">
+            <div
+              className={`inline-flex items-center gap-3 rounded-full border border-border/70 bg-card/88 px-4 py-2 ${
+                shouldAnimateHero ? 'hero-reveal hero-reveal-1' : ''
+              }`}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
               <p className="section-label font-outfit text-muted-foreground/95">{t('hero.subtitle')}</p>
-            </motion.div>
+            </div>
 
-            {/* Name */}
-            <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3">
-              <LiteSplitTextReveal text="Gisela" delay={0.3} stagger={0.09} />{' '}
-              <LiteSplitTextReveal text="Saldarriaga" delay={0.4} stagger={0.09} className="text-accent luxury-accent align-baseline" />
+            <h1 className="hero-title mt-7 mb-3 text-5xl text-foreground md:text-6xl lg:text-7xl xl:text-[5rem]">
+              {shouldAnimateHero ? (
+                <>
+                  <LiteSplitTextReveal text="Gisela" delay={0.18} stagger={0.07} />{' '}
+                  <LiteSplitTextReveal
+                    text="Saldarriaga"
+                    delay={0.28}
+                    stagger={0.07}
+                    className="text-accent luxury-accent align-baseline"
+                  />
+                </>
+              ) : (
+                <>
+                  <span>Gisela </span>
+                  <span className="text-accent luxury-accent align-baseline">Saldarriaga</span>
+                </>
+              )}
             </h1>
 
-            {/* Signature */}
-            <motion.p
-              className="section-label text-foreground/55 mb-8"
-              variants={shouldReduceMotion ? undefined : heroItemVariants}
+            <p
+              className={`section-label mb-8 text-foreground/55 ${
+                shouldAnimateHero ? 'hero-reveal hero-reveal-2' : ''
+              }`}
             >
               {t('hero.signature')}
-            </motion.p>
+            </p>
 
-            <motion.div
-              className="w-44 h-px signature-line mb-8 origin-left"
-              variants={shouldReduceMotion ? undefined : heroLineVariants}
+            <div
+              className={`signature-line mb-8 h-px w-44 ${shouldAnimateHero ? 'hero-reveal hero-reveal-3' : ''}`}
             />
 
-            {/* Description */}
-            <motion.p
-              className="strategic-body text-foreground/80 text-lg md:text-xl mb-10 max-w-xl"
-              variants={shouldReduceMotion ? undefined : heroItemVariants}
+            <p
+              className={`strategic-body mb-10 max-w-xl text-lg text-foreground/80 md:text-xl ${
+                shouldAnimateHero ? 'hero-reveal hero-reveal-4' : ''
+              }`}
             >
               {t('hero.description')}
-            </motion.p>
+            </p>
 
-            {/* CTAs */}
-            <motion.div
-              className="hidden md:flex flex-col sm:flex-row gap-4 sm:gap-5"
-              variants={shouldReduceMotion ? undefined : heroItemVariants}
+            <div
+              className={`hidden flex-col gap-4 sm:flex-row sm:gap-5 md:flex ${
+                shouldAnimateHero ? 'hero-reveal hero-reveal-5' : ''
+              }`}
             >
-              <motion.a
-                href="#portfolio"
-                onClick={handleHashLinkClick}
-                className="btn-primary-nordic btn-shimmer px-8 py-3.5"
-                whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.02 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
-                transition={springSnappy}
-              >
+              <a href="#portfolio" onClick={handleHashLinkClick} className="btn-primary-nordic px-8 py-3.5">
                 {t('hero.buttonPortfolio')}
-              </motion.a>
-              <motion.a
-                href="#contact"
-                onClick={handleContactCtaClick}
-                className="btn-primary-nordic btn-shimmer px-8 py-3.5"
-                whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.02 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
-                transition={springSnappy}
-              >
+              </a>
+              <a href="#contact" onClick={handleContactCtaClick} className="btn-primary-nordic px-8 py-3.5">
                 {t('hero.buttonContact')}
-              </motion.a>
-            </motion.div>
+              </a>
+            </div>
 
-            {/* Pills */}
-            <motion.div
-              className="mt-10 hidden md:flex md:flex-wrap gap-3"
-              variants={shouldReduceMotion ? undefined : heroItemVariants}
+            <div
+              className={`mt-10 hidden gap-3 md:flex md:flex-wrap ${
+                shouldAnimateHero ? 'hero-reveal hero-reveal-6' : ''
+              }`}
             >
               {heroPills.map(({ icon: Icon, labelKey }) => (
-                <motion.div
-                  key={labelKey}
-                  className="hero-chip group"
-                  whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.03 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
-                  transition={springSmooth}
-                >
-                  <Icon className="h-3 w-3 text-accent/70 group-hover:text-accent transition-colors" />
+                <div key={labelKey} className="hero-chip group">
+                  <Icon className="h-3 w-3 text-accent/70 transition-colors group-hover:text-accent" />
                   <span>{t(labelKey)}</span>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          {/* ─── Right Column: Hero Image ─── */}
-          <motion.div
+          <div
             ref={mediaRef}
-            className="order-1 lg:order-2 flex justify-center lg:justify-end hero-parallax-media"
-            initial="hidden"
-            animate="visible"
-            variants={shouldReduceMotion ? undefined : heroImageVariants}
+            className={`order-1 flex justify-center lg:order-2 lg:justify-end ${
+              shouldAnimateHero ? 'hero-reveal hero-reveal-4' : ''
+            }`}
           >
             <div className="relative w-full max-w-[25rem]">
               <div className="hero-frame-glow absolute -inset-6 pointer-events-none" />
-              <div className="hero-image-shell relative overflow-hidden p-3.5 bg-card/95">
+              <div className="hero-image-shell relative overflow-hidden bg-card/95 p-3.5">
                 <picture>
                   <source
                     type="image/webp"
@@ -283,7 +244,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                   <img
                     src="/uploads/gisela-hero-585.jpg"
                     alt={t('hero.imageAlt')}
-                    className="w-full aspect-[4/5] object-cover rounded-[1.5rem]"
+                    className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
                     width={585}
                     height={731}
                     loading="eager"
@@ -303,35 +264,25 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <span>{t('hero.tagline')}</span>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
-        {/* ─── Introduction (desktop only, below hero) ─── */}
         {showIntroduction && (
-          <motion.div
-            className="mt-24 mb-16 pt-16 border-t border-border/40"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
-            }}
-          >
-            <div className="grid lg:grid-cols-[1fr_2fr] gap-12 items-start">
-              <motion.div className="space-y-6" variants={blurRevealUp()}>
+          <div className="mt-24 mb-16 border-t border-border/40 pt-16">
+            <div className="grid items-start gap-12 lg:grid-cols-[1fr_2fr]">
+              <div className="space-y-6">
                 <span className="section-label">{t('hero.introduction.eyebrow')}</span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-[0.95] tracking-tight-serif">
-                  <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} />
+                <h2 className="text-4xl text-foreground md:text-5xl lg:text-6xl font-serif leading-[0.95] tracking-tight-serif">
+                  <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.06} />
                 </h2>
-              </motion.div>
-              <motion.div className="lg:pt-20" variants={blurRevealUp(20, 0.8, 0.15)}>
-                <p className="strategic-body text-foreground/60 text-lg md:text-xl max-w-2xl">
+              </div>
+              <div className="lg:pt-20">
+                <p className="strategic-body max-w-2xl text-lg text-foreground/60 md:text-xl">
                   {t('hero.introduction.description')}
                 </p>
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
         )}
       </div>
     </section>

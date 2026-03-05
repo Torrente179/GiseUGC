@@ -1,9 +1,10 @@
 import { useRef, useState, useCallback, useEffect, useMemo, memo, startTransition, type TouchEvent, type SyntheticEvent, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Pause, Play, Volume2, VolumeX, X } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
+import { useMotionProfile } from '@/components/motion/profile';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
@@ -312,7 +313,7 @@ TheaterVideo.displayName = 'TheaterVideo';
 
 const Portfolio = () => {
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
+  const motionProfile = useMotionProfile();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const isMobile = useIsMobile();
 
@@ -569,11 +570,6 @@ const Portfolio = () => {
         if (isVerticalSwipe && crossedVerticalNavigateThreshold) {
           queueTheaterDrag(0);
           navigateReelPreview(deltaY < 0 ? 1 : -1);
-          return;
-        }
-
-        if (isHorizontalSwipe && crossedHorizontalThreshold) {
-          dismissReelPreview(deltaX < 0 ? 1 : -1);
           return;
         }
 
@@ -1026,7 +1022,7 @@ const Portfolio = () => {
 
   const startupPreviewPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 1 : isMobile ? 3 : 4;
+    const clipCount = connectionProfile.slow ? 1 : isMobile ? 2 : 4;
     return showcaseReelClips.slice(0, clipCount);
   }, [connectionProfile.slow, isMobile, showcaseReelClips, startupPrewarmEnabled]);
 
@@ -1038,9 +1034,9 @@ const Portfolio = () => {
 
   const startupMobilePreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
-    const clipCount = connectionProfile.slow ? 0 : isMobile ? 2 : 1;
+    const clipCount = connectionProfile.slow ? 0 : 1;
     return showcaseReelClips.slice(0, clipCount);
-  }, [connectionProfile.slow, isMobile, showcaseReelClips, startupPrewarmEnabled]);
+  }, [connectionProfile.slow, showcaseReelClips, startupPrewarmEnabled]);
 
   const primaryWarmPreloadClip = theaterWarmPreloadClips[0] ?? null;
   const secondaryWarmPreloadClip = theaterWarmPreloadClips[1] ?? null;
@@ -1185,10 +1181,21 @@ const Portfolio = () => {
               <p className="section-label text-accent text-sm md:text-base">{t('portfolio.sectionSubtitle')}</p>
             </motion.div>
             <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95]">
-              <SplitTextReveal text={t('portfolio.sectionTitle')} delay={0.06} />
-              <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">
-                <SplitTextReveal text={t('portfolio.sectionTitleAccent')} delay={0.22} />
-              </span>
+              {motionProfile.mobile ? (
+                <>
+                  <span>{t('portfolio.sectionTitle')}</span>
+                  <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">
+                    {t('portfolio.sectionTitleAccent')}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <SplitTextReveal text={t('portfolio.sectionTitle')} delay={0.06} />
+                  <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">
+                    <SplitTextReveal text={t('portfolio.sectionTitleAccent')} delay={0.18} />
+                  </span>
+                </>
+              )}
             </h2>
           </div>
           <motion.div className="lg:max-w-xs text-center lg:text-right" variants={revealUp(20, 0.64)}>
@@ -1221,7 +1228,7 @@ const Portfolio = () => {
             {/* Mobile navigation arrows */}
             <button
               type="button"
-              className="md:hidden absolute left-2 top-1/2 -translate-y-1/2 z-30 h-10 w-10 rounded-full bg-foreground/60 backdrop-blur-sm flex items-center justify-center text-white hover:bg-foreground/80 transition-colors"
+              className="md:hidden absolute left-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-foreground/70 text-white transition-colors hover:bg-foreground/85"
               onClick={() => scrollReels('left')}
               aria-label={t('portfolio.reelAriaPrev')}
             >
@@ -1229,7 +1236,7 @@ const Portfolio = () => {
             </button>
             <button
               type="button"
-              className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-30 h-10 w-10 rounded-full bg-foreground/60 backdrop-blur-sm flex items-center justify-center text-white hover:bg-foreground/80 transition-colors"
+              className="md:hidden absolute right-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-foreground/70 text-white transition-colors hover:bg-foreground/85"
               onClick={() => scrollReels('right')}
               aria-label={t('portfolio.reelAriaNext')}
             >
@@ -1248,11 +1255,11 @@ const Portfolio = () => {
                   const isWarmMobileCard = isMobile && mobileCardDistance <= 1;
 
                   return (
-                    <motion.button
+                    <button
                       type="button"
                       key={clip.id}
                       data-reel-card="true"
-                      className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-manipulation"
+                      className="group relative shrink-0 w-[70vw] aspect-[9/16] snap-center overflow-hidden rounded-2xl border border-border text-left shadow-sm transition-[transform,border-color] duration-180 hover:border-primary/40 hover:-translate-y-0.5 touch-manipulation sm:w-[55vw] md:w-[180px] lg:w-[200px]"
                       onMouseEnter={() => scheduleInteractionPrewarm(clip)}
                       onMouseLeave={clearInteractionPrewarm}
                       onPointerDown={() => scheduleInteractionPrewarm(clip)}
@@ -1264,9 +1271,6 @@ const Portfolio = () => {
                       onTouchCancel={handleReelCardTouchEnd}
                       onClick={() => handleReelCardClick(clip)}
                       aria-label={getReelTitle(clip)}
-                      whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.02 }}
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
-                      transition={springHoverTransition}
                     >
                       <LazyVideo
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -1277,13 +1281,13 @@ const Portfolio = () => {
                         autoPlay
                         loop
                         playsInline
-                        preload={isWarmMobileCard ? 'auto' : 'none'}
-                        rootMargin="100px 0px"
+                        preload={isWarmMobileCard ? 'metadata' : 'none'}
+                        rootMargin={isMobile ? '72px 0px' : '100px 0px'}
                         pauseOffscreen
                         forcePause={isTheaterOpen || !isActiveMobileCard}
                         aria-hidden="true"
                       />
-                    </motion.button>
+                    </button>
                   );
                 })}
               </div>
@@ -1328,9 +1332,6 @@ const Portfolio = () => {
               href="#contact"
               onClick={handleContactCtaClick}
               className="btn-primary-nordic px-7 py-3"
-              whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.02 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-              transition={springHoverTransition}
             >
               {t('portfolio.collageCta')}
             </motion.a>
@@ -1343,7 +1344,7 @@ const Portfolio = () => {
             onMouseEnter={handleCollageMouseEnter}
             onMouseLeave={handleCollageMouseLeave}
             variants={revealUp(24, 0.72)}
-            whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
+            whileHover={motionProfile.reduce ? undefined : { y: -6, scale: 1.012 }}
             transition={springHoverTransition}
           >
             {/* Sunset gradient background matching the reference */}
@@ -1358,7 +1359,7 @@ const Portfolio = () => {
             {COLLAGE_CLIPS.map((clip, index) => (
               <div
                 key={clip.id}
-                className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden origin-center will-change-transform transition-[top,left,right,width,transform,opacity] duration-700 ${collageHovered ? clip.hoverClass : clip.cornerClass
+                className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden origin-center transition-[top,left,right,width,transform,opacity] duration-700 ${collageHovered ? clip.hoverClass : clip.cornerClass
                   }`}
                 style={{
                   aspectRatio: '9/16',
@@ -1446,6 +1447,7 @@ const Portfolio = () => {
 
       {activeReelPreview && (
         <div
+          data-testid="portfolio-theater"
           className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4"
           onClick={() => dismissReelPreview()}
         >
@@ -1473,30 +1475,34 @@ const Portfolio = () => {
             onTouchEnd={handleTheaterTouchEnd}
             onTouchCancel={resetTheaterSwipe}
           >
-            <button
-              type="button"
-              className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                navigateReelPreview(-1);
-              }}
-              aria-label={t('portfolio.reelPreviewPrev')}
-            >
-              <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
-            </button>
-            <button
-              type="button"
-              className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                navigateReelPreview(1);
-              }}
-              aria-label={t('portfolio.reelPreviewNext')}
-            >
-              <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
-            </button>
+            {!isMobile && (
+              <>
+                <button
+                  type="button"
+                  className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    navigateReelPreview(-1);
+                  }}
+                  aria-label={t('portfolio.reelPreviewPrev')}
+                >
+                  <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
+                </button>
+                <button
+                  type="button"
+                  className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    navigateReelPreview(1);
+                  }}
+                  aria-label={t('portfolio.reelPreviewNext')}
+                >
+                  <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
+                </button>
+              </>
+            )}
             <div
               className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]"
               onClick={(event) => event.stopPropagation()}
@@ -1508,6 +1514,7 @@ const Portfolio = () => {
             >
               <button
                 type="button"
+                data-testid="portfolio-theater-close"
                 className="theater-control absolute right-3 top-3 z-30 h-9 w-9"
                 onClick={() => dismissReelPreview()}
                 aria-label={t('portfolio.reelPreviewClose')}

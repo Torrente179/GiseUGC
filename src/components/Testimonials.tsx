@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState, type TouchEvent, type WheelEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { blurRevealUp, easeOutExpo, springHoverTransition, springSmooth, springSnappy, staggerContainer } from '@/components/motion/variants';
+import { useMotionProfile } from '@/components/motion/profile';
 
 interface TestimonialImage {
   id: number;
@@ -117,7 +117,7 @@ const TESTIMONIAL_IMAGES: TestimonialImage[] = [
 
 const Testimonials = () => {
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
+  const motionProfile = useMotionProfile();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
@@ -211,68 +211,48 @@ const Testimonials = () => {
   return (
     <section id="testimonials" className="studio-section bg-background">
       <div className="studio-container">
-        <motion.div
-          className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-10 md:mb-12"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer(0.12, 0.04)}
-        >
+        <div className="mb-10 flex flex-col gap-6 md:mb-12 md:flex-row md:items-end md:justify-between">
           <div>
-            <motion.p className="section-label text-muted-foreground mb-3" variants={blurRevealUp(14, 0.56)}>
-              {t('testimonials.sectionSubtitle')}
-            </motion.p>
+            <p className="section-label text-muted-foreground mb-3">{t('testimonials.sectionSubtitle')}</p>
             <h2 className="studio-title">
-              <SplitTextReveal text={t('testimonials.sectionTitle')} delay={0.08} />
+              {motionProfile.mobile ? t('testimonials.sectionTitle') : <SplitTextReveal text={t('testimonials.sectionTitle')} delay={0.04} />}
             </h2>
           </div>
 
-          <motion.div className="hidden md:flex items-center gap-3" variants={blurRevealUp(18, 0.62)}>
-            <motion.button
+          <div className="hidden md:flex items-center gap-3">
+            <button
               onClick={prevTestimonial}
-              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-primary/20 bg-card shadow-sm transition-[transform,border-color] duration-180 hover:-translate-y-0.5 hover:border-primary/40"
               aria-label={t('testimonials.ariaPrev')}
-              whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.06 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
-              transition={springSnappy}
             >
               <ChevronLeft className="h-5 w-5 text-primary" />
-            </motion.button>
-            <motion.button
+            </button>
+            <button
               onClick={nextTestimonial}
-              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-primary/20 bg-card shadow-sm transition-[transform,border-color] duration-180 hover:-translate-y-0.5 hover:border-primary/40"
               aria-label={t('testimonials.ariaNext')}
-              whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.06 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
-              transition={springSnappy}
             >
               <ChevronRight className="h-5 w-5 text-primary" />
-            </motion.button>
-          </motion.div>
-        </motion.div>
+            </button>
+          </div>
+        </div>
 
-        <motion.div
-          className="studio-rule mb-8 md:mb-10"
-          initial={{ opacity: 0, scaleX: 0.7 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.62 }}
-        />
+        <div className="studio-rule mb-8 md:mb-10" />
 
-        <motion.div
+        <div
           className="relative overflow-hidden"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          initial={{ opacity: 0, y: 22 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.68 }}
         >
           <motion.div
             className="flex"
             animate={{ x: `-${activeIndex * 100}%` }}
-            transition={{ type: 'spring', stiffness: 220, damping: 28, mass: 0.9 }}
+            transition={
+              motionProfile.reduce
+                ? { duration: 0 }
+                : { type: 'spring', stiffness: 220, damping: 30, mass: 0.95 }
+            }
           >
             {TESTIMONIAL_IMAGES.map((testimonial, index) => (
               <article key={testimonial.id} className="min-w-full">
@@ -297,7 +277,7 @@ const Testimonials = () => {
               </article>
             ))}
           </motion.div>
-        </motion.div>
+        </div>
 
         <div className="mt-3 md:mt-4">
           <div className="flex items-center gap-2">
@@ -316,30 +296,27 @@ const Testimonials = () => {
               onWheel={handleThumbnailWheel}
             >
               {TESTIMONIAL_IMAGES.map((testimonial, index) => (
-                <motion.button
-                  key={testimonial.id}
-                  ref={setThumbnailButtonRef(index)}
-                  onClick={() => setActiveIndex(index)}
-                  className={`relative h-16 w-24 shrink-0 snap-start overflow-hidden rounded-lg border bg-background/55 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:h-20 md:w-32 ${
-                    activeIndex === index ? 'border-primary/70 ring-1 ring-primary/40' : 'border-border/65 hover:border-primary/30'
-                  }`}
-                  aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
-                  whileHover={shouldReduceMotion ? undefined : { scale: 1.03 }}
-                  whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
-                  transition={springHoverTransition}
-                >
-                  <img
-                    src={testimonial.src}
+              <button
+                key={testimonial.id}
+                ref={setThumbnailButtonRef(index)}
+                onClick={() => setActiveIndex(index)}
+                className={`relative h-16 w-24 shrink-0 snap-start overflow-hidden rounded-lg border bg-background/55 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:h-20 md:w-32 ${
+                  activeIndex === index ? 'border-primary/70 ring-1 ring-primary/40' : 'border-border/65 hover:border-primary/30'
+                }`}
+                aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
+              >
+                <img
+                  src={testimonial.src}
                     alt=""
                     width={testimonial.width}
                     height={testimonial.height}
                     className="h-full w-full object-contain"
                     loading="lazy"
-                    decoding="async"
-                  />
-                </motion.button>
-              ))}
-            </div>
+                  decoding="async"
+                />
+              </button>
+            ))}
+          </div>
 
             <button
               type="button"
