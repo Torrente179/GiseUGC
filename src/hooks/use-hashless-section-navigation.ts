@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import type { MouseEvent } from 'react';
+import { getLenis } from '@/lib/smooth-scroll';
 
 const stripHashFromUrl = () => {
   if (!window.location.hash) {
@@ -26,16 +27,23 @@ const premiumEaseScroll = (t: number): number => {
 };
 
 /**
- * JS-powered smooth scroll with custom easing for a premium, consistent feel
- * across all browsers (native smooth scroll uses different easing per browser).
+ * Smooth scroll using Lenis when available (desktop), with JS-powered fallback.
  */
-const smoothScrollTo = (targetY: number, duration = 900) => {
+const smoothScrollTo = (targetElement: HTMLElement, duration = 900) => {
+  // Use Lenis when available — physics-based, interruptible scrolling
+  const lenis = getLenis();
+  if (lenis) {
+    lenis.scrollTo(targetElement, { duration: 1.2, offset: 0 });
+    return;
+  }
+
+  // Fallback: JS-powered smooth scroll with custom easing
+  const targetY = targetElement.getBoundingClientRect().top + window.scrollY;
   const startY = window.scrollY;
   const distance = targetY - startY;
 
   if (Math.abs(distance) < 1) return;
 
-  // Respect reduced motion preference
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     window.scrollTo(0, targetY);
     return;
@@ -70,8 +78,7 @@ export const useHashlessSectionNavigation = () => {
       return false;
     }
 
-    const targetY = targetElement.getBoundingClientRect().top + window.scrollY;
-    smoothScrollTo(targetY);
+    smoothScrollTo(targetElement);
     stripHashFromUrl();
     return true;
   }, []);

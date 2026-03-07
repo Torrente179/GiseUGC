@@ -1,4 +1,4 @@
-import { useEffect, useRef, type MouseEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Diamond, Sparkles, Zap } from 'lucide-react';
@@ -59,6 +59,9 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   const mediaRef = useRef<HTMLDivElement>(null);
   const floatingCardRef = useRef<HTMLDivElement>(null);
   const cornerTagRef = useRef<HTMLDivElement>(null);
+
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
+  const handleImageLoad = useCallback(() => setHeroImageLoaded(true), []);
 
   const heroPills = [
     { icon: Sparkles, labelKey: 'hero.pillStrategy' },
@@ -133,6 +136,11 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       frameId = window.requestAnimationFrame(updateParallax);
     };
 
+    // Promote layers to GPU only while parallax is active
+    media.style.willChange = 'transform';
+    floatingCard.style.willChange = 'transform';
+    cornerTag.style.willChange = 'transform';
+
     measure();
     queueParallaxUpdate();
 
@@ -157,8 +165,11 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       resizeObserver?.disconnect();
       if (frameId !== null) window.cancelAnimationFrame(frameId);
       media.style.transform = '';
+      media.style.willChange = '';
       floatingCard.style.transform = '';
+      floatingCard.style.willChange = '';
       cornerTag.style.transform = '';
+      cornerTag.style.willChange = '';
       delete section.dataset.motion;
     };
   }, []);
@@ -283,12 +294,13 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                   <img
                     src="/uploads/gisela-hero-585.jpg"
                     alt={t('hero.imageAlt')}
-                    className="w-full aspect-[4/5] object-cover rounded-[1.5rem]"
+                    className={`w-full aspect-[4/5] object-cover rounded-[1.5rem] img-reveal${heroImageLoaded ? ' loaded' : ''}`}
                     width={585}
                     height={731}
                     loading="eager"
                     fetchPriority="high"
                     decoding="async"
+                    onLoad={handleImageLoad}
                   />
                 </picture>
               </div>
@@ -312,7 +324,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             className="mt-24 mb-16 pt-16 border-t border-border/40"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.3 }}
             variants={{
               hidden: {},
               visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },

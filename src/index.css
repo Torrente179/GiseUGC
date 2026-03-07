@@ -4,6 +4,15 @@
 
 @layer base {
   :root {
+    /* ─── Animation Timing Tokens ─── */
+    --duration-micro: 150ms;   /* taps, focus rings, icon rotations */
+    --duration-fast: 250ms;    /* hovers, toggles, button states */
+    --duration-medium: 600ms;  /* section entrances, card reveals */
+    --duration-slow: 900ms;    /* hero orchestration, page-load sequences */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+
     /* Nordic Atelier palette inspired by the provided reference image */
     --coastal-teal: 193 63.9% 47.8%;
     /* #2CA7C8 */
@@ -124,7 +133,7 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* Native scroll-behavior removed — Lenis handles smooth scrolling */
   }
 
   body {
@@ -137,7 +146,39 @@
     background-color: hsl(var(--background));
     min-height: 100vh;
     overflow-x: hidden;
-    /* Removed explicit color to rely on text-foreground for better contrast */
+  }
+
+  /* ─── Theme Toggle Transition ─── */
+  html.theme-transitioning,
+  html.theme-transitioning *,
+  html.theme-transitioning *::before,
+  html.theme-transitioning *::after {
+    transition: background-color 300ms ease, color 200ms ease, border-color 300ms ease, box-shadow 300ms ease, fill 200ms ease, stroke 200ms ease !important;
+  }
+
+  /* ─── Focus Ring Animation ─── */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+    transition: outline-offset var(--duration-micro) ease-out;
+  }
+
+  *:not(:focus-visible) {
+    outline-offset: 0px;
+    transition: outline-offset var(--duration-micro) ease-out;
+  }
+
+  /* ─── Mobile Tap States ─── */
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  @media (hover: none) {
+    button:active, a:active, [role="button"]:active {
+      transform: scale(0.97);
+      transition: transform 100ms ease-out;
+    }
   }
 
   .brand-logo {
@@ -253,7 +294,8 @@
   }
 
   .theater-control {
-    @apply flex items-center justify-center rounded-full transition-[background-color,border-color,color] duration-200;
+    @apply flex items-center justify-center rounded-full;
+    transition: background-color var(--duration-fast) var(--ease-out-expo), border-color var(--duration-fast) var(--ease-out-expo), color var(--duration-fast) var(--ease-out-expo);
     background-color: hsl(var(--theater-control-bg) / 0.82);
     border: 1px solid hsl(var(--theater-control-border) / 0.88);
     color: hsl(var(--theater-control-fg));
@@ -348,16 +390,20 @@
   }
 
   .transition-all-custom {
-    @apply transition-all duration-300 ease-in-out;
+    transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-out-expo);
   }
 
   .hover-grow {
-    @apply transition-transform duration-300 hover:scale-[1.01];
+    transition: transform var(--duration-fast) var(--ease-out-expo);
   }
+  .hover-grow:hover { transform: scale(1.01); }
 
   .hover-lift {
-    @apply transition-transform duration-300 hover:-translate-y-0.5;
+    transition: transform var(--duration-fast) var(--ease-out-expo);
   }
+  .hover-lift:hover { transform: translateY(-2px); }
 
   .text-shadow {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -401,17 +447,19 @@
   }
 
   .hero-chip {
-    @apply inline-flex items-center gap-2.5 rounded-full border border-border/50 bg-card/45 px-5 py-2.5 text-[10px] font-bold uppercase tracking-prestige text-muted-foreground/90 backdrop-blur-md transition-[border-color,background-color,color,box-shadow] duration-300 hover:border-accent/30 hover:bg-card/80 hover:text-foreground hover:shadow-[0_12px_24px_-12px_hsl(var(--foreground)/0.15)] cursor-default;
+    @apply inline-flex items-center gap-2.5 rounded-full border border-border/50 bg-card/45 px-5 py-2.5 text-[10px] font-bold uppercase tracking-prestige text-muted-foreground/90 backdrop-blur-md hover:border-accent/30 hover:bg-card/80 hover:text-foreground hover:shadow-[0_12px_24px_-12px_hsl(var(--foreground)/0.15)] cursor-default;
+    transition: border-color var(--duration-fast) var(--ease-out-expo), background-color var(--duration-fast) var(--ease-out-expo), color var(--duration-fast) var(--ease-out-expo), box-shadow var(--duration-fast) var(--ease-out-expo);
   }
 
   .hero-image-shell {
     @apply rounded-[2rem] border border-border/90 shadow-[0_36px_70px_-46px_hsl(var(--foreground)/0.55)] backdrop-blur-sm;
   }
 
+  /* will-change managed via JS in Hero.tsx — only applied during active parallax */
   .hero-parallax-media,
   .hero-parallax-floating-card,
   .hero-parallax-corner-tag {
-    will-change: transform;
+    transform: translate3d(0, 0, 0);
   }
 
   .hero-frame-glow {
@@ -484,7 +532,8 @@
   }
 
   .cafe-card {
-    @apply rounded-2xl border border-border/90 bg-card backdrop-blur-sm transition-[border-color,box-shadow] duration-300 elegant-shadow;
+    @apply rounded-2xl border border-border/90 bg-card backdrop-blur-sm elegant-shadow;
+    transition: border-color 350ms var(--ease-out-expo), box-shadow 350ms var(--ease-out-expo);
     background-color: hsl(var(--card) / 0.98);
   }
 
@@ -498,11 +547,13 @@
   }
 
   .btn-primary-nordic {
-    @apply inline-flex items-center justify-center rounded-full bg-primary text-foreground font-sans text-[10px] font-bold uppercase tracking-prestige transition-[color,background-color,border-color,box-shadow] duration-300 hover:bg-accent hover:-translate-y-[1px] hover:shadow-[0_14px_30px_-15px_hsla(var(--accent)/0.5)];
+    @apply inline-flex items-center justify-center rounded-full bg-primary text-foreground font-sans text-[10px] font-bold uppercase tracking-prestige hover:bg-accent hover:-translate-y-[1px] hover:shadow-[0_14px_30px_-15px_hsla(var(--accent)/0.5)];
+    transition: color var(--duration-fast) var(--ease-out-expo), background-color var(--duration-fast) var(--ease-out-expo), border-color var(--duration-fast) var(--ease-out-expo), box-shadow var(--duration-fast) var(--ease-out-expo), transform var(--duration-fast) var(--ease-out-expo);
   }
 
   .btn-secondary-nordic {
-    @apply inline-flex items-center justify-center rounded-full border border-muted bg-transparent text-primary/60 font-sans text-[10px] font-bold uppercase tracking-prestige transition-[color,background-color,border-color] duration-300 hover:bg-primary hover:text-primary-foreground hover:border-primary;
+    @apply inline-flex items-center justify-center rounded-full border border-muted bg-transparent text-primary/60 font-sans text-[10px] font-bold uppercase tracking-prestige hover:bg-primary hover:text-primary-foreground hover:border-primary;
+    transition: color var(--duration-fast) var(--ease-out-expo), background-color var(--duration-fast) var(--ease-out-expo), border-color var(--duration-fast) var(--ease-out-expo);
   }
 
   .grain-overlay {
@@ -805,8 +856,8 @@
     height: 1.5px;
     background: hsl(var(--primary));
     border-radius: 9999px;
-    transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-                right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: left var(--duration-fast) var(--ease-premium),
+                right var(--duration-fast) var(--ease-premium);
   }
 
   .nav-link-underline:hover::after {
@@ -870,6 +921,64 @@
 
     .btn-shimmer::after {
       animation: none;
+    }
+  }
+
+  /* ─── Image Load Fade-In ─── */
+  .img-reveal {
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-out-expo);
+  }
+
+  .img-reveal.loaded {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .img-reveal {
+      opacity: 1;
+      transition: none;
+    }
+  }
+
+  /* ─── Skeleton-to-Content Crossfade ─── */
+  .fade-in-on-mount {
+    animation: fade-in-mount 0.45s var(--ease-out-expo) both;
+  }
+
+  @keyframes fade-in-mount {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in-on-mount {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ─── Accordion Content Fade ─── */
+  .accordion-content-fade {
+    animation: accordion-content-reveal 0.3s var(--ease-out-expo) 0.08s both;
+  }
+
+  @keyframes accordion-content-reveal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accordion-content-fade {
+      animation: none;
+      opacity: 1;
     }
   }
 }

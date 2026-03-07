@@ -14,6 +14,17 @@ export const easeOutQuart: [number, number, number, number] = [0.25, 1, 0.5, 1];
 /** Cubic in-out — bidirectional (open/close, toggle states) */
 export const easeInOutCubic: [number, number, number, number] = [0.65, 0, 0.35, 1];
 
+/* ─── Timing Tokens (seconds, for Framer Motion) ─── */
+
+/** Micro: taps, focus rings, icon rotations */
+export const DURATION_MICRO = 0.15;
+/** Fast: hovers, toggles, button states */
+export const DURATION_FAST = 0.25;
+/** Medium: section entrances, card reveals */
+export const DURATION_MEDIUM = 0.6;
+/** Slow: hero orchestration, page-load sequences */
+export const DURATION_SLOW = 0.9;
+
 /* ─── Named Spring Configs ─── */
 
 /** Smooth spring — universal for hover/entrance (feels organic, not bouncy) */
@@ -43,7 +54,7 @@ export const springHoverTransition: Transition = {
 /* ─── Variant Generators ─── */
 
 /** Reveal-up: translate-Y + opacity (the workhorse) */
-export const revealUp = (distance = 26, duration = 0.72, delay = 0): Variants => ({
+export const revealUp = (distance = 26, duration = DURATION_MEDIUM, delay = 0): Variants => ({
   hidden: {
     opacity: 0,
     y: distance,
@@ -60,7 +71,7 @@ export const revealUp = (distance = 26, duration = 0.72, delay = 0): Variants =>
 });
 
 /** Simple opacity fade */
-export const fadeIn = (duration = 0.6, delay = 0): Variants => ({
+export const fadeIn = (duration = DURATION_MEDIUM, delay = 0): Variants => ({
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -69,7 +80,7 @@ export const fadeIn = (duration = 0.6, delay = 0): Variants => ({
 });
 
 /** Scale-in: scale + opacity (hero image, card emphasis) */
-export const scaleIn = (from = 0.96, duration = 0.7, delay = 0): Variants => ({
+export const scaleIn = (from = 0.96, duration = DURATION_MEDIUM, delay = 0): Variants => ({
   hidden: {
     opacity: 0,
     scale: from,
@@ -82,7 +93,7 @@ export const scaleIn = (from = 0.96, duration = 0.7, delay = 0): Variants => ({
 });
 
 /** Reveal from left */
-export const revealFromLeft = (distance = 30, duration = 0.72, delay = 0): Variants => ({
+export const revealFromLeft = (distance = 30, duration = DURATION_MEDIUM, delay = 0): Variants => ({
   hidden: { opacity: 0, x: -distance },
   visible: {
     opacity: 1,
@@ -92,7 +103,7 @@ export const revealFromLeft = (distance = 30, duration = 0.72, delay = 0): Varia
 });
 
 /** Reveal from right */
-export const revealFromRight = (distance = 30, duration = 0.72, delay = 0): Variants => ({
+export const revealFromRight = (distance = 30, duration = DURATION_MEDIUM, delay = 0): Variants => ({
   hidden: { opacity: 0, x: distance },
   visible: {
     opacity: 1,
@@ -102,7 +113,7 @@ export const revealFromRight = (distance = 30, duration = 0.72, delay = 0): Vari
 });
 
 /** Blur-in: filter-blur + opacity (premium content reveal — the Apple signature) */
-export const blurIn = (duration = 0.8, delay = 0): Variants => ({
+export const blurIn = (duration = 0.7, delay = 0): Variants => ({
   hidden: {
     opacity: 0,
     filter: 'blur(8px)',
@@ -115,7 +126,7 @@ export const blurIn = (duration = 0.8, delay = 0): Variants => ({
 });
 
 /** Blur-reveal-up: combines translate-Y + blur + opacity for premium section entrances */
-export const blurRevealUp = (distance = 20, duration = 0.8, delay = 0): Variants => ({
+export const blurRevealUp = (distance = 20, duration = 0.7, delay = 0): Variants => ({
   hidden: {
     opacity: 0,
     y: distance,

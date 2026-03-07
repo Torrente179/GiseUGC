@@ -105,9 +105,11 @@ const Navbar = () => {
 
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    document.body.style.overscrollBehavior = mobileMenuOpen ? 'contain' : '';
     document.body.classList.toggle('mobile-menu-open', mobileMenuOpen);
     return () => {
       document.body.style.overflow = '';
+      document.body.style.overscrollBehavior = '';
       document.body.classList.remove('mobile-menu-open');
     };
   }, [mobileMenuOpen]);
@@ -417,11 +419,14 @@ const Navbar = () => {
                 key={link.key}
                 href={link.href}
                 onClick={(event) => handleHashLinkClick(event, closeMobileMenu)}
-                className={`group flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 transition-all duration-500 ${
+                className={`group flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 transition-[opacity,transform] duration-500 ${
                   mobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'
                 }`}
                 style={{
-                  transitionDelay: mobileMenuOpen ? `${120 + index * 60}ms` : '0ms',
+                  transitionTimingFunction: 'var(--ease-out-expo)',
+                  transitionDelay: mobileMenuOpen
+                    ? `${120 + index * 60}ms`
+                    : `${(mobileNavLinkKeys.length - 1 - index) * 40}ms`,
                 }}
               >
                 <div className="flex items-center gap-4">
@@ -430,16 +435,19 @@ const Navbar = () => {
                     {t(link.key)}
                   </span>
                 </div>
-                <ArrowRight className="w-5 h-5 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                <ArrowRight className="w-5 h-5 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-[opacity,transform] duration-[250ms]" />
               </a>
             ))}
           </nav>
 
           <div
-            className={`pb-10 transition-all duration-500 ${
+            className={`pb-10 transition-[opacity,transform] duration-500 ${
               mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
-            style={{ transitionDelay: mobileMenuOpen ? '460ms' : '0ms' }}
+            style={{
+              transitionTimingFunction: 'var(--ease-out-expo)',
+              transitionDelay: mobileMenuOpen ? '460ms' : '80ms',
+            }}
           >
             <div className="relative overflow-hidden rounded-[1.7rem] border border-border/80 bg-gradient-to-br from-card via-card to-secondary/55 p-4 shadow-[0_28px_46px_-34px_hsl(var(--foreground)/0.85)]">
               <div className="pointer-events-none absolute -left-8 -top-8 h-24 w-24 rounded-full bg-primary/15 blur-2xl" />

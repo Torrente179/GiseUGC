@@ -4,6 +4,7 @@ import Hero from '@/components/Hero';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { clearUrlHash } from '@/hooks/use-hashless-section-navigation';
 import SectionSkeleton from '@/components/motion/SectionSkeleton';
+import FadeInOnMount from '@/components/motion/FadeInOnMount';
 import { useDeferredMount } from '@/hooks/use-deferred-mount';
 import { mark, measure, startLongTaskObserver } from '@/lib/perf-debug';
 
@@ -54,7 +55,7 @@ const DeferredSection = ({
   if (!enabled) return null;
 
   if (shouldMount) {
-    return <Suspense fallback={skeleton}>{children}</Suspense>;
+    return <Suspense fallback={skeleton}><FadeInOnMount>{children}</FadeInOnMount></Suspense>;
   }
 
   return <div ref={placeholderRef}>{skeleton}</div>;
