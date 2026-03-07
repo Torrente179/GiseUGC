@@ -51,7 +51,7 @@ type MobileMenuSwipeState = {
 };
 
 const Navbar = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileMenuDragOffset, setMobileMenuDragOffset] = useState(0);
