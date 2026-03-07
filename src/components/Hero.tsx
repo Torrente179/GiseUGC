@@ -224,15 +224,18 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
             {/* Name */}
             <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3">
-              <LiteSplitTextReveal text={t('hero.headline')} delay={0.3} stagger={0.09} />
-              <span className="mt-3 block text-accent">
-                <LiteSplitTextReveal text={t('hero.headlineAccent')} delay={0.42} stagger={0.08} />
-              </span>
+              <LiteSplitTextReveal text="Gisela" delay={0.3} stagger={0.09} />{' '}
+              <LiteSplitTextReveal
+                text="Saldarriaga"
+                delay={0.42}
+                stagger={0.08}
+                className="text-accent luxury-accent align-baseline"
+              />
             </h1>
 
             {/* Signature */}
             <motion.p
-              className="section-label text-foreground/55 mb-8"
+              className="font-outfit text-sm md:text-[0.95rem] leading-relaxed tracking-[0.02em] text-foreground/58 mb-8 max-w-md"
               variants={shouldReduceMotion ? undefined : heroItemVariants}
             >
               {t('hero.signature')}
