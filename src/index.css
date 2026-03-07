@@ -942,26 +942,21 @@
   }
 
   /* ─── Skeleton-to-Content Crossfade ─── */
+  /* Only opacity — transform would create a containing block that breaks
+     position:fixed descendants (e.g. theater overlay inside Portfolio). */
   .fade-in-on-mount {
     animation: fade-in-mount 0.45s var(--ease-out-expo) both;
   }
 
   @keyframes fade-in-mount {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .fade-in-on-mount {
       animation: none;
       opacity: 1;
-      transform: none;
     }
   }
 
