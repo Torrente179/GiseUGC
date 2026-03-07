@@ -33,7 +33,7 @@ const smoothScrollTo = (targetElement: HTMLElement, duration = 900) => {
   // Use Lenis when available — physics-based, interruptible scrolling
   const lenis = getLenis();
   if (lenis) {
-    lenis.scrollTo(targetElement, { duration: 1.2, offset: 0 });
+    lenis.scrollTo(targetElement, { duration: 0.9, offset: 0 });
     return;
   }
 

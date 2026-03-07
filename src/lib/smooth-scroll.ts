@@ -15,7 +15,7 @@ export const initLenis = (): (() => void) | undefined => {
   if (!isDesktop || prefersReducedMotion) return;
 
   const lenis = new Lenis({
-    lerp: 0.1,
+    lerp: 0.14,
     smoothWheel: true,
   });
 
