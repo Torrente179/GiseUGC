@@ -12,12 +12,14 @@
     "changeLanguage": "Change Language"
   },
   "hero": {
-    "subtitle": "UGC Creator & Content Specialist",
-    "signature": "User Generated Content",
-    "description": "I create authentic and elegant content that showcases your brand's unique story and connects with your audience on a deeper level.",
+    "subtitle": "Spokesperson work, demos, and creator-led pieces for brands with a point of view",
+    "headline": "UGC with presence",
+    "headlineAccent": "and editorial polish",
+    "signature": "Gisela Saldarriaga",
+    "description": "Creator-led ads, demos, and spokesperson pieces shaped to feel natural on camera and clear in the message, from Medellin and around the world.",
     "buttonPortfolio": "See My Work",
     "buttonContact": "Contact",
-    "imageAlt": "Gisela Saldarriaga",
+    "imageAlt": "Gisela Saldarriaga, UGC creator and spokesperson",
     "scrollPrompt": "Explore My Services",
     "pillStrategy": "Creative direction",
     "pillAesthetic": "Premium aesthetic",
@@ -28,8 +30,8 @@
     "tagline": "Editorial UGC",
     "introduction": {
       "eyebrow": "Creative UGC",
-      "title": "Elevating brands through authentic narratives",
-      "description": "As a content specialist, I bridge the gap between your brand identity and consumer connection. My approach combines editorial aesthetics with performance marketing strategies to create assets that don't just look good—they sell."
+      "title": "A more human presence for campaigns that need credibility",
+      "description": "I love working with brands that want to feel closer on screen without losing visual taste. My process blends commercial intent, performance thinking, and a polished aesthetic so each piece feels natural, useful, and ready to travel between markets."
     }
   },
   "services": {
@@ -124,6 +126,8 @@
     "sectionTitle": "Creatives that ",
     "sectionTitleAccent": "Convert",
     "reelDescription": "Each reel is crafted to hook attention fast, communicate value clearly, and drive conversion intent.",
+    "featuredLabel": "Featured work",
+    "featuredDescription": "A short edit of recent demos, spokesperson pieces, and reviews.",
     "reelAriaPrev": "Scroll previous videos",
     "reelAriaNext": "Scroll next videos",
     "reelPreviewLabel": "Reel preview",
@@ -244,6 +248,52 @@
     "views": "Views Generated",
     "satisfaction": "Satisfaction",
     "contentPieces": "Content Pieces"
+  },
+  "faq": {
+    "sectionSubtitle": "Frequently Asked Questions",
+    "sectionTitle": "Questions, answered",
+    "items": [
+      {
+        "question": "What is UGC and how can it help my brand?",
+        "answer": "They're authentic, natural-looking videos made by creators like me, designed for ad campaigns. Instead of feeling like a corporate ad, UGC feels real, and that builds far more trust and engagement."
+      },
+      {
+        "question": "What types of UGC content do you create?",
+        "answer": "A bit of everything: ads with strong hooks, spokesperson videos, reviews, product demos, lifestyle content, and B-Roll. All in Spanish, English, or both, in vertical format ready for social."
+      },
+      {
+        "question": "Do you publish the content on your social media?",
+        "answer": "No. All the content is exclusively for your brand. You get the files and use them however you want: social media, paid ads, landing pages. I don't post anything on my accounts unless we agree on a brand ambassador deal."
+      },
+      {
+        "question": "How does the work process work?",
+        "answer": "Pretty simple: you tell me what you need, I send you a proposal, we align on the brief together, I shoot, edit, and deliver. If I need the product, you ship it beforehand. Everything is remote and smooth."
+      },
+      {
+        "question": "How much does UGC content cost?",
+        "answer": "It depends on the content type, how many videos you need, and the complexity of the project. Reach out through the form or Fiverr and I'll send you a quote tailored to what you're looking for."
+      },
+      {
+        "question": "Do you include revisions?",
+        "answer": "Yes, every project includes 1 to 2 revision rounds for editing tweaks, pacing, or on-screen text. If you need something bigger like a full re-shoot, we coordinate that separately."
+      },
+      {
+        "question": "How long does content delivery take?",
+        "answer": "Usually 3 to 5 business days after I receive the product and we confirm the brief. If you have a tight deadline, tell me upfront and we'll make it work."
+      },
+      {
+        "question": "What usage rights does the brand get over the content?",
+        "answer": "Rights for organic posts are included in every project. If you also want to use the content in paid ads, that comes with a separate license we quote together."
+      },
+      {
+        "question": "What kinds of brands do you usually work with?",
+        "answer": "Most of my projects come from brands speaking to Spanish-speaking audiences in the US, along with teams in Spain, Europe, and Latin America. I also take on selected English-language briefs when the tone feels right. Everything is produced remotely from Medellin with a process that stays simple."
+      },
+      {
+        "question": "What languages do you work in?",
+        "answer": "In Spanish with no word limit or script needed, it's my native language. In English too, with a script from your side and a 65-word limit per video to keep it natural."
+      }
+    ]
   },
   "floatingContact": {
     "whatsappLabel": "WhatsApp",

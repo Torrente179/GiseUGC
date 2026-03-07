@@ -9,7 +9,13 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import LazyVideo from '@/components/media/LazyVideo';
 import VIDEO_LQIP from '@/data/video-lqip';
-import { LEGACY_REEL_CLIPS, r2Poster, r2PreviewVideo, type ReelClip } from '@/data/portfolio-clips';
+import {
+  FEATURED_REEL_CLIP_IDS,
+  LEGACY_REEL_CLIPS,
+  r2Poster,
+  r2PreviewVideo,
+  type ReelClip,
+} from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 
 interface CollageClip {
@@ -78,6 +84,9 @@ const shuffleWithSeed = <T,>(items: T[], seed: number): T[] => {
 };
 
 const ALL_REEL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS];
+const FEATURED_REEL_CLIPS: ReelClip[] = FEATURED_REEL_CLIP_IDS.map((clipId) =>
+  ALL_REEL_CLIPS.find((clip) => clip.id === clipId),
+).filter((clip): clip is ReelClip => Boolean(clip));
 
 const COLLAGE_CLIPS: CollageClip[] = [
   {
@@ -349,6 +358,7 @@ const Portfolio = () => {
     () => shuffleWithSeed(ALL_REEL_CLIPS, utcDayBucket),
     [utcDayBucket],
   );
+  const featuredReelClips = useMemo(() => FEATURED_REEL_CLIPS, []);
 
   const handleContactCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (isMobileViewport()) {
@@ -1207,6 +1217,32 @@ const Portfolio = () => {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.66 }}
         />
+
+        <motion.div
+          className="mb-8 md:mb-10"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={staggerContainer(0.06, 0.04)}
+        >
+          <motion.p className="section-label text-muted-foreground mb-2" variants={revealUp(12, 0.5)}>
+            {t('portfolio.featuredLabel')}
+          </motion.p>
+          <motion.p className="strategic-body text-foreground/60 max-w-2xl mb-4" variants={revealUp(14, 0.56)}>
+            {t('portfolio.featuredDescription')}
+          </motion.p>
+          <motion.div className="flex flex-wrap gap-2.5" variants={staggerContainer(0.04, 0.02)}>
+            {featuredReelClips.map((clip) => (
+              <motion.span
+                key={`featured-${clip.id}`}
+                className="inline-flex items-center rounded-full border border-border/70 bg-card/75 px-3 py-1.5 text-xs font-medium text-foreground/80 shadow-[0_14px_28px_-26px_hsl(var(--foreground)/0.85)]"
+                variants={revealUp(10, 0.45)}
+              >
+                {getReelTitle(clip)}
+              </motion.span>
+            ))}
+          </motion.div>
+        </motion.div>
 
         <motion.div
           className="mb-12 md:mb-14"

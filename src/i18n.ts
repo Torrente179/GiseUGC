@@ -1,32 +1,36 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import HttpBackend from 'i18next-http-backend';
+import enTranslation from '@/locales/en/translation.json';
 import esTranslation from '@/locales/es/translation.json';
 
+const syncDocumentLanguage = (lng?: string) => {
+  if (typeof document === 'undefined' || !lng) return;
+  document.documentElement.lang = lng;
+};
+
 i18n
-  .use(HttpBackend)
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     supportedLngs: ['en', 'es'],
     fallbackLng: 'es',
-    partialBundledLanguages: true,
     resources: {
       es: { translation: esTranslation },
-    },
-    backend: {
-      loadPath: '/locales/{{lng}}/translation.json',
+      en: { translation: enTranslation },
     },
     debug: import.meta.env.DEV,
     detection: {
-      order: ['querystring', 'cookie', 'localStorage', 'sessionStorage', 'navigator', 'htmlTag'],
-      caches: ['cookie'],
-      cookieOptions: { path: '/', sameSite: 'strict' },
+      order: ['path', 'htmlTag'],
+      lookupFromPathIndex: 0,
+      caches: [],
     },
     react: {
       useSuspense: false,
     },
   });
+
+i18n.on('languageChanged', syncDocumentLanguage);
+syncDocumentLanguage(i18n.resolvedLanguage ?? i18n.language);
 
 export default i18n;

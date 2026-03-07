@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gisela Saldarriaga | UGC y videos de portavoz</title>
+    <title>Gisela Saldarriaga | UGC and spokesperson videos</title>
     <meta
       name="description"
-      content="UGC, demos y videos de portavoz con una presencia natural frente a camara y criterio visual. Desde Medellin para marcas en Estados Unidos, Espana y otros mercados."
+      content="UGC, demos, and spokesperson videos with a polished, human feel for brands in the US, Spain, and beyond."
     />
     <meta name="author" content="Gisela Saldarriaga" />
     <meta name="theme-color" content="#fffefe" />
@@ -15,8 +15,8 @@
         try {
           var normalizedUrl = new URL(window.location.href);
           var requestedLng = normalizedUrl.searchParams.get('lng');
-          if (requestedLng === 'en' && !normalizedUrl.pathname.startsWith('/en')) {
-            normalizedUrl.pathname = '/en/';
+          if (requestedLng === 'es' && normalizedUrl.pathname.startsWith('/en')) {
+            normalizedUrl.pathname = '/';
             normalizedUrl.searchParams.delete('lng');
             window.location.replace(normalizedUrl.toString());
             return;
@@ -50,7 +50,7 @@
       })();
     </script>
     <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://www.giselasaldarriaga.com/" />
+    <link rel="canonical" href="https://www.giselasaldarriaga.com/en/" />
     <link rel="alternate" href="https://www.giselasaldarriaga.com/" hreflang="es" />
     <link rel="alternate" href="https://www.giselasaldarriaga.com/en/" hreflang="en" />
     <link rel="alternate" href="https://www.giselasaldarriaga.com/" hreflang="x-default" />
@@ -63,11 +63,11 @@
     <link rel="shortcut icon" href="/favicon.ico" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.giselasaldarriaga.com/" />
-    <meta property="og:title" content="Gisela Saldarriaga | UGC y videos de portavoz" />
+    <meta property="og:url" content="https://www.giselasaldarriaga.com/en/" />
+    <meta property="og:title" content="Gisela Saldarriaga | UGC and spokesperson videos" />
     <meta
       property="og:description"
-      content="UGC, demos y videos de portavoz con una presencia natural frente a camara y criterio visual. Desde Medellin para marcas en Estados Unidos, Espana y otros mercados."
+      content="UGC, demos, and spokesperson videos with a polished, human feel for brands in the US, Spain, and beyond."
     />
     <meta property="og:image" content="https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg?v=20260219" />
     <meta property="og:image:url" content="https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg?v=20260219" />
@@ -75,21 +75,21 @@
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:alt" content="Gisela Saldarriaga, creadora UGC y portavoz" />
+    <meta property="og:image:alt" content="Gisela Saldarriaga, UGC creator and spokesperson" />
     <meta property="og:site_name" content="Gisela Saldarriaga" />
-    <meta property="og:locale" content="es_CO" />
-    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="es_CO" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://www.giselasaldarriaga.com/" />
-    <meta name="twitter:title" content="Gisela Saldarriaga | UGC y videos de portavoz" />
+    <meta name="twitter:url" content="https://www.giselasaldarriaga.com/en/" />
+    <meta name="twitter:title" content="Gisela Saldarriaga | UGC and spokesperson videos" />
     <meta
       name="twitter:description"
-      content="UGC, demos y videos de portavoz con una presencia natural frente a camara y criterio visual. Desde Medellin para marcas en Estados Unidos, Espana y otros mercados."
+      content="UGC, demos, and spokesperson videos with a polished, human feel for brands in the US, Spain, and beyond."
     />
     <meta name="twitter:image" content="https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg?v=20260219" />
     <meta name="twitter:image:src" content="https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg?v=20260219" />
-    <meta name="twitter:image:alt" content="Gisela Saldarriaga, creadora UGC y portavoz" />
+    <meta name="twitter:image:alt" content="Gisela Saldarriaga, UGC creator and spokesperson" />
 
     <script type="application/ld+json">
       {
@@ -104,11 +104,11 @@
           },
           {
             "@type": "WebPage",
-            "@id": "https://www.giselasaldarriaga.com/#webpage",
-            "url": "https://www.giselasaldarriaga.com/",
-            "name": "Gisela Saldarriaga | UGC y videos de portavoz",
-            "description": "UGC, demos y videos de portavoz con una presencia natural frente a camara y criterio visual. Desde Medellin para marcas en Estados Unidos, Espana y otros mercados.",
-            "inLanguage": "es",
+            "@id": "https://www.giselasaldarriaga.com/en/#webpage",
+            "url": "https://www.giselasaldarriaga.com/en/",
+            "name": "Gisela Saldarriaga | UGC and spokesperson videos",
+            "description": "UGC, demos, and spokesperson videos with a polished, human feel for brands in the US, Spain, and beyond.",
+            "inLanguage": "en",
             "isPartOf": {
               "@id": "https://www.giselasaldarriaga.com/#website"
             },
@@ -121,8 +121,8 @@
             "@id": "https://www.giselasaldarriaga.com/#person",
             "name": "Gisela Saldarriaga",
             "url": "https://www.giselasaldarriaga.com/",
-            "jobTitle": "Creadora UGC y spokesperson",
-            "description": "Creadora UGC y portavoz para marcas que necesitan una presencia mas humana, clara y creible frente a camara.",
+            "jobTitle": "UGC creator and spokesperson",
+            "description": "UGC creator and spokesperson for brands that need a more human, polished, and believable on-camera presence.",
             "knowsLanguage": ["Spanish", "English"],
             "sameAs": [
               "https://www.fiverr.com/gisela_sm?source=gig_page",
@@ -142,7 +142,7 @@
             "name": "Gisela Saldarriaga UGC Studio",
             "url": "https://www.giselasaldarriaga.com/",
             "image": "https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg",
-            "description": "UGC, demos y videos de portavoz con una mirada cuidada y una produccion remota desde Medellin para marcas que trabajan con audiencias hispanas y globales.",
+            "description": "UGC, demos, and spokesperson videos with a polished visual point of view and remote production from Medellin for brands working across Spanish-speaking and global markets.",
             "telephone": "+57-304-378-6101",
             "availableLanguage": ["es", "en"],
             "founder": {
@@ -194,78 +194,78 @@
             ],
             "hasOfferCatalog": {
               "@type": "OfferCatalog",
-              "name": "Servicios UGC y de portavoz",
+              "name": "UGC and spokesperson services",
               "itemListElement": [
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "UGC Ads para TikTok y Meta" } },
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Videos de portavoz" } },
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Demos y how-to de producto" } },
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Testimoniales y resenas UGC" } },
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "UGC para beauty, lifestyle y tech" } },
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "B-Roll y paquetes de footage" } }
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "UGC Ads for TikTok and Meta" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Spokesperson videos" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Product demos and how-to videos" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "UGC testimonials and reviews" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "UGC for beauty, lifestyle, and tech" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "B-Roll and footage packs" } }
               ]
             }
           },
           {
             "@type": "FAQPage",
-            "@id": "https://www.giselasaldarriaga.com/#faq",
-            "url": "https://www.giselasaldarriaga.com/#faq",
-            "inLanguage": "es",
+            "@id": "https://www.giselasaldarriaga.com/en/#faq",
+            "url": "https://www.giselasaldarriaga.com/en/#faq",
+            "inLanguage": "en",
             "mainEntity": [
               {
                 "@type": "Question",
-                "name": "Que es el UGC y como puede ayudar a mi marca?",
+                "name": "What is UGC and how can it help my brand?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Son videos con una presencia mas natural y cercana, pensados para campanas publicitarias. En lugar de sentirse corporativos, ayudan a que el mensaje se vea mas creible y genere confianza."
+                  "text": "UGC helps your message feel more natural, believable, and closer to the way people actually consume video on social platforms. That tends to build more trust than a traditional corporate ad."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Que tipos de contenido UGC creas?",
+                "name": "What types of UGC content do you create?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Creo ads con hooks fuertes, videos de portavoz, resenas, demos de producto, contenido lifestyle y B-Roll. Todo en espanol, ingles o ambos, en formato vertical listo para redes."
+                  "text": "I create ads with strong hooks, spokesperson videos, reviews, product demos, lifestyle content, and B-Roll. Everything can be delivered in Spanish, English, or both."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Como funciona el proceso de trabajo?",
+                "name": "How does the work process work?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Me cuentas que necesitas, te envio la propuesta, alineamos el brief, grabo, edito y entrego. Si el proyecto requiere producto fisico, me lo envias antes. Todo se trabaja de forma remota y muy clara."
+                  "text": "You share the brief, I send a proposal, we align the creative direction, and then I shoot, edit, and deliver. If the project needs a physical product, you send it before production."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Con que marcas sueles trabajar?",
+                "name": "What kinds of brands do you usually work with?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Suelo trabajar con marcas que quieren hablarle al mercado hispano en Estados Unidos, con equipos en Espana o Latinoamerica y con proyectos que necesitan una voz cercana frente a camara. Cuando el brief lo pide, tambien trabajo en ingles."
+                  "text": "Most of my work comes from brands speaking to Spanish-speaking audiences in the US, along with teams in Spain, Europe, and Latin America. I also take on selected English-language briefs when the tone is right."
                 }
               },
               {
                 "@type": "Question",
-                "name": "Cuanto tiempo tarda la entrega del contenido?",
+                "name": "How long does content delivery take?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Normalmente entre 3 y 5 dias habiles despues de recibir el producto y confirmar el brief. Si hay una fecha limite, la definimos desde el comienzo."
+                  "text": "Typical delivery is 3 to 5 business days after the brief is confirmed and the product is received, if the project needs one."
                 }
               },
               {
                 "@type": "Question",
-                "name": "En que idiomas trabajas?",
+                "name": "What languages do you work in?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Trabajo en espanol como idioma nativo y tambien en ingles, con guion por parte de la marca cuando el proyecto lo requiere."
+                  "text": "I work in Spanish as my native language and also in English, with a brand-provided script when the project calls for it."
                 }
               }
             ]
           },
           {
             "@type": "VideoObject",
-            "@id": "https://www.giselasaldarriaga.com/#video-lifestyle-review",
-            "name": "Resena de Estilo de Vida",
-            "description": "Resena lifestyle con tono cercano y demostracion de producto pensada para TikTok, Reels y pauta.",
+            "@id": "https://www.giselasaldarriaga.com/en/#video-lifestyle-review",
+            "name": "Lifestyle Product Review",
+            "description": "A lifestyle product review with a warm, natural delivery built for TikTok, Reels, and paid social.",
             "thumbnailUrl": "https://media.giselasaldarriaga.com/videos/posters/ugc-lifestyle-review-poster.jpg",
             "contentUrl": "https://media.giselasaldarriaga.com/videos/main/ugc-lifestyle-review.mp4",
             "duration": "PT73S",
@@ -277,9 +277,9 @@
           },
           {
             "@type": "VideoObject",
-            "@id": "https://www.giselasaldarriaga.com/#video-brand-spokesperson",
-            "name": "Portavoz de Marca",
-            "description": "Pieza de portavoz orientada a comunicar beneficios y presencia de marca con una entrega clara frente a camara.",
+            "@id": "https://www.giselasaldarriaga.com/en/#video-brand-spokesperson",
+            "name": "Brand Spokesperson",
+            "description": "A spokesperson-style piece built to communicate benefits and brand presence with a clear on-camera delivery.",
             "thumbnailUrl": "https://media.giselasaldarriaga.com/videos/posters/ugc-brand-spokesperson-poster.jpg",
             "contentUrl": "https://media.giselasaldarriaga.com/videos/main/ugc-brand-spokesperson.mp4",
             "duration": "PT24S",
@@ -291,9 +291,9 @@
           },
           {
             "@type": "VideoObject",
-            "@id": "https://www.giselasaldarriaga.com/#video-creatine-review",
-            "name": "Resena de Suplemento de Creatina",
-            "description": "Review de bienestar y suplemento con enfoque testimonial, beneficios visibles y una puesta en escena cercana.",
+            "@id": "https://www.giselasaldarriaga.com/en/#video-creatine-review",
+            "name": "Creatine Supplement Review",
+            "description": "A wellness-focused testimonial review built around clear benefits, believable delivery, and a close-to-camera feel.",
             "thumbnailUrl": "https://media.giselasaldarriaga.com/videos/posters/ugc-creatine-supplement-review-poster.jpg",
             "contentUrl": "https://media.giselasaldarriaga.com/videos/main/ugc-creatine-supplement-review.mp4",
             "duration": "PT41S",
@@ -305,9 +305,9 @@
           },
           {
             "@type": "VideoObject",
-            "@id": "https://www.giselasaldarriaga.com/#video-ai-services-review",
-            "name": "Resena de Servicios IA",
-            "description": "Demo y resena para servicios de AI con explicacion directa, ritmo agil y enfoque en claridad comercial.",
+            "@id": "https://www.giselasaldarriaga.com/en/#video-ai-services-review",
+            "name": "AI Services Review",
+            "description": "A creator-led AI services demo with direct explanation, brisk pacing, and a commercial focus on clarity.",
             "thumbnailUrl": "https://media.giselasaldarriaga.com/videos/posters/ugc-ai-services-review-poster.jpg",
             "contentUrl": "https://media.giselasaldarriaga.com/videos/main/ugc-ai-services-review.mp4",
             "duration": "PT23S",
@@ -459,15 +459,15 @@
       <section class="boot-shell">
         <div class="boot-grid">
           <div>
-            <p class="boot-label">UGC, demos y piezas de portavoz</p>
+            <p class="boot-label">UGC, demos, and spokesperson work</p>
             <h1 class="boot-title">
-              UGC con presencia
-              <span class="boot-accent">y pulso editorial</span>
+              UGC with presence
+              <span class="boot-accent">and editorial polish</span>
             </h1>
             <p class="boot-signature">Gisela Saldarriaga</p>
             <p class="boot-summary">
-              Piezas de creadora, demos y videos de portavoz con una presencia natural frente a camara
-              y una idea clara, hechas desde Medellin para marcas que se mueven aqui y en otros mercados.
+              Creator-led ads, demos, and spokesperson pieces shaped to feel natural on camera and
+              clear in the message, from Medellin and around the world.
             </p>
           </div>
           <div class="boot-image-wrap">
@@ -476,7 +476,7 @@
               src="/uploads/gisela-hero-585.jpg"
               srcset="/uploads/gisela-hero-400.webp 400w, /uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-640.webp 640w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
               sizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 43vw, 76vw"
-              alt="Gisela Saldarriaga, creadora UGC y portavoz"
+              alt="Gisela Saldarriaga, UGC creator and spokesperson"
               width="585"
               height="731"
               decoding="async"
@@ -487,49 +487,49 @@
       </section>
       <noscript>
         <article style="max-width:800px;margin:0 auto;padding:24px;font-family:Inter,system-ui,sans-serif;color:#2f2a24">
-          <h2>UGC con presencia y pulso editorial</h2>
-          <p>Gisela Saldarriaga crea UGC, demos y videos de portavoz para marcas que buscan una presencia mas humana, clara y creible frente a camara. Trabaja desde Medellin con equipos en Estados Unidos, Espana, Latinoamerica y otros mercados.</p>
+          <h2>UGC with presence and editorial polish</h2>
+          <p>Gisela Saldarriaga creates UGC, demos, and spokesperson videos for brands that need a more human, polished, and believable on-camera presence. She works from Medellin with teams in the US, Spain, Latin America, and beyond.</p>
 
-          <h3>Servicios</h3>
+          <h3>Services</h3>
           <ul>
-            <li>UGC Ads para TikTok y Meta</li>
-            <li>Videos de portavoz y speaking a camara</li>
-            <li>Demos y how-to de producto</li>
-            <li>Testimoniales y resenas UGC</li>
-            <li>UGC para beauty, lifestyle y tech</li>
-            <li>B-Roll y paquetes de footage</li>
+            <li>UGC Ads for TikTok and Meta</li>
+            <li>Spokesperson and speaking-to-camera videos</li>
+            <li>Product demos and how-to videos</li>
+            <li>UGC testimonials and reviews</li>
+            <li>UGC for beauty, lifestyle, and tech brands</li>
+            <li>B-Roll and footage packs</li>
           </ul>
 
-          <h3>Trabajo destacado</h3>
+          <h3>Featured work</h3>
           <ul>
-            <li>Resena de Estilo de Vida</li>
-            <li>Portavoz de Marca</li>
-            <li>Resena de Suplemento de Creatina</li>
-            <li>Resena de Servicios IA</li>
+            <li>Lifestyle Product Review</li>
+            <li>Brand Spokesperson</li>
+            <li>Creatine Supplement Review</li>
+            <li>AI Services Review</li>
           </ul>
 
-          <h3>Preguntas frecuentes</h3>
+          <h3>Frequently asked questions</h3>
           <dl>
-            <dt>Que es el UGC y como puede ayudar a mi marca?</dt>
-            <dd>Son videos con una presencia mas natural y cercana, pensados para campanas publicitarias. En lugar de sentirse corporativos, ayudan a que el mensaje se vea mas creible y genere confianza.</dd>
+            <dt>What is UGC and how can it help my brand?</dt>
+            <dd>UGC helps your message feel more natural, believable, and closer to the way people actually consume video on social platforms. That tends to build more trust than a traditional corporate ad.</dd>
 
-            <dt>Que tipos de contenido UGC creas?</dt>
-            <dd>Creo ads con hooks fuertes, videos de portavoz, resenas, demos de producto, contenido lifestyle y B-Roll. Todo en espanol, ingles o ambos, en formato vertical listo para redes.</dd>
+            <dt>What types of content do you create?</dt>
+            <dd>I create ads with strong hooks, spokesperson videos, reviews, product demos, lifestyle content, and B-Roll. Everything can be delivered in Spanish, English, or both.</dd>
 
-            <dt>Como funciona el proceso de trabajo?</dt>
-            <dd>Me cuentas que necesitas, te envio la propuesta, alineamos el brief, grabo, edito y entrego. Si el proyecto requiere producto fisico, me lo envias antes. Todo se trabaja de forma remota y muy clara.</dd>
+            <dt>How does the process work?</dt>
+            <dd>You share the brief, I send a proposal, we align the creative direction, and then I shoot, edit, and deliver. If the project needs a physical product, you send it before production.</dd>
 
-            <dt>Con que marcas sueles trabajar?</dt>
-            <dd>Suelo trabajar con marcas que quieren hablarle al mercado hispano en Estados Unidos, con equipos en Espana o Latinoamerica y con proyectos que necesitan una voz cercana frente a camara. Cuando el brief lo pide, tambien trabajo en ingles.</dd>
+            <dt>What kinds of brands do you usually work with?</dt>
+            <dd>Most of my work comes from brands speaking to Spanish-speaking audiences in the US, along with teams in Spain, Europe, and Latin America. I also take on selected English-language briefs when the tone is right.</dd>
 
-            <dt>Cuanto tiempo tarda la entrega?</dt>
-            <dd>Normalmente entre 3 y 5 dias habiles despues de recibir el producto y confirmar el brief. Si hay una fecha limite, la definimos desde el comienzo.</dd>
+            <dt>How long does delivery take?</dt>
+            <dd>Typical delivery is 3 to 5 business days after the brief is confirmed and the product is received, if the project needs one.</dd>
 
-            <dt>En que idiomas trabajas?</dt>
-            <dd>Trabajo en espanol como idioma nativo y tambien en ingles, con guion por parte de la marca cuando el proyecto lo requiere.</dd>
+            <dt>What languages do you work in?</dt>
+            <dd>I work in Spanish as my native language and also in English, with a brand-provided script when the project calls for it.</dd>
           </dl>
 
-          <h3>Contacto</h3>
+          <h3>Contact</h3>
           <ul>
             <li>Fiverr: <a href="https://www.fiverr.com/gisela_sm?source=gig_page" rel="noopener noreferrer">fiverr.com/gisela_sm</a></li>
             <li>Instagram: <a href="https://www.instagram.com/sm_gisela/" rel="noopener noreferrer">@sm_gisela</a></li>

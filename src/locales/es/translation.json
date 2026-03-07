@@ -12,12 +12,14 @@
     "changeLanguage": "Cambiar Idioma"
   },
   "hero": {
-    "subtitle": "Creadora de UGC & Especialista en Contenido",
-    "signature": "User Generated Content",
-    "description": "Creo contenido auténtico y elegante que muestra la historia única de tu marca y conecta con tu audiencia a un nivel más profundo.",
+    "subtitle": "Portavoz, demos y piezas de creadora para marcas con personalidad",
+    "headline": "UGC con presencia",
+    "headlineAccent": "y pulso editorial",
+    "signature": "Gisela Saldarriaga",
+    "description": "Piezas de creadora, demos y videos de portavoz con una presencia natural frente a cámara y una idea clara, hechas desde Medellín para marcas que se mueven aquí y en otros mercados.",
     "buttonPortfolio": "Ver Mi Trabajo",
     "buttonContact": "Contactar",
-    "imageAlt": "Gisela Saldarriaga",
+    "imageAlt": "Gisela Saldarriaga, creadora UGC y portavoz",
     "scrollPrompt": "Explora Mis Servicios",
     "pillStrategy": "Dirección creativa",
     "pillAesthetic": "Estética premium",
@@ -28,8 +30,8 @@
     "tagline": "Editorial UGC",
     "introduction": {
       "eyebrow": "UGC Creativo",
-      "title": "Elevando marcas a través de narrativas auténticas",
-      "description": "Como especialista en contenido, cierro la brecha entre la identidad de tu marca y la conexión con el consumidor. Mi enfoque combina la estética editorial con estrategias de performance marketing para crear activos que no solo se ven bien, sino que venden."
+      "title": "Una presencia más humana para campañas que necesitan credibilidad",
+      "description": "Me gusta trabajar con marcas que quieren verse cercanas sin perder criterio visual. Combino intención comercial, performance y una estética cuidada para que cada pieza se sienta natural, útil y lista para moverse entre mercados."
     }
   },
   "services": {
@@ -124,6 +126,8 @@
     "sectionTitle": "Historias que ",
     "sectionTitleAccent": "Convierten",
     "reelDescription": "Cada reel esta pensado para captar atencion rapido, comunicar valor con claridad y elevar la intencion de compra.",
+    "featuredLabel": "Trabajo destacado",
+    "featuredDescription": "Una selección breve entre demos, piezas de portavoz y reviews recientes.",
     "reelAriaPrev": "Desplazar videos anteriores",
     "reelAriaNext": "Desplazar videos siguientes",
     "reelPreviewLabel": "Vista previa del reel",
@@ -282,8 +286,8 @@
         "answer": "Los derechos para publicaciones orgánicas vienen incluidos en todos los proyectos. Si quieres usarlo también en anuncios pagados, eso lleva una licencia aparte que cotizamos juntos."
       },
       {
-        "question": "¿Trabajas con marcas internacionales?",
-        "answer": "Sí, trabajo con marcas de muchos países de forma remota. Si tu marca necesita contenido en español, inglés o ambos, puedo ayudarte sin importar dónde estés."
+        "question": "¿Con qué marcas sueles trabajar?",
+        "answer": "Suelo encajar muy bien con marcas que quieren hablarle al mercado hispano en Estados Unidos, con equipos en España o Latinoamérica y con proyectos que necesitan una voz cercana frente a cámara. Cuando el brief lo pide, también trabajo en inglés. Todo lo produzco de forma remota desde Medellín, con un proceso claro y muy práctico."
       },
       {
         "question": "¿En qué idiomas trabajas?",

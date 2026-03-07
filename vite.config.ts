@@ -19,6 +19,10 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   build: {
     rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        en: path.resolve(__dirname, 'en/index.html'),
+      },
       output: {
         manualChunks: {
           'framer-motion': ['framer-motion'],

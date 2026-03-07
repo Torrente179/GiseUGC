@@ -224,8 +224,10 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
             {/* Name */}
             <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl xl:text-[5rem] text-foreground mt-7 mb-3">
-              <LiteSplitTextReveal text="Gisela" delay={0.3} stagger={0.09} />{' '}
-              <LiteSplitTextReveal text="Saldarriaga" delay={0.4} stagger={0.09} className="text-accent luxury-accent align-baseline" />
+              <LiteSplitTextReveal text={t('hero.headline')} delay={0.3} stagger={0.09} />
+              <span className="mt-3 block text-accent">
+                <LiteSplitTextReveal text={t('hero.headlineAccent')} delay={0.42} stagger={0.08} />
+              </span>
             </h1>
 
             {/* Signature */}

@@ -13,6 +13,7 @@ import {
 import ThemeToggle from '@/components/ThemeToggle';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { springSnappy } from '@/components/motion/variants';
+import { getCanonicalLocaleHref, getLocaleFromPath, type SiteLocale } from '@/lib/locale-path';
 
 const SCROLL_RANGE = 80; // px over which the glass effect intensifies
 
@@ -50,7 +51,7 @@ type MobileMenuSwipeState = {
 };
 
 const Navbar = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileMenuDragOffset, setMobileMenuDragOffset] = useState(0);
@@ -383,8 +384,11 @@ const Navbar = () => {
     },
   ];
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
+  const changeLanguage = (lng: SiteLocale) => {
+    const currentLocale = getLocaleFromPath(window.location.pathname);
+    if (currentLocale === lng) return;
+
+    window.location.assign(getCanonicalLocaleHref(lng, window.location.hash));
   };
 
   const languageButtonClass = (language: string) =>

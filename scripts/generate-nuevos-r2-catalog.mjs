@@ -258,6 +258,8 @@ export const NUEVOS_R2_BLOCK_REPORT: {
         sourceFilename,
         title: override?.title ?? toReadableVideoTitle(sourceFilename),
         category: override?.category ?? inferVideoCategory(sourceFilename),
+        durationSeconds: Number.parseFloat(cells[3] ?? ''),
+        language: 'es',
         assets: {
           main: toR2VideoUrl('main', sourceFilename),
           mobile: toR2VideoUrl('mobile', `${baseName}-mobile.mp4`),
@@ -321,6 +323,8 @@ export const NUEVOS_R2_BLOCK_REPORT: {
         mobileSrc: candidate.assets.mobile,
         previewSrc: candidate.assets.preview,
         posterSrc: candidate.assets.poster,
+        durationSeconds: Number.isFinite(candidate.durationSeconds) ? candidate.durationSeconds : undefined,
+        language: candidate.language,
       });
     }
   });
@@ -347,6 +351,8 @@ export const NUEVOS_R2_BLOCK_REPORT: {
     mobileSrc: '${escapeSingleQuotes(clip.mobileSrc)}',
     previewSrc: '${escapeSingleQuotes(clip.previewSrc)}',
     posterSrc: '${escapeSingleQuotes(clip.posterSrc)}',
+    durationSeconds: ${clip.durationSeconds ?? 'undefined'},
+    language: '${clip.language}',
   },`,
     )
     .join('\n');

@@ -1,3 +1,5 @@
+export type ReelClipLocale = 'es' | 'en';
+
 export interface ReelClip {
   id: number;
   titleKey?: string;
@@ -7,6 +9,10 @@ export interface ReelClip {
   mobileSrc: string;
   previewSrc: string;
   posterSrc: string;
+  language?: ReelClipLocale;
+  durationSeconds?: number;
+  publishedAt?: string;
+  schemaDescription?: Partial<Record<ReelClipLocale, string>>;
 }
 
 export const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
@@ -21,6 +27,8 @@ export const r2PreviewVideo = (filename: string) =>
 
 export const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
 
+export const FEATURED_REEL_CLIP_IDS = [1, 2, 4, 7] as const;
+
 export const LEGACY_REEL_CLIPS: ReelClip[] = [
   {
     id: 1,
@@ -30,6 +38,12 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     mobileSrc: r2MobileVideo('ugc-lifestyle-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-lifestyle-review.mp4'),
     posterSrc: r2Poster('ugc-lifestyle-review-poster.jpg'),
+    language: 'es',
+    durationSeconds: 72.93,
+    schemaDescription: {
+      es: 'Reseña lifestyle con tono cercano y demostración de producto pensada para TikTok, Reels y pauta.',
+      en: 'A lifestyle product review with a warm, natural delivery built for TikTok, Reels, and paid social.',
+    },
   },
   {
     id: 2,
@@ -39,6 +53,12 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     mobileSrc: r2MobileVideo('ugc-brand-spokesperson.mp4'),
     previewSrc: r2PreviewVideo('ugc-brand-spokesperson.mp4'),
     posterSrc: r2Poster('ugc-brand-spokesperson-poster.jpg'),
+    language: 'es',
+    durationSeconds: 23.5,
+    schemaDescription: {
+      es: 'Pieza de portavoz orientada a comunicar beneficios y presencia de marca con una entrega clara frente a cámara.',
+      en: 'A spokesperson-style piece built to communicate benefits and brand presence with a clear on-camera delivery.',
+    },
   },
   {
     id: 3,
@@ -48,6 +68,8 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     mobileSrc: r2MobileVideo('ugc-voicebot-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-voicebot-review.mp4'),
     posterSrc: r2Poster('ugc-voicebot-review-poster.jpg'),
+    language: 'es',
+    durationSeconds: 59.09,
   },
   {
     id: 4,
@@ -57,6 +79,12 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     mobileSrc: r2MobileVideo('ugc-creatine-supplement-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-creatine-supplement-review.mp4'),
     posterSrc: r2Poster('ugc-creatine-supplement-review-poster.jpg'),
+    language: 'es',
+    durationSeconds: 41.45,
+    schemaDescription: {
+      es: 'Review de bienestar y suplemento con enfoque testimonial, beneficios visibles y una puesta en escena cercana.',
+      en: 'A wellness-focused testimonial review built around clear benefits, believable delivery, and a close-to-camera feel.',
+    },
   },
   {
     id: 5,
@@ -66,6 +94,8 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     mobileSrc: r2MobileVideo('ugc-business-promotion.mp4'),
     previewSrc: r2PreviewVideo('ugc-business-promotion.mp4'),
     posterSrc: r2Poster('ugc-business-promotion-poster.jpg'),
+    language: 'es',
+    durationSeconds: 42.24,
   },
   {
     id: 6,
@@ -75,6 +105,8 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     mobileSrc: r2MobileVideo('ugc-services-presentation.mp4'),
     previewSrc: r2PreviewVideo('ugc-services-presentation.mp4'),
     posterSrc: r2Poster('ugc-services-presentation-poster.jpg'),
+    language: 'es',
+    durationSeconds: 38.85,
   },
   {
     id: 7,
@@ -84,6 +116,12 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     mobileSrc: r2MobileVideo('ugc-ai-services-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-ai-services-review.mp4'),
     posterSrc: r2Poster('ugc-ai-services-review-poster.jpg'),
+    language: 'es',
+    durationSeconds: 23.06,
+    schemaDescription: {
+      es: 'Demo y reseña para servicios de AI con explicación directa, ritmo ágil y enfoque en claridad comercial.',
+      en: 'A creator-led AI services demo with direct explanation, brisk pacing, and a commercial focus on clarity.',
+    },
   },
   {
     id: 8,
@@ -93,6 +131,8 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     mobileSrc: r2MobileVideo('ugc-lifestyle-review-2.mp4'),
     previewSrc: r2PreviewVideo('ugc-lifestyle-review-2.mp4'),
     posterSrc: r2Poster('ugc-lifestyle-review-2-poster.jpg'),
+    language: 'es',
+    durationSeconds: 40.05,
   },
   {
     id: 9,
@@ -102,6 +142,8 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     mobileSrc: r2MobileVideo('ugc-voiceover-bots-review.mp4'),
     previewSrc: r2PreviewVideo('ugc-voiceover-bots-review.mp4'),
     posterSrc: r2Poster('ugc-voiceover-bots-review-poster.jpg'),
+    language: 'es',
+    durationSeconds: 27.61,
   },
   {
     id: 10,
@@ -111,5 +153,7 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     mobileSrc: r2MobileVideo('ugc-lifestyle-review-3.mp4'),
     previewSrc: r2PreviewVideo('ugc-lifestyle-review-3.mp4'),
     posterSrc: r2Poster('ugc-lifestyle-review-3-poster.jpg'),
+    language: 'es',
+    durationSeconds: 7.38,
   },
 ];
