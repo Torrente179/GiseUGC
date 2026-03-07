@@ -947,8 +947,22 @@ const Portfolio = () => {
 
   const handleCollageMouseLeave = useCallback(() => {
     setCollageHovered(false);
-    pauseCollageVideos();
-  }, [pauseCollageVideos]);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile || connectionProfile.constrained || !isPortfolioNearViewport) {
+      pauseCollageVideos();
+      return;
+    }
+
+    playCollageVideos();
+  }, [
+    connectionProfile.constrained,
+    isMobile,
+    isPortfolioNearViewport,
+    pauseCollageVideos,
+    playCollageVideos,
+  ]);
 
   useEffect(() => {
     const section = portfolioSectionRef.current;
@@ -1412,9 +1426,12 @@ const Portfolio = () => {
                   poster={clip.posterSrc}
                   lqip={getLqip(clip.previewSrc)}
                   muted
+                  autoPlay={!isMobile}
                   loop
                   playsInline
-                  preload="none"
+                  preload={connectionProfile.slow ? 'metadata' : 'auto'}
+                  loadWhenVisible={isMobile || connectionProfile.constrained}
+                  pauseOffscreen={!isMobile}
                   aria-label={t(clip.labelKey)}
                 />
 
