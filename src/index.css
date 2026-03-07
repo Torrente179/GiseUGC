@@ -842,6 +842,15 @@
     animation: skeleton-shimmer 1.8s ease-in-out infinite;
   }
 
+  /* ─── Navbar: hide on mobile when theater (video preview) is open ─── */
+  @media (max-width: 767px) {
+    html[data-theater="open"] nav[class*="z-[110]"] {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease-out;
+    }
+  }
+
   /* ─── Nav Link Animated Underline ─── */
   .nav-link-underline {
     position: relative;

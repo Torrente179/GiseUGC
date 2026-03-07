@@ -765,8 +765,10 @@ const Portfolio = () => {
     document.body.style.overscrollBehavior = 'none';
     htmlElement.style.overflow = 'hidden';
     htmlElement.style.overscrollBehavior = 'none';
+    htmlElement.dataset.theater = 'open';
 
     return () => {
+      delete htmlElement.dataset.theater;
       document.body.style.position = previousStyles.position;
       document.body.style.top = previousStyles.top;
       document.body.style.left = previousStyles.left;
