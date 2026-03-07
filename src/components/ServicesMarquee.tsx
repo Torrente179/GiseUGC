@@ -51,9 +51,12 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
     const trackRef = useRef<HTMLDivElement>(null);
     const isPausedRef = useRef(false);
     const isDraggingRef = useRef(false);
-    const offsetRef = useRef(0);
+    const targetOffsetRef = useRef(0);
+    const renderedOffsetRef = useRef(0);
+    const releaseVelocityRef = useRef(0);
     const setWidthRef = useRef(0);
     const dragStartRef = useRef({ x: 0, y: 0, offset: 0 });
+    const lastDragSampleRef = useRef({ x: 0, timestamp: 0 });
     const hasDraggedRef = useRef(false);
     const touchAxisRef = useRef<'pending' | 'horizontal' | 'vertical'>('pending');
     const isTouchTrackingRef = useRef(false);
@@ -199,6 +202,9 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
     // Sync pause state with expanded card
     useEffect(() => {
         isPausedRef.current = expandedCard !== null;
+        if (expandedCard !== null) {
+            releaseVelocityRef.current = 0;
+        }
     }, [expandedCard]);
 
     // Click outside cards to dismiss expanded card and resume scrolling
@@ -248,8 +254,26 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             return normalized < 0 ? normalized + setWidth : normalized;
         };
 
+        const stabilizeOffset = (offset: number, setWidth: number) => {
+            if (setWidth <= 0) return 0;
+
+            let nextOffset = offset;
+            while (nextOffset >= setWidth * 2) {
+                nextOffset -= setWidth;
+            }
+            while (nextOffset < 0) {
+                nextOffset += setWidth;
+            }
+
+            return nextOffset;
+        };
+
+        const syncTrackTransform = (offset: number) => {
+            track.style.transform = `translate3d(-${offset}px, 0, 0)`;
+        };
+
         // Measure one set width. On resize, preserve relative position instead of hard-resetting.
-        const measure = (preserveOffset = true) => {
+        const measureTrack = (preserveOffset = true) => {
             const nextSetWidth = track.scrollWidth / 3;
             if (!Number.isFinite(nextSetWidth) || nextSetWidth <= 0) return;
 
@@ -257,15 +281,19 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             const shouldInitialize = !preserveOffset || previousSetWidth <= 0;
 
             if (shouldInitialize) {
-                offsetRef.current = nextSetWidth;
+                targetOffsetRef.current = nextSetWidth;
+                renderedOffsetRef.current = nextSetWidth;
             } else {
-                const previousNormalized = normalizeOffsetWithinSet(offsetRef.current, previousSetWidth);
+                const previousNormalized = normalizeOffsetWithinSet(targetOffsetRef.current, previousSetWidth);
                 const progress = previousSetWidth > 0 ? previousNormalized / previousSetWidth : 0;
-                offsetRef.current = nextSetWidth + progress * nextSetWidth;
+                const nextOffset = nextSetWidth + progress * nextSetWidth;
+                targetOffsetRef.current = nextOffset;
+                renderedOffsetRef.current = nextOffset;
             }
 
+            releaseVelocityRef.current = 0;
             setWidthRef.current = nextSetWidth;
-            track.style.transform = `translateX(-${offsetRef.current}px)`;
+            syncTrackTransform(renderedOffsetRef.current);
         };
 
         let resizeRafId: number | null = null;
@@ -278,12 +306,12 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                 viewportWidthRef.current = nextViewportWidth;
                 updateViewportMode();
                 if (!viewportWidthChanged) return;
-                measure(true);
+                measureTrack(true);
             });
         };
 
         const initTimeout = setTimeout(() => {
-            measure(false);
+            measureTrack(false);
         }, 50);
         window.addEventListener('resize', handleResize);
         document.addEventListener('visibilitychange', syncDocumentVisibility);
@@ -328,34 +356,80 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                 const autoScrollSpeed = isMobileViewportRef.current
                     ? AUTO_SCROLL_SPEED_MOBILE_PX_PER_SECOND
                     : AUTO_SCROLL_SPEED_DESKTOP_PX_PER_SECOND;
-                offsetRef.current += autoScrollSpeed * (deltaMs / 1000);
+                targetOffsetRef.current += autoScrollSpeed * (deltaMs / 1000);
             }
 
-            // Wrap boundaries — runs every frame regardless
-            if (offsetRef.current >= sw * 2) {
-                offsetRef.current -= sw;
-            } else if (offsetRef.current <= 0) {
-                offsetRef.current += sw;
+            if (!isDraggingRef.current && Math.abs(releaseVelocityRef.current) > 8) {
+                targetOffsetRef.current += releaseVelocityRef.current * (deltaMs / 1000);
+                const decay = Math.pow(0.88, deltaMs / 16.67);
+                releaseVelocityRef.current *= decay;
+                if (Math.abs(releaseVelocityRef.current) < 8) {
+                    releaseVelocityRef.current = 0;
+                }
             }
 
-            track.style.transform = `translateX(-${offsetRef.current}px)`;
+            targetOffsetRef.current = stabilizeOffset(targetOffsetRef.current, sw);
+            renderedOffsetRef.current = stabilizeOffset(renderedOffsetRef.current, sw);
+
+            const rawDelta = targetOffsetRef.current - renderedOffsetRef.current;
+            const wrappedDelta =
+                rawDelta > sw / 2
+                    ? rawDelta - sw
+                    : rawDelta < -sw / 2
+                        ? rawDelta + sw
+                        : rawDelta;
+            const followStrength = isDraggingRef.current ? 1 : 1 - Math.exp(-deltaMs / 72);
+
+            renderedOffsetRef.current = stabilizeOffset(
+                renderedOffsetRef.current + wrappedDelta * followStrength,
+                sw,
+            );
+
+            if (Math.abs(wrappedDelta) < 0.1) {
+                renderedOffsetRef.current = stabilizeOffset(targetOffsetRef.current, sw);
+            }
+
+            syncTrackTransform(renderedOffsetRef.current);
             syncAnimationLoop();
+        };
+
+        const sampleReleaseVelocity = (clientX: number, multiplier = 1) => {
+            const now = performance.now();
+            const elapsed = Math.max(1, now - lastDragSampleRef.current.timestamp);
+            const deltaX = clientX - lastDragSampleRef.current.x;
+            const nextVelocity = (-deltaX * multiplier / elapsed) * 1000;
+
+            releaseVelocityRef.current = Math.max(-560, Math.min(560, nextVelocity));
+            lastDragSampleRef.current = { x: clientX, timestamp: now };
+        };
+
+        const settleInteraction = () => {
+            isDraggingRef.current = false;
+            if (Math.abs(releaseVelocityRef.current) < 24) {
+                releaseVelocityRef.current = 0;
+            }
         };
 
         // Mouse drag
         const handleMouseDown = (e: MouseEvent) => {
             isDraggingRef.current = true;
             hasDraggedRef.current = false;
-            dragStartRef.current = { x: e.clientX, y: 0, offset: offsetRef.current };
+            releaseVelocityRef.current = 0;
+            dragStartRef.current = { x: e.clientX, y: 0, offset: targetOffsetRef.current };
+            lastDragSampleRef.current = { x: e.clientX, timestamp: performance.now() };
+            syncAnimationLoop();
         };
         const handleMouseMove = (e: MouseEvent) => {
             if (!isDraggingRef.current) return;
             const dx = dragStartRef.current.x - e.clientX;
             if (Math.abs(dx) > 5) hasDraggedRef.current = true;
-            offsetRef.current = dragStartRef.current.offset + dx;
+            sampleReleaseVelocity(e.clientX);
+            targetOffsetRef.current = dragStartRef.current.offset + dx;
+            renderedOffsetRef.current = targetOffsetRef.current;
+            syncTrackTransform(renderedOffsetRef.current);
         };
         const handleMouseUp = () => {
-            isDraggingRef.current = false;
+            settleInteraction();
         };
 
         // Touch drag
@@ -371,7 +445,10 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             isDraggingRef.current = false;
             hasDraggedRef.current = false;
             touchAxisRef.current = 'pending';
-            dragStartRef.current = { x: touch.clientX, y: touch.clientY, offset: offsetRef.current };
+            releaseVelocityRef.current = 0;
+            dragStartRef.current = { x: touch.clientX, y: touch.clientY, offset: targetOffsetRef.current };
+            lastDragSampleRef.current = { x: touch.clientX, timestamp: performance.now() };
+            syncAnimationLoop();
         };
         const handleTouchMove = (e: TouchEvent) => {
             if (!isTouchTrackingRef.current) return;
@@ -403,6 +480,7 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
                 isTouchTrackingRef.current = false;
                 isDraggingRef.current = false;
                 hasDraggedRef.current = true;
+                releaseVelocityRef.current = 0;
                 return;
             }
 
@@ -414,7 +492,10 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             const dragMultiplier = isMobileViewportRef.current ? MOBILE_TOUCH_DRAG_MULTIPLIER : 1;
             const dragDelta = dx * dragMultiplier;
             if (Math.abs(dragDelta) > 5) hasDraggedRef.current = true;
-            offsetRef.current = dragStartRef.current.offset + dragDelta;
+            sampleReleaseVelocity(touch.clientX, dragMultiplier);
+            targetOffsetRef.current = dragStartRef.current.offset + dragDelta;
+            renderedOffsetRef.current = targetOffsetRef.current;
+            syncTrackTransform(renderedOffsetRef.current);
         };
         const handleTouchEnd = () => {
             const sessionId = activeTouchSessionRef.current;
@@ -426,7 +507,7 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             }
             activeTouchSessionRef.current = null;
             isTouchTrackingRef.current = false;
-            isDraggingRef.current = false;
+            settleInteraction();
             touchAxisRef.current = 'pending';
         };
 
@@ -473,7 +554,8 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
     }, []);
 
     const scroll = (direction: 'left' | 'right') => {
-        offsetRef.current += direction === 'left' ? -300 : 300;
+        releaseVelocityRef.current = 0;
+        targetOffsetRef.current += direction === 'left' ? -280 : 280;
     };
 
     return (

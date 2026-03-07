@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { getLenis } from '@/lib/smooth-scroll';
 
+let activeScrollFrameId: number | null = null;
+
 const stripHashFromUrl = () => {
   if (!window.location.hash) {
     return;
@@ -13,6 +15,12 @@ const stripHashFromUrl = () => {
 
 export const clearUrlHash = () => {
   stripHashFromUrl();
+};
+
+const cancelActiveScroll = () => {
+  if (activeScrollFrameId === null) return;
+  cancelAnimationFrame(activeScrollFrameId);
+  activeScrollFrameId = null;
 };
 
 /**
@@ -30,41 +38,49 @@ const premiumEaseScroll = (t: number): number => {
  * Smooth scroll using Lenis when available (desktop), with JS-powered fallback.
  */
 const smoothScrollTo = (targetElement: HTMLElement, duration = 900) => {
-  // Use Lenis when available — physics-based, interruptible scrolling
-  const lenis = getLenis();
-  if (lenis) {
-    lenis.scrollTo(targetElement, { duration: 0.9, offset: 0 });
-    return;
-  }
-
-  // Fallback: JS-powered smooth scroll with custom easing
   const targetY = targetElement.getBoundingClientRect().top + window.scrollY;
   const startY = window.scrollY;
   const distance = targetY - startY;
+  const absoluteDistance = Math.abs(distance);
 
-  if (Math.abs(distance) < 1) return;
+  if (absoluteDistance < 1) return;
+
+  // Use Lenis when available — physics-based, interruptible scrolling
+  const lenis = getLenis();
+  if (lenis) {
+    lenis.scrollTo(targetElement, {
+      duration: Math.min(1.05, Math.max(0.72, absoluteDistance / 2200)),
+      offset: 0,
+    });
+    return;
+  }
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     window.scrollTo(0, targetY);
     return;
   }
 
+  cancelActiveScroll();
+  const resolvedDuration = Math.min(1080, Math.max(700, Math.max(duration, absoluteDistance * 0.42)));
   let startTime: number | null = null;
 
   const step = (timestamp: number) => {
     if (startTime === null) startTime = timestamp;
     const elapsed = timestamp - startTime;
-    const progress = Math.min(elapsed / duration, 1);
+    const progress = Math.min(elapsed / resolvedDuration, 1);
     const eased = premiumEaseScroll(progress);
 
     window.scrollTo(0, startY + distance * eased);
 
     if (progress < 1) {
-      requestAnimationFrame(step);
+      activeScrollFrameId = requestAnimationFrame(step);
+      return;
     }
+
+    activeScrollFrameId = null;
   };
 
-  requestAnimationFrame(step);
+  activeScrollFrameId = requestAnimationFrame(step);
 };
 
 export const useHashlessSectionNavigation = () => {

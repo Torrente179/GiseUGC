@@ -30,25 +30,25 @@ export const DURATION_SLOW = 0.9;
 /** Smooth spring — universal for hover/entrance (feels organic, not bouncy) */
 export const springSmooth: Transition = {
   type: 'spring',
-  stiffness: 200,
-  damping: 26,
-  mass: 0.8,
+  stiffness: 184,
+  damping: 24,
+  mass: 0.9,
 };
 
 /** Snappy spring — taps, clicks, quick feedback */
 export const springSnappy: Transition = {
   type: 'spring',
-  stiffness: 380,
-  damping: 30,
-  mass: 0.6,
+  stiffness: 312,
+  damping: 27,
+  mass: 0.7,
 };
 
 /** Existing hover spring (well-tuned, keep) */
 export const springHoverTransition: Transition = {
   type: 'spring',
-  stiffness: 290,
-  damping: 20,
-  mass: 0.72,
+  stiffness: 252,
+  damping: 22,
+  mass: 0.78,
 };
 
 /* ─── Variant Generators ─── */
@@ -113,30 +113,32 @@ export const revealFromRight = (distance = 30, duration = DURATION_MEDIUM, delay
 });
 
 /** Blur-in: filter-blur + opacity (premium content reveal — the Apple signature) */
-export const blurIn = (duration = 0.7, delay = 0): Variants => ({
+export const blurIn = (duration = 0.66, delay = 0): Variants => ({
   hidden: {
     opacity: 0,
-    filter: 'blur(8px)',
+    filter: 'blur(5px)',
   },
   visible: {
     opacity: 1,
     filter: 'blur(0px)',
     transition: { duration, delay, ease: easeOutExpo },
+    transitionEnd: { filter: 'none' },
   },
 });
 
 /** Blur-reveal-up: combines translate-Y + blur + opacity for premium section entrances */
-export const blurRevealUp = (distance = 20, duration = 0.7, delay = 0): Variants => ({
+export const blurRevealUp = (distance = 18, duration = 0.66, delay = 0): Variants => ({
   hidden: {
     opacity: 0,
     y: distance,
-    filter: 'blur(6px)',
+    filter: 'blur(4px)',
   },
   visible: {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
     transition: { duration, delay, ease: easeOutExpo },
+    transitionEnd: { filter: 'none' },
   },
 });
 

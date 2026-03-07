@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { premiumEase } from '@/components/motion/variants';
+import { easeOutExpo } from '@/components/motion/variants';
 
 interface SplitTextRevealProps {
   text: string;
@@ -50,17 +50,18 @@ const SplitTextReveal = ({
         <span key={`${word}-${index}`} className="inline-block overflow-hidden align-bottom">
           <motion.span
             className={cn('inline-block', wordClassName)}
+            style={{ willChange: 'transform, opacity' }}
             variants={{
               hidden: {
-                y: '112%',
+                y: '108%',
                 opacity: 0,
               },
               visible: {
                 y: '0%',
                 opacity: 1,
                 transition: {
-                  duration: 0.72,
-                  ease: premiumEase,
+                  duration: 0.68,
+                  ease: easeOutExpo,
                 },
               },
             }}

@@ -31,12 +31,13 @@ const heroContainerVariants = {
 };
 
 const heroItemVariants = {
-  hidden: { opacity: 0, y: 18, filter: 'blur(6px)' },
+  hidden: { opacity: 0, y: 18, filter: 'blur(4px)' },
   visible: {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    transition: { duration: 0.7, ease: easeOutExpo },
+    transition: { duration: 0.68, ease: easeOutExpo },
+    transitionEnd: { filter: 'none' },
   },
 };
 
@@ -107,6 +108,8 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     let sectionHeight = 1;
     let viewportHeight = window.innerHeight;
     let frameId: number | null = null;
+    let targetProgress = 0;
+    let currentProgress = 0;
 
     const measure = () => {
       const rect = section.getBoundingClientRect();
@@ -115,12 +118,14 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       viewportHeight = window.innerHeight;
     };
 
-    const updateParallax = () => {
-      frameId = null;
+    const getScrollProgress = () => {
       const start = sectionTop - viewportHeight;
       const end = sectionTop + sectionHeight;
-      const progress = Math.max(0, Math.min(1, (window.scrollY - start) / (end - start)));
+      const travelDistance = Math.max(1, end - start);
+      return Math.max(0, Math.min(1, (window.scrollY - start) / travelDistance));
+    };
 
+    const renderParallax = (progress: number) => {
       const imageY = 46 - 92 * progress;
       const imageRotate = -1.4 + 2.8 * progress;
       const cardY = 22 - 48 * progress;
@@ -131,9 +136,24 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       cornerTag.style.transform = `translate3d(0, ${tagY.toFixed(2)}px, 0)`;
     };
 
+    const animateParallax = () => {
+      frameId = null;
+      currentProgress += (targetProgress - currentProgress) * 0.16;
+      if (Math.abs(targetProgress - currentProgress) < 0.0015) {
+        currentProgress = targetProgress;
+      }
+
+      renderParallax(currentProgress);
+
+      if (Math.abs(targetProgress - currentProgress) > 0.0015) {
+        frameId = window.requestAnimationFrame(animateParallax);
+      }
+    };
+
     const queueParallaxUpdate = () => {
+      targetProgress = getScrollProgress();
       if (frameId !== null) return;
-      frameId = window.requestAnimationFrame(updateParallax);
+      frameId = window.requestAnimationFrame(animateParallax);
     };
 
     // Promote layers to GPU only while parallax is active
@@ -142,7 +162,9 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     cornerTag.style.willChange = 'transform';
 
     measure();
-    queueParallaxUpdate();
+    targetProgress = getScrollProgress();
+    currentProgress = targetProgress;
+    renderParallax(currentProgress);
 
     const handleResize = () => {
       measure();

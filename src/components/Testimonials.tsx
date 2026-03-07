@@ -270,9 +270,9 @@ const Testimonials = () => {
           transition={{ duration: 0.68 }}
         >
           <motion.div
-            className="flex"
+            className="flex will-change-transform"
             animate={{ x: `-${activeIndex * 100}%` }}
-            transition={{ type: 'spring', stiffness: 220, damping: 28, mass: 0.9 }}
+            transition={{ type: 'spring', stiffness: 188, damping: 24, mass: 0.95 }}
           >
             {TESTIMONIAL_IMAGES.map((testimonial, index) => (
               <article key={testimonial.id} className="min-w-full">

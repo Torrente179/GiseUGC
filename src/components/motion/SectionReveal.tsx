@@ -34,8 +34,9 @@ const getDirectionalVariants = (
   duration: number,
   blur: boolean,
 ) => {
-  const blurHidden = blur ? { filter: 'blur(6px)' } : {};
+  const blurHidden = blur ? { filter: 'blur(4px)' } : {};
   const blurVisible = blur ? { filter: 'blur(0px)' } : {};
+  const transitionEnd = blur ? { filter: 'none' } : {};
 
   const baseHidden: Record<string, unknown> = { opacity: 0, ...blurHidden };
   const baseVisible: Record<string, unknown> = { opacity: 1, ...blurVisible };
@@ -48,6 +49,7 @@ const getDirectionalVariants = (
           ...baseVisible,
           y: 0,
           transition: { duration, ease: easeOutExpo },
+          transitionEnd,
         },
       };
     case 'left':
@@ -57,6 +59,7 @@ const getDirectionalVariants = (
           ...baseVisible,
           x: 0,
           transition: { duration, ease: easeOutExpo },
+          transitionEnd,
         },
       };
     case 'right':
@@ -66,6 +69,7 @@ const getDirectionalVariants = (
           ...baseVisible,
           x: 0,
           transition: { duration, ease: easeOutExpo },
+          transitionEnd,
         },
       };
     case 'scale':
@@ -75,6 +79,7 @@ const getDirectionalVariants = (
           ...baseVisible,
           scale: 1,
           transition: { duration, ease: easeOutExpo },
+          transitionEnd,
         },
       };
   }

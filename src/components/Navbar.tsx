@@ -64,6 +64,7 @@ const Navbar = () => {
   const navRef = useRef<HTMLElement | null>(null);
   const navShellRef = useRef<HTMLDivElement | null>(null);
   const scrollProgressRef = useRef(0);
+  const targetScrollProgressRef = useRef(0);
 
   useEffect(() => {
     const applyScrollProgressStyles = (p: number) => {
@@ -83,22 +84,33 @@ const Navbar = () => {
           : 'none';
     };
 
-    const updateScrollProgress = () => {
+    const animateScrollProgress = () => {
       scrollRafRef.current = null;
-      const p = Math.min(1, Math.max(0, window.scrollY / SCROLL_RANGE));
-      if (Math.abs(scrollProgressRef.current - p) < 0.01) return;
-      scrollProgressRef.current = p;
-      applyScrollProgressStyles(p);
+      const current = scrollProgressRef.current;
+      const target = targetScrollProgressRef.current;
+      const next = current + (target - current) * 0.18;
+      const resolved = Math.abs(target - next) < 0.008 ? target : next;
+
+      scrollProgressRef.current = resolved;
+      applyScrollProgressStyles(resolved);
+
+      if (Math.abs(target - resolved) >= 0.008) {
+        scrollRafRef.current = requestAnimationFrame(animateScrollProgress);
+      }
     };
-    const handleScroll = () => {
+
+    const queueScrollProgress = () => {
+      targetScrollProgressRef.current = Math.min(1, Math.max(0, window.scrollY / SCROLL_RANGE));
       if (scrollRafRef.current !== null) return;
-      scrollRafRef.current = requestAnimationFrame(updateScrollProgress);
+      scrollRafRef.current = requestAnimationFrame(animateScrollProgress);
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    window.addEventListener('scroll', queueScrollProgress, { passive: true });
     applyScrollProgressStyles(scrollProgressRef.current);
-    updateScrollProgress();
+    queueScrollProgress();
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', queueScrollProgress);
       if (scrollRafRef.current !== null) cancelAnimationFrame(scrollRafRef.current);
     };
   }, []);
