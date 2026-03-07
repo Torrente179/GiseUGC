@@ -842,8 +842,8 @@
     animation: skeleton-shimmer 1.8s ease-in-out infinite;
   }
 
-  /* ─── Navbar: hide on mobile when theater (video preview) is open ─── */
-  @media (max-width: 767px) {
+  /* ─── Navbar: hide on desktop when theater (video preview) is open ─── */
+  @media (min-width: 768px) {
     html[data-theater="open"] nav[class*="z-[110]"] {
       opacity: 0;
       pointer-events: none;
