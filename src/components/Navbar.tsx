@@ -503,7 +503,7 @@ const Navbar = () => {
 
       <motion.nav
         ref={navRef}
-        className="fixed top-0 left-0 w-full z-[110]"
+        className="site-navbar fixed top-0 left-0 w-full z-[110]"
         style={{ padding: '20px 0' }}
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -512,7 +512,7 @@ const Navbar = () => {
         <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
           <div
             ref={navShellRef}
-            className="flex items-center justify-between rounded-[1.15rem] px-4 md:px-6 transition-[box-shadow] duration-300"
+            className="navbar-shell flex items-center justify-between rounded-[1.15rem] px-4 md:px-6 transition-[box-shadow] duration-300"
             style={{
               padding: '12px 16px',
               backgroundColor: 'hsl(var(--card) / 0.45)',
@@ -526,7 +526,7 @@ const Navbar = () => {
           >
             <a
               href="#home"
-              className="brand-logo text-xl md:text-2xl text-accent"
+              className="navbar-brand brand-logo text-xl md:text-2xl text-accent"
               onClick={(event) => handleHashLinkClick(event, closeMobileMenu)}
             >
               Gisela<span className="text-foreground font-medium">.UGC</span>
@@ -546,17 +546,17 @@ const Navbar = () => {
             </div>
 
             <div className="hidden md:flex items-center gap-2.5">
-              <div className="flex items-center gap-1 rounded-full border border-border bg-card px-1 py-1">
+              <div className="navbar-language-switch flex items-center gap-1 rounded-full border border-border bg-card px-1 py-1">
                 <button
                   onClick={() => changeLanguage('es')}
-                  className={languageButtonClass('es')}
+                  className={`${languageButtonClass('es')} navbar-language-button`}
                   aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
                 >
                   ES
                 </button>
                 <button
                   onClick={() => changeLanguage('en')}
-                  className={languageButtonClass('en')}
+                  className={`${languageButtonClass('en')} navbar-language-button`}
                   aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
                 >
                   EN
@@ -575,18 +575,18 @@ const Navbar = () => {
               </motion.a>
             </div>
 
-            <div className="md:hidden flex items-center gap-2">
-              <div className="flex items-center gap-1 rounded-full border border-border bg-card px-1 py-1">
+            <div className="navbar-mobile-controls md:hidden flex items-center gap-2">
+              <div className="navbar-language-switch flex items-center gap-1 rounded-full border border-border bg-card px-1 py-1">
                 <button
                   onClick={() => changeLanguage('es')}
-                  className={languageButtonClass('es')}
+                  className={`${languageButtonClass('es')} navbar-language-button`}
                   aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
                 >
                   ES
                 </button>
                 <button
                   onClick={() => changeLanguage('en')}
-                  className={languageButtonClass('en')}
+                  className={`${languageButtonClass('en')} navbar-language-button`}
                   aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
                 >
                   EN
@@ -596,7 +596,7 @@ const Navbar = () => {
               <button
                 onPointerDown={handleMobileMenuButtonPointerDown}
                 onClick={handleMobileMenuButtonClick}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:text-primary"
+                className="navbar-mobile-menu-button inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:text-primary"
                 aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
                 aria-expanded={mobileMenuOpen}
               >

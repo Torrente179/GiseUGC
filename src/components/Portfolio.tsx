@@ -1501,7 +1501,7 @@ const Portfolio = () => {
 
       {activeReelPreview && (
         <div
-          className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4"
+          className="fixed inset-0 z-[200] flex items-start justify-center px-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] pt-[calc(env(safe-area-inset-top,0px)+5.15rem)] sm:items-center sm:p-4 sm:pt-4"
           onClick={() => dismissReelPreview()}
         >
           <div
@@ -1522,7 +1522,7 @@ const Portfolio = () => {
             }}
           />
           <div
-            className="relative w-full max-w-[430px]"
+            className="relative w-full max-w-[390px] sm:max-w-[430px]"
             onTouchStart={handleTheaterTouchStart}
             onTouchMove={handleTheaterTouchMove}
             onTouchEnd={handleTheaterTouchEnd}

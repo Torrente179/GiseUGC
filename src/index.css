@@ -849,12 +849,71 @@
     animation: skeleton-shimmer 1.8s ease-in-out infinite;
   }
 
-  /* ─── Navbar: hide on desktop when theater (video preview) is open ─── */
-  @media (min-width: 768px) {
-    html[data-theater="open"] nav[class*="z-[110]"] {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 200ms ease-out;
+  /* ─── Navbar: keep available during theater mode ─── */
+  html[data-theater="open"] .site-navbar {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 240 !important;
+  }
+
+  html[data-theater="open"] .navbar-shell {
+    background-color: hsl(var(--card) / 0.68) !important;
+    border-color: hsl(var(--border) / 0.34) !important;
+    box-shadow: 0 18px 40px -30px hsl(var(--foreground) / 0.52) !important;
+  }
+
+  @media (max-width: 767px) {
+    html[data-theater="open"] .site-navbar {
+      padding: calc(env(safe-area-inset-top, 0px) + 8px) 0 0 !important;
+    }
+
+    html[data-theater="open"] .site-navbar > .container {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    html[data-theater="open"] .navbar-shell {
+      padding: 8px 10px !important;
+      border-radius: 1rem;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+    }
+
+    html[data-theater="open"] .navbar-brand {
+      font-size: 1.1rem;
+    }
+
+    html[data-theater="open"] .navbar-mobile-controls {
+      gap: 0.4rem;
+    }
+
+    html[data-theater="open"] .navbar-language-switch {
+      gap: 0.1rem;
+      padding: 0.18rem;
+    }
+
+    html[data-theater="open"] .navbar-language-button {
+      min-height: 2.25rem;
+      min-width: 2.25rem;
+      padding: 0.45rem 0.52rem;
+      font-size: 10px;
+      letter-spacing: 0.24em;
+    }
+
+    html[data-theater="open"] .navbar-mobile-controls > button {
+      height: 2.5rem;
+      width: 2.5rem;
+    }
+
+    html[data-theater="open"] .navbar-mobile-controls > button svg {
+      height: 1.1rem;
+      width: 1.1rem;
+    }
+
+    html[data-theater="open"] .navbar-mobile-menu-button .relative,
+    html[data-theater="open"] .navbar-mobile-menu-button .relative svg {
+      height: 1.2rem;
+      width: 1.2rem;
     }
   }
 
