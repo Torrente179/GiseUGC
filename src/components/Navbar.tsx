@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
@@ -58,7 +57,6 @@ const Navbar = () => {
   const [mobileMenuDragOffset, setMobileMenuDragOffset] = useState(0);
   const [isMobileMenuDragging, setIsMobileMenuDragging] = useState(false);
   const [isMobileMenuSwipeDismissing, setIsMobileMenuSwipeDismissing] = useState(false);
-  const [isTheaterOpen, setIsTheaterOpen] = useState(false);
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const mobileMenuSwipeRef = useRef<MobileMenuSwipeState | null>(null);
   const swipeDismissTimeoutRef = useRef<number | null>(null);
@@ -128,25 +126,6 @@ const Navbar = () => {
       document.body.classList.remove('mobile-menu-open');
     };
   }, [mobileMenuOpen]);
-
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-
-    const htmlElement = document.documentElement;
-    const syncTheaterState = () => {
-      setIsTheaterOpen(htmlElement.dataset.theater === 'open');
-    };
-
-    syncTheaterState();
-
-    const observer = new MutationObserver(syncTheaterState);
-    observer.observe(htmlElement, {
-      attributes: true,
-      attributeFilter: ['data-theater'],
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   const clearSwipeDismissTimeout = useCallback(() => {
     if (swipeDismissTimeoutRef.current !== null) {
@@ -419,150 +398,10 @@ const Navbar = () => {
         : 'text-foreground/85 hover:text-primary'
     }`;
 
-  const renderNavbar = (variant: 'base' | 'theater') => {
-    const isTheaterVariant = variant === 'theater';
-
-    return (
-      <motion.nav
-        ref={isTheaterVariant ? undefined : navRef}
-        className={`site-navbar ${isTheaterVariant ? 'site-navbar-theater' : 'site-navbar-base'} fixed top-0 left-0 w-full z-[110]`}
-        style={isTheaterVariant ? { padding: '14px 0 0' } : { padding: '20px 0' }}
-        initial={isTheaterVariant ? { opacity: 0, y: -10 } : { opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={
-          isTheaterVariant
-            ? { duration: 0.28, ease: [0.16, 1, 0.3, 1] }
-            : { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.05 }
-        }
-      >
-        <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
-          <div
-            ref={isTheaterVariant ? undefined : navShellRef}
-            className="navbar-shell flex items-center justify-between rounded-[1.15rem] px-4 md:px-6 transition-[box-shadow] duration-300"
-            style={
-              isTheaterVariant
-                ? {
-                    padding: '12px 16px',
-                    backgroundColor: 'hsl(var(--card) / 0.72)',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
-                    borderWidth: 1,
-                    borderStyle: 'solid',
-                    borderColor: 'hsl(var(--border) / 0.34)',
-                    boxShadow: '0 18px 40px -30px hsl(var(--foreground) / 0.52)',
-                  }
-                : {
-                    padding: '12px 16px',
-                    backgroundColor: 'hsl(var(--card) / 0.45)',
-                    backdropFilter: 'blur(4px)',
-                    WebkitBackdropFilter: 'blur(4px)',
-                    borderWidth: 1,
-                    borderStyle: 'solid',
-                    borderColor: 'hsl(var(--border) / 0)',
-                    boxShadow: 'none',
-                  }
-            }
-          >
-            <a
-              href="#home"
-              className="navbar-brand brand-logo text-xl md:text-2xl text-accent"
-              onClick={(event) => handleHashLinkClick(event, closeMobileMenu)}
-            >
-              Gisela<span className="text-foreground font-medium">.UGC</span>
-            </a>
-
-            <div className="hidden md:flex items-center gap-7">
-              {desktopNavLinkKeys.map((link) => (
-                <a
-                  key={`${variant}-${link.key}`}
-                  href={link.href}
-                  onClick={handleHashLinkClick}
-                  className="section-label text-foreground/80 transition-colors hover:text-primary nav-link-underline"
-                >
-                  {t(link.key)}
-                </a>
-              ))}
-            </div>
-
-            <div className="hidden md:flex items-center gap-2.5">
-              <div className="navbar-language-switch flex items-center gap-1 rounded-full border border-border bg-card px-1 py-1">
-                <button
-                  onClick={() => changeLanguage('es')}
-                  className={`${languageButtonClass('es')} navbar-language-button`}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
-                >
-                  ES
-                </button>
-                <button
-                  onClick={() => changeLanguage('en')}
-                  className={`${languageButtonClass('en')} navbar-language-button`}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
-                >
-                  EN
-                </button>
-              </div>
-              <ThemeToggle />
-              <motion.a
-                href="#contact"
-                onClick={handleHashLinkClick}
-                className="btn-primary-nordic btn-shimmer px-5 py-2.5"
-                whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
-                transition={springSnappy}
-              >
-                {t('navbar.hireMe')}
-              </motion.a>
-            </div>
-
-            <div className="navbar-mobile-controls md:hidden flex items-center gap-2">
-              <div className="navbar-language-switch flex items-center gap-1 rounded-full border border-border bg-card px-1 py-1">
-                <button
-                  onClick={() => changeLanguage('es')}
-                  className={`${languageButtonClass('es')} navbar-language-button`}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
-                >
-                  ES
-                </button>
-                <button
-                  onClick={() => changeLanguage('en')}
-                  className={`${languageButtonClass('en')} navbar-language-button`}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
-                >
-                  EN
-                </button>
-              </div>
-              <ThemeToggle />
-              <button
-                onPointerDown={handleMobileMenuButtonPointerDown}
-                onClick={handleMobileMenuButtonClick}
-                className="navbar-mobile-menu-button inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:text-primary"
-                aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
-                aria-expanded={mobileMenuOpen}
-              >
-                <div className="relative w-6 h-6">
-                  <Menu
-                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
-                      mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
-                    }`}
-                  />
-                  <X
-                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
-                      mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
-                    }`}
-                  />
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-      </motion.nav>
-    );
-  };
-
   return (
     <>
       <div
-        className={`navbar-mobile-menu-overlay fixed inset-0 z-[100] md:hidden transition-all duration-500 ${
+        className={`fixed inset-0 z-[100] md:hidden transition-all duration-500 ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
@@ -662,10 +501,122 @@ const Navbar = () => {
         </div>
       </div>
 
-      {renderNavbar('base')}
-      {isTheaterOpen && typeof document !== 'undefined'
-        ? createPortal(renderNavbar('theater'), document.body)
-        : null}
+      <motion.nav
+        ref={navRef}
+        className="fixed top-0 left-0 w-full z-[110]"
+        style={{ padding: '20px 0' }}
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+      >
+        <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
+          <div
+            ref={navShellRef}
+            className="flex items-center justify-between rounded-[1.15rem] px-4 md:px-6 transition-[box-shadow] duration-300"
+            style={{
+              padding: '12px 16px',
+              backgroundColor: 'hsl(var(--card) / 0.45)',
+              backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
+              borderWidth: 1,
+              borderStyle: 'solid',
+              borderColor: 'hsl(var(--border) / 0)',
+              boxShadow: 'none',
+            }}
+          >
+            <a
+              href="#home"
+              className="brand-logo text-xl md:text-2xl text-accent"
+              onClick={(event) => handleHashLinkClick(event, closeMobileMenu)}
+            >
+              Gisela<span className="text-foreground font-medium">.UGC</span>
+            </a>
+
+            <div className="hidden md:flex items-center gap-7">
+              {desktopNavLinkKeys.map((link) => (
+                <a
+                  key={link.key}
+                  href={link.href}
+                  onClick={handleHashLinkClick}
+                  className="section-label text-foreground/80 transition-colors hover:text-primary nav-link-underline"
+                >
+                  {t(link.key)}
+                </a>
+              ))}
+            </div>
+
+            <div className="hidden md:flex items-center gap-2.5">
+              <div className="flex items-center gap-1 rounded-full border border-border bg-card px-1 py-1">
+                <button
+                  onClick={() => changeLanguage('es')}
+                  className={languageButtonClass('es')}
+                  aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
+                >
+                  ES
+                </button>
+                <button
+                  onClick={() => changeLanguage('en')}
+                  className={languageButtonClass('en')}
+                  aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
+                >
+                  EN
+                </button>
+              </div>
+              <ThemeToggle />
+              <motion.a
+                href="#contact"
+                onClick={handleHashLinkClick}
+                className="btn-primary-nordic btn-shimmer px-5 py-2.5"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+                transition={springSnappy}
+              >
+                {t('navbar.hireMe')}
+              </motion.a>
+            </div>
+
+            <div className="md:hidden flex items-center gap-2">
+              <div className="flex items-center gap-1 rounded-full border border-border bg-card px-1 py-1">
+                <button
+                  onClick={() => changeLanguage('es')}
+                  className={languageButtonClass('es')}
+                  aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
+                >
+                  ES
+                </button>
+                <button
+                  onClick={() => changeLanguage('en')}
+                  className={languageButtonClass('en')}
+                  aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
+                >
+                  EN
+                </button>
+              </div>
+              <ThemeToggle />
+              <button
+                onPointerDown={handleMobileMenuButtonPointerDown}
+                onClick={handleMobileMenuButtonClick}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:text-primary"
+                aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
+                aria-expanded={mobileMenuOpen}
+              >
+                <div className="relative w-6 h-6">
+                  <Menu
+                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
+                      mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
+                    }`}
+                  />
+                  <X
+                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
+                      mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
+                    }`}
+                  />
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.nav>
     </>
   );
 };
