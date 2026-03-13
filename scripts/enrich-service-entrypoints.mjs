@@ -182,6 +182,23 @@ const escapeHtml = (value) =>
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
 
+const bootNoScriptStyles = `      .boot-noscript h2,
+      .boot-noscript h3 {
+        font-family: 'Playfair Display', serif;
+        letter-spacing: -0.04em;
+      }
+      .boot-noscript dl {
+        margin: 0;
+      }
+      .boot-noscript dt {
+        margin-top: 16px;
+        font-weight: 700;
+      }
+      .boot-noscript dd {
+        margin: 8px 0 0;
+        line-height: 1.8;
+      }`;
+
 for (const entry of serviceFaqs) {
   const absolutePath = path.join(rootDir, entry.file);
   const source = fs.readFileSync(absolutePath, 'utf8');
@@ -250,19 +267,10 @@ for (const entry of serviceFaqs) {
   );
 
   updated = updated.replace(
-    /(\.boot-noscript h2,\s*\n\s*\.boot-noscript h3 \{\s*\n\s*font-family: 'Playfair Display', serif;\s*\n\s*letter-spacing: -0.04em;\s*\n\s*\})/,
-    `$1
-      .boot-noscript dl {
-        margin: 0;
-      }
-      .boot-noscript dt {
-        margin-top: 16px;
-        font-weight: 700;
-      }
-      .boot-noscript dd {
-        margin: 8px 0 0;
-        line-height: 1.8;
-      }`,
+    /\s*\.boot-noscript h2,\s*\n\s*\.boot-noscript h3 \{[\s\S]*?\n\s*@media \(max-width: 1023px\) \{/,
+    `
+${bootNoScriptStyles}
+      @media (max-width: 1023px) {`,
   );
 
   fs.writeFileSync(absolutePath, updated);
