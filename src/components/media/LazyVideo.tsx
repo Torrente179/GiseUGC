@@ -200,7 +200,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
         }
       : {
           ...style,
-          opacity: mediaReady ? 1 : 0,
+          opacity: mediaReady || !lqip ? 1 : 0,
           transition: 'filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
         };
 
