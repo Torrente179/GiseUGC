@@ -12,9 +12,9 @@
     "changeLanguage": "Cambiar Idioma"
   },
   "hero": {
-    "subtitle": "Creadora de UGC & Especialista en Contenido",
-    "signature": "User Generated Content",
-    "description": "Creo contenido auténtico y elegante que muestra la historia única de tu marca y conecta con tu audiencia a un nivel más profundo.",
+    "subtitle": "UGC bilingüe, demos y videos de portavoz para marcas que venden en social",
+    "signature": "Creadora UGC bilingüe y portavoz para TikTok Ads, Meta Ads y demos de producto",
+    "description": "Creo anuncios UGC, demos de producto, reseñas y videos de portavoz en español e inglés para marcas de ecommerce, beauty, lifestyle, SaaS y tecnología que venden en Estados Unidos, España y Latinoamérica.",
     "buttonPortfolio": "Ver Mi Trabajo",
     "buttonContact": "Contactar",
     "imageAlt": "Gisela Saldarriaga",
@@ -25,18 +25,20 @@
     "proofLabel": "Campañas activas",
     "proofValue": "+28 marcas",
     "proofCaption": "Moda, belleza y lifestyle",
-    "tagline": "Editorial UGC",
+    "tagline": "UGC bilingüe",
     "introduction": {
       "eyebrow": "UGC Creativo",
-      "title": "Elevando marcas a través de narrativas auténticas",
-      "description": "Como especialista en contenido, cierro la brecha entre la identidad de tu marca y la conexión con el consumidor. Mi enfoque combina la estética editorial con estrategias de performance marketing para crear activos que no solo se ven bien, sino que venden."
-    }
+      "title": "UGC bilingüe y videos de portavoz para campañas que necesitan confianza y conversión",
+      "description": "Trabajo con marcas que necesitan TikTok Ads, Meta Ads, demos, testimoniales y piezas directas a cámara con criterio visual. Produzco desde Medellín para equipos en Estados Unidos, España y Latinoamérica."
+    },
+    "headline": "UGC con presencia",
+    "headlineAccent": "y conversión"
   },
   "services": {
     "sectionSubtitle": "Lo Que Ofrezco",
-    "sectionTitle": "Mis Servicios",
+    "sectionTitle": "Servicios de UGC y portavoz",
     "motionTitle": "El toolkit completo para anunciantes modernos",
-    "motionSubtitle": "Contenido bilingüe en español e inglés que combina autenticidad con estrategia de conversión, desde el guion hasta la entrega final.",
+    "motionSubtitle": "Contenido bilingüe en español e inglés para TikTok Ads, Meta Ads, demos, reseñas y piezas de portavoz con enfoque en conversión.",
     "videoPreviewLabel": "Vista previa en video",
     "videoPreviewClose": "Cerrar vista previa de video",
     "service1": {
@@ -190,8 +192,8 @@
     "sectionTitle": "Contáctame",
     "heading": "Hablemos de tu Proyecto",
     "description": "¿Listo para elevar tu marca con contenido UGC profesional? Me encantaría conocer tu proyecto y discutir cómo podemos colaborar para alcanzar tus objetivos.",
-    "emailLabel": "Email",
-    "emailValue": "contacto@ejemplo.com",
+    "emailLabel": "Contacto directo",
+    "emailValue": "WhatsApp o Fiverr",
     "fiverrLabel": "Fiverr",
     "fiverrValue": "fiverr.com/gisela_sm",
     "form": {
@@ -212,8 +214,8 @@
     }
   },
   "footer": {
-    "brandName": "Tu próxima campaña empieza aquí",
-    "description": "Hablemos de una estrategia creativa enfocada en resultados.",
+    "brandName": "UGC bilingüe y videos de portavoz para tu próxima campaña",
+    "description": "Hablemos de TikTok Ads, Meta Ads, demos y creativos UGC listos para vender más.",
     "servicesTitle": "Servicios",
     "quickLinksTitle": "Enlaces Rápidos",
     "contactTitle": "Contacto",

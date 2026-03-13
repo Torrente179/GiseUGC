@@ -5,10 +5,7 @@ Allow: /
 User-agent: bingbot
 Allow: /
 
-# === OpenAI (ChatGPT, Copilot) ===
-User-agent: GPTBot
-Allow: /
-
+# === Answer Engines / Search Fetchers ===
 User-agent: OAI-SearchBot
 Allow: /
 
@@ -25,31 +22,17 @@ Allow: /
 User-agent: Claude-User
 Allow: /
 
-User-agent: claude-web
-Allow: /
-
-# === Perplexity ===
 User-agent: PerplexityBot
 Allow: /
 
-# === Google-Extended (training controls) ===
+User-agent: Perplexity-User
+Allow: /
+
+# === Training / Model Controls ===
+User-agent: GPTBot
+Allow: /
+
 User-agent: Google-Extended
-Allow: /
-
-# === Apple Intelligence ===
-User-agent: Applebot-Extended
-Allow: /
-
-# === Amazon Alexa ===
-User-agent: Amazonbot
-Allow: /
-
-# === Meta AI ===
-User-agent: meta-externalagent
-Allow: /
-
-# === ByteDance (Doubao AI) ===
-User-agent: Bytespider
 Allow: /
 
 # === Default ===
