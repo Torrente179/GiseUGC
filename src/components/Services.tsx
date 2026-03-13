@@ -99,8 +99,9 @@ const Services = () => {
           variants={staggerContainer(0.09, 0.03)}
         >
           {serviceData.map((service, index) => (
-            <motion.article
+            <motion.a
               key={service.titleKey}
+              href={getServicePath(servicePageByCard[index], locale)}
               className="group rounded-[1.25rem] md:rounded-[1.5rem] border border-border/70 bg-card/50 p-5 md:p-8 backdrop-blur-md transition-[border-color,box-shadow] duration-[350ms] hover:border-primary/30 hover:shadow-xl"
               style={{ transitionTimingFunction: 'var(--ease-out-expo)' }}
               variants={blurRevealUp(18, 0.58)}
@@ -108,31 +109,29 @@ const Services = () => {
               whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
               transition={springSmooth}
             >
-              <a href={getServicePath(servicePageByCard[index], locale)} className="block h-full">
-                <motion.div
-                  className="mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110"
-                  whileHover={shouldReduceMotion ? undefined : { rotate: -6, scale: 1.08 }}
-                  transition={springHoverTransition}
-                >
-                  {service.icon}
-                </motion.div>
-                <h3 className="text-lg md:text-2xl font-sans font-medium tracking-tight text-foreground mb-1 leading-tight">
-                  {t(service.titleKey)}
-                </h3>
-                {service.subtitleKey && (
-                  <p className="text-sm md:text-base text-muted-foreground/70 mb-3 md:mb-4 italic">
-                    {t(service.subtitleKey)}
-                  </p>
-                )}
-                {!service.subtitleKey && <div className="mb-3 md:mb-4" />}
-                <p className="strategic-body text-muted-foreground text-sm md:text-base line-clamp-3 md:line-clamp-none">
-                  {t(service.descriptionKey)}
+              <motion.div
+                className="mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110"
+                whileHover={shouldReduceMotion ? undefined : { rotate: -6, scale: 1.08 }}
+                transition={springHoverTransition}
+              >
+                {service.icon}
+              </motion.div>
+              <h3 className="text-lg md:text-2xl font-sans font-medium tracking-tight text-foreground mb-1 leading-tight">
+                {t(service.titleKey)}
+              </h3>
+              {service.subtitleKey && (
+                <p className="text-sm md:text-base text-muted-foreground/70 mb-3 md:mb-4 italic">
+                  {t(service.subtitleKey)}
                 </p>
-                <span className="mt-5 inline-flex text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition-colors group-hover:text-accent">
-                  {exploreLabel}
-                </span>
-              </a>
-            </motion.article>
+              )}
+              {!service.subtitleKey && <div className="mb-3 md:mb-4" />}
+              <p className="strategic-body text-muted-foreground text-sm md:text-base line-clamp-3 md:line-clamp-none">
+                {t(service.descriptionKey)}
+              </p>
+              <span className="mt-5 inline-flex text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition-colors group-hover:text-accent">
+                {exploreLabel}
+              </span>
+            </motion.a>
           ))}
         </motion.div>
       </div>
