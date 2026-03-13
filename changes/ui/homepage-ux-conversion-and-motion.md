@@ -89,3 +89,11 @@ Generated at: `2026-03-13T13:12:09.537Z`
 - Browser version:
 - Repro video/screenshot path (if any):
 - Additional observations:
+
+## 2026-03-13 service-page routing and internal-linking pass
+
+### What changed
+1. The homepage service grid now links each card to a dedicated localized landing page instead of trapping all intent on the homepage.
+2. Footer link groups now expose the three main service pages in both languages, giving users and crawlers a stable internal-link path to deeper service content.
+3. Navbar language switching now preserves the current route when possible, so `/servicios/...` maps to `/en/services/...` instead of dropping the user back on the homepage.
+4. The shared 404 screen now returns users to the correct localized homepage instead of always forcing Spanish root.

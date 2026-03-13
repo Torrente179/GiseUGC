@@ -10,10 +10,17 @@ import {
   Linkedin,
   Facebook,
 } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { springSnappy } from '@/components/motion/variants';
-import { getCanonicalLocaleHref, getLocaleFromPath, type SiteLocale } from '@/lib/locale-path';
+import {
+  getHomeSectionHref,
+  getLocalizedPathForCurrentRoute,
+  getLocaleFromPath,
+  isHomePath,
+  type SiteLocale,
+} from '@/lib/locale-path';
 import { cn } from '@/lib/utils';
 
 const SCROLL_THRESHOLD = 18;
@@ -52,6 +59,7 @@ type MobileMenuSwipeState = {
 };
 
 const Navbar = () => {
+  const location = useLocation();
   const { t, i18n } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -63,6 +71,8 @@ const Navbar = () => {
   const mobileMenuSwipeRef = useRef<MobileMenuSwipeState | null>(null);
   const swipeDismissTimeoutRef = useRef<number | null>(null);
   const ignoreNextMenuButtonClickRef = useRef(false);
+  const currentLocale = getLocaleFromPath(location.pathname);
+  const onHomePage = isHomePath(location.pathname);
 
   useEffect(() => {
     const syncScrolledState = () => {
@@ -243,12 +253,15 @@ const Navbar = () => {
   const mobileMenuPanelScale = 1 - swipeProgress * 0.035;
   const mobileMenuPanelOpacity = mobileMenuOpen ? Math.max(0, 1 - swipeProgress * 0.26) : 0;
 
+  const homeSectionHref = (sectionId: string) =>
+    onHomePage ? `#${sectionId}` : getHomeSectionHref(currentLocale, sectionId);
+
   const desktopNavLinkKeys = [
-    { key: 'navbar.home', href: '#home', number: '01' },
-    { key: 'navbar.services', href: '#services', number: '02' },
-    { key: 'navbar.portfolio', href: '#portfolio', number: '03' },
-    { key: 'navbar.testimonials', href: '#testimonials', number: '04' },
-    { key: 'navbar.contact', href: '#contact', number: '05' },
+    { key: 'navbar.home', href: homeSectionHref('home'), number: '01' },
+    { key: 'navbar.services', href: homeSectionHref('services'), number: '02' },
+    { key: 'navbar.portfolio', href: homeSectionHref('portfolio'), number: '03' },
+    { key: 'navbar.testimonials', href: homeSectionHref('testimonials'), number: '04' },
+    { key: 'navbar.contact', href: homeSectionHref('contact'), number: '05' },
   ];
   const mobileNavLinkKeys = desktopNavLinkKeys.filter((link) => link.key !== 'navbar.contact');
 
@@ -351,10 +364,9 @@ const Navbar = () => {
   ];
 
   const changeLanguage = (lng: SiteLocale) => {
-    const currentLocale = getLocaleFromPath(window.location.pathname);
     if (currentLocale === lng) return;
 
-    window.location.assign(getCanonicalLocaleHref(lng, window.location.hash));
+    window.location.assign(getLocalizedPathForCurrentRoute(location.pathname, lng, window.location.hash));
   };
 
   const languageButtonClass = (language: string) =>
@@ -400,7 +412,14 @@ const Navbar = () => {
               <a
                 key={link.key}
                 href={link.href}
-                onClick={(event) => handleHashLinkClick(event, closeMobileMenu)}
+                onClick={(event) => {
+                  if (onHomePage) {
+                    handleHashLinkClick(event, closeMobileMenu);
+                    return;
+                  }
+
+                  closeMobileMenu();
+                }}
                 className={`group flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 transition-[opacity,transform] duration-500 ${
                   mobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'
                 }`}
@@ -486,9 +505,9 @@ const Navbar = () => {
             )}
           >
             <a
-              href="#home"
+              href={homeSectionHref('home')}
               className="brand-logo text-xl md:text-2xl text-accent"
-              onClick={(event) => handleHashLinkClick(event, closeMobileMenu)}
+              onClick={onHomePage ? (event) => handleHashLinkClick(event, closeMobileMenu) : undefined}
             >
               Gisela<span className="text-foreground font-medium">.UGC</span>
             </a>
@@ -498,7 +517,7 @@ const Navbar = () => {
                 <a
                   key={link.key}
                   href={link.href}
-                  onClick={handleHashLinkClick}
+                  onClick={onHomePage ? handleHashLinkClick : undefined}
                   className="section-label text-foreground/80 transition-colors hover:text-primary nav-link-underline"
                 >
                   {t(link.key)}
@@ -525,8 +544,8 @@ const Navbar = () => {
               </div>
               <ThemeToggle />
               <motion.a
-                href="#contact"
-                onClick={handleHashLinkClick}
+                href={homeSectionHref('contact')}
+                onClick={onHomePage ? handleHashLinkClick : undefined}
                 className="btn-primary-nordic btn-shimmer px-5 py-2.5"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}

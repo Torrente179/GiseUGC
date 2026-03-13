@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, type ReactNode } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -7,6 +8,9 @@ import SectionSkeleton from '@/components/motion/SectionSkeleton';
 import FadeInOnMount from '@/components/motion/FadeInOnMount';
 import { useDeferredMount } from '@/hooks/use-deferred-mount';
 import { mark, measure, startLongTaskObserver } from '@/lib/perf-debug';
+import PageSeo from '@/components/PageSeo';
+import { getLocaleFromPath, getHomePath, type SiteLocale } from '@/lib/locale-path';
+import Footer from '@/components/Footer';
 
 const SocialProofSection = lazy(() => import('@/components/SocialProof'));
 const ServicesSection = lazy(() => import('@/components/Services'));
@@ -18,7 +22,6 @@ const DesktopFiverrRatingSection = lazy(() => import('@/components/DesktopFiverr
 const TestimonialsSection = lazy(() => import('@/components/Testimonials'));
 const FAQSection = lazy(() => import('@/components/FAQ'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
-const FooterSection = lazy(() => import('@/components/Footer'));
 const FloatingContactDockSection = lazy(() => import('@/components/FloatingContactDock'));
 
 type DeferredSectionProps = {
@@ -63,6 +66,29 @@ const DeferredSection = ({
 
 const Index = () => {
   const isMobile = useIsMobile();
+  const location = useLocation();
+  const locale = getLocaleFromPath(location.pathname);
+  const homeSeoByLocale: Record<
+    SiteLocale,
+    {
+      title: string;
+      description: string;
+    }
+  > = {
+    es: {
+      title: 'Gisela Saldarriaga | Creadora UGC bilingüe y videos de portavoz',
+      description:
+        'Creadora UGC bilingüe en Medellín para TikTok Ads, Meta Ads, demos de producto y videos de portavoz. Trabajo con marcas de Estados Unidos, España y Latinoamérica.',
+    },
+    en: {
+      title: 'Gisela Saldarriaga | Bilingual UGC creator and spokesperson',
+      description:
+        'Bilingual UGC creator in Medellin for TikTok ads, Meta ads, product demos, reviews, and spokesperson videos for brands in the US, Spain, and LatAm.',
+    },
+  };
+  const homeSeo = homeSeoByLocale[locale];
+  const siteUrl = 'https://www.giselasaldarriaga.com';
+  const buildUrl = (pathname: string) => new URL(pathname, siteUrl).toString();
 
   useEffect(() => {
     clearUrlHash();
@@ -72,6 +98,17 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      <PageSeo
+        title={homeSeo.title}
+        description={homeSeo.description}
+        canonical={buildUrl(getHomePath(locale))}
+        locale={locale}
+        alternates={{
+          es: buildUrl(getHomePath('es')),
+          en: buildUrl(getHomePath('en')),
+          xDefault: buildUrl(getHomePath('es')),
+        }}
+      />
       <Navbar />
       <Hero showIntroduction={!isMobile} />
       {isMobile ? <HeroIntroductionSection /> : <SocialProofSection />}
@@ -123,7 +160,7 @@ const Index = () => {
       >
         <ServicesMarqueeSection sectionId="services" />
       </DeferredSection>
-      {isMobile ? <FooterSection /> : null}
+      {isMobile ? <Footer /> : null}
 
       <DeferredSection
         enabled={!isMobile}
@@ -162,7 +199,7 @@ const Index = () => {
       >
         <ServicesMarqueeSection />
       </DeferredSection>
-      {!isMobile ? <FooterSection /> : null}
+      {!isMobile ? <Footer /> : null}
 
       <Suspense fallback={null}>
         <FloatingContactDockSection />
