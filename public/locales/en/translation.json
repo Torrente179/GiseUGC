@@ -12,9 +12,9 @@
     "changeLanguage": "Change Language"
   },
   "hero": {
-    "subtitle": "UGC Creator & Content Specialist",
-    "signature": "User Generated Content",
-    "description": "I create authentic and elegant content that showcases your brand's unique story and connects with your audience on a deeper level.",
+    "subtitle": "Bilingual UGC, product demos, and spokesperson videos for brands that sell through social",
+    "signature": "Bilingual UGC creator and spokesperson for TikTok ads, Meta ads, and product demos",
+    "description": "I create bilingual UGC ads, product demos, reviews, and spokesperson videos in Spanish and English for ecommerce, beauty, lifestyle, SaaS, and tech brands selling in the US, Spain, and LatAm.",
     "buttonPortfolio": "See My Work",
     "buttonContact": "Contact",
     "imageAlt": "Gisela Saldarriaga",
@@ -25,18 +25,20 @@
     "proofLabel": "Active campaigns",
     "proofValue": "28+ brands",
     "proofCaption": "Fashion, beauty and lifestyle",
-    "tagline": "Editorial UGC",
+    "tagline": "Bilingual UGC",
     "introduction": {
       "eyebrow": "Creative UGC",
-      "title": "Elevating brands through authentic narratives",
-      "description": "As a content specialist, I bridge the gap between your brand identity and consumer connection. My approach combines editorial aesthetics with performance marketing strategies to create assets that don't just look good—they sell."
-    }
+      "title": "Bilingual UGC and spokesperson videos for campaigns that need trust and conversion",
+      "description": "I work with brands that need TikTok ads, Meta ads, demos, testimonials, and speaking-to-camera assets with a polished visual standard. I produce remotely from Medellin for teams in the US, Spain, and LatAm."
+    },
+    "headline": "UGC with presence",
+    "headlineAccent": "and conversion focus"
   },
   "services": {
     "sectionSubtitle": "What I Offer",
-    "sectionTitle": "My Services",
+    "sectionTitle": "UGC and spokesperson services",
     "motionTitle": "The complete toolkit for modern advertisers",
-    "motionSubtitle": "Bilingual content in Spanish and English that blends authenticity with conversion strategy, from script to final delivery.",
+    "motionSubtitle": "Bilingual content in Spanish and English for TikTok ads, Meta ads, demos, reviews, and spokesperson pieces built around conversion.",
     "videoPreviewLabel": "Video preview",
     "videoPreviewClose": "Close video preview",
     "service1": {
@@ -193,8 +195,8 @@
     "sectionTitle": "Contact Me",
     "heading": "Let's Discuss Your Project",
     "description": "Ready to elevate your brand with professional UGC content? I'd love to hear about your project and discuss how we can collaborate to achieve your goals.",
-    "emailLabel": "Email",
-    "emailValue": "contact@example.com",
+    "emailLabel": "Direct contact",
+    "emailValue": "WhatsApp or Fiverr",
     "fiverrLabel": "Fiverr",
     "fiverrValue": "fiverr.com/gisela_sm",
     "form": {
@@ -215,8 +217,8 @@
     }
   },
   "footer": {
-    "brandName": "Your next campaign starts here",
-    "description": "Let's talk about a creative strategy focused on results.",
+    "brandName": "Bilingual UGC and spokesperson videos for your next campaign",
+    "description": "Let's plan TikTok ads, Meta ads, demos, and UGC creatives built to drive trust and sales.",
     "servicesTitle": "Services",
     "quickLinksTitle": "Quick Links",
     "contactTitle": "Contact",

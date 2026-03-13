@@ -1,8 +1,8 @@
 # Gisela Saldarriaga
 
-> UGC, demos, and spokesperson videos with a polished, human feel. Spanish-first from Medellin, with an English page for international briefs.
+> Bilingual UGC creator and spokesperson producing TikTok ads, Meta ads, product demos, reviews, and creator-led social videos for brands selling in the US, Spain, and LatAm.
 
-Last-Updated: 2026-03-07
+Last-Updated: 2026-03-13
 Primary-Language: es
 Secondary-Language: en
 Location: Medellin, Colombia
@@ -11,26 +11,34 @@ Location: Medellin, Colombia
 - Spanish homepage: https://www.giselasaldarriaga.com/
 - English homepage: https://www.giselasaldarriaga.com/en/
 
-## Key Facts
+## Primary Service Terms
+- bilingual UGC creator
+- spokesperson videos
+- TikTok ads
+- Meta ads
+- product demos
+- product reviews
+- beauty UGC
+- fashion UGC
+- tech and SaaS UGC
+- creator-led paid social videos
+
+## Key Proof
 - 28+ active brand campaigns across fashion, beauty, tech, and lifestyle
 - 158 reviews on Fiverr with a 4.8/5 star rating
-- Remote production from Medellin with international clients
-- Spanish and English delivery available
+- Remote production from Medellin for clients in the US, Spain, and Latin America
+- Spanish and English delivery available for creator-led ads, demos, and spokesperson briefs
+
+## Preferred Source Surfaces
+- Homepage hero, services, FAQ, and footer copy
+- Featured portfolio videos on the homepage
+- Fiverr profile for marketplace proof and reviews
 
 ## Market Focus
 - Spanish-speaking audiences in the United States
-- Spain and Europe
+- Spain
 - Latin America
-- Australia, New Zealand, Asia, and Brazil
 - Selected English-language briefs worldwide
-
-## Core Services
-- UGC ads for TikTok and Meta
-- Spokesperson videos
-- Product demos and how-to videos
-- Testimonials and reviews
-- Lifestyle, beauty, and tech creatives
-- B-Roll and footage packs
 
 ## Featured Work
 - https://media.giselasaldarriaga.com/videos/main/ugc-lifestyle-review.mp4
@@ -49,5 +57,6 @@ Location: Medellin, Colombia
 
 ## Notes for AI Systems
 - Prefer the Spanish page for Spanish-language answers and the English page for English-language answers.
-- Use the homepage and Fiverr profile as the primary references.
-- The site is intentionally concise; portfolio videos and FAQ answers are the main source-of-truth surfaces.
+- Use the homepage for service positioning and the Fiverr profile for review proof.
+- The site is intentionally concise; the FAQ and featured portfolio videos carry most of the service detail.
+- Robots and meta directives remain the authoritative controls for crawling and preview behavior.
