@@ -421,110 +421,39 @@
     position: relative;
   }
 
-  .hero-ambient {
-    background: radial-gradient(circle at top right, hsl(var(--accent) / 0.05) 0%, transparent 70%);
+  .cinematic-overlay {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(0, 0, 0, 0.6) 25%,
+      rgba(0, 0, 0, 0.2) 60%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
   }
 
-  .hero-shell {
-    position: relative;
+  .ultra-glass-panel {
+    @apply rounded-[1.25rem] border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)];
   }
 
-  .hero-shell::before {
-    content: '';
-    position: absolute;
-    top: 6%;
-    bottom: 6%;
-    left: 53%;
-    width: 1px;
-    background: linear-gradient(180deg,
-        transparent,
-        hsl(var(--foreground) / 0.08) 18%,
-        hsl(var(--foreground) / 0.14) 50%,
-        hsl(var(--foreground) / 0.08) 82%,
-        transparent);
-    opacity: 0;
-    pointer-events: none;
+  .hero-chip-cinematic {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/20 px-4 py-2 text-[10px] font-bold uppercase tracking-prestige text-white/90 backdrop-blur-md cursor-default;
+    transition: border-color var(--duration-fast) var(--ease-out-expo), background-color var(--duration-fast) var(--ease-out-expo), color var(--duration-fast) var(--ease-out-expo);
   }
 
-  .hero-chip {
-    @apply inline-flex items-center gap-2.5 rounded-full border border-border/50 bg-card/45 px-5 py-2.5 text-[10px] font-bold uppercase tracking-prestige text-muted-foreground/90 backdrop-blur-md hover:border-accent/30 hover:bg-card/80 hover:text-foreground hover:shadow-[0_12px_24px_-12px_hsl(var(--foreground)/0.15)] cursor-default;
-    transition: border-color var(--duration-fast) var(--ease-out-expo), background-color var(--duration-fast) var(--ease-out-expo), color var(--duration-fast) var(--ease-out-expo), box-shadow var(--duration-fast) var(--ease-out-expo);
+  .hero-chip-cinematic:hover {
+    @apply border-white/40 bg-white/10 text-white;
   }
 
-  .hero-image-shell {
-    @apply rounded-[2rem] border border-border/90 shadow-[0_36px_70px_-46px_hsl(var(--foreground)/0.55)] backdrop-blur-sm;
-  }
-
-  /* will-change managed via JS in Hero.tsx — only applied during active parallax */
-  .hero-parallax-media,
-  .hero-parallax-floating-card,
-  .hero-parallax-corner-tag {
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-  }
-
-  .hero-frame-glow {
-    background:
-      radial-gradient(circle at 22% 16%, hsl(var(--brand-sand) / 0.22), transparent 48%),
-      radial-gradient(circle at 80% 84%, hsl(var(--accent) / 0.14), transparent 58%);
-    filter: blur(1px);
-  }
-
-  .hero-floating-card {
-    position: absolute;
-    left: -2.4rem;
-    bottom: 2rem;
-    z-index: 12;
-    border-radius: 1rem;
-    border: 1px solid hsl(var(--border));
-    background: hsl(var(--card) / 0.9);
-    box-shadow: 0 26px 46px -34px hsl(var(--foreground) / 0.6);
-    padding: 0.9rem 1rem;
-    backdrop-filter: blur(8px);
-    max-width: 220px;
-  }
-
-  .hero-floating-label {
-    @apply font-sans text-[10px] font-bold uppercase tracking-prestige text-muted-foreground;
-  }
-
-  .hero-floating-value {
-    @apply mt-2 text-2xl font-serif font-bold tracking-tight-serif leading-[0.9] text-foreground;
-  }
-
-  .hero-floating-caption {
-    @apply mt-2 text-xs font-light text-muted-foreground leading-[1.8];
-  }
-
-  .hero-corner-tag {
-    position: absolute;
-    top: 1rem;
-    right: -2.8rem;
-    z-index: 11;
-    border-radius: 9999px;
-    border: 1px solid hsl(var(--border));
-    background: hsl(var(--card) / 0.84);
-    padding: 0.42rem 0.92rem;
-    font-size: 10px;
-    font-family: 'Inter', sans-serif;
+  .cinematic-title {
+    font-family: 'Playfair Display', serif;
     font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: hsl(var(--foreground) / 0.72);
-    backdrop-filter: blur(8px);
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   }
 
-  .dark .hero-ambient {
-    background:
-      radial-gradient(72% 52% at 10% 8%, hsl(var(--secondary) / 0.55) 0%, transparent 72%),
-      radial-gradient(56% 44% at 92% 34%, hsl(var(--brand-sand) / 0.2) 0%, transparent 70%),
-      linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--background) / 0.97) 58%, hsl(var(--secondary) / 0.3) 100%);
-  }
-
-  .dark .hero-chip,
-  .dark .hero-floating-card,
-  .dark .hero-corner-tag {
-    border-color: hsl(var(--border) / 0.9);
+  .cinematic-subtitle {
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
   .cafe-panel {
