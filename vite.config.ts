@@ -11,7 +11,8 @@ export default defineConfig(({ mode }) => ({
   },
   preview: {
     headers: {
-      'Content-Security-Policy': "default-src 'self'; img-src 'self' images.unsplash.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; script-src 'self' 'unsafe-inline';",
+      'Content-Security-Policy':
+        "default-src 'self'; img-src 'self' https://images.unsplash.com https://media.giselasaldarriaga.com data: blob:; media-src 'self' https://media.giselasaldarriaga.com blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://media.giselasaldarriaga.com; script-src 'self' 'unsafe-inline';",
     },
   },
   plugins: [
@@ -22,6 +23,12 @@ export default defineConfig(({ mode }) => ({
       input: {
         main: path.resolve(__dirname, 'index.html'),
         en: path.resolve(__dirname, 'en/index.html'),
+        bilingualUgcEs: path.resolve(__dirname, 'servicios/creadora-ugc-bilingue/index.html'),
+        spokespersonEs: path.resolve(__dirname, 'servicios/videos-de-portavoz/index.html'),
+        ugcAdsEs: path.resolve(__dirname, 'servicios/ugc-ads-tiktok-meta/index.html'),
+        bilingualUgcEn: path.resolve(__dirname, 'en/services/bilingual-ugc-creator/index.html'),
+        spokespersonEn: path.resolve(__dirname, 'en/services/spokesperson-videos/index.html'),
+        ugcAdsEn: path.resolve(__dirname, 'en/services/ugc-ads-tiktok-meta/index.html'),
       },
       output: {
         manualChunks: {

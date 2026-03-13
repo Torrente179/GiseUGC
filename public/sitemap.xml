@@ -6,7 +6,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/" />
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -15,8 +15,62 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/" />
-    <lastmod>2026-03-07</lastmod>
+    <lastmod>2026-03-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/" />
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/" />
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/spokesperson-videos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/" />
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/services/spokesperson-videos/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/spokesperson-videos/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/" />
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/" />
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.82</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/" />
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.82</priority>
   </url>
 </urlset>

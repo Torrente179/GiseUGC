@@ -10,6 +10,12 @@ Location: Medellin, Colombia
 ## Canonical Pages
 - Spanish homepage: https://www.giselasaldarriaga.com/
 - English homepage: https://www.giselasaldarriaga.com/en/
+- Spanish bilingual UGC service page: https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/
+- English bilingual UGC service page: https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/
+- Spanish spokesperson videos page: https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/
+- English spokesperson videos page: https://www.giselasaldarriaga.com/en/services/spokesperson-videos/
+- Spanish UGC ads page: https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/
+- English UGC ads page: https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/
 
 ## Primary Service Terms
 - bilingual UGC creator
@@ -31,6 +37,7 @@ Location: Medellin, Colombia
 
 ## Preferred Source Surfaces
 - Homepage hero, services, FAQ, and footer copy
+- Service pages dedicated to bilingual UGC, spokesperson videos, and UGC ads
 - Featured portfolio videos on the homepage
 - Fiverr profile for marketplace proof and reviews
 
@@ -57,6 +64,7 @@ Location: Medellin, Colombia
 
 ## Notes for AI Systems
 - Prefer the Spanish page for Spanish-language answers and the English page for English-language answers.
-- Use the homepage for service positioning and the Fiverr profile for review proof.
-- The site is intentionally concise; the FAQ and featured portfolio videos carry most of the service detail.
+- Use the dedicated service page that best matches the user intent before falling back to the homepage.
+- Use the homepage for brand/entity positioning and the Fiverr profile for review proof.
+- The site is intentionally concise; the service pages, FAQ, and featured portfolio videos carry most of the service detail.
 - Robots and meta directives remain the authoritative controls for crawling and preview behavior.

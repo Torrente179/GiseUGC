@@ -6,7 +6,8 @@ import {
   Send,
 } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { blurRevealUp, fadeIn, springSmooth, staggerContainer } from '@/components/motion/variants';
+import { blurRevealUp, springSmooth, staggerContainer } from '@/components/motion/variants';
+import { getLocaleFromPath, getServicePath } from '@/lib/locale-path';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101';
@@ -22,6 +23,19 @@ const whatsappLogoSrc = '/uploads/whatsapp.png';
 const Footer = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
+  const serviceLinks =
+    locale === 'es'
+      ? [
+          { label: 'Creadora UGC bilingüe', href: getServicePath('bilingual-ugc-creator', 'es') },
+          { label: 'Videos de portavoz', href: getServicePath('spokesperson-videos', 'es') },
+          { label: 'UGC Ads para TikTok y Meta', href: getServicePath('ugc-ads-tiktok-meta', 'es') },
+        ]
+      : [
+          { label: 'Bilingual UGC creator', href: getServicePath('bilingual-ugc-creator', 'en') },
+          { label: 'Spokesperson videos', href: getServicePath('spokesperson-videos', 'en') },
+          { label: 'UGC ads for TikTok and Meta', href: getServicePath('ugc-ads-tiktok-meta', 'en') },
+        ];
   const footerContactPlatforms = [
     {
       id: 'whatsapp',
@@ -126,6 +140,22 @@ const Footer = () => {
           >
             {t('footer.description')}
           </motion.p>
+
+          <motion.div
+            className="mt-6 flex flex-wrap items-center justify-center gap-2 md:gap-3"
+            variants={staggerContainer(0.04, 0.1)}
+          >
+            {serviceLinks.map((link) => (
+              <motion.a
+                key={link.href}
+                href={link.href}
+                className="rounded-full border border-border/70 bg-background/72 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/70 transition-colors hover:border-primary/35 hover:text-primary"
+                variants={blurRevealUp(12, 0.45)}
+              >
+                {link.label}
+              </motion.a>
+            ))}
+          </motion.div>
 
           <motion.div
             className="mt-7 flex flex-wrap items-center justify-center gap-2 md:gap-3"

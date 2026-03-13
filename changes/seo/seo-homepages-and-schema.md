@@ -48,3 +48,45 @@ This is the current SEO note. It consolidates the AEO/GEO audit, FAQ and crawler
 3. Source locales and public locale mirrors were aligned to the same conversion-focused positioning, and placeholder contact values were removed so the site no longer leaks fake contact data.
 4. `robots.txt` was simplified to documented search, answer-engine, user-fetch, and training agents instead of carrying speculative or low-value bot entries.
 5. `llms.txt` was kept as a secondary summary surface, but rewritten to mirror the actual service terms and proof points already present on the site instead of acting like a separate source of truth.
+
+## 2026-03-13 dedicated service-page discoverability pass
+
+### Runtime touchpoints in this pass
+- `servicios/creadora-ugc-bilingue/index.html`
+- `servicios/videos-de-portavoz/index.html`
+- `servicios/ugc-ads-tiktok-meta/index.html`
+- `en/services/bilingual-ugc-creator/index.html`
+- `en/services/spokesperson-videos/index.html`
+- `en/services/ugc-ads-tiktok-meta/index.html`
+- `src/App.tsx`
+- `src/main.tsx`
+- `src/pages/Index.tsx`
+- `src/pages/NotFound.tsx`
+- `src/components/PageSeo.tsx`
+- `src/components/ServiceLandingPage.tsx`
+- `src/components/Navbar.tsx`
+- `src/components/Footer.tsx`
+- `src/components/Services.tsx`
+- `src/lib/locale-path.ts`
+- `src/data/service-pages.ts`
+- `public/sitemap.xml`
+- `public/llms.txt`
+- `vercel.json`
+- `vite.config.ts`
+- `package.json`
+- `scripts/enrich-service-entrypoints.mjs`
+
+### What changed
+1. Added six crawlable, path-specific landing pages for the three core service intents in Spanish and English: bilingual UGC creator, spokesperson videos, and UGC ads for TikTok/Meta.
+2. The React app now routes these URLs directly, keeps locale in sync with the pathname, and resets route-level metadata so client-side navigation does not leave stale service titles, canonicals, or FAQ schema on the homepage.
+3. Homepage service cards, footer links, navbar language switching, and 404 recovery now point to the correct localized service URLs instead of forcing all discovery through the homepage.
+4. `sitemap.xml` now lists each service page with hreflang alternates, and `llms.txt` now points answer engines toward the most relevant service page before falling back to the homepage.
+5. Static service entrypoints were wired into the Vite multi-page build and Vercel cache headers so the new URLs ship as real HTML documents, not only client-side routes.
+6. The new `scripts/enrich-service-entrypoints.mjs` step adds FAQPage schema and noscript FAQ content to each service entrypoint so non-JS fetchers and answer-engine audits can extract service-specific answers from raw HTML.
+
+### Verification
+1. `npm run build` completed successfully with all six service entrypoints emitted in `dist/`.
+2. `seo_audit.py` returned clean baseline results for:
+   - `/servicios/creadora-ugc-bilingue/`
+   - `/en/services/bilingual-ugc-creator/`
+3. The remaining four service URLs returned `200 OK` with the expected title, description, and canonical tags in local preview.
