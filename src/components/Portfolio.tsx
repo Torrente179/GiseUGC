@@ -947,8 +947,7 @@ const Portfolio = () => {
 
   const handleCollageMouseLeave = useCallback(() => {
     setCollageHovered(false);
-    pauseCollageVideos();
-  }, [pauseCollageVideos]);
+  }, []);
 
   useEffect(() => {
     if (isMobile || connectionProfile.constrained || !isPortfolioNearViewport) {
@@ -956,14 +955,9 @@ const Portfolio = () => {
       return;
     }
 
-    if (collageHovered) {
-      playCollageVideos();
-      return;
-    }
-
     pauseCollageVideos();
+    playCollageVideos();
   }, [
-    collageHovered,
     connectionProfile.constrained,
     isMobile,
     isPortfolioNearViewport,
@@ -1333,7 +1327,7 @@ const Portfolio = () => {
                         poster={clip.posterSrc}
                         lqip={getLqip(clip.previewSrc)}
                         muted
-                        autoPlay={isMobile && isActiveMobileCard}
+                        autoPlay={!isMobile || isActiveMobileCard}
                         loop
                         playsInline
                         preload={isWarmMobileCard ? 'auto' : 'none'}
@@ -1433,7 +1427,7 @@ const Portfolio = () => {
                   poster={clip.posterSrc}
                   lqip={getLqip(clip.previewSrc)}
                   muted
-                  autoPlay={false}
+                  autoPlay={!isMobile}
                   loop
                   playsInline
                   preload={connectionProfile.slow ? 'metadata' : 'auto'}
