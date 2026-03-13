@@ -4,6 +4,7 @@
 This is the current homepage-facing UI note. It consolidates the review-card system, FAQ launch, CTA routing, theme defaults, marquee smoothness, testimonial screenshot integration, and the later motion-polish passes that shaped the current landing page.
 
 ## Current runtime touchpoints
+- `src/App.tsx`
 - `src/pages/Index.tsx`
 - `src/components/Hero.tsx`
 - `src/components/Footer.tsx`
@@ -60,9 +61,17 @@ This is the current homepage-facing UI note. It consolidates the review-card sys
 2. Mobile now renders the hero introduction, services, FAQ, and footer directly; desktop now renders social proof, services, FAQ, and footer directly.
 3. Heavier media sections such as portfolio, testimonials, rating cards, and the services marquee remain deferred so the SEO gain does not turn into a full homepage performance regression.
 
+## 2026-03-13 Desktop smoothness pass
+
+### What changed
+1. Removed the global Lenis mount so desktop returns to native scrolling instead of layering virtual scroll interpolation on top of an already media-heavy homepage.
+2. Simplified the navbar scroll behavior from per-frame glass interpolation to a binary scrolled/unscrolled state, cutting repeated `backdrop-filter`, padding, border, and shadow mutation work during scroll.
+3. Reduced desktop playback pressure in the portfolio by stopping always-on reel-card autoplay and making the desktop collage videos play on hover instead of decoding continuously while the section sits onscreen.
+4. Re-ran the mobile regression guardrail after the scroll/runtime change and refreshed the checklist below for follow-up manual Safari validation.
+
 ## Mobile Regression Checklist
 
-Generated at: `2026-03-13T12:52:48.404Z`
+Generated at: `2026-03-13T13:12:09.537Z`
 
 ### Automated checks
 - ✅ Targeted lint
