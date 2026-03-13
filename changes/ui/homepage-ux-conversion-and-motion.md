@@ -97,3 +97,10 @@ Generated at: `2026-03-13T13:12:09.537Z`
 2. Footer link groups now expose the three main service pages in both languages, giving users and crawlers a stable internal-link path to deeper service content.
 3. Navbar language switching now preserves the current route when possible, so `/servicios/...` maps to `/en/services/...` instead of dropping the user back on the homepage.
 4. The shared 404 screen now returns users to the correct localized homepage instead of always forcing Spanish root.
+
+## 2026-03-13 portfolio autoplay restoration
+
+### What changed
+1. Restored desktop reel-card autoplay after the smoothness pass made the portfolio feel visually broken and removed the motion users expected from the section.
+2. Restored desktop collage autoplay so the collage returns to ambient motion while onscreen instead of staying paused until hover.
+3. Kept the other desktop smoothness changes in place; this rollback only targets the portfolio playback tradeoff that regressed the experience.
