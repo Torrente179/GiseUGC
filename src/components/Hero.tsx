@@ -92,7 +92,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             <img
               src="/uploads/gisela-hero-1200.jpg"
               alt={t('hero.imageAlt')}
-              className={`w-full h-full object-cover object-top lg:object-center transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`w-full h-full object-cover object-[50%_15%] md:object-[50%_20%] lg:object-[50%_25%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
               loading="eager"
               fetchPriority="high"
               decoding="async"
@@ -123,7 +123,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
               <h1 className="cinematic-title text-white text-[14vw] sm:text-[5.5rem] md:text-[7rem] lg:text-[8.5rem] xl:text-[9.5rem] -ml-1 md:-ml-2 mb-6">
                 <LiteSplitTextReveal text="Gisela" delay={0.2} stagger={0.06} className="block" />
-                <LiteSplitTextReveal text="Saldarriaga" delay={0.4} stagger={0.06} className="block text-white/90" />
+                <LiteSplitTextReveal text="Saldarriaga" delay={0.4} stagger={0.06} className="block text-accent luxury-accent align-baseline" />
               </h1>
 
               <motion.div 
