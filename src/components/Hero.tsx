@@ -77,7 +77,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   return (
     <section ref={containerRef} id="home" className="relative w-full overflow-hidden bg-black">
       {/* ─── 100vh Cinematic Window ─── */}
-      <div className="relative h-[100svh] w-full flex flex-col justify-end">
+      <div className="relative min-h-[100svh] w-full flex flex-col justify-end">
         {/* Background Image Layer */}
         <motion.div 
           className="absolute inset-0 z-0 origin-top overflow-hidden"
@@ -107,12 +107,12 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
         {/* Content Layer */}
         <motion.div 
-          className="container relative z-20 mx-auto px-6 md:px-12 pb-12 md:pb-20 pt-32 w-full"
+          className="container relative z-20 mx-auto px-6 md:px-12 pb-8 md:pb-20 pt-28 md:pt-32 w-full"
           initial="hidden"
           animate="visible"
           variants={shouldReduceMotion ? undefined : cinematicContainerVariants}
         >
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-12">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 lg:gap-12">
             {/* Left side: Typography */}
             <div className="max-w-4xl">
               <motion.div variants={shouldReduceMotion ? undefined : cinematicItemVariants}>
@@ -169,7 +169,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
             {/* Right side: Floating UI metrics */}
             <motion.div 
-              className="lg:self-end ultra-glass-panel p-6 w-full max-w-[280px]"
+              className="lg:self-end ultra-glass-panel p-5 sm:p-6 w-full max-w-[280px]"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
               <div className="flex flex-col gap-5">

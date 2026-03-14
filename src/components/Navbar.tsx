@@ -501,7 +501,7 @@ const Navbar = () => {
               'flex items-center justify-between rounded-[1.15rem] border px-4 md:px-6 transition-[background-color,border-color,box-shadow,padding] duration-300',
               isScrolled
                 ? 'border-border/80 bg-card/92 py-2 shadow-[0_16px_36px_-28px_hsl(var(--foreground)/0.22)] backdrop-blur-md'
-                : 'border-transparent bg-card/45 py-3 shadow-none backdrop-blur-sm',
+                : 'border-transparent bg-transparent py-3 shadow-none',
             )}
           >
             <a
