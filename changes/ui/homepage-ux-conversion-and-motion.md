@@ -104,3 +104,10 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Restored desktop reel-card autoplay after the smoothness pass made the portfolio feel visually broken and removed the motion users expected from the section.
 2. Restored desktop collage autoplay so the collage returns to ambient motion while onscreen instead of staying paused until hover.
 3. Kept the other desktop smoothness changes in place; this rollback only targets the portfolio playback tradeoff that regressed the experience.
+
+## 2026-03-14 hero introduction title rebalance
+
+### What changed
+1. Rebalanced the desktop hero-introduction grid so the left headline column gets more width and the supporting paragraph stops dominating the row.
+2. Trimmed the desktop intro headline sizing just enough to keep the SEO-updated copy reading like a designed title instead of collapsing into an awkward vertical stack.
+3. Tightened the intro paragraph width and top offset so the pair feels intentional again instead of leaving a tall title next to a wide, floating description block.

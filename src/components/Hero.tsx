@@ -214,15 +214,15 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
             }}
           >
-            <div className="grid lg:grid-cols-[1fr_2fr] gap-12 items-start">
-              <motion.div className="space-y-6" variants={cinematicItemVariants}>
+            <div className="grid lg:grid-cols-[minmax(0,1.18fr)_minmax(0,0.82fr)] gap-12 lg:gap-16 items-start">
+              <motion.div className="space-y-6 max-w-[56rem]" variants={cinematicItemVariants}>
                 <span className="section-label">{t('hero.introduction.eyebrow')}</span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-[0.95] tracking-tight-serif">
+                <h2 className="max-w-[12ch] text-4xl md:text-5xl lg:text-[4.5rem] xl:text-[4.9rem] font-serif text-foreground leading-[0.94] tracking-tight-serif">
                   <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} />
                 </h2>
               </motion.div>
-              <motion.div className="lg:pt-20" variants={cinematicItemVariants}>
-                <p className="strategic-body text-foreground/60 text-lg md:text-xl max-w-2xl">
+              <motion.div className="lg:pt-14" variants={cinematicItemVariants}>
+                <p className="strategic-body text-foreground/60 text-lg md:text-xl max-w-[34rem]">
                   {t('hero.introduction.description')}
                 </p>
               </motion.div>
