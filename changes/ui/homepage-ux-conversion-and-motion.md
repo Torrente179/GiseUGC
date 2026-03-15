@@ -111,3 +111,10 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Rebalanced the desktop hero-introduction grid so the left headline column gets more width and the supporting paragraph stops dominating the row.
 2. Trimmed the desktop intro headline sizing just enough to keep the SEO-updated copy reading like a designed title instead of collapsing into an awkward vertical stack.
 3. Tightened the intro paragraph width and top offset so the pair feels intentional again instead of leaving a tall title next to a wide, floating description block.
+
+## 2026-03-15 hero introduction headline rollback
+
+### What changed
+1. Replaced the SEO-heavy visible intro headline with the shorter editorial version that fits the intended premium presentation.
+2. Scaled the desktop intro headline back down and relaxed the forced line length so the section reads like a designed title instead of a stacked keyword block.
+3. Kept the service-intent detail in the supporting paragraph, metadata, FAQ, and service pages instead of forcing the H2 to do every SEO job at once.
