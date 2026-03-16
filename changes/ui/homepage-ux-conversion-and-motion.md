@@ -125,7 +125,6 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Reduced the hero background parallax scale so the portrait no longer starts pre-zoomed before the user scrolls.
 2. Constrained the desktop hero media wrapper with a max width, which lets the 4:5 source image read more naturally on wide screens instead of being forced to cover the full viewport width.
 3. Lowered the desktop object-position slightly so more of the torso remains visible and the hero stops reading like an over-tight face crop.
-4. Centered the constrained desktop image with layout instead of `translateX`, because Framer Motion owns the hero transform stack and was pinning the media from the midpoint on wide screens.
 
 ### Verification
 - `npx eslint src/components/Hero.tsx`
