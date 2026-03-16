@@ -235,7 +235,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               <motion.div className="space-y-6 max-w-[52rem]" variants={cinematicItemVariants}>
                 <span className="section-label">{t('hero.introduction.eyebrow')}</span>
                 <h2 className="max-w-[14ch] text-4xl md:text-5xl lg:text-[3.85rem] xl:text-[4.25rem] font-serif text-foreground leading-[0.96] tracking-tight-serif">
-                  <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} />
+                  <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} className="block" />
                 </h2>
               </motion.div>
               <motion.div className="lg:pt-12" variants={cinematicItemVariants}>

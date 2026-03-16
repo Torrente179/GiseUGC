@@ -20,7 +20,7 @@ const HeroIntroduction = () => {
           <motion.div className="space-y-4" variants={blurRevealUp(18, 0.62)}>
             <span className="section-label">{t('hero.introduction.eyebrow')}</span>
             <h2 className="text-3xl sm:text-4xl font-serif text-foreground leading-[0.95] tracking-tight-serif">
-              <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} />
+              <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} className="block" />
             </h2>
           </motion.div>
           <motion.div className="md:pt-9" variants={blurRevealUp(16, 0.68, 0.1)}>
