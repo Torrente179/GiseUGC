@@ -80,10 +80,10 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       <div className="relative min-h-[100svh] w-full flex flex-col justify-end">
         {/* Background Image Layer */}
         <motion.div 
-          className="absolute inset-0 z-0 origin-top overflow-hidden lg:inset-y-0 lg:left-1/2 lg:right-auto lg:w-full lg:max-w-[78rem] lg:-translate-x-1/2 xl:max-w-[84rem] 2xl:max-w-[88rem]"
+          className="absolute inset-0 z-0 origin-top overflow-hidden lg:flex lg:justify-center"
           style={shouldReduceMotion ? {} : { y: yImage, scale: scaleImage }}
         >
-          <picture>
+          <picture className="block h-full w-full lg:max-w-[84rem] xl:max-w-[90rem] 2xl:max-w-[94rem]">
             <source
               type="image/webp"
               srcSet="/uploads/gisela-hero-400.webp 400w, /uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
