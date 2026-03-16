@@ -111,14 +111,3 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Rebalanced the desktop hero-introduction grid so the left headline column gets more width and the supporting paragraph stops dominating the row.
 2. Trimmed the desktop intro headline sizing just enough to keep the SEO-updated copy reading like a designed title instead of collapsing into an awkward vertical stack.
 3. Tightened the intro paragraph width and top offset so the pair feels intentional again instead of leaving a tall title next to a wide, floating description block.
-
-## 2026-03-16 desktop hero de-zoom pass
-
-### What changed
-1. Reduced the hero background parallax scale so the portrait no longer starts pre-zoomed before the user scrolls.
-2. Constrained the desktop hero media wrapper with a max width, which lets the 4:5 source image read more naturally on wide screens instead of being forced to cover the full viewport width.
-3. Lowered the desktop object-position slightly so more of the torso remains visible and the hero stops reading like an over-tight face crop.
-
-### Verification
-- `npx eslint src/components/Hero.tsx`
-- `npx vite build`
