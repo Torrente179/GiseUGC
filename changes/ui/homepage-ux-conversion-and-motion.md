@@ -118,14 +118,3 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Replaced the SEO-heavy visible intro headline with the shorter editorial version that fits the intended premium presentation.
 2. Scaled the desktop intro headline back down and relaxed the forced line length so the section reads like a designed title instead of a stacked keyword block.
 3. Kept the service-intent detail in the supporting paragraph, metadata, FAQ, and service pages instead of forcing the H2 to do every SEO job at once.
-
-## 2026-03-16 desktop hero de-zoom pass
-
-### What changed
-1. Reduced the hero background parallax scale so the portrait no longer starts pre-zoomed before the user scrolls.
-2. Constrained the desktop hero media wrapper with a max width, which lets the 4:5 source image read more naturally on wide screens instead of being forced to cover the full viewport width.
-3. Lowered the desktop object-position slightly so more of the torso remains visible and the hero stops reading like an over-tight face crop.
-
-### Verification
-- `npx eslint src/components/Hero.tsx`
-- `npx vite build`
