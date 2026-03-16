@@ -71,8 +71,8 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     offset: ['start start', 'end start'],
   });
   
-  const yImage = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
-  const scaleImage = useTransform(scrollYProgress, [0, 1], [1.05, 1.15]);
+  const yImage = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
+  const scaleImage = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
 
   return (
     <section ref={containerRef} id="home" className="relative w-full overflow-hidden bg-black">
@@ -80,7 +80,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       <div className="relative min-h-[100svh] w-full flex flex-col justify-end">
         {/* Background Image Layer */}
         <motion.div 
-          className="absolute inset-0 z-0 origin-top overflow-hidden"
+          className="absolute inset-0 z-0 origin-top overflow-hidden lg:inset-y-0 lg:left-1/2 lg:right-auto lg:w-full lg:max-w-[78rem] lg:-translate-x-1/2 xl:max-w-[84rem] 2xl:max-w-[88rem]"
           style={shouldReduceMotion ? {} : { y: yImage, scale: scaleImage }}
         >
           <picture>
@@ -92,7 +92,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             <img
               src="/uploads/gisela-hero-1200.jpg"
               alt={t('hero.imageAlt')}
-              className={`w-full h-full object-cover object-[50%_15%] md:object-[50%_20%] lg:object-[50%_25%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`w-full h-full object-cover object-[50%_15%] md:object-[50%_20%] lg:object-[50%_30%] xl:object-[50%_34%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
               loading="eager"
               fetchPriority="high"
               decoding="async"
