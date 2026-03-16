@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useRef, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Diamond, Sparkles, Zap, ArrowDownRight, ChevronDown } from 'lucide-react';
@@ -6,10 +6,6 @@ import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navig
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { premiumEase, easeOutExpo, springSnappy } from '@/components/motion/variants';
-import { R2_MEDIA_BASE_URL } from '@/data/portfolio-clips';
-
-const HERO_VIDEO_SRC = `${R2_MEDIA_BASE_URL}/videos/previews/ugc-brand-spokesperson-preview.mp4`;
-const HERO_VIDEO_POSTER = `${R2_MEDIA_BASE_URL}/videos/posters/ugc-brand-spokesperson-poster.jpg`;
 
 interface HeroProps {
   showIntroduction?: boolean;
@@ -50,28 +46,9 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const shouldReduceMotion = useReducedMotion();
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
-  const [videoReady, setVideoReady] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
   const containerRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleImageLoad = useCallback(() => setHeroImageLoaded(true), []);
-
-  // Desktop detection for video background (avoid loading video on mobile)
-  useEffect(() => {
-    const mql = window.matchMedia('(min-width: 1024px)');
-    setIsDesktop(mql.matches);
-    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mql.addEventListener('change', onChange);
-    return () => mql.removeEventListener('change', onChange);
-  }, []);
-
-  // Auto-play video when ready on desktop
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !isDesktop) return;
-    video.play().catch(() => {});
-  }, [isDesktop, videoReady]);
 
   const heroPills = [
     { icon: Sparkles, labelKey: 'hero.pillStrategy' },
@@ -123,30 +100,6 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             />
           </picture>
         </motion.div>
-
-        {/* Video Background Layer (desktop only, fades in over photo) */}
-        {isDesktop && (
-          <motion.div
-            className="absolute inset-0 z-[1] origin-top overflow-hidden"
-            style={shouldReduceMotion ? {} : { y: yImage, scale: scaleImage }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: videoReady ? 1 : 0 }}
-            transition={{ duration: 1.8, ease: premiumEase }}
-          >
-            <video
-              ref={videoRef}
-              className="w-full h-full object-cover object-[50%_25%]"
-              muted
-              loop
-              playsInline
-              preload="auto"
-              poster={HERO_VIDEO_POSTER}
-              onCanPlay={() => setVideoReady(true)}
-            >
-              <source src={HERO_VIDEO_SRC} type="video/mp4" />
-            </video>
-          </motion.div>
-        )}
 
         {/* Animated Atmosphere Orbs */}
         <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden" aria-hidden="true">
