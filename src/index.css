@@ -456,6 +456,56 @@
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
 
+  /* ─── Hero Atmospheric Orbs ─── */
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.18;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .hero-orb-1 {
+    width: 45vw;
+    height: 45vw;
+    max-width: 600px;
+    max-height: 600px;
+    bottom: -10%;
+    left: -8%;
+    background: radial-gradient(circle, hsl(var(--coastal-teal) / 0.6), transparent 70%);
+    animation: hero-orb-drift-1 14s ease-in-out infinite;
+  }
+
+  .hero-orb-2 {
+    width: 35vw;
+    height: 35vw;
+    max-width: 480px;
+    max-height: 480px;
+    top: 10%;
+    right: -5%;
+    background: radial-gradient(circle, hsl(var(--washed-khaki) / 0.5), transparent 70%);
+    animation: hero-orb-drift-2 18s ease-in-out infinite;
+  }
+
+  @keyframes hero-orb-drift-1 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    33% { transform: translate3d(4vw, -3vw, 0) scale(1.08); }
+    66% { transform: translate3d(-2vw, 2vw, 0) scale(0.95); }
+  }
+
+  @keyframes hero-orb-drift-2 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    40% { transform: translate3d(-3vw, 4vw, 0) scale(1.05); }
+    70% { transform: translate3d(2vw, -2vw, 0) scale(0.92); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-orb {
+      animation: none;
+    }
+  }
+
   .cafe-panel {
     @apply rounded-[1.35rem] border border-border/90 bg-card backdrop-blur-sm elegant-shadow;
     background-color: hsl(var(--card) / 0.98);
