@@ -2,12 +2,14 @@ import { useTranslation } from 'react-i18next';
 import {
   ArrowRight,
   ArrowUpRight,
+  Send,
 } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { blurRevealUp, springSmooth } from '@/components/motion/variants';
 import { getLocaleFromPath, getServicePath, type ServicePageId } from '@/lib/locale-path';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
+const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101';
 const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
 const fiverrLogoSrc = '/uploads/fiverr-logo-56.webp';
 const whatsappLogoSrc = '/uploads/whatsapp.png';
@@ -28,6 +30,50 @@ const Footer = () => {
     href: getServicePath(serviceId, locale),
     label: t(`footer.services.${serviceId}`),
   }));
+
+  const quickActions = [
+    {
+      id: 'whatsapp',
+      href: whatsappUrl,
+      ariaLabel: t('floatingContact.whatsappAria'),
+      toneClass: 'border-foreground/10 bg-white/92 text-foreground',
+      icon: (
+        <img
+          src={whatsappLogoSrc}
+          alt=""
+          width={56}
+          height={56}
+          loading="lazy"
+          decoding="async"
+          className="h-4 w-4 object-contain"
+        />
+      ),
+    },
+    {
+      id: 'telegram',
+      href: telegramUrl,
+      ariaLabel: t('floatingContact.telegramAria'),
+      toneClass: 'border-sky-500/20 bg-sky-500/12 text-sky-700 dark:text-sky-200',
+      icon: <Send className="h-4 w-4 -rotate-12" />,
+    },
+    {
+      id: 'fiverr',
+      href: fiverrUrl,
+      ariaLabel: t('floatingContact.fiverrAria'),
+      toneClass: 'border-foreground/10 bg-white/92 text-foreground',
+      icon: (
+        <img
+          src={fiverrLogoSrc}
+          alt=""
+          width={56}
+          height={56}
+          loading="lazy"
+          decoding="async"
+          className="h-4 w-4 object-contain"
+        />
+      ),
+    },
+  ];
 
   return (
     <footer
@@ -69,15 +115,17 @@ const Footer = () => {
                 transition={springSmooth}
               >
                 <span className="inline-flex items-center gap-2.5">
-                  <img
-                    src={whatsappLogoSrc}
-                    alt=""
-                    width={56}
-                    height={56}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-4.5 w-4.5 rounded-full object-cover shadow-[0_5px_12px_-7px_rgba(0,0,0,0.45)] sm:h-5 sm:w-5"
-                  />
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/92 shadow-[0_6px_14px_-10px_rgba(0,0,0,0.45)]">
+                    <img
+                      src={whatsappLogoSrc}
+                      alt=""
+                      width={56}
+                      height={56}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-3.5 w-3.5 object-contain"
+                    />
+                  </span>
                   {t('footer.primaryCta')}
                 </span>
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -93,19 +141,39 @@ const Footer = () => {
                 transition={springSmooth}
               >
                 <span className="inline-flex items-center gap-2.5">
-                  <img
-                    src={fiverrLogoSrc}
-                    alt=""
-                    width={56}
-                    height={56}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-4.5 w-4.5 rounded-full object-cover shadow-[0_5px_12px_-7px_rgba(0,0,0,0.45)] sm:h-5 sm:w-5"
-                  />
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white shadow-[0_6px_14px_-10px_rgba(0,0,0,0.28)]">
+                    <img
+                      src={fiverrLogoSrc}
+                      alt=""
+                      width={56}
+                      height={56}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-3.5 w-3.5 object-contain"
+                    />
+                  </span>
                   {t('footer.fiverr.visitProfile')}
                 </span>
                 <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </motion.a>
+
+              <div className="flex items-center gap-2 pt-1">
+                {quickActions.map((action) => (
+                  <motion.a
+                    key={action.id}
+                    href={action.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={action.ariaLabel}
+                    className={`inline-flex h-9 w-9 items-center justify-center rounded-full border ${action.toneClass} shadow-[0_10px_24px_-20px_rgba(0,0,0,0.45)] transition-colors hover:border-primary/30 hover:text-primary`}
+                    whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+                    whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
+                    transition={springSmooth}
+                  >
+                    {action.icon}
+                  </motion.a>
+                ))}
+              </div>
             </motion.div>
           </div>
 
