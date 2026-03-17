@@ -118,3 +118,10 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Replaced the SEO-heavy visible intro headline with the shorter editorial version that fits the intended premium presentation.
 2. Scaled the desktop intro headline back down and relaxed the forced line length so the section reads like a designed title instead of a stacked keyword block.
 3. Kept the service-intent detail in the supporting paragraph, metadata, FAQ, and service pages instead of forcing the H2 to do every SEO job at once.
+
+## 2026-03-17 homepage FAQ readability correction
+
+### What changed
+1. The homepage FAQ question rows now explicitly use the sans stack instead of relying on inherited typography.
+2. FAQ answers were also pinned to the same sans stack so the accordion reads consistently once opened.
+3. This change stayed scoped to the homepage FAQ component shown on the main landing page; the separate service-page FAQ treatment remains tracked in the service-page UI note.
