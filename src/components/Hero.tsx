@@ -244,14 +244,44 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               </div>
             </motion.div>
 
-            {/* Mobile-only: proof strip */}
+            {/* Mobile-only: Horizontal scrollable reel strip */}
             <motion.div
-              className="lg:hidden flex items-center gap-3 text-white/60"
+              className="lg:hidden w-full"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
-              <span className="text-lg font-serif font-bold text-white">{t('hero.proofValue')}</span>
-              <span className="w-px h-4 bg-white/20" />
-              <span className="text-[10px] font-bold uppercase tracking-prestige">{t('hero.proofCaption')}</span>
+              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-6 px-6">
+                {LEGACY_REEL_CLIPS.slice(0, 5).map((clip) => (
+                  <a
+                    key={clip.id}
+                    href="#portfolio"
+                    onClick={handleHashLinkClick}
+                    className="flex-shrink-0 w-[72px] h-[128px] rounded-xl overflow-hidden border border-white/15 relative group"
+                  >
+                    <img
+                      src={clip.posterSrc}
+                      alt=""
+                      className="w-full h-full object-cover transition-transform duration-300 group-active:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                      <Play className="w-4 h-4 text-white/80 fill-white/80" />
+                    </div>
+                  </a>
+                ))}
+                {/* "See all" card */}
+                <a
+                  href="#portfolio"
+                  onClick={handleHashLinkClick}
+                  className="flex-shrink-0 w-[72px] h-[128px] rounded-xl overflow-hidden border border-white/15 bg-white/5 flex items-center justify-center"
+                >
+                  <div className="flex flex-col items-center gap-1.5">
+                    <ArrowDownRight className="w-4 h-4 text-white/60" />
+                    <span className="text-[8px] font-bold uppercase tracking-prestige text-white/60">
+                      {t('hero.proofValue')}
+                    </span>
+                  </div>
+                </a>
+              </div>
             </motion.div>
           </div>
         </motion.div>
