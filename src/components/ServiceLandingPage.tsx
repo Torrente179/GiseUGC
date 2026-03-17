@@ -1,5 +1,5 @@
-import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
-import { Check, Play, X } from 'lucide-react';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Check, Play, X, Plus, ArrowRight } from 'lucide-react';
 import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getHomeSectionHref, getServicePath } from '@/lib/locale-path';
 import { getServicePageContent, getRelatedServiceSummaries } from '@/data/service-pages';
@@ -37,20 +37,64 @@ const localeLabels = {
   es: {
     home: 'Inicio',
     services: 'Servicios',
-    openSample: 'Abrir muestra',
+    openSample: 'Ver muestra',
     useWhatsApp: 'WhatsApp',
     useFiverr: 'Fiverr',
-    relatedLink: 'Ver página',
+    relatedLink: 'Ver servicio',
+    scrollDown: 'Explorar',
   },
   en: {
     home: 'Home',
     services: 'Services',
-    openSample: 'Open sample',
+    openSample: 'View sample',
     useWhatsApp: 'WhatsApp',
     useFiverr: 'Fiverr',
-    relatedLink: 'View page',
+    relatedLink: 'View service',
+    scrollDown: 'Explore',
   },
 } as const;
+
+/* ── Scroll-reveal hook ── */
+function useScrollReveal<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === 'undefined') {
+      node?.classList.add('is-visible');
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          node.classList.add('is-visible');
+          observer.unobserve(node);
+        }
+      },
+      { rootMargin: '0px 0px -60px 0px', threshold: 0.08 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
+
+/* ── Section wrapper with reveal ── */
+function RevealSection({
+  children,
+  className = '',
+  id,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
+}) {
+  const ref = useScrollReveal<HTMLElement>();
+  return (
+    <section ref={ref} id={id} className={`svc-reveal ${className}`}>
+      {children}
+    </section>
+  );
+}
 
 const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
   const page = getServicePageContent(serviceId, locale);
@@ -71,19 +115,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     [page.featuredExamples],
   );
 
-  const [selectedProofId, setSelectedProofId] = useState<number | null>(
-    page.featuredExamples[0]?.clipId ?? null,
-  );
-
-  useEffect(() => {
-    setSelectedProofId(page.featuredExamples[0]?.clipId ?? null);
-  }, [serviceId, locale, page.featuredExamples]);
-
-  const selectedProof =
-    proofExamples.find((item) => item.example.clipId === selectedProofId) ?? proofExamples[0];
   const leadProof = proofExamples[0];
-  const supportingProofs = proofExamples.slice(1);
-  const selectedDuration = formatDuration(selectedProof?.clip.durationSeconds);
+
+  /* ── Mobile deliverable expand state ── */
+  const [expandedDeliverable, setExpandedDeliverable] = useState<number | null>(null);
+  const toggleDeliverable = useCallback((index: number) => {
+    setExpandedDeliverable((prev) => (prev === index ? null : index));
+  }, []);
 
   const schema = useMemo(() => {
     const breadcrumbItems = [
@@ -208,188 +246,97 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
       <div className="min-h-screen bg-background">
         <Navbar />
 
-        <main className="pt-28 pb-16 md:pt-32 md:pb-24">
-          <section className="studio-section pt-8 pb-8 md:pt-12 md:pb-10">
-            <div className="studio-container">
-              <nav className="mb-6 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-foreground/45">
-                <a href={getHomePath(locale)} className="transition-colors hover:text-primary">
-                  {labels.home}
-                </a>
-                <span>/</span>
-                <a
-                  href={getHomeSectionHref(locale, 'services')}
-                  className="transition-colors hover:text-primary"
-                >
-                  {labels.services}
-                </a>
-                <span>/</span>
-                <span className="text-foreground/75">{page.breadcrumbLabel}</span>
+        <main>
+          {/* ═══════════════════════════════════════════
+              1. CINEMATIC HERO — Full-bleed video
+              ═══════════════════════════════════════════ */}
+          <section className="svc-hero">
+            {/* Background video */}
+            {leadProof && (
+              <LazyVideo
+                className="svc-hero-video"
+                src={leadProof.clip.previewSrc}
+                poster={leadProof.clip.posterSrc}
+                lqip={getVideoLqip(leadProof.clip.previewSrc)}
+                muted
+                autoPlay
+                loop
+                playsInline
+                preload="auto"
+                pauseOffscreen
+                aria-hidden="true"
+              />
+            )}
+
+            {/* Gradient overlay */}
+            <div className="svc-hero-overlay" />
+
+            {/* Content */}
+            <div className="svc-hero-content">
+              {/* Breadcrumb */}
+              <nav className="svc-breadcrumb mb-8 md:mb-10" aria-label="Breadcrumb">
+                <a href={getHomePath(locale)}>{labels.home}</a>
+                <span className="opacity-40">/</span>
+                <a href={getHomeSectionHref(locale, 'services')}>{labels.services}</a>
+                <span className="opacity-40">/</span>
+                <span className="text-white/70">{page.breadcrumbLabel}</span>
               </nav>
 
-              <div className="grid gap-10 xl:grid-cols-[minmax(0,0.9fr)_minmax(360px,0.72fr)] xl:items-start">
-                <div className="max-w-4xl">
-                  <p className="section-label mb-4">{page.heroEyebrow}</p>
-                  <h1 className="max-w-4xl text-4xl leading-[0.92] tracking-tight-serif text-foreground sm:text-5xl lg:text-6xl">
-                    {page.heroTitle}
-                  </h1>
-                  <p className="strategic-body mt-6 max-w-3xl text-lg text-foreground/72 md:text-xl">
-                    {page.heroSummary}
-                  </p>
+              {/* Eyebrow */}
+              <p className="svc-hero-tagline mb-5 md:mb-6">{page.heroEyebrow}</p>
 
-                  <div className="mt-8 flex flex-wrap gap-3">
-                    {page.heroPoints.map((point) => (
-                      <span
-                        key={point}
-                        className="rounded-full border border-border/70 bg-card/70 px-4 py-2 text-sm font-medium text-foreground/75"
-                      >
-                        {point}
-                      </span>
-                    ))}
-                  </div>
+              {/* H1 — SEO preserved, same text */}
+              <h1 className="svc-hero-title max-w-5xl">{page.heroTitle}</h1>
 
-                  <div className="mt-8 flex flex-wrap gap-4">
-                    <a href={page.primaryCtaHref} className="btn-primary-nordic btn-shimmer px-7 py-3">
-                      {page.primaryCtaLabel}
-                    </a>
-                    <a
-                      href={page.secondaryCtaHref}
-                      className="rounded-full border border-border/80 bg-card/70 px-6 py-3 text-sm font-semibold text-foreground/75 transition-colors hover:border-primary/40 hover:text-primary"
-                    >
-                      {page.secondaryCtaLabel}
-                    </a>
-                  </div>
-                </div>
+              {/* Summary */}
+              <p className="svc-hero-summary mt-6 text-base md:text-lg">{page.heroSummary}</p>
 
-                {selectedProof ? (
-                  <div className="xl:pl-4">
-                    <div className="relative overflow-hidden rounded-[2rem] border border-border/70 bg-[#15110e] shadow-[0_34px_90px_-56px_rgba(30,23,17,0.75)]">
-                      <div className="aspect-[4/5] w-full overflow-hidden">
-                        <LazyVideo
-                          className="h-full w-full object-cover"
-                          src={selectedProof.clip.previewSrc}
-                          poster={selectedProof.clip.posterSrc}
-                          lqip={getVideoLqip(selectedProof.clip.previewSrc)}
-                          muted
-                          autoPlay
-                          loop
-                          playsInline
-                          preload="auto"
-                          pauseOffscreen
-                          aria-hidden="true"
-                        />
-                      </div>
+              {/* Chips */}
+              <div className="mt-6 flex flex-wrap gap-2 md:mt-8">
+                {page.heroPoints.map((point) => (
+                  <span key={point} className="svc-hero-chip">
+                    {point}
+                  </span>
+                ))}
+              </div>
 
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#15110e] via-[#15110e]/16 to-transparent" />
-
-                      <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-7">
-                        <div className="mb-3 flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80">
-                          <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 backdrop-blur-md">
-                            {page.navLabel}
-                          </span>
-                          {selectedDuration && (
-                            <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 backdrop-blur-md">
-                              {selectedDuration}
-                            </span>
-                          )}
-                        </div>
-
-                        <p className="max-w-md text-2xl font-medium leading-tight tracking-tight text-white md:text-[2rem]">
-                          {selectedProof.example.title}
-                        </p>
-                        <p className="mt-3 max-w-lg text-sm leading-7 text-white/74 md:text-base">
-                          {selectedProof.example.description}
-                        </p>
-
-                        <a
-                          href={selectedProof.clip.mainSrc}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-foreground transition-transform hover:-translate-y-[1px]"
-                        >
-                          <Play className="h-4 w-4" />
-                          {labels.openSample}
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                      {proofExamples.map(({ example, clip }) => {
-                        const isActive = example.clipId === selectedProof.example.clipId;
-
-                        return (
-                          <button
-                            type="button"
-                            key={example.clipId}
-                            onClick={() => setSelectedProofId(example.clipId)}
-                            aria-pressed={isActive}
-                            className={`overflow-hidden rounded-[1.4rem] border text-left transition-all ${isActive
-                              ? 'border-primary/45 bg-card/85 shadow-[0_22px_48px_-42px_rgba(44,167,200,0.72)]'
-                              : 'border-border/65 bg-card/60 hover:border-primary/25'
-                              }`}
-                          >
-                            <div className="relative aspect-[4/5] overflow-hidden bg-secondary/20">
-                              <img
-                                src={clip.posterSrc}
-                                alt={example.title}
-                                className="h-full w-full object-cover"
-                                loading="lazy"
-                                decoding="async"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-[#15110e]/35 via-transparent to-transparent" />
-                            </div>
-                            <div className="p-4">
-                              <p className="text-sm font-semibold leading-tight text-foreground">
-                                {example.title}
-                              </p>
-                              <p className="mt-2 line-clamp-2 text-xs leading-6 text-foreground/62">
-                                {example.description}
-                              </p>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ) : (
-                  <aside className="rounded-[1.75rem] border border-border/70 bg-card/60 p-6 shadow-[0_28px_90px_-48px_rgba(47,42,36,0.45)] backdrop-blur-md md:p-8">
-                    <p className="section-label mb-4">{page.sectionIntroTitle}</p>
-                    <p className="strategic-body text-foreground/68">{page.sectionIntroText}</p>
-                    <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-                      {page.marketItems.map((item) => (
-                        <div
-                          key={item}
-                          className="rounded-2xl border border-border/60 bg-background/70 px-4 py-4 text-sm text-foreground/72"
-                        >
-                          {item}
-                        </div>
-                      ))}
-                    </div>
-                  </aside>
-                )}
+              {/* CTAs */}
+              <div className="mt-8 flex flex-wrap gap-3 md:mt-10">
+                <a href={page.primaryCtaHref} className="svc-hero-cta-primary">
+                  {page.primaryCtaLabel}
+                </a>
+                <a href={page.secondaryCtaHref} className="svc-hero-cta-secondary">
+                  {page.secondaryCtaLabel}
+                </a>
               </div>
             </div>
           </section>
 
-          <section className="studio-section pt-0 pb-8 md:pb-10">
+          {/* ═══════════════════════════════════════════
+              2. EDITORIAL INTRO — What this resolves
+              ═══════════════════════════════════════════ */}
+          <RevealSection className="py-16 md:py-24 lg:py-28">
             <div className="studio-container">
-              <div className="grid gap-8 border-y border-border/60 py-8 md:py-10 xl:grid-cols-[minmax(0,0.58fr)_minmax(0,0.42fr)] xl:items-start">
-                <div className="max-w-3xl">
-                  <p className="section-label mb-4">{page.sectionIntroTitle}</p>
-                  <p className="text-[clamp(1.2rem,2vw,1.85rem)] font-light leading-[1.65] text-foreground/82">
+              <div className="grid gap-10 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,0.45fr)] lg:items-start">
+                <div>
+                  <p className="section-label mb-5">{page.sectionIntroTitle}</p>
+                  <p className="font-serif text-[clamp(1.35rem,2.5vw,2.2rem)] font-light leading-[1.5] tracking-tight text-foreground/85">
                     {page.sectionIntroText}
                   </p>
                 </div>
 
-                <div className="xl:pl-6">
-                  <p className="section-label mb-4">{page.marketTitle}</p>
-                  <div className="grid gap-3">
-                    {page.marketItems.map((item) => (
+                <div className="lg:pl-8">
+                  <p className="section-label mb-5">{page.marketTitle}</p>
+                  <div className="space-y-0">
+                    {page.marketItems.map((item, i) => (
                       <div
                         key={item}
-                        className="flex gap-3 border-b border-border/55 pb-3 last:border-b-0 last:pb-0"
+                        className="flex gap-4 border-b border-border/40 py-4 last:border-b-0"
                       >
-                        <span className="mt-[0.7rem] h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                        <p className="text-sm font-light leading-[1.8] text-foreground/72 md:text-base">
+                        <span className="mt-1 text-xs font-semibold uppercase tracking-prestige text-accent/70">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <p className="text-sm font-light leading-[1.75] text-foreground/70 md:text-base">
                           {item}
                         </p>
                       </div>
@@ -398,299 +345,333 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 </div>
               </div>
             </div>
-          </section>
+          </RevealSection>
 
-          <section className="studio-section pt-0 pb-8 md:pb-10" id="examples">
-            <div className="studio-container">
-              <div className="studio-header mb-10">
-                <div>
+          {/* ═══════════════════════════════════════════
+              3. PROOF GALLERY — Bento mosaic
+              ═══════════════════════════════════════════ */}
+          {proofExamples.length > 0 && (
+            <RevealSection className="pb-16 md:pb-24 lg:pb-28" id="examples">
+              <div className="studio-container">
+                <div className="mb-10 md:mb-14">
                   <p className="section-label mb-4">{page.featuredTitle}</p>
                   <h2 className="studio-title max-w-3xl">{page.featuredIntro}</h2>
                 </div>
-                <p className="studio-subtitle max-w-xl lg:justify-self-end">{page.metaDescription}</p>
-              </div>
 
-              <div className="studio-rule mb-10" />
-
-              <div className="grid gap-6 xl:grid-cols-[minmax(0,0.62fr)_minmax(320px,0.38fr)]">
-                {leadProof && (
-                  <article className="overflow-hidden rounded-[2rem] border border-border/70 bg-card/60 shadow-[0_30px_80px_-52px_rgba(47,42,36,0.48)]">
-                    <div className="grid h-full gap-0 lg:grid-cols-[minmax(0,0.58fr)_minmax(0,0.42fr)]">
-                      <div className="relative min-h-[320px] bg-secondary/15">
+                {/* Bento grid — asymmetric */}
+                <div className="grid gap-3 md:gap-4 md:grid-cols-2 lg:grid-cols-3 auto-rows-[280px] md:auto-rows-[340px]">
+                  {proofExamples.map(({ example, clip }, index) => {
+                    const isLead = index === 0;
+                    const duration = formatDuration(clip.durationSeconds);
+                    return (
+                      <a
+                        key={example.clipId}
+                        href={clip.mainSrc}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`svc-bento-item group ${
+                          isLead
+                            ? 'md:col-span-2 md:row-span-2 md:auto-rows-auto'
+                            : ''
+                        }`}
+                        style={isLead ? { gridRow: 'span 2' } : undefined}
+                      >
                         <img
-                          src={leadProof.clip.posterSrc}
-                          alt={leadProof.example.title}
+                          src={clip.posterSrc}
+                          alt={example.title}
                           className="h-full w-full object-cover"
-                          loading="lazy"
+                          loading={index === 0 ? 'eager' : 'lazy'}
                           decoding="async"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#15110e]/30 via-transparent to-transparent" />
-                        <div className="absolute left-5 top-5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md">
-                          {page.navLabel}
-                        </div>
-                      </div>
 
-                      <div className="flex flex-col justify-between p-7 md:p-8">
-                        <div>
-                          <p className="section-label mb-3">{page.heroEyebrow}</p>
-                          <h3 className="text-3xl font-medium tracking-tight text-foreground">
-                            {leadProof.example.title}
-                          </h3>
-                          <p className="strategic-body mt-4 text-foreground/68">
-                            {leadProof.example.description}
-                          </p>
-                        </div>
-
-                        <a
-                          href={leadProof.clip.mainSrc}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-6 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:text-accent"
-                        >
-                          <Play className="h-4 w-4" />
-                          {labels.openSample}
-                        </a>
-                      </div>
-                    </div>
-                  </article>
-                )}
-
-                <div className="grid content-start gap-4">
-                  {supportingProofs.map(({ example, clip }) => (
-                    <article
-                      key={example.clipId}
-                      className="rounded-[1.6rem] border border-border/70 bg-card/55 p-5 transition-colors hover:border-primary/25 md:p-6"
-                    >
-                      <div className="flex gap-4">
-                        <div className="relative hidden h-32 w-24 shrink-0 overflow-hidden rounded-[1.1rem] bg-secondary/20 sm:block">
-                          <img
-                            src={clip.posterSrc}
-                            alt={example.title}
-                            className="h-full w-full object-cover"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        </div>
-
-                        <div>
-                          <p className="section-label mb-2">{page.navLabel}</p>
-                          <h3 className="text-xl font-medium tracking-tight text-foreground">
+                        {/* Hover/always-on overlay */}
+                        <div className="svc-bento-overlay">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-prestige text-white/90 backdrop-blur-md">
+                              {page.navLabel}
+                            </span>
+                            {duration && (
+                              <span className="rounded-full border border-white/15 bg-white/8 px-2.5 py-1 text-[10px] font-bold uppercase tracking-prestige text-white/75 backdrop-blur-md">
+                                {duration}
+                              </span>
+                            )}
+                          </div>
+                          <h3 className="text-lg font-medium leading-tight tracking-tight text-white md:text-xl">
                             {example.title}
                           </h3>
-                          <p className="strategic-body mt-3 text-sm text-foreground/68 md:text-base">
+                          <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-white/70">
                             {example.description}
                           </p>
-                          <a
-                            href={clip.mainSrc}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:text-accent"
-                          >
-                            <Play className="h-4 w-4" />
+                          <span className="mt-3 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-prestige text-white/80">
+                            <Play className="h-3.5 w-3.5" />
                             {labels.openSample}
-                          </a>
+                          </span>
                         </div>
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            </RevealSection>
+          )}
+
+          {/* ═══════════════════════════════════════════
+              4. DELIVERABLES — Editorial line items
+              ═══════════════════════════════════════════ */}
+          <RevealSection className="pb-16 md:pb-24 lg:pb-28">
+            <div className="studio-container">
+              <div className="mb-10 md:mb-14">
+                <p className="section-label mb-4">{page.deliverablesTitle}</p>
+                <h2 className="studio-title max-w-3xl">{page.navLabel}</h2>
+              </div>
+
+              <div className="border-t border-border/50">
+                {page.deliverables.map((item, index) => {
+                  const isExpanded = expandedDeliverable === index;
+                  return (
+                    <div
+                      key={item.title}
+                      className={`svc-deliverable-row border-b border-border/40 ${isExpanded ? 'is-expanded' : ''}`}
+                    >
+                      {/* Desktop: grid layout, always visible */}
+                      <div className="hidden md:grid md:grid-cols-[64px_minmax(0,0.38fr)_minmax(0,0.62fr)] md:items-baseline md:gap-6">
+                        <span className="text-sm font-semibold uppercase tracking-prestige text-accent/65 pt-1">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <h3 className="font-serif text-2xl font-medium tracking-tight text-foreground lg:text-[1.7rem]">
+                          {item.title}
+                        </h3>
+                        <p className="text-sm font-light leading-[1.85] text-foreground/62 lg:text-base">
+                          {item.description}
+                        </p>
+                      </div>
+
+                      {/* Mobile: tap-to-expand */}
+                      <button
+                        type="button"
+                        className="flex w-full items-start gap-4 text-left md:hidden"
+                        onClick={() => toggleDeliverable(index)}
+                        aria-expanded={isExpanded}
+                      >
+                        <span className="mt-0.5 text-sm font-semibold uppercase tracking-prestige text-accent/65">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <div className="flex-1">
+                          <h3 className="font-serif text-xl font-medium tracking-tight text-foreground">
+                            {item.title}
+                          </h3>
+                          <div className="svc-deliverable-desc">
+                            <p className="mt-3 text-sm font-light leading-[1.85] text-foreground/62">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+                        <span
+                          className={`mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border/50 text-foreground/35 transition-transform duration-300 ${
+                            isExpanded ? 'rotate-45' : ''
+                          }`}
+                        >
+                          <Plus className="h-3.5 w-3.5" />
+                        </span>
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </RevealSection>
+
+          {/* ═══════════════════════════════════════════
+              5. BEST FIT / NOT FIT — Split editorial
+              ═══════════════════════════════════════════ */}
+          <RevealSection className="pb-16 md:pb-24 lg:pb-28">
+            <div className="studio-container">
+              <div className="overflow-hidden rounded-[2rem]">
+                <div className="grid lg:grid-cols-2">
+                  {/* Best Fit */}
+                  <article className="svc-split-fit p-7 md:p-10 lg:p-12">
+                    <p className="section-label mb-6">{page.bestFitTitle}</p>
+                    <ul className="space-y-5">
+                      {page.bestFitItems.map((item) => (
+                        <li key={item} className="flex gap-3">
+                          <span className="mt-[0.35rem] flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+                            <Check className="h-3 w-3" />
+                          </span>
+                          <span className="text-sm font-light leading-[1.75] text-foreground/75 md:text-base">
+                            {item}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+
+                  {/* Not Fit */}
+                  <article className="svc-split-notfit p-7 md:p-10 lg:p-12">
+                    <p className="section-label mb-6 !text-white/45">{page.notFitTitle}</p>
+                    <ul className="space-y-5">
+                      {page.notFitItems.map((item) => (
+                        <li key={item} className="flex gap-3">
+                          <span className="mt-[0.35rem] flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/8 text-white/45">
+                            <X className="h-3 w-3" />
+                          </span>
+                          <span className="text-sm font-light leading-[1.75] opacity-75 md:text-base">
+                            {item}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </RevealSection>
+
+          {/* ═══════════════════════════════════════════
+              6. PROCESS — Timeline with scroll beam
+              ═══════════════════════════════════════════ */}
+          <RevealSection className="pb-16 md:pb-24 lg:pb-28">
+            <div className="studio-container">
+              <div className="mb-10 md:mb-14 max-w-3xl">
+                <p className="section-label mb-4">{page.processTitle}</p>
+                <h2 className="studio-title">{page.processTitle}</h2>
+              </div>
+
+              <div className="relative pl-14 md:pl-20">
+                {/* Timeline line */}
+                <div className="svc-timeline-line" aria-hidden="true" />
+
+                <div className="space-y-10 md:space-y-14">
+                  {page.processSteps.map((step, index) => (
+                    <article key={step.title} className="relative">
+                      {/* Dot */}
+                      <div className="absolute -left-14 top-0 md:-left-20">
+                        <div className="svc-timeline-dot">{index + 1}</div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="pt-1">
+                        <h3 className="font-serif text-2xl font-medium tracking-tight text-foreground md:text-3xl">
+                          {step.title}
+                        </h3>
+                        <p className="mt-3 max-w-2xl text-sm font-light leading-[1.85] text-foreground/65 md:text-base">
+                          {step.description}
+                        </p>
                       </div>
                     </article>
                   ))}
                 </div>
               </div>
             </div>
-          </section>
+          </RevealSection>
 
-          <section className="studio-section pt-0 pb-8 md:pb-10">
-            <div className="studio-container">
-              <div className="studio-header mb-8">
-                <div>
-                  <p className="section-label mb-4">{page.deliverablesTitle}</p>
-                  <h2 className="studio-title">{page.navLabel}</h2>
-                </div>
-                <p className="studio-subtitle max-w-2xl lg:justify-self-end">{page.metaDescription}</p>
-              </div>
-
-              <div className="border-y border-border/60">
-                {page.deliverables.map((item, index) => (
-                  <article
-                    key={item.title}
-                    className={`grid gap-4 py-6 md:grid-cols-[72px_minmax(0,0.36fr)_minmax(0,0.64fr)] md:gap-6 ${index === 0 ? '' : 'border-t border-border/55'
-                      }`}
-                  >
-                    <div className="text-sm font-semibold uppercase tracking-[0.18em] text-accent/80">
-                      {String(index + 1).padStart(2, '0')}
-                    </div>
-                    <h3 className="text-2xl font-medium tracking-tight text-foreground">{item.title}</h3>
-                    <p className="strategic-body text-foreground/68">{item.description}</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="studio-section pt-0 pb-8 md:pb-10">
-            <div className="studio-container">
-              <div className="overflow-hidden rounded-[2rem] border border-border/70 bg-card/45">
-                <div className="grid lg:grid-cols-2">
-                  <article className="p-7 md:p-8 lg:border-r lg:border-border/60">
-                    <p className="section-label mb-4">{page.bestFitTitle}</p>
-                    <ul className="space-y-4">
-                      {page.bestFitItems.map((item) => (
-                        <li key={item} className="flex gap-3 text-foreground/74">
-                          <span className="mt-[0.3rem] flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary">
-                            <Check className="h-3.5 w-3.5" />
-                          </span>
-                          <span className="strategic-body text-sm md:text-base">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </article>
-
-                  <article className="bg-foreground/[0.02] p-7 md:p-8">
-                    <p className="section-label mb-4">{page.notFitTitle}</p>
-                    <ul className="space-y-4">
-                      {page.notFitItems.map((item) => (
-                        <li key={item} className="flex gap-3 text-foreground/74">
-                          <span className="mt-[0.3rem] flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-foreground/12 bg-foreground/[0.04] text-foreground/55">
-                            <X className="h-3.5 w-3.5" />
-                          </span>
-                          <span className="strategic-body text-sm md:text-base">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </article>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="studio-section pt-0 pb-8 md:pb-10">
-            <div className="studio-container">
-              <div className="studio-header mb-8">
-                <div>
-                  <p className="section-label mb-4">{page.processTitle}</p>
-                  <h2 className="studio-title">{page.processTitle}</h2>
-                </div>
-                <p className="studio-subtitle max-w-xl lg:justify-self-end">{page.metaDescription}</p>
-              </div>
-
-              <div className="border-y border-border/60">
-                {page.processSteps.map((step, index) => (
-                  <article
-                    key={step.title}
-                    className={`grid gap-4 py-6 md:grid-cols-[88px_minmax(0,1fr)] md:gap-8 ${index === 0 ? '' : 'border-t border-border/55'
-                      }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-11 w-11 items-center justify-center rounded-full border border-border/70 bg-card text-sm font-semibold text-foreground">
-                        {index + 1}
-                      </span>
-                      <span className="hidden h-px flex-1 bg-border/50 md:block" />
-                    </div>
-
-                    <div>
-                      <h3 className="text-2xl font-medium tracking-tight text-foreground">{step.title}</h3>
-                      <p className="strategic-body mt-3 max-w-3xl text-foreground/68">
-                        {step.description}
-                      </p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="studio-section pt-0 pb-8 md:pb-10" id="faq">
-            <div className="studio-container max-w-5xl">
-              <div className="mb-10 text-center">
+          {/* ═══════════════════════════════════════════
+              7. FAQ — Premium accordion
+              ═══════════════════════════════════════════ */}
+          <RevealSection className="pb-16 md:pb-24 lg:pb-28" id="faq">
+            <div className="studio-container max-w-4xl">
+              <div className="mb-10 md:mb-14 text-center">
                 <p className="section-label mb-4">{page.faqTitle}</p>
                 <h2 className="studio-title">{page.navLabel}</h2>
               </div>
 
-              <div className="border-y border-border/60">
+              <div>
                 {page.faqs.map((faq, index) => (
                   <details
                     key={faq.question}
-                    className={`group py-5 ${index === 0 ? '' : 'border-t border-border/60'}`}
+                    className={`svc-faq-item group py-6 md:py-7 ${
+                      index === 0 ? '' : 'border-t border-border/40'
+                    }`}
                   >
-                    <summary className="flex cursor-pointer list-none items-start justify-between gap-6 text-lg font-medium tracking-tight text-foreground">
+                    <summary className="flex cursor-pointer list-none items-start justify-between gap-5 text-lg tracking-tight text-foreground md:text-xl">
                       <span>{faq.question}</span>
-                      <span className="mt-1 text-2xl font-light text-foreground/35">+</span>
+                      <span className="svc-faq-toggle shrink-0 mt-0.5">
+                        <Plus className="h-4 w-4" />
+                      </span>
                     </summary>
-                    <p className="strategic-body mt-4 max-w-3xl text-foreground/68">{faq.answer}</p>
+                    <p className="mt-4 max-w-3xl text-sm font-light leading-[1.85] text-foreground/65 md:text-base">
+                      {faq.answer}
+                    </p>
                   </details>
                 ))}
               </div>
             </div>
-          </section>
+          </RevealSection>
 
-          <section className="studio-section pt-0 pb-8 md:pb-10">
-            <div className="studio-container">
-              <div className="rounded-[2rem] border border-border/70 bg-card/60 p-7 shadow-[0_28px_90px_-50px_rgba(47,42,36,0.48)] md:p-10">
-                <div className="grid gap-6 lg:grid-cols-[minmax(0,0.68fr)_auto] lg:items-end">
-                  <div>
-                    <p className="section-label mb-4">{page.ctaTitle}</p>
-                    <p className="text-[clamp(1.25rem,2vw,1.9rem)] font-light leading-[1.6] text-foreground/82">
-                      {page.ctaText}
-                    </p>
-                  </div>
+          {/* ═══════════════════════════════════════════
+              8. CTA CLOSER — Dark editorial sign-off
+              ═══════════════════════════════════════════ */}
+          <RevealSection className="svc-cta-closer py-20 md:py-28 lg:py-32">
+            <div className="studio-container relative z-10 text-center">
+              <p className="section-label mb-6 !text-white/40">{page.ctaTitle}</p>
+              <p className="mx-auto max-w-3xl font-serif text-[clamp(1.4rem,3vw,2.6rem)] font-light leading-[1.45] tracking-tight text-white/90">
+                {page.ctaText}
+              </p>
 
-                  <div className="flex flex-wrap gap-4 lg:justify-end">
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-primary-nordic btn-shimmer px-7 py-3"
-                    >
-                      {labels.useWhatsApp}
-                    </a>
-                    <a
-                      href={fiverrUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-full border border-border/80 bg-background/75 px-6 py-3 text-sm font-semibold text-foreground/75 transition-colors hover:border-primary/40 hover:text-primary"
-                    >
-                      {labels.useFiverr}
-                    </a>
-                  </div>
-                </div>
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-white/12 border border-white/20 px-8 py-3.5 text-[10px] font-bold uppercase tracking-prestige text-white backdrop-blur-md transition-all duration-200 hover:bg-white/20 hover:border-white/35 hover:-translate-y-[1px]"
+                >
+                  {labels.useWhatsApp}
+                </a>
+                <a
+                  href={fiverrUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center rounded-full border border-white/12 px-7 py-3.5 text-[10px] font-bold uppercase tracking-prestige text-white/65 transition-all duration-200 hover:text-white hover:border-white/30"
+                >
+                  {labels.useFiverr}
+                </a>
+              </div>
+
+              {/* Signature flourish */}
+              <div className="mt-12 md:mt-16">
+                <div className="signature-line mx-auto mb-6 max-w-[200px] !bg-gradient-to-r !from-transparent !via-white/15 !to-transparent" />
+                <span className="svc-signature">Gisela Saldarriaga</span>
               </div>
             </div>
-          </section>
+          </RevealSection>
 
-          <section className="studio-section pt-0 pb-6 md:pb-8">
+          {/* ═══════════════════════════════════════════
+              9. RELATED SERVICES — Horizontal cards
+              ═══════════════════════════════════════════ */}
+          <RevealSection className="py-16 md:py-24 lg:py-28">
             <div className="studio-container">
-              <div className="border-t border-border/60 pt-8">
-                <div className="studio-header mb-8">
-                  <div>
-                    <p className="section-label mb-4">{page.relatedTitle}</p>
-                    <h2 className="studio-title">{page.relatedTitle}</h2>
-                  </div>
-                </div>
+              <div className="mb-10 md:mb-14">
+                <p className="section-label mb-4">{page.relatedTitle}</p>
+                <h2 className="studio-title">{page.relatedTitle}</h2>
+              </div>
 
-                <div className="grid gap-5 md:grid-cols-2">
-                  {page.relatedServiceIds.map((relatedId, index) => {
-                    const relatedPage = relatedPages[index];
-                    if (!relatedPage) return null;
+              <div className="grid gap-5 md:grid-cols-2">
+                {page.relatedServiceIds.map((relatedId, index) => {
+                  const relatedPage = relatedPages[index];
+                  if (!relatedPage) return null;
 
-                    return (
-                      <article key={relatedId} className="border-t border-border/60 pt-5">
-                        <p className="section-label mb-3">{relatedPage.eyebrow}</p>
-                        <h3 className="text-2xl font-medium tracking-tight text-foreground mb-3">
-                          {relatedPage.title}
-                        </h3>
-                        <p className="strategic-body mb-5 text-foreground/68">{relatedPage.summary}</p>
-                        <a
-                          href={getServicePath(relatedId, locale)}
-                          className="inline-flex items-center text-sm font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:text-accent"
-                        >
-                          {labels.relatedLink}
-                        </a>
-                      </article>
-                    );
-                  })}
-                </div>
+                  return (
+                    <a
+                      key={relatedId}
+                      href={getServicePath(relatedId, locale)}
+                      className="svc-related-card group block p-7 md:p-8"
+                    >
+                      <p className="section-label mb-3">{relatedPage.eyebrow}</p>
+                      <h3 className="font-serif text-2xl font-medium tracking-tight text-foreground mb-3 md:text-[1.6rem]">
+                        {relatedPage.title}
+                      </h3>
+                      <p className="text-sm font-light leading-[1.75] text-foreground/62 mb-5">
+                        {relatedPage.summary}
+                      </p>
+                      <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-prestige text-primary transition-colors group-hover:text-accent">
+                        {labels.relatedLink}
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </a>
+                  );
+                })}
               </div>
             </div>
-          </section>
+          </RevealSection>
         </main>
 
         <Footer />
