@@ -160,13 +160,14 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               </h1>
 
               <motion.div
-                className="w-24 md:w-40 h-px bg-white/30 my-8 origin-left"
+                className="hidden md:block w-24 md:w-40 h-px bg-white/30 my-8 origin-left"
                 variants={shouldReduceMotion ? undefined : cinematicLineVariants}
               />
 
-              <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center">
+              <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center mt-6 md:mt-0">
+                {/* Description: visually hidden on mobile, still in DOM for SEO */}
                 <motion.p
-                  className="font-outfit font-light text-base md:text-lg text-white/80 max-w-sm cinematic-subtitle"
+                  className="sr-only md:not-sr-only md:font-outfit md:font-light md:text-lg md:text-white/80 md:max-w-sm md:cinematic-subtitle"
                   variants={shouldReduceMotion ? undefined : cinematicItemVariants}
                 >
                   {t('hero.description')}
