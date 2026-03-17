@@ -125,3 +125,10 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. The homepage FAQ question rows now explicitly use the sans stack instead of relying on inherited typography.
 2. FAQ answers were also pinned to the same sans stack so the accordion reads consistently once opened.
 3. This change stayed scoped to the homepage FAQ component shown on the main landing page; the separate service-page FAQ treatment remains tracked in the service-page UI note.
+
+## 2026-03-17 homepage FAQ typography rebalance
+
+### What changed
+1. Restored the homepage FAQ questions to the serif display stack after the full sans override flattened the section too much.
+2. Increased the question size and weight and tightened the line-height so the Cormorant treatment stays legible instead of feeling thin.
+3. Kept the FAQ answers on the sans stack, preserving cleaner paragraph readability once each accordion item opens.
