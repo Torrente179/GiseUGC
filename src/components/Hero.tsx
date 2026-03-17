@@ -1,15 +1,12 @@
-import { useCallback, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Diamond, Sparkles, Zap, ArrowDownRight, ChevronDown, Play } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { premiumEase, easeOutExpo, springSnappy } from '@/components/motion/variants';
-import { R2_MEDIA_BASE_URL } from '@/data/portfolio-clips';
-
-const REEL_VIDEO_SRC = `${R2_MEDIA_BASE_URL}/videos/mobile/ugc-brand-spokesperson-mobile.mp4`;
-const REEL_POSTER_SRC = `${R2_MEDIA_BASE_URL}/videos/posters/ugc-brand-spokesperson-poster.jpg`;
+import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
 
 interface HeroProps {
   showIntroduction?: boolean;
@@ -50,9 +47,35 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const shouldReduceMotion = useReducedMotion();
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
+  const [currentClipIndex, setCurrentClipIndex] = useState(0);
   const containerRef = useRef<HTMLElement>(null);
+  const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
 
   const handleImageLoad = useCallback(() => setHeroImageLoaded(true), []);
+
+  // TikTok-style auto-cycling through all clips
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+    const interval = setInterval(() => {
+      setCurrentClipIndex((prev) => (prev + 1) % LEGACY_REEL_CLIPS.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [shouldReduceMotion]);
+
+  // Preload next video for smooth transitions
+  useEffect(() => {
+    const nextIndex = (currentClipIndex + 1) % LEGACY_REEL_CLIPS.length;
+    const nextClip = LEGACY_REEL_CLIPS[nextIndex];
+    const nextVideo = videoRefs.current.get(nextIndex);
+    if (!nextVideo) {
+      const preloadEl = document.createElement('video');
+      preloadEl.src = nextClip.mobileSrc;
+      preloadEl.preload = 'auto';
+      preloadEl.muted = true;
+    }
+  }, [currentClipIndex]);
+
+  const currentClip = LEGACY_REEL_CLIPS[currentClipIndex];
 
   const heroPills = [
     { icon: Sparkles, labelKey: 'hero.pillStrategy' },
@@ -175,25 +198,41 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
             {/* Right side: Phone-frame video reel + compact metrics */}
             <motion.div
-              className="hidden lg:flex flex-col items-center gap-4 lg:self-end"
+              className="hidden lg:flex flex-col items-center gap-5 lg:self-end"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
-              {/* Phone Frame */}
+              {/* Phone Frame with TikTok-style cycling */}
               <div className="hero-phone-frame">
                 <div className="hero-phone-notch" />
-                <video
-                  className="hero-phone-video"
-                  src={REEL_VIDEO_SRC}
-                  poster={REEL_POSTER_SRC}
-                  muted
-                  loop
-                  playsInline
-                  autoPlay
-                />
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.video
+                    key={currentClip.id}
+                    className="hero-phone-video"
+                    src={currentClip.mobileSrc}
+                    poster={currentClip.posterSrc}
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                    ref={(el) => {
+                      if (el) videoRefs.current.set(currentClipIndex, el);
+                    }}
+                    initial={{ y: '100%', opacity: 0.5 }}
+                    animate={{ y: '0%', opacity: 1 }}
+                    exit={{ y: '-100%', opacity: 0.5 }}
+                    transition={{ duration: 0.5, ease: premiumEase }}
+                  />
+                </AnimatePresence>
                 {/* Play indicator overlay */}
-                <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-sm px-2.5 py-1">
+                <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-sm px-2.5 py-1">
                   <Play className="w-2.5 h-2.5 text-white fill-white" />
                   <span className="text-[9px] font-bold uppercase tracking-prestige text-white/90">UGC Reel</span>
+                </div>
+                {/* Clip counter */}
+                <div className="absolute top-3 right-3 z-10 rounded-full bg-black/50 backdrop-blur-sm px-2.5 py-1">
+                  <span className="text-[9px] font-bold uppercase tracking-prestige text-white/80">
+                    {currentClipIndex + 1}/{LEGACY_REEL_CLIPS.length}
+                  </span>
                 </div>
               </div>
 
@@ -205,34 +244,60 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               </div>
             </motion.div>
 
-            {/* Mobile-only: keep original glass panel */}
-            <motion.div
-              className="lg:hidden ultra-glass-panel p-5 sm:p-6 w-full max-w-[280px]"
+            {/* Mobile-only: Stacked video peek */}
+            <motion.a
+              href="#portfolio"
+              onClick={handleHashLinkClick}
+              className="lg:hidden relative w-[160px] h-[220px] flex-shrink-0"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
+              aria-label={t('hero.buttonPortfolio')}
             >
-              <div className="flex flex-col gap-5">
-                <div>
-                  <p className="font-sans text-[10px] font-bold uppercase tracking-prestige text-white/60">
-                    {t('hero.proofLabel')}
-                  </p>
-                  <p className="mt-2 text-4xl font-serif font-bold tracking-tight text-white">
-                    {t('hero.proofValue')}
-                  </p>
-                  <p className="mt-1 text-xs font-light text-white/70">
-                    {t('hero.proofCaption')}
-                  </p>
+              {/* Back card */}
+              <div
+                className="absolute inset-0 rounded-2xl overflow-hidden border border-white/10 shadow-lg"
+                style={{ transform: 'rotate(6deg) translateX(12px) scale(0.92)', transformOrigin: 'bottom center' }}
+              >
+                <img
+                  src={LEGACY_REEL_CLIPS[2].posterSrc}
+                  alt=""
+                  className="w-full h-full object-cover opacity-50"
+                  loading="lazy"
+                />
+              </div>
+              {/* Middle card */}
+              <div
+                className="absolute inset-0 rounded-2xl overflow-hidden border border-white/15 shadow-xl"
+                style={{ transform: 'rotate(-3deg) translateX(-6px) scale(0.96)', transformOrigin: 'bottom center' }}
+              >
+                <img
+                  src={LEGACY_REEL_CLIPS[1].posterSrc}
+                  alt=""
+                  className="w-full h-full object-cover opacity-70"
+                  loading="lazy"
+                />
+              </div>
+              {/* Front card */}
+              <div className="absolute inset-0 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl">
+                <img
+                  src={LEGACY_REEL_CLIPS[0].posterSrc}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                {/* Play overlay */}
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
+                    <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+                  </div>
                 </div>
-                <div className="h-px w-full bg-white/10" />
-                <div className="flex flex-wrap gap-2">
-                  {heroPills.map(({ icon: Icon, labelKey }, i) => (
-                    <div key={i} className="hero-chip-cinematic">
-                      <Icon className="w-3 h-3 text-white/70" />
-                      <span>{t(labelKey)}</span>
-                    </div>
-                  ))}
+                {/* Label */}
+                <div className="absolute bottom-3 left-0 right-0 text-center">
+                  <span className="text-[9px] font-bold uppercase tracking-prestige text-white/90 bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full">
+                    {t('hero.proofValue')} · {t('hero.proofCaption')}
+                  </span>
                 </div>
               </div>
-            </motion.div>
+            </motion.a>
           </div>
         </motion.div>
 
