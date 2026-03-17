@@ -199,11 +199,11 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
             {/* Right side: Phone-frame video reel + compact metrics */}
             <motion.div
-              className="hidden lg:flex flex-col items-center gap-5 lg:self-end lg:-mr-4 xl:-mr-8"
+              className="hidden lg:flex flex-col items-center gap-5 lg:self-end lg:-mr-12 xl:-mr-20"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
               {/* Phone Frame with smooth cycling */}
-              <div className="hero-phone-frame">
+              <a href="#portfolio" onClick={handleHashLinkClick} className="hero-phone-frame cursor-pointer">
                 <div className="hero-phone-notch" />
                 <AnimatePresence mode="popLayout" initial={false}>
                   <motion.video
@@ -235,7 +235,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                     {currentClipIndex + 1}/{LEGACY_REEL_CLIPS.length}
                   </span>
                 </div>
-              </div>
+              </a>
 
               {/* Compact metrics below phone */}
               <div className="flex items-center gap-3 text-white/60">
