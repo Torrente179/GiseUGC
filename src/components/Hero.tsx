@@ -244,33 +244,14 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               </div>
             </motion.div>
 
-            {/* Mobile-only: Auto-playing inline video reel */}
+            {/* Mobile-only: proof strip */}
             <motion.div
-              className="lg:hidden w-[140px] h-[248px] flex-shrink-0 rounded-2xl overflow-hidden relative border border-white/15 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.6)]"
+              className="lg:hidden flex items-center gap-3 text-white/60"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.video
-                  key={`mobile-${currentClip.id}`}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  src={currentClip.previewSrc}
-                  poster={currentClip.posterSrc}
-                  muted
-                  loop
-                  playsInline
-                  autoPlay
-                  initial={{ y: '100%', opacity: 0.5 }}
-                  animate={{ y: '0%', opacity: 1 }}
-                  exit={{ y: '-100%', opacity: 0.5 }}
-                  transition={{ duration: 0.5, ease: premiumEase }}
-                />
-              </AnimatePresence>
-              {/* Clip counter */}
-              <div className="absolute top-2 right-2 z-10 rounded-full bg-black/50 backdrop-blur-sm px-2 py-0.5">
-                <span className="text-[8px] font-bold uppercase tracking-prestige text-white/80">
-                  {currentClipIndex + 1}/{LEGACY_REEL_CLIPS.length}
-                </span>
-              </div>
+              <span className="text-lg font-serif font-bold text-white">{t('hero.proofValue')}</span>
+              <span className="w-px h-4 bg-white/20" />
+              <span className="text-[10px] font-bold uppercase tracking-prestige">{t('hero.proofCaption')}</span>
             </motion.div>
           </div>
         </motion.div>
