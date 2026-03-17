@@ -272,7 +272,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                   <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} className="block text-balance" />
                 </h2>
               </motion.div>
-              <motion.div className="lg:pt-8 xl:pt-10" variants={cinematicItemVariants}>
+              <motion.div className="lg:pt-14 xl:pt-16" variants={cinematicItemVariants}>
                 <p className="strategic-body max-w-[35rem] text-[1.18rem] leading-[1.58] font-normal text-foreground/72 md:text-[1.3rem]">
                   {t('hero.introduction.description')}
                 </p>
