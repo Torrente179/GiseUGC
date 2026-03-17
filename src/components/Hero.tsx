@@ -112,6 +112,18 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
         >
           <picture>
             <source
+              media="(max-width: 767px)"
+              type="image/webp"
+              srcSet="/uploads/gisela-hero-mobile-768.webp 768w, /uploads/gisela-hero-mobile-992.webp 992w"
+              sizes="100vw"
+            />
+            <source
+              media="(max-width: 767px)"
+              type="image/jpeg"
+              srcSet="/uploads/gisela-hero-mobile-992.jpg 992w"
+              sizes="100vw"
+            />
+            <source
               media="(min-width: 1024px)"
               type="image/webp"
               srcSet="/uploads/gisela-hero-desktop-1600.webp 1600w, /uploads/gisela-hero-desktop-2048.webp 2048w"
@@ -131,7 +143,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             <img
               src="/uploads/gisela-hero-585.jpg"
               alt={t('hero.imageAlt')}
-              className={`w-full h-full object-cover object-[50%_8%] md:object-[50%_12%] lg:object-[50%_34%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`w-full h-full object-cover object-[44%_0%] md:object-[50%_12%] lg:object-[50%_34%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
               loading="eager"
               fetchPriority="high"
               decoding="async"
