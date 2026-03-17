@@ -1,11 +1,15 @@
 import { useCallback, useRef, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { Diamond, Sparkles, Zap, ArrowDownRight, ChevronDown } from 'lucide-react';
+import { Diamond, Sparkles, Zap, ArrowDownRight, ChevronDown, Play } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { premiumEase, easeOutExpo, springSnappy } from '@/components/motion/variants';
+import { R2_MEDIA_BASE_URL } from '@/data/portfolio-clips';
+
+const REEL_VIDEO_SRC = `${R2_MEDIA_BASE_URL}/videos/mobile/ugc-brand-spokesperson-mobile.mp4`;
+const REEL_POSTER_SRC = `${R2_MEDIA_BASE_URL}/videos/posters/ugc-brand-spokesperson-poster.jpg`;
 
 interface HeroProps {
   showIntroduction?: boolean;
@@ -169,9 +173,41 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               </div>
             </div>
 
-            {/* Right side: Floating UI metrics */}
+            {/* Right side: Phone-frame video reel + compact metrics */}
             <motion.div
-              className="lg:self-end ultra-glass-panel p-5 sm:p-6 w-full max-w-[280px]"
+              className="hidden lg:flex flex-col items-center gap-4 lg:self-end"
+              variants={shouldReduceMotion ? undefined : cinematicItemVariants}
+            >
+              {/* Phone Frame */}
+              <div className="hero-phone-frame">
+                <div className="hero-phone-notch" />
+                <video
+                  className="hero-phone-video"
+                  src={REEL_VIDEO_SRC}
+                  poster={REEL_POSTER_SRC}
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                />
+                {/* Play indicator overlay */}
+                <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-sm px-2.5 py-1">
+                  <Play className="w-2.5 h-2.5 text-white fill-white" />
+                  <span className="text-[9px] font-bold uppercase tracking-prestige text-white/90">UGC Reel</span>
+                </div>
+              </div>
+
+              {/* Compact metrics below phone */}
+              <div className="flex items-center gap-3 text-white/60">
+                <span className="text-lg font-serif font-bold text-white">{t('hero.proofValue')}</span>
+                <span className="w-px h-4 bg-white/20" />
+                <span className="text-[10px] font-bold uppercase tracking-prestige">{t('hero.proofCaption')}</span>
+              </div>
+            </motion.div>
+
+            {/* Mobile-only: keep original glass panel */}
+            <motion.div
+              className="lg:hidden ultra-glass-panel p-5 sm:p-6 w-full max-w-[280px]"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
               <div className="flex flex-col gap-5">
@@ -186,9 +222,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                     {t('hero.proofCaption')}
                   </p>
                 </div>
-
                 <div className="h-px w-full bg-white/10" />
-
                 <div className="flex flex-wrap gap-2">
                   {heroPills.map(({ icon: Icon, labelKey }, i) => (
                     <div key={i} className="hero-chip-cinematic">
@@ -231,15 +265,15 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
             }}
           >
-            <div className="grid lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] gap-12 lg:gap-14 items-start">
-              <motion.div className="space-y-6 max-w-[52rem]" variants={cinematicItemVariants}>
+            <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-12 lg:gap-16 xl:gap-20 items-start">
+              <motion.div className="space-y-6 max-w-[50rem]" variants={cinematicItemVariants}>
                 <span className="section-label">{t('hero.introduction.eyebrow')}</span>
-                <h2 className="max-w-[14ch] text-4xl md:text-5xl lg:text-[3.85rem] xl:text-[4.25rem] font-serif text-foreground leading-[0.96] tracking-tight-serif">
-                  <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} className="block" />
+                <h2 className="max-w-[16ch] text-balance text-4xl md:text-[3.4rem] lg:text-[3.35rem] xl:text-[3.65rem] font-serif text-foreground leading-[0.98] tracking-tight-serif">
+                  <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} className="block text-balance" />
                 </h2>
               </motion.div>
-              <motion.div className="lg:pt-12" variants={cinematicItemVariants}>
-                <p className="strategic-body text-foreground/60 text-lg md:text-xl max-w-[32rem]">
+              <motion.div className="lg:pt-8 xl:pt-10" variants={cinematicItemVariants}>
+                <p className="strategic-body max-w-[35rem] text-[1.18rem] leading-[1.58] font-normal text-foreground/72 md:text-[1.3rem]">
                   {t('hero.introduction.description')}
                 </p>
               </motion.div>
