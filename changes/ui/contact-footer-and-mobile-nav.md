@@ -66,7 +66,7 @@ This consolidates the February work on contact entry points, footer structure, a
 4. Footer copy in both languages was shortened so the component closes the page with confidence rather than repeating the sales pitch already handled higher in the page.
 5. A follow-up mobile correction tightened the footer further after live review: the headline was shortened again, mobile font sizes and paddings were reduced, CTA labels were simplified, and the service links were converted from a tall stacked list into a denser wrapped utility row.
 6. The nearby contact and service-card headings were aligned to the serif display system so these conversion touchpoints feel consistent with the premium typography direction used across the homepage.
-7. Another live mobile correction fixed the CTA icons: the oversized WhatsApp and Fiverr marks inside the buttons were replaced with smaller icon holders, the WhatsApp icon now sits on a white backing for contrast against the blue CTA, and Telegram was reintroduced as a single tertiary action instead of a redundant repeated icon row.
+7. Another live mobile correction fixed the CTA icons: the oversized WhatsApp and Fiverr marks inside the buttons were replaced with clearer icon holders, the WhatsApp icon backing was strengthened for contrast against the blue CTA, and Telegram was promoted into a full-width tertiary button instead of a mismatched small chip.
 
 ### SEO guardrail
 1. The footer keeps `id="contact"` so existing page anchors and contact-entry behavior remain intact.

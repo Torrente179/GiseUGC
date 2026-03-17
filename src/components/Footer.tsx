@@ -71,7 +71,7 @@ const Footer = () => {
                 transition={springSmooth}
               >
                 <span className="inline-flex items-center gap-2.5">
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/92 shadow-[0_6px_14px_-10px_rgba(0,0,0,0.45)]">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/90 bg-white shadow-[0_8px_18px_-12px_rgba(0,0,0,0.45)]">
                     <img
                       src={whatsappLogoSrc}
                       alt=""
@@ -79,7 +79,7 @@ const Footer = () => {
                       height={56}
                       loading="lazy"
                       decoding="async"
-                      className="h-3.5 w-3.5 object-contain"
+                      className="h-4.5 w-4.5 object-contain"
                     />
                   </span>
                   {t('footer.primaryCta')}
@@ -97,7 +97,7 @@ const Footer = () => {
                 transition={springSmooth}
               >
                 <span className="inline-flex items-center gap-2.5">
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white shadow-[0_6px_14px_-10px_rgba(0,0,0,0.28)]">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-[0_8px_18px_-12px_rgba(0,0,0,0.28)]">
                     <img
                       src={fiverrLogoSrc}
                       alt=""
@@ -105,7 +105,7 @@ const Footer = () => {
                       height={56}
                       loading="lazy"
                       decoding="async"
-                      className="h-3.5 w-3.5 object-contain"
+                      className="h-4 w-4 object-contain"
                     />
                   </span>
                   {t('footer.fiverr.visitProfile')}
@@ -118,13 +118,18 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={t('floatingContact.telegramAria')}
-                className="inline-flex min-h-9 self-start items-center gap-2 rounded-full border border-sky-500/18 bg-sky-500/10 px-3 py-1.5 text-[12px] font-medium text-sky-700 transition-colors hover:border-sky-500/30 hover:bg-sky-500/14 dark:text-sky-200"
+                className="group inline-flex min-h-[2.8rem] w-full items-center justify-between rounded-full border border-sky-500/18 bg-sky-500/10 px-4 py-2.5 text-[13px] font-semibold text-sky-700 transition-colors hover:border-sky-500/30 hover:bg-sky-500/14 dark:text-sky-200 sm:px-5 sm:text-[13px]"
                 whileHover={shouldReduceMotion ? undefined : { y: -2 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
                 transition={springSmooth}
               >
-                <Send className="h-3.5 w-3.5 -rotate-12" />
-                <span>{t('floatingContact.telegramLabel')}</span>
+                <span className="inline-flex items-center gap-2.5">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-sky-500/20 bg-white/90 shadow-[0_8px_18px_-12px_rgba(0,0,0,0.18)]">
+                    <Send className="h-4 w-4 -rotate-12" />
+                  </span>
+                  {t('floatingContact.telegramLabel')}
+                </span>
+                <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </motion.a>
             </motion.div>
           </div>
