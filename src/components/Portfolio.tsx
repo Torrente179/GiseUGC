@@ -1355,8 +1355,13 @@ const Portfolio = () => {
             <motion.p className="section-label text-muted-foreground mb-4" variants={revealUp(14, 0.56)}>
               {t('portfolio.collageEyebrow')}
             </motion.p>
-            <h3 className="text-3xl md:text-[2.4rem] font-sans font-medium tracking-tight leading-tight mb-5">
-              <SplitTextReveal text={t('portfolio.collageTitle')} delay={0.06} />
+            <h3 className="text-3xl md:text-[2.4rem] font-serif font-medium tracking-tight leading-tight mb-5">
+              <SplitTextReveal
+                text={t('portfolio.collageTitle')}
+                delay={0.06}
+                className="font-serif"
+                wordClassName="font-serif"
+              />
             </h3>
             <motion.p className="strategic-body text-muted-foreground mb-6" variants={revealUp(16, 0.62)}>
               {t('portfolio.collageDescription')}
