@@ -1361,9 +1361,9 @@
   .svc-faq-item summary,
   .svc-faq-item summary * {
     font-family: var(--font-sans);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.35;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    line-height: 1.45;
   }
 
   .svc-faq-item summary::marker,

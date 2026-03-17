@@ -583,16 +583,16 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                     }`}
                   >
                     <summary
-                      className="font-sans flex cursor-pointer list-none items-start justify-between gap-5 text-lg font-semibold tracking-[-0.01em] leading-[1.35] text-foreground md:text-xl"
+                      className="font-sans flex cursor-pointer list-none items-start justify-between gap-5 text-base font-medium tracking-[-0.005em] leading-[1.45] text-foreground md:text-lg"
                       style={{ fontFamily: 'var(--font-sans)' }}
                     >
-                      <span style={{ fontFamily: 'var(--font-sans)' }}>{faq.question}</span>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 500 }}>{faq.question}</span>
                       <span className="svc-faq-toggle shrink-0 mt-0.5">
                         <Plus className="h-4 w-4" />
                       </span>
                     </summary>
                     <p
-                      className="mt-4 max-w-3xl font-sans text-sm font-light leading-[1.85] text-foreground/65 md:text-base"
+                      className="mt-4 max-w-3xl font-sans text-[0.95rem] font-normal leading-[1.8] text-foreground/68 md:text-base"
                       style={{ fontFamily: 'var(--font-sans)' }}
                     >
                       {faq.answer}

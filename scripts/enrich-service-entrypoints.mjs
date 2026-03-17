@@ -193,7 +193,7 @@ const bootNoScriptStyles = `      .boot-noscript h2,
       .boot-noscript dt {
         margin-top: 16px;
         font-family: 'DM Sans', system-ui, sans-serif;
-        font-weight: 700;
+        font-weight: 600;
       }
       .boot-noscript dd {
         margin: 8px 0 0;
