@@ -245,18 +245,23 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               </div>
             </motion.div>
 
-            {/* Mobile-only: Horizontal scrollable reel strip */}
+            {/* Mobile-only: Fixed 4-card reel strip (thumbnails rotate daily) */}
             <motion.div
               className="lg:hidden w-full"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-6 px-6">
-                {LEGACY_REEL_CLIPS.slice(0, 5).map((clip) => (
+              <div className="grid grid-cols-4 gap-2.5 px-1">
+                {(() => {
+                  const dayOffset = Math.floor(Date.now() / 86400000) % LEGACY_REEL_CLIPS.length;
+                  return Array.from({ length: 4 }, (_, i) =>
+                    LEGACY_REEL_CLIPS[(dayOffset + i) % LEGACY_REEL_CLIPS.length]
+                  );
+                })().map((clip) => (
                   <a
                     key={clip.id}
                     href="#portfolio"
                     onClick={handleHashLinkClick}
-                    className="flex-shrink-0 w-[72px] h-[128px] rounded-xl overflow-hidden border border-white/15 relative group"
+                    className="aspect-[9/16] rounded-xl overflow-hidden border border-white/15 relative group"
                   >
                     <img
                       src={clip.posterSrc}
@@ -269,19 +274,6 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                     </div>
                   </a>
                 ))}
-                {/* "See all" card */}
-                <a
-                  href="#portfolio"
-                  onClick={handleHashLinkClick}
-                  className="flex-shrink-0 w-[72px] h-[128px] rounded-xl overflow-hidden border border-white/15 bg-white/5 flex items-center justify-center"
-                >
-                  <div className="flex flex-col items-center gap-1.5">
-                    <ArrowDownRight className="w-4 h-4 text-white/60" />
-                    <span className="text-[8px] font-bold uppercase tracking-prestige text-white/60">
-                      {t('hero.proofValue')}
-                    </span>
-                  </div>
-                </a>
               </div>
             </motion.div>
           </div>
