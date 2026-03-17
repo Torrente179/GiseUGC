@@ -49,3 +49,10 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 1. The service-page FAQ question rows were moved back to the sans stack instead of inheriting the premium serif display treatment.
 2. Letter spacing and line height were relaxed for FAQ questions so longer entries read cleanly on desktop and mobile without losing the higher-end visual tone of the rest of the page.
 3. The change stayed scoped to service-page FAQ question text only; the broader service-page typography, metadata, and crawlable HTML entrypoints were left untouched.
+
+## 2026-03-17 service FAQ typography enforcement
+
+### What changed
+1. Moved the service-page FAQ question typography from a CSS-only hook into explicit component classes so the sans treatment no longer depends on inherited service-page styles.
+2. Pinned the FAQ answer copy to the sans stack as well, keeping the full accordion block consistently more readable.
+3. Left the FAQ content, schema output, metadata, and localized entrypoint structure unchanged.

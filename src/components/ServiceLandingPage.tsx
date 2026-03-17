@@ -582,13 +582,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                       index === 0 ? '' : 'border-t border-border/40'
                     }`}
                   >
-                    <summary className="flex cursor-pointer list-none items-start justify-between gap-5 text-lg tracking-tight text-foreground md:text-xl">
+                    <summary className="font-sans flex cursor-pointer list-none items-start justify-between gap-5 text-lg font-semibold tracking-[-0.01em] leading-[1.35] text-foreground md:text-xl">
                       <span>{faq.question}</span>
                       <span className="svc-faq-toggle shrink-0 mt-0.5">
                         <Plus className="h-4 w-4" />
                       </span>
                     </summary>
-                    <p className="mt-4 max-w-3xl text-sm font-light leading-[1.85] text-foreground/65 md:text-base">
+                    <p className="mt-4 max-w-3xl font-sans text-sm font-light leading-[1.85] text-foreground/65 md:text-base">
                       {faq.answer}
                     </p>
                   </details>
