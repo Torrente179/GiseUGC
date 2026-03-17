@@ -148,16 +148,16 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 lg:gap-12">
             {/* Left side: Typography */}
             <div className="max-w-4xl">
-              <motion.div variants={shouldReduceMotion ? undefined : cinematicItemVariants}>
-                <p className="font-sans text-xs md:text-sm font-bold uppercase tracking-[0.3em] text-white/70 mb-4 cinematic-subtitle">
-                  {t('hero.subtitle')}
-                </p>
-              </motion.div>
-
-              <h1 className="cinematic-title text-white text-[12vw] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[6.5rem] xl:text-[7.5rem] -ml-1 md:-ml-2 mb-6">
+              <h1 className="cinematic-title text-white text-[12vw] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[6.5rem] xl:text-[7.5rem] -ml-1 md:-ml-2 mb-4">
                 <LiteSplitTextReveal text="Gisela" delay={0.2} stagger={0.06} className="block" />
                 <LiteSplitTextReveal text="Saldarriaga" delay={0.4} stagger={0.06} className="block text-accent luxury-accent align-baseline" />
               </h1>
+
+              <motion.div variants={shouldReduceMotion ? undefined : cinematicItemVariants}>
+                <p className="font-sans text-xs md:text-sm font-bold uppercase tracking-[0.3em] text-white/70 mb-6 cinematic-subtitle">
+                  {t('hero.subtitle')}
+                </p>
+              </motion.div>
 
               <motion.div
                 className="hidden md:block w-24 md:w-40 h-px bg-white/30 my-8 origin-left"
