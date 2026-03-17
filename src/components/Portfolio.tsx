@@ -1234,26 +1234,34 @@ const Portfolio = () => {
         />
 
         <motion.div
-          className="mb-8 md:mb-10"
+          className="mb-10 md:mb-14"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          variants={staggerContainer(0.06, 0.04)}
+          variants={staggerContainer(0.08, 0.04)}
         >
-          <motion.p className="section-label text-muted-foreground mb-2" variants={revealUp(12, 0.5)}>
+          <motion.p className="section-label text-muted-foreground mb-3" variants={revealUp(12, 0.5)}>
             {t('portfolio.featuredLabel')}
           </motion.p>
-          <motion.p className="strategic-body text-foreground/60 max-w-2xl mb-4" variants={revealUp(14, 0.56)}>
+          <motion.p className="strategic-body text-foreground/50 max-w-2xl mb-6 md:mb-8" variants={revealUp(14, 0.56)}>
             {t('portfolio.featuredDescription')}
           </motion.p>
-          <motion.div className="flex flex-wrap gap-2.5" variants={staggerContainer(0.04, 0.02)}>
-            {featuredReelClips.map((clip) => (
+          <motion.div
+            className="flex flex-wrap items-center gap-x-3 gap-y-2 md:gap-x-0"
+            variants={staggerContainer(0.06, 0.02)}
+          >
+            {featuredReelClips.map((clip, index) => (
               <motion.span
                 key={`featured-${clip.id}`}
-                className="inline-flex items-center rounded-full border border-border/70 bg-card/75 px-3 py-1.5 text-xs font-medium text-foreground/80 shadow-[0_14px_28px_-26px_hsl(var(--foreground)/0.85)]"
+                className="inline-flex items-center"
                 variants={revealUp(10, 0.45)}
               >
-                {getReelTitle(clip)}
+                <span className="font-serif text-base md:text-[1.125rem] text-foreground/65 tracking-tight leading-none">
+                  {getReelTitle(clip)}
+                </span>
+                {index < featuredReelClips.length - 1 && (
+                  <span className="hidden md:inline-block mx-5 h-4 w-px bg-foreground/25" aria-hidden="true" />
+                )}
               </motion.span>
             ))}
           </motion.div>
