@@ -70,7 +70,7 @@ const FAQ = () => {
                     value={`item-${index}`}
                     className="faq-answer border-b border-border/70 last:border-b-0"
                   >
-                    <AccordionTrigger className="font-serif text-left text-[1.4rem] md:text-[1.7rem] font-semibold leading-[1.1] tracking-tight text-foreground py-5 md:py-6 hover:no-underline hover:text-primary transition-colors duration-300 [&[data-state=open]]:text-primary [&>svg]:text-foreground/70 [&>svg]:transition-transform [&>svg]:duration-300">
+                    <AccordionTrigger className="font-serif text-left text-[1.26rem] md:text-[1.7rem] font-semibold leading-[1.1] tracking-tight text-foreground py-5 md:py-6 hover:no-underline hover:text-primary transition-colors duration-300 [&[data-state=open]]:text-primary [&>svg]:text-foreground/70 [&>svg]:transition-transform [&>svg]:duration-300">
                       {item.question}
                     </AccordionTrigger>
                     <AccordionContent className="font-sans text-foreground/80 text-sm md:text-base leading-relaxed pb-5 md:pb-6">

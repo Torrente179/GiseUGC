@@ -132,3 +132,9 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Restored the homepage FAQ questions to the serif display stack after the full sans override flattened the section too much.
 2. Increased the question size and weight and tightened the line-height so the Cormorant treatment stays legible instead of feeling thin.
 3. Kept the FAQ answers on the sans stack, preserving cleaner paragraph readability once each accordion item opens.
+
+## 2026-03-17 homepage FAQ mobile-size trim
+
+### What changed
+1. Reduced the mobile FAQ question size slightly so longer Cormorant questions stop feeling oversized on narrow screens.
+2. Left the desktop FAQ question size unchanged, since the larger serif treatment was already reading correctly there.
