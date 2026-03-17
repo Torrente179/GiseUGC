@@ -116,7 +116,7 @@ const Services = () => {
               >
                 {service.icon}
               </motion.div>
-              <h3 className="text-lg md:text-2xl font-sans font-medium tracking-tight text-foreground mb-1 leading-tight">
+              <h3 className="text-lg md:text-2xl font-serif font-medium tracking-tight text-foreground mb-1 leading-tight">
                 {t(service.titleKey)}
               </h3>
               {service.subtitleKey && (

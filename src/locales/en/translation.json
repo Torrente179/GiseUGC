@@ -220,12 +220,12 @@
   },
   "footer": {
     "eyebrow": "Premium creator studio",
-    "title": "Your next campaign needs a more human presence.",
-    "description": "Bilingual UGC, product demos, and spokesperson videos for TikTok ads, Meta ads, and brands that sell through social.",
+    "title": "Human presence for campaigns that sell.",
+    "description": "Bilingual UGC, product demos, and spokesperson videos for TikTok ads, Meta ads, and social-first launches.",
     "contactCardEyebrow": "Start your next campaign",
     "contactCardTitle": "Clear brief, fast communication, polished delivery.",
     "contactCardDescription": "WhatsApp is the fastest route for availability, timing, and creative fit. Fiverr stays open for teams that prefer marketplace workflow.",
-    "primaryCta": "Start on WhatsApp",
+    "primaryCta": "Message on WhatsApp",
     "telegramPrompt": "Prefer Telegram? Send the brief here.",
     "proofBrands": "28+ brands",
     "proofMarkets": "US, Spain, and LatAm",
@@ -237,7 +237,7 @@
     "studioFactLocation": "Medellin, Colombia",
     "studioFactLanguages": "Spanish and English delivery",
     "studioFactTurnaround": "Typical delivery: 3 to 5 business days",
-    "bottomNote": "Medellin, Colombia · Spanish and English · Remote production for the US, Spain, and LatAm.",
+    "bottomNote": "Medellin, Colombia · Spanish and English · Remote for the US, Spain, and LatAm.",
     "services": {
       "bilingual-ugc-creator": "Bilingual UGC creator",
       "spokesperson-videos": "Spokesperson videos",
@@ -254,7 +254,7 @@
       "metricCommunication": "Seller communication level",
       "metricQuality": "Quality of delivery",
       "metricValue": "Value of delivery",
-      "visitProfile": "View Fiverr profile",
+      "visitProfile": "Fiverr profile",
       "profileAlt": "Gisela Fiverr profile photo"
     },
     "copyright": "© {{year}} Gisela Saldarriaga. All rights reserved."

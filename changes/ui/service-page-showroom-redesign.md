@@ -5,6 +5,7 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 
 ## Current runtime touchpoints
 - `src/components/ServiceLandingPage.tsx`
+- `src/index.css`
 - `src/data/service-pages.ts`
 - `src/data/portfolio-clips.ts`
 - `src/data/video-lqip.ts`
@@ -41,3 +42,10 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 ### Verification
 1. `npm run build`
 2. `npx eslint src/components/ServiceLandingPage.tsx`
+
+## 2026-03-17 service FAQ readability correction
+
+### What changed
+1. The service-page FAQ question rows were moved back to the sans stack instead of inheriting the premium serif display treatment.
+2. Letter spacing and line height were relaxed for FAQ questions so longer entries read cleanly on desktop and mobile without losing the higher-end visual tone of the rest of the page.
+3. The change stayed scoped to service-page FAQ question text only; the broader service-page typography, metadata, and crawlable HTML entrypoints were left untouched.

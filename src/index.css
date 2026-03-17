@@ -1359,9 +1359,10 @@
 
   /* ── FAQ accordion premium ── */
   .svc-faq-item summary {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
   }
 
   .svc-faq-item summary::marker,

@@ -220,12 +220,12 @@
   },
   "footer": {
     "eyebrow": "Estudio creador premium",
-    "title": "Tu próxima campaña necesita una presencia más humana.",
-    "description": "UGC bilingüe, demos de producto y videos de portavoz para TikTok Ads, Meta Ads y marcas que venden desde social.",
+    "title": "Presencia humana para campañas que venden.",
+    "description": "UGC bilingüe, demos de producto y videos de portavoz para TikTok Ads, Meta Ads y lanzamientos sociales.",
     "contactCardEyebrow": "Empieza tu próxima campaña",
     "contactCardTitle": "Brief claro, comunicación rápida, entrega cuidada.",
     "contactCardDescription": "WhatsApp es la vía más rápida para revisar disponibilidad, tiempos y encaje creativo. Fiverr sigue abierto para equipos que prefieren flujo de marketplace.",
-    "primaryCta": "Empezar por WhatsApp",
+    "primaryCta": "Escribir por WhatsApp",
     "telegramPrompt": "¿Prefieres Telegram? Envía el brief aquí.",
     "proofBrands": "+28 marcas",
     "proofMarkets": "EE. UU., España y LatAm",
@@ -237,7 +237,7 @@
     "studioFactLocation": "Medellín, Colombia",
     "studioFactLanguages": "Entrega en español e inglés",
     "studioFactTurnaround": "Entrega habitual: 3 a 5 días hábiles",
-    "bottomNote": "Medellín, Colombia · Español e inglés · Producción remota para EE. UU., España y LatAm.",
+    "bottomNote": "Medellín, Colombia · Español e inglés · Remoto para EE. UU., España y LatAm.",
     "services": {
       "bilingual-ugc-creator": "Creadora UGC bilingüe",
       "spokesperson-videos": "Videos de portavoz",
@@ -254,7 +254,7 @@
       "metricCommunication": "Nivel de comunicación",
       "metricQuality": "Calidad de entrega",
       "metricValue": "Valor de entrega",
-      "visitProfile": "Ver perfil en Fiverr",
+      "visitProfile": "Perfil de Fiverr",
       "profileAlt": "Foto de perfil de Fiverr de Gisela"
     },
     "copyright": "© {{year}} Gisela Saldarriaga. Todos los derechos reservados."
