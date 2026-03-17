@@ -1247,22 +1247,31 @@ const Portfolio = () => {
             {t('portfolio.featuredDescription')}
           </motion.p>
           <motion.div
-            className="flex flex-wrap items-center gap-x-3 gap-y-2 md:gap-x-0"
-            variants={staggerContainer(0.06, 0.02)}
+            className="grid grid-cols-2 md:grid-cols-4 bg-border/25 gap-px rounded-xl overflow-hidden"
+            variants={revealUp(14, 0.54)}
           >
             {featuredReelClips.map((clip, index) => (
-              <motion.span
+              <button
                 key={`featured-${clip.id}`}
-                className="inline-flex items-center"
-                variants={revealUp(10, 0.45)}
+                type="button"
+                className="group bg-background text-left px-4 py-5 md:px-5 md:py-6 hover:bg-foreground/[0.025] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"
+                onClick={() => {
+                  const reelIndex = allReelIndexById.get(clip.id) ?? 0;
+                  openReelPreview(clip, reelIndex);
+                }}
               >
-                <span className="font-serif text-base md:text-[1.125rem] text-foreground/65 tracking-tight leading-none">
+                <span className="block text-[10px] font-sans font-semibold tracking-[0.14em] text-foreground/30 mb-2 uppercase">
+                  0{index + 1}
+                </span>
+                <span className="block font-serif text-sm md:text-base text-foreground/65 leading-snug group-hover:text-foreground/90 transition-colors duration-200">
                   {getReelTitle(clip)}
                 </span>
-                {index < featuredReelClips.length - 1 && (
-                  <span className="hidden md:inline-block mx-5 h-4 w-px bg-foreground/25" aria-hidden="true" />
-                )}
-              </motion.span>
+                <span className="block mt-3 text-foreground/20 group-hover:text-foreground/40 transition-colors duration-200" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.5 7H11.5M11.5 7L8 3.5M11.5 7L8 10.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </span>
+              </button>
             ))}
           </motion.div>
         </motion.div>
