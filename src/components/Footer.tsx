@@ -31,50 +31,6 @@ const Footer = () => {
     label: t(`footer.services.${serviceId}`),
   }));
 
-  const quickActions = [
-    {
-      id: 'whatsapp',
-      href: whatsappUrl,
-      ariaLabel: t('floatingContact.whatsappAria'),
-      toneClass: 'border-foreground/10 bg-white/92 text-foreground',
-      icon: (
-        <img
-          src={whatsappLogoSrc}
-          alt=""
-          width={56}
-          height={56}
-          loading="lazy"
-          decoding="async"
-          className="h-4 w-4 object-contain"
-        />
-      ),
-    },
-    {
-      id: 'telegram',
-      href: telegramUrl,
-      ariaLabel: t('floatingContact.telegramAria'),
-      toneClass: 'border-sky-500/20 bg-sky-500/12 text-sky-700 dark:text-sky-200',
-      icon: <Send className="h-4 w-4 -rotate-12" />,
-    },
-    {
-      id: 'fiverr',
-      href: fiverrUrl,
-      ariaLabel: t('floatingContact.fiverrAria'),
-      toneClass: 'border-foreground/10 bg-white/92 text-foreground',
-      icon: (
-        <img
-          src={fiverrLogoSrc}
-          alt=""
-          width={56}
-          height={56}
-          loading="lazy"
-          decoding="async"
-          className="h-4 w-4 object-contain"
-        />
-      ),
-    },
-  ];
-
   return (
     <footer
       id="contact"
@@ -157,23 +113,19 @@ const Footer = () => {
                 <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </motion.a>
 
-              <div className="flex items-center gap-2 pt-1">
-                {quickActions.map((action) => (
-                  <motion.a
-                    key={action.id}
-                    href={action.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={action.ariaLabel}
-                    className={`inline-flex h-9 w-9 items-center justify-center rounded-full border ${action.toneClass} shadow-[0_10px_24px_-20px_rgba(0,0,0,0.45)] transition-colors hover:border-primary/30 hover:text-primary`}
-                    whileHover={shouldReduceMotion ? undefined : { y: -2 }}
-                    whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
-                    transition={springSmooth}
-                  >
-                    {action.icon}
-                  </motion.a>
-                ))}
-              </div>
+              <motion.a
+                href={telegramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t('floatingContact.telegramAria')}
+                className="inline-flex min-h-9 self-start items-center gap-2 rounded-full border border-sky-500/18 bg-sky-500/10 px-3 py-1.5 text-[12px] font-medium text-sky-700 transition-colors hover:border-sky-500/30 hover:bg-sky-500/14 dark:text-sky-200"
+                whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
+                transition={springSmooth}
+              >
+                <Send className="h-3.5 w-3.5 -rotate-12" />
+                <span>{t('floatingContact.telegramLabel')}</span>
+              </motion.a>
             </motion.div>
           </div>
 
