@@ -98,8 +98,8 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     offset: ['start start', 'end start'],
   });
 
-  const yImage = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
-  const scaleImage = useTransform(scrollYProgress, [0, 1], [1.05, 1.15]);
+  const yImage = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
+  const scaleImage = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
 
   return (
     <section ref={containerRef} id="home" className="relative w-full overflow-hidden bg-black">
