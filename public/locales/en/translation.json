@@ -217,14 +217,30 @@
     }
   },
   "footer": {
-    "brandName": "Bilingual UGC and spokesperson videos for your next campaign",
-    "description": "Let's plan TikTok ads, Meta ads, demos, and UGC creatives built to drive trust and sales.",
+    "eyebrow": "Premium creator studio",
+    "title": "Creator-led campaigns with an editorial finish and a conversion mindset.",
+    "description": "Bilingual UGC creator and spokesperson videos for TikTok Ads, Meta Ads, product demos, reviews, and launch creatives that need a polished human presence.",
+    "contactCardEyebrow": "Start your next campaign",
+    "contactCardTitle": "Clear brief, fast communication, polished delivery.",
+    "contactCardDescription": "WhatsApp is the fastest route for availability, timing, and creative fit. Fiverr stays open for teams that prefer marketplace workflow.",
+    "primaryCta": "Start on WhatsApp",
+    "telegramPrompt": "Prefer Telegram? Send the brief here.",
+    "proofBrands": "28+ brands",
+    "proofMarkets": "US, Spain, and LatAm",
+    "proofLanguages": "Spanish and English",
     "servicesTitle": "Services",
-    "quickLinksTitle": "Quick Links",
-    "contactTitle": "Contact",
-    "emailLabel": "Email",
-    "fiverrLabel": "Fiverr",
-    "hireOnFiverrButton": "Hire Me on Fiverr",
+    "studioTitle": "Studio",
+    "profilesTitle": "Profiles",
+    "studioSummary": "Remote production from Medellin for beauty, lifestyle, ecommerce, SaaS, and tech teams that need bilingual creator-led ads, demos, and spokesperson assets.",
+    "studioFactLocation": "Medellin, Colombia",
+    "studioFactLanguages": "Spanish and English delivery",
+    "studioFactTurnaround": "Typical delivery: 3 to 5 business days",
+    "bottomNote": "Bilingual UGC creator in Medellin for TikTok ads, Meta ads, spokesperson videos, product demos, and reviews.",
+    "services": {
+      "bilingual-ugc-creator": "Bilingual UGC creator",
+      "spokesperson-videos": "Spokesperson videos",
+      "ugc-ads-tiktok-meta": "UGC ads for TikTok and Meta"
+    },
     "fiverr": {
       "name": "Gisela",
       "handle": "@gisela_sm",
@@ -239,7 +255,7 @@
       "visitProfile": "View Fiverr profile",
       "profileAlt": "Gisela Fiverr profile photo"
     },
-    "copyright": "© {{year}} UGC Portfolio. All rights reserved."
+    "copyright": "© {{year}} Gisela Saldarriaga. All rights reserved."
   },
   "socialProof": {
     "brands": "Brands",

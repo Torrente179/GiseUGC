@@ -219,14 +219,30 @@
     }
   },
   "footer": {
-    "brandName": "UGC bilingüe y videos de portavoz para tu próxima campaña",
-    "description": "Hablemos de TikTok Ads, Meta Ads, demos y creativos UGC listos para vender más.",
+    "eyebrow": "Estudio creador premium",
+    "title": "Campañas lideradas por creadora con acabado editorial y enfoque en conversión.",
+    "description": "UGC bilingüe y videos de portavoz para TikTok Ads, Meta Ads, demos de producto, reseñas y creativos de lanzamiento que necesitan una presencia humana pulida.",
+    "contactCardEyebrow": "Empieza tu próxima campaña",
+    "contactCardTitle": "Brief claro, comunicación rápida, entrega cuidada.",
+    "contactCardDescription": "WhatsApp es la vía más rápida para revisar disponibilidad, tiempos y encaje creativo. Fiverr sigue abierto para equipos que prefieren flujo de marketplace.",
+    "primaryCta": "Empezar por WhatsApp",
+    "telegramPrompt": "¿Prefieres Telegram? Envía el brief aquí.",
+    "proofBrands": "+28 marcas",
+    "proofMarkets": "EE. UU., España y LatAm",
+    "proofLanguages": "Español e inglés",
     "servicesTitle": "Servicios",
-    "quickLinksTitle": "Enlaces Rápidos",
-    "contactTitle": "Contacto",
-    "emailLabel": "Email",
-    "fiverrLabel": "Fiverr",
-    "hireOnFiverrButton": "Contrátame en Fiverr",
+    "studioTitle": "Estudio",
+    "profilesTitle": "Perfiles",
+    "studioSummary": "Producción remota desde Medellín para equipos de beauty, lifestyle, ecommerce, SaaS y tech que necesitan anuncios, demos y piezas de portavoz con creadora bilingüe.",
+    "studioFactLocation": "Medellín, Colombia",
+    "studioFactLanguages": "Entrega en español e inglés",
+    "studioFactTurnaround": "Entrega habitual: 3 a 5 días hábiles",
+    "bottomNote": "Creadora UGC bilingüe en Medellín para TikTok Ads, Meta Ads, videos de portavoz, demos de producto y reseñas.",
+    "services": {
+      "bilingual-ugc-creator": "Creadora UGC bilingüe",
+      "spokesperson-videos": "Videos de portavoz",
+      "ugc-ads-tiktok-meta": "UGC Ads para TikTok y Meta"
+    },
     "fiverr": {
       "name": "Gisela",
       "handle": "@gisela_sm",
@@ -241,7 +257,7 @@
       "visitProfile": "Ver perfil en Fiverr",
       "profileAlt": "Foto de perfil de Fiverr de Gisela"
     },
-    "copyright": "© {{year}} Portafolio UGC. Todos los derechos reservados."
+    "copyright": "© {{year}} Gisela Saldarriaga. Todos los derechos reservados."
   },
   "socialProof": {
     "brands": "Marcas",
