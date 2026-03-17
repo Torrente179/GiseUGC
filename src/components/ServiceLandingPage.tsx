@@ -320,7 +320,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <div className="grid gap-10 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,0.45fr)] lg:items-start">
                 <div>
                   <p className="section-label mb-5">{page.sectionIntroTitle}</p>
-                  <p className="font-serif text-[clamp(1.35rem,2.5vw,2.2rem)] font-medium leading-[1.55] tracking-tight text-foreground/85">
+                  <p className="font-serif text-[clamp(1.35rem,2.5vw,2.2rem)] font-light leading-[1.5] tracking-tight text-foreground/85">
                     {page.sectionIntroText}
                   </p>
                 </div>
@@ -603,7 +603,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
           <RevealSection className="svc-cta-closer py-20 md:py-28 lg:py-32">
             <div className="studio-container relative z-10 text-center">
               <p className="section-label mb-6 !text-white/40">{page.ctaTitle}</p>
-              <p className="mx-auto max-w-3xl font-serif text-[clamp(1.4rem,3vw,2.6rem)] font-medium leading-[1.5] tracking-tight text-white/90">
+              <p className="mx-auto max-w-3xl font-serif text-[clamp(1.4rem,3vw,2.6rem)] font-light leading-[1.45] tracking-tight text-white/90">
                 {page.ctaText}
               </p>
 

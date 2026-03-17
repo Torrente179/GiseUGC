@@ -82,9 +82,9 @@ This condenses the February homepage rebuild that established the current visual
 - `scripts/enrich-service-entrypoints.mjs`
 
 ### What changed
-1. The heading system moved from `DM Serif Display` to `Bricolage Grotesque` while body and supporting copy stayed on `DM Sans`, shifting the site toward a more current creator-economy feel without redesigning page structure.
-2. Shared display metrics were loosened slightly so the new font does not crowd in the homepage hero, service-page hero, footer branding, FAQ headings, and other large editorial moments.
-3. The remaining one-off `Outfit` body exception in the homepage hero was removed so the live UI now uses a tighter, more consistent two-family system plus the existing `Alex Brush` accent treatment.
+1. The heading system moved from `DM Serif Display` to `Cormorant Garamond` while body and supporting copy stayed on `DM Sans`, shifting the site toward a more luxurious beauty/editorial direction without redesigning page structure.
+2. Shared display metrics were retuned for the new serif rhythm so the homepage hero, service-page hero, footer branding, FAQ headings, and other large editorial moments keep a softer premium cadence instead of the earlier display-grotesk feel.
+3. The remaining one-off `Outfit` body exception in the homepage hero was removed so the live UI now uses a tighter, more consistent two-family system while preserving the existing `Alex Brush` accent treatment.
 4. Both localized homepage shells and all six static service entrypoints were updated to load the same heading font for first paint and non-JS crawler-visible HTML, keeping the visual system consistent before hydration.
 5. The service-entrypoint enrichment script was updated to preserve the new heading font inside regenerated noscript FAQ blocks instead of reintroducing the old serif on future builds.
 
