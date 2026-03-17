@@ -244,60 +244,34 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               </div>
             </motion.div>
 
-            {/* Mobile-only: Stacked video peek */}
-            <motion.a
-              href="#portfolio"
-              onClick={handleHashLinkClick}
-              className="lg:hidden relative w-[160px] h-[220px] flex-shrink-0"
+            {/* Mobile-only: Auto-playing inline video reel */}
+            <motion.div
+              className="lg:hidden w-[140px] h-[248px] flex-shrink-0 rounded-2xl overflow-hidden relative border border-white/15 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.6)]"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
-              aria-label={t('hero.buttonPortfolio')}
             >
-              {/* Back card */}
-              <div
-                className="absolute inset-0 rounded-2xl overflow-hidden border border-white/10 shadow-lg"
-                style={{ transform: 'rotate(6deg) translateX(12px) scale(0.92)', transformOrigin: 'bottom center' }}
-              >
-                <img
-                  src={LEGACY_REEL_CLIPS[2].posterSrc}
-                  alt=""
-                  className="w-full h-full object-cover opacity-50"
-                  loading="lazy"
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.video
+                  key={`mobile-${currentClip.id}`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  src={currentClip.previewSrc}
+                  poster={currentClip.posterSrc}
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                  initial={{ y: '100%', opacity: 0.5 }}
+                  animate={{ y: '0%', opacity: 1 }}
+                  exit={{ y: '-100%', opacity: 0.5 }}
+                  transition={{ duration: 0.5, ease: premiumEase }}
                 />
+              </AnimatePresence>
+              {/* Clip counter */}
+              <div className="absolute top-2 right-2 z-10 rounded-full bg-black/50 backdrop-blur-sm px-2 py-0.5">
+                <span className="text-[8px] font-bold uppercase tracking-prestige text-white/80">
+                  {currentClipIndex + 1}/{LEGACY_REEL_CLIPS.length}
+                </span>
               </div>
-              {/* Middle card */}
-              <div
-                className="absolute inset-0 rounded-2xl overflow-hidden border border-white/15 shadow-xl"
-                style={{ transform: 'rotate(-3deg) translateX(-6px) scale(0.96)', transformOrigin: 'bottom center' }}
-              >
-                <img
-                  src={LEGACY_REEL_CLIPS[1].posterSrc}
-                  alt=""
-                  className="w-full h-full object-cover opacity-70"
-                  loading="lazy"
-                />
-              </div>
-              {/* Front card */}
-              <div className="absolute inset-0 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl">
-                <img
-                  src={LEGACY_REEL_CLIPS[0].posterSrc}
-                  alt=""
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                {/* Play overlay */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-                    <Play className="w-5 h-5 text-white fill-white ml-0.5" />
-                  </div>
-                </div>
-                {/* Label */}
-                <div className="absolute bottom-3 left-0 right-0 text-center">
-                  <span className="text-[9px] font-bold uppercase tracking-prestige text-white/90 bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full">
-                    {t('hero.proofValue')} · {t('hero.proofCaption')}
-                  </span>
-                </div>
-              </div>
-            </motion.a>
+            </motion.div>
           </div>
         </motion.div>
 
