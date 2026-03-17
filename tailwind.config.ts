@@ -22,12 +22,12 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				serif: ['"DM Serif Display"', 'serif'],
-				sans: ['"DM Sans"', 'sans-serif'],
+				serif: ['"Bricolage Grotesque"', '"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+				sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
 				script: ['"Alex Brush"', 'cursive'],
 			},
 			letterSpacing: {
-				'tight-serif': '-0.05em',
+				'tight-serif': '-0.02em',
 				prestige: '0.18em',
 			},
 			colors: {

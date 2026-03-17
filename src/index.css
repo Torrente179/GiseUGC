@@ -77,6 +77,9 @@
     --theater-overlay-title: 0 0% 98%;
 
     --radius: 1.25rem;
+    --font-display: 'Bricolage Grotesque', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-script: 'Alex Brush', cursive;
   }
 
   /* Dark mode variables */
@@ -138,7 +141,7 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-sans);
     font-weight: 300;
     letter-spacing: 0;
     line-height: 1.8;
@@ -182,33 +185,37 @@
   }
 
   .brand-logo {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.02em;
     text-transform: none;
     color: hsl(var(--primary));
   }
 
   h1,
   h2,
+  h3,
+  h4,
+  h5,
+  h6,
   .hero-title {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.02em;
     color: hsl(var(--foreground));
   }
 
   h1,
   .hero-title {
-    line-height: 0.9;
-  }
-
-  h2 {
     line-height: 0.95;
   }
 
+  h2 {
+    line-height: 0.98;
+  }
+
   .section-label {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-sans);
     font-weight: 700;
     font-size: 10px;
     text-transform: uppercase;
@@ -218,7 +225,7 @@
   }
 
   .luxury-accent {
-    font-family: 'Alex Brush', cursive;
+    font-family: var(--font-script);
     font-weight: 400;
     font-size: 1.4em;
     line-height: 1;
@@ -227,7 +234,7 @@
   }
 
   p {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-sans);
     font-weight: 300;
     line-height: 1.8;
     color: hsl(var(--foreground) / 0.82);
@@ -256,26 +263,6 @@
   }
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
-  }
-
-  .font-playfair {
-    font-family: 'DM Serif Display', serif;
-  }
-
-  .font-cormorant {
-    font-family: 'DM Serif Display', serif;
-  }
-
-  .font-outfit {
-    font-family: 'Outfit', sans-serif;
-  }
-
-  .editorial-label {
-    @apply font-sans font-bold uppercase text-[10px] tracking-prestige leading-none;
-  }
-
-  .power-display {
-    @apply font-serif font-bold tracking-tight-serif;
   }
 
   .strategic-body {
@@ -325,7 +312,7 @@
     color: hsl(var(--theater-chip-fg));
     background-color: hsl(var(--theater-chip-bg) / 0.88);
     border: 1px solid hsl(var(--theater-chip-border) / 0.9);
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-sans);
     font-weight: 700;
     font-size: 10px;
     text-transform: uppercase;
@@ -337,7 +324,7 @@
 
   .theater-meta-title {
     color: hsl(var(--theater-overlay-title));
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-sans);
     font-weight: 600;
     letter-spacing: -0.015em;
     text-shadow: 0 1px 14px rgba(0, 0, 0, 0.62);
@@ -453,11 +440,11 @@
   }
 
   .cinematic-title {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 0.85;
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    letter-spacing: -0.025em;
+    line-height: 0.9;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.32);
   }
 
   .cinematic-subtitle {
@@ -1085,18 +1072,18 @@
   }
 
   .svc-hero-title {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: -0.04em;
-    line-height: 0.88;
+    letter-spacing: -0.025em;
+    line-height: 0.93;
     color: hsl(var(--pure-linen));
-    text-shadow: 0 4px 32px rgba(0, 0, 0, 0.35);
+    text-shadow: 0 4px 26px rgba(0, 0, 0, 0.28);
     font-size: clamp(2.4rem, 7vw, 5.5rem);
   }
 
   .svc-hero-tagline {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
+    font-family: var(--font-sans);
+    font-weight: 400;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     font-size: 10px;
@@ -1111,7 +1098,7 @@
   }
 
   .svc-hero-summary {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-sans);
     font-weight: 300;
     line-height: 1.75;
     color: hsl(var(--pure-linen) / 0.78);
@@ -1263,7 +1250,7 @@
 
   .svc-timeline-dot {
     @apply relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 border-primary/40 bg-background text-lg font-semibold text-primary;
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-display);
     box-shadow: 0 0 0 6px hsl(var(--background)), 0 0 24px -8px hsl(var(--primary) / 0.3);
   }
 
@@ -1297,7 +1284,7 @@
   }
 
   .svc-signature {
-    font-family: 'Alex Brush', cursive;
+    font-family: var(--font-script);
     font-weight: 400;
     font-size: 2rem;
     line-height: 1;
@@ -1372,9 +1359,9 @@
 
   /* ── FAQ accordion premium ── */
   .svc-faq-item summary {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
   }
 
   .svc-faq-item summary::marker,

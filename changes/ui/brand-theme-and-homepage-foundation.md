@@ -63,3 +63,31 @@ This condenses the February homepage rebuild that established the current visual
 - `2026-02-17-services-marquee-mobile-swipe-and-speed.md`
 - `2026-02-18-dark-theme-night-palette.md`
 - `2026-02-18-system-theme-detection.md`
+
+## 2026-03-17 creator-economy typography refresh
+
+### Runtime touchpoints in this pass
+- `tailwind.config.ts`
+- `src/index.css`
+- `src/components/Hero.tsx`
+- `src/components/ServiceLandingPage.tsx`
+- `index.html`
+- `en/index.html`
+- `servicios/creadora-ugc-bilingue/index.html`
+- `servicios/videos-de-portavoz/index.html`
+- `servicios/ugc-ads-tiktok-meta/index.html`
+- `en/services/bilingual-ugc-creator/index.html`
+- `en/services/spokesperson-videos/index.html`
+- `en/services/ugc-ads-tiktok-meta/index.html`
+- `scripts/enrich-service-entrypoints.mjs`
+
+### What changed
+1. The heading system moved from `DM Serif Display` to `Bricolage Grotesque` while body and supporting copy stayed on `DM Sans`, shifting the site toward a more current creator-economy feel without redesigning page structure.
+2. Shared display metrics were loosened slightly so the new font does not crowd in the homepage hero, service-page hero, footer branding, FAQ headings, and other large editorial moments.
+3. The remaining one-off `Outfit` body exception in the homepage hero was removed so the live UI now uses a tighter, more consistent two-family system plus the existing `Alex Brush` accent treatment.
+4. Both localized homepage shells and all six static service entrypoints were updated to load the same heading font for first paint and non-JS crawler-visible HTML, keeping the visual system consistent before hydration.
+5. The service-entrypoint enrichment script was updated to preserve the new heading font inside regenerated noscript FAQ blocks instead of reintroducing the old serif on future builds.
+
+### SEO guardrail
+1. This pass changed font loading and typography declarations only.
+2. Metadata, canonicals, hreflang, robots, sitemap, llms, JSON-LD, FAQ content, and route-level SEO wiring were intentionally left unchanged.

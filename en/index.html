@@ -382,7 +382,7 @@
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=DM+Sans:wght@300;400;500;700&family=Outfit:wght@500;700&family=DM+Serif+Display&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
     />
     <link
       rel="preload"
@@ -395,14 +395,14 @@
     />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=DM+Sans:wght@300;400;500;700&family=Outfit:wght@500;700&family=DM+Serif+Display&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=DM+Sans:wght@300;400;500;700&family=Outfit:wght@500;700&family=DM+Serif+Display&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
       />
     </noscript>
     <style>
@@ -433,10 +433,11 @@
       }
       .boot-title {
         margin: 0;
-        font-family: "DM Serif Display", Georgia, serif;
+        font-family: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
+        font-weight: 700;
         font-size: clamp(2.6rem, 6vw, 5rem);
-        line-height: 0.94;
-        letter-spacing: -0.04em;
+        line-height: 0.98;
+        letter-spacing: -0.02em;
       }
       .boot-name-accent {
         color: #9f9366;
@@ -501,6 +502,12 @@
         display: block;
         object-fit: cover;
       }
+      .boot-noscript h2,
+      .boot-noscript h3 {
+        font-family: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
       @media (max-width: 1023px) {
         .boot-shell {
           padding-top: 88px;
@@ -554,7 +561,7 @@
         </div>
       </section>
       <noscript>
-        <article style="max-width:800px;margin:0 auto;padding:24px;font-family:'DM Sans',system-ui,sans-serif;color:#2f2a24">
+        <article class="boot-noscript" style="max-width:800px;margin:0 auto;padding:24px;font-family:'DM Sans',system-ui,sans-serif;color:#2f2a24">
           <h2>Bilingual UGC creator and spokesperson for brands that sell through social</h2>
           <p>Gisela Saldarriaga creates UGC ads, product demos, reviews, and spokesperson videos in Spanish and English for ecommerce, beauty, lifestyle, SaaS, and tech brands. She works from Medellin with teams in the US, Spain, and LatAm.</p>
 
