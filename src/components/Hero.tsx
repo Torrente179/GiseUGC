@@ -119,7 +119,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             <img
               src="/uploads/gisela-hero-1200.jpg"
               alt={t('hero.imageAlt')}
-              className={`w-full h-full object-cover object-[50%_15%] md:object-[50%_20%] lg:object-[50%_25%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`w-full h-full object-cover object-[50%_22%] md:object-[50%_28%] lg:object-[50%_32%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
               loading="eager"
               fetchPriority="high"
               decoding="async"
