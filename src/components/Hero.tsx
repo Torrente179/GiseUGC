@@ -199,10 +199,10 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
             {/* Right side: Phone-frame video reel + compact metrics */}
             <motion.div
-              className="hidden lg:flex flex-col items-center gap-5 lg:self-end"
+              className="hidden lg:flex flex-col items-center gap-5 lg:self-end lg:-mr-4 xl:-mr-8"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
-              {/* Phone Frame with TikTok-style cycling */}
+              {/* Phone Frame with smooth cycling */}
               <div className="hero-phone-frame">
                 <div className="hero-phone-notch" />
                 <AnimatePresence mode="popLayout" initial={false}>
@@ -218,10 +218,10 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                     ref={(el) => {
                       if (el) videoRefs.current.set(currentClipIndex, el);
                     }}
-                    initial={{ y: '100%', opacity: 0.5 }}
-                    animate={{ y: '0%', opacity: 1 }}
-                    exit={{ y: '-100%', opacity: 0.5 }}
-                    transition={{ duration: 0.5, ease: premiumEase }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1.2, ease: 'easeInOut' }}
                   />
                 </AnimatePresence>
                 {/* Play indicator overlay */}
