@@ -56,3 +56,10 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 1. Moved the service-page FAQ question typography from a CSS-only hook into explicit component classes so the sans treatment no longer depends on inherited service-page styles.
 2. Pinned the FAQ answer copy to the sans stack as well, keeping the full accordion block consistently more readable.
 3. Left the FAQ content, schema output, metadata, and localized entrypoint structure unchanged.
+
+## 2026-03-17 service FAQ cross-surface font lock
+
+### What changed
+1. Added hard font-family enforcement (`DM Sans`) on service FAQ question and answer nodes inside the React service template to prevent serif fallback from inherited typography.
+2. Expanded the shared `.svc-faq-item summary` CSS selector to include descendants so nested FAQ text nodes inherit the same sans rule consistently.
+3. Updated and regenerated all six static service entrypoints so no-JS fallback FAQ terms/answers also stay on the sans stack.

@@ -192,10 +192,12 @@ const bootNoScriptStyles = `      .boot-noscript h2,
       }
       .boot-noscript dt {
         margin-top: 16px;
+        font-family: 'DM Sans', system-ui, sans-serif;
         font-weight: 700;
       }
       .boot-noscript dd {
         margin: 8px 0 0;
+        font-family: 'DM Sans', system-ui, sans-serif;
         line-height: 1.8;
       }`;
 
