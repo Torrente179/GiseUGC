@@ -112,14 +112,26 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
         >
           <picture>
             <source
+              media="(min-width: 1024px)"
+              type="image/webp"
+              srcSet="/uploads/gisela-hero-desktop-1600.webp 1600w, /uploads/gisela-hero-desktop-2048.webp 2048w"
+              sizes="100vw"
+            />
+            <source
+              media="(min-width: 1024px)"
+              type="image/jpeg"
+              srcSet="/uploads/gisela-hero-desktop-2048.jpg 2048w"
+              sizes="100vw"
+            />
+            <source
               type="image/webp"
               srcSet="/uploads/gisela-hero-400.webp 400w, /uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
               sizes="100vw"
             />
             <img
-              src="/uploads/gisela-hero-1200.jpg"
+              src="/uploads/gisela-hero-585.jpg"
               alt={t('hero.imageAlt')}
-              className={`w-full h-full object-cover object-[50%_8%] md:object-[50%_12%] lg:object-[50%_16%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`w-full h-full object-cover object-[50%_8%] md:object-[50%_12%] lg:object-[50%_34%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
               loading="eager"
               fetchPriority="high"
               decoding="async"
