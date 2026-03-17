@@ -154,7 +154,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 </p>
               </motion.div>
 
-              <h1 className="cinematic-title text-white text-[14vw] sm:text-[5.5rem] md:text-[7rem] lg:text-[8.5rem] xl:text-[9.5rem] -ml-1 md:-ml-2 mb-6">
+              <h1 className="cinematic-title text-white text-[12vw] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[6.5rem] xl:text-[7.5rem] -ml-1 md:-ml-2 mb-6">
                 <LiteSplitTextReveal text="Gisela" delay={0.2} stagger={0.06} className="block" />
                 <LiteSplitTextReveal text="Saldarriaga" delay={0.4} stagger={0.06} className="block text-accent luxury-accent align-baseline" />
               </h1>
@@ -199,7 +199,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
             {/* Right side: Phone-frame video reel + compact metrics */}
             <motion.div
-              className="hidden lg:flex flex-col items-center gap-5 lg:self-end lg:-mr-12 xl:-mr-20"
+              className="hidden lg:flex flex-col items-center gap-5 lg:self-end lg:-mr-4 xl:-mr-8"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
               {/* Phone Frame with smooth cycling */}
