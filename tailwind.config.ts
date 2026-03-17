@@ -22,8 +22,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				serif: ['"Playfair Display"', 'serif'],
-				sans: ['"Inter"', 'sans-serif'],
+				serif: ['"DM Serif Display"', 'serif'],
+				sans: ['"DM Sans"', 'sans-serif'],
 				script: ['"Alex Brush"', 'cursive'],
 			},
 			letterSpacing: {

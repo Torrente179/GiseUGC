@@ -184,7 +184,7 @@ const escapeHtml = (value) =>
 
 const bootNoScriptStyles = `      .boot-noscript h2,
       .boot-noscript h3 {
-        font-family: 'Playfair Display', serif;
+        font-family: 'DM Serif Display', serif;
         letter-spacing: -0.04em;
       }
       .boot-noscript dl {
