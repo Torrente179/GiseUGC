@@ -457,7 +457,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               2. PROOF GALLERY — Editorial numbered showcase
               ═══════════════════════════════════════════ */}
           {proofExamples.length > 0 && (
-            <RevealSection className="pb-16 md:pb-24 lg:pb-28" id="examples">
+            <RevealSection className="py-16 md:py-24 lg:py-28" id="examples">
               <div className="studio-container">
                 <div className="mb-12 md:mb-16">
                   <p className="section-label mb-4">{page.featuredTitle}</p>
