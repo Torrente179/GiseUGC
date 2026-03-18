@@ -120,3 +120,22 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 
 ### SEO impact
 - Hero copy, H1, metadata wiring, schema output, and service routes are unchanged.
+
+## 2026-03-18 service hero mobile framing — homepage-style de-clutter pass
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+- `src/index.css`
+
+### What changed
+1. De-cluttered breadcrumb navigation on mobile with an `sr-only` pattern (`sr-only md:not-sr-only md:flex`) to reclaim top-of-hero visual space without removing semantic link markup from the rendered DOM.
+2. Applied homepage-style mobile de-clutter to the service hero body by keeping summary and hero chips in the DOM but removing them from small-screen visual layout (`sr-only` / `md:not-sr-only` patterns).
+3. Tightened mobile title measure by capping line width (`max-w-[12ch]`) and reducing mobile title scale/line-height so the overlay copy no longer dominates the image.
+4. Updated mobile hero image framing to `object-position: 62% 12%` and restored centered framing from `md` upward, improving subject visibility behind the remaining hero content.
+
+### Verification
+1. `npm run build`
+
+### SEO impact
+- Hero H1 and summary text remain present in rendered HTML.
+- No schema, canonical routes, metadata, or localized service copy were changed.

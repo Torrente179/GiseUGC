@@ -263,7 +263,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
             {/* Content */}
             <div className="svc-hero-content">
               {/* Breadcrumb */}
-              <nav className="svc-breadcrumb mb-8 md:mb-10" aria-label="Breadcrumb">
+              <nav className="svc-breadcrumb mb-8 md:mb-10 sr-only md:not-sr-only md:flex" aria-label="Breadcrumb">
                 <a href={getHomePath(locale)}>{labels.home}</a>
                 <span className="opacity-40">/</span>
                 <a href={getHomeSectionHref(locale, 'services')}>{labels.services}</a>
@@ -275,13 +275,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <p className="svc-hero-tagline mb-5 md:mb-6">{page.heroEyebrow}</p>
 
               {/* H1 — SEO preserved, same text */}
-              <h1 className="svc-hero-title max-w-5xl">{page.heroTitle}</h1>
+              <h1 className="svc-hero-title max-w-[12ch] md:max-w-5xl">{page.heroTitle}</h1>
 
               {/* Summary */}
-              <p className="svc-hero-summary mt-6 text-base md:text-lg">{page.heroSummary}</p>
+              <p className="svc-hero-summary sr-only mt-6 text-base md:not-sr-only md:text-lg">{page.heroSummary}</p>
 
               {/* Chips */}
-              <div className="mt-6 flex flex-wrap gap-2 md:mt-8">
+              <div className="mt-6 sr-only md:not-sr-only md:mt-8 md:flex md:flex-wrap md:gap-2">
                 {page.heroPoints.map((point) => (
                   <span key={point} className="svc-hero-chip">
                     {point}

@@ -1033,8 +1033,14 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: 62% 12%;
     z-index: 0;
+  }
+
+  @media (min-width: 768px) {
+    .svc-hero-media {
+      object-position: center;
+    }
   }
 
   .svc-hero-overlay {
@@ -1080,6 +1086,13 @@
     color: hsl(var(--pure-linen));
     text-shadow: 0 4px 30px rgba(0, 0, 0, 0.32);
     font-size: clamp(2.4rem, 7vw, 5.5rem);
+  }
+
+  @media (max-width: 767px) {
+    .svc-hero-title {
+      font-size: clamp(2rem, 10.5vw, 3.2rem);
+      line-height: 0.93;
+    }
   }
 
   .svc-hero-tagline {
