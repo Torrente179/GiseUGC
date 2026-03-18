@@ -264,3 +264,21 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 
 ### SEO impact
 - CSS-only framing update; no SEO-surface changes.
+
+## 2026-03-18 service hero desktop framing — additional downward shift
+
+### Runtime touchpoints
+- `src/index.css`
+
+### What changed
+1. Shifted service-hero desktop/tablet focal Y further down to increase top headroom:
+   - `md` (`>=768px`): `center 46%` → `center 40%`
+   - `lg+` (`>=1024px`): `center 40%` → `center 32%`
+2. Kept all mobile framing and transform behavior unchanged.
+
+### Verification
+1. `npm run build`
+
+### SEO impact
+- CSS-only positional refinement.
+- No metadata, schema, canonical routes, or content changes.
