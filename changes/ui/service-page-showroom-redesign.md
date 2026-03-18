@@ -222,3 +222,28 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 - No SEO-copy or schema changes.
 - No metadata/canonical route changes.
 - Visual/layout-only updates.
+
+## 2026-03-18 service hero top-strip removal + ultra-compact mobile nav pass
+
+### Runtime touchpoints
+- `src/components/Navbar.tsx`
+- `src/components/ThemeToggle.tsx`
+- `src/index.css`
+
+### What changed
+1. Removed the remaining service-hero top strip by lifting the mobile image offset from `translateY(1.4%)` to `translateY(0%)` while preserving existing scale/headroom behavior.
+2. Tightened service-page mobile navbar again in `compactMobile` mode:
+   - zero outer top/bottom nav padding on mobile (`py-0`)
+   - smaller shell radius and vertical padding
+   - smaller logo text size
+   - thinner ES/EN pills
+   - smaller theme toggle button/icon (new `compact` prop on `ThemeToggle`)
+   - smaller hamburger button/icon
+3. Kept desktop navbar sizing and homepage mobile navbar behavior unchanged.
+
+### Verification
+1. `npm run build`
+
+### SEO impact
+- Layout/CSS + control sizing only.
+- No metadata, schema, canonical routing, or content changes.
