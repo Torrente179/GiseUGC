@@ -146,9 +146,9 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 - `src/index.css`
 
 ### What changed
-1. Shifted mobile service-hero image focus further to the right (`object-position: 70% 20%`).
-2. Added a subtle mobile-only framing offset using `transform: scale(1.04) translateY(2%)` so the subject sits lower and avoids top-edge chop against the mobile navbar chrome.
-3. Reset transform at `md+` (`transform: none`) so desktop/tablet framing remains unchanged.
+1. Corrected mobile horizontal focal direction by moving to `object-position: 34% 0%`, which places the subject further right on screen (the previous higher X value moved her left).
+2. Switched to top-origin scaling and a controlled downward offset (`transform: scale(1.04) translateY(2.5%)`, `transform-origin: top center`) to preserve top headroom while still lowering the subject away from the navbar chrome.
+3. Kept the `md+` reset (`transform: none`) so desktop/tablet framing remains unchanged.
 
 ### Verification
 1. `npm run build`
