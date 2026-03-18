@@ -1,5 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Check, Play, X, Plus, ArrowRight } from 'lucide-react';
+import { Check, Play, X, Plus, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getHomeSectionHref, getServicePath } from '@/lib/locale-path';
 import { getServicePageContent, getRelatedServiceSummaries } from '@/data/service-pages';
@@ -7,6 +7,7 @@ import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageSeo from '@/components/PageSeo';
+import TheaterVideo from '@/components/media/TheaterVideo';
 
 const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
 
@@ -37,6 +38,9 @@ const localeLabels = {
     scrollDown: 'Explorar',
     featuredWorkLabel: 'Trabajo Destacado',
     featuredWorkSubtitle: 'Una selección breve entre demos, piezas de portavoz y reviews recientes.',
+    previewClose: 'Cerrar vista previa',
+    previewPrev: 'Clip anterior',
+    previewNext: 'Siguiente clip',
   },
   en: {
     home: 'Home',
@@ -48,6 +52,9 @@ const localeLabels = {
     scrollDown: 'Explore',
     featuredWorkLabel: 'Featured Work',
     featuredWorkSubtitle: 'A brief selection from demos, spokesperson pieces, and recent reviews.',
+    previewClose: 'Close preview',
+    previewPrev: 'Previous clip',
+    previewNext: 'Next clip',
   },
 } as const;
 
@@ -117,6 +124,151 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
   const toggleDeliverable = useCallback((index: number) => {
     setExpandedDeliverable((prev) => (prev === index ? null : index));
   }, []);
+  const [activeProofIndex, setActiveProofIndex] = useState<number | null>(null);
+  const [isMobileViewport, setIsMobileViewport] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 767px)').matches;
+  });
+
+  const activeProofItem = useMemo(
+    () => (activeProofIndex === null ? null : proofExamples[activeProofIndex] ?? null),
+    [activeProofIndex, proofExamples],
+  );
+  const isProofTheaterOpen = activeProofItem !== null;
+
+  const openProofClip = useCallback(
+    (index: number) => {
+      if (index < 0 || index >= proofExamples.length) return;
+      setActiveProofIndex(index);
+    },
+    [proofExamples.length],
+  );
+
+  const closeProofTheater = useCallback(() => {
+    setActiveProofIndex(null);
+  }, []);
+
+  const navigateProofTheater = useCallback(
+    (direction: 1 | -1) => {
+      if (proofExamples.length === 0) return;
+      setActiveProofIndex((previousIndex) => {
+        if (previousIndex === null) return previousIndex;
+        return (previousIndex + direction + proofExamples.length) % proofExamples.length;
+      });
+    },
+    [proofExamples.length],
+  );
+
+  const theaterSources = useMemo(() => {
+    const clip = activeProofItem?.clip;
+    if (!clip) return [];
+
+    const preferredSources = isMobileViewport
+      ? [clip.mobileSrc, clip.mainSrc, clip.previewSrc]
+      : [clip.mainSrc, clip.mobileSrc, clip.previewSrc];
+
+    return preferredSources.filter((source, index, sources): source is string => {
+      if (!source) return false;
+      return sources.indexOf(source) === index;
+    });
+  }, [activeProofItem, isMobileViewport]);
+
+  useEffect(() => {
+    if (activeProofIndex === null) return;
+    if (activeProofIndex >= proofExamples.length) {
+      setActiveProofIndex(null);
+    }
+  }, [activeProofIndex, proofExamples.length]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const updateViewport = () => {
+      setIsMobileViewport(mediaQuery.matches);
+    };
+
+    updateViewport();
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', updateViewport);
+      return () => mediaQuery.removeEventListener('change', updateViewport);
+    }
+
+    mediaQuery.addListener(updateViewport);
+    return () => mediaQuery.removeListener(updateViewport);
+  }, []);
+
+  useEffect(() => {
+    if (!isProofTheaterOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeProofTheater();
+        return;
+      }
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        navigateProofTheater(1);
+        return;
+      }
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        navigateProofTheater(-1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [closeProofTheater, isProofTheaterOpen, navigateProofTheater]);
+
+  useEffect(() => {
+    if (!isProofTheaterOpen) return;
+
+    const scrollY = window.scrollY;
+    const htmlElement = document.documentElement;
+    const previousStyles = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      left: document.body.style.left,
+      right: document.body.style.right,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+      overscrollBehavior: document.body.style.overscrollBehavior,
+    };
+    const previousHtmlStyles = {
+      overflow: htmlElement.style.overflow,
+      overscrollBehavior: htmlElement.style.overscrollBehavior,
+      scrollBehavior: htmlElement.style.scrollBehavior,
+    };
+
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+    document.body.style.overscrollBehavior = 'none';
+    htmlElement.style.overflow = 'hidden';
+    htmlElement.style.overscrollBehavior = 'none';
+    htmlElement.dataset.theater = 'open';
+
+    return () => {
+      delete htmlElement.dataset.theater;
+      document.body.style.position = previousStyles.position;
+      document.body.style.top = previousStyles.top;
+      document.body.style.left = previousStyles.left;
+      document.body.style.right = previousStyles.right;
+      document.body.style.width = previousStyles.width;
+      document.body.style.overflow = previousStyles.overflow;
+      document.body.style.overscrollBehavior = previousStyles.overscrollBehavior;
+      htmlElement.style.overflow = previousHtmlStyles.overflow;
+      htmlElement.style.overscrollBehavior = previousHtmlStyles.overscrollBehavior;
+      htmlElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, scrollY);
+      htmlElement.style.scrollBehavior = previousHtmlStyles.scrollBehavior;
+    };
+  }, [isProofTheaterOpen]);
 
   const schema = useMemo(() => {
     const breadcrumbItems = [
@@ -352,12 +504,12 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   const { example: leadExample, clip: leadClip } = proofExamples[0];
                   const leadDuration = formatDuration(leadClip.durationSeconds);
                   return (
-                    <a
+                    <button
                       key={leadExample.clipId}
-                      href={leadClip.mainSrc}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="svc-proof-lead group relative block overflow-hidden rounded-2xl md:rounded-3xl mb-4 md:mb-5"
+                      type="button"
+                      onClick={() => openProofClip(0)}
+                      aria-label={`${labels.openSample}: ${leadExample.title}`}
+                      className="svc-proof-lead group relative mb-4 block w-full overflow-hidden rounded-2xl border-0 bg-transparent p-0 text-left md:mb-5 md:rounded-3xl"
                     >
                       <div className="relative aspect-[16/10] md:aspect-[21/9]">
                         <img
@@ -397,7 +549,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                           </p>
                         </div>
                       </div>
-                    </a>
+                    </button>
                   );
                 })()}
 
@@ -413,12 +565,12 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                     {proofExamples.slice(1).map(({ example, clip }, index) => {
                       const duration = formatDuration(clip.durationSeconds);
                       return (
-                        <a
+                        <button
                           key={example.clipId}
-                          href={clip.mainSrc}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="svc-proof-card group relative block overflow-hidden rounded-2xl"
+                          type="button"
+                          onClick={() => openProofClip(index + 1)}
+                          aria-label={`${labels.openSample}: ${example.title}`}
+                          className="svc-proof-card group relative block w-full overflow-hidden rounded-2xl border-0 bg-transparent p-0 text-left"
                         >
                           <div className="relative aspect-[4/5] md:aspect-[5/4]">
                             <img
@@ -457,7 +609,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                               </p>
                             </div>
                           </div>
-                        </a>
+                        </button>
                       );
                     })}
                   </div>
@@ -673,13 +825,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                         : 'grid-cols-3'
                   }`}
                 >
-                  {proofExamples.map(({ example, clip }, index) => (
-                    <a
+                  {proofExamples.map(({ example }, index) => (
+                    <button
                       key={example.clipId}
-                      href={clip.mainSrc}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex flex-col justify-between gap-6 px-5 py-8 md:px-7 md:py-9 border-b border-border/40 transition-colors duration-200 hover:bg-accent/[0.03]"
+                      type="button"
+                      onClick={() => openProofClip(index)}
+                      aria-label={`${labels.openSample}: ${example.title}`}
+                      className="group flex w-full flex-col justify-between gap-6 border-0 border-b border-border/40 bg-transparent px-5 py-8 text-left transition-colors duration-200 hover:bg-accent/[0.03] md:px-7 md:py-9"
                     >
                       <div>
                         <span className="block text-xs font-semibold uppercase tracking-prestige text-foreground/30 mb-4">
@@ -692,7 +844,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                       <span className="text-foreground/30 transition-all duration-200 group-hover:translate-x-1 group-hover:text-foreground/60 text-xl leading-none">
                         →
                       </span>
-                    </a>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -775,6 +927,94 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
             </div>
           </RevealSection>
         </main>
+
+        {activeProofItem && (
+          <div
+            className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4"
+            onClick={closeProofTheater}
+          >
+            <div
+              className="absolute inset-0 backdrop-blur-[6px] md:backdrop-blur-[10px]"
+              style={{ backgroundColor: 'hsl(var(--theater-backdrop) / 0.74)' }}
+            />
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)',
+              }}
+            />
+            <div className="relative w-full max-w-[430px]">
+              <button
+                type="button"
+                className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  navigateProofTheater(-1);
+                }}
+                aria-label={labels.previewPrev}
+              >
+                <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
+              </button>
+              <button
+                type="button"
+                className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  navigateProofTheater(1);
+                }}
+                aria-label={labels.previewNext}
+              >
+                <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
+              </button>
+              <div
+                className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  className="theater-control absolute right-3 top-3 z-30 h-9 w-9"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    closeProofTheater();
+                  }}
+                  aria-label={labels.previewClose}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                <div className="relative">
+                  <TheaterVideo
+                    sources={theaterSources}
+                    poster={activeProofItem.clip.posterSrc}
+                    enableStartupFallback={isMobileViewport}
+                    startupFallbackMs={isMobileViewport ? 300 : 420}
+                  />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
+                    <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="theater-meta-chip inline-flex max-w-[78%] items-center rounded-full px-2.5 py-1">
+                          {page.navLabel}
+                        </p>
+                        {formatDuration(activeProofItem.clip.durationSeconds) && (
+                          <p className="theater-meta-chip inline-flex items-center rounded-full px-2.5 py-1">
+                            {formatDuration(activeProofItem.clip.durationSeconds)}
+                          </p>
+                        )}
+                      </div>
+                      <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">
+                        {activeProofItem.example.title}
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <Footer />
 
