@@ -78,9 +78,25 @@ This consolidates the February work on contact entry points, footer structure, a
 2. `npm run build`
 3. `npm run check:mobile-regression`
 
+## 2026-03-18 mobile theme toggle ghost-click hardening
+
+### Runtime touchpoints in this pass
+- `src/components/ThemeToggle.tsx`
+- `src/components/Navbar.tsx`
+- `tmp/mobile-regression/latest.md`
+
+### What changed
+1. The mobile theme toggle was hardened against Safari-style ghost clicks after refresh by moving touch activation onto `pointerdown`, preventing the follow-up synthetic click, and keeping desktop mouse/keyboard activation on the normal click path.
+2. A short re-entry lock was added around the theme transition window so repeated touch/click events cannot flip the theme back and forth while the previous toggle is still settling.
+3. The toggle now updates `color-scheme` and the `theme-color` meta tag immediately alongside the class flip so the browser chrome stays in sync during the transition instead of waiting for the next theme-provider repaint.
+
+### Verification
+1. `npx eslint src/components/ThemeToggle.tsx src/components/Navbar.tsx`
+2. `npm run check:mobile-regression`
+
 ## Mobile Regression Checklist
 
-Generated at: `2026-03-17T14:04:56.767Z`
+Generated at: `2026-03-18T14:36:10.837Z`
 
 ### Automated checks
 - ✅ Targeted lint
@@ -97,4 +113,4 @@ Generated at: `2026-03-17T14:04:56.767Z`
 - Device/OS:
 - Browser version:
 - Repro video/screenshot path (if any):
-- Additional observations:
+- Additional observations: Theme toggle touch ghost-click mitigation shipped; direct iPhone Safari refresh verification still pending.
