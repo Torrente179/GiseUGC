@@ -187,3 +187,18 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 ### SEO impact
 - CSS-only visual positioning adjustment.
 - No metadata, canonical, schema, or content changes.
+
+## 2026-03-18 service hero mobile framing — left-shift follow-up for right-arm visibility
+
+### Runtime touchpoints
+- `src/index.css`
+
+### What changed
+1. Increased mobile focal X from `46%` to `52%` to shift the subject further left on screen and recover more of the right arm.
+2. Kept vertical/headroom framing unchanged to avoid reintroducing top crop issues.
+
+### Verification
+1. `npm run build`
+
+### SEO impact
+- CSS-only positional update; no SEO-surface changes.
