@@ -156,3 +156,18 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 ### SEO impact
 - CSS-only visual adjustment.
 - No content, metadata, schema, canonical route, or semantic structure changes.
+
+## 2026-03-18 service hero mobile framing — horizontal rebalance
+
+### Runtime touchpoints
+- `src/index.css`
+
+### What changed
+1. Rebalanced the mobile horizontal focal point from `34%` to `42%` to reduce over-shift and place the subject closer to the intended center-right position.
+2. Kept the prior top-headroom fix intact (`transform: scale(1.04) translateY(2.5%)`, `transform-origin: top center`).
+
+### Verification
+1. `npm run build`
+
+### SEO impact
+- CSS-only positional tweak; no SEO-surface changes.
