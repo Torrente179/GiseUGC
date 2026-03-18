@@ -139,6 +139,12 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Reduced the mobile FAQ question size slightly so longer Cormorant questions stop feeling oversized on narrow screens.
 2. Left the desktop FAQ question size unchanged, since the larger serif treatment was already reading correctly there.
 
+## 2026-03-18 homepage FAQ desktop-size trim
+
+### What changed
+1. Reduced the desktop FAQ question size a bit so the accordion feels less oversized on larger screens.
+2. Kept the mobile size and overall FAQ structure unchanged, so the tweak stays focused on desktop readability only.
+
 ## 2026-03-17 featured work section redesign — interactive numbered grid
 
 ### Runtime touchpoints
