@@ -314,3 +314,25 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 
 ### Verification
 1. `npm run build` — passed, 2118 modules, no errors.
+
+## 2026-03-18 editorial intro — tighten pass (border-left anchor + inline numbers)
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+
+### What changed
+1. Added a desktop-only left border rule (`lg:border-l lg:border-border/40 lg:pl-12`) to the right column so it reads as a distinct editorial panel without adding background color or box decoration.
+2. Restored `marketTitle` label (`section-label mb-8`) above the delivery items — it was removed in the previous pass, but is important visitor context and a crawlable text node.
+3. Replaced the floating large-serif number treatment (`text-3xl font-serif`) with a compact inline spec-sheet style: `text-[11px] font-bold uppercase tracking-prestige text-accent/50` sitting inline to the left of the item text via a `flex items-start gap-5` row.
+4. Items are now separated by `border-t border-border/30` with symmetric `mt-5 pt-5` spacing — tight, scannable, and premium without competing with the left-column body text.
+5. Increased overall column gap to `lg:gap-20` and adjusted left padding to `lg:pl-12` for more compositional air.
+
+### SEO safety check
+- `sectionIntroTitle` preserved as `<p class="section-label">` — crawlable.
+- `sectionIntroText` preserved unchanged — crawlable.
+- `marketTitle` restored to DOM — crawlable.
+- All `marketItems` text visible in `<p>` elements — crawlable.
+- No heading levels, metadata, schema, routes, or structured data changed.
+
+### Verification
+1. `npm run build` — passed, no errors.
