@@ -247,3 +247,20 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 ### SEO impact
 - Layout/CSS + control sizing only.
 - No metadata, schema, canonical routing, or content changes.
+
+## 2026-03-18 service hero desktop framing — lower subject for headroom
+
+### Runtime touchpoints
+- `src/index.css`
+
+### What changed
+1. Adjusted service-hero media focal Y on larger breakpoints so the subject sits slightly lower and avoids top head crop:
+   - `md` (`>=768px`): `object-position: center 46%`
+   - `lg+` (`>=1024px`): `object-position: center 40%`
+2. Kept transform disabled on desktop/tablet (`transform: none`) so only focal alignment changes.
+
+### Verification
+1. `npm run build`
+
+### SEO impact
+- CSS-only framing update; no SEO-surface changes.
