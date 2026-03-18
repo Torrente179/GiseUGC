@@ -282,3 +282,35 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 ### SEO impact
 - CSS-only positional refinement.
 - No metadata, schema, canonical routes, or content changes.
+
+## 2026-03-18 editorial intro — section reorder + premium redesign
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+
+### What changed
+
+#### Section reorder
+1. Moved the Proof Gallery (formerly Section 3) up to Section 2 so video proof appears immediately after the hero before any editorial framing.
+2. Moved the Editorial Intro (formerly Section 2) down to Section 3, where it now provides context after the visitor has already seen the work.
+3. Updated section-number comments in the component to reflect the new order.
+
+#### Editorial Intro redesign (Direction 3 — clean split with premium market items)
+1. Increased section padding from `py-16 md:py-24 lg:py-28` to `py-20 md:py-28 lg:py-32` for more breathing room.
+2. Added a top border (`border-t border-border/50`) to visually anchor the section's separation from the gallery above.
+3. Increased column gap from `gap-10` to `gap-12 lg:gap-16`.
+4. Left column: upgraded intro text from `clamp(1.35rem,2.5vw,2.2rem) leading-[1.5] text-foreground/85` to `clamp(1.5rem,2.8vw,2.4rem) leading-[1.45] text-foreground` — larger, tighter line-height, full opacity for a more confident typographic statement.
+5. Right column: removed the `section-label` eyebrow (was creating redundant label duplication). Replaced the bordered numbered row treatment (`border-b border-border/40 py-4 flex gap-4`) with a premium editorial callout stack — each item gets a large serif number (`text-3xl font-serif font-light text-accent/35`) above the item text, items separated by whitespace (`pt-8 md:pt-10`) rather than border lines.
+6. The left column eyebrow label (`section-label`) is retained as the single label for the section.
+
+### SEO safety check
+- `sectionIntroTitle` eyebrow text: preserved in DOM as a `<p class="section-label">` element — crawlable.
+- `sectionIntroText` body copy: preserved unchanged — crawlable.
+- `marketItems` array text: all items remain visible in the DOM as `<p>` elements — crawlable.
+- `marketTitle` field: no longer rendered as a heading/label (was a duplicate label in the right column). The items themselves remain fully crawlable so the indexed text is unchanged.
+- No heading levels modified.
+- No metadata, schema, canonical routes, or structured data changed.
+- Section reorder does not affect SEO — all text content remains present in the DOM.
+
+### Verification
+1. `npm run build` — passed, 2118 modules, no errors.

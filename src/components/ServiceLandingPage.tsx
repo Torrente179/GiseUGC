@@ -454,42 +454,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
           </section>
 
           {/* ═══════════════════════════════════════════
-              2. EDITORIAL INTRO — What this resolves
-              ═══════════════════════════════════════════ */}
-          <RevealSection className="py-16 md:py-24 lg:py-28">
-            <div className="studio-container">
-              <div className="grid gap-10 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,0.45fr)] lg:items-start">
-                <div>
-                  <p className="section-label mb-5">{page.sectionIntroTitle}</p>
-                  <p className="font-serif text-[clamp(1.35rem,2.5vw,2.2rem)] font-light leading-[1.5] tracking-tight text-foreground/85">
-                    {page.sectionIntroText}
-                  </p>
-                </div>
-
-                <div className="lg:pl-8">
-                  <p className="section-label mb-5">{page.marketTitle}</p>
-                  <div className="space-y-0">
-                    {page.marketItems.map((item, i) => (
-                      <div
-                        key={item}
-                        className="flex gap-4 border-b border-border/40 py-4 last:border-b-0"
-                      >
-                        <span className="mt-1 text-xs font-semibold uppercase tracking-prestige text-accent/70">
-                          {String(i + 1).padStart(2, '0')}
-                        </span>
-                        <p className="text-sm font-light leading-[1.75] text-foreground/70 md:text-base">
-                          {item}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </RevealSection>
-
-          {/* ═══════════════════════════════════════════
-              3. PROOF GALLERY — Editorial numbered showcase
+              2. PROOF GALLERY — Editorial numbered showcase
               ═══════════════════════════════════════════ */}
           {proofExamples.length > 0 && (
             <RevealSection className="pb-16 md:pb-24 lg:pb-28" id="examples">
@@ -617,6 +582,40 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </div>
             </RevealSection>
           )}
+
+          {/* ═══════════════════════════════════════════
+              3. EDITORIAL INTRO — What this resolves
+              ═══════════════════════════════════════════ */}
+          <RevealSection className="border-t border-border/50 py-20 md:py-28 lg:py-32">
+            <div className="studio-container">
+              <div className="grid gap-12 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,0.45fr)] lg:items-start lg:gap-16">
+                {/* Left — intro statement */}
+                <div>
+                  <p className="section-label mb-6">{page.sectionIntroTitle}</p>
+                  <p className="font-serif text-[clamp(1.5rem,2.8vw,2.4rem)] font-light leading-[1.45] tracking-tight text-foreground">
+                    {page.sectionIntroText}
+                  </p>
+                </div>
+
+                {/* Right — market items as editorial callouts */}
+                <div className="lg:pl-8">
+                  {page.marketItems.map((item, i) => (
+                    <div
+                      key={item}
+                      className={i === 0 ? '' : 'pt-8 md:pt-10'}
+                    >
+                      <span className="block font-serif text-3xl font-light leading-none text-accent/35 mb-3">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <p className="text-base font-light leading-[1.75] text-foreground/70">
+                        {item}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </RevealSection>
 
           {/* ═══════════════════════════════════════════
               4. DELIVERABLES — Editorial line items
