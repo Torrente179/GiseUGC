@@ -171,3 +171,19 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 
 ### SEO impact
 - CSS-only positional tweak; no SEO-surface changes.
+
+## 2026-03-18 service hero mobile framing — fine horizontal nudge
+
+### Runtime touchpoints
+- `src/index.css`
+
+### What changed
+1. Increased mobile hero horizontal focal X from `42%` to `46%` for a small additional rebalance while preserving the current headroom fix.
+2. Left vertical/top-headroom settings unchanged (`transform: scale(1.04) translateY(2.5%)`, `transform-origin: top center`).
+
+### Verification
+1. `npm run build`
+
+### SEO impact
+- CSS-only visual positioning adjustment.
+- No metadata, canonical, schema, or content changes.
