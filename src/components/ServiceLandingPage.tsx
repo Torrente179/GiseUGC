@@ -4,27 +4,20 @@ import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getHomeSectionHref, getServicePath } from '@/lib/locale-path';
 import { getServicePageContent, getRelatedServiceSummaries } from '@/data/service-pages';
 import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
-import VIDEO_LQIP from '@/data/video-lqip';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageSeo from '@/components/PageSeo';
-import LazyVideo from '@/components/media/LazyVideo';
 
 const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
+const SERVICE_HERO_BACKGROUND_SRC = '/uploads/services-hero-background.jpg';
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
 
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
 
 const clipMap = new Map(LEGACY_REEL_CLIPS.map((clip) => [clip.id, clip]));
-
-const getVideoLqip = (src: string) => {
-  const filename = src.split('/').pop() ?? '';
-  const key = filename.replace(/-preview\.mp4$/, '').replace(/\.mp4$/, '');
-  return VIDEO_LQIP[key] || undefined;
-};
 
 const formatDuration = (seconds?: number) => (seconds ? `${Math.round(seconds)}s` : null);
 
@@ -118,8 +111,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
       }),
     [page.featuredExamples],
   );
-
-  const leadProof = proofExamples[0];
 
   /* ── Mobile deliverable expand state ── */
   const [expandedDeliverable, setExpandedDeliverable] = useState<number | null>(null);
@@ -252,25 +243,19 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
 
         <main>
           {/* ═══════════════════════════════════════════
-              1. CINEMATIC HERO — Full-bleed video
+              1. CINEMATIC HERO — Full-bleed image
               ═══════════════════════════════════════════ */}
           <section className="svc-hero">
-            {/* Background video */}
-            {leadProof && (
-              <LazyVideo
-                className="svc-hero-video"
-                src={leadProof.clip.previewSrc}
-                poster={leadProof.clip.posterSrc}
-                lqip={getVideoLqip(leadProof.clip.previewSrc)}
-                muted
-                autoPlay
-                loop
-                playsInline
-                preload="auto"
-                pauseOffscreen
-                aria-hidden="true"
-              />
-            )}
+            {/* Background image */}
+            <img
+              className="svc-hero-media"
+              src={SERVICE_HERO_BACKGROUND_SRC}
+              alt=""
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              aria-hidden="true"
+            />
 
             {/* Gradient overlay */}
             <div className="svc-hero-overlay" />

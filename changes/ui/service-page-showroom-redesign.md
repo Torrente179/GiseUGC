@@ -101,3 +101,22 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 ### SEO impact
 - Section label and clip titles are crawlable text in semantic elements.
 - No heading structure, schema, canonicals, or metadata were modified.
+
+## 2026-03-18 service hero background — static image swap
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+- `src/index.css`
+- `public/uploads/services-hero-background.jpg`
+
+### What changed
+1. Replaced the dedicated service hero autoplay video layer with a static background image (`/uploads/services-hero-background.jpg`) sourced from the provided photo.
+2. Removed service-hero video dependencies from the runtime template (`LazyVideo` and service-page video LQIP lookup) to keep the hero render path image-only.
+3. Renamed the hero media class from `svc-hero-video` to `svc-hero-media` and retained full-bleed cover behavior with centered crop (`object-position: center`) so existing overlay and content contrast still work across breakpoints.
+4. Added a losslessly optimized JPEG asset for the hero background (`services-hero-background.jpg`), preserving image quality while reducing metadata and storage overhead.
+
+### Verification
+1. `npm run build`
+
+### SEO impact
+- Hero copy, H1, metadata wiring, schema output, and service routes are unchanged.
