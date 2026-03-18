@@ -202,3 +202,23 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 
 ### SEO impact
 - CSS-only positional update; no SEO-surface changes.
+
+## 2026-03-18 service hero top-gap cleanup + compact mobile nav
+
+### Runtime touchpoints
+- `src/components/Navbar.tsx`
+- `src/components/ServiceLandingPage.tsx`
+- `src/index.css`
+
+### What changed
+1. Added a service-page-only compact mobile navbar mode via `Navbar compactMobile` so homepage nav sizing remains unchanged.
+2. Reduced mobile navbar vertical footprint on service pages by tightening top padding, shell padding/radius, language switch button size, theme toggle visual size, and hamburger button/icon size.
+3. Moved the service-hero image up slightly by reducing vertical offset from `translateY(2.5%)` to `translateY(1.4%)` while keeping current headroom scaling behavior.
+
+### Verification
+1. `npm run build`
+
+### SEO impact
+- No SEO-copy or schema changes.
+- No metadata/canonical route changes.
+- Visual/layout-only updates.

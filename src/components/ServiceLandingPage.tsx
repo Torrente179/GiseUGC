@@ -239,7 +239,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
       />
 
       <div className="min-h-screen bg-background">
-        <Navbar />
+        <Navbar compactMobile />
 
         <main>
           {/* ═══════════════════════════════════════════

@@ -58,7 +58,11 @@ type MobileMenuSwipeState = {
   axis: 'pending' | 'horizontal' | 'vertical';
 };
 
-const Navbar = () => {
+type NavbarProps = {
+  compactMobile?: boolean;
+};
+
+const Navbar = ({ compactMobile = false }: NavbarProps) => {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
@@ -369,12 +373,16 @@ const Navbar = () => {
     window.location.assign(getLocalizedPathForCurrentRoute(location.pathname, lng, window.location.hash));
   };
 
-  const languageButtonClass = (language: string) =>
-    `inline-flex min-h-10 min-w-10 items-center justify-center rounded-full px-2.5 py-2 text-[11px] font-bold uppercase tracking-[0.32em] ${
+  const languageButtonClass = (language: string, compact = false) =>
+    cn(
+      'inline-flex items-center justify-center rounded-full font-bold uppercase',
+      compact
+        ? 'min-h-9 min-w-9 px-2 py-1.5 text-[10px] tracking-[0.26em]'
+        : 'min-h-10 min-w-10 px-2.5 py-2 text-[11px] tracking-[0.32em]',
       i18n.resolvedLanguage === language
         ? 'bg-primary/22 text-foreground shadow-[inset_0_0_0_1px_hsl(var(--primary)/0.35)]'
-        : 'text-foreground/85 hover:text-primary'
-    }`;
+        : 'text-foreground/85 hover:text-primary',
+    );
 
   return (
     <>
@@ -489,7 +497,13 @@ const Navbar = () => {
       <motion.nav
         className={cn(
           'fixed top-0 left-0 w-full z-[110] transition-[padding] duration-300',
-          isScrolled ? 'py-3' : 'py-5',
+          isScrolled
+            ? compactMobile
+              ? 'py-2 md:py-3'
+              : 'py-3'
+            : compactMobile
+              ? 'py-3 md:py-5'
+              : 'py-5',
         )}
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -498,10 +512,15 @@ const Navbar = () => {
         <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
           <div
             className={cn(
-              'flex items-center justify-between rounded-[1.15rem] border px-4 md:px-6 transition-[background-color,border-color,box-shadow,padding,backdrop-filter] duration-300',
+              'flex items-center justify-between border px-4 md:px-6 transition-[background-color,border-color,box-shadow,padding,backdrop-filter,border-radius] duration-300',
+              compactMobile ? 'rounded-[1rem] md:rounded-[1.15rem]' : 'rounded-[1.15rem]',
               isScrolled
-                ? 'border-border/80 bg-card/92 py-2 shadow-[0_16px_36px_-28px_hsl(var(--foreground)/0.22)] backdrop-blur-md'
-                : 'border-border/40 bg-card/60 py-3 shadow-sm backdrop-blur-md',
+                ? compactMobile
+                  ? 'border-border/80 bg-card/92 py-1.5 md:py-2 shadow-[0_16px_36px_-28px_hsl(var(--foreground)/0.22)] backdrop-blur-md'
+                  : 'border-border/80 bg-card/92 py-2 shadow-[0_16px_36px_-28px_hsl(var(--foreground)/0.22)] backdrop-blur-md'
+                : compactMobile
+                  ? 'border-border/40 bg-card/60 py-2 md:py-3 shadow-sm backdrop-blur-md'
+                  : 'border-border/40 bg-card/60 py-3 shadow-sm backdrop-blur-md',
             )}
           >
             <a
@@ -555,41 +574,55 @@ const Navbar = () => {
               </motion.a>
             </div>
 
-            <div className="md:hidden flex items-center gap-2">
-              <div className="flex items-center gap-1 rounded-full border border-border bg-card px-1 py-1">
+            <div className={cn('md:hidden flex items-center', compactMobile ? 'gap-1.5' : 'gap-2')}>
+              <div
+                className={cn(
+                  'flex items-center rounded-full border border-border bg-card',
+                  compactMobile ? 'gap-0.5 px-0.5 py-0.5' : 'gap-1 px-1 py-1',
+                )}
+              >
                 <button
                   onClick={() => changeLanguage('es')}
-                  className={languageButtonClass('es')}
+                  className={languageButtonClass('es', compactMobile)}
                   aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
                 >
                   ES
                 </button>
                 <button
                   onClick={() => changeLanguage('en')}
-                  className={languageButtonClass('en')}
+                  className={languageButtonClass('en', compactMobile)}
                   aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
                 >
                   EN
                 </button>
               </div>
-              <ThemeToggle />
+              <div className={cn(compactMobile ? 'scale-[0.9] origin-center' : undefined)}>
+                <ThemeToggle />
+              </div>
               <button
                 onPointerDown={handleMobileMenuButtonPointerDown}
                 onClick={handleMobileMenuButtonClick}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:text-primary"
+                className={cn(
+                  'inline-flex items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:text-primary',
+                  compactMobile ? 'h-10 w-10' : 'h-11 w-11',
+                )}
                 aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
                 aria-expanded={mobileMenuOpen}
               >
-                <div className="relative w-6 h-6">
+                <div className={cn('relative', compactMobile ? 'w-5 h-5' : 'w-6 h-6')}>
                   <Menu
-                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
-                      mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'
-                    }`}
+                    className={cn(
+                      'absolute inset-0 transition-all duration-300',
+                      compactMobile ? 'w-5 h-5' : 'w-6 h-6',
+                      mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100',
+                    )}
                   />
                   <X
-                    className={`absolute inset-0 w-6 h-6 transition-all duration-300 ${
-                      mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'
-                    }`}
+                    className={cn(
+                      'absolute inset-0 transition-all duration-300',
+                      compactMobile ? 'w-5 h-5' : 'w-6 h-6',
+                      mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50',
+                    )}
                   />
                 </div>
               </button>
