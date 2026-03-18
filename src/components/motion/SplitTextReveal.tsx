@@ -24,9 +24,10 @@ const SplitTextReveal = ({
   const shouldReduceMotion = useReducedMotion();
   const content = typeof text === 'string' ? text : String(text ?? '');
   const words = content.split(/\s+/).filter(Boolean);
+  const descenderSafeMaskClassName = 'inline-block overflow-hidden align-bottom pb-[0.14em] -mb-[0.14em]';
 
   if (shouldReduceMotion || words.length === 0) {
-    return <span className={className}>{content}</span>;
+    return <span className={cn('inline-block pb-[0.14em] -mb-[0.14em]', className)}>{content}</span>;
   }
 
   return (
@@ -47,7 +48,7 @@ const SplitTextReveal = ({
       }}
     >
       {words.map((word, index) => (
-        <span key={`${word}-${index}`} className="inline-block overflow-hidden align-bottom">
+        <span key={`${word}-${index}`} className={descenderSafeMaskClassName}>
           <motion.span
             className={cn('inline-block', wordClassName)}
             style={{ willChange: 'transform, opacity' }}

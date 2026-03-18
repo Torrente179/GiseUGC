@@ -170,3 +170,13 @@ Generated at: `2026-03-13T13:12:09.537Z`
 ### SEO impact
 - The removed grid contained no heading tags, schema, canonicals, or internal links.
 - No metadata, structured data, or crawlable content was affected.
+
+## 2026-03-18 split headline descender clipping fix
+
+### Runtime touchpoints
+- `src/components/motion/SplitTextReveal.tsx`
+
+### What changed
+1. Added a small descender-safe bottom allowance to each masked word wrapper in `SplitTextReveal`, with a matching negative offset so the visual rhythm stays the same.
+2. Applied the same allowance to the reduced-motion fallback path, so desktop users do not lose the bottoms of letters like `y`, `p`, and `q` when serif headlines render without animation.
+3. Kept the fix scoped to the reveal component instead of relaxing headline line-height site-wide, preserving the existing editorial heading proportions while removing the clipping artifact.
