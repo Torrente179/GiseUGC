@@ -138,3 +138,20 @@ Generated at: `2026-03-13T13:12:09.537Z`
 ### What changed
 1. Reduced the mobile FAQ question size slightly so longer Cormorant questions stop feeling oversized on narrow screens.
 2. Left the desktop FAQ question size unchanged, since the larger serif treatment was already reading correctly there.
+
+## 2026-03-17 featured work section redesign — interactive numbered grid
+
+### Runtime touchpoints
+- `src/components/Portfolio.tsx`
+
+### What changed
+1. Replaced the generic rounded-pill tag list with a 2×2 (mobile) / 4-column (desktop) interactive grid. Each cell shows a numbered index (01–04), the serif video title, and an arrow icon.
+2. Each grid cell is a real button wired to `openReelPreview` so tapping any item opens that video directly in the theater. The section now functions as a navigable index for the reel below instead of a decorative keyword list.
+3. The grid uses a `gap-px` separator pattern (`bg-border/25` container, `bg-background` cells) for clean, restrained dividers without heavy borders.
+4. Hover states: subtle background tint (`hover:bg-foreground/[0.025]`) and title color lift (`group-hover:text-foreground/90`) communicate affordance before interaction.
+5. Animation: the grid reveals as a single unit via `revealUp` inheriting from the parent section stagger, replacing the previous nested `motion.span` stagger that conflicted with the parent's `once: true` viewport trigger.
+
+### SEO impact
+- All crawlable text content (section label, description, video titles) is preserved in semantic elements.
+- No heading structure, schema, metadata, canonicals, or internal links were modified.
+- No new dependencies or layout-shifting elements introduced.
