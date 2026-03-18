@@ -155,3 +155,18 @@ Generated at: `2026-03-13T13:12:09.537Z`
 - All crawlable text content (section label, description, video titles) is preserved in semantic elements.
 - No heading structure, schema, metadata, canonicals, or internal links were modified.
 - No new dependencies or layout-shifting elements introduced.
+
+## 2026-03-18 featured work grid removed from homepage portfolio
+
+### Runtime touchpoints
+- `src/components/Portfolio.tsx`
+- `src/data/portfolio-clips.ts`
+
+### What changed
+1. Removed the "TRABAJO DESTACADO" 4-column numbered text grid from the homepage Portfolio section. The grid (01–04 cards with clip titles and arrow icons) was triple-gated behind lazy loading and IntersectionObserver, so it had no crawlable SEO value and was not contributing to the homepage conversion flow.
+2. Cleaned up the `FEATURED_REEL_CLIPS` constant, `featuredReelClips` useMemo, and the `FEATURED_REEL_CLIP_IDS` import that were only used by that grid. The rest of the Portfolio component (video theater, collage, reel carousel) is untouched.
+3. The homepage flow now transitions cleanly from the video collage into the next section without an orphaned text-only index.
+
+### SEO impact
+- The removed grid contained no heading tags, schema, canonicals, or internal links.
+- No metadata, structured data, or crawlable content was affected.

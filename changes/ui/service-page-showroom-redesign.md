@@ -70,3 +70,34 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 1. Reduced service FAQ question visual heaviness by moving from semibold sizing to a medium-weight, smaller type scale (`text-base` on mobile, `text-lg` on desktop).
 2. Relaxed the shared FAQ line-height and tracking so longer Spanish questions read cleaner without the blocky heavy look.
 3. Mirrored the tone shift in no-JS fallback FAQ terms by reducing fallback term weight from `700` to `600` in the entrypoint generator.
+
+## 2026-03-18 service proof gallery — editorial numbered showcase
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+- `src/index.css`
+
+### What changed
+1. Replaced the flat bento mosaic in the Proof Gallery section (section 3) with an editorial numbered showcase. The new layout uses a cinematic wide lead card (01) with a `16/10` → `21/9` aspect ratio and an always-visible gradient overlay, title, description, and play button, followed by a secondary grid (02, 03) of portrait-on-mobile / landscape-on-desktop cards.
+2. Replaced `svc-bento-item` and `svc-bento-overlay` CSS classes with `svc-proof-lead` and `svc-proof-card`, each using `ease-out-expo` transitions for hover lift and box-shadow.
+3. Secondary card grid columns are conditionally sized: 1 column for ≤2 total examples, 2 columns for exactly 3, up to 3 columns for 4+.
+
+### SEO impact
+- Section heading (h2), section label, and example titles remain crawlable.
+- No metadata, schema, canonical routes, or structured data were modified.
+
+## 2026-03-18 service page — featured work numbered text grid after FAQ
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+
+### What changed
+1. Added a new "Trabajo Destacado / Featured Work" section (section 8) after the FAQ and before the CTA closer. The section renders the same numbered text grid style that previously existed on the homepage portfolio: a border-divided column grid where each cell shows a number index (01, 02, 03), a serif clip title, and an arrow.
+2. Each cell links directly to the clip's main video URL (`clip.mainSrc`), opening in a new tab.
+3. The column count is driven by the number of proof examples: 2 examples → 2 columns, 3 → 3 columns, 4+ → 4 columns.
+4. Added `featuredWorkLabel` and `featuredWorkSubtitle` keys to both `es` and `en` entries in `localeLabels` for correct bilingual rendering.
+5. The section is gated on `proofExamples.length > 0` so pages without featured examples don't render an empty block.
+
+### SEO impact
+- Section label and clip titles are crawlable text in semantic elements.
+- No heading structure, schema, canonicals, or metadata were modified.

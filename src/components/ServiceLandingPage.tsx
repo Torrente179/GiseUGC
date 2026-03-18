@@ -42,6 +42,8 @@ const localeLabels = {
     useFiverr: 'Fiverr',
     relatedLink: 'Ver servicio',
     scrollDown: 'Explorar',
+    featuredWorkLabel: 'Trabajo Destacado',
+    featuredWorkSubtitle: 'Una selección breve entre demos, piezas de portavoz y reviews recientes.',
   },
   en: {
     home: 'Home',
@@ -51,6 +53,8 @@ const localeLabels = {
     useFiverr: 'Fiverr',
     relatedLink: 'View service',
     scrollDown: 'Explore',
+    featuredWorkLabel: 'Featured Work',
+    featuredWorkSubtitle: 'A brief selection from demos, spokesperson pieces, and recent reviews.',
   },
 } as const;
 
@@ -348,69 +352,131 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
           </RevealSection>
 
           {/* ═══════════════════════════════════════════
-              3. PROOF GALLERY — Bento mosaic
+              3. PROOF GALLERY — Editorial numbered showcase
               ═══════════════════════════════════════════ */}
           {proofExamples.length > 0 && (
             <RevealSection className="pb-16 md:pb-24 lg:pb-28" id="examples">
               <div className="studio-container">
-                <div className="mb-10 md:mb-14">
+                <div className="mb-12 md:mb-16">
                   <p className="section-label mb-4">{page.featuredTitle}</p>
                   <h2 className="studio-title max-w-3xl">{page.featuredIntro}</h2>
                 </div>
 
-                {/* Bento grid — asymmetric */}
-                <div className="grid gap-3 md:gap-4 md:grid-cols-2 lg:grid-cols-3 auto-rows-[280px] md:auto-rows-[340px]">
-                  {proofExamples.map(({ example, clip }, index) => {
-                    const isLead = index === 0;
-                    const duration = formatDuration(clip.durationSeconds);
-                    return (
-                      <a
-                        key={example.clipId}
-                        href={clip.mainSrc}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`svc-bento-item group ${
-                          isLead
-                            ? 'md:col-span-2 md:row-span-2 md:auto-rows-auto'
-                            : ''
-                        }`}
-                        style={isLead ? { gridRow: 'span 2' } : undefined}
-                      >
+                {/* Lead featured example — cinematic card */}
+                {proofExamples.length > 0 && (() => {
+                  const { example: leadExample, clip: leadClip } = proofExamples[0];
+                  const leadDuration = formatDuration(leadClip.durationSeconds);
+                  return (
+                    <a
+                      key={leadExample.clipId}
+                      href={leadClip.mainSrc}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="svc-proof-lead group relative block overflow-hidden rounded-2xl md:rounded-3xl mb-4 md:mb-5"
+                    >
+                      <div className="relative aspect-[16/10] md:aspect-[21/9]">
                         <img
-                          src={clip.posterSrc}
-                          alt={example.title}
-                          className="h-full w-full object-cover"
-                          loading={index === 0 ? 'eager' : 'lazy'}
+                          src={leadClip.posterSrc}
+                          alt={leadExample.title}
+                          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                          loading="eager"
                           decoding="async"
                         />
-
-                        {/* Hover/always-on overlay */}
-                        <div className="svc-bento-overlay">
-                          <div className="flex flex-wrap items-center gap-2 mb-2">
-                            <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-prestige text-white/90 backdrop-blur-md">
+                        {/* Gradient overlay — always visible */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        {/* Number badge */}
+                        <div className="absolute top-5 left-5 md:top-7 md:left-7">
+                          <span className="text-[10px] font-bold uppercase tracking-prestige text-white/50">01</span>
+                        </div>
+                        {/* Play indicator */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white transition-all duration-300 group-hover:scale-110 group-hover:bg-white/25">
+                          <Play className="h-5 w-5 md:h-6 md:w-6 ml-0.5" />
+                        </div>
+                        {/* Content */}
+                        <div className="absolute bottom-0 left-0 right-0 p-5 md:p-8 lg:p-10">
+                          <div className="flex flex-wrap items-center gap-2 mb-3">
+                            <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-prestige text-white/80 backdrop-blur-md">
                               {page.navLabel}
                             </span>
-                            {duration && (
-                              <span className="rounded-full border border-white/15 bg-white/8 px-2.5 py-1 text-[10px] font-bold uppercase tracking-prestige text-white/75 backdrop-blur-md">
-                                {duration}
+                            {leadDuration && (
+                              <span className="rounded-full border border-white/15 bg-white/8 px-2.5 py-1 text-[10px] font-bold uppercase tracking-prestige text-white/60 backdrop-blur-md">
+                                {leadDuration}
                               </span>
                             )}
                           </div>
-                          <h3 className="text-lg font-medium leading-tight tracking-tight text-white md:text-xl">
-                            {example.title}
+                          <h3 className="text-xl md:text-2xl lg:text-3xl font-serif font-medium leading-tight tracking-tight text-white">
+                            {leadExample.title}
                           </h3>
-                          <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-white/70">
-                            {example.description}
+                          <p className="mt-2 max-w-xl text-sm md:text-base leading-relaxed text-white/65">
+                            {leadExample.description}
                           </p>
-                          <span className="mt-3 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-prestige text-white/80">
-                            <Play className="h-3.5 w-3.5" />
-                            {labels.openSample}
-                          </span>
                         </div>
-                      </a>
-                    );
-                  })}
-                </div>
+                      </div>
+                    </a>
+                  );
+                })()}
+
+                {/* Secondary examples — numbered editorial cards */}
+                {proofExamples.length > 1 && (
+                  <div className={`grid gap-4 md:gap-5 ${
+                    proofExamples.length <= 2
+                      ? 'md:grid-cols-1 max-w-2xl'
+                      : proofExamples.length === 3
+                        ? 'md:grid-cols-2'
+                        : 'md:grid-cols-2 lg:grid-cols-3'
+                  }`}>
+                    {proofExamples.slice(1).map(({ example, clip }, index) => {
+                      const duration = formatDuration(clip.durationSeconds);
+                      return (
+                        <a
+                          key={example.clipId}
+                          href={clip.mainSrc}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="svc-proof-card group relative block overflow-hidden rounded-2xl"
+                        >
+                          <div className="relative aspect-[4/5] md:aspect-[5/4]">
+                            <img
+                              src={clip.posterSrc}
+                              alt={example.title}
+                              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                              loading="lazy"
+                              decoding="async"
+                            />
+                            {/* Gradient overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                            {/* Number */}
+                            <div className="absolute top-4 left-4 md:top-5 md:left-5">
+                              <span className="text-[10px] font-bold uppercase tracking-prestige text-white/45">
+                                {String(index + 2).padStart(2, '0')}
+                              </span>
+                            </div>
+                            {/* Play indicator */}
+                            <div className="absolute top-4 right-4 md:top-5 md:right-5 flex h-9 w-9 items-center justify-center rounded-full bg-white/12 backdrop-blur-sm border border-white/15 text-white/70 transition-all duration-300 group-hover:bg-white/20 group-hover:text-white">
+                              <Play className="h-3.5 w-3.5 ml-0.5" />
+                            </div>
+                            {/* Content */}
+                            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                {duration && (
+                                  <span className="rounded-full border border-white/15 bg-white/8 px-2 py-0.5 text-[9px] font-bold uppercase tracking-prestige text-white/55 backdrop-blur-md">
+                                    {duration}
+                                  </span>
+                                )}
+                              </div>
+                              <h3 className="text-base md:text-lg font-serif font-medium leading-tight tracking-tight text-white">
+                                {example.title}
+                              </h3>
+                              <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-white/60">
+                                {example.description}
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </RevealSection>
           )}
@@ -604,7 +670,52 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
           </RevealSection>
 
           {/* ═══════════════════════════════════════════
-              8. CTA CLOSER — Dark editorial sign-off
+              8. FEATURED WORK — Numbered text grid
+              ═══════════════════════════════════════════ */}
+          {proofExamples.length > 0 && (
+            <RevealSection className="pb-16 md:pb-24 lg:pb-28">
+              <div className="studio-container">
+                <p className="section-label mb-3">{labels.featuredWorkLabel}</p>
+                <p className="mb-10 md:mb-14 font-sans text-sm font-light text-foreground/55 max-w-2xl">
+                  {labels.featuredWorkSubtitle}
+                </p>
+                <div
+                  className={`grid border-t border-border/40 divide-x divide-border/40 ${
+                    proofExamples.length === 2
+                      ? 'grid-cols-2'
+                      : proofExamples.length >= 4
+                        ? 'grid-cols-4'
+                        : 'grid-cols-3'
+                  }`}
+                >
+                  {proofExamples.map(({ example, clip }, index) => (
+                    <a
+                      key={example.clipId}
+                      href={clip.mainSrc}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex flex-col justify-between gap-6 px-5 py-8 md:px-7 md:py-9 border-b border-border/40 transition-colors duration-200 hover:bg-accent/[0.03]"
+                    >
+                      <div>
+                        <span className="block text-xs font-semibold uppercase tracking-prestige text-foreground/30 mb-4">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <h3 className="font-serif text-lg md:text-xl font-medium tracking-tight text-foreground leading-snug">
+                          {example.title}
+                        </h3>
+                      </div>
+                      <span className="text-foreground/30 transition-all duration-200 group-hover:translate-x-1 group-hover:text-foreground/60 text-xl leading-none">
+                        →
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </RevealSection>
+          )}
+
+          {/* ═══════════════════════════════════════════
+              9. CTA CLOSER — Dark editorial sign-off
               ═══════════════════════════════════════════ */}
           <RevealSection className="svc-cta-closer py-20 md:py-28 lg:py-32">
             <div className="studio-container relative z-10 text-center">
@@ -641,7 +752,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
           </RevealSection>
 
           {/* ═══════════════════════════════════════════
-              9. RELATED SERVICES — Horizontal cards
+              10. RELATED SERVICES — Horizontal cards
               ═══════════════════════════════════════════ */}
           <RevealSection className="py-16 md:py-24 lg:py-28">
             <div className="studio-container">

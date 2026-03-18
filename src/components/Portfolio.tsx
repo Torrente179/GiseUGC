@@ -10,7 +10,6 @@ import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import LazyVideo from '@/components/media/LazyVideo';
 import VIDEO_LQIP from '@/data/video-lqip';
 import {
-  FEATURED_REEL_CLIP_IDS,
   LEGACY_REEL_CLIPS,
   r2Poster,
   r2PreviewVideo,
@@ -84,9 +83,6 @@ const shuffleWithSeed = <T,>(items: T[], seed: number): T[] => {
 };
 
 const ALL_REEL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS];
-const FEATURED_REEL_CLIPS: ReelClip[] = FEATURED_REEL_CLIP_IDS.map((clipId) =>
-  ALL_REEL_CLIPS.find((clip) => clip.id === clipId),
-).filter((clip): clip is ReelClip => Boolean(clip));
 
 const COLLAGE_CLIPS: CollageClip[] = [
   {
@@ -358,8 +354,6 @@ const Portfolio = () => {
     () => shuffleWithSeed(ALL_REEL_CLIPS, utcDayBucket),
     [utcDayBucket],
   );
-  const featuredReelClips = useMemo(() => FEATURED_REEL_CLIPS, []);
-
   const handleContactCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (isMobileViewport()) {
       event.preventDefault();
@@ -1232,49 +1226,6 @@ const Portfolio = () => {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.66 }}
         />
-
-        <motion.div
-          className="mb-10 md:mb-14"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={staggerContainer(0.08, 0.04)}
-        >
-          <motion.p className="section-label text-muted-foreground mb-3" variants={revealUp(12, 0.5)}>
-            {t('portfolio.featuredLabel')}
-          </motion.p>
-          <motion.p className="strategic-body text-foreground/50 max-w-2xl mb-6 md:mb-8" variants={revealUp(14, 0.56)}>
-            {t('portfolio.featuredDescription')}
-          </motion.p>
-          <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 bg-border/25 gap-px rounded-xl overflow-hidden"
-            variants={revealUp(14, 0.54)}
-          >
-            {featuredReelClips.map((clip, index) => (
-              <button
-                key={`featured-${clip.id}`}
-                type="button"
-                className="group bg-background text-left px-4 py-5 md:px-5 md:py-6 hover:bg-foreground/[0.025] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"
-                onClick={() => {
-                  const reelIndex = allReelIndexById.get(clip.id) ?? 0;
-                  openReelPreview(clip, reelIndex);
-                }}
-              >
-                <span className="block text-[10px] font-sans font-semibold tracking-[0.14em] text-foreground/30 mb-2 uppercase">
-                  0{index + 1}
-                </span>
-                <span className="block font-serif text-sm md:text-base text-foreground/65 leading-snug group-hover:text-foreground/90 transition-colors duration-200">
-                  {getReelTitle(clip)}
-                </span>
-                <span className="block mt-3 text-foreground/20 group-hover:text-foreground/40 transition-colors duration-200" aria-hidden="true">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2.5 7H11.5M11.5 7L8 3.5M11.5 7L8 10.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </span>
-              </button>
-            ))}
-          </motion.div>
-        </motion.div>
 
         <motion.div
           className="mb-12 md:mb-14"

@@ -1314,47 +1314,23 @@
     box-shadow: 0 24px 48px -32px hsl(var(--foreground) / 0.2);
   }
 
-  /* ── Bento proof gallery ── */
-  .svc-bento-item {
-    @apply relative overflow-hidden rounded-[1.25rem] cursor-pointer;
+  /* ── Proof gallery — editorial numbered showcase ── */
+  .svc-proof-lead {
+    transition: box-shadow var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .svc-proof-lead:hover {
+    box-shadow: 0 24px 56px -20px rgba(0, 0, 0, 0.3);
+  }
+
+  .svc-proof-card {
     transition: transform var(--duration-fast) var(--ease-out-expo),
                 box-shadow var(--duration-fast) var(--ease-out-expo);
   }
 
-  .svc-bento-item:hover {
-    transform: scale(1.02);
-    box-shadow: 0 20px 48px -24px rgba(0, 0, 0, 0.35);
-  }
-
-  .svc-bento-item video,
-  .svc-bento-item img {
-    @apply h-full w-full object-cover;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .svc-bento-item:hover video,
-  .svc-bento-item:hover img {
-    transform: scale(1.06);
-  }
-
-  .svc-bento-overlay {
-    @apply absolute inset-0 flex flex-col justify-end p-4 md:p-5;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.15) 50%, transparent 100%);
-    opacity: 0;
-    transition: opacity var(--duration-fast) var(--ease-out-expo);
-  }
-
-  .svc-bento-item:hover .svc-bento-overlay,
-  .svc-bento-item:focus-within .svc-bento-overlay {
-    opacity: 1;
-  }
-
-  /* Always show overlay on touch devices */
-  @media (hover: none) {
-    .svc-bento-overlay {
-      opacity: 1;
-      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%);
-    }
+  .svc-proof-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 48px -24px rgba(0, 0, 0, 0.3);
   }
 
   /* ── FAQ accordion premium ── */
