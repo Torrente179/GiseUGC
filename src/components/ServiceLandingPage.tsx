@@ -588,30 +588,33 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               ═══════════════════════════════════════════ */}
           <RevealSection className="border-t border-border/50 py-20 md:py-28 lg:py-32">
             <div className="studio-container">
-              <div className="grid gap-12 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,0.45fr)] lg:items-start lg:gap-16">
-                {/* Left — intro statement */}
+              <div className="grid gap-14 lg:grid-cols-[minmax(0,0.56fr)_minmax(0,0.44fr)] lg:items-start lg:gap-20">
+                {/* Left — problem statement */}
                 <div>
-                  <p className="section-label mb-6">{page.sectionIntroTitle}</p>
-                  <p className="font-serif text-[clamp(1.5rem,2.8vw,2.4rem)] font-light leading-[1.45] tracking-tight text-foreground">
+                  <p className="section-label mb-7">{page.sectionIntroTitle}</p>
+                  <p className="font-serif text-[clamp(1.45rem,2.6vw,2.3rem)] font-light leading-[1.45] tracking-tight text-foreground">
                     {page.sectionIntroText}
                   </p>
                 </div>
 
-                {/* Right — market items as editorial callouts */}
-                <div className="lg:pl-8">
-                  {page.marketItems.map((item, i) => (
-                    <div
-                      key={item}
-                      className={i === 0 ? '' : 'pt-8 md:pt-10'}
-                    >
-                      <span className="block font-serif text-3xl font-light leading-none text-accent/35 mb-3">
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <p className="text-base font-light leading-[1.75] text-foreground/70">
-                        {item}
-                      </p>
-                    </div>
-                  ))}
+                {/* Right — what I deliver, anchored with a left rule */}
+                <div className="lg:border-l lg:border-border/40 lg:pl-12">
+                  <p className="section-label mb-8">{page.marketTitle}</p>
+                  <div className="space-y-0">
+                    {page.marketItems.map((item, i) => (
+                      <div
+                        key={item}
+                        className={`flex items-start gap-5 ${i > 0 ? 'border-t border-border/30 pt-5 mt-5' : ''}`}
+                      >
+                        <span className="shrink-0 pt-0.5 text-[11px] font-bold uppercase tracking-prestige text-accent/50">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <p className="text-base font-light leading-[1.75] text-foreground/72">
+                          {item}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
