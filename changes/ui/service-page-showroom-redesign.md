@@ -139,3 +139,20 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 ### SEO impact
 - Hero H1 and summary text remain present in rendered HTML.
 - No schema, canonical routes, metadata, or localized service copy were changed.
+
+## 2026-03-18 service hero mobile framing — right/lower subject alignment pass
+
+### Runtime touchpoints
+- `src/index.css`
+
+### What changed
+1. Shifted mobile service-hero image focus further to the right (`object-position: 70% 20%`).
+2. Added a subtle mobile-only framing offset using `transform: scale(1.04) translateY(2%)` so the subject sits lower and avoids top-edge chop against the mobile navbar chrome.
+3. Reset transform at `md+` (`transform: none`) so desktop/tablet framing remains unchanged.
+
+### Verification
+1. `npm run build`
+
+### SEO impact
+- CSS-only visual adjustment.
+- No content, metadata, schema, canonical route, or semantic structure changes.
