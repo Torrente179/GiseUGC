@@ -145,6 +145,12 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Reduced the desktop FAQ question size a bit so the accordion feels less oversized on larger screens.
 2. Kept the mobile size and overall FAQ structure unchanged, so the tweak stays focused on desktop readability only.
 
+## 2026-03-18 homepage FAQ desktop-size second trim
+
+### What changed
+1. Reduced the desktop FAQ question size a little further because the previous pass was still reading too large.
+2. Left mobile and accordion structure untouched so the adjustment stays limited to desktop typography.
+
 ## 2026-03-17 featured work section redesign — interactive numbered grid
 
 ### Runtime touchpoints
