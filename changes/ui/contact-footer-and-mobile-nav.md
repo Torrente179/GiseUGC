@@ -94,6 +94,26 @@ This consolidates the February work on contact entry points, footer structure, a
 1. `npx eslint src/components/ThemeToggle.tsx src/components/Navbar.tsx`
 2. `npm run check:mobile-regression`
 
+## 2026-03-20 end-credits footer redesign
+
+### Runtime touchpoints in this pass
+- `src/components/Footer.tsx`
+
+### What changed
+1. Replaced the previous motion-heavy premium footer with a cleaner two-path "end credits" treatment: a three-column editorial desktop footer and a stacked mobile footer tuned for quick scanning.
+2. Removed the Framer Motion dependency and the icon-badge CTA treatment from the footer component, reducing runtime complexity while keeping the `id="contact"` anchor and the localized service-link structure intact.
+3. Expanded the footer's outbound contact surfaces to include Instagram, TikTok, and LinkedIn in addition to WhatsApp, Fiverr, and Telegram, with desktop and mobile layouts tailored separately instead of forcing one shared composition.
+4. Shifted the footer tone from promotional card to navigation-and-contact closeout, using simpler CTA blocks, denser service links, and a more explicit "Connect" column on desktop.
+
+### SEO guardrail
+1. The footer still owns `id="contact"` for in-page anchor behavior.
+2. Service links remain plain crawlable anchors with the same locale-aware destinations.
+3. This pass did not change metadata, schema, canonicals, hreflang, robots, or sitemap behavior.
+
+### Verification
+1. `npx tsc --noEmit`
+2. `npx eslint src/components/Footer.tsx`
+
 ## Mobile Regression Checklist
 
 Generated at: `2026-03-18T14:36:10.837Z`
