@@ -29,9 +29,12 @@ const TheaterVideo = memo(
   }: TheaterVideoProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const startupTimeoutRef = useRef<number | null>(null);
+    const hideTimeoutRef = useRef<number | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [activeSourceIndex, setActiveSourceIndex] = useState(0);
+    const [progress, setProgress] = useState(0);
+    const [controlsVisible, setControlsVisible] = useState(true);
     const sourceKey = sources.join('|');
     const activeSource = sources[activeSourceIndex] ?? sources[0] ?? '';
 
@@ -41,6 +44,21 @@ const TheaterVideo = memo(
         startupTimeoutRef.current = null;
       }
     }, []);
+
+    /* ── Auto-hide controls ── */
+    const scheduleHideControls = useCallback(() => {
+      if (hideTimeoutRef.current !== null) {
+        window.clearTimeout(hideTimeoutRef.current);
+      }
+      hideTimeoutRef.current = window.setTimeout(() => {
+        setControlsVisible(false);
+      }, 3000);
+    }, []);
+
+    const showControls = useCallback(() => {
+      setControlsVisible(true);
+      scheduleHideControls();
+    }, [scheduleHideControls]);
 
     const promoteFallbackSource = useCallback(() => {
       setActiveSourceIndex((previousIndex) => {
@@ -98,14 +116,22 @@ const TheaterVideo = memo(
     const handlePlay = () => {
       clearStartupTimeout();
       setIsPlaying(true);
+      scheduleHideControls();
     };
-    const handlePause = () => setIsPlaying(false);
+    const handlePause = () => {
+      setIsPlaying(false);
+      setControlsVisible(true);
+      if (hideTimeoutRef.current !== null) {
+        window.clearTimeout(hideTimeoutRef.current);
+      }
+    };
     const handleWaiting = () => setIsPlaying(false);
     const handlePlaying = () => {
       clearStartupTimeout();
       setIsPlaying(true);
       const video = videoRef.current;
       if (video) setIsMuted(video.muted);
+      scheduleHideControls();
     };
 
     const handleCanPlayThrough = useCallback(() => {
@@ -131,7 +157,8 @@ const TheaterVideo = memo(
       }
     }, [attemptPlay]);
 
-    const toggleMute = useCallback(() => {
+    const toggleMute = useCallback((e: React.MouseEvent) => {
+      e.stopPropagation();
       const video = videoRef.current;
       if (!video) return;
       const nextMuted = !video.muted;
@@ -146,9 +173,22 @@ const TheaterVideo = memo(
       (event: SyntheticEvent<HTMLVideoElement>) => {
         const video = event.currentTarget;
         if (!video.paused && !isPlaying) setIsPlaying(true);
+        if (video.duration > 0) {
+          setProgress((video.currentTime / video.duration) * 100);
+        }
       },
       [isPlaying],
     );
+
+    const handleProgressClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      const video = videoRef.current;
+      if (!video || !video.duration) return;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const fraction = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      video.currentTime = fraction * video.duration;
+      setProgress(fraction * 100);
+    }, []);
 
     useEffect(() => {
       setActiveSourceIndex(0);
@@ -171,11 +211,20 @@ const TheaterVideo = memo(
     }, [activeSource, attemptPlay, clearStartupTimeout, scheduleStartupFallback]);
 
     useEffect(() => {
-      return () => clearStartupTimeout();
+      return () => {
+        clearStartupTimeout();
+        if (hideTimeoutRef.current !== null) {
+          window.clearTimeout(hideTimeoutRef.current);
+        }
+      };
     }, [clearStartupTimeout]);
 
     return (
-      <div className={cn('relative overflow-hidden bg-black', className)}>
+      <div
+        className={cn('theater-floating relative overflow-hidden', className)}
+        onMouseMove={showControls}
+        onTouchStart={showControls}
+      >
         <video
           ref={videoRef}
           className="w-full aspect-[9/16] object-cover"
@@ -199,6 +248,8 @@ const TheaterVideo = memo(
           onError={handleError}
           onTimeUpdate={handleTimeUpdate}
         />
+
+        {/* Center play button — visible when paused */}
         <button
           type="button"
           className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
@@ -207,22 +258,53 @@ const TheaterVideo = memo(
           onClick={togglePlayback}
           aria-label={isPlaying ? 'Pause' : 'Play'}
         >
-          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/45 bg-black/40 backdrop-blur-sm shadow-[0_10px_24px_-16px_rgba(0,0,0,0.88)]">
-            {isPlaying ? (
-              <Pause className="h-5 w-5 text-white/90" fill="currentColor" />
-            ) : (
-              <Play className="ml-0.5 h-5 w-5 text-white/90" fill="currentColor" />
-            )}
+          <span className="theater-play-btn flex h-14 w-14 items-center justify-center rounded-full">
+            <Play className="ml-0.5 h-6 w-6 text-white/90" fill="currentColor" />
           </span>
         </button>
-        <button
-          type="button"
-          className="absolute left-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/40 bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/55"
-          onClick={toggleMute}
-          aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+
+        {/* Frosted-glass pill control bar */}
+        <div
+          className={`theater-pill-controls absolute inset-x-3 bottom-3 z-20 flex items-center gap-2.5 rounded-full px-3 py-2 transition-all duration-300 ${
+            controlsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
+          }`}
+          onClick={(e) => e.stopPropagation()}
         >
-          {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-        </button>
+          {/* Play/Pause */}
+          <button
+            type="button"
+            onClick={togglePlayback}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white/90 transition-colors hover:text-white"
+            aria-label={isPlaying ? 'Pause' : 'Play'}
+          >
+            {isPlaying ? (
+              <Pause className="h-3.5 w-3.5" fill="currentColor" />
+            ) : (
+              <Play className="ml-0.5 h-3.5 w-3.5" fill="currentColor" />
+            )}
+          </button>
+
+          {/* Progress scrubber */}
+          <div
+            className="theater-progress flex-1 h-1 rounded-full cursor-pointer"
+            onClick={handleProgressClick}
+          >
+            <div
+              className="theater-progress-fill h-full rounded-full transition-[width] duration-150"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          {/* Mute */}
+          <button
+            type="button"
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white/90 transition-colors hover:text-white"
+            onClick={toggleMute}
+            aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+          >
+            {isMuted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
+          </button>
+        </div>
       </div>
     );
   },

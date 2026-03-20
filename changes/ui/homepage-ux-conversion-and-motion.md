@@ -192,3 +192,39 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Added a small descender-safe bottom allowance to each masked word wrapper in `SplitTextReveal`, with a matching negative offset so the visual rhythm stays the same.
 2. Applied the same allowance to the reduced-motion fallback path, so desktop users do not lose the bottoms of letters like `y`, `p`, and `q` when serif headlines render without animation.
 3. Kept the fix scoped to the reveal component instead of relaxing headline line-height site-wide, preserving the existing editorial heading proportions while removing the clipping artifact.
+
+## 2026-03-19 testimonials — carousel → masonry wall
+
+### Runtime touchpoints
+- `src/components/Testimonials.tsx`
+
+### What changed
+1. Replaced the single-image carousel (only 1/14 visible at a time, complex swipe/thumbnail navigation) with a CSS-columns masonry wall showing 8 testimonials simultaneously.
+2. Removed: `activeIndex`, swipe handlers, thumbnail rail, prev/next buttons, horizontal carousel mechanism.
+3. Added: CSS `columns-2 md:columns-3` masonry layout, `INITIAL_VISIBLE = 8` with "Show all / Show less" toggle button.
+4. Each testimonial is a `motion.button` with `break-inside-avoid`, stagger animation (`delay: index * 0.04`), rounded-xl border, hover lift effect.
+5. Kept: Dialog zoom on click, `TESTIMONIAL_IMAGES` data array, section heading with `SplitTextReveal` (SEO preserved).
+
+### SEO impact
+- Section heading (h2) preserved with same text source.
+- All testimonial images remain in DOM (more are now visible by default).
+- No metadata, schema, or route changes.
+
+## 2026-03-19 mobile hero — 4-poster grid → single auto-cycling phone frame
+
+### Runtime touchpoints
+- `src/components/Hero.tsx`
+- `src/index.css`
+
+### What changed
+1. Replaced the `grid grid-cols-4` of 4 static poster thumbnails (lines 273–302) with a single centered auto-cycling phone frame using `AnimatePresence mode="popLayout"`.
+2. Phone frame uses `.hero-phone-frame--mobile` CSS (180×320px, 28px border-radius, 2px border) — scaled-down version of the desktop `.hero-phone-frame`.
+3. Cycles through `LEGACY_REEL_CLIPS` posters every 3s (reuses existing `currentClipIndex` state from the desktop phone frame).
+4. Uses `motion.img` with poster images instead of `motion.video` to avoid mobile autoplay issues and reduce data usage.
+5. Added horizontal dot indicators below the phone (6 dots, active dot expands to pill shape `w-5 h-1.5`, inactive dots `w-1.5 h-1.5`).
+6. "UGC Reel" play badge in bottom-left corner of phone.
+7. Entire phone is wrapped in an `<a href="#portfolio">` link.
+
+### SEO impact
+- No heading or text content changes.
+- No metadata, schema, or route changes.

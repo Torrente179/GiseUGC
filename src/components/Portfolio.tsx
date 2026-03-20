@@ -1479,9 +1479,9 @@ const Portfolio = () => {
           onClick={() => dismissReelPreview()}
         >
           <div
-            className="absolute inset-0 backdrop-blur-[6px] md:backdrop-blur-[10px]"
+            className="absolute inset-0 backdrop-blur-[8px] md:backdrop-blur-[14px]"
             style={{
-              backgroundColor: 'hsl(var(--theater-backdrop) / 0.74)',
+              backgroundColor: 'hsl(var(--theater-backdrop) / 0.78)',
               opacity: theaterOverlayOpacity,
               transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 280ms ease',
             }}
@@ -1492,7 +1492,7 @@ const Portfolio = () => {
               opacity: theaterOverlayOpacity,
               transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 320ms ease',
               background:
-                'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)',
+                'radial-gradient(ellipse 70% 50% at 50% 30%, hsl(193 64% 48% / 0.06), transparent 70%), radial-gradient(circle at 20% 80%, hsl(var(--theater-backdrop-glow) / 0.08) 0%, transparent 50%)',
             }}
           />
           <div
@@ -1527,7 +1527,7 @@ const Portfolio = () => {
               <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
             </button>
             <div
-              className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]"
+              className="theater-glass-card relative w-full overflow-hidden"
               onClick={(event) => event.stopPropagation()}
               style={{
                 transform: theaterCardTransform,
@@ -1615,18 +1615,16 @@ const Portfolio = () => {
                   startupFallbackMs={theaterStartupFallbackMs}
                 />
 
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
-                  <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
-                    <p className="theater-meta-chip inline-flex max-w-[78%] items-center rounded-full px-2.5 py-1">
-                      {t(`portfolio.categories.${activeReelPreview.category}`)}
-                    </p>
-                    <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">
-                      {getReelTitle(activeReelPreview)}
-                    </h4>
-                  </div>
-                </div>
               </div>
+            </div>
+            {/* Detached floating meta bar */}
+            <div className="theater-meta-bar mt-3 mx-auto flex items-center gap-3 rounded-full px-4 py-2.5 max-w-[90%]">
+              <span className="theater-meta-chip shrink-0 inline-flex items-center rounded-full px-2.5 py-0.5">
+                {t(`portfolio.categories.${activeReelPreview.category}`)}
+              </span>
+              <h4 className="truncate text-sm font-serif font-medium text-white/85 leading-snug">
+                {getReelTitle(activeReelPreview)}
+              </h4>
             </div>
           </div>
         </div>

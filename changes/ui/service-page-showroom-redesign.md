@@ -336,3 +336,71 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 
 ### Verification
 1. `npm run build` — passed, no errors.
+
+## 2026-03-19 "Cinematic Cadence" redesign — unique layout DNA per service page
+
+### Summary
+Full architectural rework of the service pages. Decomposed the 1032-line `ServiceLandingPage.tsx` monolith into 11 focused components under `src/components/service/`, each accepting a `variant` prop. Each of the 3 service pages now has unique layout DNA — different hero visuals, different section layouts, and different section ordering — while sharing the same design system (typography, color, motion).
+
+### Runtime touchpoints (new files)
+- `src/components/service/layouts.ts` — config hub mapping each ServicePageId to its variant set + section order
+- `src/components/service/ServiceHero.tsx` — 3 hero variants: `split-world`, `stage`, `lab`
+- `src/components/service/ServiceEditorialIntro.tsx` — 3 intro variants: `wide`, `centered`, `dark`
+- `src/components/service/ServiceDeliverables.tsx` — 3 deliverables variants: `magazine`, `bento`, `dashboard`
+- `src/components/service/ServiceProcess.tsx` — 3 process variants: `scroll-track`, `centered-timeline`, `row-blocks`
+- `src/components/service/ServiceFitPanel.tsx` — 3 fit panel variants: `split-diagonal`, `stacked`, `tabs`
+- `src/components/service/ServiceCtaCloser.tsx` — 3 CTA variants: `default`, `personal`, `teal-gradient`
+- `src/components/service/ServiceFaq.tsx` — extracted, single variant
+- `src/components/service/ServiceFeaturedWork.tsx` — extracted with `ServiceFeaturedWorkGrid` named export
+- `src/components/service/ServiceRelated.tsx` — extracted
+- `src/components/service/ServiceProofTheater.tsx` — extracted video overlay modal
+
+### Runtime touchpoints (modified)
+- `src/components/ServiceLandingPage.tsx` — rewritten from 1032-line monolith to ~380-line thin orchestrator. Keeps ALL SEO/schema logic. Renders sections via `layout.sectionOrder` from config.
+- `src/index.css` — added hero variant CSS (`.svc-hero--split-world`, `.svc-hero--stage`, `.svc-hero--lab`), intro dark variant (`.svc-intro-dark`), floating cinema CSS (Phase 6)
+
+### Unique layout per service
+
+#### bilingual-ugc-creator → "The Flagship"
+- **Hero**: Split-world — homepage hero image with split-tint CSS overlays (teal left / khaki right)
+- **Section order**: hero → featuredWork → editorialIntro → deliverables → process → fitPanel → faq → featuredWorkGrid → ctaCloser → related
+- **Deliverables**: Magazine spread — full-width rows with 72px watermark numerals
+- **Process**: Horizontal snap-scroll cards (mobile) / 4-column grid (desktop)
+- **Fit Panel**: Split panel with diagonal CSS `clip-path` divider
+- **CTA**: Default centered dark sign-off
+
+#### spokesperson-videos → "The Stage"
+- **Hero**: Stage — R2 spokesperson poster as background, centered composition, stage spotlight gradient
+- **Section order**: hero → editorialIntro → featuredWork → deliverables → process → fitPanel → faq → featuredWorkGrid → ctaCloser → related
+- **Intro**: Centered pull-quote with left border, italic Cormorant, max-width 720px
+- **Deliverables**: Bento grid — 2×2, first card spans 2 columns
+- **Process**: Centered timeline — steps alternate left/right of center line
+- **Fit Panel**: Stacked vertically — best-fit light, not-fit dark
+- **CTA**: Asymmetric — Gisela's avatar left, CTA text right
+
+#### ugc-ads-tiktok-meta → "The Lab"
+- **Hero**: Lab — no background image, solid deep-ebony, split layout with live `<video>` in phone frame
+- **Section order**: hero → deliverables → featuredWork → editorialIntro → process → fitPanel → faq → featuredWorkGrid → ctaCloser → related
+- **Deliverables**: Dashboard grid — 4 cards with teal dot indicators
+- **Intro**: Dark section (deep-ebony bg, linen text), bold numbered market items
+- **Process**: Numbered blocks in a single row
+- **Fit Panel**: Tab interface with animated underline
+- **CTA**: Coastal-teal gradient accent background
+
+### Hero background strategy (no new assets)
+- bilingual-ugc-creator: `gisela-hero-desktop-2048.webp` (existing) with split-tint CSS overlays
+- spokesperson-videos: R2 poster from clip ID 2 (`ugc-brand-spokesperson-poster.jpg`, already exists)
+- ugc-ads-tiktok-meta: No image — solid deep-ebony + inline `<video>` element
+
+### SEO impact
+- H1 in hero preserved (same text source)
+- H2/H3 hierarchy preserved across all sections
+- Schema, meta, canonicals all untouched — `ServiceLandingPage.tsx` orchestrator keeps all SEO logic
+- FAQ content and structure unchanged
+- No route changes, no metadata-field rewrites
+
+### Verification
+1. `npm run build` — passed
+2. `npx tsc --noEmit` — zero type errors
+3. All 3 service pages × ES locale verified in dev server
+4. Homepage unaffected
