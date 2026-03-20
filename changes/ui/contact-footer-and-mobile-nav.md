@@ -94,25 +94,50 @@ This consolidates the February work on contact entry points, footer structure, a
 1. `npx eslint src/components/ThemeToggle.tsx src/components/Navbar.tsx`
 2. `npm run check:mobile-regression`
 
-## 2026-03-20 end-credits footer redesign
+## 2026-03-20 "End Credits" footer redesign — dark, dual-path, CSS-only
 
 ### Runtime touchpoints in this pass
 - `src/components/Footer.tsx`
+- `src/index.css`
+
+### Direction
+Design name: "End Credits." Dark deep-ebony background — the footer is the final frame of the page, not a second hero. Two completely separate render paths: `hidden md:block` for desktop editorial grid, `md:hidden` for mobile app-like stack.
 
 ### What changed
-1. Replaced the previous motion-heavy premium footer with a cleaner two-path "end credits" treatment: a three-column editorial desktop footer and a stacked mobile footer tuned for quick scanning.
-2. Removed the Framer Motion dependency and the icon-badge CTA treatment from the footer component, reducing runtime complexity while keeping the `id="contact"` anchor and the localized service-link structure intact.
-3. Expanded the footer's outbound contact surfaces to include Instagram, TikTok, and LinkedIn in addition to WhatsApp, Fiverr, and Telegram, with desktop and mobile layouts tailored separately instead of forcing one shared composition.
-4. Shifted the footer tone from promotional card to navigation-and-contact closeout, using simpler CTA blocks, denser service links, and a more explicit "Connect" column on desktop.
+1. Replaced the previous motion-heavy beige-card footer with a dark (`deep-ebony` bg) dual-path "End Credits" layout.
+2. **Removed all Framer Motion** from the footer — no `motion.div`, `blurRevealUp`, `springSmooth`, `whileInView`, `whileHover`, `whileTap`. Pure CSS transitions only.
+3. **Removed 3 Lucide icons** — `ArrowRight`, `ArrowUpRight`, `Send` no longer imported by Footer.
+4. **Removed the beige card container** — no more `bg-[#F7F2E9]`, rounded card with shadow, backdrop-blur. Just dark bg with clean text.
+5. **Collapsed 3 equally-weighted CTAs into 1** — single WhatsApp button. Fiverr/Telegram become quiet inline text links (mobile) or nav-column entries (desktop).
+6. **Added Instagram, TikTok, LinkedIn** — previously only in FloatingContactDock, now also in the footer Connect column (desktop) and social pill row (mobile).
+
+### Desktop layout (`hidden md:block`)
+- 3-column grid: brand statement + CTA left (1.1fr), services middle (0.38fr), connect right (0.32fr)
+- Bottom bar: location left, copyright right, separated by thin `pure-linen/0.08` border
+- CSS classes: `.ft-desktop`, `.ft-container`, `.ft-grid`, `.ft-brand`, `.ft-statement`, `.ft-desc`, `.ft-cta`, `.ft-nav-col`, `.ft-nav-label`, `.ft-nav-link`, `.ft-bar`, `.ft-bar-text`
+
+### Mobile layout (`md:hidden`)
+- App-like stack: logo → serif statement → full-width WhatsApp CTA → Fiverr · Telegram secondary → service link rows with arrows → social pills (Instagram, TikTok, LinkedIn) → location + copyright
+- CSS classes: `.ftm-mobile`, `.ftm-top`, `.ftm-statement`, `.ftm-cta`, `.ftm-secondary-links`, `.ftm-dot`, `.ftm-services`, `.ftm-service-link`, `.ftm-service-arrow`, `.ftm-social-row`, `.ftm-social-pill`, `.ftm-bottom`, `.ftm-bottom-text`, `.ftm-bottom-copyright`
+
+### Shared classes
+- `.ft-root`, `.ft-logo`, `.ft-logo-dot`
 
 ### SEO guardrail
 1. The footer still owns `id="contact"` for in-page anchor behavior.
 2. Service links remain plain crawlable anchors with the same locale-aware destinations.
-3. This pass did not change metadata, schema, canonicals, hreflang, robots, or sitemap behavior.
+3. H2 heading preserved for the footer statement text.
+4. This pass did not change metadata, schema, canonicals, hreflang, robots, or sitemap behavior.
+
+### Bundle impact
+- Removed `framer-motion` and `lucide-react` imports from Footer → smaller chunk
+- Footer no longer contributes to the Framer Motion dependency chain
+- Added ~200 lines of `.ft-*` / `.ftm-*` CSS classes to `index.css`
 
 ### Verification
-1. `npx tsc --noEmit`
-2. `npx eslint src/components/Footer.tsx`
+1. `npm run build` — passed, ✓ built in 4.12s, 0 errors
+2. Visual verification at 375×812 (mobile) and 1440×900 (desktop) via Puppeteer
+3. Homepage and service page footers confirmed rendering on both viewports
 
 ## Mobile Regression Checklist
 
