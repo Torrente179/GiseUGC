@@ -11,6 +11,7 @@ import { useDeferredMount } from '@/hooks/use-deferred-mount';
 import { mark, measure, startLongTaskObserver } from '@/lib/perf-debug';
 import PageSeo from '@/components/PageSeo';
 import { getLocaleFromPath, getHomePath, type SiteLocale } from '@/lib/locale-path';
+import Footer from '@/components/Footer';
 
 const SocialProofSection = lazy(() => import('@/components/SocialProof'));
 const ServicesSection = lazy(() => import('@/components/Services'));
@@ -200,7 +201,7 @@ const Index = () => {
       >
         <ServicesMarqueeSection />
       </DeferredSection>
-      <div id="contact" aria-hidden="true" className="h-px overflow-hidden" />
+      <Footer />
 
       <Suspense fallback={null}>
         <FloatingContactDockSection />

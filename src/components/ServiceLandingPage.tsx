@@ -450,12 +450,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </div>
             </section>
 
-            {/* ── M4: TOOLKIT MARQUEE — Homepage placement parity ── */}
-            <Suspense fallback={null}>
-              <ServicesMarqueeSection />
-            </Suspense>
-
-            {/* ── M5: RELATED SERVICES — Horizontal pill strip ── */}
+            {/* ── M4: RELATED SERVICES — Horizontal pill strip ── */}
             {relatedPages.length > 0 && (
               <section className="stm-related">
                 <p className="st-eyebrow px-5 mb-3">{labels.alsoOffered}</p>
@@ -473,7 +468,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </section>
             )}
 
-            {/* ── M6: MOBILE CTA — Above footer ── */}
+            {/* ── M5: MOBILE CTA — Above footer ── */}
             <section className="stm-cta">
               <p className="stm-cta-text">{page.ctaText}</p>
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg stm-cta-btn">
@@ -487,6 +482,11 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 {labels.startProject}
               </a>
             </div>
+
+            {/* ── M6: TOOLKIT MARQUEE — Final block before footer ── */}
+            <Suspense fallback={null}>
+              <ServicesMarqueeSection />
+            </Suspense>
           </div>
 
           {/* ╔══════════════════════════════════════════════════════════╗
@@ -657,12 +657,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </div>
             </RevealSection>
 
-            {/* ── D6: TOOLKIT MARQUEE — Homepage placement parity ── */}
-            <Suspense fallback={null}>
-              <ServicesMarqueeSection />
-            </Suspense>
-
-            {/* ── D7: THE CLOSE ── */}
+            {/* ── D6: THE CLOSE ── */}
             <RevealSection className="st-close">
               <div className="st-container st-close-inner">
                 <p className="st-close-text">{page.ctaText}</p>
@@ -684,6 +679,11 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 )}
               </div>
             </RevealSection>
+
+            {/* ── D7: TOOLKIT MARQUEE — Final block before footer ── */}
+            <Suspense fallback={null}>
+              <ServicesMarqueeSection />
+            </Suspense>
           </div>
         </main>
 
@@ -715,7 +715,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
           </div>
         )}
 
-        <div id="contact" aria-hidden="true" className="h-px overflow-hidden" />
+        <Footer />
         <Suspense fallback={null}><FloatingContactDock /></Suspense>
       </div>
     </>
