@@ -628,7 +628,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 <p className="st-eyebrow mb-4">{labels.isThisForYou}</p>
                 <h2 className="st-section-title mb-14">{page.navLabel}</h2>
                 <div className="st-fit-grid">
-                  <div>
+                  <div className="st-fit-yes">
                     <p className="st-fit-label st-fit-label--yes">{labels.yes}</p>
                     <ul className="st-fit-list">
                       {page.bestFitItems.map((item) => (
@@ -636,7 +636,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                       ))}
                     </ul>
                   </div>
-                  <div>
+                  <div className="st-fit-no">
                     <p className="st-fit-label st-fit-label--no">{labels.no}</p>
                     <ul className="st-fit-list">
                       {page.notFitItems.map((item) => (

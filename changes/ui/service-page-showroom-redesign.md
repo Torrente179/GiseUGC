@@ -504,3 +504,45 @@ This pass added no new headings, did not change heading hierarchy, and did not m
 ### Verification
 1. `npm run build` — passed
 2. Visual verification at 1440×900 across all desktop sections (Hero, Brief, Proof, Process, Filter, FAQ, Close, Related, Footer)
+
+## 2026-03-20 structural asymmetry — kill the template grid
+
+### Direction
+The previous pass added decoration (gradient orbs, glass panels, hover tints) to the same symmetric grid layouts. Every section still used equal columns. This pass redesigns the *structure* to create visual tension, hierarchy, and conviction — asymmetric grids, staggered vertical rhythm, oversized watermark typography, and directional CTA layouts.
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+- `src/index.css`
+
+### What changed
+1. **Hero split: 80/120 → video dominates.** Changed from `1fr 1fr` to `0.8fr 1.2fr` at ≥1280px. The hero media also bleeds past the container with `margin-right: -4vw`. The video is the product — it gets more space.
+2. **Proof gallery: asymmetric triptych.** Card 1 takes `1.15fr`, cards 2+3 take `0.85fr` each. Stagger shifted — card 2 drops 5.5rem, card 3 sits at 1.5rem. Magazine spread, not grid template.
+3. **Process: oversized watermark numbers + staggered offsets.** Killed the bordered equal-box grid. Step numbers are now 6.5rem absolutely-positioned watermarks at 4% opacity. Vertical dividers between columns replace the cell borders. Steps 2/3/4 have different `padding-top` values (5rem/2rem/4rem) so they never sit on the same baseline.
+4. **Fit section: verdict, not comparison.** "Sí" side takes `1.2fr` (60%) with a teal-tinted card (background, border, padding). "No" side takes `0.8fr` at 65% opacity — visually subordinate. The layout has conviction about who the service is for.
+5. **Close section: asymmetric grid.** Desktop uses a `1.3fr 0.7fr` grid — text and CTA left-aligned in column 1, related services in column 2. The teal glow is repositioned to anchor left at 15% instead of centered. No more generic centered-text-on-dark.
+
+### CSS classes modified
+- `.st-hero-split` — asymmetric grid columns + new 1280px breakpoint
+- `.st-hero-media` — negative right margin bleed
+- `.st-proof-gallery` — asymmetric `1.15fr 0.85fr 0.85fr` columns
+- `.st-proof-column--1/2/3` — revised stagger offsets
+- `.st-process-row` — removed bordered box grid, added vertical dividers
+- `.st-process-block` — staggered padding-top per nth-child
+- `.st-process-num` — absolutely positioned 6.5rem watermark
+- `.st-fit-grid` — asymmetric `1.2fr 0.8fr`
+- `.st-fit-yes` — teal-tinted card with border
+- `.st-fit-no` — subdued opacity
+- `.st-close-inner` — 2-column grid layout on desktop
+- `.st-close::before` — glow repositioned left
+- `.st-related` — positioned in right grid column
+
+### TSX changes
+- Added `className="st-fit-yes"` and `className="st-fit-no"` to the fit grid children
+
+### SEO guardrail
+No heading changes, no metadata changes, no schema changes.
+
+### Verification
+1. `npm run build` — passed
+2. Visual verification at 1440×900 on all 3 service pages (bilingual, spokesperson, ads)
+3. Mobile 375×812 confirmed unaffected — separate render path
