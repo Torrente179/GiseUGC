@@ -112,7 +112,6 @@ const Index = () => {
       <Navbar />
       <Hero showIntroduction={!isMobile} />
       {isMobile ? <HeroIntroductionSection /> : <SocialProofSection />}
-      <ServicesSection />
 
       <DeferredSection
         enabled={isMobile}
@@ -123,6 +122,7 @@ const Index = () => {
       >
         <PortfolioSection />
       </DeferredSection>
+      {isMobile ? <ServicesSection /> : null}
       <DeferredSection
         enabled={isMobile}
         mountId="mobile-rating-card"
@@ -171,6 +171,7 @@ const Index = () => {
       >
         <PortfolioSection />
       </DeferredSection>
+      {!isMobile ? <ServicesSection /> : null}
       <DeferredSection
         enabled={!isMobile}
         mountId="desktop-rating-card"

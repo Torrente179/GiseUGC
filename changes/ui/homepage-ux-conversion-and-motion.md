@@ -71,7 +71,7 @@ This is the current homepage-facing UI note. It consolidates the review-card sys
 
 ## Mobile Regression Checklist
 
-Generated at: `2026-03-13T13:12:09.537Z`
+Generated at: `2026-03-20T18:28:42.873Z`
 
 ### Automated checks
 - ✅ Targeted lint
@@ -192,3 +192,17 @@ Generated at: `2026-03-13T13:12:09.537Z`
 1. Added a small descender-safe bottom allowance to each masked word wrapper in `SplitTextReveal`, with a matching negative offset so the visual rhythm stays the same.
 2. Applied the same allowance to the reduced-motion fallback path, so desktop users do not lose the bottoms of letters like `y`, `p`, and `q` when serif headlines render without animation.
 3. Kept the fix scoped to the reveal component instead of relaxing headline line-height site-wide, preserving the existing editorial heading proportions while removing the clipping artifact.
+
+## 2026-03-20 homepage services section moved below portfolio
+
+### Runtime touchpoints
+- `src/pages/Index.tsx`
+
+### What changed
+1. Moved the homepage `ServicesSection` so "Lo Que Ofrezco / Servicios de UGC y portavoz" now renders immediately after the "Historias que convierten" portfolio on both mobile and desktop.
+2. Kept the existing deferred-loading strategy intact for the heavier media sections by only changing the section order in the page composition, not the portfolio or marquee internals.
+3. Left the later Fiverr rating, testimonials, FAQ, footer, and services marquee sequence unchanged so the request stays scoped to the homepage information hierarchy.
+
+### Verification
+1. `npm run build:dev`
+2. `npm run check:mobile-regression`
