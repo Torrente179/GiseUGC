@@ -1444,7 +1444,7 @@
     .st-spec-sheet {
       border-top: none;
       border-left: none;
-      padding-top: 0;
+      padding-top: 1.75rem;
       padding-left: 2.5rem;
       padding-right: 2rem;
       padding-bottom: 1.5rem;
@@ -1985,28 +1985,16 @@
      ════════════════════════════════ */
   .st-close {
     padding: 5rem 0 3rem;
-    background: hsl(var(--deep-ebony));
+    background:
+      radial-gradient(ellipse at 20% 40%, hsl(var(--primary) / 0.06) 0%, transparent 50%),
+      linear-gradient(180deg, hsl(var(--warm-sand)) 0%, hsl(var(--pure-linen)) 100%);
     position: relative;
     overflow: hidden;
-  }
-
-  /* Subtle teal glow — asymmetric, anchored to left */
-  .st-close::before {
-    content: '';
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    top: 30%;
-    left: 15%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: radial-gradient(circle, hsl(var(--primary) / 0.07) 0%, transparent 65%);
-    pointer-events: none;
-    filter: blur(80px);
+    border-top: 1px solid hsl(var(--foreground) / 0.04);
   }
 
   @media (min-width: 768px) {
-    .st-close { padding: 7rem 0 4rem; }
+    .st-close { padding: 7rem 0 5rem; }
   }
 
   .st-close-inner {
@@ -2031,11 +2019,11 @@
 
   .st-close-text {
     font-family: var(--font-display);
-    font-weight: 300;
+    font-weight: 400;
     font-size: clamp(1.3rem, 2.8vw, 2.2rem);
     line-height: 1.35;
     letter-spacing: -0.025em;
-    color: hsl(var(--pure-linen) / 0.75);
+    color: hsl(var(--foreground) / 0.7);
     max-width: 580px;
     margin-bottom: 2rem;
   }
@@ -2076,7 +2064,7 @@
   }
 
   .st-related .st-eyebrow {
-    color: hsl(var(--pure-linen) / 0.25);
+    color: hsl(var(--foreground) / 0.25);
   }
 
   .st-related-row {
@@ -2084,13 +2072,13 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.9rem 0;
-    border-bottom: 1px solid hsl(var(--pure-linen) / 0.08);
+    border-bottom: 1px solid hsl(var(--foreground) / 0.08);
     text-decoration: none;
     transition: padding-left var(--duration-fast) var(--ease-out-expo);
   }
 
   .st-related-row:first-of-type {
-    border-top: 1px solid hsl(var(--pure-linen) / 0.08);
+    border-top: 1px solid hsl(var(--foreground) / 0.08);
   }
 
   .st-related-row:hover {
@@ -2102,17 +2090,17 @@
     font-weight: 500;
     font-size: 1.1rem;
     letter-spacing: -0.02em;
-    color: hsl(var(--pure-linen) / 0.5);
+    color: hsl(var(--foreground) / 0.45);
     transition: color var(--duration-fast) var(--ease-out-expo);
   }
 
   .st-related-row:hover .st-related-title {
-    color: hsl(var(--pure-linen) / 0.85);
+    color: hsl(var(--foreground) / 0.8);
   }
 
   .st-related-arrow {
     font-size: 1.1rem;
-    color: hsl(var(--pure-linen) / 0.15);
+    color: hsl(var(--foreground) / 0.15);
     transition: color var(--duration-fast) var(--ease-out-expo),
                 transform var(--duration-fast) var(--ease-out-expo);
   }
