@@ -29,7 +29,6 @@ const localeLabels = {
     services: 'Servicios',
     startProject: 'Empezar proyecto',
     openSample: 'Ver muestra',
-    moreWork: 'Ver todos los ejemplos',
     theWork: 'El trabajo',
     whatYouGet: 'Lo que recibes',
     isThisForYou: '¿Es para ti?',
@@ -37,19 +36,16 @@ const localeLabels = {
     no: 'No, si',
     howItWorks: 'Así funciona',
     faq: 'Preguntas',
-    letsWork: 'Siguiente paso',
-    relatedLink: 'Ver servicio →',
+    alsoOffered: 'También ofrezco',
     previewClose: 'Cerrar vista previa',
     previewPrev: 'Clip anterior',
     previewNext: 'Siguiente clip',
-    alsoOffered: 'También ofrezco',
   },
   en: {
     home: 'Home',
     services: 'Services',
     startProject: 'Start a project',
     openSample: 'View sample',
-    moreWork: 'View all examples',
     theWork: 'The work',
     whatYouGet: 'What you get',
     isThisForYou: 'Is this for you?',
@@ -57,16 +53,14 @@ const localeLabels = {
     no: 'Not ideal if',
     howItWorks: 'How it works',
     faq: 'Questions',
-    letsWork: 'Next step',
-    relatedLink: 'View service →',
+    alsoOffered: 'Also offered',
     previewClose: 'Close preview',
     previewPrev: 'Previous clip',
     previewNext: 'Next clip',
-    alsoOffered: 'Also offered',
   },
 } as const;
 
-/* ── Scroll-reveal hook (IntersectionObserver, CSS-only animation) ── */
+/* ── Scroll-reveal hook (IntersectionObserver, CSS-only) ── */
 function useScrollReveal<T extends HTMLElement>() {
   const ref = useRef<T>(null);
   useEffect(() => {
@@ -94,24 +88,23 @@ function RevealSection({
   children,
   className = '',
   id,
-  as: Tag = 'section',
 }: {
   children: React.ReactNode;
   className?: string;
   id?: string;
-  as?: 'section' | 'div';
 }) {
   const ref = useScrollReveal<HTMLElement>();
   return (
-    <Tag ref={ref} id={id} className={`svc-reveal ${className}`}>
+    <section ref={ref} id={id} className={`svc-reveal ${className}`}>
       {children}
-    </Tag>
+    </section>
   );
 }
 
 /* ════════════════════════════════════════════════════════════════════
    SCREEN TEST — Service Landing Page
-   Direction: A24 meets Apple. Video-first. One CTA. No filler.
+   Mobile: App-like independent experience
+   Desktop: A24 × Apple editorial layout
    ════════════════════════════════════════════════════════════════════ */
 
 const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
@@ -120,7 +113,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
   const relatedPages = getRelatedServiceSummaries(page.relatedServiceIds, locale);
 
   const canonical = buildUrl(page.path);
-  const alternateCanonical = buildUrl(page.alternatePath);
   const homeCanonical = buildUrl(getHomePath(locale));
 
   const proofExamples = useMemo(
@@ -152,9 +144,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     },
     [proofExamples.length],
   );
-
   const closeProofTheater = useCallback(() => setActiveProofIndex(null), []);
-
   const navigateProofTheater = useCallback(
     (direction: 1 | -1) => {
       if (proofExamples.length === 0) return;
@@ -189,14 +179,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     return () => mq.removeListener(update);
   }, []);
 
-  /* ── Guard stale index ── */
   useEffect(() => {
     if (activeProofIndex !== null && activeProofIndex >= proofExamples.length) {
       setActiveProofIndex(null);
     }
   }, [activeProofIndex, proofExamples.length]);
 
-  /* ── Keyboard navigation ── */
+  /* ── Keyboard nav ── */
   useEffect(() => {
     if (!isProofTheaterOpen) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -222,12 +211,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
       overflow: document.body.style.overflow,
       overscrollBehavior: document.body.style.overscrollBehavior,
     };
-    const prevHtml = {
-      overflow: html.style.overflow,
-      overscrollBehavior: html.style.overscrollBehavior,
-      scrollBehavior: html.style.scrollBehavior,
-    };
-
+    const prevHtml = { overflow: html.style.overflow, overscrollBehavior: html.style.overscrollBehavior, scrollBehavior: html.style.scrollBehavior };
     document.body.style.position = 'fixed';
     document.body.style.top = `-${scrollY}px`;
     document.body.style.left = '0';
@@ -238,7 +222,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     html.style.overflow = 'hidden';
     html.style.overscrollBehavior = 'none';
     html.dataset.theater = 'open';
-
     return () => {
       delete html.dataset.theater;
       document.body.style.position = prev.position;
@@ -256,7 +239,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     };
   }, [isProofTheaterOpen]);
 
-  /* ── Schema.org (preserved exactly) ── */
+  /* ── Schema.org (preserved) ── */
   const schema = useMemo(() => {
     const breadcrumbItems = [
       { '@type': 'ListItem', position: 1, name: labels.home, item: homeCanonical },
@@ -266,63 +249,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     return {
       '@context': 'https://schema.org',
       '@graph': [
-        {
-          '@type': 'WebPage',
-          '@id': `${canonical}#webpage`,
-          url: canonical,
-          name: page.metaTitle,
-          description: page.metaDescription,
-          dateModified: '2026-03-13',
-          inLanguage: locale,
-          isPartOf: { '@id': `${homeCanonical}#website` },
-          breadcrumb: { '@id': `${canonical}#breadcrumb` },
-          mainEntity: { '@id': `${canonical}#service` },
-        },
+        { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: page.metaTitle, description: page.metaDescription, dateModified: '2026-03-13', inLanguage: locale, isPartOf: { '@id': `${homeCanonical}#website` }, breadcrumb: { '@id': `${canonical}#breadcrumb` }, mainEntity: { '@id': `${canonical}#service` } },
         { '@type': 'BreadcrumbList', '@id': `${canonical}#breadcrumb`, itemListElement: breadcrumbItems },
-        {
-          '@type': 'Service',
-          '@id': `${canonical}#service`,
-          name: page.navLabel,
-          serviceType: page.navLabel,
-          description: page.metaDescription,
-          url: canonical,
-          provider: {
-            '@type': 'ProfessionalService',
-            '@id': `${SITE_URL}/#business`,
-            name: 'Gisela Saldarriaga UGC Studio',
-            url: `${SITE_URL}/`,
-            telephone: '+57-304-378-6101',
-            availableLanguage: ['es', 'en'],
-          },
-          areaServed: [
-            { '@type': 'Country', name: 'United States' },
-            { '@type': 'Country', name: 'Spain' },
-            { '@type': 'Place', name: 'Latin America' },
-          ],
-          availableLanguage: ['es', 'en'],
-          audience: {
-            '@type': 'Audience',
-            audienceType:
-              locale === 'es'
-                ? 'Marcas de ecommerce, beauty, lifestyle, SaaS y tecnología'
-                : 'Ecommerce, beauty, lifestyle, SaaS, and tech brands',
-          },
-        },
-        {
-          '@type': 'FAQPage',
-          '@id': `${canonical}#faq`,
-          inLanguage: locale,
-          mainEntity: page.faqs.map((faq) => ({
-            '@type': 'Question',
-            name: faq.question,
-            acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-          })),
-        },
+        { '@type': 'Service', '@id': `${canonical}#service`, name: page.navLabel, serviceType: page.navLabel, description: page.metaDescription, url: canonical, provider: { '@type': 'ProfessionalService', '@id': `${SITE_URL}/#business`, name: 'Gisela Saldarriaga UGC Studio', url: `${SITE_URL}/`, telephone: '+57-304-378-6101', availableLanguage: ['es', 'en'] }, areaServed: [{ '@type': 'Country', name: 'United States' }, { '@type': 'Country', name: 'Spain' }, { '@type': 'Place', name: 'Latin America' }], availableLanguage: ['es', 'en'], audience: { '@type': 'Audience', audienceType: locale === 'es' ? 'Marcas de ecommerce, beauty, lifestyle, SaaS y tecnología' : 'Ecommerce, beauty, lifestyle, SaaS, and tech brands' } },
+        { '@type': 'FAQPage', '@id': `${canonical}#faq`, inLanguage: locale, mainEntity: page.faqs.map((faq) => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: faq.answer } })) },
       ],
     };
   }, [canonical, homeCanonical, labels.home, labels.services, locale, page.breadcrumbLabel, page.faqs, page.metaDescription, page.metaTitle, page.navLabel]);
 
-  /* ── Lead proof for hero ── */
   const leadProof = proofExamples[0] ?? null;
 
   return (
@@ -344,346 +278,409 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
         <Navbar compactMobile />
 
         <main>
-          {/* ═══════════════════════════════════════════════════════
-              1. COLD OPEN — The work is the hero
-              No background image. No gradient overlay. No filler.
-              ═══════════════════════════════════════════════════════ */}
-          <section className="st-hero">
-            <div className="st-container">
-              {/* Breadcrumb — barely visible */}
-              <nav className="st-breadcrumb" aria-label="Breadcrumb">
+          {/* ╔══════════════════════════════════════════════════════════╗
+              ║  MOBILE — App-like experience (< 768px)                ║
+              ║  Completely independent from desktop layout             ║
+              ╚══════════════════════════════════════════════════════════╝ */}
+          <div className="md:hidden">
+
+            {/* ── M1: APP HERO — Full-viewport video poster ── */}
+            <section className="stm-hero">
+              {leadProof ? (
+                <button
+                  type="button"
+                  className="stm-hero-poster"
+                  onClick={() => openProofClip(0)}
+                  aria-label={`${labels.openSample}: ${leadProof.example.title}`}
+                >
+                  <img
+                    src={leadProof.clip.posterSrc}
+                    alt={leadProof.example.title}
+                    className="stm-hero-poster-img"
+                    loading="eager"
+                    decoding="async"
+                    fetchPriority="high"
+                  />
+                  <div className="stm-hero-poster-overlay" />
+                  <div className="st-play-btn">
+                    <Play className="h-5 w-5 ml-0.5" />
+                  </div>
+                </button>
+              ) : (
+                <div className="stm-hero-poster stm-hero-poster--empty" />
+              )}
+
+              {/* Overlaid content at bottom */}
+              <div className="stm-hero-bottom">
+                <p className="st-eyebrow st-eyebrow--light mb-2">{page.heroEyebrow}</p>
+                <h1 className="stm-hero-title">{page.heroTitle}</h1>
+                <p className="stm-hero-hook">{page.heroSummary}</p>
+              </div>
+
+              {/* SEO breadcrumb — visually hidden on mobile */}
+              <nav className="sr-only" aria-label="Breadcrumb">
                 <a href={getHomePath(locale)}>{labels.home}</a>
-                <span aria-hidden="true">/</span>
+                <span>/</span>
                 <a href={getHomeSectionHref(locale, 'services')}>{labels.services}</a>
-                <span aria-hidden="true">/</span>
+                <span>/</span>
                 <span>{page.breadcrumbLabel}</span>
               </nav>
+            </section>
 
-              {/* Split: text left, video right */}
-              <div className="st-hero-split">
-                {/* Left — typography */}
-                <div className="st-hero-text">
-                  <p className="st-eyebrow">{page.heroEyebrow}</p>
-                  <h1 className="st-hero-title">{page.heroTitle}</h1>
-                  <p className="st-hero-hook">{page.heroSummary}</p>
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="st-cta-primary"
-                  >
-                    {labels.startProject}
-                  </a>
-                </div>
-
-                {/* Right — lead video poster in letterbox frame */}
-                {leadProof && (
-                  <div className="st-hero-media">
-                    <button
-                      type="button"
-                      className="st-letterbox group"
-                      onClick={() => openProofClip(0)}
-                      aria-label={`${labels.openSample}: ${leadProof.example.title}`}
-                    >
-                      <img
-                        src={leadProof.clip.posterSrc}
-                        alt={leadProof.example.title}
-                        className="st-letterbox-img"
-                        loading="eager"
-                        decoding="async"
-                        fetchPriority="high"
-                      />
-                      {/* Play indicator */}
-                      <div className="st-play-btn">
-                        <Play className="h-5 w-5 ml-0.5" />
-                      </div>
-                      {/* Caption strip */}
-                      <div className="st-letterbox-caption">
-                        <span className="st-chip">{page.navLabel}</span>
-                        {formatDuration(leadProof.clip.durationSeconds) && (
-                          <span className="st-chip">{formatDuration(leadProof.clip.durationSeconds)}</span>
-                        )}
-                      </div>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-
-          {/* ═══════════════════════════════════════════════════════
-              2. THE BRIEF — Editorial intro + deliverables merged
-              One section. Asymmetric. Dense.
-              ═══════════════════════════════════════════════════════ */}
-          <RevealSection className="st-section st-section--tight">
-            <div className="st-container">
-              <div className="st-brief-grid">
-                {/* Left — the bold statement */}
-                <div className="st-brief-statement">
-                  <p className="st-pullquote">{page.sectionIntroText}</p>
-                  <div className="st-market-strip">
-                    {page.marketItems.map((item, i) => (
-                      <span key={item}>
-                        {i > 0 && <span className="st-middot" aria-hidden="true">·</span>}
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Right — the spec sheet */}
-                <div className="st-spec-sheet">
-                  <p className="st-eyebrow mb-6">{labels.whatYouGet}</p>
-                  <h2 className="sr-only">{page.deliverablesTitle}</h2>
-                  <div className="st-spec-list">
-                    {page.deliverables.map((item) => (
-                      <div key={item.title} className="st-spec-row">
-                        <h3 className="st-spec-title">{item.title}</h3>
-                        <p className="st-spec-desc">{item.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </RevealSection>
-
-          {/* ═══════════════════════════════════════════════════════
-              3. THE PROOF — Full-bleed dark. Video sells.
-              Each example takes real space. Not a cramped grid.
-              ═══════════════════════════════════════════════════════ */}
-          {proofExamples.length > 1 && (
-            <RevealSection className="st-proof-wall" id="examples">
-              <div className="st-container">
-                <p className="st-eyebrow st-eyebrow--light mb-10 md:mb-14">{labels.theWork}</p>
+            {/* ── M2: SWIPEABLE PROOF GALLERY ── */}
+            {proofExamples.length > 0 && (
+              <section className="stm-reel">
+                <p className="st-eyebrow px-5 mb-4">{labels.theWork}</p>
                 <h2 className="sr-only">{page.featuredTitle}</h2>
-
-                <div className="st-proof-stack">
-                  {proofExamples.slice(1).map(({ example, clip }, index) => {
+                <div className="stm-reel-track scrollbar-hide">
+                  {proofExamples.map(({ example, clip }, index) => {
                     const duration = formatDuration(clip.durationSeconds);
                     return (
                       <button
                         key={example.clipId}
                         type="button"
-                        onClick={() => openProofClip(index + 1)}
+                        onClick={() => openProofClip(index)}
                         aria-label={`${labels.openSample}: ${example.title}`}
-                        className="st-proof-card group"
+                        className="stm-reel-card"
                       >
-                        <div className="st-proof-card-media">
+                        <div className="stm-reel-card-media">
                           <img
                             src={clip.posterSrc}
                             alt={example.title}
-                            className="st-proof-card-img"
+                            className="stm-reel-card-img"
                             loading="lazy"
                             decoding="async"
                           />
-                          <div className="st-proof-card-overlay" />
+                          <div className="stm-reel-card-gradient" />
                           <div className="st-play-btn st-play-btn--small">
-                            <Play className="h-4 w-4 ml-0.5" />
+                            <Play className="h-3.5 w-3.5 ml-0.5" />
                           </div>
-                        </div>
-                        <div className="st-proof-card-info">
-                          <h3 className="st-proof-card-title">{example.title}</h3>
-                          <p className="st-proof-card-desc">{example.description}</p>
-                          <div className="st-proof-card-meta">
-                            {duration && <span className="st-chip st-chip--dark">{duration}</span>}
-                            {clip.language && (
-                              <span className="st-chip st-chip--dark">
-                                {clip.language === 'es' ? 'Español' : 'English'}
-                              </span>
-                            )}
+                          <div className="stm-reel-card-bottom">
+                            <span className="stm-reel-card-name">{example.title}</span>
+                            <div className="stm-reel-card-chips">
+                              {duration && <span className="st-chip">{duration}</span>}
+                              {clip.language && <span className="st-chip">{clip.language === 'es' ? 'ES' : 'EN'}</span>}
+                            </div>
                           </div>
                         </div>
                       </button>
                     );
                   })}
                 </div>
-              </div>
-            </RevealSection>
-          )}
+              </section>
+            )}
 
-          {/* ═══════════════════════════════════════════════════════
-              4. THE PROCESS — Compressed. Four moves. No timeline.
-              ═══════════════════════════════════════════════════════ */}
-          <RevealSection className="st-section">
-            <div className="st-container">
-              <p className="st-eyebrow mb-4">{labels.howItWorks}</p>
-              <h2 className="st-section-title mb-10 md:mb-14">{page.processTitle}</h2>
-
-              <div className="st-process-row">
-                {page.processSteps.map((step, index) => (
-                  <article key={step.title} className="st-process-block">
-                    <div className="st-process-accent" aria-hidden="true" />
-                    <span className="st-process-num">{String(index + 1).padStart(2, '0')}</span>
-                    <h3 className="st-process-step-title">{step.title}</h3>
-                    <p className="st-process-step-desc">{step.description}</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </RevealSection>
-
-          {/* ═══════════════════════════════════════════════════════
-              5. THE FILTER — Fit check + FAQ combined
-              No rounded mega-panel. No decorative icons.
-              ═══════════════════════════════════════════════════════ */}
-          <RevealSection className="st-section st-section--wide">
-            <div className="st-container">
-              <p className="st-eyebrow mb-4">{labels.isThisForYou}</p>
-              <h2 className="st-section-title mb-10 md:mb-14">{page.navLabel}</h2>
-
-              {/* Fit / Not-fit — two clean columns */}
-              <div className="st-fit-grid">
-                <div className="st-fit-col">
-                  <p className="st-fit-label st-fit-label--yes">{labels.yes}</p>
-                  <ul className="st-fit-list">
-                    {page.bestFitItems.map((item) => (
-                      <li key={item} className="st-fit-item">
-                        <span className="st-fit-dash st-fit-dash--teal" aria-hidden="true">—</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+            {/* ── M3: COMPACT INFO ACCORDION ── */}
+            <section className="stm-info">
+              {/* What you get */}
+              <details className="stm-accordion">
+                <summary className="stm-accordion-trigger">
+                  <span>{labels.whatYouGet}</span>
+                  <span className="stm-accordion-icon" aria-hidden="true" />
+                </summary>
+                <div className="stm-accordion-body">
+                  <h2 className="sr-only">{page.deliverablesTitle}</h2>
+                  {page.deliverables.map((item) => (
+                    <div key={item.title} className="stm-spec-item">
+                      <h3 className="stm-spec-name">{item.title}</h3>
+                      <p className="stm-spec-desc">{item.description}</p>
+                    </div>
+                  ))}
                 </div>
-                <div className="st-fit-col">
-                  <p className="st-fit-label st-fit-label--no">{labels.no}</p>
-                  <ul className="st-fit-list">
-                    {page.notFitItems.map((item) => (
-                      <li key={item} className="st-fit-item st-fit-item--muted">
-                        <span className="st-fit-dash" aria-hidden="true">—</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+              </details>
+
+              {/* How it works */}
+              <details className="stm-accordion">
+                <summary className="stm-accordion-trigger">
+                  <span>{labels.howItWorks}</span>
+                  <span className="stm-accordion-icon" aria-hidden="true" />
+                </summary>
+                <div className="stm-accordion-body">
+                  <h2 className="sr-only">{page.processTitle}</h2>
+                  {page.processSteps.map((step, i) => (
+                    <div key={step.title} className="stm-step">
+                      <span className="stm-step-num">{i + 1}</span>
+                      <div>
+                        <h3 className="stm-step-name">{step.title}</h3>
+                        <p className="stm-spec-desc">{step.description}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
+              </details>
+
+              {/* Is this for you */}
+              <details className="stm-accordion">
+                <summary className="stm-accordion-trigger">
+                  <span>{labels.isThisForYou}</span>
+                  <span className="stm-accordion-icon" aria-hidden="true" />
+                </summary>
+                <div className="stm-accordion-body">
+                  <p className="stm-fit-heading stm-fit-heading--yes">{labels.yes}</p>
+                  {page.bestFitItems.map((item) => (
+                    <p key={item} className="stm-fit-item stm-fit-item--yes">{item}</p>
+                  ))}
+                  <p className="stm-fit-heading stm-fit-heading--no">{labels.no}</p>
+                  {page.notFitItems.map((item) => (
+                    <p key={item} className="stm-fit-item stm-fit-item--no">{item}</p>
+                  ))}
+                </div>
+              </details>
+
+              {/* FAQ */}
+              <details className="stm-accordion">
+                <summary className="stm-accordion-trigger">
+                  <span>{labels.faq}</span>
+                  <span className="stm-accordion-icon" aria-hidden="true" />
+                </summary>
+                <div className="stm-accordion-body">
+                  <h2 className="sr-only">{page.faqTitle}</h2>
+                  {page.faqs.map((faq) => (
+                    <details key={faq.question} className="stm-faq-item">
+                      <summary className="stm-faq-q">{faq.question}</summary>
+                      <p className="stm-faq-a">{faq.answer}</p>
+                    </details>
+                  ))}
+                </div>
+              </details>
+
+              {/* Intro pull-quote */}
+              <div className="stm-quote-block">
+                <p className="stm-quote">{page.sectionIntroText}</p>
               </div>
+            </section>
 
-              {/* FAQ — minimal, no decorative toggles */}
-              <div className="st-faq" id="faq">
-                <p className="st-eyebrow mb-8">{labels.faq}</p>
-                <h2 className="sr-only">{page.faqTitle}</h2>
-                {page.faqs.map((faq, index) => (
-                  <details
-                    key={faq.question}
-                    className={`st-faq-item ${index > 0 ? 'st-faq-item--bordered' : ''}`}
-                  >
-                    <summary className="st-faq-question">{faq.question}</summary>
-                    <p className="st-faq-answer">{faq.answer}</p>
-                  </details>
-                ))}
-              </div>
-            </div>
-          </RevealSection>
-
-          {/* ═══════════════════════════════════════════════════════
-              6. THE CLOSE — CTA + Related services, minimal
-              No dark bg. No signature flourish. Just the action.
-              ═══════════════════════════════════════════════════════ */}
-          <RevealSection className="st-close">
-            <div className="st-container st-close-inner">
-              <p className="st-close-text">{page.ctaText}</p>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="st-cta-primary st-cta-primary--lg"
-              >
-                {labels.startProject}
-              </a>
-
-              {/* Related services — text rows, not cards */}
-              {relatedPages.length > 0 && (
-                <div className="st-related">
-                  <p className="st-eyebrow mb-5">{labels.alsoOffered}</p>
+            {/* ── M4: RELATED SERVICES — Horizontal pill strip ── */}
+            {relatedPages.length > 0 && (
+              <section className="stm-related">
+                <p className="st-eyebrow px-5 mb-3">{labels.alsoOffered}</p>
+                <div className="stm-related-strip scrollbar-hide">
                   {page.relatedServiceIds.map((relatedId, index) => {
                     const rel = relatedPages[index];
                     if (!rel) return null;
                     return (
-                      <a
-                        key={relatedId}
-                        href={getServicePath(relatedId, locale)}
-                        className="st-related-row group"
-                      >
-                        <span className="st-related-title">{rel.title}</span>
-                        <span className="st-related-arrow">→</span>
+                      <a key={relatedId} href={getServicePath(relatedId, locale)} className="stm-related-pill">
+                        {rel.title}
                       </a>
                     );
                   })}
                 </div>
-              )}
+              </section>
+            )}
+
+            {/* ── M5: MOBILE CTA — Above footer ── */}
+            <section className="stm-cta">
+              <p className="stm-cta-text">{page.ctaText}</p>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg stm-cta-btn">
+                {labels.startProject}
+              </a>
+            </section>
+
+            {/* ── STICKY WHATSAPP BAR ── */}
+            <div className="stm-sticky-bar">
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="stm-sticky-btn">
+                {labels.startProject}
+              </a>
             </div>
-          </RevealSection>
+          </div>
+
+          {/* ╔══════════════════════════════════════════════════════════╗
+              ║  DESKTOP — Screen Test editorial layout (≥ 768px)       ║
+              ╚══════════════════════════════════════════════════════════╝ */}
+          <div className="hidden md:block">
+
+            {/* ── D1: COLD OPEN ── */}
+            <section className="st-hero">
+              <div className="st-container">
+                <nav className="st-breadcrumb" aria-label="Breadcrumb">
+                  <a href={getHomePath(locale)}>{labels.home}</a>
+                  <span aria-hidden="true">/</span>
+                  <a href={getHomeSectionHref(locale, 'services')}>{labels.services}</a>
+                  <span aria-hidden="true">/</span>
+                  <span>{page.breadcrumbLabel}</span>
+                </nav>
+                <div className="st-hero-split">
+                  <div className="st-hero-text">
+                    <p className="st-eyebrow">{page.heroEyebrow}</p>
+                    <h1 className="st-hero-title">{page.heroTitle}</h1>
+                    <p className="st-hero-hook">{page.heroSummary}</p>
+                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary">{labels.startProject}</a>
+                  </div>
+                  {leadProof && (
+                    <div className="st-hero-media">
+                      <button type="button" className="st-letterbox group" onClick={() => openProofClip(0)} aria-label={`${labels.openSample}: ${leadProof.example.title}`}>
+                        <img src={leadProof.clip.posterSrc} alt={leadProof.example.title} className="st-letterbox-img" loading="eager" decoding="async" fetchPriority="high" />
+                        <div className="st-play-btn"><Play className="h-5 w-5 ml-0.5" /></div>
+                        <div className="st-letterbox-caption">
+                          <span className="st-chip">{page.navLabel}</span>
+                          {formatDuration(leadProof.clip.durationSeconds) && <span className="st-chip">{formatDuration(leadProof.clip.durationSeconds)}</span>}
+                        </div>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            {/* ── D2: THE BRIEF ── */}
+            <RevealSection className="st-section st-section--tight">
+              <div className="st-container">
+                <div className="st-brief-grid">
+                  <div className="st-brief-statement">
+                    <p className="st-pullquote">{page.sectionIntroText}</p>
+                    <div className="st-market-strip">
+                      {page.marketItems.map((item, i) => (
+                        <span key={item}>{i > 0 && <span className="st-middot" aria-hidden="true">·</span>}{item}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="st-spec-sheet">
+                    <p className="st-eyebrow mb-6">{labels.whatYouGet}</p>
+                    <h2 className="sr-only">{page.deliverablesTitle}</h2>
+                    <div className="st-spec-list">
+                      {page.deliverables.map((item) => (
+                        <div key={item.title} className="st-spec-row">
+                          <h3 className="st-spec-title">{item.title}</h3>
+                          <p className="st-spec-desc">{item.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </RevealSection>
+
+            {/* ── D3: THE PROOF ── */}
+            {proofExamples.length > 1 && (
+              <RevealSection className="st-proof-wall" id="examples">
+                <div className="st-container">
+                  <p className="st-eyebrow st-eyebrow--light mb-14">{labels.theWork}</p>
+                  <h2 className="sr-only">{page.featuredTitle}</h2>
+                  <div className="st-proof-stack">
+                    {proofExamples.slice(1).map(({ example, clip }, index) => {
+                      const duration = formatDuration(clip.durationSeconds);
+                      return (
+                        <button key={example.clipId} type="button" onClick={() => openProofClip(index + 1)} aria-label={`${labels.openSample}: ${example.title}`} className="st-proof-card group">
+                          <div className="st-proof-card-media">
+                            <img src={clip.posterSrc} alt={example.title} className="st-proof-card-img" loading="lazy" decoding="async" />
+                            <div className="st-proof-card-overlay" />
+                            <div className="st-play-btn st-play-btn--small"><Play className="h-4 w-4 ml-0.5" /></div>
+                          </div>
+                          <div className="st-proof-card-info">
+                            <h3 className="st-proof-card-title">{example.title}</h3>
+                            <p className="st-proof-card-desc">{example.description}</p>
+                            <div className="st-proof-card-meta">
+                              {duration && <span className="st-chip st-chip--dark">{duration}</span>}
+                              {clip.language && <span className="st-chip st-chip--dark">{clip.language === 'es' ? 'Español' : 'English'}</span>}
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </RevealSection>
+            )}
+
+            {/* ── D4: THE PROCESS ── */}
+            <RevealSection className="st-section">
+              <div className="st-container">
+                <p className="st-eyebrow mb-4">{labels.howItWorks}</p>
+                <h2 className="st-section-title mb-14">{page.processTitle}</h2>
+                <div className="st-process-row">
+                  {page.processSteps.map((step, index) => (
+                    <article key={step.title} className="st-process-block">
+                      <div className="st-process-accent" aria-hidden="true" />
+                      <span className="st-process-num">{String(index + 1).padStart(2, '0')}</span>
+                      <h3 className="st-process-step-title">{step.title}</h3>
+                      <p className="st-process-step-desc">{step.description}</p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </RevealSection>
+
+            {/* ── D5: THE FILTER ── */}
+            <RevealSection className="st-section st-section--wide">
+              <div className="st-container">
+                <p className="st-eyebrow mb-4">{labels.isThisForYou}</p>
+                <h2 className="st-section-title mb-14">{page.navLabel}</h2>
+                <div className="st-fit-grid">
+                  <div>
+                    <p className="st-fit-label st-fit-label--yes">{labels.yes}</p>
+                    <ul className="st-fit-list">
+                      {page.bestFitItems.map((item) => (
+                        <li key={item} className="st-fit-item"><span className="st-fit-dash st-fit-dash--teal" aria-hidden="true">—</span><span>{item}</span></li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="st-fit-label st-fit-label--no">{labels.no}</p>
+                    <ul className="st-fit-list">
+                      {page.notFitItems.map((item) => (
+                        <li key={item} className="st-fit-item st-fit-item--muted"><span className="st-fit-dash" aria-hidden="true">—</span><span>{item}</span></li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div className="st-faq" id="faq">
+                  <p className="st-eyebrow mb-8">{labels.faq}</p>
+                  <h2 className="sr-only">{page.faqTitle}</h2>
+                  {page.faqs.map((faq, index) => (
+                    <details key={faq.question} className={`st-faq-item ${index > 0 ? 'st-faq-item--bordered' : ''}`}>
+                      <summary className="st-faq-question">{faq.question}</summary>
+                      <p className="st-faq-answer">{faq.answer}</p>
+                    </details>
+                  ))}
+                </div>
+              </div>
+            </RevealSection>
+
+            {/* ── D6: THE CLOSE ── */}
+            <RevealSection className="st-close">
+              <div className="st-container st-close-inner">
+                <p className="st-close-text">{page.ctaText}</p>
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg">{labels.startProject}</a>
+                {relatedPages.length > 0 && (
+                  <div className="st-related">
+                    <p className="st-eyebrow mb-5">{labels.alsoOffered}</p>
+                    {page.relatedServiceIds.map((relatedId, index) => {
+                      const rel = relatedPages[index];
+                      if (!rel) return null;
+                      return (
+                        <a key={relatedId} href={getServicePath(relatedId, locale)} className="st-related-row group">
+                          <span className="st-related-title">{rel.title}</span>
+                          <span className="st-related-arrow">→</span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </RevealSection>
+          </div>
         </main>
 
-        {/* ── Theater overlay (preserved) ── */}
+        {/* ── Theater overlay (shared) ── */}
         {activeProofItem && (
-          <div
-            className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4"
-            onClick={closeProofTheater}
-          >
-            <div
-              className="absolute inset-0 backdrop-blur-[6px] md:backdrop-blur-[10px]"
-              style={{ backgroundColor: 'hsl(var(--theater-backdrop) / 0.74)' }}
-            />
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)',
-              }}
-            />
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4" onClick={closeProofTheater}>
+            <div className="absolute inset-0 backdrop-blur-[6px] md:backdrop-blur-[10px]" style={{ backgroundColor: 'hsl(var(--theater-backdrop) / 0.74)' }} />
+            <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)' }} />
             <div className="relative w-full max-w-[430px]">
-              <button
-                type="button"
-                className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigateProofTheater(-1); }}
-                aria-label={labels.previewPrev}
-              >
-                <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
-              </button>
-              <button
-                type="button"
-                className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigateProofTheater(1); }}
-                aria-label={labels.previewNext}
-              >
-                <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
-              </button>
-              <div
-                className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  type="button"
-                  className="theater-control absolute right-3 top-3 z-30 h-9 w-9"
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); closeProofTheater(); }}
-                  aria-label={labels.previewClose}
-                >
-                  <X className="h-4 w-4" />
-                </button>
+              <button type="button" className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigateProofTheater(-1); }} aria-label={labels.previewPrev}><ChevronLeft className="h-4 w-4 md:h-5 md:w-5" /></button>
+              <button type="button" className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigateProofTheater(1); }} aria-label={labels.previewNext}><ChevronRight className="h-4 w-4 md:h-5 md:w-5" /></button>
+              <div className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]" onClick={(e) => e.stopPropagation()}>
+                <button type="button" className="theater-control absolute right-3 top-3 z-30 h-9 w-9" onClick={(e) => { e.preventDefault(); e.stopPropagation(); closeProofTheater(); }} aria-label={labels.previewClose}><X className="h-4 w-4" /></button>
                 <div className="relative">
-                  <TheaterVideo
-                    sources={theaterSources}
-                    poster={activeProofItem.clip.posterSrc}
-                    enableStartupFallback={isMobileViewport}
-                    startupFallbackMs={isMobileViewport ? 300 : 420}
-                  />
+                  <TheaterVideo sources={theaterSources} poster={activeProofItem.clip.posterSrc} enableStartupFallback={isMobileViewport} startupFallbackMs={isMobileViewport ? 300 : 420} />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
                     <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
                     <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
                       <div className="flex flex-wrap items-center gap-2">
-                        <p className="theater-meta-chip inline-flex max-w-[78%] items-center rounded-full px-2.5 py-1">
-                          {page.navLabel}
-                        </p>
-                        {formatDuration(activeProofItem.clip.durationSeconds) && (
-                          <p className="theater-meta-chip inline-flex items-center rounded-full px-2.5 py-1">
-                            {formatDuration(activeProofItem.clip.durationSeconds)}
-                          </p>
-                        )}
+                        <p className="theater-meta-chip inline-flex max-w-[78%] items-center rounded-full px-2.5 py-1">{page.navLabel}</p>
+                        {formatDuration(activeProofItem.clip.durationSeconds) && <p className="theater-meta-chip inline-flex items-center rounded-full px-2.5 py-1">{formatDuration(activeProofItem.clip.durationSeconds)}</p>}
                       </div>
-                      <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">
-                        {activeProofItem.example.title}
-                      </h4>
+                      <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">{activeProofItem.example.title}</h4>
                     </div>
                   </div>
                 </div>
@@ -693,10 +690,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
         )}
 
         <Footer />
-
-        <Suspense fallback={null}>
-          <FloatingContactDock />
-        </Suspense>
+        <Suspense fallback={null}><FloatingContactDock /></Suspense>
       </div>
     </>
   );

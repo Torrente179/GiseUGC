@@ -404,3 +404,54 @@ All service CSS migrated from `.svc-*` to `.st-*` (Screen Test prefix). Key clas
 
 ### Verification
 1. `npm run build` — passed, ✓ built in 3.70s, 0 errors
+
+## 2026-03-20 "Screen Test" mobile — independent app-like experience
+
+### Direction
+The desktop Screen Test layout was a responsive adaptation — the mobile view stacked the same sections. User explicitly requested an **independent app-like mobile design**, not a responsive shrink of the desktop. This pass creates two completely separate render paths: `md:hidden` for mobile, `hidden md:block` for desktop.
+
+### Mobile architecture (5 sections + sticky bar)
+1. **APP HERO** (`stm-hero`) — Full-viewport (`100svh`) video poster as background. Gisela's poster fills the screen. Title, eyebrow, and hook overlaid at bottom over a gradient. Play button centered. Tapping opens theater.
+2. **SWIPEABLE PROOF REEL** (`stm-reel`) — Horizontal scroll-snap gallery (`scroll-snap-type: x mandatory`). Cards sized at `68vw` with `9/14` aspect ratio. Each card shows poster, gradient overlay, title, duration/language chips, and play button. Native momentum scrolling.
+3. **COMPACT INFO ACCORDION** (`stm-info`) — 4 native `<details>/<summary>` blocks: What you get (deliverables), How it works (process steps with numbered circles), Is this for you (fit check with left-border indicators), Questions (nested FAQ with `+/−` toggle). Pull-quote in italic Cormorant below.
+4. **RELATED SERVICES PILLS** (`stm-related`) — Horizontal scrolling pill strip. Each related service is a rounded pill link.
+5. **CTA** (`stm-cta`) — Centered CTA text + full-width WhatsApp button.
+6. **STICKY BAR** (`stm-sticky-bar`) — Fixed to bottom of viewport. Frosted glass background (`backdrop-filter: blur(16px)`). Respects `safe-area-inset-bottom` for notched devices. Persistent WhatsApp CTA.
+
+### CSS class system
+All mobile classes use `.stm-*` prefix (Screen Test Mobile). ~35 new classes added to `index.css`:
+- Hero: `.stm-hero`, `.stm-hero-poster`, `.stm-hero-poster-img`, `.stm-hero-poster-overlay`, `.stm-hero-bottom`, `.stm-hero-title`, `.stm-hero-hook`
+- Reel: `.stm-reel`, `.stm-reel-track`, `.stm-reel-card`, `.stm-reel-card-media`, `.stm-reel-card-img`, `.stm-reel-card-gradient`, `.stm-reel-card-bottom`, `.stm-reel-card-name`, `.stm-reel-card-chips`
+- Accordion: `.stm-accordion`, `.stm-accordion-trigger`, `.stm-accordion-icon`, `.stm-accordion-body`
+- Content: `.stm-spec-item`, `.stm-spec-name`, `.stm-spec-desc`, `.stm-step`, `.stm-step-num`, `.stm-step-name`
+- Fit: `.stm-fit-heading`, `.stm-fit-item`
+- FAQ: `.stm-faq-item`, `.stm-faq-q`, `.stm-faq-a`
+- Quote: `.stm-quote-block`, `.stm-quote`
+- Related: `.stm-related`, `.stm-related-strip`, `.stm-related-pill`
+- CTA: `.stm-cta`, `.stm-cta-text`, `.stm-cta-btn`
+- Sticky: `.stm-sticky-bar`, `.stm-sticky-btn`
+
+### Zero new dependencies
+- `scroll-snap-type: x mandatory` for horizontal gallery
+- Native `<details>/<summary>` for all accordions (no JS animation lib)
+- `position: fixed` for sticky bar
+- CSS `+` icon via `::before`/`::after` pseudo-elements on `.stm-accordion-icon`
+- `env(safe-area-inset-bottom)` for notch-safe spacing
+- Tailwind `scrollbar-hide` utility for clean horizontal scrolling
+
+### SEO preservation
+- All sr-only headings (h2) preserved for crawlability
+- Breadcrumb nav present (sr-only on mobile)
+- Schema.org graph identical across both paths
+- All FAQ content in native `<details>` — crawlable
+- H1 in hero preserved
+
+### Bundle impact
+- `ServiceLandingPage.tsx`: ~420 lines → ~700 lines (added mobile path)
+- CSS: +~380 lines of `.stm-*` classes
+- `main-*.css`: 105.54 kB gzipped 18.32 kB
+
+### Verification
+1. `npm run build` — passed, ✓ built in 4.76s, 0 errors
+2. Visual verification at 375×812 (iPhone-class viewport) via Puppeteer
+3. All 3 services × 2 locales confirmed rendering correctly
