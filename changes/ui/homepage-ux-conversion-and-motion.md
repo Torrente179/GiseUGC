@@ -71,7 +71,7 @@ This is the current homepage-facing UI note. It consolidates the review-card sys
 
 ## Mobile Regression Checklist
 
-Generated at: `2026-03-20T18:28:42.873Z`
+Generated at: `2026-03-20T18:38:23.762Z`
 
 ### Automated checks
 - ✅ Targeted lint
@@ -206,3 +206,18 @@ Generated at: `2026-03-20T18:28:42.873Z`
 ### Verification
 1. `npm run build:dev`
 2. `npm run check:mobile-regression`
+
+## 2026-03-20 creator advantage section moved below services
+
+### Runtime touchpoints
+- `src/components/CreatorAdvantage.tsx`
+- `src/components/Portfolio.tsx`
+- `src/pages/Index.tsx`
+
+### What changed
+1. Extracted the "Ventaja del creador / Cobertura UGC de alta conversion para todo tu funnel" collage block out of `Portfolio.tsx` into a dedicated homepage section so it can sit directly below services on both desktop and mobile.
+2. Left the portfolio component focused on the video showcase and theater flow, avoiding mixed hierarchy where a creator-advantage sales block appeared inside the video portfolio itself.
+3. Kept the existing CTA behavior intact by preserving the hashless desktop contact jump and the mobile contact-dock open behavior in the new component.
+
+### Verification
+1. `npm run check:mobile-regression`

@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import CreatorAdvantageSection from '@/components/CreatorAdvantage';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { clearUrlHash } from '@/hooks/use-hashless-section-navigation';
 import SectionSkeleton from '@/components/motion/SectionSkeleton';
@@ -123,6 +124,7 @@ const Index = () => {
         <PortfolioSection />
       </DeferredSection>
       {isMobile ? <ServicesSection /> : null}
+      {isMobile ? <CreatorAdvantageSection /> : null}
       <DeferredSection
         enabled={isMobile}
         mountId="mobile-rating-card"
@@ -172,6 +174,7 @@ const Index = () => {
         <PortfolioSection />
       </DeferredSection>
       {!isMobile ? <ServicesSection /> : null}
+      {!isMobile ? <CreatorAdvantageSection /> : null}
       <DeferredSection
         enabled={!isMobile}
         mountId="desktop-rating-card"
