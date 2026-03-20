@@ -256,6 +256,18 @@
   }
 }
 
+/* Temporary footer suppression while the redesign is in progress.
+   Keeps the #contact anchor in the document so existing CTA scroll targets still resolve. */
+footer#contact.ft-root {
+  block-size: 1px;
+  min-block-size: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
 @layer utilities {
   .scrollbar-hide {
     -ms-overflow-style: none;
