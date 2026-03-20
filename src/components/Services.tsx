@@ -58,7 +58,7 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="studio-section bg-background pt-16 md:pt-20">
+    <section id="services" className="studio-section section-premium-canvas pt-16 md:pt-20">
       <div className="studio-container">
         <motion.div
           className="studio-header mb-12"
@@ -102,7 +102,7 @@ const Services = () => {
             <motion.a
               key={service.titleKey}
               href={getServicePath(servicePageByCard[index], locale)}
-              className="group rounded-[1.25rem] md:rounded-[1.5rem] border border-border/70 bg-card/50 p-5 md:p-8 backdrop-blur-md transition-[border-color,box-shadow] duration-[350ms] hover:border-primary/30 hover:shadow-xl"
+              className="group premium-shell premium-shell-hover rounded-[1.25rem] md:rounded-[1.5rem] p-5 md:p-8 transition-[border-color,box-shadow] duration-[350ms]"
               style={{ transitionTimingFunction: 'var(--ease-out-expo)' }}
               variants={blurRevealUp(18, 0.58)}
               whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.015 }}
@@ -110,7 +110,7 @@ const Services = () => {
               transition={springSmooth}
             >
               <motion.div
-                className="mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110"
+                className="premium-frame mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl text-primary transition-transform duration-500 group-hover:scale-110"
                 whileHover={shouldReduceMotion ? undefined : { rotate: -6, scale: 1.08 }}
                 transition={springHoverTransition}
               >

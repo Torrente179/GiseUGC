@@ -24,7 +24,7 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
   const maxRatingCount = fiverrRatingDistribution[0]?.count ?? 1;
 
   return (
-    <div className={`rounded-2xl border border-border/70 bg-card/80 backdrop-blur-sm p-4 md:p-5 ${className}`}>
+    <div className={`premium-shell rounded-2xl p-4 md:p-5 ${className}`}>
       <div className="grid grid-cols-[auto_1fr] gap-3.5 md:gap-4 items-start">
         <img
           src="/uploads/gisela-avatar-160.webp"

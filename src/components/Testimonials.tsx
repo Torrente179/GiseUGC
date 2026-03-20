@@ -209,7 +209,7 @@ const Testimonials = () => {
   };
 
   return (
-    <section id="testimonials" className="studio-section bg-background">
+    <section id="testimonials" className="studio-section section-premium-canvas">
       <div className="studio-container">
         <motion.div
           className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-10 md:mb-12"
@@ -230,7 +230,7 @@ const Testimonials = () => {
           <motion.div className="hidden md:flex items-center gap-3" variants={blurRevealUp(18, 0.62)}>
             <motion.button
               onClick={prevTestimonial}
-              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
+              className="premium-control h-11 w-11 rounded-full flex items-center justify-center"
               aria-label={t('testimonials.ariaPrev')}
               whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.06 }}
               whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
@@ -240,7 +240,7 @@ const Testimonials = () => {
             </motion.button>
             <motion.button
               onClick={nextTestimonial}
-              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
+              className="premium-control h-11 w-11 rounded-full flex items-center justify-center"
               aria-label={t('testimonials.ariaNext')}
               whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.06 }}
               whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
@@ -276,11 +276,11 @@ const Testimonials = () => {
           >
             {TESTIMONIAL_IMAGES.map((testimonial, index) => (
               <article key={testimonial.id} className="min-w-full">
-                <div className="rounded-[1.5rem] border border-border/80 bg-card/70 p-3 md:p-4 lg:p-5">
+                <div className="premium-shell rounded-[1.5rem] p-3 md:p-4 lg:p-5">
                   <button
                     type="button"
                     onClick={() => setZoomedIndex(index)}
-                    className="mx-auto block w-full max-w-[980px] overflow-hidden rounded-2xl border border-border/70 bg-background/55 transition-colors hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:max-w-[760px] lg:max-w-[820px]"
+                    className="premium-frame mx-auto block w-full max-w-[980px] overflow-hidden rounded-2xl transition-colors hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:max-w-[760px] lg:max-w-[820px]"
                     aria-label={`Open testimonial image ${index + 1}`}
                   >
                     <img
@@ -304,7 +304,7 @@ const Testimonials = () => {
             <button
               type="button"
               onClick={() => scrollThumbnailRail('left')}
-              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-card text-primary transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="premium-control inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label="Scroll testimonials left"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -320,7 +320,7 @@ const Testimonials = () => {
                   key={testimonial.id}
                   ref={setThumbnailButtonRef(index)}
                   onClick={() => setActiveIndex(index)}
-                  className={`relative h-16 w-24 shrink-0 snap-start overflow-hidden rounded-lg border bg-background/55 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:h-20 md:w-32 ${
+                  className={`premium-frame relative h-16 w-24 shrink-0 snap-start overflow-hidden rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:h-20 md:w-32 ${
                     activeIndex === index ? 'border-primary/70 ring-1 ring-primary/40' : 'border-border/65 hover:border-primary/30'
                   }`}
                   aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
@@ -344,7 +344,7 @@ const Testimonials = () => {
             <button
               type="button"
               onClick={() => scrollThumbnailRail('right')}
-              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-card text-primary transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="premium-control inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label="Scroll testimonials right"
             >
               <ChevronRight className="h-4 w-4" />

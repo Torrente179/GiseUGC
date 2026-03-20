@@ -87,7 +87,7 @@ const SocialProof = () => {
 
   return (
     <motion.section
-      className="relative z-20 py-20 bg-secondary/35 border-y border-muted/30"
+      className="section-premium-band relative z-20 py-20"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.32 }}

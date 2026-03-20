@@ -1008,7 +1008,7 @@ const Portfolio = () => {
 
 
   return (
-    <section ref={portfolioSectionRef} id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
+    <section ref={portfolioSectionRef} id="portfolio" className="studio-section section-premium-canvas pt-20 pb-16">
       {!isTheaterOpen && instantPrewarmSources.length > 0 && (
         <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
           {instantPrewarmSources.map((src, index) => (
@@ -1170,7 +1170,7 @@ const Portfolio = () => {
                       type="button"
                       key={clip.id}
                       data-reel-card="true"
-                      className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-manipulation"
+                      className="premium-frame premium-shell-hover group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden text-left transition-colors snap-center touch-manipulation"
                       onMouseEnter={() => scheduleInteractionPrewarm(clip)}
                       onMouseLeave={clearInteractionPrewarm}
                       onPointerDown={() => scheduleInteractionPrewarm(clip)}

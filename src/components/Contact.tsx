@@ -76,7 +76,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="studio-section bg-secondary/16">
+    <section id="contact" className="studio-section section-premium-band">
       <div className="studio-container">
         <div className="studio-header">
           <div>
@@ -97,8 +97,8 @@ const Contact = () => {
               <p className="strategic-body text-muted-foreground mb-7">{t('contact.description')}</p>
 
               <div className="space-y-4">
-                <div className="rounded-xl border border-border/70 bg-background/55 px-4 py-3.5 flex items-center gap-3.5">
-                  <span className="h-10 w-10 rounded-full border border-border/70 bg-card/90 flex items-center justify-center">
+                <div className="premium-frame rounded-xl px-4 py-3.5 flex items-center gap-3.5">
+                  <span className="premium-frame h-10 w-10 rounded-full flex items-center justify-center">
                     <Mail className="h-4 w-4 text-primary" />
                   </span>
                   <div>
@@ -107,8 +107,8 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-border/70 bg-background/55 px-4 py-3.5 flex items-center gap-3.5">
-                  <span className="h-10 w-10 rounded-full border border-border/70 bg-card/90 flex items-center justify-center">
+                <div className="premium-frame rounded-xl px-4 py-3.5 flex items-center gap-3.5">
+                  <span className="premium-frame h-10 w-10 rounded-full flex items-center justify-center">
                     <MessageSquare className="h-4 w-4 text-primary" />
                   </span>
                   <div>
