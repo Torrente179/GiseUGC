@@ -1160,6 +1160,11 @@
     background: radial-gradient(circle, hsl(var(--accent) / 0.1) 0%, transparent 70%);
   }
 
+  .dark .st-hero::before,
+  .dark .st-hero::after {
+    opacity: 0.3;
+  }
+
   @media (min-width: 768px) {
     .st-hero {
       padding-top: 8rem;
@@ -1382,6 +1387,12 @@
     border-bottom: 1px solid hsl(var(--border) / 0.15);
   }
 
+  .dark .st-section--warm {
+    background: hsl(var(--card));
+    border-top-color: hsl(var(--border) / 0.25);
+    border-bottom-color: hsl(var(--border) / 0.25);
+  }
+
   .st-section--wide {
     padding-top: 3rem;
     padding-bottom: 5rem;
@@ -1454,6 +1465,12 @@
       backdrop-filter: blur(8px);
       box-shadow: 0 20px 50px -28px hsl(var(--foreground) / 0.12);
     }
+
+    .dark .st-spec-sheet {
+      background: hsl(var(--card) / 0.8);
+      border-color: hsl(var(--border) / 0.4);
+      box-shadow: 0 20px 50px -28px rgba(0, 0, 0, 0.4);
+    }
   }
 
   .st-spec-list {
@@ -1501,6 +1518,13 @@
       linear-gradient(180deg, hsl(var(--pure-linen)) 0%, hsl(var(--background)) 52%, hsl(var(--pure-linen)) 100%);
   }
 
+  .dark .st-proof-wall {
+    background:
+      radial-gradient(circle at 14% 18%, hsl(var(--primary) / 0.08), transparent 28%),
+      radial-gradient(circle at 84% 14%, hsl(var(--primary) / 0.05), transparent 28%),
+      hsl(var(--card));
+  }
+
   @media (min-width: 768px) {
     .st-proof-wall { padding: 5.5rem 0 7rem; }
   }
@@ -1528,6 +1552,11 @@
     background: radial-gradient(circle, hsl(var(--secondary) / 0.18) 0%, transparent 68%);
     filter: blur(20px);
     opacity: 0.65;
+  }
+
+  .dark .st-proof-wall::before,
+  .dark .st-proof-wall::after {
+    opacity: 0.2;
   }
 
   .st-proof-gallery {
@@ -1592,6 +1621,11 @@
     transition:
       transform var(--duration-medium) var(--ease-premium),
       box-shadow var(--duration-medium) var(--ease-premium);
+  }
+
+  .dark .st-proof-stage {
+    background: linear-gradient(180deg, hsl(var(--card)) 0%, hsl(222 24% 14%) 100%);
+    box-shadow: 0 30px 76px -42px rgba(0, 0, 0, 0.5);
   }
 
   .st-proof-stage::before {
@@ -1663,9 +1697,19 @@
     backdrop-filter: blur(14px);
   }
 
+  .dark .st-play-btn--proof {
+    background: hsl(var(--card) / 0.85);
+    border-color: hsl(var(--border) / 0.5);
+    color: hsl(var(--primary));
+  }
+
   .st-proof-column-trigger:hover .st-play-btn--proof {
     transform: translate(-50%, -50%) scale(1.06);
     background: hsl(var(--pure-linen));
+  }
+
+  .dark .st-proof-column-trigger:hover .st-play-btn--proof {
+    background: hsl(var(--card));
   }
 
   .st-proof-copy {
@@ -1855,6 +1899,11 @@
       border: 1px solid hsl(var(--primary) / 0.08);
     }
 
+    .dark .st-fit-yes {
+      background: hsl(var(--primary) / 0.06);
+      border-color: hsl(var(--primary) / 0.12);
+    }
+
     .st-fit-no {
       padding-top: 2rem;
       opacity: 0.65;
@@ -1985,11 +2034,18 @@
   .st-close {
     padding: 5rem 0 3rem;
     background:
-      radial-gradient(ellipse at 20% 40%, hsl(var(--primary) / 0.06) 0%, transparent 50%),
-      linear-gradient(180deg, hsl(var(--warm-sand)) 0%, hsl(var(--pure-linen)) 100%);
+      radial-gradient(ellipse at 25% 50%, hsl(var(--primary) / 0.05) 0%, transparent 55%),
+      hsl(var(--background));
     position: relative;
     overflow: hidden;
-    border-top: 1px solid hsl(var(--foreground) / 0.04);
+    border-top: 1px solid hsl(var(--border) / 0.2);
+  }
+
+  .dark .st-close {
+    background:
+      radial-gradient(ellipse at 25% 50%, hsl(var(--primary) / 0.08) 0%, transparent 55%),
+      hsl(var(--card));
+    border-top-color: hsl(var(--border) / 0.3);
   }
 
   @media (min-width: 768px) {
@@ -2649,6 +2705,11 @@
     padding: 4.5rem 0 2.5rem;
   }
 
+  .dark .ft-desktop {
+    background: hsl(220 32% 6%);
+    border-top: 1px solid hsl(var(--border) / 0.2);
+  }
+
   .ft-container {
     width: 100%;
     max-width: 1200px;
@@ -2782,6 +2843,11 @@
     padding: 2.5rem 1.25rem 1.5rem;
     /* Extra bottom padding for sticky bar on service pages */
     padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .dark .ftm-mobile {
+    background: hsl(220 32% 6%);
+    border-top: 1px solid hsl(var(--border) / 0.2);
   }
 
   .ftm-top {
