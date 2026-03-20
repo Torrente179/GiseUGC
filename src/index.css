@@ -1127,8 +1127,37 @@
      1. COLD OPEN — Hero
      ════════════════════════════════ */
   .st-hero {
+    position: relative;
     padding-top: 7rem;
     padding-bottom: 2rem;
+    overflow: hidden;
+  }
+
+  /* Decorative gradient orbs behind hero */
+  .st-hero::before,
+  .st-hero::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(80px);
+    opacity: 0.5;
+  }
+
+  .st-hero::before {
+    width: 420px;
+    height: 420px;
+    top: -8%;
+    right: -5%;
+    background: radial-gradient(circle, hsl(var(--primary) / 0.12) 0%, transparent 70%);
+  }
+
+  .st-hero::after {
+    width: 350px;
+    height: 350px;
+    bottom: -10%;
+    left: -3%;
+    background: radial-gradient(circle, hsl(var(--accent) / 0.1) 0%, transparent 70%);
   }
 
   @media (min-width: 768px) {
@@ -1329,6 +1358,17 @@
     .st-section--tight { padding-top: 5rem; padding-bottom: 4rem; }
   }
 
+  /* Warm cream background band for alternating sections */
+  .st-section--warm {
+    background: linear-gradient(
+      180deg,
+      hsl(var(--warm-sand) / 0.12) 0%,
+      hsl(var(--warm-sand) / 0.06) 100%
+    );
+    border-top: 1px solid hsl(var(--border) / 0.15);
+    border-bottom: 1px solid hsl(var(--border) / 0.15);
+  }
+
   .st-section--wide {
     padding-top: 3rem;
     padding-bottom: 5rem;
@@ -1358,6 +1398,8 @@
     line-height: 1.4;
     letter-spacing: -0.02em;
     color: hsl(var(--foreground));
+    padding-left: 1.5rem;
+    border-left: 2px solid hsl(var(--primary) / 0.3);
   }
 
   .st-market-strip {
@@ -1388,9 +1430,16 @@
   @media (min-width: 1024px) {
     .st-spec-sheet {
       border-top: none;
-      border-left: 1px solid hsl(var(--border) / 0.3);
+      border-left: none;
       padding-top: 0;
-      padding-left: 3rem;
+      padding-left: 2.5rem;
+      padding-right: 2rem;
+      padding-bottom: 1.5rem;
+      background: hsl(var(--background) / 0.7);
+      border: 1px solid hsl(var(--border) / 0.25);
+      border-radius: 1.25rem;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 20px 50px -28px hsl(var(--foreground) / 0.12);
     }
   }
 
@@ -1683,18 +1732,35 @@
     padding: 1.5rem;
     background: hsl(var(--background));
     position: relative;
+    transition: background-color var(--duration-fast) var(--ease-out-expo),
+                box-shadow var(--duration-fast) var(--ease-out-expo);
   }
 
   @media (min-width: 768px) {
     .st-process-block { padding: 2rem; }
   }
 
+  .st-process-block:hover {
+    background: hsl(var(--primary) / 0.03);
+  }
+
+  .st-process-block:hover .st-process-accent {
+    width: 3rem;
+    background: hsl(var(--primary));
+  }
+
+  .st-process-block:hover .st-process-num {
+    color: hsl(var(--primary) / 0.5);
+  }
+
   .st-process-accent {
     width: 2rem;
     height: 2px;
-    background: hsl(var(--primary));
+    background: hsl(var(--primary) / 0.5);
     margin-bottom: 1.2rem;
     border-radius: 1px;
+    transition: width var(--duration-fast) var(--ease-out-expo),
+                background-color var(--duration-fast) var(--ease-out-expo);
   }
 
   .st-process-num {
@@ -1803,8 +1869,20 @@
 
   /* ── FAQ — Minimal ── */
   .st-faq {
-    border-top: 1px solid hsl(var(--border) / 0.25);
-    padding-top: 2.5rem;
+    border-top: none;
+    padding-top: 3rem;
+    position: relative;
+  }
+
+  .st-faq::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, hsl(var(--primary) / 0.25), hsl(var(--accent) / 0.2), transparent);
+    border-radius: 9999px;
   }
 
   .st-faq-item {
@@ -1861,7 +1939,24 @@
      ════════════════════════════════ */
   .st-close {
     padding: 5rem 0 3rem;
-    border-top: 1px solid hsl(var(--border) / 0.2);
+    background: hsl(var(--deep-ebony));
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle teal glow behind CTA */
+  .st-close::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, hsl(var(--primary) / 0.08) 0%, transparent 70%);
+    pointer-events: none;
+    filter: blur(60px);
   }
 
   @media (min-width: 768px) {
@@ -1873,6 +1968,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    z-index: 1;
   }
 
   .st-close-text {
@@ -1881,7 +1978,7 @@
     font-size: clamp(1.2rem, 2.5vw, 2rem);
     line-height: 1.4;
     letter-spacing: -0.02em;
-    color: hsl(var(--foreground) / 0.8);
+    color: hsl(var(--pure-linen) / 0.7);
     max-width: 580px;
     margin-bottom: 2rem;
   }
@@ -1897,18 +1994,22 @@
     .st-related { margin-top: 5rem; }
   }
 
+  .st-related .st-eyebrow {
+    color: hsl(var(--pure-linen) / 0.25);
+  }
+
   .st-related-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.9rem 0;
-    border-bottom: 1px solid hsl(var(--border) / 0.2);
+    border-bottom: 1px solid hsl(var(--pure-linen) / 0.08);
     text-decoration: none;
     transition: padding-left var(--duration-fast) var(--ease-out-expo);
   }
 
   .st-related-row:first-of-type {
-    border-top: 1px solid hsl(var(--border) / 0.2);
+    border-top: 1px solid hsl(var(--pure-linen) / 0.08);
   }
 
   .st-related-row:hover {
@@ -1920,17 +2021,17 @@
     font-weight: 500;
     font-size: 1.1rem;
     letter-spacing: -0.02em;
-    color: hsl(var(--foreground) / 0.7);
+    color: hsl(var(--pure-linen) / 0.5);
     transition: color var(--duration-fast) var(--ease-out-expo);
   }
 
   .st-related-row:hover .st-related-title {
-    color: hsl(var(--foreground));
+    color: hsl(var(--pure-linen) / 0.85);
   }
 
   .st-related-arrow {
     font-size: 1.1rem;
-    color: hsl(var(--foreground) / 0.25);
+    color: hsl(var(--pure-linen) / 0.15);
     transition: color var(--duration-fast) var(--ease-out-expo),
                 transform var(--duration-fast) var(--ease-out-expo);
   }

@@ -529,7 +529,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
             </section>
 
             {/* ── D2: THE BRIEF ── */}
-            <RevealSection className="st-section st-section--tight">
+            <RevealSection className="st-section st-section--tight st-section--warm">
               <div className="st-container">
                 <div className="st-brief-grid">
                   <div className="st-brief-statement">
@@ -605,7 +605,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
             )}
 
             {/* ── D4: THE PROCESS ── */}
-            <RevealSection className="st-section">
+            <RevealSection className="st-section st-section--warm">
               <div className="st-container">
                 <p className="st-eyebrow mb-4">{labels.howItWorks}</p>
                 <h2 className="st-section-title mb-14">{page.processTitle}</h2>

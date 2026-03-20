@@ -471,3 +471,36 @@ All mobile classes use `.stm-*` prefix (Screen Test Mobile). ~35 new classes add
 
 ### Verification
 1. `npm run build`
+
+## 2026-03-20 desktop visual cadence — backgrounds, accents, and dark closer
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+- `src/index.css`
+
+### What changed
+1. Added gradient orbs to the hero section via `::before` and `::after` pseudo-elements on `.st-hero`, creating a subtle warm-teal radial glow in the upper corners instead of a flat white background.
+2. Introduced `.st-section--warm` — a warm cream background band (`--warm-sand` gradient) applied to the Brief (D2) and Process (D4) sections, breaking the monotonous white page flow.
+3. Added a teal left-accent border on `.st-pullquote` (the large serif editorial intro text) for visual anchoring.
+4. Gave `.st-spec-sheet` (deliverables panel) a glass-panel treatment: `backdrop-filter: blur(20px)`, rounded corners, subtle shadow, and a faint `pure-linen/0.6` background.
+5. Added hover interactions on `.st-process-block`: the teal accent bar grows from 32px to 48px width, and a warm tint background appears on hover.
+6. Converted `.st-close` (CTA closer section) into a dark deep-ebony background with a radial coastal-teal glow behind the CTA button, creating a cinematic closing moment.
+7. Added a gradient divider on `.st-faq::before` — a thin line transitioning from `--coastal-teal` to accent, giving the FAQ section a subtle top border.
+8. Updated `.st-related-*` classes for dark background compatibility since they now sit below the dark closer section.
+
+### CSS classes added/modified
+- `.st-hero::before`, `.st-hero::after` — gradient orbs
+- `.st-section--warm` — cream background band
+- `.st-pullquote` — teal left border accent
+- `.st-spec-sheet` — glass panel treatment
+- `.st-process-block` — hover accent bar + tint
+- `.st-close` — dark background + teal radial glow
+- `.st-faq::before` — gradient divider
+- `.st-related-card`, `.st-related-label` — dark-bg compatible colors
+
+### SEO guardrail
+This pass added no new headings, did not change heading hierarchy, and did not modify metadata, schema, canonicals, or sitemap behavior.
+
+### Verification
+1. `npm run build` — passed
+2. Visual verification at 1440×900 across all desktop sections (Hero, Brief, Proof, Process, Filter, FAQ, Close, Related, Footer)
