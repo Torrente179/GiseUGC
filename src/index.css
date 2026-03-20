@@ -1058,10 +1058,10 @@
   }
 
   .st-chip--dark {
-    border-color: hsl(var(--border) / 0.4);
-    color: hsl(var(--foreground) / 0.5);
+    border-color: hsl(var(--pure-linen) / 0.18);
+    color: hsl(var(--pure-linen) / 0.5);
     backdrop-filter: none;
-    background: transparent;
+    background: hsl(var(--pure-linen) / 0.04);
   }
 
   .st-cta-primary {
@@ -1321,12 +1321,12 @@
   }
 
   .st-section--tight {
-    padding-top: 4rem;
-    padding-bottom: 3rem;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
   }
 
   @media (min-width: 768px) {
-    .st-section--tight { padding-top: 6rem; padding-bottom: 4rem; }
+    .st-section--tight { padding-top: 5rem; padding-bottom: 4rem; }
   }
 
   .st-section--wide {
