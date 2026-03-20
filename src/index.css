@@ -1905,8 +1905,15 @@
     }
 
     .st-fit-no {
-      padding-top: 2rem;
-      opacity: 0.65;
+      background: hsl(var(--foreground) / 0.03);
+      border-radius: 1rem;
+      padding: 2rem 2.25rem;
+      border: 1px solid hsl(var(--foreground) / 0.06);
+    }
+
+    .dark .st-fit-no {
+      background: hsl(var(--foreground) / 0.05);
+      border-color: hsl(var(--foreground) / 0.10);
     }
   }
 
@@ -1924,7 +1931,7 @@
   }
 
   .st-fit-label--no {
-    color: hsl(var(--foreground) / 0.35);
+    color: hsl(var(--foreground) / 0.55);
   }
 
   .st-fit-list {
@@ -1948,13 +1955,13 @@
   }
 
   .st-fit-item--muted {
-    color: hsl(var(--foreground) / 0.4);
+    color: hsl(var(--foreground) / 0.55);
   }
 
   .st-fit-dash {
     flex-shrink: 0;
     font-weight: 700;
-    color: hsl(var(--foreground) / 0.18);
+    color: hsl(var(--foreground) / 0.3);
   }
 
   .st-fit-dash--teal {

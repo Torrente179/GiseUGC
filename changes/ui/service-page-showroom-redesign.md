@@ -546,3 +546,24 @@ No heading changes, no metadata changes, no schema changes.
 1. `npm run build` — passed
 2. Visual verification at 1440×900 on all 3 service pages (bilingual, spokesperson, ads)
 3. Mobile 375×812 confirmed unaffected — separate render path
+
+## 2026-03-20 fit-vs-not-fit "No, si" card design parity
+
+### Problem
+The "No, si" column on desktop had `opacity: 0.65` and no card treatment — just bare `padding-top: 2rem`. It looked unfinished compared to the styled "Sí, sí" card on the left.
+
+### Changes (`src/index.css`)
+- `.st-fit-no` — replaced `opacity: 0.65` + bare padding with a proper card: subtle neutral background (`foreground/0.03`), `border-radius: 1rem`, `padding: 2rem 2.25rem`, and a light border (`foreground/0.06`). Added dark-mode variant.
+- `.st-fit-label--no` — color opacity bumped from `0.35` → `0.55` for readability.
+- `.st-fit-item--muted` — color opacity bumped from `0.4` → `0.55`.
+- `.st-fit-dash` (neutral dashes) — color opacity bumped from `0.18` → `0.3`.
+
+### Result
+Both columns now read as proper cards with distinct personalities — teal-tinted for "yes", warm-neutral for "no" — without the right side looking like an afterthought.
+
+### SEO guardrail
+No heading changes, no metadata changes, no schema changes. CSS-only.
+
+### Verification
+1. Desktop 1440×900 — both cards visually balanced, inspected computed styles confirmed
+2. No console errors related to changes
