@@ -455,3 +455,19 @@ All mobile classes use `.stm-*` prefix (Screen Test Mobile). ~35 new classes add
 1. `npm run build` — passed, ✓ built in 4.76s, 0 errors
 2. Visual verification at 375×812 (iPhone-class viewport) via Puppeteer
 3. All 3 services × 2 locales confirmed rendering correctly
+
+## 2026-03-20 desktop proof section — editorial triptych redesign
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+- `src/index.css`
+
+### What changed
+1. Replaced the dark split-card desktop proof block with a lighter editorial triptych that keeps the same example titles and descriptions already defined in `service-pages.ts`.
+2. Moved the desktop section from `proofExamples.slice(1)` to the full `proofExamples` list so the section now reads as a complete three-card gallery instead of a hero sample plus two leftovers.
+3. Rebuilt the desktop proof markup around tall image-first cards with staggered vertical rhythm, centered play controls, serif italic headlines, and restrained metadata chips below each card.
+4. Swapped the heavy cocoa background for layered linen, teal, and sand gradients drawn from the existing homepage palette tokens in `src/index.css`, so the section now feels native to the live brand system.
+5. Left the mobile proof gallery and the service-page wording unchanged; this pass is strictly a desktop visual redesign.
+
+### Verification
+1. `npm run build`

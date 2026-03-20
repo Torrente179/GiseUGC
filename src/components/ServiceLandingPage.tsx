@@ -551,30 +551,46 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
             </RevealSection>
 
             {/* ── D3: THE PROOF ── */}
-            {proofExamples.length > 1 && (
+            {proofExamples.length > 0 && (
               <RevealSection className="st-proof-wall" id="examples">
                 <div className="st-container">
-                  <p className="st-eyebrow st-eyebrow--light mb-14">{labels.theWork}</p>
+                  <p className="st-eyebrow mb-10">{labels.theWork}</p>
                   <h2 className="sr-only">{page.featuredTitle}</h2>
-                  <div className="st-proof-stack">
-                    {proofExamples.slice(1).map(({ example, clip }, index) => {
+                  <div className="st-proof-gallery">
+                    {proofExamples.map(({ example, clip }, index) => {
                       const duration = formatDuration(clip.durationSeconds);
                       return (
-                        <button key={example.clipId} type="button" onClick={() => openProofClip(index + 1)} aria-label={`${labels.openSample}: ${example.title}`} className="st-proof-card group">
-                          <div className="st-proof-card-media">
-                            <img src={clip.posterSrc} alt={example.title} className="st-proof-card-img" loading="lazy" decoding="async" />
-                            <div className="st-proof-card-overlay" />
-                            <div className="st-play-btn st-play-btn--small"><Play className="h-4 w-4 ml-0.5" /></div>
-                          </div>
-                          <div className="st-proof-card-info">
-                            <h3 className="st-proof-card-title">{example.title}</h3>
-                            <p className="st-proof-card-desc">{example.description}</p>
-                            <div className="st-proof-card-meta">
-                              {duration && <span className="st-chip st-chip--dark">{duration}</span>}
-                              {clip.language && <span className="st-chip st-chip--dark">{clip.language === 'es' ? 'Español' : 'English'}</span>}
+                        <article key={example.clipId} className={`st-proof-column st-proof-column--${(index % 3) + 1}`}>
+                          <button
+                            type="button"
+                            onClick={() => openProofClip(index)}
+                            aria-label={`${labels.openSample}: ${example.title}`}
+                            className="st-proof-column-trigger group"
+                          >
+                            <div className="st-proof-stage">
+                              <img
+                                src={clip.posterSrc}
+                                alt={example.title}
+                                className="st-proof-stage-poster"
+                                loading="lazy"
+                                decoding="async"
+                              />
+                              <div className="st-proof-stage-overlay" />
+                              <div className="st-play-btn st-play-btn--proof">
+                                <Play className="h-4 w-4 ml-0.5" />
+                              </div>
                             </div>
-                          </div>
-                        </button>
+
+                            <div className="st-proof-copy">
+                              <h3 className="st-proof-headline">{example.title}</h3>
+                              <p className="st-proof-body">{example.description}</p>
+                              <div className="st-proof-meta">
+                                {duration && <span className="st-proof-meta-chip">{duration}</span>}
+                                {clip.language && <span className="st-proof-meta-chip">{clip.language === 'es' ? 'Español' : 'English'}</span>}
+                              </div>
+                            </div>
+                          </button>
+                        </article>
                       );
                     })}
                   </div>
