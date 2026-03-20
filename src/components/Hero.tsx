@@ -269,41 +269,34 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               </div>
             </motion.div>
 
-            {/* Mobile-only: Single auto-cycling phone frame */}
+            {/* Mobile-only: Fixed 4-card reel strip (thumbnails rotate daily) */}
             <motion.div
-              className="lg:hidden flex flex-col items-center gap-4"
+              className="lg:hidden w-full"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
-              <a href="#portfolio" onClick={handleHashLinkClick} className="hero-phone-frame hero-phone-frame--mobile cursor-pointer">
-                <div className="hero-phone-notch" />
-                <AnimatePresence mode="popLayout" initial={false}>
-                  <motion.img
-                    key={currentClip.id}
-                    className="hero-phone-video"
-                    src={currentClip.posterSrc}
-                    alt=""
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 1.0, ease: 'easeInOut' }}
-                  />
-                </AnimatePresence>
-                <div className="absolute bottom-2.5 left-2.5 z-10 flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-sm px-2 py-0.5">
-                  <Play className="w-2 h-2 text-white fill-white" />
-                  <span className="text-[8px] font-bold uppercase tracking-prestige text-white/90">UGC Reel</span>
-                </div>
-              </a>
-              {/* Dot indicators */}
-              <div className="flex items-center gap-1.5">
-                {LEGACY_REEL_CLIPS.slice(0, 6).map((clip, i) => (
-                  <span
+              <div className="grid grid-cols-4 gap-2.5 px-1">
+                {(() => {
+                  const dayOffset = Math.floor(Date.now() / 86400000) % LEGACY_REEL_CLIPS.length;
+                  return Array.from({ length: 4 }, (_, i) =>
+                    LEGACY_REEL_CLIPS[(dayOffset + i) % LEGACY_REEL_CLIPS.length]
+                  );
+                })().map((clip) => (
+                  <a
                     key={clip.id}
-                    className={`block rounded-full transition-all duration-300 ${
-                      i === currentClipIndex % 6
-                        ? 'w-5 h-1.5 bg-white/80'
-                        : 'w-1.5 h-1.5 bg-white/25'
-                    }`}
-                  />
+                    href="#portfolio"
+                    onClick={handleHashLinkClick}
+                    className="aspect-[9/16] rounded-xl overflow-hidden border border-white/15 relative group"
+                  >
+                    <img
+                      src={clip.posterSrc}
+                      alt=""
+                      className="w-full h-full object-cover transition-transform duration-300 group-active:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                      <Play className="w-4 h-4 text-white/80 fill-white/80" />
+                    </div>
+                  </a>
                 ))}
               </div>
             </motion.div>
