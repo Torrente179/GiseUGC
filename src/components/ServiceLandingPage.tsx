@@ -5,6 +5,7 @@ import { getHomePath, getHomeSectionHref, getServicePath } from '@/lib/locale-pa
 import { getServicePageContent, getRelatedServiceSummaries } from '@/data/service-pages';
 import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import PageSeo from '@/components/PageSeo';
 import TheaterVideo from '@/components/media/TheaterVideo';
 

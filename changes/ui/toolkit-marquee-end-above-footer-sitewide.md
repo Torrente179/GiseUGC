@@ -21,3 +21,16 @@ Tracks the follow-up placement correction that makes the `El toolkit completo pa
 ### SEO impact
 - No route, metadata, schema, canonical, or localized copy changes.
 - The adjustment is limited to layout composition and footer placement in the shared React templates.
+
+## 2026-03-20 service-page footer import regression fix
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+
+### What changed
+1. Restored the `Footer` import inside the shared service-page template after the footer was re-mounted at the bottom of the page.
+2. This fixes the service-route runtime crash caused by rendering `<Footer />` without the symbol being in scope.
+
+### Verification
+1. `npx tsc --noEmit`
+2. `npx eslint src/components/ServiceLandingPage.tsx`
