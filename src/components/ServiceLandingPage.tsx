@@ -1,5 +1,5 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Check, Play, X, Plus, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getHomeSectionHref, getServicePath } from '@/lib/locale-path';
 import { getServicePageContent, getRelatedServiceSummaries } from '@/data/service-pages';
@@ -12,14 +12,10 @@ import TheaterVideo from '@/components/media/TheaterVideo';
 const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
-const SERVICE_HERO_BACKGROUND_SRC = '/uploads/services-hero-background.jpg';
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
-const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
 
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
-
 const clipMap = new Map(LEGACY_REEL_CLIPS.map((clip) => [clip.id, clip]));
-
 const formatDuration = (seconds?: number) => (seconds ? `${Math.round(seconds)}s` : null);
 
 type ServiceLandingPageProps = {
@@ -31,34 +27,46 @@ const localeLabels = {
   es: {
     home: 'Inicio',
     services: 'Servicios',
+    startProject: 'Empezar proyecto',
     openSample: 'Ver muestra',
-    useWhatsApp: 'WhatsApp',
-    useFiverr: 'Fiverr',
-    relatedLink: 'Ver servicio',
-    scrollDown: 'Explorar',
-    featuredWorkLabel: 'Trabajo Destacado',
-    featuredWorkSubtitle: 'Una selección breve entre demos, piezas de portavoz y reviews recientes.',
+    moreWork: 'Ver todos los ejemplos',
+    theWork: 'El trabajo',
+    whatYouGet: 'Lo que recibes',
+    isThisForYou: '¿Es para ti?',
+    yes: 'Sí, si',
+    no: 'No, si',
+    howItWorks: 'Así funciona',
+    faq: 'Preguntas',
+    letsWork: 'Siguiente paso',
+    relatedLink: 'Ver servicio →',
     previewClose: 'Cerrar vista previa',
     previewPrev: 'Clip anterior',
     previewNext: 'Siguiente clip',
+    alsoOffered: 'También ofrezco',
   },
   en: {
     home: 'Home',
     services: 'Services',
+    startProject: 'Start a project',
     openSample: 'View sample',
-    useWhatsApp: 'WhatsApp',
-    useFiverr: 'Fiverr',
-    relatedLink: 'View service',
-    scrollDown: 'Explore',
-    featuredWorkLabel: 'Featured Work',
-    featuredWorkSubtitle: 'A brief selection from demos, spokesperson pieces, and recent reviews.',
+    moreWork: 'View all examples',
+    theWork: 'The work',
+    whatYouGet: 'What you get',
+    isThisForYou: 'Is this for you?',
+    yes: 'Yes, if',
+    no: 'Not ideal if',
+    howItWorks: 'How it works',
+    faq: 'Questions',
+    letsWork: 'Next step',
+    relatedLink: 'View service →',
     previewClose: 'Close preview',
     previewPrev: 'Previous clip',
     previewNext: 'Next clip',
+    alsoOffered: 'Also offered',
   },
 } as const;
 
-/* ── Scroll-reveal hook ── */
+/* ── Scroll-reveal hook (IntersectionObserver, CSS-only animation) ── */
 function useScrollReveal<T extends HTMLElement>() {
   const ref = useRef<T>(null);
   useEffect(() => {
@@ -74,7 +82,7 @@ function useScrollReveal<T extends HTMLElement>() {
           observer.unobserve(node);
         }
       },
-      { rootMargin: '0px 0px -60px 0px', threshold: 0.08 },
+      { rootMargin: '0px 0px -40px 0px', threshold: 0.06 },
     );
     observer.observe(node);
     return () => observer.disconnect();
@@ -82,27 +90,32 @@ function useScrollReveal<T extends HTMLElement>() {
   return ref;
 }
 
-/* ── Section wrapper with reveal ── */
 function RevealSection({
   children,
   className = '',
   id,
+  as: Tag = 'section',
 }: {
   children: React.ReactNode;
   className?: string;
   id?: string;
+  as?: 'section' | 'div';
 }) {
   const ref = useScrollReveal<HTMLElement>();
   return (
-    <section ref={ref} id={id} className={`svc-reveal ${className}`}>
+    <Tag ref={ref} id={id} className={`svc-reveal ${className}`}>
       {children}
-    </section>
+    </Tag>
   );
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   SCREEN TEST — Service Landing Page
+   Direction: A24 meets Apple. Video-first. One CTA. No filler.
+   ════════════════════════════════════════════════════════════════════ */
+
 const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
   const page = getServicePageContent(serviceId, locale);
-  const alternateLocale = locale === 'es' ? 'en' : 'es';
   const labels = localeLabels[locale];
   const relatedPages = getRelatedServiceSummaries(page.relatedServiceIds, locale);
 
@@ -119,11 +132,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     [page.featuredExamples],
   );
 
-  /* ── Mobile deliverable expand state ── */
-  const [expandedDeliverable, setExpandedDeliverable] = useState<number | null>(null);
-  const toggleDeliverable = useCallback((index: number) => {
-    setExpandedDeliverable((prev) => (prev === index ? null : index));
-  }, []);
+  /* ── Theater state ── */
   const [activeProofIndex, setActiveProofIndex] = useState<number | null>(null);
   const [isMobileViewport, setIsMobileViewport] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -144,16 +153,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     [proofExamples.length],
   );
 
-  const closeProofTheater = useCallback(() => {
-    setActiveProofIndex(null);
-  }, []);
+  const closeProofTheater = useCallback(() => setActiveProofIndex(null), []);
 
   const navigateProofTheater = useCallback(
     (direction: 1 | -1) => {
       if (proofExamples.length === 0) return;
-      setActiveProofIndex((previousIndex) => {
-        if (previousIndex === null) return previousIndex;
-        return (previousIndex + direction + proofExamples.length) % proofExamples.length;
+      setActiveProofIndex((prev) => {
+        if (prev === null) return prev;
+        return (prev + direction + proofExamples.length) % proofExamples.length;
       });
     },
     [proofExamples.length],
@@ -162,72 +169,51 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
   const theaterSources = useMemo(() => {
     const clip = activeProofItem?.clip;
     if (!clip) return [];
-
-    const preferredSources = isMobileViewport
+    const preferred = isMobileViewport
       ? [clip.mobileSrc, clip.mainSrc, clip.previewSrc]
       : [clip.mainSrc, clip.mobileSrc, clip.previewSrc];
-
-    return preferredSources.filter((source, index, sources): source is string => {
-      if (!source) return false;
-      return sources.indexOf(source) === index;
-    });
+    return preferred.filter((s, i, a): s is string => !!s && a.indexOf(s) === i);
   }, [activeProofItem, isMobileViewport]);
 
+  /* ── Viewport listener ── */
   useEffect(() => {
-    if (activeProofIndex === null) return;
-    if (activeProofIndex >= proofExamples.length) {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsMobileViewport(mq.matches);
+    update();
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', update);
+      return () => mq.removeEventListener('change', update);
+    }
+    mq.addListener(update);
+    return () => mq.removeListener(update);
+  }, []);
+
+  /* ── Guard stale index ── */
+  useEffect(() => {
+    if (activeProofIndex !== null && activeProofIndex >= proofExamples.length) {
       setActiveProofIndex(null);
     }
   }, [activeProofIndex, proofExamples.length]);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mediaQuery = window.matchMedia('(max-width: 767px)');
-    const updateViewport = () => {
-      setIsMobileViewport(mediaQuery.matches);
-    };
-
-    updateViewport();
-
-    if (typeof mediaQuery.addEventListener === 'function') {
-      mediaQuery.addEventListener('change', updateViewport);
-      return () => mediaQuery.removeEventListener('change', updateViewport);
-    }
-
-    mediaQuery.addListener(updateViewport);
-    return () => mediaQuery.removeListener(updateViewport);
-  }, []);
-
+  /* ── Keyboard navigation ── */
   useEffect(() => {
     if (!isProofTheaterOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        closeProofTheater();
-        return;
-      }
-      if (event.key === 'ArrowRight') {
-        event.preventDefault();
-        navigateProofTheater(1);
-        return;
-      }
-      if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        navigateProofTheater(-1);
-      }
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { e.preventDefault(); closeProofTheater(); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); navigateProofTheater(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); navigateProofTheater(-1); }
     };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
   }, [closeProofTheater, isProofTheaterOpen, navigateProofTheater]);
 
+  /* ── Body scroll lock ── */
   useEffect(() => {
     if (!isProofTheaterOpen) return;
-
     const scrollY = window.scrollY;
-    const htmlElement = document.documentElement;
-    const previousStyles = {
+    const html = document.documentElement;
+    const prev = {
       position: document.body.style.position,
       top: document.body.style.top,
       left: document.body.style.left,
@@ -236,10 +222,10 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
       overflow: document.body.style.overflow,
       overscrollBehavior: document.body.style.overscrollBehavior,
     };
-    const previousHtmlStyles = {
-      overflow: htmlElement.style.overflow,
-      overscrollBehavior: htmlElement.style.overscrollBehavior,
-      scrollBehavior: htmlElement.style.scrollBehavior,
+    const prevHtml = {
+      overflow: html.style.overflow,
+      overscrollBehavior: html.style.overscrollBehavior,
+      scrollBehavior: html.style.scrollBehavior,
     };
 
     document.body.style.position = 'fixed';
@@ -249,49 +235,34 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     document.body.style.width = '100%';
     document.body.style.overflow = 'hidden';
     document.body.style.overscrollBehavior = 'none';
-    htmlElement.style.overflow = 'hidden';
-    htmlElement.style.overscrollBehavior = 'none';
-    htmlElement.dataset.theater = 'open';
+    html.style.overflow = 'hidden';
+    html.style.overscrollBehavior = 'none';
+    html.dataset.theater = 'open';
 
     return () => {
-      delete htmlElement.dataset.theater;
-      document.body.style.position = previousStyles.position;
-      document.body.style.top = previousStyles.top;
-      document.body.style.left = previousStyles.left;
-      document.body.style.right = previousStyles.right;
-      document.body.style.width = previousStyles.width;
-      document.body.style.overflow = previousStyles.overflow;
-      document.body.style.overscrollBehavior = previousStyles.overscrollBehavior;
-      htmlElement.style.overflow = previousHtmlStyles.overflow;
-      htmlElement.style.overscrollBehavior = previousHtmlStyles.overscrollBehavior;
-      htmlElement.style.scrollBehavior = 'auto';
+      delete html.dataset.theater;
+      document.body.style.position = prev.position;
+      document.body.style.top = prev.top;
+      document.body.style.left = prev.left;
+      document.body.style.right = prev.right;
+      document.body.style.width = prev.width;
+      document.body.style.overflow = prev.overflow;
+      document.body.style.overscrollBehavior = prev.overscrollBehavior;
+      html.style.overflow = prevHtml.overflow;
+      html.style.overscrollBehavior = prevHtml.overscrollBehavior;
+      html.style.scrollBehavior = 'auto';
       window.scrollTo(0, scrollY);
-      htmlElement.style.scrollBehavior = previousHtmlStyles.scrollBehavior;
+      html.style.scrollBehavior = prevHtml.scrollBehavior;
     };
   }, [isProofTheaterOpen]);
 
+  /* ── Schema.org (preserved exactly) ── */
   const schema = useMemo(() => {
     const breadcrumbItems = [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: labels.home,
-        item: homeCanonical,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: labels.services,
-        item: homeCanonical,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: page.breadcrumbLabel,
-        item: canonical,
-      },
+      { '@type': 'ListItem', position: 1, name: labels.home, item: homeCanonical },
+      { '@type': 'ListItem', position: 2, name: labels.services, item: homeCanonical },
+      { '@type': 'ListItem', position: 3, name: page.breadcrumbLabel, item: canonical },
     ];
-
     return {
       '@context': 'https://schema.org',
       '@graph': [
@@ -303,21 +274,11 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
           description: page.metaDescription,
           dateModified: '2026-03-13',
           inLanguage: locale,
-          isPartOf: {
-            '@id': `${homeCanonical}#website`,
-          },
-          breadcrumb: {
-            '@id': `${canonical}#breadcrumb`,
-          },
-          mainEntity: {
-            '@id': `${canonical}#service`,
-          },
+          isPartOf: { '@id': `${homeCanonical}#website` },
+          breadcrumb: { '@id': `${canonical}#breadcrumb` },
+          mainEntity: { '@id': `${canonical}#service` },
         },
-        {
-          '@type': 'BreadcrumbList',
-          '@id': `${canonical}#breadcrumb`,
-          itemListElement: breadcrumbItems,
-        },
+        { '@type': 'BreadcrumbList', '@id': `${canonical}#breadcrumb`, itemListElement: breadcrumbItems },
         {
           '@type': 'Service',
           '@id': `${canonical}#service`,
@@ -354,26 +315,15 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
           mainEntity: page.faqs.map((faq) => ({
             '@type': 'Question',
             name: faq.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: faq.answer,
-            },
+            acceptedAnswer: { '@type': 'Answer', text: faq.answer },
           })),
         },
       ],
     };
-  }, [
-    canonical,
-    homeCanonical,
-    labels.home,
-    labels.services,
-    locale,
-    page.breadcrumbLabel,
-    page.faqs,
-    page.metaDescription,
-    page.metaTitle,
-    page.navLabel,
-  ]);
+  }, [canonical, homeCanonical, labels.home, labels.services, locale, page.breadcrumbLabel, page.faqs, page.metaDescription, page.metaTitle, page.navLabel]);
+
+  /* ── Lead proof for hero ── */
+  const leadProof = proofExamples[0] ?? null;
 
   return (
     <>
@@ -394,224 +344,102 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
         <Navbar compactMobile />
 
         <main>
-          {/* ═══════════════════════════════════════════
-              1. CINEMATIC HERO — Full-bleed image
-              ═══════════════════════════════════════════ */}
-          <section className="svc-hero">
-            {/* Background image */}
-            <img
-              className="svc-hero-media"
-              src={SERVICE_HERO_BACKGROUND_SRC}
-              alt=""
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
-              aria-hidden="true"
-            />
-
-            {/* Gradient overlay */}
-            <div className="svc-hero-overlay" />
-
-            {/* Content */}
-            <div className="svc-hero-content">
-              {/* Breadcrumb */}
-              <nav className="svc-breadcrumb mb-8 md:mb-10 sr-only md:not-sr-only md:flex" aria-label="Breadcrumb">
+          {/* ═══════════════════════════════════════════════════════
+              1. COLD OPEN — The work is the hero
+              No background image. No gradient overlay. No filler.
+              ═══════════════════════════════════════════════════════ */}
+          <section className="st-hero">
+            <div className="st-container">
+              {/* Breadcrumb — barely visible */}
+              <nav className="st-breadcrumb" aria-label="Breadcrumb">
                 <a href={getHomePath(locale)}>{labels.home}</a>
-                <span className="opacity-40">/</span>
+                <span aria-hidden="true">/</span>
                 <a href={getHomeSectionHref(locale, 'services')}>{labels.services}</a>
-                <span className="opacity-40">/</span>
-                <span className="text-white/70">{page.breadcrumbLabel}</span>
+                <span aria-hidden="true">/</span>
+                <span>{page.breadcrumbLabel}</span>
               </nav>
 
-              {/* Eyebrow */}
-              <p className="svc-hero-tagline mb-5 md:mb-6">{page.heroEyebrow}</p>
+              {/* Split: text left, video right */}
+              <div className="st-hero-split">
+                {/* Left — typography */}
+                <div className="st-hero-text">
+                  <p className="st-eyebrow">{page.heroEyebrow}</p>
+                  <h1 className="st-hero-title">{page.heroTitle}</h1>
+                  <p className="st-hero-hook">{page.heroSummary}</p>
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="st-cta-primary"
+                  >
+                    {labels.startProject}
+                  </a>
+                </div>
 
-              {/* H1 — SEO preserved, same text */}
-              <h1 className="svc-hero-title max-w-[12ch] md:max-w-5xl">{page.heroTitle}</h1>
-
-              {/* Summary */}
-              <p className="svc-hero-summary sr-only mt-6 text-base md:not-sr-only md:text-lg">{page.heroSummary}</p>
-
-              {/* Chips */}
-              <div className="mt-6 sr-only md:not-sr-only md:mt-8 md:flex md:flex-wrap md:gap-2">
-                {page.heroPoints.map((point) => (
-                  <span key={point} className="svc-hero-chip">
-                    {point}
-                  </span>
-                ))}
-              </div>
-
-              {/* CTAs */}
-              <div className="mt-8 flex flex-wrap gap-3 md:mt-10">
-                <a href={page.primaryCtaHref} className="svc-hero-cta-primary">
-                  {page.primaryCtaLabel}
-                </a>
-                <a href={page.secondaryCtaHref} className="svc-hero-cta-secondary">
-                  {page.secondaryCtaLabel}
-                </a>
+                {/* Right — lead video poster in letterbox frame */}
+                {leadProof && (
+                  <div className="st-hero-media">
+                    <button
+                      type="button"
+                      className="st-letterbox group"
+                      onClick={() => openProofClip(0)}
+                      aria-label={`${labels.openSample}: ${leadProof.example.title}`}
+                    >
+                      <img
+                        src={leadProof.clip.posterSrc}
+                        alt={leadProof.example.title}
+                        className="st-letterbox-img"
+                        loading="eager"
+                        decoding="async"
+                        fetchPriority="high"
+                      />
+                      {/* Play indicator */}
+                      <div className="st-play-btn">
+                        <Play className="h-5 w-5 ml-0.5" />
+                      </div>
+                      {/* Caption strip */}
+                      <div className="st-letterbox-caption">
+                        <span className="st-chip">{page.navLabel}</span>
+                        {formatDuration(leadProof.clip.durationSeconds) && (
+                          <span className="st-chip">{formatDuration(leadProof.clip.durationSeconds)}</span>
+                        )}
+                      </div>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </section>
 
-          {/* ═══════════════════════════════════════════
-              2. PROOF GALLERY — Editorial numbered showcase
-              ═══════════════════════════════════════════ */}
-          {proofExamples.length > 0 && (
-            <RevealSection className="py-16 md:py-24 lg:py-28" id="examples">
-              <div className="studio-container">
-                <div className="mb-12 md:mb-16">
-                  <p className="section-label mb-4">{page.featuredTitle}</p>
-                  <h2 className="studio-title max-w-3xl">{page.featuredIntro}</h2>
-                </div>
-
-                {/* Lead featured example — cinematic card */}
-                {proofExamples.length > 0 && (() => {
-                  const { example: leadExample, clip: leadClip } = proofExamples[0];
-                  const leadDuration = formatDuration(leadClip.durationSeconds);
-                  return (
-                    <button
-                      key={leadExample.clipId}
-                      type="button"
-                      onClick={() => openProofClip(0)}
-                      aria-label={`${labels.openSample}: ${leadExample.title}`}
-                      className="svc-proof-lead group relative mb-4 block w-full overflow-hidden rounded-2xl border-0 bg-transparent p-0 text-left md:mb-5 md:rounded-3xl"
-                    >
-                      <div className="relative aspect-[16/10] md:aspect-[21/9]">
-                        <img
-                          src={leadClip.posterSrc}
-                          alt={leadExample.title}
-                          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                          loading="eager"
-                          decoding="async"
-                        />
-                        {/* Gradient overlay — always visible */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                        {/* Number badge */}
-                        <div className="absolute top-5 left-5 md:top-7 md:left-7">
-                          <span className="text-[10px] font-bold uppercase tracking-prestige text-white/50">01</span>
-                        </div>
-                        {/* Play indicator */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white transition-all duration-300 group-hover:scale-110 group-hover:bg-white/25">
-                          <Play className="h-5 w-5 md:h-6 md:w-6 ml-0.5" />
-                        </div>
-                        {/* Content */}
-                        <div className="absolute bottom-0 left-0 right-0 p-5 md:p-8 lg:p-10">
-                          <div className="flex flex-wrap items-center gap-2 mb-3">
-                            <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-prestige text-white/80 backdrop-blur-md">
-                              {page.navLabel}
-                            </span>
-                            {leadDuration && (
-                              <span className="rounded-full border border-white/15 bg-white/8 px-2.5 py-1 text-[10px] font-bold uppercase tracking-prestige text-white/60 backdrop-blur-md">
-                                {leadDuration}
-                              </span>
-                            )}
-                          </div>
-                          <h3 className="text-xl md:text-2xl lg:text-3xl font-serif font-medium leading-tight tracking-tight text-white">
-                            {leadExample.title}
-                          </h3>
-                          <p className="mt-2 max-w-xl text-sm md:text-base leading-relaxed text-white/65">
-                            {leadExample.description}
-                          </p>
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })()}
-
-                {/* Secondary examples — numbered editorial cards */}
-                {proofExamples.length > 1 && (
-                  <div className={`grid gap-4 md:gap-5 ${
-                    proofExamples.length <= 2
-                      ? 'md:grid-cols-1 max-w-2xl'
-                      : proofExamples.length === 3
-                        ? 'md:grid-cols-2'
-                        : 'md:grid-cols-2 lg:grid-cols-3'
-                  }`}>
-                    {proofExamples.slice(1).map(({ example, clip }, index) => {
-                      const duration = formatDuration(clip.durationSeconds);
-                      return (
-                        <button
-                          key={example.clipId}
-                          type="button"
-                          onClick={() => openProofClip(index + 1)}
-                          aria-label={`${labels.openSample}: ${example.title}`}
-                          className="svc-proof-card group relative block w-full overflow-hidden rounded-2xl border-0 bg-transparent p-0 text-left"
-                        >
-                          <div className="relative aspect-[4/5] md:aspect-[5/4]">
-                            <img
-                              src={clip.posterSrc}
-                              alt={example.title}
-                              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                              loading="lazy"
-                              decoding="async"
-                            />
-                            {/* Gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-                            {/* Number */}
-                            <div className="absolute top-4 left-4 md:top-5 md:left-5">
-                              <span className="text-[10px] font-bold uppercase tracking-prestige text-white/45">
-                                {String(index + 2).padStart(2, '0')}
-                              </span>
-                            </div>
-                            {/* Play indicator */}
-                            <div className="absolute top-4 right-4 md:top-5 md:right-5 flex h-9 w-9 items-center justify-center rounded-full bg-white/12 backdrop-blur-sm border border-white/15 text-white/70 transition-all duration-300 group-hover:bg-white/20 group-hover:text-white">
-                              <Play className="h-3.5 w-3.5 ml-0.5" />
-                            </div>
-                            {/* Content */}
-                            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                              <div className="flex flex-wrap items-center gap-2 mb-2">
-                                {duration && (
-                                  <span className="rounded-full border border-white/15 bg-white/8 px-2 py-0.5 text-[9px] font-bold uppercase tracking-prestige text-white/55 backdrop-blur-md">
-                                    {duration}
-                                  </span>
-                                )}
-                              </div>
-                              <h3 className="text-base md:text-lg font-serif font-medium leading-tight tracking-tight text-white">
-                                {example.title}
-                              </h3>
-                              <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-white/60">
-                                {example.description}
-                              </p>
-                            </div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </RevealSection>
-          )}
-
-          {/* ═══════════════════════════════════════════
-              3. EDITORIAL INTRO — What this resolves
-              ═══════════════════════════════════════════ */}
-          <RevealSection className="border-t border-border/50 py-20 md:py-28 lg:py-32">
-            <div className="studio-container">
-              <div className="grid gap-14 lg:grid-cols-[minmax(0,0.56fr)_minmax(0,0.44fr)] lg:items-start lg:gap-20">
-                {/* Left — problem statement */}
-                <div>
-                  <p className="section-label mb-7">{page.sectionIntroTitle}</p>
-                  <p className="font-serif text-[clamp(1.45rem,2.6vw,2.3rem)] font-light leading-[1.45] tracking-tight text-foreground">
-                    {page.sectionIntroText}
-                  </p>
-                </div>
-
-                {/* Right — what I deliver, anchored with a left rule */}
-                <div className="lg:border-l lg:border-border/40 lg:pl-12">
-                  <p className="section-label mb-8">{page.marketTitle}</p>
-                  <div className="space-y-0">
+          {/* ═══════════════════════════════════════════════════════
+              2. THE BRIEF — Editorial intro + deliverables merged
+              One section. Asymmetric. Dense.
+              ═══════════════════════════════════════════════════════ */}
+          <RevealSection className="st-section st-section--tight">
+            <div className="st-container">
+              <div className="st-brief-grid">
+                {/* Left — the bold statement */}
+                <div className="st-brief-statement">
+                  <p className="st-pullquote">{page.sectionIntroText}</p>
+                  <div className="st-market-strip">
                     {page.marketItems.map((item, i) => (
-                      <div
-                        key={item}
-                        className={`flex items-start gap-5 ${i > 0 ? 'border-t border-border/30 pt-5 mt-5' : ''}`}
-                      >
-                        <span className="shrink-0 pt-0.5 text-[11px] font-bold uppercase tracking-prestige text-accent/50">
-                          {String(i + 1).padStart(2, '0')}
-                        </span>
-                        <p className="text-base font-light leading-[1.75] text-foreground/72">
-                          {item}
-                        </p>
+                      <span key={item}>
+                        {i > 0 && <span className="st-middot" aria-hidden="true">·</span>}
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right — the spec sheet */}
+                <div className="st-spec-sheet">
+                  <p className="st-eyebrow mb-6">{labels.whatYouGet}</p>
+                  <h2 className="sr-only">{page.deliverablesTitle}</h2>
+                  <div className="st-spec-list">
+                    {page.deliverables.map((item) => (
+                      <div key={item.title} className="st-spec-row">
+                        <h3 className="st-spec-title">{item.title}</h3>
+                        <p className="st-spec-desc">{item.description}</p>
                       </div>
                     ))}
                   </div>
@@ -620,316 +448,174 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
             </div>
           </RevealSection>
 
-          {/* ═══════════════════════════════════════════
-              4. DELIVERABLES — Editorial line items
-              ═══════════════════════════════════════════ */}
-          <RevealSection className="pb-16 md:pb-24 lg:pb-28">
-            <div className="studio-container">
-              <div className="mb-10 md:mb-14">
-                <p className="section-label mb-4">{page.deliverablesTitle}</p>
-                <h2 className="studio-title max-w-3xl">{page.navLabel}</h2>
-              </div>
+          {/* ═══════════════════════════════════════════════════════
+              3. THE PROOF — Full-bleed dark. Video sells.
+              Each example takes real space. Not a cramped grid.
+              ═══════════════════════════════════════════════════════ */}
+          {proofExamples.length > 1 && (
+            <RevealSection className="st-proof-wall" id="examples">
+              <div className="st-container">
+                <p className="st-eyebrow st-eyebrow--light mb-10 md:mb-14">{labels.theWork}</p>
+                <h2 className="sr-only">{page.featuredTitle}</h2>
 
-              <div className="border-t border-border/50">
-                {page.deliverables.map((item, index) => {
-                  const isExpanded = expandedDeliverable === index;
-                  return (
-                    <div
-                      key={item.title}
-                      className={`svc-deliverable-row border-b border-border/40 ${isExpanded ? 'is-expanded' : ''}`}
-                    >
-                      {/* Desktop: grid layout, always visible */}
-                      <div className="hidden md:grid md:grid-cols-[64px_minmax(0,0.38fr)_minmax(0,0.62fr)] md:items-baseline md:gap-6">
-                        <span className="text-sm font-semibold uppercase tracking-prestige text-accent/65 pt-1">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <h3 className="font-serif text-2xl font-medium tracking-tight text-foreground lg:text-[1.7rem]">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm font-light leading-[1.85] text-foreground/62 lg:text-base">
-                          {item.description}
-                        </p>
-                      </div>
-
-                      {/* Mobile: tap-to-expand */}
+                <div className="st-proof-stack">
+                  {proofExamples.slice(1).map(({ example, clip }, index) => {
+                    const duration = formatDuration(clip.durationSeconds);
+                    return (
                       <button
+                        key={example.clipId}
                         type="button"
-                        className="flex w-full items-start gap-4 text-left md:hidden"
-                        onClick={() => toggleDeliverable(index)}
-                        aria-expanded={isExpanded}
+                        onClick={() => openProofClip(index + 1)}
+                        aria-label={`${labels.openSample}: ${example.title}`}
+                        className="st-proof-card group"
                       >
-                        <span className="mt-0.5 text-sm font-semibold uppercase tracking-prestige text-accent/65">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <div className="flex-1">
-                          <h3 className="font-serif text-xl font-medium tracking-tight text-foreground">
-                            {item.title}
-                          </h3>
-                          <div className="svc-deliverable-desc">
-                            <p className="mt-3 text-sm font-light leading-[1.85] text-foreground/62">
-                              {item.description}
-                            </p>
+                        <div className="st-proof-card-media">
+                          <img
+                            src={clip.posterSrc}
+                            alt={example.title}
+                            className="st-proof-card-img"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <div className="st-proof-card-overlay" />
+                          <div className="st-play-btn st-play-btn--small">
+                            <Play className="h-4 w-4 ml-0.5" />
                           </div>
                         </div>
-                        <span
-                          className={`mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border/50 text-foreground/35 transition-transform duration-300 ${
-                            isExpanded ? 'rotate-45' : ''
-                          }`}
-                        >
-                          <Plus className="h-3.5 w-3.5" />
-                        </span>
+                        <div className="st-proof-card-info">
+                          <h3 className="st-proof-card-title">{example.title}</h3>
+                          <p className="st-proof-card-desc">{example.description}</p>
+                          <div className="st-proof-card-meta">
+                            {duration && <span className="st-chip st-chip--dark">{duration}</span>}
+                            {clip.language && (
+                              <span className="st-chip st-chip--dark">
+                                {clip.language === 'es' ? 'Español' : 'English'}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </button>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </RevealSection>
-
-          {/* ═══════════════════════════════════════════
-              5. BEST FIT / NOT FIT — Split editorial
-              ═══════════════════════════════════════════ */}
-          <RevealSection className="pb-16 md:pb-24 lg:pb-28">
-            <div className="studio-container">
-              <div className="overflow-hidden rounded-[2rem]">
-                <div className="grid lg:grid-cols-2">
-                  {/* Best Fit */}
-                  <article className="svc-split-fit p-7 md:p-10 lg:p-12">
-                    <p className="section-label mb-6">{page.bestFitTitle}</p>
-                    <ul className="space-y-5">
-                      {page.bestFitItems.map((item) => (
-                        <li key={item} className="flex gap-3">
-                          <span className="mt-[0.35rem] flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
-                            <Check className="h-3 w-3" />
-                          </span>
-                          <span className="text-sm font-light leading-[1.75] text-foreground/75 md:text-base">
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </article>
-
-                  {/* Not Fit */}
-                  <article className="svc-split-notfit p-7 md:p-10 lg:p-12">
-                    <p className="section-label mb-6 !text-white/45">{page.notFitTitle}</p>
-                    <ul className="space-y-5">
-                      {page.notFitItems.map((item) => (
-                        <li key={item} className="flex gap-3">
-                          <span className="mt-[0.35rem] flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/8 text-white/45">
-                            <X className="h-3 w-3" />
-                          </span>
-                          <span className="text-sm font-light leading-[1.75] opacity-75 md:text-base">
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </article>
+                    );
+                  })}
                 </div>
               </div>
+            </RevealSection>
+          )}
+
+          {/* ═══════════════════════════════════════════════════════
+              4. THE PROCESS — Compressed. Four moves. No timeline.
+              ═══════════════════════════════════════════════════════ */}
+          <RevealSection className="st-section">
+            <div className="st-container">
+              <p className="st-eyebrow mb-4">{labels.howItWorks}</p>
+              <h2 className="st-section-title mb-10 md:mb-14">{page.processTitle}</h2>
+
+              <div className="st-process-row">
+                {page.processSteps.map((step, index) => (
+                  <article key={step.title} className="st-process-block">
+                    <div className="st-process-accent" aria-hidden="true" />
+                    <span className="st-process-num">{String(index + 1).padStart(2, '0')}</span>
+                    <h3 className="st-process-step-title">{step.title}</h3>
+                    <p className="st-process-step-desc">{step.description}</p>
+                  </article>
+                ))}
+              </div>
             </div>
           </RevealSection>
 
-          {/* ═══════════════════════════════════════════
-              6. PROCESS — Timeline with scroll beam
-              ═══════════════════════════════════════════ */}
-          <RevealSection className="pb-16 md:pb-24 lg:pb-28">
-            <div className="studio-container">
-              <div className="mb-10 md:mb-14 max-w-3xl">
-                <p className="section-label mb-4">{page.processTitle}</p>
-                <h2 className="studio-title">{page.processTitle}</h2>
-              </div>
+          {/* ═══════════════════════════════════════════════════════
+              5. THE FILTER — Fit check + FAQ combined
+              No rounded mega-panel. No decorative icons.
+              ═══════════════════════════════════════════════════════ */}
+          <RevealSection className="st-section st-section--wide">
+            <div className="st-container">
+              <p className="st-eyebrow mb-4">{labels.isThisForYou}</p>
+              <h2 className="st-section-title mb-10 md:mb-14">{page.navLabel}</h2>
 
-              <div className="relative pl-14 md:pl-20">
-                {/* Timeline line */}
-                <div className="svc-timeline-line" aria-hidden="true" />
-
-                <div className="space-y-10 md:space-y-14">
-                  {page.processSteps.map((step, index) => (
-                    <article key={step.title} className="relative">
-                      {/* Dot */}
-                      <div className="absolute -left-14 top-0 md:-left-20">
-                        <div className="svc-timeline-dot">{index + 1}</div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="pt-1">
-                        <h3 className="font-serif text-2xl font-medium tracking-tight text-foreground md:text-3xl">
-                          {step.title}
-                        </h3>
-                        <p className="mt-3 max-w-2xl text-sm font-light leading-[1.85] text-foreground/65 md:text-base">
-                          {step.description}
-                        </p>
-                      </div>
-                    </article>
-                  ))}
+              {/* Fit / Not-fit — two clean columns */}
+              <div className="st-fit-grid">
+                <div className="st-fit-col">
+                  <p className="st-fit-label st-fit-label--yes">{labels.yes}</p>
+                  <ul className="st-fit-list">
+                    {page.bestFitItems.map((item) => (
+                      <li key={item} className="st-fit-item">
+                        <span className="st-fit-dash st-fit-dash--teal" aria-hidden="true">—</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="st-fit-col">
+                  <p className="st-fit-label st-fit-label--no">{labels.no}</p>
+                  <ul className="st-fit-list">
+                    {page.notFitItems.map((item) => (
+                      <li key={item} className="st-fit-item st-fit-item--muted">
+                        <span className="st-fit-dash" aria-hidden="true">—</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </div>
-          </RevealSection>
 
-          {/* ═══════════════════════════════════════════
-              7. FAQ — Premium accordion
-              ═══════════════════════════════════════════ */}
-          <RevealSection className="pb-16 md:pb-24 lg:pb-28" id="faq">
-            <div className="studio-container max-w-4xl">
-              <div className="mb-10 md:mb-14 text-center">
-                <p className="section-label mb-4">{page.faqTitle}</p>
-                <h2 className="studio-title">{page.navLabel}</h2>
-              </div>
-
-              <div>
+              {/* FAQ — minimal, no decorative toggles */}
+              <div className="st-faq" id="faq">
+                <p className="st-eyebrow mb-8">{labels.faq}</p>
+                <h2 className="sr-only">{page.faqTitle}</h2>
                 {page.faqs.map((faq, index) => (
                   <details
                     key={faq.question}
-                    className={`svc-faq-item group py-6 md:py-7 ${
-                      index === 0 ? '' : 'border-t border-border/40'
-                    }`}
+                    className={`st-faq-item ${index > 0 ? 'st-faq-item--bordered' : ''}`}
                   >
-                    <summary
-                      className="font-sans flex cursor-pointer list-none items-start justify-between gap-5 text-base font-medium tracking-[-0.005em] leading-[1.45] text-foreground md:text-lg"
-                      style={{ fontFamily: 'var(--font-sans)' }}
-                    >
-                      <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 500 }}>{faq.question}</span>
-                      <span className="svc-faq-toggle shrink-0 mt-0.5">
-                        <Plus className="h-4 w-4" />
-                      </span>
-                    </summary>
-                    <p
-                      className="mt-4 max-w-3xl font-sans text-[0.95rem] font-normal leading-[1.8] text-foreground/68 md:text-base"
-                      style={{ fontFamily: 'var(--font-sans)' }}
-                    >
-                      {faq.answer}
-                    </p>
+                    <summary className="st-faq-question">{faq.question}</summary>
+                    <p className="st-faq-answer">{faq.answer}</p>
                   </details>
                 ))}
               </div>
             </div>
           </RevealSection>
 
-          {/* ═══════════════════════════════════════════
-              8. FEATURED WORK — Numbered text grid
-              ═══════════════════════════════════════════ */}
-          {proofExamples.length > 0 && (
-            <RevealSection className="pb-16 md:pb-24 lg:pb-28">
-              <div className="studio-container">
-                <p className="section-label mb-3">{labels.featuredWorkLabel}</p>
-                <p className="mb-10 md:mb-14 font-sans text-sm font-light text-foreground/55 max-w-2xl">
-                  {labels.featuredWorkSubtitle}
-                </p>
-                <div
-                  className={`grid border-t border-border/40 divide-x divide-border/40 ${
-                    proofExamples.length === 2
-                      ? 'grid-cols-2'
-                      : proofExamples.length >= 4
-                        ? 'grid-cols-4'
-                        : 'grid-cols-3'
-                  }`}
-                >
-                  {proofExamples.map(({ example }, index) => (
-                    <button
-                      key={example.clipId}
-                      type="button"
-                      onClick={() => openProofClip(index)}
-                      aria-label={`${labels.openSample}: ${example.title}`}
-                      className="group flex w-full flex-col justify-between gap-6 border-0 border-b border-border/40 bg-transparent px-5 py-8 text-left transition-colors duration-200 hover:bg-accent/[0.03] md:px-7 md:py-9"
-                    >
-                      <div>
-                        <span className="block text-xs font-semibold uppercase tracking-prestige text-foreground/30 mb-4">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <h3 className="font-serif text-lg md:text-xl font-medium tracking-tight text-foreground leading-snug">
-                          {example.title}
-                        </h3>
-                      </div>
-                      <span className="text-foreground/30 transition-all duration-200 group-hover:translate-x-1 group-hover:text-foreground/60 text-xl leading-none">
-                        →
-                      </span>
-                    </button>
-                  ))}
+          {/* ═══════════════════════════════════════════════════════
+              6. THE CLOSE — CTA + Related services, minimal
+              No dark bg. No signature flourish. Just the action.
+              ═══════════════════════════════════════════════════════ */}
+          <RevealSection className="st-close">
+            <div className="st-container st-close-inner">
+              <p className="st-close-text">{page.ctaText}</p>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="st-cta-primary st-cta-primary--lg"
+              >
+                {labels.startProject}
+              </a>
+
+              {/* Related services — text rows, not cards */}
+              {relatedPages.length > 0 && (
+                <div className="st-related">
+                  <p className="st-eyebrow mb-5">{labels.alsoOffered}</p>
+                  {page.relatedServiceIds.map((relatedId, index) => {
+                    const rel = relatedPages[index];
+                    if (!rel) return null;
+                    return (
+                      <a
+                        key={relatedId}
+                        href={getServicePath(relatedId, locale)}
+                        className="st-related-row group"
+                      >
+                        <span className="st-related-title">{rel.title}</span>
+                        <span className="st-related-arrow">→</span>
+                      </a>
+                    );
+                  })}
                 </div>
-              </div>
-            </RevealSection>
-          )}
-
-          {/* ═══════════════════════════════════════════
-              9. CTA CLOSER — Dark editorial sign-off
-              ═══════════════════════════════════════════ */}
-          <RevealSection className="svc-cta-closer py-20 md:py-28 lg:py-32">
-            <div className="studio-container relative z-10 text-center">
-              <p className="section-label mb-6 !text-white/40">{page.ctaTitle}</p>
-              <p className="mx-auto max-w-3xl font-serif text-[clamp(1.4rem,3vw,2.6rem)] font-light leading-[1.45] tracking-tight text-white/90">
-                {page.ctaText}
-              </p>
-
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-white/12 border border-white/20 px-8 py-3.5 text-[10px] font-bold uppercase tracking-prestige text-white backdrop-blur-md transition-all duration-200 hover:bg-white/20 hover:border-white/35 hover:-translate-y-[1px]"
-                >
-                  {labels.useWhatsApp}
-                </a>
-                <a
-                  href={fiverrUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full border border-white/12 px-7 py-3.5 text-[10px] font-bold uppercase tracking-prestige text-white/65 transition-all duration-200 hover:text-white hover:border-white/30"
-                >
-                  {labels.useFiverr}
-                </a>
-              </div>
-
-              {/* Signature flourish */}
-              <div className="mt-12 md:mt-16">
-                <div className="signature-line mx-auto mb-6 max-w-[200px] !bg-gradient-to-r !from-transparent !via-white/15 !to-transparent" />
-                <span className="svc-signature">Gisela Saldarriaga</span>
-              </div>
-            </div>
-          </RevealSection>
-
-          {/* ═══════════════════════════════════════════
-              10. RELATED SERVICES — Horizontal cards
-              ═══════════════════════════════════════════ */}
-          <RevealSection className="py-16 md:py-24 lg:py-28">
-            <div className="studio-container">
-              <div className="mb-10 md:mb-14">
-                <p className="section-label mb-4">{page.relatedTitle}</p>
-                <h2 className="studio-title">{page.relatedTitle}</h2>
-              </div>
-
-              <div className="grid gap-5 md:grid-cols-2">
-                {page.relatedServiceIds.map((relatedId, index) => {
-                  const relatedPage = relatedPages[index];
-                  if (!relatedPage) return null;
-
-                  return (
-                    <a
-                      key={relatedId}
-                      href={getServicePath(relatedId, locale)}
-                      className="svc-related-card group block p-7 md:p-8"
-                    >
-                      <p className="section-label mb-3">{relatedPage.eyebrow}</p>
-                      <h3 className="font-serif text-2xl font-medium tracking-tight text-foreground mb-3 md:text-[1.6rem]">
-                        {relatedPage.title}
-                      </h3>
-                      <p className="text-sm font-light leading-[1.75] text-foreground/62 mb-5">
-                        {relatedPage.summary}
-                      </p>
-                      <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-prestige text-primary transition-colors group-hover:text-accent">
-                        {labels.relatedLink}
-                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                      </span>
-                    </a>
-                  );
-                })}
-              </div>
+              )}
             </div>
           </RevealSection>
         </main>
 
+        {/* ── Theater overlay (preserved) ── */}
         {activeProofItem && (
           <div
             className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4"
@@ -950,11 +636,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <button
                 type="button"
                 className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-                onClick={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  navigateProofTheater(-1);
-                }}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigateProofTheater(-1); }}
                 aria-label={labels.previewPrev}
               >
                 <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
@@ -962,27 +644,19 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <button
                 type="button"
                 className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-                onClick={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  navigateProofTheater(1);
-                }}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigateProofTheater(1); }}
                 aria-label={labels.previewNext}
               >
                 <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
               </button>
               <div
                 className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]"
-                onClick={(event) => event.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
               >
                 <button
                   type="button"
                   className="theater-control absolute right-3 top-3 z-30 h-9 w-9"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    closeProofTheater();
-                  }}
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); closeProofTheater(); }}
                   aria-label={labels.previewClose}
                 >
                   <X className="h-4 w-4" />

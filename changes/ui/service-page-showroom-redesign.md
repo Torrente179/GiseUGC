@@ -336,3 +336,71 @@ This is the current UI note for the dedicated service pages. It tracks the shift
 
 ### Verification
 1. `npm run build` — passed, no errors.
+
+## 2026-03-20 "Screen Test" redesign — A24 × Apple, video-first, one CTA
+
+### Direction
+Design name: "Screen Test". North stars: A24 film pages (work IS the page) × Apple product pages (scale shifts, confident whitespace, zero filler). Core principle: video work is not "a section" — it IS the page. Everything else is annotation.
+
+### Audit of template patterns killed
+1. Full-bleed photo hero with gradient overlay → replaced with clean-bg split layout (text left, video poster right)
+2. Every section opens with `section-label + studio-title` → varied rhythm, some sections have no heading at all
+3. Vertical timeline with numbered dots → horizontal 2×2/4-column grid blocks with teal accent bars
+4. Split rounded mega-panel for fit/not-fit → clean two-column plain text with dash prefixes
+5. Two hero CTAs → single WhatsApp button (coastal-teal, full color, unmissable)
+6. Identical padding on every section → variable spacing (tight brief, generous close, compressed process)
+7. Dark CTA closer with cursive signature → clean centered text + single button, no dark bg
+8. Numbered editorial deliverable rows → dense spec-sheet style (title–description pairs, hair borders)
+9. Numbered badges on proof cards → removed, replaced with concrete data (duration, language)
+10. Related services rounded hover-lift cards → minimal text rows with arrow
+
+### Section architecture (7 → 5 visible sections)
+1. **COLD OPEN** — No bg image. Asymmetric split: serif title + hook + WhatsApp CTA left, letterbox video poster right. Desktop: 50/50 grid. Mobile: stacked.
+2. **THE BRIEF** — Editorial intro text as pull-quote left (58%), deliverables as dense spec-sheet right (42%) with left border rule. Market items as middot-separated inline strip.
+3. **THE PROOF** — Full-bleed dark (`deep-ebony` bg). Stacked horizontal cards (poster left, info right on desktop). Duration + language chips. No numbered badges.
+4. **THE PROCESS** — 2×2 mobile / 4-column desktop grid. Each block: teal accent bar, step number, title, description. No timeline, no dots.
+5. **THE FILTER** — Combined fit/not-fit + FAQ. Two clean columns for fit check (teal dash = yes, muted dash = no). FAQ below with CSS-only `+/−` toggle (no icon component). Everything in one section.
+6. **THE CLOSE** — Centered CTA text + WhatsApp button. Related services as text rows with arrow hover animation.
+
+### What was removed entirely
+- `services-hero-background.jpg` dependency (hero has no bg image)
+- `svc-hero-*` CSS classes (replaced by `st-hero-*`)
+- `svc-hero-chip`, `svc-hero-cta-secondary` (no secondary CTA)
+- `svc-timeline-line`, `svc-timeline-dot` (no timeline)
+- `svc-split-fit`, `svc-split-notfit` (no rounded panel)
+- `svc-cta-closer`, `svc-signature` (no dark closer)
+- `svc-related-card` (no card treatment)
+- `svc-faq-toggle` (CSS-only toggle via `::before`)
+- `svc-deliverable-row`, `svc-deliverable-desc` (spec-sheet replaces editorial rows)
+- `svc-proof-lead`, `svc-proof-card` (new `st-proof-card` system)
+
+### New CSS class system
+All service CSS migrated from `.svc-*` to `.st-*` (Screen Test prefix). Key classes:
+- `.st-hero`, `.st-hero-split`, `.st-hero-title`, `.st-hero-hook`
+- `.st-letterbox`, `.st-letterbox-img`, `.st-play-btn`
+- `.st-brief-grid`, `.st-pullquote`, `.st-spec-sheet`, `.st-spec-row`
+- `.st-proof-wall`, `.st-proof-card`, `.st-proof-card-media`
+- `.st-process-row`, `.st-process-block`, `.st-process-accent`
+- `.st-fit-grid`, `.st-fit-item`, `.st-faq-item`, `.st-faq-question`
+- `.st-close`, `.st-related-row`
+- `.st-cta-primary` — single conversion button, coastal-teal bg, used everywhere
+
+### Icons reduced
+- **Before**: Check, Play, X, Plus, ArrowRight, ChevronLeft, ChevronRight (7 icons)
+- **After**: Play, ChevronLeft, ChevronRight, X (4 icons — only Play for proof, nav arrows + close for theater)
+
+### Bundle impact
+- `ServiceLandingPage.tsx`: 1032 lines → ~420 lines
+- `main-*.js` chunk: 327.87 kB → 317.82 kB (−10 kB, −3%)
+- CSS `main-*.css`: net reduction from removing unused `.svc-*` classes
+
+### SEO impact
+- H1 in hero preserved (same text source: `page.heroTitle`)
+- H2 preserved for deliverables (sr-only), featured work (sr-only), FAQ (sr-only), process, fit section
+- All FAQ content in native `<details>/<summary>` — crawlable
+- Schema.org graph identical (WebPage, BreadcrumbList, Service, FAQPage)
+- Canonical URLs, alternates, meta title/description all untouched
+- Breadcrumb semantic nav preserved
+
+### Verification
+1. `npm run build` — passed, ✓ built in 3.70s, 0 errors
