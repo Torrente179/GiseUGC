@@ -1,7 +1,7 @@
 # Homepage UX, Conversion, and Motion
 
 ## Summary
-This is the current homepage-facing UI note. It consolidates the review-card system, FAQ launch, CTA routing, theme defaults, marquee smoothness, testimonial screenshot integration, and the later motion-polish passes that shaped the current landing page.
+This is the current homepage-facing UI note. It consolidates the review-card system, FAQ launch, CTA routing, theme behavior, marquee smoothness, testimonial screenshot integration, and the later motion-polish passes that shaped the current landing page.
 
 ## Current runtime touchpoints
 - `src/App.tsx`
@@ -15,9 +15,13 @@ This is the current homepage-facing UI note. It consolidates the review-card sys
 - `src/components/ServicesMarquee.tsx`
 - `src/components/Testimonials.tsx`
 - `src/components/Portfolio.tsx`
+- `src/components/ThemeToggle.tsx`
+- `src/components/ThemeRuntimeSync.tsx`
+- `src/components/ui/sonner.tsx`
 - `src/components/motion/SplitTextReveal.tsx`
 - `src/index.css`
 - `src/main.tsx`
+- `index.html`
 
 ## Current state
 1. FAQ content is live in the page and tied to schema-supporting copy rather than staying only in metadata files.
@@ -25,7 +29,7 @@ This is the current homepage-facing UI note. It consolidates the review-card sys
 3. Mobile CTAs now cooperate with the floating dock instead of fighting it, and the contact button placement lines up with the testimonial and FAQ flow.
 4. Services marquee behavior was tuned for smoother mobile interaction, more stable loop toggling, better resize handling, and cleaner supporting copy.
 5. Motion polish continued without reworking the brand direction: transition timing, split-text smoothing, scroll interpolation, and desktop collage eager-loading were all optimized in place.
-6. Theme handling now defaults to light with manual dark override, while footer copy and the hero-title treatment were restored to the intended presentation.
+6. Theme handling now follows the device preference by default, still allows manual light/dark override, and keeps browser chrome surfaces synced through `color-scheme` and `theme-color`.
 
 ## Legacy notes absorbed
 - `2026-03-04-animation-transition-polish.md`
@@ -218,6 +222,26 @@ Generated at: `2026-03-20T18:38:23.762Z`
 1. Extracted the "Ventaja del creador / Cobertura UGC de alta conversion para todo tu funnel" collage block out of `Portfolio.tsx` into a dedicated homepage section so it can sit directly below services on both desktop and mobile.
 2. Left the portfolio component focused on the video showcase and theater flow, avoiding mixed hierarchy where a creator-advantage sales block appeared inside the video portfolio itself.
 3. Kept the existing CTA behavior intact by preserving the hashless desktop contact jump and the mobile contact-dock open behavior in the new component.
+
+## 2026-03-21 system-theme detection restoration
+
+### Runtime touchpoints
+- `src/main.tsx`
+- `src/App.tsx`
+- `src/components/ThemeRuntimeSync.tsx`
+- `src/components/ThemeToggle.tsx`
+- `src/components/ui/sonner.tsx`
+- `index.html`
+
+### What changed
+1. Switched the app `ThemeProvider` from forced light mode to `defaultTheme="system"` with `enableSystem`, so first-time visitors inherit the device light/dark preference instead of always starting in light mode.
+2. Replaced the early HTML bootstrap logic so the initial `dark` class, `color-scheme`, and `theme-color` meta value are derived from `prefers-color-scheme` unless the visitor has already chosen an explicit light or dark override.
+3. Added a small runtime sync component to keep browser chrome metadata aligned after hydration and while the OS theme changes during an open session.
+4. Updated the manual theme toggle and toast theme consumer to use the resolved light/dark value, avoiding incorrect `"system"` handling and keeping manual overrides working after the system-aware default returned.
+
+### Verification
+1. `npx eslint src/main.tsx src/App.tsx src/components/ThemeRuntimeSync.tsx src/components/ThemeToggle.tsx src/components/ui/sonner.tsx`
+2. `npm run build`
 
 ### Verification
 1. `npm run check:mobile-regression`

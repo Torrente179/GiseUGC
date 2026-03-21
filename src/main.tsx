@@ -7,7 +7,7 @@ import './i18n'; // Import i18n configuration
 
 createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <App />
         </ThemeProvider>
     </BrowserRouter>

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import ServiceLandingPage from '@/components/ServiceLandingPage';
+import ThemeRuntimeSync from '@/components/ThemeRuntimeSync';
 import { getLocaleFromPath, getServicePageRouteEntries } from '@/lib/locale-path';
 
 const AppRoutes = () => {
@@ -39,6 +40,7 @@ const AppRoutes = () => {
 const App = () => {
   return (
     <>
+      <ThemeRuntimeSync />
       <AppRoutes />
       <Analytics />
       <SpeedInsights />

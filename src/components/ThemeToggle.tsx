@@ -34,11 +34,11 @@ const ThemeToggle = ({ compact = false }: ThemeToggleProps) => {
     }, []);
 
     const toggleTheme = useCallback(() => {
-        if (toggleLockRef.current) return;
+        if (toggleLockRef.current || !resolvedTheme) return;
 
         const root = document.documentElement;
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-        const nextTheme = root.classList.contains('dark') ? 'light' : 'dark';
+        const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark';
 
         toggleLockRef.current = true;
         if (transitionTimeoutRef.current !== null) {
@@ -56,7 +56,7 @@ const ThemeToggle = ({ compact = false }: ThemeToggleProps) => {
             toggleLockRef.current = false;
             transitionTimeoutRef.current = null;
         }, THEME_TRANSITION_MS);
-    }, [setTheme]);
+    }, [resolvedTheme, setTheme]);
 
     const handlePointerDown = useCallback(
         (event: React.PointerEvent<HTMLButtonElement>) => {
@@ -81,7 +81,7 @@ const ThemeToggle = ({ compact = false }: ThemeToggleProps) => {
         [toggleTheme],
     );
 
-    if (!mounted) {
+    if (!mounted || !resolvedTheme) {
         return (
             <button
                 type="button"
