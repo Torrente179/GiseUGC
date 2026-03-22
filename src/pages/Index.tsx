@@ -115,7 +115,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         enabled={isMobile}
         mountId="portfolio-mobile"
         rootMargin="1100px 0px"
-        queueDelayMs={260}
+        queueDelayMs={80}
         skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />}
       >
         <PortfolioSection />
@@ -126,7 +126,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         enabled={isMobile}
         mountId="mobile-rating-card"
         rootMargin="900px 0px"
-        queueDelayMs={300}
+        queueDelayMs={100}
         skeleton={<SectionSkeleton id="mobile-rating-card" minHeightClass="min-h-[460px]" />}
       >
         <MobileFiverrRatingSection />
@@ -135,7 +135,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         enabled={isMobile}
         mountId="testimonials-mobile"
         rootMargin="850px 0px"
-        queueDelayMs={300}
+        queueDelayMs={100}
         skeleton={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}
       >
         <TestimonialsSection />
@@ -144,7 +144,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         enabled={isMobile}
         mountId="mobile-contact-cta"
         rootMargin="800px 0px"
-        queueDelayMs={300}
+        queueDelayMs={100}
         skeleton={<SectionSkeleton id="mobile-contact-cta" minHeightClass="min-h-[120px]" />}
       >
         <MobileContactCtaSection />
@@ -154,7 +154,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         enabled={isMobile}
         mountId="services-marquee-mobile"
         rootMargin="1250px 0px"
-        queueDelayMs={280}
+        queueDelayMs={120}
         skeleton={<SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />}
       >
         <ServicesMarqueeSection sectionId="services" />
@@ -163,7 +163,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         enabled={!isMobile}
         mountId="portfolio-desktop"
         rootMargin="950px 0px"
-        queueDelayMs={300}
+        queueDelayMs={80}
         skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />}
       >
         <PortfolioSection />
@@ -174,7 +174,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         enabled={!isMobile}
         mountId="desktop-rating-card"
         rootMargin="850px 0px"
-        queueDelayMs={300}
+        queueDelayMs={100}
         skeleton={<SectionSkeleton id="desktop-rating-card" minHeightClass="min-h-[460px]" />}
       >
         <DesktopFiverrRatingSection />
@@ -183,7 +183,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         enabled={!isMobile}
         mountId="testimonials-desktop"
         rootMargin="800px 0px"
-        queueDelayMs={320}
+        queueDelayMs={100}
         skeleton={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}
       >
         <TestimonialsSection />
@@ -193,7 +193,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         enabled={!isMobile}
         mountId="services-marquee-desktop"
         rootMargin="700px 0px"
-        queueDelayMs={320}
+        queueDelayMs={120}
         skeleton={<SectionSkeleton minHeightClass="min-h-[520px]" variant="cards" />}
       >
         <ServicesMarqueeSection />
