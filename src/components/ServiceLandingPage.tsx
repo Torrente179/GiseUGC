@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getHomeSectionHref, getServicePath } from '@/lib/locale-path';
-import { getServicePageContent, getRelatedServiceSummaries } from '@/data/service-pages';
+import { getServicePageContent, getRelatedServiceSummaries, getAllServiceIds } from '@/data/service-pages';
 import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import Navbar from '@/components/Navbar';
@@ -114,6 +114,10 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
   const page = getServicePageContent(serviceId, locale);
   const labels = localeLabels[locale];
   const relatedPages = getRelatedServiceSummaries(page.relatedServiceIds, locale);
+  const allOtherServiceIds = useMemo(
+    () => getAllServiceIds().filter((id) => id !== serviceId),
+    [serviceId],
+  );
 
   const canonical = buildUrl(page.path);
   const homeCanonical = buildUrl(getHomePath(locale));
@@ -297,7 +301,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   aria-label={`${labels.openSample}: ${leadProof.example.title}`}
                 >
                   <video
-                    src={`${leadProof.clip.mainSrc}#t=0.04`}
+                    src={`${leadProof.clip.mainSrc}#t=2`}
                     poster={leadProof.clip.posterSrc}
                     className="stm-hero-poster-img"
                     muted
@@ -350,7 +354,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                       >
                         <div className="stm-reel-card-media">
                           <video
-                            src={`${clip.mainSrc}#t=0.04`}
+                            src={`${clip.mainSrc}#t=2`}
                             poster={clip.posterSrc}
                             aria-label={example.title}
                             className="stm-reel-card-img"
@@ -522,7 +526,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   {leadProof && (
                     <div className="st-hero-media">
                       <button type="button" className="st-letterbox group" onClick={() => openProofClip(0)} aria-label={`${labels.openSample}: ${leadProof.example.title}`}>
-                        <video src={`${leadProof.clip.mainSrc}#t=0.04`} poster={leadProof.clip.posterSrc} className="st-letterbox-img" muted playsInline preload="auto" disablePictureInPicture aria-label={leadProof.example.title} />
+                        <video src={`${leadProof.clip.mainSrc}#t=2`} poster={leadProof.clip.posterSrc} className="st-letterbox-img" muted playsInline preload="auto" disablePictureInPicture aria-label={leadProof.example.title} />
                         <div className="st-play-btn"><Play className="h-5 w-5 ml-0.5" /></div>
                         <div className="st-letterbox-caption">
                           <span className="st-chip">{page.navLabel}</span>
@@ -582,7 +586,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                           >
                             <div className="st-proof-stage">
                               <video
-                                src={`${clip.mainSrc}#t=0.04`}
+                                src={`${clip.mainSrc}#t=2`}
                                 poster={clip.posterSrc}
                                 aria-label={example.title}
                                 className="st-proof-stage-poster"
@@ -709,7 +713,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <div className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]" onClick={(e) => e.stopPropagation()}>
                 <button type="button" className="theater-control absolute right-3 top-3 z-30 h-9 w-9" onClick={(e) => { e.preventDefault(); e.stopPropagation(); closeProofTheater(); }} aria-label={labels.previewClose}><X className="h-4 w-4" /></button>
                 <div className="relative">
-                  <TheaterVideo sources={theaterSources} poster={`${activeProofItem.clip.mainSrc}#t=0.04`} enableStartupFallback={isMobileViewport} startupFallbackMs={isMobileViewport ? 300 : 420} />
+                  <TheaterVideo sources={theaterSources} poster={`${activeProofItem.clip.mainSrc}#t=2`} enableStartupFallback={isMobileViewport} startupFallbackMs={isMobileViewport ? 300 : 420} />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
                     <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
                     <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
