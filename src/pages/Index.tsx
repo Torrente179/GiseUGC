@@ -1,5 +1,4 @@
-import { lazy, Suspense, useEffect, type ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
+import { lazy, memo, Suspense, useEffect, type ReactNode } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import CreatorAdvantageSection from '@/components/CreatorAdvantage';
@@ -10,7 +9,7 @@ import FadeInOnMount from '@/components/motion/FadeInOnMount';
 import { useDeferredMount } from '@/hooks/use-deferred-mount';
 import { mark, measure, startLongTaskObserver } from '@/lib/perf-debug';
 import PageSeo from '@/components/PageSeo';
-import { getLocaleFromPath, getHomePath, type SiteLocale } from '@/lib/locale-path';
+import { getHomePath, type SiteLocale } from '@/lib/locale-path';
 import Footer from '@/components/Footer';
 
 const SocialProofSection = lazy(() => import('@/components/SocialProof'));
@@ -65,10 +64,8 @@ const DeferredSection = ({
   return <div ref={placeholderRef}>{skeleton}</div>;
 };
 
-const Index = () => {
+const Index = memo(({ locale }: { locale: SiteLocale }) => {
   const isMobile = useIsMobile();
-  const location = useLocation();
-  const locale = getLocaleFromPath(location.pathname);
   const homeSeoByLocale: Record<
     SiteLocale,
     {
@@ -208,6 +205,7 @@ const Index = () => {
       </Suspense>
     </div>
   );
-};
+});
 
+Index.displayName = 'Index';
 export default Index;

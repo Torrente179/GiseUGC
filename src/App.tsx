@@ -64,6 +64,7 @@ const AppRoutes = () => {
   const prevLocationKeyRef = useRef<string | null>(null);
 
   const onHome = isHomePath(location.pathname);
+  const locale = getLocaleFromPath(location.pathname);
 
   // Find the matching service route entry for the current URL (null when on home/404)
   const currentServiceEntry = useMemo(() => {
@@ -114,7 +115,7 @@ const AppRoutes = () => {
         style={{ display: onHome ? 'block' : 'none' }}
         aria-hidden={!onHome ? true : undefined}
       >
-        <Index />
+        <Index locale={locale} />
       </div>
 
       {/*
