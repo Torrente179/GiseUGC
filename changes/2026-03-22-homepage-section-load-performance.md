@@ -20,7 +20,10 @@ Three compounding issues made the homepage feel slow and janky, especially on mo
 - Replaced `blurRevealUp(18, 0.58)` with `revealUp(18, 0.45)` on service card variants — removes the `filter: blur(4px)` that was causing GPU thrash on mobile, reduces animation duration from 580ms to 450ms.
 - Reduced stagger from `staggerContainer(0.09, 0.03)` → `staggerContainer(0.05, 0.02)` — card 8 now starts at 0.38s (vs 0.66s) and finishes at 0.83s (vs 1.24s).
 - Lowered `viewport.amount` from `0.25` to `0.15` — grid animation triggers sooner as the user scrolls in, so the second row is already mid-reveal rather than invisible when it enters the viewport.
-- Removed unused `blurRevealUp` import.
+- Removed `blurRevealUp` import and replaced two remaining `blurRevealUp` calls in the section header (subtitle label and motion subtitle) with `revealUp` equivalents.
+
+### Hotfix: `blurRevealUp` ReferenceError (commit `b230f44`)
+- During the rebase conflict resolution, the `blurRevealUp` import was removed but two usages in the section header (outside the conflict zone) were missed. This caused a `ReferenceError` at runtime, crashing the Services component and making the homepage go blank. Fixed by replacing both calls with `revealUp`.
 
 ### `src/pages/Index.tsx`
 - Reduced all `queueDelayMs` values:
