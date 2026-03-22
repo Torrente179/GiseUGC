@@ -2125,6 +2125,9 @@ export const getServicePageRouteEntries = () => {
   ]);
 };
 
+export const getAllServiceIds = (): ServicePageId[] =>
+  Object.keys(SERVICE_PAGE_CONTENT) as ServicePageId[];
+
 export const getRelatedServiceSummaries = (
   serviceIds: ServicePageId[],
   locale: SiteLocale,
