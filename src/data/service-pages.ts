@@ -116,7 +116,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       bestFitTitle: 'Mejor encaje',
       bestFitItems: [
         'Marcas que venden a audiencias hispanas en Estados Unidos y también quieren una versión en inglés limpia.',
-        'Equipos de ecommerce, beauty, lifestyle, SaaS o tech que necesitan velocidad sin perder consistencia visual.',
+        'Equipos de marketing que necesitan velocidad sin perder consistencia visual.',
         'Campañas que mezclan demos, spokesperson, reviews y creator-led ads dentro de un mismo sprint.',
       ],
       notFitTitle: 'No es la mejor opción si',
@@ -154,19 +154,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Estas piezas muestran cómo se ve una voz creadora clara, comercial y adaptable entre categorías.',
       featuredExamples: [
         {
+          clipId: 6,
+          title: 'Presentación profesional de servicios',
+          description: 'Pieza donde me presento como creadora, muestro mi rango y cierro con llamado a la acción claro.',
+        },
+        {
+          clipId: 1006,
+          title: 'Reel multiservicio para distintas industrias',
+          description: 'Un compilado que demuestra versatilidad: música, real estate, agro y servicios legales en una sola pieza.',
+        },
+        {
           clipId: 1,
-          title: 'Review lifestyle de producto',
-          description: 'Un formato natural y cercano que funciona bien cuando el objetivo es confianza + conversión.',
-        },
-        {
-          clipId: 2,
-          title: 'Portavoz de marca',
-          description: 'Direct-to-camera con explicación limpia para presentar oferta, contexto y beneficio principal.',
-        },
-        {
-          clipId: 7,
-          title: 'Demo para servicios digitales',
-          description: 'Un ejemplo útil para tech y SaaS cuando el reto es explicar valor rápido y sin fricción.',
+          title: 'Review lifestyle de producto (Temu)',
+          description: 'Review detallado de outfits con tono natural y cercano. Ideal para marcas que venden en redes.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre UGC bilingüe',
@@ -184,7 +184,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
         {
           question: '¿Qué tipo de marcas encajan mejor aquí?',
           answer:
-            'Principalmente ecommerce, beauty, lifestyle, SaaS y tecnología que necesitan una creadora con presencia natural frente a cámara y criterio comercial.',
+            'Cualquier marca que necesite una creadora con presencia natural frente a cámara y criterio comercial. He trabajado con marcas de muchas industrias.',
         },
         {
           question: '¿Esto sirve solo para ads?',
@@ -280,19 +280,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'These pieces show what a clear, commercially useful creator voice looks like across categories.',
       featuredExamples: [
         {
+          clipId: 6,
+          title: 'Professional services introduction',
+          description: 'A self-presentation piece showing range, voice, and a clear call to action.',
+        },
+        {
+          clipId: 1006,
+          title: 'Multi-industry spokesperson reel',
+          description: 'A compilation proving versatility across music, real estate, agriculture, and legal services.',
+        },
+        {
           clipId: 1,
-          title: 'Lifestyle product review',
-          description: 'A natural, trust-first format that works when the goal is credibility and conversion together.',
-        },
-        {
-          clipId: 2,
-          title: 'Brand spokesperson delivery',
-          description: 'Clean direct-to-camera structure for presenting the offer, context, and main benefit.',
-        },
-        {
-          clipId: 7,
-          title: 'Digital services demo',
-          description: 'A strong reference for tech and SaaS when the job is to explain value quickly and clearly.',
+          title: 'Lifestyle product review (Temu)',
+          description: 'Detailed outfit review with natural tone and close delivery. Great for brands selling on social.',
         },
       ],
       faqTitle: 'FAQs about bilingual UGC work',
@@ -310,7 +310,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
         {
           question: 'Which brands are usually the best fit?',
           answer:
-            'Mostly ecommerce, beauty, lifestyle, SaaS, and tech teams that need a creator with natural on-camera presence and clear commercial instincts.',
+            'Any brand that needs a creator with natural on-camera presence and clear commercial instincts. I\'ve worked across many industries.',
         },
         {
           question: 'Is this only for paid ads?',
@@ -409,18 +409,18 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredExamples: [
         {
           clipId: 2,
-          title: 'Portavoz de marca',
-          description: 'El ejemplo más directo de presencia, orden y beneficio comunicado frente a cámara.',
+          title: 'Portavoz para Agenda Bot',
+          description: 'Presentación directa a cámara: imagen de empresa, problema y solución con cierre profesional.',
         },
         {
-          clipId: 6,
-          title: 'Presentación de servicios',
-          description: 'Útil para explicar una oferta cuando necesitas una sensación más clara y comercial que un reel casual.',
+          clipId: 1010,
+          title: 'Reporte noticioso internacional',
+          description: 'Entrega con formato de noticiero real: elecciones, economía y datos duros con presencia de anchor.',
         },
         {
-          clipId: 7,
-          title: 'Review de servicios AI',
-          description: 'Muestra cómo aterrizar una propuesta más técnica con una entrega comprensible y ágil.',
+          clipId: 1005,
+          title: 'Spokesperson de programa financiero',
+          description: 'Pieza con croma key explicando beneficios de un programa de fondos. Tono informativo y urgente.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre videos de portavoz',
@@ -535,18 +535,18 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredExamples: [
         {
           clipId: 2,
-          title: 'Brand spokesperson video',
-          description: 'The clearest reference for presence, structure, and benefit-driven delivery on camera.',
+          title: 'Spokesperson for Agenda Bot',
+          description: 'Direct-to-camera brand pitch: company image, problem, and solution with professional close.',
         },
         {
-          clipId: 6,
-          title: 'Services presentation',
-          description: 'Useful when you need a clearer, more commercially structured message than a casual reel can provide.',
+          clipId: 1010,
+          title: 'International news report',
+          description: 'Real news anchor delivery covering elections, economy, and hard data with broadcast presence.',
         },
         {
-          clipId: 7,
-          title: 'AI services review',
-          description: 'Shows how a more technical offer can be made understandable with direct, paced explanation.',
+          clipId: 1005,
+          title: 'Financial program spokesperson',
+          description: 'Green screen piece explaining fund benefits with an informative, urgent tone.',
         },
       ],
       faqTitle: 'FAQs about spokesperson videos',
@@ -609,7 +609,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'La base más directa para Meta y TikTok cuando necesitas un activo entendible en segundos.',
         },
         {
-          title: 'Problem–solution creatives',
+          title: 'Problem-solution creatives',
           description: 'Piezas que arrancan desde el dolor o la fricción real del usuario y aterrizan el producto como solución.',
         },
         {
@@ -662,19 +662,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Estas referencias muestran diferentes maneras de vender con creator-led performance content.',
       featuredExamples: [
         {
-          clipId: 1,
-          title: 'Review lifestyle para paid social',
-          description: 'Un formato que mezcla naturalidad, producto visible y mensaje de compra sin verse rígido.',
+          clipId: 1001,
+          title: 'Ad para agencia de marketing digital',
+          description: 'Estructura clásica de ad: hook directo, propuesta de valor y CTA. Pensado para pauta en redes.',
         },
         {
-          clipId: 4,
-          title: 'Review / testimonial de suplemento',
-          description: 'Útil cuando la conversión depende de confianza, beneficio claro y delivery creíble.',
+          clipId: 1003,
+          title: 'Anuncio de rotulación vehicular',
+          description: 'Pieza corta con croma key, mensaje comercial claro y cierre en español. Formato listo para Meta Ads.',
         },
         {
-          clipId: 7,
-          title: 'Demo ágil para servicios AI',
-          description: 'Un ejemplo de cómo explicar valor rápido cuando el producto necesita algo de contexto.',
+          clipId: 1009,
+          title: 'Ad para WhatsApp Bot de ventas',
+          description: 'Hook de dolor, beneficios rápidos y CTA. Perfecto para campañas de conversión en TikTok o Meta.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre UGC Ads',
@@ -788,19 +788,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'These references show different ways creator-led performance content can help sell.',
       featuredExamples: [
         {
-          clipId: 1,
-          title: 'Lifestyle review for paid social',
-          description: 'A format that balances natural delivery, visible product use, and commercial clarity.',
+          clipId: 1001,
+          title: 'Ad for digital marketing agency',
+          description: 'Classic ad structure: direct hook, value proposition, and CTA. Built for paid social placement.',
         },
         {
-          clipId: 4,
-          title: 'Supplement review / testimonial',
-          description: 'Useful when conversion depends on trust, clear benefit framing, and credible delivery.',
+          clipId: 1003,
+          title: 'Vehicle wrapping service ad',
+          description: 'Short green screen piece with clear commercial message and Spanish-language close. Meta Ads ready.',
         },
         {
-          clipId: 7,
-          title: 'Fast AI services demo',
-          description: 'An example of how to explain value quickly when the product needs some context.',
+          clipId: 1009,
+          title: 'WhatsApp sales bot ad',
+          description: 'Pain-point hook, quick benefits, and CTA. Perfect for conversion campaigns on TikTok or Meta.',
         },
       ],
       faqTitle: 'FAQs about UGC ads',
@@ -916,19 +916,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Estas piezas muestran cómo se ve un video testimonial natural, creíble y útil para la marca.',
       featuredExamples: [
         {
-          clipId: 1,
-          title: 'Review lifestyle de producto',
-          description: 'Un formato cercano y natural donde el producto se muestra en contexto real de uso.',
-        },
-        {
           clipId: 4,
-          title: 'Reseña de suplemento (creatina)',
-          description: 'Ejemplo de cómo contar beneficios de un suplemento con credibilidad y sin sonar a infomercial.',
+          title: 'Reseña de suplemento Curvella',
+          description: 'Testimonial creíble: experiencia personal con creatina, beneficios visibles y tono cercano sin sonar a infomercial.',
         },
         {
-          clipId: 8,
-          title: 'Review lifestyle con foco en experiencia',
-          description: 'Una reseña donde la experiencia personal sostiene el mensaje y genera confianza.',
+          clipId: 1013,
+          title: 'Testimonial de método fitness',
+          description: 'Review corto y directo del método Power Palp Abdomen. Formato ideal para social proof rápido.',
+        },
+        {
+          clipId: 1004,
+          title: 'Review de restaurante colombiano',
+          description: 'Reseña de Parceros Street Food en Calgary: platos, experiencia y recomendación con tono orgánico.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre reseñas UGC',
@@ -1042,19 +1042,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'These pieces show what a natural, credible, and commercially useful video testimonial looks like.',
       featuredExamples: [
         {
-          clipId: 1,
-          title: 'Lifestyle product review',
-          description: 'A natural, approachable format where the product is shown in real-life context.',
-        },
-        {
           clipId: 4,
-          title: 'Supplement review (creatine)',
-          description: 'An example of how to talk about supplement benefits with credibility and without sounding like an infomercial.',
+          title: 'Curvella supplement review',
+          description: 'Credible testimonial: personal creatine experience, visible benefits, and close delivery without sounding scripted.',
         },
         {
-          clipId: 8,
-          title: 'Experience-led lifestyle review',
-          description: 'A review where personal experience carries the message and builds trust.',
+          clipId: 1013,
+          title: 'Fitness method testimonial',
+          description: 'Short, direct Power Palp Abdomen review. Ideal format for quick social proof.',
+        },
+        {
+          clipId: 1004,
+          title: 'Colombian restaurant review',
+          description: 'Review of Parceros Street Food in Calgary: dishes, experience, and recommendation with organic tone.',
         },
       ],
       faqTitle: 'FAQs about UGC testimonials',
@@ -1170,19 +1170,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Estas piezas muestran cómo explico productos y servicios con claridad y ritmo comercial.',
       featuredExamples: [
         {
+          clipId: 1008,
+          title: 'Demo en vivo de VoiceBot automotriz',
+          description: 'Conversación real con un bot de Calvotia para un concesionario. Muestra el producto funcionando en tiempo real.',
+        },
+        {
+          clipId: 1011,
+          title: 'Demo de VoiceBot para clínica dental',
+          description: 'Demostración interactiva: agendar citas, consultar tarifas y dirección. El producto se explica solo.',
+        },
+        {
           clipId: 3,
-          title: 'Review de voicebot (demo tech)',
-          description: 'Un ejemplo de cómo presentar un producto tecnológico con explicación clara y tono accesible.',
-        },
-        {
-          clipId: 7,
-          title: 'Demo de servicios AI',
-          description: 'Muestra cómo aterrizar una propuesta técnica en pocos segundos sin perder al espectador.',
-        },
-        {
-          clipId: 9,
-          title: 'Review de bots con voiceover',
-          description: 'Formato más corto para explicar herramientas digitales con voiceover y ritmo directo.',
+          title: 'Review-demo de voicebot (Calvotia)',
+          description: 'Testimonial en contexto de café que evoluciona a explicación de producto con beneficios claros.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre demos UGC',
@@ -1296,19 +1296,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'These pieces show how I explain products and services with clarity and commercial pacing.',
       featuredExamples: [
         {
+          clipId: 1008,
+          title: 'Live VoiceBot demo for auto dealer',
+          description: 'Real conversation with a Calvotia bot for a car dealership. Shows the product working in real time.',
+        },
+        {
+          clipId: 1011,
+          title: 'VoiceBot demo for dental clinic',
+          description: 'Interactive demo: booking appointments, checking rates and location. The product explains itself.',
+        },
+        {
           clipId: 3,
-          title: 'Voicebot review (tech demo)',
-          description: 'An example of presenting a tech product with clear explanation and accessible tone.',
-        },
-        {
-          clipId: 7,
-          title: 'AI services demo',
-          description: 'Shows how to land a technical proposition in seconds without losing the viewer.',
-        },
-        {
-          clipId: 9,
-          title: 'Bot review with voiceover',
-          description: 'A shorter format for explaining digital tools with voiceover and direct pacing.',
+          title: 'Voicebot review-demo (Calvotia)',
+          description: 'Cafe-setting testimonial that evolves into a product explanation with clear benefits.',
         },
       ],
       faqTitle: 'FAQs about UGC product demos',
@@ -1343,15 +1343,15 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
   },
   'ugc-problem-solution': {
     es: {
-      navLabel: 'UGC problema–solución',
+      navLabel: 'UGC problema-solución',
       metaTitle: 'Video problema solución UGC | Gisela',
       metaDescription:
-        'Videos UGC con formato problema–solución: hook, dolor, solución y CTA. El formato más orientado a conversión para paid social.',
-      breadcrumbLabel: 'Problema–solución',
+        'Videos UGC con formato problema-solución: hook, dolor, solución y CTA. El formato más orientado a conversión para paid social.',
+      breadcrumbLabel: 'Problema-solución',
       heroEyebrow: 'Direct response',
-      heroTitle: 'Videos UGC problema–solución que enganchan, conectan y convierten',
+      heroTitle: 'Videos UGC problema-solución que enganchan, conectan y convierten',
       heroSummary:
-        'Creo creativos con el formato hook–problema–solución–CTA, el más efectivo para direct response. Entiendo la estructura narrativa porque llevo más de 9 años en medios, y eso se nota en cada guion.',
+        'Creo creativos con el formato hook-problema-solución-CTA, el más efectivo para direct response. Entiendo la estructura narrativa porque llevo más de 9 años en medios, y eso se nota en cada guion.',
       heroPoints: [
         'El 80 % del rendimiento está en el hook',
         'Formato diseñado para conversión directa',
@@ -1361,7 +1361,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       primaryCtaHref: getHomePath('es', '#contact'),
       secondaryCtaLabel: 'Ver muestras',
       secondaryCtaHref: getHomePath('es', '#portfolio'),
-      sectionIntroTitle: 'Por qué el formato problema–solución domina paid social',
+      sectionIntroTitle: 'Por qué el formato problema-solución domina paid social',
       sectionIntroText:
         'El formato hook problema solución funciona porque refleja cómo decide la gente: siente una frustración, se identifica con el dolor y acepta la solución cuando llega en el momento justo. No es fórmula mágica, pero sí la estructura con mejores resultados consistentes en UGC para ads.',
       deliverablesTitle: 'Tipos de creativos que entrego',
@@ -1375,7 +1375,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'Misma pieza con diferentes entradas para testear cuál engancha más a tu audiencia en los primeros 3 segundos.',
         },
         {
-          title: 'Problema–solución con demo',
+          title: 'Problema-solución con demo',
           description: 'Cuando la solución se entiende mejor mostrando el producto en uso junto con la narrativa de dolor.',
         },
         {
@@ -1401,7 +1401,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
         'Audiencias frías que necesitan identificarse con el dolor antes de considerar el producto.',
         'Lotes de creativos para testeo donde cada pieza tiene una hipótesis clara de dolor y solución.',
       ],
-      processTitle: 'Cómo construyo un creativo problema–solución',
+      processTitle: 'Cómo construyo un creativo problema-solución',
       processSteps: [
         {
           title: '1. Dolor y audiencia',
@@ -1409,7 +1409,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
         },
         {
           title: '2. Hook y estructura',
-          description: 'Escribo múltiples opciones de hook y armo la secuencia dolor–solución–prueba–CTA para máxima retención.',
+          description: 'Escribo múltiples opciones de hook y armo la secuencia dolor-solución-prueba-CTA para máxima retención.',
         },
         {
           title: '3. Grabación con intención',
@@ -1424,25 +1424,25 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Estas referencias muestran cómo funciona una narrativa de dolor y solución frente a cámara.',
       featuredExamples: [
         {
+          clipId: 1009,
+          title: 'WhatsApp Bot: clientes sin respuesta → ventas automáticas',
+          description: 'Hook de dolor claro ("¿cuántos clientes no reciben respuesta?"), beneficios rápidos y CTA directo.',
+        },
+        {
           clipId: 5,
-          title: 'Promoción de negocio (hook + beneficio)',
-          description: 'Una pieza donde el gancho comercial lleva la narrativa y el beneficio aterriza claro.',
+          title: 'Real estate: no saber invertir → acompañamiento completo',
+          description: '"¿Quieres invertir pero no sabes por dónde empezar?" Problema, solución con 30 años de experiencia y CTA.',
         },
         {
-          clipId: 4,
-          title: 'Reseña de suplemento con dolor implícito',
-          description: 'Formato donde el problema se siente desde la experiencia personal y la solución aparece natural.',
-        },
-        {
-          clipId: 2,
-          title: 'Portavoz de marca con estructura directa',
-          description: 'Ejemplo de cómo la presencia frente a cámara refuerza una narrativa de problema y solución.',
+          clipId: 1001,
+          title: 'Marketing: redes bonitas no basta → equipo de ventas',
+          description: '"¿Quieres vender más? Anuncios no bastan." Estructura hook-dolor-solución-CTA para agencia digital.',
         },
       ],
-      faqTitle: 'Preguntas frecuentes sobre UGC problema–solución',
+      faqTitle: 'Preguntas frecuentes sobre UGC problema-solución',
       faqs: [
         {
-          question: '¿Por qué el formato problema–solución convierte tan bien?',
+          question: '¿Por qué el formato problema-solución convierte tan bien?',
           answer:
             'Porque replica cómo tomamos decisiones: primero sentimos el dolor, luego buscamos la salida. Un video problema solución UGC bien hecho hace que el espectador se identifique en los primeros segundos y esté listo para la solución cuando la presentas.',
         },
@@ -1550,19 +1550,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'These references show how a pain-and-solution narrative plays out on camera.',
       featuredExamples: [
         {
+          clipId: 1009,
+          title: 'WhatsApp Bot: unanswered clients → automated sales',
+          description: 'Clear pain hook ("how many clients don\'t get a timely response?"), quick benefits, and direct CTA.',
+        },
+        {
           clipId: 5,
-          title: 'Business promotion (hook + benefit)',
-          description: 'A piece where the commercial hook drives the narrative and the benefit lands clearly.',
+          title: 'Real estate: don\'t know how to invest → full guidance',
+          description: '"Want to invest but don\'t know where to start?" Problem, 30-year solution, and CTA.',
         },
         {
-          clipId: 4,
-          title: 'Supplement review with implied pain',
-          description: 'A format where the problem is felt through personal experience and the solution arrives naturally.',
-        },
-        {
-          clipId: 2,
-          title: 'Brand spokesperson with direct structure',
-          description: 'An example of how on-camera presence reinforces a problem-and-solution narrative.',
+          clipId: 1001,
+          title: 'Marketing: pretty social isn\'t enough → sales team',
+          description: '"Want to sell more? Ads aren\'t enough." Hook-pain-solution-CTA structure for a digital agency.',
         },
       ],
       faqTitle: 'FAQs about problem-solution UGC',
@@ -1678,19 +1678,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Estas piezas muestran cómo se ve un producto integrado en momentos reales, con tono natural y ritmo orgánico.',
       featuredExamples: [
         {
-          clipId: 1,
-          title: 'Review lifestyle de producto',
-          description: 'Un formato cercano donde el producto aparece en contexto real, con opinión genuina y sin guion forzado.',
-        },
-        {
           clipId: 8,
-          title: 'Review lifestyle — formato medio',
-          description: 'Reseña natural con más detalle sobre la experiencia de uso, manteniendo el tono conversacional.',
+          title: 'Review de perfumes Chop X',
+          description: '"Mi pequeño lujo diario": fragancias en contexto cotidiano con humor, personalidad y tono orgánico.',
         },
         {
-          clipId: 10,
-          title: 'Lifestyle short-form',
-          description: 'Pieza corta y directa pensada para captar atención rápido en scroll orgánico.',
+          clipId: 1002,
+          title: 'Contenido orgánico desde España',
+          description: 'Relato de viaje sobre la cultura española. Formato TikTok puro: opinión personal, storytelling y autenticidad.',
+        },
+        {
+          clipId: 1,
+          title: 'Try-on de outfits Temu',
+          description: 'Probándome ropa paso a paso con opinión honesta. Formato lifestyle clásico para marcas de moda.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre UGC lifestyle',
@@ -1804,19 +1804,19 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'These pieces show what a product looks like when it is woven into real moments with a natural tone and organic pacing.',
       featuredExamples: [
         {
-          clipId: 1,
-          title: 'Lifestyle product review',
-          description: 'A close, genuine format where the product appears in real context with an honest take and no forced script.',
-        },
-        {
           clipId: 8,
-          title: 'Lifestyle review — mid-length',
-          description: 'A natural review with more detail on the usage experience, keeping the conversational tone throughout.',
+          title: 'Chop X perfume review',
+          description: '"My little daily luxury": fragrances in everyday context with humor, personality, and organic tone.',
         },
         {
-          clipId: 10,
-          title: 'Lifestyle short-form',
-          description: 'A short, punchy piece designed to grab attention quickly during organic scroll.',
+          clipId: 1002,
+          title: 'Organic content from Spain',
+          description: 'Travel story about Spanish culture. Pure TikTok format: personal opinion, storytelling, and authenticity.',
+        },
+        {
+          clipId: 1,
+          title: 'Temu outfit try-on',
+          description: 'Step-by-step outfit review with honest opinion. Classic lifestyle format for fashion brands.',
         },
       ],
       faqTitle: 'FAQs about lifestyle UGC content',
@@ -1933,18 +1933,18 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredExamples: [
         {
           clipId: 10,
-          title: 'Toma lifestyle corta',
-          description: 'Ejemplo del tipo de escena y encuadre que funciona bien como clip suelto para edición posterior.',
+          title: 'Clip lifestyle corto (7s)',
+          description: 'Toma rápida con encuadre limpio. Ejemplo del tipo de clip suelto listo para que tu equipo edite.',
         },
         {
-          clipId: 8,
-          title: 'Escena de producto en contexto',
-          description: 'Referencia de iluminación y composición natural que se traslada directamente al tipo de b-roll que entrego.',
+          clipId: 1002,
+          title: 'Escenas de viaje y exteriores',
+          description: 'Contenido grabado en España con variedad de locaciones, luz natural y movimiento. Ideal como material visual.',
         },
         {
-          clipId: 5,
-          title: 'Toma con ritmo visual',
-          description: 'Muestra de pacing y estética que un editor puede integrar fácilmente en una pieza más larga o un montaje.',
+          clipId: 1007,
+          title: 'Behind-the-scenes de noticiero',
+          description: 'Tomas de detrás de cámaras con countdown y set de noticias. Referencia de producción profesional.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre b-roll UGC',
@@ -2059,18 +2059,18 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredExamples: [
         {
           clipId: 10,
-          title: 'Short lifestyle shot',
-          description: 'An example of the scene type and framing that works well as a standalone clip for post-production.',
+          title: 'Short lifestyle clip (7s)',
+          description: 'Quick shot with clean framing. Example of the standalone clip type ready for your team to edit.',
         },
         {
-          clipId: 8,
-          title: 'Product in context',
-          description: 'A reference for the natural lighting and composition that translates directly into the b-roll I deliver.',
+          clipId: 1002,
+          title: 'Travel and exterior scenes',
+          description: 'Content shot in Spain with varied locations, natural light, and movement. Ideal as visual material.',
         },
         {
-          clipId: 5,
-          title: 'Visually paced shot',
-          description: 'A sample of pacing and aesthetic that an editor can easily integrate into a longer piece or montage.',
+          clipId: 1007,
+          title: 'News studio behind-the-scenes',
+          description: 'Behind-the-scenes shots with countdown and news set. Professional production reference.',
         },
       ],
       faqTitle: 'FAQs about UGC b-roll footage',

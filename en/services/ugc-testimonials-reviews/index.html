@@ -12,17 +12,20 @@
         const root = document.documentElement;
         const storageKey = 'theme';
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        let storedTheme = null;
+
         try {
-          const storedTheme = localStorage.getItem(storageKey);
-          const shouldUseDark = storedTheme === 'dark';
-          if (storedTheme === 'system') localStorage.setItem(storageKey, 'light');
-          root.classList.toggle('dark', shouldUseDark);
-          root.style.colorScheme = shouldUseDark ? 'dark' : 'light';
-          if (themeColorMeta) themeColorMeta.setAttribute('content', shouldUseDark ? '#0f121a' : '#fffefe');
-        } catch (_) {
-          root.classList.remove('dark');
-          root.style.colorScheme = 'light';
-          if (themeColorMeta) themeColorMeta.setAttribute('content', '#fffefe');
+          storedTheme = localStorage.getItem(storageKey);
+        } catch (_) {}
+
+        const activeTheme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : systemTheme;
+        const shouldUseDark = activeTheme === 'dark';
+
+        root.classList.toggle('dark', shouldUseDark);
+        root.style.colorScheme = activeTheme;
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute('content', shouldUseDark ? '#0f121a' : '#fffefe');
         }
       })();</script>
     <meta name="robots" content="index,follow" />

@@ -10,7 +10,7 @@ import {
   Linkedin,
   Facebook,
 } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { springSnappy } from '@/components/motion/variants';
@@ -367,10 +367,13 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
     },
   ];
 
+  const navigate = useNavigate();
+
   const changeLanguage = (lng: SiteLocale) => {
     if (currentLocale === lng) return;
 
-    window.location.assign(getLocalizedPathForCurrentRoute(location.pathname, lng, window.location.hash));
+    const targetPath = getLocalizedPathForCurrentRoute(location.pathname, lng, window.location.hash);
+    navigate(targetPath);
   };
 
   const languageButtonClass = (language: string, compact = false) =>
@@ -426,7 +429,9 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                     return;
                   }
 
+                  event.preventDefault();
                   closeMobileMenu();
+                  navigate(link.href);
                 }}
                 className={`group flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 transition-[opacity,transform] duration-500 ${
                   mobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'
@@ -529,7 +534,15 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                 'brand-logo md:text-2xl text-accent',
                 compactMobile ? 'text-lg' : 'text-xl',
               )}
-              onClick={onHomePage ? (event) => handleHashLinkClick(event, closeMobileMenu) : undefined}
+              onClick={(event) => {
+                if (onHomePage) {
+                  handleHashLinkClick(event, closeMobileMenu);
+                } else {
+                  event.preventDefault();
+                  closeMobileMenu();
+                  navigate(homeSectionHref('home'));
+                }
+              }}
             >
               Gisela<span className="text-foreground font-medium">.UGC</span>
             </a>
@@ -539,7 +552,14 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                 <a
                   key={link.key}
                   href={link.href}
-                  onClick={onHomePage ? handleHashLinkClick : undefined}
+                  onClick={(event) => {
+                    if (onHomePage) {
+                      handleHashLinkClick(event);
+                    } else {
+                      event.preventDefault();
+                      navigate(link.href);
+                    }
+                  }}
                   className="section-label text-foreground/80 transition-colors hover:text-primary nav-link-underline"
                 >
                   {t(link.key)}
@@ -567,7 +587,14 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
               <ThemeToggle />
               <motion.a
                 href={homeSectionHref('contact')}
-                onClick={onHomePage ? handleHashLinkClick : undefined}
+                onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
+                  if (onHomePage) {
+                    handleHashLinkClick(event);
+                  } else {
+                    event.preventDefault();
+                    navigate(homeSectionHref('contact'));
+                  }
+                }}
                 className="btn-primary-nordic btn-shimmer px-5 py-2.5"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}

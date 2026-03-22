@@ -12,17 +12,20 @@
         const root = document.documentElement;
         const storageKey = 'theme';
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        let storedTheme = null;
+
         try {
-          const storedTheme = localStorage.getItem(storageKey);
-          const shouldUseDark = storedTheme === 'dark';
-          if (storedTheme === 'system') localStorage.setItem(storageKey, 'light');
-          root.classList.toggle('dark', shouldUseDark);
-          root.style.colorScheme = shouldUseDark ? 'dark' : 'light';
-          if (themeColorMeta) themeColorMeta.setAttribute('content', shouldUseDark ? '#0f121a' : '#fffefe');
-        } catch (_) {
-          root.classList.remove('dark');
-          root.style.colorScheme = 'light';
-          if (themeColorMeta) themeColorMeta.setAttribute('content', '#fffefe');
+          storedTheme = localStorage.getItem(storageKey);
+        } catch (_) {}
+
+        const activeTheme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : systemTheme;
+        const shouldUseDark = activeTheme === 'dark';
+
+        root.classList.toggle('dark', shouldUseDark);
+        root.style.colorScheme = activeTheme;
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute('content', shouldUseDark ? '#0f121a' : '#fffefe');
         }
       })();</script>
     <meta name="robots" content="index,follow" />
@@ -49,7 +52,7 @@
     <meta name="twitter:description" content="Creadora UGC bilingüe para marcas que necesitan anuncios, demos y reviews en español e inglés para Estados Unidos, España y Latinoamérica." />
     <meta name="twitter:image" content="https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg?v=20260219" />
     <meta name="twitter:image:alt" content="Creadora UGC bilingüe para marcas que venden en varios mercados" />
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#webpage","url":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/","name":"Creadora UGC bilingüe | Gisela Saldarriaga","description":"Creadora UGC bilingüe para marcas que necesitan anuncios, demos y reviews en español e inglés para Estados Unidos, España y Latinoamérica.","dateModified":"2026-03-13","inLanguage":"es","isPartOf":{"@id":"https://www.giselasaldarriaga.com/#website"},"breadcrumb":{"@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#breadcrumb"},"mainEntity":{"@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#service"}},{"@type":"BreadcrumbList","@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.giselasaldarriaga.com/"},{"@type":"ListItem","position":2,"name":"Servicios","item":"https://www.giselasaldarriaga.com/"},{"@type":"ListItem","position":3,"name":"Creadora UGC bilingüe","item":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/"}]},{"@type":"Service","@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#service","name":"Creadora UGC bilingüe","serviceType":"Bilingual UGC creator","description":"Creadora UGC bilingüe para marcas que necesitan anuncios, demos y reviews en español e inglés para Estados Unidos, España y Latinoamérica.","url":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/","provider":{"@type":"ProfessionalService","name":"Gisela Saldarriaga UGC Studio","url":"https://www.giselasaldarriaga.com/","telephone":"+57-304-378-6101","availableLanguage":["es","en"]},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"Country","name":"Spain"},{"@type":"Place","name":"Latin America"}],"availableLanguage":["es","en"]},{"@type":"FAQPage","@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#faq","inLanguage":"es","mainEntity":[{"@type":"Question","name":"¿Trabajas tanto en español como en inglés?","acceptedAnswer":{"@type":"Answer","text":"Sí. El español es mi idioma nativo y también trabajo en inglés para piezas breves y comerciales. Cuando el proyecto es en inglés, prefiero partir de un guion o una estructura clara para mantener naturalidad y precisión."}},{"@type":"Question","name":"¿Puedes grabar una misma pieza en dos idiomas?","acceptedAnswer":{"@type":"Answer","text":"Sí. Puedo producir versiones paralelas para campañas que necesitan consistencia de mensaje entre mercados sin dividir la producción entre dos creadoras."}},{"@type":"Question","name":"¿Qué tipo de marcas encajan mejor aquí?","acceptedAnswer":{"@type":"Answer","text":"Principalmente ecommerce, beauty, lifestyle, SaaS y tecnología que necesitan una creadora con presencia natural frente a cámara y criterio comercial."}},{"@type":"Question","name":"¿Esto sirve solo para ads?","acceptedAnswer":{"@type":"Answer","text":"No. También funciona para landings, páginas de producto, creativos orgánicos, demos, testimoniales y piezas de apoyo para equipos de ventas."}}]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#webpage","url":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/","name":"Creadora UGC bilingüe | Gisela Saldarriaga","description":"Creadora UGC bilingüe para marcas que necesitan anuncios, demos y reviews en español e inglés para Estados Unidos, España y Latinoamérica.","dateModified":"2026-03-13","inLanguage":"es","isPartOf":{"@id":"https://www.giselasaldarriaga.com/#website"},"breadcrumb":{"@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#breadcrumb"},"mainEntity":{"@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#service"}},{"@type":"BreadcrumbList","@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.giselasaldarriaga.com/"},{"@type":"ListItem","position":2,"name":"Servicios","item":"https://www.giselasaldarriaga.com/"},{"@type":"ListItem","position":3,"name":"Creadora UGC bilingüe","item":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/"}]},{"@type":"Service","@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#service","name":"Creadora UGC bilingüe","serviceType":"Bilingual UGC creator","description":"Creadora UGC bilingüe para marcas que necesitan anuncios, demos y reviews en español e inglés para Estados Unidos, España y Latinoamérica.","url":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/","provider":{"@type":"ProfessionalService","name":"Gisela Saldarriaga UGC Studio","url":"https://www.giselasaldarriaga.com/","telephone":"+57-304-378-6101","availableLanguage":["es","en"]},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"Country","name":"Spain"},{"@type":"Place","name":"Latin America"}],"availableLanguage":["es","en"]},{"@type":"FAQPage","@id":"https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/#faq","inLanguage":"es","mainEntity":[{"@type":"Question","name":"¿Trabajas tanto en español como en inglés?","acceptedAnswer":{"@type":"Answer","text":"Sí. El español es mi idioma nativo y también trabajo en inglés para piezas breves y comerciales. Cuando el proyecto es en inglés, prefiero partir de un guion o una estructura clara para mantener naturalidad y precisión."}},{"@type":"Question","name":"¿Puedes grabar una misma pieza en dos idiomas?","acceptedAnswer":{"@type":"Answer","text":"Sí. Puedo producir versiones paralelas para campañas que necesitan consistencia de mensaje entre mercados sin dividir la producción entre dos creadoras."}},{"@type":"Question","name":"¿Qué tipo de marcas encajan mejor aquí?","acceptedAnswer":{"@type":"Answer","text":"Cualquier marca que necesite una creadora con presencia natural frente a cámara y criterio comercial. He trabajado con marcas de muchas industrias."}},{"@type":"Question","name":"¿Esto sirve solo para ads?","acceptedAnswer":{"@type":"Answer","text":"No. También funciona para landings, páginas de producto, creativos orgánicos, demos, testimoniales y piezas de apoyo para equipos de ventas."}}]}]}</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://media.giselasaldarriaga.com" crossorigin />
@@ -271,7 +274,7 @@
             <dt>¿Puedes grabar una misma pieza en dos idiomas?</dt>
             <dd>Sí. Puedo producir versiones paralelas para campañas que necesitan consistencia de mensaje entre mercados sin dividir la producción entre dos creadoras.</dd>
             <dt>¿Qué tipo de marcas encajan mejor aquí?</dt>
-            <dd>Principalmente ecommerce, beauty, lifestyle, SaaS y tecnología que necesitan una creadora con presencia natural frente a cámara y criterio comercial.</dd>
+            <dd>Cualquier marca que necesite una creadora con presencia natural frente a cámara y criterio comercial. He trabajado con marcas de muchas industrias.</dd>
             <dt>¿Esto sirve solo para ads?</dt>
             <dd>No. También funciona para landings, páginas de producto, creativos orgánicos, demos, testimoniales y piezas de apoyo para equipos de ventas.</dd>
           </dl>

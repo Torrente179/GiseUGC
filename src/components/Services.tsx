@@ -1,9 +1,12 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Film, Globe, Lightbulb, Megaphone, Mic, PlayCircle, Sparkles, Star } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { blurRevealUp, revealUp, springHoverTransition, springSmooth, staggerContainer } from '@/components/motion/variants';
 import { getLocaleFromPath, getServicePath, type ServicePageId } from '@/lib/locale-path';
+
+const MotionLink = motion.create(Link);
 
 const Services = () => {
   const { t } = useTranslation();
@@ -113,9 +116,9 @@ const Services = () => {
           variants={staggerContainer(0.09, 0.03)}
         >
           {serviceData.map((service, index) => (
-            <motion.a
+            <MotionLink
               key={service.titleKey}
-              href={getServicePath(servicePageByCard[index], locale)}
+              to={getServicePath(servicePageByCard[index], locale)}
               className="group rounded-[1.25rem] md:rounded-[1.5rem] border border-border/70 bg-card/50 p-5 md:p-8 backdrop-blur-md transition-[border-color,box-shadow] duration-[350ms] hover:border-primary/30 hover:shadow-xl"
               style={{ transitionTimingFunction: 'var(--ease-out-expo)' }}
               variants={blurRevealUp(18, 0.58)}
@@ -145,7 +148,7 @@ const Services = () => {
               <span className="mt-5 inline-flex text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition-colors group-hover:text-accent">
                 {exploreLabel}
               </span>
-            </motion.a>
+            </MotionLink>
           ))}
         </motion.div>
       </div>

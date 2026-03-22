@@ -23,7 +23,7 @@ const serviceFaqs = [
       {
         question: '¿Qué tipo de marcas encajan mejor aquí?',
         answer:
-          'Principalmente ecommerce, beauty, lifestyle, SaaS y tecnología que necesitan una creadora con presencia natural frente a cámara y criterio comercial.',
+          'Cualquier marca que necesite una creadora con presencia natural frente a cámara y criterio comercial. He trabajado con marcas de muchas industrias.',
       },
       {
         question: '¿Esto sirve solo para ads?',
@@ -51,7 +51,7 @@ const serviceFaqs = [
       {
         question: 'Which brands are usually the best fit?',
         answer:
-          'Mostly ecommerce, beauty, lifestyle, SaaS, and tech teams that need a creator with natural on-camera presence and clear commercial instincts.',
+          'Any brand that needs a creator with natural on-camera presence and clear commercial instincts. I\'ve worked across many industries.',
       },
       {
         question: 'Is this only for paid ads?',
@@ -291,10 +291,10 @@ const serviceFaqs = [
     file: 'servicios/ugc-problema-solucion/index.html',
     canonical: 'https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/',
     locale: 'es',
-    faqTitle: 'Preguntas frecuentes sobre UGC problema–solución',
+    faqTitle: 'Preguntas frecuentes sobre UGC problema-solución',
     faqs: [
       {
-        question: '¿Por qué el formato problema–solución convierte tan bien?',
+        question: '¿Por qué el formato problema-solución convierte tan bien?',
         answer:
           'Porque replica cómo tomamos decisiones: primero sentimos el dolor, luego buscamos la salida. Un video problema solución UGC bien hecho hace que el espectador se identifique en los primeros segundos y esté listo para la solución cuando la presentas.',
       },

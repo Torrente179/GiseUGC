@@ -1,9 +1,11 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getHomeSectionHref, getServicePath } from '@/lib/locale-path';
 import { getServicePageContent, getRelatedServiceSummaries } from '@/data/service-pages';
 import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
+import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageSeo from '@/components/PageSeo';
@@ -16,7 +18,7 @@ const SITE_URL = 'https://www.giselasaldarriaga.com';
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
-const clipMap = new Map(LEGACY_REEL_CLIPS.map((clip) => [clip.id, clip]));
+const clipMap = new Map([...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS].map((clip) => [clip.id, clip]));
 const formatDuration = (seconds?: number) => (seconds ? `${Math.round(seconds)}s` : null);
 
 type ServiceLandingPageProps = {
@@ -252,7 +254,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
       '@graph': [
         { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: page.metaTitle, description: page.metaDescription, dateModified: '2026-03-13', inLanguage: locale, isPartOf: { '@id': `${homeCanonical}#website` }, breadcrumb: { '@id': `${canonical}#breadcrumb` }, mainEntity: { '@id': `${canonical}#service` } },
         { '@type': 'BreadcrumbList', '@id': `${canonical}#breadcrumb`, itemListElement: breadcrumbItems },
-        { '@type': 'Service', '@id': `${canonical}#service`, name: page.navLabel, serviceType: page.navLabel, description: page.metaDescription, url: canonical, provider: { '@type': 'ProfessionalService', '@id': `${SITE_URL}/#business`, name: 'Gisela Saldarriaga UGC Studio', url: `${SITE_URL}/`, telephone: '+57-304-378-6101', availableLanguage: ['es', 'en'] }, areaServed: [{ '@type': 'Country', name: 'United States' }, { '@type': 'Country', name: 'Spain' }, { '@type': 'Place', name: 'Latin America' }], availableLanguage: ['es', 'en'], audience: { '@type': 'Audience', audienceType: locale === 'es' ? 'Marcas de ecommerce, beauty, lifestyle, SaaS y tecnología' : 'Ecommerce, beauty, lifestyle, SaaS, and tech brands' } },
+        { '@type': 'Service', '@id': `${canonical}#service`, name: page.navLabel, serviceType: page.navLabel, description: page.metaDescription, url: canonical, provider: { '@type': 'ProfessionalService', '@id': `${SITE_URL}/#business`, name: 'Gisela Saldarriaga UGC Studio', url: `${SITE_URL}/`, telephone: '+57-304-378-6101', availableLanguage: ['es', 'en'] }, areaServed: [{ '@type': 'Country', name: 'United States' }, { '@type': 'Country', name: 'Spain' }, { '@type': 'Place', name: 'Latin America' }], availableLanguage: ['es', 'en'], audience: { '@type': 'Audience', audienceType: locale === 'es' ? 'Marcas globales' : 'Global brands' } },
         { '@type': 'FAQPage', '@id': `${canonical}#faq`, inLanguage: locale, mainEntity: page.faqs.map((faq) => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: faq.answer } })) },
       ],
     };
@@ -320,9 +322,9 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
 
               {/* SEO breadcrumb — visually hidden on mobile */}
               <nav className="sr-only" aria-label="Breadcrumb">
-                <a href={getHomePath(locale)}>{labels.home}</a>
+                <Link to={getHomePath(locale)}>{labels.home}</Link>
                 <span>/</span>
-                <a href={getHomeSectionHref(locale, 'services')}>{labels.services}</a>
+                <Link to={getHomeSectionHref(locale, 'services')}>{labels.services}</Link>
                 <span>/</span>
                 <span>{page.breadcrumbLabel}</span>
               </nav>
@@ -460,9 +462,9 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                     const rel = relatedPages[index];
                     if (!rel) return null;
                     return (
-                      <a key={relatedId} href={getServicePath(relatedId, locale)} className="stm-related-pill">
+                      <Link key={relatedId} to={getServicePath(relatedId, locale)} className="stm-related-pill">
                         {rel.title}
-                      </a>
+                      </Link>
                     );
                   })}
                 </div>
@@ -499,9 +501,9 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
             <section className="st-hero">
               <div className="st-container">
                 <nav className="st-breadcrumb" aria-label="Breadcrumb">
-                  <a href={getHomePath(locale)}>{labels.home}</a>
+                  <Link to={getHomePath(locale)}>{labels.home}</Link>
                   <span aria-hidden="true">/</span>
-                  <a href={getHomeSectionHref(locale, 'services')}>{labels.services}</a>
+                  <Link to={getHomeSectionHref(locale, 'services')}>{labels.services}</Link>
                   <span aria-hidden="true">/</span>
                   <span>{page.breadcrumbLabel}</span>
                 </nav>
@@ -670,10 +672,10 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                       const rel = relatedPages[index];
                       if (!rel) return null;
                       return (
-                        <a key={relatedId} href={getServicePath(relatedId, locale)} className="st-related-row group">
+                        <Link key={relatedId} to={getServicePath(relatedId, locale)} className="st-related-row group">
                           <span className="st-related-title">{rel.title}</span>
                           <span className="st-related-arrow">→</span>
-                        </a>
+                        </Link>
                       );
                     })}
                   </div>

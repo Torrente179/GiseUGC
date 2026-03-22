@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { getLocaleFromPath, getServicePath, type ServicePageId } from '@/lib/locale-path';
 
 /* ── External URLs ── */
@@ -114,10 +115,10 @@ const Footer = () => {
         {/* Service links */}
         <nav className="ftm-services" aria-label={t('footer.servicesTitle')}>
           {serviceLinks.map((link) => (
-            <a key={link.href} href={link.href} className="ftm-service-link">
+            <Link key={link.href} to={link.href} className="ftm-service-link">
               <span>{link.label}</span>
               <span className="ftm-service-arrow" aria-hidden="true">→</span>
-            </a>
+            </Link>
           ))}
         </nav>
 

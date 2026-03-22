@@ -26,26 +26,20 @@
         const root = document.documentElement;
         const storageKey = 'theme';
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        let storedTheme = null;
 
         try {
-          const storedTheme = localStorage.getItem(storageKey);
-          const shouldUseDark = storedTheme === 'dark';
+          storedTheme = localStorage.getItem(storageKey);
+        } catch (_) {}
 
-          if (storedTheme === 'system') {
-            localStorage.setItem(storageKey, 'light');
-          }
+        const activeTheme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : systemTheme;
+        const shouldUseDark = activeTheme === 'dark';
 
-          root.classList.toggle('dark', shouldUseDark);
-          root.style.colorScheme = shouldUseDark ? 'dark' : 'light';
-          if (themeColorMeta) {
-            themeColorMeta.setAttribute('content', shouldUseDark ? '#0f121a' : '#fffefe');
-          }
-        } catch (_) {
-          root.classList.remove('dark');
-          root.style.colorScheme = 'light';
-          if (themeColorMeta) {
-            themeColorMeta.setAttribute('content', '#fffefe');
-          }
+        root.classList.toggle('dark', shouldUseDark);
+        root.style.colorScheme = activeTheme;
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute('content', shouldUseDark ? '#0f121a' : '#fffefe');
         }
       })();
     </script>
@@ -563,7 +557,7 @@
       <noscript>
         <article class="boot-noscript" style="max-width:800px;margin:0 auto;padding:24px;font-family:'DM Sans',system-ui,sans-serif;color:#2f2a24">
           <h2>Bilingual UGC creator and spokesperson for brands that sell through social</h2>
-          <p>Gisela Saldarriaga creates UGC ads, product demos, reviews, and spokesperson videos in Spanish and English for ecommerce, beauty, lifestyle, SaaS, and tech brands. She works from Medellin with teams in the US, Spain, and LatAm.</p>
+          <p>Gisela Saldarriaga creates UGC ads, product demos, reviews, and spokesperson videos in Spanish and English for global brands. She works from Medellin with teams worldwide.</p>
 
           <h3>UGC services</h3>
           <ul>

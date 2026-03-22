@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { getHomePath, getLocaleFromPath } from "@/lib/locale-path";
 
@@ -27,9 +27,9 @@ const NotFound = () => {
       <div className="text-center cafe-panel p-10 max-w-lg w-full">
         <h1 className="text-5xl font-bold mb-4 text-primary">404</h1>
         <p className="text-xl text-muted-foreground mb-6">{copy.title}</p>
-        <a href={getHomePath(locale)} className="btn-primary-nordic px-6 py-2.5 hover-grow">
+        <Link to={getHomePath(locale)} className="btn-primary-nordic px-6 py-2.5 hover-grow">
           {copy.action}
-        </a>
+        </Link>
       </div>
     </div>
   );
