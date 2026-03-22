@@ -163,7 +163,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     const clip = activeProofItem?.clip;
     if (!clip) return [];
     const preferred = isMobileViewport
-      ? [clip.mobileSrc, clip.mainSrc, clip.previewSrc]
+      ? [clip.mainSrc, clip.mobileSrc, clip.previewSrc]
       : [clip.mainSrc, clip.mobileSrc, clip.previewSrc];
     return preferred.filter((s, i, a): s is string => !!s && a.indexOf(s) === i);
   }, [activeProofItem, isMobileViewport]);

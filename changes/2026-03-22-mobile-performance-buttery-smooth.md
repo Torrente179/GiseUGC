@@ -45,8 +45,23 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
 });
 ```
 
+### 3. Service page theater plays lower-quality video on mobile vs homepage
+
+**Root cause:** `ServiceLandingPage.tsx` theater source priority on mobile was `[mobileSrc, mainSrc, previewSrc]`, preferring the smaller mobile encode. Meanwhile, `Portfolio.tsx` (homepage) uses `[mainSrc, mobileSrc]` on mobile (`shouldPreferMobileTheaterSource = false`), giving the full-quality experience. This mismatch was documented in `changes/ui/service-video-theater-parity.md` but the source order was set to mobile-first during initial implementation.
+
+**Fix:** Aligned service page theater source priority to match portfolio — now `[mainSrc, mobileSrc, previewSrc]` on mobile. Both pages serve the highest-quality video first.
+
+```tsx
+// Before: mobile got lower-quality mobileSrc first
+? [clip.mobileSrc, clip.mainSrc, clip.previewSrc]
+
+// After: mainSrc first on all viewports (matches portfolio)
+? [clip.mainSrc, clip.mobileSrc, clip.previewSrc]
+```
+
 ## Files changed
 
 - `src/components/Services.tsx` — per-card `whileInView` on mobile with reduced animation intensity; desktop stagger unchanged
 - `src/pages/Index.tsx` — `React.memo` wrapper, accepts `locale` prop, removed `useLocation()` dependency
 - `src/App.tsx` — computes `locale` in render body, passes to `Index`
+- `src/components/ServiceLandingPage.tsx` — theater source priority on mobile changed to `mainSrc` first, matching portfolio parity
