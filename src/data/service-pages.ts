@@ -1170,6 +1170,11 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Estas piezas muestran cómo explico productos y servicios con claridad y ritmo comercial.',
       featuredExamples: [
         {
+          clipId: 3,
+          title: 'Review-demo de voicebot (Calvotia)',
+          description: 'Testimonial en contexto de café que evoluciona a explicación de producto con beneficios claros.',
+        },
+        {
           clipId: 1008,
           title: 'Demo en vivo de VoiceBot automotriz',
           description: 'Conversación real con un bot de Calvotia para un concesionario. Muestra el producto funcionando en tiempo real.',
@@ -1178,11 +1183,6 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           clipId: 1011,
           title: 'Demo de VoiceBot para clínica dental',
           description: 'Demostración interactiva: agendar citas, consultar tarifas y dirección. El producto se explica solo.',
-        },
-        {
-          clipId: 3,
-          title: 'Review-demo de voicebot (Calvotia)',
-          description: 'Testimonial en contexto de café que evoluciona a explicación de producto con beneficios claros.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre demos UGC',
@@ -1296,6 +1296,11 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'These pieces show how I explain products and services with clarity and commercial pacing.',
       featuredExamples: [
         {
+          clipId: 3,
+          title: 'Voicebot review-demo (Calvotia)',
+          description: 'Cafe-setting testimonial that evolves into a product explanation with clear benefits.',
+        },
+        {
           clipId: 1008,
           title: 'Live VoiceBot demo for auto dealer',
           description: 'Real conversation with a Calvotia bot for a car dealership. Shows the product working in real time.',
@@ -1304,11 +1309,6 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           clipId: 1011,
           title: 'VoiceBot demo for dental clinic',
           description: 'Interactive demo: booking appointments, checking rates and location. The product explains itself.',
-        },
-        {
-          clipId: 3,
-          title: 'Voicebot review-demo (Calvotia)',
-          description: 'Cafe-setting testimonial that evolves into a product explanation with clear benefits.',
         },
       ],
       faqTitle: 'FAQs about UGC product demos',

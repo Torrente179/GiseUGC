@@ -32,7 +32,7 @@ Read all 26 video transcripts (10 legacy + 16 nuevos) and reassigned featured ex
 | spokesperson-videos | 2,6,7 | 2,1010,1005 | 2=brand spokesperson, 1010=news anchor, 1005=financial spokesperson |
 | ugc-ads-tiktok-meta | 1,4,7 | 1001,1003,1009 | 1001=marketing ad, 1003=vehicle wrap ad, 1009=WhatsApp bot ad |
 | ugc-testimonials-reviews | 1,4,8 | 4,1013,1004 | 4=supplement review, 1013=fitness testimonial, 1004=restaurant review |
-| ugc-product-demo | 3,7,9 | 1008,1011,3 | 1008=auto VoiceBot demo, 1011=dental demo, 3=voicebot review |
+| ugc-product-demo | 3,7,9 | 3,1008,1011 | 3=voicebot review-demo (hero), 1008=auto VoiceBot demo, 1011=dental demo |
 | ugc-problem-solution | 5,4,2 | 1009,5,1001 | 1009=WhatsApp hook-pain-CTA, 5=real estate hook-solution, 1001=marketing hook-solution |
 | ugc-lifestyle | 1,8,10 | 8,1002,1 | 8=perfume lifestyle, 1002=Spain organic content, 1=Temu try-on |
 | ugc-broll-footage | 10,8,5 | 10,1002,1007 | 10=short lifestyle, 1002=travel visuals, 1007=news BTS |
