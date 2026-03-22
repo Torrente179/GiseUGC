@@ -96,7 +96,11 @@ const FloatingContactDock = () => {
         return;
       }
 
-      const footer = document.getElementById('contact');
+      const footerCandidates = document.querySelectorAll<HTMLElement>('#contact');
+      let footer: HTMLElement | null = null;
+      for (const candidate of footerCandidates) {
+        if (candidate.offsetHeight > 0) { footer = candidate; break; }
+      }
       const isAtAbsoluteBottom = footer
         ? footer.getBoundingClientRect().bottom <= window.innerHeight + 2
         : (() => {
