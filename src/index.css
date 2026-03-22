@@ -1779,6 +1779,12 @@
     color: hsl(var(--foreground) / 0.48);
   }
 
+  .dark .st-proof-meta-chip {
+    border-color: hsl(var(--pure-linen) / 0.15);
+    background: hsl(var(--pure-linen) / 0.06);
+    color: hsl(var(--pure-linen) / 0.55);
+  }
+
   /* ════════════════════════════════
      4. THE PROCESS — Horizontal blocks
      ════════════════════════════════ */
