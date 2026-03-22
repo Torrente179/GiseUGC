@@ -87,7 +87,7 @@ const Services = () => {
           variants={staggerContainer(0.12, 0.04)}
         >
           <div className="text-center md:text-left">
-            <motion.p className="section-label text-muted-foreground mb-4" variants={blurRevealUp(14, 0.56)}>
+            <motion.p className="section-label text-muted-foreground mb-4" variants={revealUp(14, 0.45)}>
               {t('services.sectionSubtitle')}
             </motion.p>
             <h2 className="studio-title">
@@ -96,7 +96,7 @@ const Services = () => {
           </div>
           <motion.p
             className="studio-subtitle lg:justify-self-end text-center md:text-right max-w-lg"
-            variants={blurRevealUp(18, 0.62)}
+            variants={revealUp(18, 0.5)}
           >
             {t('services.motionSubtitle')}
           </motion.p>
