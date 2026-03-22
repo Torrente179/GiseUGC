@@ -991,6 +991,19 @@
     }
   }
 
+  /* ─── Page-level enter fade (service pages mounting on navigation) ─── */
+  /* Reuses fade-in-mount keyframes — shorter duration for page-swap context. */
+  .page-enter {
+    animation: fade-in-mount 0.2s var(--ease-out-expo) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-enter {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
   /* ─── Accordion Content Fade ─── */
   .accordion-content-fade {
     animation: accordion-content-reveal 0.3s var(--ease-out-expo) 0.08s both;
