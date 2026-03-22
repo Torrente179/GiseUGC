@@ -15,6 +15,11 @@ type DeferredMountState = {
 
 let nextQueueSlotAt = 0;
 
+// Sections that have been mounted at least once survive SPA navigation.
+// When the user returns to a page, sections render immediately instead of
+// cycling through skeleton → lazy-load → reveal.
+const persistedMountedSections = new Set<string>();
+
 export const useDeferredMount = ({
   enabled = true,
   rootMargin = '700px 0px',
@@ -24,7 +29,9 @@ export const useDeferredMount = ({
   const placeholderRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<number | null>(null);
   const scheduledRef = useRef(false);
-  const [shouldMount, setShouldMount] = useState(false);
+  // Initialise as already-mounted when the section was previously shown in
+  // this browser session (survives SPA navigations away and back).
+  const [shouldMount, setShouldMount] = useState(() => persistedMountedSections.has(mountId));
 
   useEffect(() => {
     if (!enabled) {
@@ -59,6 +66,7 @@ export const useDeferredMount = ({
         startTransition(() => {
           setShouldMount(true);
         });
+        persistedMountedSections.add(mountId);
         mark(mountedMark);
         measure(queuedMark, mountedMark, `${mountId}:deferred-mount`);
         timeoutRef.current = null;
