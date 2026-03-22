@@ -1,5 +1,13 @@
 export type SiteLocale = 'es' | 'en';
-export type ServicePageId = 'bilingual-ugc-creator' | 'spokesperson-videos' | 'ugc-ads-tiktok-meta';
+export type ServicePageId =
+  | 'bilingual-ugc-creator'
+  | 'spokesperson-videos'
+  | 'ugc-ads-tiktok-meta'
+  | 'ugc-testimonials-reviews'
+  | 'ugc-product-demo'
+  | 'ugc-problem-solution'
+  | 'ugc-lifestyle'
+  | 'ugc-broll-footage';
 
 const HOME_PATHS: Record<SiteLocale, string> = {
   es: '/',
@@ -18,6 +26,26 @@ const SERVICE_PATHS: Record<ServicePageId, Record<SiteLocale, string>> = {
   'ugc-ads-tiktok-meta': {
     es: '/servicios/ugc-ads-tiktok-meta/',
     en: '/en/services/ugc-ads-tiktok-meta/',
+  },
+  'ugc-testimonials-reviews': {
+    es: '/servicios/testimoniales-resenas-ugc/',
+    en: '/en/services/ugc-testimonials-reviews/',
+  },
+  'ugc-product-demo': {
+    es: '/servicios/demo-producto-ugc/',
+    en: '/en/services/ugc-product-demo/',
+  },
+  'ugc-problem-solution': {
+    es: '/servicios/ugc-problema-solucion/',
+    en: '/en/services/ugc-problem-solution/',
+  },
+  'ugc-lifestyle': {
+    es: '/servicios/ugc-lifestyle/',
+    en: '/en/services/lifestyle-ugc-organic-content/',
+  },
+  'ugc-broll-footage': {
+    es: '/servicios/b-roll-footage-ugc/',
+    en: '/en/services/ugc-b-roll-footage/',
   },
 };
 

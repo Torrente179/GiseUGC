@@ -73,4 +73,94 @@
     <changefreq>weekly</changefreq>
     <priority>0.82</priority>
   </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-testimonials-reviews/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/" />
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/services/ugc-testimonials-reviews/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-testimonials-reviews/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/" />
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-product-demo/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/" />
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/services/ugc-product-demo/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-product-demo/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/" />
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-problem-solution/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/" />
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/services/ugc-problem-solution/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-problem-solution/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/" />
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/" />
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/" />
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/" />
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/" />
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
 </urlset>

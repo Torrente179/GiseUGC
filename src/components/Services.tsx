@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Film, Lightbulb, Megaphone, PlayCircle, Sparkles, Star } from 'lucide-react';
+import { Film, Globe, Lightbulb, Megaphone, Mic, PlayCircle, Sparkles, Star } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { blurRevealUp, revealUp, springHoverTransition, springSmooth, staggerContainer } from '@/components/motion/variants';
@@ -11,9 +11,11 @@ const Services = () => {
   const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
   const servicePageByCard: ServicePageId[] = [
     'ugc-ads-tiktok-meta',
-    'bilingual-ugc-creator',
-    'bilingual-ugc-creator',
-    'ugc-ads-tiktok-meta',
+    'ugc-testimonials-reviews',
+    'ugc-product-demo',
+    'ugc-problem-solution',
+    'ugc-lifestyle',
+    'ugc-broll-footage',
     'bilingual-ugc-creator',
     'spokesperson-videos',
   ];
@@ -55,6 +57,18 @@ const Services = () => {
       subtitleKey: 'services.service6.subtitle',
       descriptionKey: 'services.service6.description',
     },
+    {
+      icon: <Globe className="h-8 w-8 text-primary/80" />,
+      titleKey: 'services.service7.title',
+      subtitleKey: 'services.service7.subtitle',
+      descriptionKey: 'services.service7.description',
+    },
+    {
+      icon: <Mic className="h-8 w-8 text-primary/80" />,
+      titleKey: 'services.service8.title',
+      subtitleKey: 'services.service8.subtitle',
+      descriptionKey: 'services.service8.description',
+    },
   ];
 
   return (
@@ -92,7 +106,7 @@ const Services = () => {
         />
 
         <motion.div
-          className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-3"
+          className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.25 }}

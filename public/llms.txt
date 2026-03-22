@@ -2,7 +2,7 @@
 
 > Bilingual UGC creator and spokesperson producing TikTok ads, Meta ads, product demos, reviews, and creator-led social videos for brands selling in the US, Spain, and LatAm.
 
-Last-Updated: 2026-03-13
+Last-Updated: 2026-03-21
 Primary-Language: es
 Secondary-Language: en
 Location: Medellin, Colombia
@@ -16,6 +16,16 @@ Location: Medellin, Colombia
 - English spokesperson videos page: https://www.giselasaldarriaga.com/en/services/spokesperson-videos/
 - Spanish UGC ads page: https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/
 - English UGC ads page: https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/
+- Spanish testimonials/reviews page: https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/
+- English testimonials/reviews page: https://www.giselasaldarriaga.com/en/services/ugc-testimonials-reviews/
+- Spanish product demo page: https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/
+- English product demo page: https://www.giselasaldarriaga.com/en/services/ugc-product-demo/
+- Spanish problem-solution page: https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/
+- English problem-solution page: https://www.giselasaldarriaga.com/en/services/ugc-problem-solution/
+- Spanish lifestyle UGC page: https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/
+- English lifestyle UGC page: https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/
+- Spanish b-roll footage page: https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/
+- English b-roll footage page: https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/
 
 ## Primary Service Terms
 - bilingual UGC creator
@@ -28,6 +38,11 @@ Location: Medellin, Colombia
 - fashion UGC
 - tech and SaaS UGC
 - creator-led paid social videos
+- UGC testimonials and review videos
+- product demo and tutorial UGC
+- problem-solution direct response UGC
+- lifestyle UGC organic content
+- UGC b-roll footage packages
 
 ## Key Proof
 - 28+ active brand campaigns across fashion, beauty, tech, and lifestyle
@@ -37,7 +52,7 @@ Location: Medellin, Colombia
 
 ## Preferred Source Surfaces
 - Homepage hero, services, FAQ, and footer copy
-- Service pages dedicated to bilingual UGC, spokesperson videos, and UGC ads
+- Service pages dedicated to bilingual UGC, spokesperson videos, UGC ads, testimonials/reviews, product demos, problem-solution, lifestyle UGC, and b-roll footage
 - Featured portfolio videos on the homepage
 - Fiverr profile for marketplace proof and reviews
 
