@@ -88,9 +88,16 @@ const AppRoutes = () => {
     prevLocationKeyRef.current = location.key;
 
     if (navigationType === 'POP') {
-      // Browser back / forward — restore exact saved scroll position
+      // Browser back / forward — restore exact saved scroll position.
+      // Two rAF hops let the browser finish layout (especially display:none→block
+      // for the homepage) before we set scroll, preventing the main-thread freeze
+      // on mobile where layout and scroll restoration would otherwise compete.
       const savedY = scrollPositions.get(location.key) ?? 0;
-      jumpToY(savedY);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          jumpToY(savedY);
+        });
+      });
     } else if (location.hash) {
       // Navigating to a hash section (e.g. /#services from a service page)
       jumpToY(0);

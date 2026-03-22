@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Film, Globe, Lightbulb, Megaphone, Mic, PlayCircle, Sparkles, Star } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
-import { blurRevealUp, revealUp, springHoverTransition, springSmooth, staggerContainer } from '@/components/motion/variants';
+import { revealUp, springHoverTransition, springSmooth, staggerContainer } from '@/components/motion/variants';
 import { getLocaleFromPath, getServicePath, type ServicePageId } from '@/lib/locale-path';
 
 const MotionLink = motion.create(Link);
@@ -112,8 +112,8 @@ const Services = () => {
           className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.25 }}
-          variants={staggerContainer(0.09, 0.03)}
+          viewport={{ once: true, amount: 0.15 }}
+          variants={staggerContainer(0.05, 0.02)}
         >
           {serviceData.map((service, index) => (
             <MotionLink
@@ -121,7 +121,7 @@ const Services = () => {
               to={getServicePath(servicePageByCard[index], locale)}
               className="group rounded-[1.25rem] md:rounded-[1.5rem] border border-border/70 bg-card/50 p-5 md:p-8 backdrop-blur-md transition-[border-color,box-shadow] duration-[350ms] hover:border-primary/30 hover:shadow-xl"
               style={{ transitionTimingFunction: 'var(--ease-out-expo)' }}
-              variants={blurRevealUp(18, 0.58)}
+              variants={revealUp(18, 0.45)}
               whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.015 }}
               whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
               transition={springSmooth}
