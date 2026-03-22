@@ -8,6 +8,7 @@ export type ServicePageId =
   | 'ugc-problem-solution'
   | 'ugc-lifestyle'
   | 'ugc-broll-footage';
+export type LegalPageId = 'privacy-policy' | 'terms-content-use';
 
 const HOME_PATHS: Record<SiteLocale, string> = {
   es: '/',
@@ -49,6 +50,17 @@ const SERVICE_PATHS: Record<ServicePageId, Record<SiteLocale, string>> = {
   },
 };
 
+const LEGAL_PATHS: Record<LegalPageId, Record<SiteLocale, string>> = {
+  'privacy-policy': {
+    es: '/politica-de-privacidad/',
+    en: '/en/privacy-policy/',
+  },
+  'terms-content-use': {
+    es: '/terminos-y-uso-de-contenido/',
+    en: '/en/terms-and-content-use/',
+  },
+};
+
 const normalizeHash = (hash = '') => {
   if (!hash) return '';
   return hash.startsWith('#') ? hash : `#${hash}`;
@@ -81,19 +93,29 @@ export const getCanonicalLocaleHref = (locale: SiteLocale, hash = ''): string =>
 export const getHomeSectionHref = (locale: SiteLocale, sectionId: string) => getHomePath(locale, `#${sectionId}`);
 
 export const getServicePath = (serviceId: ServicePageId, locale: SiteLocale): string => SERVICE_PATHS[serviceId][locale];
+export const getLegalPath = (pageId: LegalPageId, locale: SiteLocale): string => LEGAL_PATHS[pageId][locale];
 
-export const getServicePageIdFromPath = (pathname: string): ServicePageId | null => {
+const getPageIdFromPath = <TPageId extends string>(
+  pathname: string,
+  paths: Record<TPageId, Record<SiteLocale, string>>,
+): TPageId | null => {
   const normalized = normalizePathname(pathname);
-  const entries = Object.entries(SERVICE_PATHS) as Array<[ServicePageId, Record<SiteLocale, string>]>;
+  const entries = Object.entries(paths) as Array<[TPageId, Record<SiteLocale, string>]>;
 
-  for (const [serviceId, localeMap] of entries) {
+  for (const [pageId, localeMap] of entries) {
     if (normalizePathname(localeMap.es) === normalized || normalizePathname(localeMap.en) === normalized) {
-      return serviceId;
+      return pageId;
     }
   }
 
   return null;
 };
+
+export const getServicePageIdFromPath = (pathname: string): ServicePageId | null =>
+  getPageIdFromPath(pathname, SERVICE_PATHS);
+
+export const getLegalPageIdFromPath = (pathname: string): LegalPageId | null =>
+  getPageIdFromPath(pathname, LEGAL_PATHS);
 
 export const getLocalizedPathForCurrentRoute = (
   pathname: string,
@@ -105,15 +127,29 @@ export const getLocalizedPathForCurrentRoute = (
     return `${getServicePath(serviceId, targetLocale)}${normalizeHash(hash)}`;
   }
 
+  const legalPageId = getLegalPageIdFromPath(pathname);
+  if (legalPageId) {
+    return `${getLegalPath(legalPageId, targetLocale)}${normalizeHash(hash)}`;
+  }
+
   return getHomePath(targetLocale, hash);
 };
 
 export const getAllServicePaths = () => SERVICE_PATHS;
+export const getAllLegalPaths = () => LEGAL_PATHS;
 
 export const getServicePageRouteEntries = () => {
   const serviceIds = Object.keys(SERVICE_PATHS) as ServicePageId[];
   return serviceIds.flatMap((serviceId) => [
     { serviceId, locale: 'es' as SiteLocale, path: SERVICE_PATHS[serviceId].es },
     { serviceId, locale: 'en' as SiteLocale, path: SERVICE_PATHS[serviceId].en },
+  ]);
+};
+
+export const getLegalPageRouteEntries = () => {
+  const pageIds = Object.keys(LEGAL_PATHS) as LegalPageId[];
+  return pageIds.flatMap((pageId) => [
+    { pageId, locale: 'es' as SiteLocale, path: LEGAL_PATHS[pageId].es },
+    { pageId, locale: 'en' as SiteLocale, path: LEGAL_PATHS[pageId].en },
   ]);
 };

@@ -1,6 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { getLocaleFromPath, getServicePath, type ServicePageId } from '@/lib/locale-path';
+import {
+  getLegalPath,
+  getLocaleFromPath,
+  getServicePath,
+  type ServicePageId,
+} from '@/lib/locale-path';
 
 /* ── External URLs ── */
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
@@ -37,6 +42,16 @@ const Footer = () => {
     href: getServicePath(serviceId, locale),
     label: t(`footer.services.${serviceId}`),
   }));
+  const legalLinks = [
+    {
+      href: getLegalPath('privacy-policy', locale),
+      label: t('footer.privacyPolicy'),
+    },
+    {
+      href: getLegalPath('terms-content-use', locale),
+      label: t('footer.termsContentUse'),
+    },
+  ];
 
   return (
     <footer id="contact" className="ft-root">
@@ -88,6 +103,13 @@ const Footer = () => {
           {/* Bottom bar */}
           <div className="ft-bar">
             <p className="ft-bar-text">{t('footer.bottomNote')}</p>
+            <nav className="ft-bar-links" aria-label={t('footer.legalTitle')}>
+              {legalLinks.map((link) => (
+                <Link key={link.href} to={link.href} className="ft-bar-link">
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
             <p className="ft-bar-text">{t('footer.copyright', { year: currentYear })}</p>
           </div>
         </div>
@@ -138,6 +160,13 @@ const Footer = () => {
         <div className="ftm-bottom">
           <p className="ftm-bottom-text">{t('footer.studioFactLocation')}</p>
           <p className="ftm-bottom-text">{t('footer.studioFactLanguages')}</p>
+          <nav className="ftm-legal-links" aria-label={t('footer.legalTitle')}>
+            {legalLinks.map((link) => (
+              <Link key={link.href} to={link.href} className="ftm-legal-link">
+                {link.label}
+              </Link>
+            ))}
+          </nav>
           <p className="ftm-bottom-text ftm-bottom-copyright">{t('footer.copyright', { year: currentYear })}</p>
         </div>
       </div>

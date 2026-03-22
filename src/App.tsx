@@ -1,22 +1,26 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics, track } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useTranslation } from 'react-i18next';
 import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import ServiceLandingPage from '@/components/ServiceLandingPage';
+import LegalPage from '@/components/LegalPage';
 import ThemeRuntimeSync from '@/components/ThemeRuntimeSync';
 import {
   getLocaleFromPath,
+  getLegalPageRouteEntries,
   getServicePageRouteEntries,
   isHomePath,
   normalizePathname,
 } from '@/lib/locale-path';
+import { getChatGptReferralContext } from '@/lib/referral-attribution';
 import { getLenis } from '@/lib/smooth-scroll';
 
 // Persist scroll positions across SPA navigations, keyed by React Router location.key
 const scrollPositions = new Map<string, number>();
+let hasTrackedChatGptLanding = false;
 
 // Track the latest scroll Y in real time so we can save it before leaving a page
 let latestScrollY = 0;
@@ -24,6 +28,7 @@ window.addEventListener('scroll', () => { latestScrollY = window.scrollY; }, { p
 
 // All service route entries — computed once at module level
 const serviceRouteEntries = getServicePageRouteEntries();
+const legalRouteEntries = getLegalPageRouteEntries();
 
 // Scroll to a Y position, using Lenis when available for an immediate (non-animated) jump
 const jumpToY = (y: number) => {
@@ -73,7 +78,13 @@ const AppRoutes = () => {
     return serviceRouteEntries.find(e => normalizePathname(e.path) === normalized) ?? null;
   }, [location.pathname, onHome]);
 
-  const isKnownRoute = onHome || currentServiceEntry !== null;
+  const currentLegalEntry = useMemo(() => {
+    if (onHome) return null;
+    const normalized = normalizePathname(location.pathname);
+    return legalRouteEntries.find((entry) => normalizePathname(entry.path) === normalized) ?? null;
+  }, [location.pathname, onHome]);
+
+  const isKnownRoute = onHome || currentServiceEntry !== null || currentLegalEntry !== null;
 
   useEffect(() => {
     // Keep locale in sync with the current path
@@ -139,12 +150,46 @@ const AppRoutes = () => {
         </div>
       )}
 
+      {currentLegalEntry && (
+        <div key={location.pathname} className="page-enter">
+          <LegalPage
+            pageId={currentLegalEntry.pageId}
+            locale={currentLegalEntry.locale}
+          />
+        </div>
+      )}
+
       {!isKnownRoute && <NotFound />}
     </>
   );
 };
 
 const App = () => {
+  useEffect(() => {
+    if (hasTrackedChatGptLanding) return;
+
+    const referral = getChatGptReferralContext(window.location.href, document.referrer);
+    if (!referral) return;
+
+    let attempts = 0;
+
+    const sendChatGptLandingEvent = () => {
+      const va = (window as Window & { va?: (...args: unknown[]) => void }).va;
+      if (typeof va === 'function') {
+        track('ChatGPT Referral Landing', referral);
+        hasTrackedChatGptLanding = true;
+        return;
+      }
+
+      attempts += 1;
+      if (attempts < 10) {
+        window.setTimeout(sendChatGptLandingEvent, 150);
+      }
+    };
+
+    window.setTimeout(sendChatGptLandingEvent, 0);
+  }, []);
+
   return (
     <>
       <ThemeRuntimeSync />

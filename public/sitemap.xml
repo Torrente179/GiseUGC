@@ -20,6 +20,42 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://www.giselasaldarriaga.com/politica-de-privacidad/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/privacy-policy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.35</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/privacy-policy/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/privacy-policy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.35</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/terms-and-content-use/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.35</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/terms-and-content-use/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/terms-and-content-use/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.35</priority>
+  </url>
+  <url>
     <loc>https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/" />

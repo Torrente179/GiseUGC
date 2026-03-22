@@ -23,6 +23,10 @@ export default defineConfig(({ mode }) => ({
       input: {
         main: path.resolve(__dirname, 'index.html'),
         en: path.resolve(__dirname, 'en/index.html'),
+        privacyEs: path.resolve(__dirname, 'politica-de-privacidad/index.html'),
+        privacyEn: path.resolve(__dirname, 'en/privacy-policy/index.html'),
+        termsEs: path.resolve(__dirname, 'terminos-y-uso-de-contenido/index.html'),
+        termsEn: path.resolve(__dirname, 'en/terms-and-content-use/index.html'),
         bilingualUgcEs: path.resolve(__dirname, 'servicios/creadora-ugc-bilingue/index.html'),
         spokespersonEs: path.resolve(__dirname, 'servicios/videos-de-portavoz/index.html'),
         ugcAdsEs: path.resolve(__dirname, 'servicios/ugc-ads-tiktok-meta/index.html'),
