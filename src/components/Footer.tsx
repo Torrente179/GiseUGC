@@ -14,6 +14,11 @@ const servicePageIds: ServicePageId[] = [
   'bilingual-ugc-creator',
   'spokesperson-videos',
   'ugc-ads-tiktok-meta',
+  'ugc-testimonials-reviews',
+  'ugc-product-demo',
+  'ugc-problem-solution',
+  'ugc-lifestyle',
+  'ugc-broll-footage',
 ];
 
 /* ════════════════════════════════════════════════════════════════════

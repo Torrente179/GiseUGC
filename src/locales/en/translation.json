@@ -251,7 +251,12 @@
     "services": {
       "bilingual-ugc-creator": "Bilingual UGC creator",
       "spokesperson-videos": "Spokesperson videos",
-      "ugc-ads-tiktok-meta": "UGC ads for TikTok and Meta"
+      "ugc-ads-tiktok-meta": "UGC ads for TikTok and Meta",
+      "ugc-testimonials-reviews": "UGC testimonials and reviews",
+      "ugc-product-demo": "UGC product demos",
+      "ugc-problem-solution": "Problem-solution UGC",
+      "ugc-lifestyle": "Lifestyle UGC",
+      "ugc-broll-footage": "UGC b-roll"
     },
     "fiverr": {
       "name": "Gisela",
