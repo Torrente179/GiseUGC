@@ -1349,7 +1349,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
         'Videos UGC con formato problema–solución: hook, dolor, solución y CTA. El formato más orientado a conversión para paid social.',
       breadcrumbLabel: 'Problema–solución',
       heroEyebrow: 'Direct response',
-      heroTitle: 'Videos UGC problema–solución que enganchan, duelen y convierten',
+      heroTitle: 'Videos UGC problema–solución que enganchan, conectan y convierten',
       heroSummary:
         'Creo creativos con el formato hook–problema–solución–CTA, el más efectivo para direct response. Entiendo la estructura narrativa porque llevo más de 9 años en medios, y eso se nota en cada guion.',
       heroPoints: [
