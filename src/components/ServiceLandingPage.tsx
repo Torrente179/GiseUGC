@@ -296,13 +296,15 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   onClick={() => openProofClip(0)}
                   aria-label={`${labels.openSample}: ${leadProof.example.title}`}
                 >
-                  <img
-                    src={leadProof.clip.posterSrc}
-                    alt={leadProof.example.title}
+                  <video
+                    src={`${leadProof.clip.mainSrc}#t=0.001`}
+                    poster={leadProof.clip.posterSrc}
                     className="stm-hero-poster-img"
-                    loading="eager"
-                    decoding="async"
-                    fetchPriority="high"
+                    muted
+                    playsInline
+                    preload="auto"
+                    disablePictureInPicture
+                    aria-label={leadProof.example.title}
                   />
                   <div className="stm-hero-poster-overlay" />
                   <div className="st-play-btn">
@@ -517,7 +519,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   {leadProof && (
                     <div className="st-hero-media">
                       <button type="button" className="st-letterbox group" onClick={() => openProofClip(0)} aria-label={`${labels.openSample}: ${leadProof.example.title}`}>
-                        <img src={leadProof.clip.posterSrc} alt={leadProof.example.title} className="st-letterbox-img" loading="eager" decoding="async" fetchPriority="high" />
+                        <video src={`${leadProof.clip.mainSrc}#t=0.001`} poster={leadProof.clip.posterSrc} className="st-letterbox-img" muted playsInline preload="auto" disablePictureInPicture aria-label={leadProof.example.title} />
                         <div className="st-play-btn"><Play className="h-5 w-5 ml-0.5" /></div>
                         <div className="st-letterbox-caption">
                           <span className="st-chip">{page.navLabel}</span>

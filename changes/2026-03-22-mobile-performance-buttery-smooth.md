@@ -59,6 +59,25 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
 ? [clip.mainSrc, clip.mobileSrc, clip.previewSrc]
 ```
 
+### 4. Service page hero poster low quality (blurry JPG vs crisp video frame)
+
+**Root cause:** The hero on both mobile and desktop service pages used `<img src={clip.posterSrc}>` — a low-resolution JPG extracted separately and uploaded to R2. The encoding pipeline (`encode-videos.sh`) does NOT generate posters; they were created manually at inconsistent quality. Meanwhile, the main video files are full-resolution originals.
+
+**Fix:** Replaced the hero `<img>` with a `<video>` element that loads the first frame of `mainSrc` using the `#t=0.001` fragment. The low-quality `posterSrc` is kept as the HTML `poster` attribute for instant fallback while the video loads. Applied to both mobile (`stm-hero-poster`) and desktop (`st-letterbox`) hero areas. Reel card thumbnails and proof gallery cards still use `posterSrc` since they're small thumbnails where the quality difference is negligible.
+
+```tsx
+// Before: blurry JPG poster
+<img src={clip.posterSrc} className="stm-hero-poster-img" />
+
+// After: first frame from full-res main video, poster as fallback
+<video
+  src={`${clip.mainSrc}#t=0.001`}
+  poster={clip.posterSrc}
+  className="stm-hero-poster-img"
+  muted playsInline preload="auto"
+/>
+```
+
 ## Files changed
 
 - `src/components/Services.tsx` — per-card `whileInView` on mobile with reduced animation intensity; desktop stagger unchanged
