@@ -63,18 +63,32 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
 
 **Root cause:** The hero on both mobile and desktop service pages used `<img src={clip.posterSrc}>` — a low-resolution JPG extracted separately and uploaded to R2. The encoding pipeline (`encode-videos.sh`) does NOT generate posters; they were created manually at inconsistent quality. Meanwhile, the main video files are full-resolution originals.
 
-**Fix:** Replaced the hero `<img>` with a `<video>` element that loads the first frame of `mainSrc` using the `#t=0.001` fragment. The low-quality `posterSrc` is kept as the HTML `poster` attribute for instant fallback while the video loads. Applied to both mobile (`stm-hero-poster`) and desktop (`st-letterbox`) hero areas. Reel card thumbnails and proof gallery cards still use `posterSrc` since they're small thumbnails where the quality difference is negligible.
+**Fix:** Replaced ALL `<img src={posterSrc}>` elements with `<video>` elements that load the second frame of `mainSrc` using the `#t=0.04` fragment. The low-quality `posterSrc` is kept as the HTML `poster` attribute for instant fallback while the video loads. Applied universally across every video presentation on service pages:
+
+- Mobile hero poster (`stm-hero-poster-img`)
+- Desktop hero letterbox (`st-letterbox-img`)
+- Mobile reel card thumbnails (`stm-reel-card-img`) — uses `preload="metadata"` since these are smaller thumbnails
+- Desktop proof gallery cards (`st-proof-stage-poster`) — uses `preload="metadata"`
+- Theater overlay poster — now passes `mainSrc#t=0.04` instead of `posterSrc` to `TheaterVideo`
 
 ```tsx
-// Before: blurry JPG poster
+// Before: blurry JPG poster (all locations)
 <img src={clip.posterSrc} className="stm-hero-poster-img" />
 
-// After: first frame from full-res main video, poster as fallback
+// After: second frame from full-res main video, poster as fallback
 <video
-  src={`${clip.mainSrc}#t=0.001`}
+  src={`${clip.mainSrc}#t=0.04`}
   poster={clip.posterSrc}
   className="stm-hero-poster-img"
   muted playsInline preload="auto"
+/>
+
+// Reel cards & proof gallery use preload="metadata" to limit bandwidth
+<video
+  src={`${clip.mainSrc}#t=0.04`}
+  poster={clip.posterSrc}
+  className="stm-reel-card-img"
+  muted playsInline preload="metadata"
 />
 ```
 
@@ -83,4 +97,4 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
 - `src/components/Services.tsx` — per-card `whileInView` on mobile with reduced animation intensity; desktop stagger unchanged
 - `src/pages/Index.tsx` — `React.memo` wrapper, accepts `locale` prop, removed `useLocation()` dependency
 - `src/App.tsx` — computes `locale` in render body, passes to `Index`
-- `src/components/ServiceLandingPage.tsx` — theater source priority on mobile changed to `mainSrc` first, matching portfolio parity
+- `src/components/ServiceLandingPage.tsx` — theater source priority on mobile changed to `mainSrc` first; all video presentations now use `mainSrc#t=0.04` instead of low-quality `posterSrc` JPGs

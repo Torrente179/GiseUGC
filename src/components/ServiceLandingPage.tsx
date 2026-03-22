@@ -297,7 +297,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   aria-label={`${labels.openSample}: ${leadProof.example.title}`}
                 >
                   <video
-                    src={`${leadProof.clip.mainSrc}#t=0.001`}
+                    src={`${leadProof.clip.mainSrc}#t=0.04`}
                     poster={leadProof.clip.posterSrc}
                     className="stm-hero-poster-img"
                     muted
@@ -349,12 +349,15 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                         className="stm-reel-card"
                       >
                         <div className="stm-reel-card-media">
-                          <img
-                            src={clip.posterSrc}
-                            alt={example.title}
+                          <video
+                            src={`${clip.mainSrc}#t=0.04`}
+                            poster={clip.posterSrc}
+                            aria-label={example.title}
                             className="stm-reel-card-img"
-                            loading="lazy"
-                            decoding="async"
+                            muted
+                            playsInline
+                            preload="metadata"
+                            disablePictureInPicture
                           />
                           <div className="stm-reel-card-gradient" />
                           <div className="st-play-btn st-play-btn--small">
@@ -519,7 +522,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   {leadProof && (
                     <div className="st-hero-media">
                       <button type="button" className="st-letterbox group" onClick={() => openProofClip(0)} aria-label={`${labels.openSample}: ${leadProof.example.title}`}>
-                        <video src={`${leadProof.clip.mainSrc}#t=0.001`} poster={leadProof.clip.posterSrc} className="st-letterbox-img" muted playsInline preload="auto" disablePictureInPicture aria-label={leadProof.example.title} />
+                        <video src={`${leadProof.clip.mainSrc}#t=0.04`} poster={leadProof.clip.posterSrc} className="st-letterbox-img" muted playsInline preload="auto" disablePictureInPicture aria-label={leadProof.example.title} />
                         <div className="st-play-btn"><Play className="h-5 w-5 ml-0.5" /></div>
                         <div className="st-letterbox-caption">
                           <span className="st-chip">{page.navLabel}</span>
@@ -578,12 +581,15 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                             className="st-proof-column-trigger group"
                           >
                             <div className="st-proof-stage">
-                              <img
-                                src={clip.posterSrc}
-                                alt={example.title}
+                              <video
+                                src={`${clip.mainSrc}#t=0.04`}
+                                poster={clip.posterSrc}
+                                aria-label={example.title}
                                 className="st-proof-stage-poster"
-                                loading="lazy"
-                                decoding="async"
+                                muted
+                                playsInline
+                                preload="metadata"
+                                disablePictureInPicture
                               />
                               <div className="st-proof-stage-overlay" />
                               <div className="st-play-btn st-play-btn--proof">
@@ -703,7 +709,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <div className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]" onClick={(e) => e.stopPropagation()}>
                 <button type="button" className="theater-control absolute right-3 top-3 z-30 h-9 w-9" onClick={(e) => { e.preventDefault(); e.stopPropagation(); closeProofTheater(); }} aria-label={labels.previewClose}><X className="h-4 w-4" /></button>
                 <div className="relative">
-                  <TheaterVideo sources={theaterSources} poster={activeProofItem.clip.posterSrc} enableStartupFallback={isMobileViewport} startupFallbackMs={isMobileViewport ? 300 : 420} />
+                  <TheaterVideo sources={theaterSources} poster={`${activeProofItem.clip.mainSrc}#t=0.04`} enableStartupFallback={isMobileViewport} startupFallbackMs={isMobileViewport ? 300 : 420} />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
                     <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
                     <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
