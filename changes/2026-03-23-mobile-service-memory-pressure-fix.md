@@ -53,6 +53,24 @@ Now the component renders **only one branch** at runtime based on viewport state
 
 This removes hidden duplicate media/observer/listener work while preserving high-quality theater playback (`mainSrc` first).
 
+### 5. Lightweight service-page marquee on mobile (quality preserved for theater)
+
+`ServicesMarquee.tsx` was still running its full transform-driven carousel engine with autoplaying preview videos on service pages. That engine is optimized for homepage showcase use, but on mobile service-page navigation loops it adds avoidable cumulative pressure (multiple looping videos, drag/RAF loop, touch listeners).
+
+Added a new prop:
+- `liteMobile?: boolean`
+
+When `liteMobile` is enabled and viewport is mobile:
+- renders poster-only cards (no autoplay video elements)
+- skips marquee drag loop/RAF engine and related global listeners
+- keeps the section visually present as a horizontal toolkit strip
+
+`ServiceLandingPage.tsx` now mounts `ServicesMarqueeSection` with `liteMobile`, so service pages use the lighter mobile runtime path while desktop and homepage can keep the richer behavior.
+
+Playback quality requirement is preserved:
+- theater/video playback still prioritizes `mainSrc` (highest quality)
+- this change only affects the non-critical bottom marquee previews on mobile service pages
+
 ## Runtime instrumentation added
 
 Added mobile media pressure snapshot logging in:
@@ -86,8 +104,9 @@ Observer startup is wired in `App.tsx`.
 - `src/components/Portfolio.tsx`
 - `src/lib/perf-debug.ts`
 - `src/components/ServiceLandingPage.tsx`
+- `src/components/ServicesMarquee.tsx`
 
 ## Verification
 
-1. `npx eslint src/App.tsx src/components/media/TheaterVideo.tsx src/components/Portfolio.tsx src/components/ServiceLandingPage.tsx src/lib/perf-debug.ts`
+1. `npx eslint src/App.tsx src/components/media/TheaterVideo.tsx src/components/Portfolio.tsx src/components/ServiceLandingPage.tsx src/components/ServicesMarquee.tsx src/lib/perf-debug.ts`
 2. `npx tsc --noEmit -p tsconfig.app.json`

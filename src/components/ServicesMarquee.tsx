@@ -14,6 +14,7 @@ interface ServiceVideoCard {
 
 interface ServicesMarqueeProps {
     sectionId?: string;
+    liteMobile?: boolean;
 }
 
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
@@ -43,9 +44,13 @@ const nuevosAutomotrizVoiceDemoClip = findNuevosClipByMainFilename('IMG_5793.MOV
 const nuevosWhatsAppVentasClip = findNuevosClipByMainFilename('IMG_8435.MOV');
 const nuevosVoicebotCierraVentasClip = findNuevosClipByMainFilename('WhatsApp Video 2026-02-13 at 00.39.53.mp4');
 
-const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
+const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps) => {
     const { t } = useTranslation();
     const [expandedCard, setExpandedCard] = useState<number | null>(null);
+    const [isMobileViewport, setIsMobileViewport] = useState(() => {
+        if (typeof window === 'undefined') return false;
+        return window.innerWidth < MOBILE_BREAKPOINT_PX;
+    });
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
     const containerRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
@@ -142,7 +147,23 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
         },
     ];
 
-    const marqueeCards = [...serviceVideoCards, ...serviceVideoCards, ...serviceVideoCards];
+    const isLiteMobileMode = liteMobile && isMobileViewport;
+    const marqueeCards = isLiteMobileMode
+        ? serviceVideoCards
+        : [...serviceVideoCards, ...serviceVideoCards, ...serviceVideoCards];
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX - 1}px)`);
+        const update = () => setIsMobileViewport(mq.matches);
+        update();
+        if (typeof mq.addEventListener === 'function') {
+            mq.addEventListener('change', update);
+            return () => mq.removeEventListener('change', update);
+        }
+        mq.addListener(update);
+        return () => mq.removeListener(update);
+    }, []);
 
     const playLoopingVideo = useCallback((video: HTMLVideoElement | null) => {
         if (!video) return;
@@ -168,13 +189,15 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
     };
 
     useEffect(() => {
+        if (isLiteMobileMode) return;
         if (expandedCard !== null) return;
         videoRefs.current.forEach((video) => {
             playLoopingVideo(video);
         });
-    }, [expandedCard, playLoopingVideo]);
+    }, [expandedCard, isLiteMobileMode, playLoopingVideo]);
 
     useEffect(() => {
+        if (isLiteMobileMode) return;
         if (expandedCard === null) return;
         videoRefs.current.forEach((video, index) => {
             if (!video) return;
@@ -184,9 +207,10 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             }
             video.pause();
         });
-    }, [expandedCard, playLoopingVideo]);
+    }, [expandedCard, isLiteMobileMode, playLoopingVideo]);
 
     const assignVideoRef = (index: number, element: HTMLVideoElement | null) => {
+        if (isLiteMobileMode) return;
         videoRefs.current[index] = element;
         if (!element) {
             return;
@@ -209,6 +233,7 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
 
     // Click outside cards to dismiss expanded card and resume scrolling
     useEffect(() => {
+        if (isLiteMobileMode) return;
         if (expandedCard === null) return;
 
         const handleClickOutside = (e: MouseEvent) => {
@@ -226,10 +251,11 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             clearTimeout(timeoutId);
             document.removeEventListener('click', handleClickOutside);
         };
-    }, [expandedCard]);
+    }, [expandedCard, isLiteMobileMode]);
 
     // Transform-based infinite scroll — no native scroll, full control
     useEffect(() => {
+        if (isLiteMobileMode) return;
         const container = containerRef.current;
         const track = trackRef.current;
         if (!container || !track) return;
@@ -551,12 +577,56 @@ const ServicesMarquee = ({ sectionId }: ServicesMarqueeProps) => {
             window.removeEventListener('touchend', handleTouchEnd);
             window.removeEventListener('touchcancel', handleTouchEnd);
         };
-    }, []);
+    }, [isLiteMobileMode]);
 
     const scroll = (direction: 'left' | 'right') => {
+        if (isLiteMobileMode) return;
         releaseVelocityRef.current = 0;
         targetOffsetRef.current += direction === 'left' ? -280 : 280;
     };
+
+    if (isLiteMobileMode) {
+        return (
+            <div id={sectionId} className="mt-16 mb-12 overflow-hidden">
+                <div className="studio-container">
+                    <div className="px-4 mb-10 text-center mx-auto">
+                        <h3 className="text-3xl font-serif font-bold tracking-tight-serif leading-[0.95] text-foreground max-w-5xl mx-auto">
+                            El toolkit completo para anunciantes <span className="luxury-accent text-accent inline-block transform rotate-[-2deg] ml-2">modernos</span>
+                        </h3>
+                        <p className="strategic-body text-base text-muted-foreground mt-6 max-w-3xl mx-auto">
+                            {t('services.motionSubtitle')}
+                        </p>
+                    </div>
+                </div>
+
+                <div className="px-4">
+                    <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
+                        {serviceVideoCards.map((card, index) => (
+                            <article
+                                key={`${card.titleKey}-lite-${index}`}
+                                className="shrink-0 w-[190px] snap-start"
+                            >
+                                <div className="relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card">
+                                    <img
+                                        src={card.poster}
+                                        alt=""
+                                        aria-hidden="true"
+                                        loading="lazy"
+                                        decoding="async"
+                                        className="h-full w-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-50" />
+                                </div>
+                                <h3 className="section-label text-foreground/80 mt-4 text-center px-2">
+                                    {t(card.titleKey)}
+                                </h3>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div id={sectionId} className="mt-16 md:mt-20 mb-12 md:mb-16 overflow-hidden">

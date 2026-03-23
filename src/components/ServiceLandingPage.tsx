@@ -515,7 +515,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
 
               {/* ── M6: TOOLKIT MARQUEE — Final block before footer ── */}
               <Suspense fallback={null}>
-                <ServicesMarqueeSection />
+                <ServicesMarqueeSection liteMobile />
               </Suspense>
               </div>
             </>
@@ -725,7 +725,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
 
               {/* ── D7: TOOLKIT MARQUEE — Final block before footer ── */}
               <Suspense fallback={null}>
-                <ServicesMarqueeSection />
+                <ServicesMarqueeSection liteMobile />
               </Suspense>
               </div>
             </>
