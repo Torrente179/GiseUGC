@@ -102,6 +102,13 @@ const TheaterVideo = memo(({
     });
   }, [sources.length]);
 
+  const teardownVideo = useCallback((video: HTMLVideoElement | null) => {
+    if (!video) return;
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+  }, []);
+
   const attemptPlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -210,12 +217,17 @@ const TheaterVideo = memo(({
 
     return () => {
       clearStartupTimeout();
+      teardownVideo(video);
     };
-  }, [activeSource, attemptPlay, clearStartupTimeout, scheduleStartupFallback]);
+  }, [activeSource, attemptPlay, clearStartupTimeout, scheduleStartupFallback, teardownVideo]);
 
   useEffect(() => {
-    return () => clearStartupTimeout();
-  }, [clearStartupTimeout]);
+    const video = videoRef.current;
+    return () => {
+      clearStartupTimeout();
+      teardownVideo(video);
+    };
+  }, [clearStartupTimeout, teardownVideo]);
 
   return (
     <div className="relative overflow-hidden bg-black">
@@ -224,7 +236,7 @@ const TheaterVideo = memo(({
         className="w-full aspect-[9/16] object-cover"
         src={activeSource}
         poster={poster}
-        preload="auto"
+        preload="metadata"
         autoPlay
         playsInline
         disablePictureInPicture
@@ -595,20 +607,22 @@ const Portfolio = () => {
       setIsTheaterVisible(true);
     });
 
-    const schedulePreloads = typeof requestIdleCallback === 'function'
-      ? requestIdleCallback
-      : (cb: () => void) => setTimeout(cb, 150);
-    const cancelPreloads = typeof cancelIdleCallback === 'function'
-      ? cancelIdleCallback
-      : clearTimeout;
-
-    const preloadId = schedulePreloads(() => {
-      setTheaterPreloadsReady(true);
-    });
+    const preloadId =
+      typeof window.requestIdleCallback === 'function'
+        ? window.requestIdleCallback(() => {
+            setTheaterPreloadsReady(true);
+          })
+        : window.setTimeout(() => {
+            setTheaterPreloadsReady(true);
+          }, 150);
 
     return () => {
       window.cancelAnimationFrame(frameId);
-      cancelPreloads(preloadId);
+      if (typeof window.cancelIdleCallback === 'function') {
+        window.cancelIdleCallback(preloadId);
+      } else {
+        window.clearTimeout(preloadId);
+      }
     };
   }, [activeReelPreview]);
 

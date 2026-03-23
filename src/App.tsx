@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
 import { Analytics, track } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
@@ -16,6 +16,7 @@ import {
   normalizePathname,
 } from '@/lib/locale-path';
 import { getChatGptReferralContext } from '@/lib/referral-attribution';
+import { startMobileMediaPressureObserver } from '@/lib/perf-debug';
 import { getLenis } from '@/lib/smooth-scroll';
 
 // Persist scroll positions across SPA navigations, keyed by React Router location.key
@@ -67,6 +68,10 @@ const AppRoutes = () => {
   const navigationType = useNavigationType();
   const { i18n } = useTranslation();
   const prevLocationKeyRef = useRef<string | null>(null);
+  const [keepHomeMounted, setKeepHomeMounted] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return !window.matchMedia('(max-width: 767px)').matches;
+  });
 
   const onHome = isHomePath(location.pathname);
   const locale = getLocaleFromPath(location.pathname);
@@ -85,6 +90,21 @@ const AppRoutes = () => {
   }, [location.pathname, onHome]);
 
   const isKnownRoute = onHome || currentServiceEntry !== null || currentLegalEntry !== null;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const syncKeepHomeMounted = () => setKeepHomeMounted(!mediaQuery.matches);
+
+    syncKeepHomeMounted();
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', syncKeepHomeMounted);
+      return () => mediaQuery.removeEventListener('change', syncKeepHomeMounted);
+    }
+
+    mediaQuery.addListener(syncKeepHomeMounted);
+    return () => mediaQuery.removeListener(syncKeepHomeMounted);
+  }, []);
 
   useEffect(() => {
     // Keep locale in sync with the current path
@@ -123,18 +143,20 @@ const AppRoutes = () => {
   return (
     <>
       {/*
-        Index is kept mounted for the entire session and never unmounts.
-        CSS display:none hides it when on other pages, which preserves all
-        React state: hero video position, animation states, deferred section
-        mounts, scroll position — so returning to the homepage is instant
-        with zero re-render cascade and zero skeleton flash.
+        Keep home mounted on desktop for instant returns.
+        On mobile, unmount it off-route so hidden video-heavy sections do not
+        keep consuming media resources while browsing service pages.
       */}
-      <div
-        style={{ display: onHome ? 'block' : 'none' }}
-        aria-hidden={!onHome ? true : undefined}
-      >
-        <Index locale={locale} />
-      </div>
+      {keepHomeMounted ? (
+        <div
+          style={{ display: onHome ? 'block' : 'none' }}
+          aria-hidden={!onHome ? true : undefined}
+        >
+          <Index locale={locale} />
+        </div>
+      ) : (
+        onHome ? <Index locale={locale} /> : null
+      )}
 
       {/*
         Service pages mount on first visit and unmount when navigating away.
@@ -165,6 +187,11 @@ const AppRoutes = () => {
 };
 
 const App = () => {
+  useEffect(() => {
+    const stopMobileMediaObserver = startMobileMediaPressureObserver();
+    return () => stopMobileMediaObserver?.();
+  }, []);
+
   useEffect(() => {
     if (hasTrackedChatGptLanding) return;
 
