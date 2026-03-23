@@ -35,8 +35,8 @@ const REEL_CARD_TAP_SLOP_PX = 10;
 const THEATER_HINT_PRELOAD_OFFSETS = [-3, -2, 2, 3] as const;
 const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
 const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
-const THEATER_FAST_FALLBACK_MS_SLOW = 250;
-const THEATER_FAST_FALLBACK_MS_DEFAULT = 400;
+const THEATER_FAST_FALLBACK_MS_SLOW = 180;
+const THEATER_FAST_FALLBACK_MS_DEFAULT = 260;
 const STARTUP_PREWARM_DELAY_DESKTOP_MS = 300;
 const STARTUP_PREWARM_DELAY_MOBILE_MS = 220;
 const PORTFOLIO_PREWARM_ROOT_MARGIN = '1800px 0px';
@@ -209,8 +209,8 @@ const TheaterVideo = memo(({
     if (!video || !activeSource) return;
 
     setIsPlaying(false);
-    video.muted = false;
-    setIsMuted(false);
+    video.muted = true;
+    setIsMuted(true);
     video.load();
     scheduleStartupFallback();
     attemptPlay();
@@ -236,7 +236,7 @@ const TheaterVideo = memo(({
         className="w-full aspect-[9/16] object-cover"
         src={activeSource}
         poster={poster}
-        preload="metadata"
+        preload="auto"
         autoPlay
         playsInline
         disablePictureInPicture
@@ -355,6 +355,7 @@ const Portfolio = () => {
 
   const scheduleInteractionPrewarm = useCallback(
     (clip: ReelClip) => {
+      if (isMobile) return;
       setInteractionPrewarmClip((previousClip) => (previousClip?.id === clip.id ? previousClip : clip));
       if (interactionPrewarmTimerRef.current !== null) {
         window.clearTimeout(interactionPrewarmTimerRef.current);
@@ -364,7 +365,7 @@ const Portfolio = () => {
         interactionPrewarmTimerRef.current = null;
       }, 2800);
     },
-    [],
+    [isMobile],
   );
 
   const queueTheaterDrag = useCallback((dragY: number) => {
@@ -607,6 +608,13 @@ const Portfolio = () => {
       setIsTheaterVisible(true);
     });
 
+    if (isMobile) {
+      setTheaterPreloadsReady(false);
+      return () => {
+        window.cancelAnimationFrame(frameId);
+      };
+    }
+
     const preloadId =
       typeof window.requestIdleCallback === 'function'
         ? window.requestIdleCallback(() => {
@@ -624,7 +632,7 @@ const Portfolio = () => {
         window.clearTimeout(preloadId);
       }
     };
-  }, [activeReelPreview]);
+  }, [activeReelPreview, isMobile]);
 
   useEffect(() => {
     return () => {
@@ -649,6 +657,7 @@ const Portfolio = () => {
   // More reliable than hidden <video> elements on mobile — browsers always
   // honor link preloads at full priority regardless of element visibility.
   useEffect(() => {
+    if (isMobile) return;
     if (linkPreloadRefs.current.length > 0) {
       linkPreloadRefs.current.forEach((link) => link.remove());
       linkPreloadRefs.current = [];
@@ -671,7 +680,7 @@ const Portfolio = () => {
       linkPreloadRefs.current.forEach((link) => link.remove());
       linkPreloadRefs.current = [];
     };
-  }, [connectionProfile.constrained, getProtectedSourcesForClip, interactionPrewarmClip]);
+  }, [connectionProfile.constrained, getProtectedSourcesForClip, interactionPrewarmClip, isMobile]);
 
   useEffect(() => {
     if (!activeReelPreview) return;
@@ -871,6 +880,13 @@ const Portfolio = () => {
   );
 
   useEffect(() => {
+    if (!isMobile) return;
+    setStartupPrewarmEnabled(false);
+    setInteractionPrewarmClip(null);
+    setTheaterPreloadsReady(false);
+  }, [isMobile]);
+
+  useEffect(() => {
     const section = portfolioSectionRef.current;
     if (!section || typeof IntersectionObserver === 'undefined') {
       setIsPortfolioNearViewport(true);
@@ -892,6 +908,7 @@ const Portfolio = () => {
   }, []);
 
   useEffect(() => {
+    if (isMobile) return;
     if (startupPrewarmEnabled) return;
     if (connectionProfile.constrained) return;
     if (!isPortfolioNearViewport) return;
@@ -926,6 +943,7 @@ const Portfolio = () => {
       : 'transform 360ms cubic-bezier(0.24, 0.92, 0.38, 1), opacity 240ms ease';
 
   const theaterWarmPreloadOffsets = useMemo(() => {
+    if (isMobile) return [];
     if (isMobile && connectionProfile.slow) {
       return [theaterPrewarmDirection];
     }
@@ -948,13 +966,14 @@ const Portfolio = () => {
 
   const theaterHintPreloadClips = useMemo(() => {
     if (activeReelIndex === null) return [];
+    if (isMobile) return [];
     if (connectionProfile.slow) return [];
 
     return THEATER_HINT_PRELOAD_OFFSETS.map((offset) => {
       const index = (activeReelIndex + offset + ALL_REEL_CLIPS.length) % ALL_REEL_CLIPS.length;
       return ALL_REEL_CLIPS[index];
     }).filter((clip, index, clips) => clips.findIndex((candidate) => candidate.id === clip.id) === index);
-  }, [activeReelIndex, connectionProfile.slow]);
+  }, [activeReelIndex, connectionProfile.slow, isMobile]);
 
   const startupPreviewPreloadClips = useMemo(() => {
     if (!startupPrewarmEnabled) return [];
@@ -1011,6 +1030,7 @@ const Portfolio = () => {
   }, [getProtectedSourcesForClip, interactionPrewarmClip]);
 
   const instantPrewarmClip = useMemo(() => {
+    if (isMobile) return null;
     if (!isPortfolioNearViewport) return null;
     const clipIndex = isMobile ? activeMobileReelIndex : 0;
     return showcaseReelClips[clipIndex] ?? showcaseReelClips[0] ?? null;
@@ -1023,7 +1043,7 @@ const Portfolio = () => {
 
   return (
     <section ref={portfolioSectionRef} id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
-      {!isTheaterOpen && instantPrewarmSources.length > 0 && (
+      {!isMobile && !isTheaterOpen && instantPrewarmSources.length > 0 && (
         <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
           {instantPrewarmSources.map((src, index) => (
             <video
@@ -1039,7 +1059,7 @@ const Portfolio = () => {
           ))}
         </div>
       )}
-      {startupPrewarmEnabled && (
+      {!isMobile && startupPrewarmEnabled && (
         <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
           {startupPreviewPreloadClips.map((clip, index) => (
             <video
@@ -1087,7 +1107,7 @@ const Portfolio = () => {
           })}
         </div>
       )}
-      {interactionPrewarmClip && (
+      {!isMobile && interactionPrewarmClip && (
         <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
           {interactionPrewarmSources.map((src, index) => (
             <video
@@ -1297,7 +1317,7 @@ const Portfolio = () => {
               </button>
 
               <div className="relative">
-                {theaterPreloadsReady && <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
+                {!isMobile && theaterPreloadsReady && <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
                   {primaryWarmPreloadSources[0] && (
                     <video
                       key={`theater-preload-primary-preferred-${primaryWarmPreloadClip?.id ?? 'none'}`}

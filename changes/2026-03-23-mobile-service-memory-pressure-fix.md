@@ -71,6 +71,27 @@ Playback quality requirement is preserved:
 - theater/video playback still prioritizes `mainSrc` (highest quality)
 - this change only affects the non-critical bottom marquee previews on mobile service pages
 
+### 6. Homepage portfolio theater mobile startup and smoothness pass
+
+After the service-page fixes, mobile friction remained in the homepage portfolio theater flow:
+- delayed playback after tapping a reel card
+- choppy interaction when switching clips repeatedly
+
+Fixes applied in `src/components/Portfolio.tsx` (mobile-only behavior):
+
+- Theater startup fallback was made more aggressive on mobile:
+  - slow profile: `250ms -> 180ms`
+  - default profile: `400ms -> 260ms`
+- Theater videos now start muted by default in the home portfolio theater to avoid autoplay rejection penalties on mobile.
+- Theater `<video>` preload changed from `metadata` back to `auto` (single active theater video only) to prioritize first-play responsiveness.
+- Disabled heavy background prewarm graph on mobile:
+  - no mobile startup prewarm batch
+  - no mobile interaction `link rel="preload"` injection
+  - no mobile hidden prewarm video mounts
+  - no mobile theater-adjacent hidden preload videos
+
+Result: faster first-play latency and less cumulative mobile jank during repeated clip opens/navigations, while desktop behavior remains unchanged.
+
 ## Runtime instrumentation added
 
 Added mobile media pressure snapshot logging in:
@@ -105,6 +126,7 @@ Observer startup is wired in `App.tsx`.
 - `src/lib/perf-debug.ts`
 - `src/components/ServiceLandingPage.tsx`
 - `src/components/ServicesMarquee.tsx`
+- `src/components/Portfolio.tsx`
 
 ## Verification
 
