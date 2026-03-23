@@ -119,6 +119,25 @@ Fix:
 Result:
 - reliable next-video loading during theater navigation on both mobile and desktop, while still keeping aggressive cleanup when exiting theater.
 
+### 9. Theater playback hardening for rapid navigation (desktop + mobile)
+
+Additional stabilization in both theater players:
+- `src/components/Portfolio.tsx`
+- `src/components/media/TheaterVideo.tsx`
+
+What changed:
+- Added a `playSession` guard so stale async `video.play()` attempts from a previous clip cannot mutate state or trigger fallback for the new clip.
+- Startup fallback timeout now also checks the active play session before promoting fallback source.
+
+Homepage theater fallback chain tightened:
+- `src/components/Portfolio.tsx` theater playback now uses:
+  - mobile: quality-first `main -> mobile -> preview` (or `mobile -> main -> preview` if mobile-first flag is enabled)
+  - desktop: `main -> mobile -> preview`
+
+Result:
+- more reliable playback when users swipe quickly between clips
+- desktop can recover from codec/container edge cases (e.g., problematic main source) by falling back to mobile/previews instead of stalling.
+
 ## Runtime instrumentation added
 
 Added mobile media pressure snapshot logging in:

@@ -82,6 +82,7 @@ const TheaterVideo = memo(({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const startupTimeoutRef = useRef<number | null>(null);
+  const playSessionRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [activeSourceIndex, setActiveSourceIndex] = useState(0);
@@ -109,7 +110,8 @@ const TheaterVideo = memo(({
     video.load();
   }, []);
 
-  const attemptPlay = useCallback(() => {
+  const attemptPlay = useCallback((sessionId?: number) => {
+    const expectedSessionId = sessionId ?? playSessionRef.current;
     const video = videoRef.current;
     if (!video) return;
 
@@ -119,16 +121,20 @@ const TheaterVideo = memo(({
     const run = async () => {
       try {
         await video.play();
+        if (playSessionRef.current !== expectedSessionId) return;
         setIsMuted(video.muted);
       } catch {
+        if (playSessionRef.current !== expectedSessionId) return;
         if (!video.muted) {
           video.muted = true;
           setIsMuted(true);
         }
         try {
           await video.play();
+          if (playSessionRef.current !== expectedSessionId) return;
           setIsMuted(video.muted);
         } catch {
+          if (playSessionRef.current !== expectedSessionId) return;
           promoteFallbackSource();
         }
       }
@@ -137,11 +143,12 @@ const TheaterVideo = memo(({
     void run();
   }, [promoteFallbackSource]);
 
-  const scheduleStartupFallback = useCallback(() => {
+  const scheduleStartupFallback = useCallback((sessionId: number) => {
     clearStartupTimeout();
     if (!enableStartupFallback) return;
     if (activeSourceIndex + 1 >= sources.length) return;
     startupTimeoutRef.current = window.setTimeout(() => {
+      if (playSessionRef.current !== sessionId) return;
       const video = videoRef.current;
       if (!video || !video.paused || video.readyState >= 2) return;
       promoteFallbackSource();
@@ -178,7 +185,7 @@ const TheaterVideo = memo(({
     if (video.paused) {
       video.muted = false;
       setIsMuted(false);
-      attemptPlay();
+      attemptPlay(playSessionRef.current);
     } else {
       video.pause();
     }
@@ -191,7 +198,7 @@ const TheaterVideo = memo(({
     video.muted = nextMuted;
     setIsMuted(nextMuted);
     if (!nextMuted) {
-      attemptPlay();
+      attemptPlay(playSessionRef.current);
     }
   }, [attemptPlay]);
 
@@ -207,16 +214,21 @@ const TheaterVideo = memo(({
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !activeSource) return;
+    const sessionId = playSessionRef.current + 1;
+    playSessionRef.current = sessionId;
 
     setIsPlaying(false);
     video.muted = true;
     setIsMuted(true);
     video.load();
-    scheduleStartupFallback();
-    attemptPlay();
+    scheduleStartupFallback(sessionId);
+    attemptPlay(sessionId);
 
     return () => {
       clearStartupTimeout();
+      if (playSessionRef.current === sessionId) {
+        playSessionRef.current += 1;
+      }
       video.pause();
     };
   }, [activeSource, attemptPlay, clearStartupTimeout, scheduleStartupFallback]);
@@ -225,6 +237,7 @@ const TheaterVideo = memo(({
     const video = videoRef.current;
     return () => {
       clearStartupTimeout();
+      playSessionRef.current += 1;
       teardownVideo(video);
     };
   }, [clearStartupTimeout, teardownVideo]);
@@ -1037,9 +1050,16 @@ const Portfolio = () => {
 
   const theaterSources = useMemo(() => {
     if (!activeReelPreview) return [];
-    const protectedSources = getProtectedSourcesForClip(activeReelPreview);
-    return [...protectedSources, activeReelPreview.previewSrc];
-  }, [activeReelPreview, getProtectedSourcesForClip]);
+    const playbackSources = isMobile
+      ? shouldPreferMobileTheaterSource
+        ? [activeReelPreview.mobileSrc, activeReelPreview.mainSrc, activeReelPreview.previewSrc]
+        : [activeReelPreview.mainSrc, activeReelPreview.mobileSrc, activeReelPreview.previewSrc]
+      : [activeReelPreview.mainSrc, activeReelPreview.mobileSrc, activeReelPreview.previewSrc];
+    return playbackSources.filter(
+      (source, index, allSources): source is string =>
+        Boolean(source) && allSources.indexOf(source) === index,
+    );
+  }, [activeReelPreview, isMobile]);
 
   const interactionPrewarmSources = useMemo(() => {
     return getProtectedSourcesForClip(interactionPrewarmClip);
