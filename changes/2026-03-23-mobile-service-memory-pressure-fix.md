@@ -39,6 +39,20 @@ Both theater players now use:
 
 This keeps startup responsive while reducing up-front media memory pressure.
 
+### 4. Service-page render-path isolation on mobile
+
+`ServiceLandingPage.tsx` previously rendered both complete trees at once:
+- mobile tree (`md:hidden`)
+- desktop tree (`hidden md:block`)
+
+Even though one tree was visually hidden by CSS, both trees were still mounted in the DOM, including media surfaces and interactive components. On mobile this doubled runtime work and memory pressure per service page.
+
+Now the component renders **only one branch** at runtime based on viewport state:
+- mobile branch only on mobile
+- desktop branch only on desktop
+
+This removes hidden duplicate media/observer/listener work while preserving high-quality theater playback (`mainSrc` first).
+
 ## Runtime instrumentation added
 
 Added mobile media pressure snapshot logging in:
@@ -71,8 +85,9 @@ Observer startup is wired in `App.tsx`.
 - `src/components/media/TheaterVideo.tsx`
 - `src/components/Portfolio.tsx`
 - `src/lib/perf-debug.ts`
+- `src/components/ServiceLandingPage.tsx`
 
 ## Verification
 
-1. `npx eslint src/App.tsx src/components/media/TheaterVideo.tsx src/components/Portfolio.tsx src/lib/perf-debug.ts`
+1. `npx eslint src/App.tsx src/components/media/TheaterVideo.tsx src/components/Portfolio.tsx src/components/ServiceLandingPage.tsx src/lib/perf-debug.ts`
 2. `npx tsc --noEmit -p tsconfig.app.json`

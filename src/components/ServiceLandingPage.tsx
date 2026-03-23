@@ -302,11 +302,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
         <Navbar compactMobile />
 
         <main>
-          {/* ╔══════════════════════════════════════════════════════════╗
-              ║  MOBILE — App-like experience (< 768px)                ║
-              ║  Completely independent from desktop layout             ║
-              ╚══════════════════════════════════════════════════════════╝ */}
-          <div className="md:hidden">
+          {isMobileViewport ? (
+            <>
+              {/* ╔══════════════════════════════════════════════════════════╗
+                  ║  MOBILE — App-like experience (< 768px)                ║
+                  ║  Completely independent from desktop layout             ║
+                  ╚══════════════════════════════════════════════════════════╝ */}
+              <div>
 
             {/* ── M1: APP HERO — Full-viewport video poster ── */}
             <section className="stm-hero">
@@ -511,16 +513,18 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </a>
             </div>
 
-            {/* ── M6: TOOLKIT MARQUEE — Final block before footer ── */}
-            <Suspense fallback={null}>
-              <ServicesMarqueeSection />
-            </Suspense>
-          </div>
-
-          {/* ╔══════════════════════════════════════════════════════════╗
-              ║  DESKTOP — Screen Test editorial layout (≥ 768px)       ║
-              ╚══════════════════════════════════════════════════════════╝ */}
-          <div className="hidden md:block">
+              {/* ── M6: TOOLKIT MARQUEE — Final block before footer ── */}
+              <Suspense fallback={null}>
+                <ServicesMarqueeSection />
+              </Suspense>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* ╔══════════════════════════════════════════════════════════╗
+                  ║  DESKTOP — Screen Test editorial layout (≥ 768px)       ║
+                  ╚══════════════════════════════════════════════════════════╝ */}
+              <div>
 
             {/* ── D1: COLD OPEN ── */}
             <section className="st-hero">
@@ -719,11 +723,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </div>
             </RevealSection>
 
-            {/* ── D7: TOOLKIT MARQUEE — Final block before footer ── */}
-            <Suspense fallback={null}>
-              <ServicesMarqueeSection />
-            </Suspense>
-          </div>
+              {/* ── D7: TOOLKIT MARQUEE — Final block before footer ── */}
+              <Suspense fallback={null}>
+                <ServicesMarqueeSection />
+              </Suspense>
+              </div>
+            </>
+          )}
         </main>
 
         {/* ── Theater overlay (shared) ── */}
