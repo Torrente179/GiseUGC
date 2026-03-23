@@ -15,6 +15,7 @@
     "service:entrypoints": "node scripts/enrich-service-entrypoints.mjs",
     "video:encode": "bash scripts/encode-videos.sh",
     "video:encode:dry": "bash scripts/encode-videos.sh --dry-run",
+    "video:service-posters": "bash scripts/generate-service-posters.sh",
     "video:catalog": "node scripts/generate-nuevos-r2-catalog.mjs"
   },
   "dependencies": {

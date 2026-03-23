@@ -154,14 +154,14 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Estas piezas muestran cómo se ve una voz creadora clara, comercial y adaptable entre categorías.',
       featuredExamples: [
         {
-          clipId: 6,
-          title: 'Presentación profesional de servicios',
-          description: 'Pieza donde me presento como creadora, muestro mi rango y cierro con llamado a la acción claro.',
-        },
-        {
           clipId: 1006,
           title: 'Reel multiservicio para distintas industrias',
           description: 'Un compilado que demuestra versatilidad: música, real estate, agro y servicios legales en una sola pieza.',
+        },
+        {
+          clipId: 6,
+          title: 'Presentación profesional de servicios',
+          description: 'Pieza donde me presento como creadora, muestro mi rango y cierro con llamado a la acción claro.',
         },
         {
           clipId: 1,
@@ -280,14 +280,14 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'These pieces show what a clear, commercially useful creator voice looks like across categories.',
       featuredExamples: [
         {
-          clipId: 6,
-          title: 'Professional services introduction',
-          description: 'A self-presentation piece showing range, voice, and a clear call to action.',
-        },
-        {
           clipId: 1006,
           title: 'Multi-industry spokesperson reel',
           description: 'A compilation proving versatility across music, real estate, agriculture, and legal services.',
+        },
+        {
+          clipId: 6,
+          title: 'Professional services introduction',
+          description: 'A self-presentation piece showing range, voice, and a clear call to action.',
         },
         {
           clipId: 1,

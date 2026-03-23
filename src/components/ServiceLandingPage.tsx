@@ -1,4 +1,4 @@
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState, type SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
@@ -16,10 +16,19 @@ const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee')
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
+const SERVICE_POSTER_BASE_PATH = '/uploads/videos/service-posters';
 
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
 const clipMap = new Map([...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS].map((clip) => [clip.id, clip]));
 const formatDuration = (seconds?: number) => (seconds ? `${Math.round(seconds)}s` : null);
+const getHighQualityServicePosterSrc = (mainSrc: string, fallbackSrc: string) => {
+  const filename = mainSrc.split('/').pop();
+  if (!filename) return fallbackSrc;
+  const decodedFilename = decodeURIComponent(filename);
+  const baseName = decodedFilename.replace(/\.[^.]+$/u, '');
+  if (!baseName) return fallbackSrc;
+  return `${SERVICE_POSTER_BASE_PATH}/${encodeURIComponent(baseName)}.jpg`;
+};
 
 type ServiceLandingPageProps = {
   serviceId: ServicePageId;
@@ -265,6 +274,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
   }, [canonical, homeCanonical, labels.home, labels.services, locale, page.breadcrumbLabel, page.faqs, page.metaDescription, page.metaTitle, page.navLabel]);
 
   const leadProof = proofExamples[0] ?? null;
+  const handlePosterError = useCallback(
+    (fallbackSrc: string) => (event: SyntheticEvent<HTMLImageElement>) => {
+      const image = event.currentTarget;
+      image.onerror = null;
+      image.src = fallbackSrc;
+    },
+    [],
+  );
 
   return (
     <>
@@ -300,15 +317,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   onClick={() => openProofClip(0)}
                   aria-label={`${labels.openSample}: ${leadProof.example.title}`}
                 >
-                  <video
-                    src={`${leadProof.clip.mainSrc}#t=1.2`}
-                    poster={leadProof.clip.posterSrc}
+                  <img
+                    src={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
                     className="stm-hero-poster-img"
-                    muted
-                    playsInline
-                    preload="auto"
-                    disablePictureInPicture
-                    aria-label={leadProof.example.title}
+                    alt=""
+                    aria-hidden="true"
+                    decoding="async"
+                    fetchPriority="high"
+                    onError={handlePosterError(leadProof.clip.posterSrc)}
                   />
                   <div className="stm-hero-poster-overlay" />
                   <div className="st-play-btn">
@@ -344,6 +360,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 <div className="stm-reel-track scrollbar-hide">
                   {proofExamples.map(({ example, clip }, index) => {
                     const duration = formatDuration(clip.durationSeconds);
+                    const posterSrc = getHighQualityServicePosterSrc(clip.mainSrc, clip.posterSrc);
                     return (
                       <button
                         key={example.clipId}
@@ -353,15 +370,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                         className="stm-reel-card"
                       >
                         <div className="stm-reel-card-media">
-                          <video
-                            src={`${clip.mainSrc}#t=1.2`}
-                            poster={clip.posterSrc}
-                            aria-label={example.title}
+                          <img
+                            src={posterSrc}
                             className="stm-reel-card-img"
-                            muted
-                            playsInline
-                            preload="metadata"
-                            disablePictureInPicture
+                            alt=""
+                            aria-hidden="true"
+                            decoding="async"
+                            loading="lazy"
+                            onError={handlePosterError(clip.posterSrc)}
                           />
                           <div className="stm-reel-card-gradient" />
                           <div className="st-play-btn st-play-btn--small">
@@ -526,7 +542,15 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   {leadProof && (
                     <div className="st-hero-media">
                       <button type="button" className="st-letterbox group" onClick={() => openProofClip(0)} aria-label={`${labels.openSample}: ${leadProof.example.title}`}>
-                        <video src={`${leadProof.clip.mainSrc}#t=1.2`} poster={leadProof.clip.posterSrc} className="st-letterbox-img" muted playsInline preload="auto" disablePictureInPicture aria-label={leadProof.example.title} />
+                        <img
+                          src={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
+                          className="st-letterbox-img"
+                          alt=""
+                          aria-hidden="true"
+                          decoding="async"
+                          fetchPriority="high"
+                          onError={handlePosterError(leadProof.clip.posterSrc)}
+                        />
                         <div className="st-play-btn"><Play className="h-5 w-5 ml-0.5" /></div>
                         <div className="st-letterbox-caption">
                           <span className="st-chip">{page.navLabel}</span>
@@ -576,6 +600,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   <div className="st-proof-gallery">
                     {proofExamples.map(({ example, clip }, index) => {
                       const duration = formatDuration(clip.durationSeconds);
+                      const posterSrc = getHighQualityServicePosterSrc(clip.mainSrc, clip.posterSrc);
                       return (
                         <article key={example.clipId} className={`st-proof-column st-proof-column--${(index % 3) + 1}`}>
                           <button
@@ -585,15 +610,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                             className="st-proof-column-trigger group"
                           >
                             <div className="st-proof-stage">
-                              <video
-                                src={`${clip.mainSrc}#t=1.2`}
-                                poster={clip.posterSrc}
-                                aria-label={example.title}
+                              <img
+                                src={posterSrc}
                                 className="st-proof-stage-poster"
-                                muted
-                                playsInline
-                                preload="metadata"
-                                disablePictureInPicture
+                                alt=""
+                                aria-hidden="true"
+                                decoding="async"
+                                loading="lazy"
+                                onError={handlePosterError(clip.posterSrc)}
                               />
                               <div className="st-proof-stage-overlay" />
                               <div className="st-play-btn st-play-btn--proof">
@@ -713,7 +737,12 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <div className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]" onClick={(e) => e.stopPropagation()}>
                 <button type="button" className="theater-control absolute right-3 top-3 z-30 h-9 w-9" onClick={(e) => { e.preventDefault(); e.stopPropagation(); closeProofTheater(); }} aria-label={labels.previewClose}><X className="h-4 w-4" /></button>
                 <div className="relative">
-                  <TheaterVideo sources={theaterSources} poster={`${activeProofItem.clip.mainSrc}#t=1.2`} enableStartupFallback={isMobileViewport} startupFallbackMs={isMobileViewport ? 300 : 420} />
+                  <TheaterVideo
+                    sources={theaterSources}
+                    poster={getHighQualityServicePosterSrc(activeProofItem.clip.mainSrc, activeProofItem.clip.posterSrc)}
+                    enableStartupFallback={isMobileViewport}
+                    startupFallbackMs={isMobileViewport ? 300 : 420}
+                  />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
                     <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
                     <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
