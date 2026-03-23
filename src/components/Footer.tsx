@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {
@@ -103,14 +104,22 @@ const Footer = () => {
           {/* Bottom bar */}
           <div className="ft-bar">
             <p className="ft-bar-text">{t('footer.bottomNote')}</p>
-            <nav className="ft-bar-links" aria-label={t('footer.legalTitle')}>
-              {legalLinks.map((link) => (
-                <Link key={link.href} to={link.href} className="ft-bar-link">
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-            <p className="ft-bar-text">{t('footer.copyright', { year: currentYear })}</p>
+            <div className="ft-bar-meta">
+              <p className="ft-bar-text ft-bar-copyright">{t('footer.copyright', { year: currentYear })}</p>
+              <span className="ft-bar-separator" aria-hidden="true" />
+              <nav className="ft-bar-links" aria-label={t('footer.legalTitle')}>
+                {legalLinks.map((link, index) => (
+                  <Fragment key={link.href}>
+                    <Link to={link.href} className="ft-bar-link">
+                      {link.label}
+                    </Link>
+                    {index < legalLinks.length - 1 ? (
+                      <span className="ft-bar-divider" aria-hidden="true">/</span>
+                    ) : null}
+                  </Fragment>
+                ))}
+              </nav>
+            </div>
           </div>
         </div>
       </div>
@@ -160,14 +169,16 @@ const Footer = () => {
         <div className="ftm-bottom">
           <p className="ftm-bottom-text">{t('footer.studioFactLocation')}</p>
           <p className="ftm-bottom-text">{t('footer.studioFactLanguages')}</p>
-          <nav className="ftm-legal-links" aria-label={t('footer.legalTitle')}>
-            {legalLinks.map((link) => (
-              <Link key={link.href} to={link.href} className="ftm-legal-link">
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <p className="ftm-bottom-text ftm-bottom-copyright">{t('footer.copyright', { year: currentYear })}</p>
+          <div className="ftm-legal-card">
+            <p className="ftm-bottom-text ftm-bottom-copyright">{t('footer.copyright', { year: currentYear })}</p>
+            <nav className="ftm-legal-links" aria-label={t('footer.legalTitle')}>
+              {legalLinks.map((link) => (
+                <Link key={link.href} to={link.href} className="ftm-legal-link">
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
         </div>
       </div>
     </footer>

@@ -159,3 +159,19 @@ Generated at: `2026-03-18T14:36:10.837Z`
 - Browser version:
 - Repro video/screenshot path (if any):
 - Additional observations: Theme toggle touch ghost-click mitigation shipped; direct iPhone Safari refresh verification still pending.
+
+## 2026-03-23 legal links integrated into the footer meta rail
+
+### Runtime touchpoints in this pass
+- `src/components/Footer.tsx`
+- `src/index.css`
+
+### What changed
+1. Reworked the desktop footer bottom row so the copyright line and legal links now read as one deliberate meta rail instead of three disconnected blocks.
+2. Moved `Privacy Policy / Política de privacidad` and `Terms & Content Use / Términos y uso de contenido` directly beside the copyright line with tighter spacing, a subtle separator, and lighter uppercase styling.
+3. Refined the mobile footer to keep the app-like architecture: the legal links now sit inside a compact pill-based legal card below the studio facts, closer to a mobile settings/legal module than a plain text row.
+4. Left the route targets unchanged; this pass was only about footer placement, visual hierarchy, and making the legal links feel native to the closing UI.
+
+### Verification
+1. `npx eslint src/components/Footer.tsx`
+2. `npm run build`
