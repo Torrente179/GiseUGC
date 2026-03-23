@@ -92,6 +92,14 @@ Fixes applied in `src/components/Portfolio.tsx` (mobile-only behavior):
 
 Result: faster first-play latency and less cumulative mobile jank during repeated clip opens/navigations, while desktop behavior remains unchanged.
 
+### 7. Homepage theater mobile vertical navigation reliability
+
+Follow-up usability fix in `src/components/Portfolio.tsx`:
+- mobile vertical swipe in theater now triggers clip change as soon as gesture distance is clearly vertical (instead of relying only on touchend threshold handling)
+- added explicit mobile up/down theater controls as a fallback navigation affordance
+
+This restores reliable “scroll up/down to next video” behavior in theater mode while keeping desktop left/right navigation unchanged.
+
 ## Runtime instrumentation added
 
 Added mobile media pressure snapshot logging in:

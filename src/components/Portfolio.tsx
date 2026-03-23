@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useEffect, useMemo, memo, startTransition, type TouchEvent, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight, Pause, Play, Volume2, VolumeX, X } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Pause, Play, Volume2, VolumeX, X } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
@@ -309,6 +309,7 @@ const Portfolio = () => {
   const reelCardTouchStartRef = useRef<{ x: number; y: number } | null>(null);
   const reelCardDidDragRef = useRef(false);
   const theaterSwipeStartRef = useRef<TheaterSwipeGesture | null>(null);
+  const mobileSwipeNavigatedRef = useRef(false);
   const theaterCloseTimerRef = useRef<number | null>(null);
   const theaterDragFrameRef = useRef<number | null>(null);
   const theaterPendingDragYRef = useRef(0);
@@ -457,6 +458,7 @@ const Portfolio = () => {
         timestamp: performance.now(),
         axis: 'pending',
       };
+      mobileSwipeNavigatedRef.current = false;
       setIsTheaterDragging(true);
     },
     [isTheaterDismissing],
@@ -479,7 +481,14 @@ const Portfolio = () => {
 
       if (swipeStart.axis === 'vertical') {
         event.preventDefault();
-        if (isMobile) return;
+        if (isMobile) {
+          if (!mobileSwipeNavigatedRef.current && Math.abs(deltaY) >= 52) {
+            mobileSwipeNavigatedRef.current = true;
+            queueTheaterDrag(0);
+            navigateReelPreview(deltaY < 0 ? 1 : -1);
+          }
+          return;
+        }
         const resistance = 0.92 - Math.min(Math.abs(deltaY) / 900, 0.28);
         queueTheaterDrag(deltaY * resistance);
         return;
@@ -489,7 +498,7 @@ const Portfolio = () => {
         event.preventDefault();
       }
     },
-    [isMobile, isTheaterDismissing, queueTheaterDrag],
+    [isMobile, isTheaterDismissing, navigateReelPreview, queueTheaterDrag],
   );
 
   const handleTheaterTouchEnd = useCallback(
@@ -497,6 +506,12 @@ const Portfolio = () => {
       const swipeStart = theaterSwipeStartRef.current;
       theaterSwipeStartRef.current = null;
       setIsTheaterDragging(false);
+
+      if (mobileSwipeNavigatedRef.current) {
+        mobileSwipeNavigatedRef.current = false;
+        queueTheaterDrag(0);
+        return;
+      }
       if (!swipeStart) return;
 
       const touch = event.changedTouches[0];
@@ -559,6 +574,7 @@ const Portfolio = () => {
 
   const resetTheaterSwipe = useCallback(() => {
     theaterSwipeStartRef.current = null;
+    mobileSwipeNavigatedRef.current = false;
     setIsTheaterDragging(false);
     queueTheaterDrag(0);
   }, [queueTheaterDrag]);
@@ -1274,30 +1290,61 @@ const Portfolio = () => {
             onTouchEnd={handleTheaterTouchEnd}
             onTouchCancel={resetTheaterSwipe}
           >
-            <button
-              type="button"
-              className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                navigateReelPreview(-1);
-              }}
-              aria-label={t('portfolio.reelPreviewPrev')}
-            >
-              <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
-            </button>
-            <button
-              type="button"
-              className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                navigateReelPreview(1);
-              }}
-              aria-label={t('portfolio.reelPreviewNext')}
-            >
-              <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
-            </button>
+            {isMobile ? (
+              <>
+                <button
+                  type="button"
+                  className="theater-control absolute left-1/2 top-0 z-[220] h-9 w-9 -translate-x-1/2 -translate-y-[118%]"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    navigateReelPreview(1);
+                  }}
+                  aria-label={t('portfolio.reelPreviewNext')}
+                >
+                  <ChevronUp className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  className="theater-control absolute bottom-0 left-1/2 z-[220] h-9 w-9 -translate-x-1/2 translate-y-[118%]"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    navigateReelPreview(-1);
+                  }}
+                  aria-label={t('portfolio.reelPreviewPrev')}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    navigateReelPreview(-1);
+                  }}
+                  aria-label={t('portfolio.reelPreviewPrev')}
+                >
+                  <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
+                </button>
+                <button
+                  type="button"
+                  className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    navigateReelPreview(1);
+                  }}
+                  aria-label={t('portfolio.reelPreviewNext')}
+                >
+                  <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
+                </button>
+              </>
+            )}
             <div
               className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]"
               onClick={(event) => event.stopPropagation()}
