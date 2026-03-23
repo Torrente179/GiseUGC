@@ -25,10 +25,13 @@ Applied in both theater implementations:
 - `src/components/media/TheaterVideo.tsx`
 - `src/components/Portfolio.tsx` (inline theater player)
 
-New cleanup routine on source switch and unmount:
+Cleanup routine:
+- on unmount/close:
 - `pause()`
 - `removeAttribute('src')`
 - `load()`
+- on in-theater source switch:
+- `pause()` only (keeps newly assigned source stable during transition)
 
 This explicitly releases video decode/network buffers on mobile instead of waiting for browser heuristics.
 
@@ -99,6 +102,22 @@ Follow-up usability fix in `src/components/Portfolio.tsx`:
 - added explicit mobile up/down theater controls as a fallback navigation affordance
 
 This restores reliable “scroll up/down to next video” behavior in theater mode while keeping desktop left/right navigation unchanged.
+
+### 8. Source-switch playback regression fix (desktop + mobile)
+
+Follow-up fix for a playback stall discovered after repeated theater navigations:
+- `src/components/media/TheaterVideo.tsx`
+- `src/components/Portfolio.tsx`
+
+Root cause:
+- source-change cleanup executed full teardown (`remove src + load`) while React was transitioning to the next clip source, which could clear the newly committed source and leave playback stuck.
+
+Fix:
+- source-change cleanup now does `pause()` only.
+- full teardown is preserved for component unmount/close where memory release is required.
+
+Result:
+- reliable next-video loading during theater navigation on both mobile and desktop, while still keeping aggressive cleanup when exiting theater.
 
 ## Runtime instrumentation added
 

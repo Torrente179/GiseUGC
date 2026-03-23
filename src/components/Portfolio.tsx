@@ -217,9 +217,9 @@ const TheaterVideo = memo(({
 
     return () => {
       clearStartupTimeout();
-      teardownVideo(video);
+      video.pause();
     };
-  }, [activeSource, attemptPlay, clearStartupTimeout, scheduleStartupFallback, teardownVideo]);
+  }, [activeSource, attemptPlay, clearStartupTimeout, scheduleStartupFallback]);
 
   useEffect(() => {
     const video = videoRef.current;
