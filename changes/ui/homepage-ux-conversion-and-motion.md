@@ -269,3 +269,17 @@ Generated at: `2026-03-20T18:38:23.762Z`
 ### Verification
 1. `npx eslint src/components/CreatorAdvantage.tsx`
 2. `npm run build:dev`
+
+## 2026-03-24 creator advantage chip clearance fix
+
+### Runtime touchpoints
+- `src/components/CreatorAdvantage.tsx`
+
+### What changed
+1. Increased the shell inset around the collage status chip so it no longer clips against the rounded top edge on either mobile or desktop.
+2. Added a bit more reserved top space above the video stage so the chip and the collage composition no longer compete for the same vertical area.
+3. Kept the section structure, copy, video sources, autoplay behavior, CTA routing, and desktop hover logic unchanged.
+
+### Verification
+1. `npx eslint src/components/CreatorAdvantage.tsx`
+2. `npx vite build --mode development`
