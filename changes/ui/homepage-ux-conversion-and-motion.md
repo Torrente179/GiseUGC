@@ -311,3 +311,31 @@ Generated at: `2026-03-20T18:38:23.762Z`
 ### Verification
 1. `npx eslint src/components/CreatorAdvantage.tsx`
 2. `npx vite build --mode development`
+
+## 2026-03-24 creator advantage desktop cards raised
+
+### Runtime touchpoints
+- `src/components/CreatorAdvantage.tsx`
+
+### What changed
+1. Raised the desktop collage card stack further by trimming desktop shell top padding one more step.
+2. Reduced desktop stage top margin again so the three cards sit higher in the frame while preserving chip clearance.
+3. Left all mobile spacing and behavior untouched.
+
+### Verification
+1. `npx eslint src/components/CreatorAdvantage.tsx`
+2. `npx vite build --mode development`
+
+## 2026-03-24 creator advantage hover-title lock and english chip layout
+
+### Runtime touchpoints
+- `src/components/CreatorAdvantage.tsx`
+
+### What changed
+1. Locked the collage status copy so hover state no longer swaps the headline text.
+2. Applied the same status phrase across render states to avoid locale-based headline drift in this section.
+3. Changed desktop bottom chips to a strict 3-column grid with equal-width pills so English labels no longer break the row into an uneven layout.
+
+### Verification
+1. `npx eslint src/components/CreatorAdvantage.tsx`
+2. `npx vite build --mode development`

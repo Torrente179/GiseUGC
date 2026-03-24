@@ -99,7 +99,7 @@ const CreatorAdvantage = () => {
   );
 
   const collageIsActive = collageHovered && !shouldReduceMotion;
-  const collageStatusLabel = collageIsActive ? t('portfolio.collageHintPlaying') : t('portfolio.collageHintIdle');
+  const collageStatusLabel = 'UGC enfocado en conversion';
 
   const renderCollageShell = (isMobile: boolean) => (
     <div
@@ -243,12 +243,12 @@ const CreatorAdvantage = () => {
               </div>
             </div>
 
-            <div className={`mt-3 ${isMobile ? 'grid grid-cols-3 gap-2' : 'flex flex-wrap gap-2.5'}`}>
+            <div className={`mt-3 ${isMobile ? 'grid grid-cols-3 gap-2' : 'grid grid-cols-3 gap-2.5'}`}>
               {COLLAGE_CLIPS.map((clip) => (
                 <div
                   key={clip.id}
                   className={`rounded-full border border-foreground/8 bg-white/44 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/68 backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-foreground/72 ${
-                    isMobile ? 'text-center' : 'inline-flex max-w-full items-center gap-2 px-3'
+                    isMobile ? 'text-center' : 'inline-flex w-full min-w-0 items-center justify-center gap-2 px-3'
                   }`}
                 >
                   <span className="text-foreground/42">{String(clip.id).padStart(2, '0')}</span>
