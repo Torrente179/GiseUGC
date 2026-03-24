@@ -283,3 +283,17 @@ Generated at: `2026-03-20T18:38:23.762Z`
 ### Verification
 1. `npx eslint src/components/CreatorAdvantage.tsx`
 2. `npx vite build --mode development`
+
+## 2026-03-24 creator advantage chip flow-layout correction
+
+### Runtime touchpoints
+- `src/components/CreatorAdvantage.tsx`
+
+### What changed
+1. Replaced the collage chip's absolute overlay positioning with a normal in-flow top row inside the shell, so the label no longer depends on brittle offsets against the rounded frame.
+2. Rebalanced the shell padding and the collage stage top margin on both desktop and mobile so the chip always has dedicated clearance above the video composition.
+3. Left the rest of the section intact: same collage media, same hover behavior on desktop, same passive autoplay, and same CTA behavior.
+
+### Verification
+1. `npx eslint src/components/CreatorAdvantage.tsx`
+2. `npx vite build --mode development`

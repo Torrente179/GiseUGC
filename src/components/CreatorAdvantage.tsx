@@ -105,8 +105,8 @@ const CreatorAdvantage = () => {
     <div
       className={`relative isolate mx-auto overflow-hidden border border-border/50 bg-card/80 shadow-[0_34px_80px_-56px_rgba(47,42,36,0.48)] ${
         isMobile
-          ? 'w-full max-w-[440px] rounded-[1.7rem] px-3.5 pb-3.5 pt-4.5 sm:p-4 pointer-events-none select-none'
-          : 'h-[560px] w-full max-w-[720px] rounded-[2rem] p-5 xl:h-[590px] xl:p-6 cursor-default'
+          ? 'w-full max-w-[440px] rounded-[1.7rem] px-3.5 pb-3.5 pt-5 sm:p-4 pointer-events-none select-none'
+          : 'h-[560px] w-full max-w-[720px] rounded-[2rem] px-6 pb-6 pt-7 xl:h-[590px] xl:px-7 xl:pb-7 xl:pt-8 cursor-default'
       }`}
       onMouseEnter={isMobile ? undefined : () => setCollageHovered(true)}
       onMouseLeave={isMobile ? undefined : () => setCollageHovered(false)}
@@ -149,12 +149,8 @@ const CreatorAdvantage = () => {
       />
 
       <div className="relative z-20 flex h-full flex-col">
-        <div
-          className={`pointer-events-none absolute z-30 ${
-            isMobile ? 'left-4 top-4' : 'left-6 top-6 xl:left-7 xl:top-7'
-          }`}
-        >
-          <div className="inline-flex max-w-[78vw] items-center gap-2 rounded-full border border-white/60 bg-white/56 px-3 py-2 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.45)] backdrop-blur-md dark:border-white/10 dark:bg-slate-950/38">
+        <div className="pointer-events-none relative z-30 self-start">
+          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/60 bg-white/56 px-3 py-2 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.45)] backdrop-blur-md dark:border-white/10 dark:bg-slate-950/38 sm:px-4">
             <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_0_5px_hsl(var(--primary)/0.15)]" aria-hidden="true" />
             <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/74 sm:text-[11px]">
               {collageStatusLabel}
@@ -164,7 +160,7 @@ const CreatorAdvantage = () => {
 
         <div
           className={`relative flex-1 ${
-            isMobile ? 'min-h-[320px] pt-14 sm:min-h-[356px]' : 'min-h-0 pt-[4.75rem] xl:pt-[5rem]'
+            isMobile ? 'mt-3 min-h-[320px] sm:min-h-[356px]' : 'mt-5 min-h-0 xl:mt-6'
           }`}
         >
           <div
