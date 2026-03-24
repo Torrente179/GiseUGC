@@ -14,6 +14,11 @@ export type VerticalPageId =
   | 'tech-saas-ugc'
   | 'ecommerce-ugc'
   | 'lifestyle-wellness-ugc';
+export type ResourcePageId =
+  | 'what-is-ugc'
+  | 'how-to-hire-ugc-creator'
+  | 'ugc-vs-influencer-marketing'
+  | 'ugc-ad-formats-guide';
 export type LegalPageId = 'privacy-policy' | 'terms-content-use';
 
 const HOME_PATHS: Record<SiteLocale, string> = {
@@ -79,6 +84,25 @@ const VERTICAL_PATHS: Record<VerticalPageId, Record<SiteLocale, string>> = {
   },
 };
 
+const RESOURCE_PATHS: Record<ResourcePageId, Record<SiteLocale, string>> = {
+  'what-is-ugc': {
+    es: '/recursos/que-es-ugc/',
+    en: '/en/resources/what-is-ugc/',
+  },
+  'how-to-hire-ugc-creator': {
+    es: '/recursos/como-contratar-creadora-ugc/',
+    en: '/en/resources/how-to-hire-ugc-creator/',
+  },
+  'ugc-vs-influencer-marketing': {
+    es: '/recursos/ugc-vs-influencer-marketing/',
+    en: '/en/resources/ugc-vs-influencer-marketing/',
+  },
+  'ugc-ad-formats-guide': {
+    es: '/recursos/formatos-ugc-ads/',
+    en: '/en/resources/ugc-ad-formats-guide/',
+  },
+};
+
 const LEGAL_PATHS: Record<LegalPageId, Record<SiteLocale, string>> = {
   'privacy-policy': {
     es: '/politica-de-privacidad/',
@@ -123,6 +147,7 @@ export const getHomeSectionHref = (locale: SiteLocale, sectionId: string) => get
 
 export const getServicePath = (serviceId: ServicePageId, locale: SiteLocale): string => SERVICE_PATHS[serviceId][locale];
 export const getVerticalPath = (verticalId: VerticalPageId, locale: SiteLocale): string => VERTICAL_PATHS[verticalId][locale];
+export const getResourcePath = (resourceId: ResourcePageId, locale: SiteLocale): string => RESOURCE_PATHS[resourceId][locale];
 export const getLegalPath = (pageId: LegalPageId, locale: SiteLocale): string => LEGAL_PATHS[pageId][locale];
 
 const getPageIdFromPath = <TPageId extends string>(
@@ -147,6 +172,9 @@ export const getServicePageIdFromPath = (pathname: string): ServicePageId | null
 export const getVerticalPageIdFromPath = (pathname: string): VerticalPageId | null =>
   getPageIdFromPath(pathname, VERTICAL_PATHS);
 
+export const getResourcePageIdFromPath = (pathname: string): ResourcePageId | null =>
+  getPageIdFromPath(pathname, RESOURCE_PATHS);
+
 export const getLegalPageIdFromPath = (pathname: string): LegalPageId | null =>
   getPageIdFromPath(pathname, LEGAL_PATHS);
 
@@ -165,6 +193,11 @@ export const getLocalizedPathForCurrentRoute = (
     return `${getVerticalPath(verticalId, targetLocale)}${normalizeHash(hash)}`;
   }
 
+  const resourceId = getResourcePageIdFromPath(pathname);
+  if (resourceId) {
+    return `${getResourcePath(resourceId, targetLocale)}${normalizeHash(hash)}`;
+  }
+
   const legalPageId = getLegalPageIdFromPath(pathname);
   if (legalPageId) {
     return `${getLegalPath(legalPageId, targetLocale)}${normalizeHash(hash)}`;
@@ -175,6 +208,7 @@ export const getLocalizedPathForCurrentRoute = (
 
 export const getAllServicePaths = () => SERVICE_PATHS;
 export const getAllVerticalPaths = () => VERTICAL_PATHS;
+export const getAllResourcePaths = () => RESOURCE_PATHS;
 export const getAllLegalPaths = () => LEGAL_PATHS;
 
 export const getServicePageRouteEntries = () => {
@@ -190,6 +224,14 @@ export const getVerticalPageRouteEntries = () => {
   return verticalIds.flatMap((verticalId) => [
     { verticalId, locale: 'es' as SiteLocale, path: VERTICAL_PATHS[verticalId].es },
     { verticalId, locale: 'en' as SiteLocale, path: VERTICAL_PATHS[verticalId].en },
+  ]);
+};
+
+export const getResourcePageRouteEntries = () => {
+  const resourceIds = Object.keys(RESOURCE_PATHS) as ResourcePageId[];
+  return resourceIds.flatMap((resourceId) => [
+    { resourceId, locale: 'es' as SiteLocale, path: RESOURCE_PATHS[resourceId].es },
+    { resourceId, locale: 'en' as SiteLocale, path: RESOURCE_PATHS[resourceId].en },
   ]);
 };
 

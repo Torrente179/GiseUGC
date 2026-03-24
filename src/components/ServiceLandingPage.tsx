@@ -1,9 +1,10 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState, type SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
-import { getHomePath, getHomeSectionHref, getServicePath } from '@/lib/locale-path';
+import type { ServicePageId, SiteLocale, VerticalPageId, ResourcePageId } from '@/lib/locale-path';
+import { getHomePath, getHomeSectionHref, getServicePath, getVerticalPath, getResourcePath } from '@/lib/locale-path';
 import { getServicePageContent, getRelatedServiceSummaries, getAllServiceIds } from '@/data/service-pages';
+import { getVerticalPageContent } from '@/data/vertical-pages';
 import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import Navbar from '@/components/Navbar';
@@ -28,6 +29,33 @@ const getHighQualityServicePosterSrc = (mainSrc: string, fallbackSrc: string) =>
   const baseName = decodedFilename.replace(/\.[^.]+$/u, '');
   if (!baseName) return fallbackSrc;
   return `${SERVICE_POSTER_BASE_PATH}/${encodeURIComponent(baseName)}.jpg`;
+};
+
+/* ── Internal linking maps ── */
+const SERVICE_TO_VERTICALS: Record<ServicePageId, VerticalPageId[]> = {
+  'bilingual-ugc-creator': ['beauty-ugc', 'fashion-ugc', 'tech-saas-ugc', 'ecommerce-ugc', 'lifestyle-wellness-ugc'],
+  'spokesperson-videos': ['tech-saas-ugc', 'ecommerce-ugc', 'lifestyle-wellness-ugc'],
+  'ugc-ads-tiktok-meta': ['beauty-ugc', 'fashion-ugc', 'ecommerce-ugc', 'lifestyle-wellness-ugc'],
+  'ugc-testimonials-reviews': ['beauty-ugc', 'lifestyle-wellness-ugc', 'ecommerce-ugc'],
+  'ugc-product-demo': ['beauty-ugc', 'tech-saas-ugc', 'ecommerce-ugc'],
+  'ugc-problem-solution': ['tech-saas-ugc', 'ecommerce-ugc', 'lifestyle-wellness-ugc'],
+  'ugc-lifestyle': ['beauty-ugc', 'fashion-ugc', 'lifestyle-wellness-ugc'],
+  'ugc-broll-footage': ['beauty-ugc', 'fashion-ugc', 'ecommerce-ugc', 'lifestyle-wellness-ugc'],
+};
+
+const RESOURCE_LINKS: Record<SiteLocale, { id: ResourcePageId; label: string }[]> = {
+  es: [
+    { id: 'what-is-ugc', label: 'Que es el UGC' },
+    { id: 'how-to-hire-ugc-creator', label: 'Como contratar una creadora UGC' },
+    { id: 'ugc-vs-influencer-marketing', label: 'UGC vs influencer marketing' },
+    { id: 'ugc-ad-formats-guide', label: 'Formatos de UGC ads' },
+  ],
+  en: [
+    { id: 'what-is-ugc', label: 'What is UGC' },
+    { id: 'how-to-hire-ugc-creator', label: 'How to hire a UGC creator' },
+    { id: 'ugc-vs-influencer-marketing', label: 'UGC vs influencer marketing' },
+    { id: 'ugc-ad-formats-guide', label: 'UGC ad formats guide' },
+  ],
 };
 
 type ServiceLandingPageProps = {
@@ -130,6 +158,8 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
 
   const canonical = buildUrl(page.path);
   const homeCanonical = buildUrl(getHomePath(locale));
+  const relevantVerticals = SERVICE_TO_VERTICALS[serviceId];
+  const resourceLinks = RESOURCE_LINKS[locale];
 
   const proofExamples = useMemo(
     () =>
@@ -493,6 +523,37 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </div>
             </section>
 
+            {/* ── M3b: INDUSTRIES — Vertical cross-links ── */}
+            {relevantVerticals.length > 0 && (
+              <section className="stm-related">
+                <p className="st-eyebrow px-5 mb-3">{locale === 'es' ? 'Por industria' : 'By industry'}</p>
+                <div className="stm-all-services">
+                  {relevantVerticals.map((verticalId) => {
+                    const verticalPage = getVerticalPageContent(verticalId, locale);
+                    return (
+                      <Link key={verticalId} to={getVerticalPath(verticalId, locale)} className="stm-service-row">
+                        <span className="stm-service-label">{verticalPage.navLabel}</span>
+                        <span className="stm-service-arrow">→</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
+            {/* ── M3c: RESOURCES — Authority page cross-links ── */}
+            <section className="stm-related">
+              <p className="st-eyebrow px-5 mb-3">{locale === 'es' ? 'Recursos' : 'Resources'}</p>
+              <div className="stm-all-services">
+                {resourceLinks.map((resource) => (
+                  <Link key={resource.id} to={getResourcePath(resource.id, locale)} className="stm-service-row">
+                    <span className="stm-service-label">{resource.label}</span>
+                    <span className="stm-service-arrow">→</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
             {/* ── M4: ALL SERVICES — Full list, app-like ── */}
             {allOtherServiceIds.length > 0 && (
               <section className="stm-related">
@@ -709,6 +770,41 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                       <summary className="st-faq-question">{faq.question}</summary>
                       <p className="st-faq-answer">{faq.answer}</p>
                     </details>
+                  ))}
+                </div>
+              </div>
+            </RevealSection>
+
+            {/* ── D5b: INDUSTRIES — Vertical cross-links ── */}
+            {relevantVerticals.length > 0 && (
+              <RevealSection className="st-section">
+                <div className="st-container">
+                  <p className="st-eyebrow mb-4">{locale === 'es' ? 'Por industria' : 'By industry'}</p>
+                  <h2 className="st-section-title mb-8">{locale === 'es' ? 'Verticales donde aplico este servicio' : 'Industries where I apply this service'}</h2>
+                  <div className="flex flex-wrap gap-3">
+                    {relevantVerticals.map((verticalId) => {
+                      const verticalPage = getVerticalPageContent(verticalId, locale);
+                      return (
+                        <Link key={verticalId} to={getVerticalPath(verticalId, locale)} className="st-cta-secondary">
+                          {verticalPage.navLabel}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </RevealSection>
+            )}
+
+            {/* ── D5c: RESOURCES — Authority page cross-links ── */}
+            <RevealSection className="st-section">
+              <div className="st-container">
+                <p className="st-eyebrow mb-4">{locale === 'es' ? 'Recursos' : 'Resources'}</p>
+                <h2 className="st-section-title mb-8">{locale === 'es' ? 'Aprende más sobre UGC' : 'Learn more about UGC'}</h2>
+                <div className="flex flex-wrap gap-3">
+                  {resourceLinks.map((resource) => (
+                    <Link key={resource.id} to={getResourcePath(resource.id, locale)} className="st-cta-secondary">
+                      {resource.label}
+                    </Link>
                   ))}
                 </div>
               </div>

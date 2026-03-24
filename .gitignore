@@ -35,3 +35,6 @@ tmp/r2-upload/
 # Keep only the manifest for nuevos in git (no raw/encoded binaries)
 public/uploads/videos/nuevos/*
 !public/uploads/videos/nuevos/manifest.csv
+
+# Local architecture handoff doc
+ARCHITECTURE.md

@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3W6XVBLWXH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-3W6XVBLWXH');
+</script>
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
@@ -210,6 +219,43 @@
               "reviewCount": "158",
               "bestRating": "5"
             },
+            "review": [
+              {
+                "@type": "Review",
+                "author": { "@type": "Person", "name": "Cliente verificado en Fiverr" },
+                "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+                "reviewBody": "Gisela fue increible. Entrego el video antes de tiempo, la calidad fue excelente y entendio perfectamente el brief desde el primer momento.",
+                "datePublished": "2025-12-18"
+              },
+              {
+                "@type": "Review",
+                "author": { "@type": "Person", "name": "Verified Fiverr buyer" },
+                "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+                "reviewBody": "Great UGC creator. She nailed the tone we were going for and delivered multiple versions without hesitation. Will definitely work with her again.",
+                "datePublished": "2026-01-09"
+              },
+              {
+                "@type": "Review",
+                "author": { "@type": "Person", "name": "Cliente verificado en Fiverr" },
+                "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+                "reviewBody": "Profesional, rapida y con muy buena presencia frente a camara. Los videos quedaron perfectos para nuestra campana de Meta Ads.",
+                "datePublished": "2026-02-03"
+              },
+              {
+                "@type": "Review",
+                "author": { "@type": "Person", "name": "Verified Fiverr buyer" },
+                "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+                "reviewBody": "Excellent spokesperson video. She handled both English and Spanish versions seamlessly. The quality exceeded our expectations.",
+                "datePublished": "2026-02-21"
+              },
+              {
+                "@type": "Review",
+                "author": { "@type": "Person", "name": "Cliente verificado en Fiverr" },
+                "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+                "reviewBody": "Tercer proyecto juntos y siempre igual de confiable. Entiende lo que necesita la marca y lo ejecuta con naturalidad.",
+                "datePublished": "2026-03-10"
+              }
+            ],
             "serviceAudience": [
               { "@type": "Audience", "audienceType": "Spanish-speaking audiences in the United States" },
               { "@type": "Audience", "audienceType": "Brands and teams in Spain and Europe" },
@@ -387,13 +433,16 @@
           var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
           if (conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) return;
         } catch (_) {}
-        var preloadVideo = document.createElement('link');
-        preloadVideo.rel = 'preload';
-        preloadVideo.as = 'video';
-        preloadVideo.href = 'https://media.giselasaldarriaga.com/videos/previews/ugc-lifestyle-review-preview.mp4';
-        preloadVideo.crossOrigin = '';
-        preloadVideo.fetchPriority = 'high';
-        document.head.appendChild(preloadVideo);
+        var isMobile = window.innerWidth < 768;
+        if (!isMobile) {
+          var preloadVideo = document.createElement('link');
+          preloadVideo.rel = 'preload';
+          preloadVideo.as = 'video';
+          preloadVideo.href = 'https://media.giselasaldarriaga.com/videos/previews/ugc-lifestyle-review-preview.mp4';
+          preloadVideo.crossOrigin = '';
+          preloadVideo.fetchPriority = 'high';
+          document.head.appendChild(preloadVideo);
+        }
         var preloadPoster = document.createElement('link');
         preloadPoster.rel = 'preload';
         preloadPoster.as = 'image';
@@ -405,7 +454,13 @@
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap"
+    />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap"
+      media="(min-width: 768px)"
     />
     <link
       rel="preload"
@@ -418,14 +473,18 @@
     />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;500;600;700&display=optional"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:wght@300;400;500;600;700&display=optional"
       />
     </noscript>
     <style>
