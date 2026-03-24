@@ -50,9 +50,7 @@ Each resource page includes:
 **Files:** `index.html`, `en/index.html`
 
 1. **Video preload**: Added `window.innerWidth < 768` check — mobile devices skip the hero video preload entirely (poster image still preloads)
-2. **Font loading split**: Separated DM Sans (primary body font) from decorative fonts:
-   - DM Sans loads immediately via `<link rel="stylesheet">` (render-blocking but critical)
-   - Alex Brush + Cormorant Garamond load async via `media="print" onload="this.media='all'"` with `display=optional` (won't cause layout shift if they arrive late)
+2. **Font loading**: Unchanged — all three fonts (DM Sans, Alex Brush, Cormorant Garamond) continue to load together as a single async Google Fonts stylesheet with `display=swap`. An earlier split was reverted to preserve the original visual behavior.
 
 ### Phase 7 — Internal Linking on Service Pages
 **Files:** `src/components/ServiceLandingPage.tsx`
