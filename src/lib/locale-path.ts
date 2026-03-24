@@ -8,6 +8,12 @@ export type ServicePageId =
   | 'ugc-problem-solution'
   | 'ugc-lifestyle'
   | 'ugc-broll-footage';
+export type VerticalPageId =
+  | 'beauty-ugc'
+  | 'fashion-ugc'
+  | 'tech-saas-ugc'
+  | 'ecommerce-ugc'
+  | 'lifestyle-wellness-ugc';
 export type LegalPageId = 'privacy-policy' | 'terms-content-use';
 
 const HOME_PATHS: Record<SiteLocale, string> = {
@@ -47,6 +53,29 @@ const SERVICE_PATHS: Record<ServicePageId, Record<SiteLocale, string>> = {
   'ugc-broll-footage': {
     es: '/servicios/b-roll-footage-ugc/',
     en: '/en/services/ugc-b-roll-footage/',
+  },
+};
+
+const VERTICAL_PATHS: Record<VerticalPageId, Record<SiteLocale, string>> = {
+  'beauty-ugc': {
+    es: '/verticales/ugc-beauty/',
+    en: '/en/verticals/beauty-ugc-creator/',
+  },
+  'fashion-ugc': {
+    es: '/verticales/ugc-moda/',
+    en: '/en/verticals/fashion-ugc-creator/',
+  },
+  'tech-saas-ugc': {
+    es: '/verticales/ugc-tech-saas/',
+    en: '/en/verticals/tech-saas-ugc-creator/',
+  },
+  'ecommerce-ugc': {
+    es: '/verticales/ugc-ecommerce/',
+    en: '/en/verticals/ecommerce-ugc-creator/',
+  },
+  'lifestyle-wellness-ugc': {
+    es: '/verticales/ugc-lifestyle-bienestar/',
+    en: '/en/verticals/lifestyle-wellness-ugc-creator/',
   },
 };
 
@@ -93,6 +122,7 @@ export const getCanonicalLocaleHref = (locale: SiteLocale, hash = ''): string =>
 export const getHomeSectionHref = (locale: SiteLocale, sectionId: string) => getHomePath(locale, `#${sectionId}`);
 
 export const getServicePath = (serviceId: ServicePageId, locale: SiteLocale): string => SERVICE_PATHS[serviceId][locale];
+export const getVerticalPath = (verticalId: VerticalPageId, locale: SiteLocale): string => VERTICAL_PATHS[verticalId][locale];
 export const getLegalPath = (pageId: LegalPageId, locale: SiteLocale): string => LEGAL_PATHS[pageId][locale];
 
 const getPageIdFromPath = <TPageId extends string>(
@@ -114,6 +144,9 @@ const getPageIdFromPath = <TPageId extends string>(
 export const getServicePageIdFromPath = (pathname: string): ServicePageId | null =>
   getPageIdFromPath(pathname, SERVICE_PATHS);
 
+export const getVerticalPageIdFromPath = (pathname: string): VerticalPageId | null =>
+  getPageIdFromPath(pathname, VERTICAL_PATHS);
+
 export const getLegalPageIdFromPath = (pathname: string): LegalPageId | null =>
   getPageIdFromPath(pathname, LEGAL_PATHS);
 
@@ -127,6 +160,11 @@ export const getLocalizedPathForCurrentRoute = (
     return `${getServicePath(serviceId, targetLocale)}${normalizeHash(hash)}`;
   }
 
+  const verticalId = getVerticalPageIdFromPath(pathname);
+  if (verticalId) {
+    return `${getVerticalPath(verticalId, targetLocale)}${normalizeHash(hash)}`;
+  }
+
   const legalPageId = getLegalPageIdFromPath(pathname);
   if (legalPageId) {
     return `${getLegalPath(legalPageId, targetLocale)}${normalizeHash(hash)}`;
@@ -136,6 +174,7 @@ export const getLocalizedPathForCurrentRoute = (
 };
 
 export const getAllServicePaths = () => SERVICE_PATHS;
+export const getAllVerticalPaths = () => VERTICAL_PATHS;
 export const getAllLegalPaths = () => LEGAL_PATHS;
 
 export const getServicePageRouteEntries = () => {
@@ -143,6 +182,14 @@ export const getServicePageRouteEntries = () => {
   return serviceIds.flatMap((serviceId) => [
     { serviceId, locale: 'es' as SiteLocale, path: SERVICE_PATHS[serviceId].es },
     { serviceId, locale: 'en' as SiteLocale, path: SERVICE_PATHS[serviceId].en },
+  ]);
+};
+
+export const getVerticalPageRouteEntries = () => {
+  const verticalIds = Object.keys(VERTICAL_PATHS) as VerticalPageId[];
+  return verticalIds.flatMap((verticalId) => [
+    { verticalId, locale: 'es' as SiteLocale, path: VERTICAL_PATHS[verticalId].es },
+    { verticalId, locale: 'en' as SiteLocale, path: VERTICAL_PATHS[verticalId].en },
   ]);
 };
 

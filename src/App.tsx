@@ -6,12 +6,14 @@ import { useTranslation } from 'react-i18next';
 import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import ServiceLandingPage from '@/components/ServiceLandingPage';
+import VerticalLandingPage from '@/components/VerticalLandingPage';
 import LegalPage from '@/components/LegalPage';
 import ThemeRuntimeSync from '@/components/ThemeRuntimeSync';
 import {
   getLocaleFromPath,
   getLegalPageRouteEntries,
   getServicePageRouteEntries,
+  getVerticalPageRouteEntries,
   isHomePath,
   normalizePathname,
 } from '@/lib/locale-path';
@@ -27,8 +29,9 @@ let hasTrackedChatGptLanding = false;
 let latestScrollY = 0;
 window.addEventListener('scroll', () => { latestScrollY = window.scrollY; }, { passive: true });
 
-// All service route entries — computed once at module level
+// All route entries — computed once at module level
 const serviceRouteEntries = getServicePageRouteEntries();
+const verticalRouteEntries = getVerticalPageRouteEntries();
 const legalRouteEntries = getLegalPageRouteEntries();
 
 // Scroll to a Y position, using Lenis when available for an immediate (non-animated) jump
@@ -83,13 +86,19 @@ const AppRoutes = () => {
     return serviceRouteEntries.find(e => normalizePathname(e.path) === normalized) ?? null;
   }, [location.pathname, onHome]);
 
+  const currentVerticalEntry = useMemo(() => {
+    if (onHome) return null;
+    const normalized = normalizePathname(location.pathname);
+    return verticalRouteEntries.find(e => normalizePathname(e.path) === normalized) ?? null;
+  }, [location.pathname, onHome]);
+
   const currentLegalEntry = useMemo(() => {
     if (onHome) return null;
     const normalized = normalizePathname(location.pathname);
     return legalRouteEntries.find((entry) => normalizePathname(entry.path) === normalized) ?? null;
   }, [location.pathname, onHome]);
 
-  const isKnownRoute = onHome || currentServiceEntry !== null || currentLegalEntry !== null;
+  const isKnownRoute = onHome || currentServiceEntry !== null || currentVerticalEntry !== null || currentLegalEntry !== null;
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -168,6 +177,15 @@ const AppRoutes = () => {
           <ServiceLandingPage
             serviceId={currentServiceEntry.serviceId}
             locale={currentServiceEntry.locale}
+          />
+        </div>
+      )}
+
+      {currentVerticalEntry && (
+        <div key={location.pathname} className="page-enter">
+          <VerticalLandingPage
+            verticalId={currentVerticalEntry.verticalId}
+            locale={currentVerticalEntry.locale}
           />
         </div>
       )}

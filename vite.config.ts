@@ -43,6 +43,16 @@ export default defineConfig(({ mode }) => ({
         lifestyleEn: path.resolve(__dirname, 'en/services/lifestyle-ugc-organic-content/index.html'),
         brollEs: path.resolve(__dirname, 'servicios/b-roll-footage-ugc/index.html'),
         brollEn: path.resolve(__dirname, 'en/services/ugc-b-roll-footage/index.html'),
+        beautyEs: path.resolve(__dirname, 'verticales/ugc-beauty/index.html'),
+        beautyEn: path.resolve(__dirname, 'en/verticals/beauty-ugc-creator/index.html'),
+        fashionEs: path.resolve(__dirname, 'verticales/ugc-moda/index.html'),
+        fashionEn: path.resolve(__dirname, 'en/verticals/fashion-ugc-creator/index.html'),
+        techSaasEs: path.resolve(__dirname, 'verticales/ugc-tech-saas/index.html'),
+        techSaasEn: path.resolve(__dirname, 'en/verticals/tech-saas-ugc-creator/index.html'),
+        ecommerceEs: path.resolve(__dirname, 'verticales/ugc-ecommerce/index.html'),
+        ecommerceEn: path.resolve(__dirname, 'en/verticals/ecommerce-ugc-creator/index.html'),
+        lifestyleWellnessEs: path.resolve(__dirname, 'verticales/ugc-lifestyle-bienestar/index.html'),
+        lifestyleWellnessEn: path.resolve(__dirname, 'en/verticals/lifestyle-wellness-ugc-creator/index.html'),
       },
       output: {
         manualChunks: {

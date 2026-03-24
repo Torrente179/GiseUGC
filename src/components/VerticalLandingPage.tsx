@@ -1,9 +1,10 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState, type SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
-import { getHomePath, getHomeSectionHref, getServicePath } from '@/lib/locale-path';
-import { getServicePageContent, getRelatedServiceSummaries, getAllServiceIds } from '@/data/service-pages';
+import type { VerticalPageId, SiteLocale } from '@/lib/locale-path';
+import { getHomePath, getHomeSectionHref, getVerticalPath, getServicePath } from '@/lib/locale-path';
+import { getVerticalPageContent } from '@/data/vertical-pages';
+import { getServicePageContent, getRelatedServiceSummaries } from '@/data/service-pages';
 import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import Navbar from '@/components/Navbar';
@@ -30,15 +31,15 @@ const getHighQualityServicePosterSrc = (mainSrc: string, fallbackSrc: string) =>
   return `${SERVICE_POSTER_BASE_PATH}/${encodeURIComponent(baseName)}.jpg`;
 };
 
-type ServiceLandingPageProps = {
-  serviceId: ServicePageId;
+type VerticalLandingPageProps = {
+  verticalId: VerticalPageId;
   locale: SiteLocale;
 };
 
 const localeLabels = {
   es: {
     home: 'Inicio',
-    services: 'Servicios',
+    verticals: 'Verticales',
     startProject: 'Empezar proyecto',
     openSample: 'Ver muestra',
     theWork: 'El trabajo',
@@ -48,14 +49,14 @@ const localeLabels = {
     no: 'No, si',
     howItWorks: 'Así funciona',
     faq: 'Preguntas',
-    alsoOffered: 'También ofrezco',
+    relatedServices: 'Servicios relacionados',
     previewClose: 'Cerrar vista previa',
     previewPrev: 'Clip anterior',
     previewNext: 'Siguiente clip',
   },
   en: {
     home: 'Home',
-    services: 'Services',
+    verticals: 'Verticals',
     startProject: 'Start a project',
     openSample: 'View sample',
     theWork: 'The work',
@@ -65,7 +66,7 @@ const localeLabels = {
     no: 'Not ideal if',
     howItWorks: 'How it works',
     faq: 'Questions',
-    alsoOffered: 'Also offered',
+    relatedServices: 'Related services',
     previewClose: 'Close preview',
     previewPrev: 'Previous clip',
     previewNext: 'Next clip',
@@ -113,20 +114,10 @@ function RevealSection({
   );
 }
 
-/* ════════════════════════════════════════════════════════════════════
-   SCREEN TEST — Service Landing Page
-   Mobile: App-like independent experience
-   Desktop: A24 × Apple editorial layout
-   ════════════════════════════════════════════════════════════════════ */
-
-const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
-  const page = getServicePageContent(serviceId, locale);
+const VerticalLandingPage = ({ verticalId, locale }: VerticalLandingPageProps) => {
+  const page = getVerticalPageContent(verticalId, locale);
   const labels = localeLabels[locale];
   const relatedPages = getRelatedServiceSummaries(page.relatedServiceIds, locale);
-  const allOtherServiceIds = useMemo(
-    () => getAllServiceIds().filter((id) => id !== serviceId),
-    [serviceId],
-  );
 
   const canonical = buildUrl(page.path);
   const homeCanonical = buildUrl(getHomePath(locale));
@@ -175,11 +166,9 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
   const theaterSources = useMemo(() => {
     const clip = activeProofItem?.clip;
     if (!clip) return [];
-    const preferred = isMobileViewport
-      ? [clip.mainSrc, clip.mobileSrc, clip.previewSrc]
-      : [clip.mainSrc, clip.mobileSrc, clip.previewSrc];
+    const preferred = [clip.mainSrc, clip.mobileSrc, clip.previewSrc];
     return preferred.filter((s, i, a): s is string => !!s && a.indexOf(s) === i);
-  }, [activeProofItem, isMobileViewport]);
+  }, [activeProofItem]);
 
   /* ── Viewport listener ── */
   useEffect(() => {
@@ -255,11 +244,11 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     };
   }, [isProofTheaterOpen]);
 
-  /* ── Schema.org (preserved) ── */
+  /* ── Schema.org ── */
   const schema = useMemo(() => {
     const breadcrumbItems = [
       { '@type': 'ListItem', position: 1, name: labels.home, item: homeCanonical },
-      { '@type': 'ListItem', position: 2, name: labels.services, item: homeCanonical },
+      { '@type': 'ListItem', position: 2, name: labels.verticals, item: homeCanonical },
       { '@type': 'ListItem', position: 3, name: page.breadcrumbLabel, item: canonical },
     ];
     const videoObjects = proofExamples.map(({ example, clip }) => ({
@@ -270,7 +259,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
       thumbnailUrl: clip.posterSrc,
       contentUrl: clip.mainSrc,
       ...(clip.durationSeconds ? { duration: `PT${Math.round(clip.durationSeconds)}S` } : {}),
-      uploadDate: clip.publishedAt ?? '2026-03-13',
+      uploadDate: clip.publishedAt ?? '2026-03-23',
       inLanguage: clip.language ?? locale,
       creator: { '@id': `${SITE_URL}/#person` },
     }));
@@ -284,7 +273,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
         ...videoObjects,
       ],
     };
-  }, [canonical, homeCanonical, labels.home, labels.services, locale, page.breadcrumbLabel, page.faqs, page.metaDescription, page.metaTitle, page.navLabel, proofExamples]);
+  }, [canonical, homeCanonical, labels.home, labels.verticals, locale, page.breadcrumbLabel, page.faqs, page.metaDescription, page.metaTitle, page.navLabel, proofExamples]);
 
   const leadProof = proofExamples[0] ?? null;
   const handlePosterError = useCallback(
@@ -304,9 +293,9 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
         canonical={canonical}
         locale={locale}
         alternates={{
-          es: buildUrl(getServicePath(serviceId, 'es')),
-          en: buildUrl(getServicePath(serviceId, 'en')),
-          xDefault: buildUrl(getServicePath(serviceId, 'es')),
+          es: buildUrl(getVerticalPath(verticalId, 'es')),
+          en: buildUrl(getVerticalPath(verticalId, 'en')),
+          xDefault: buildUrl(getVerticalPath(verticalId, 'es')),
         }}
         structuredData={schema}
       />
@@ -319,11 +308,10 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
             <>
               {/* ╔══════════════════════════════════════════════════════════╗
                   ║  MOBILE — App-like experience (< 768px)                ║
-                  ║  Completely independent from desktop layout             ║
                   ╚══════════════════════════════════════════════════════════╝ */}
               <div>
 
-            {/* ── M1: APP HERO — Full-viewport video poster ── */}
+            {/* ── M1: APP HERO ── */}
             <section className="stm-hero">
               {leadProof ? (
                 <button
@@ -350,18 +338,16 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 <div className="stm-hero-poster stm-hero-poster--empty" />
               )}
 
-              {/* Overlaid content at bottom */}
               <div className="stm-hero-bottom">
                 <p className="st-eyebrow st-eyebrow--light mb-2">{page.heroEyebrow}</p>
                 <h1 className="stm-hero-title">{page.heroTitle}</h1>
                 <p className="stm-hero-hook">{page.heroSummary}</p>
               </div>
 
-              {/* SEO breadcrumb — visually hidden on mobile */}
               <nav className="sr-only" aria-label="Breadcrumb">
                 <Link to={getHomePath(locale)}>{labels.home}</Link>
                 <span>/</span>
-                <Link to={getHomeSectionHref(locale, 'services')}>{labels.services}</Link>
+                <span>{labels.verticals}</span>
                 <span>/</span>
                 <span>{page.breadcrumbLabel}</span>
               </nav>
@@ -415,7 +401,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
 
             {/* ── M3: COMPACT INFO ACCORDION ── */}
             <section className="stm-info">
-              {/* What you get */}
               <details className="stm-accordion">
                 <summary className="stm-accordion-trigger">
                   <span>{labels.whatYouGet}</span>
@@ -432,7 +417,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 </div>
               </details>
 
-              {/* How it works */}
               <details className="stm-accordion">
                 <summary className="stm-accordion-trigger">
                   <span>{labels.howItWorks}</span>
@@ -452,7 +436,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 </div>
               </details>
 
-              {/* Is this for you */}
               <details className="stm-accordion">
                 <summary className="stm-accordion-trigger">
                   <span>{labels.isThisForYou}</span>
@@ -470,7 +453,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 </div>
               </details>
 
-              {/* FAQ */}
               <details className="stm-accordion">
                 <summary className="stm-accordion-trigger">
                   <span>{labels.faq}</span>
@@ -487,23 +469,22 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 </div>
               </details>
 
-              {/* Intro pull-quote */}
               <div className="stm-quote-block">
                 <p className="stm-quote">{page.sectionIntroText}</p>
               </div>
             </section>
 
-            {/* ── M4: ALL SERVICES — Full list, app-like ── */}
-            {allOtherServiceIds.length > 0 && (
+            {/* ── M4: RELATED SERVICES ── */}
+            {page.relatedServiceIds.length > 0 && (
               <section className="stm-related">
-                <p className="st-eyebrow px-5 mb-3">{labels.alsoOffered}</p>
+                <p className="st-eyebrow px-5 mb-3">{labels.relatedServices}</p>
                 <div className="stm-all-services">
-                  {allOtherServiceIds.map((otherId) => {
-                    const otherPage = getServicePageContent(otherId, locale);
+                  {page.relatedServiceIds.map((serviceId) => {
+                    const servicePage = getServicePageContent(serviceId, locale);
                     return (
-                      <Link key={otherId} to={getServicePath(otherId, locale)} className="stm-service-row">
-                        <span className="stm-service-label">{otherPage.navLabel}</span>
-                        <span className="stm-service-arrow">→</span>
+                      <Link key={serviceId} to={getServicePath(serviceId, locale)} className="stm-service-row">
+                        <span className="stm-service-label">{servicePage.navLabel}</span>
+                        <span className="stm-service-arrow">&rarr;</span>
                       </Link>
                     );
                   })}
@@ -511,7 +492,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </section>
             )}
 
-            {/* ── M5: MOBILE CTA — Above footer ── */}
+            {/* ── M5: MOBILE CTA ── */}
             <section className="stm-cta">
               <p className="stm-cta-text">{page.ctaText}</p>
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg stm-cta-btn">
@@ -520,14 +501,12 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <p className="mt-4 text-xs text-foreground/40">{locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026'}</p>
             </section>
 
-            {/* ── STICKY WHATSAPP BAR ── */}
             <div className="stm-sticky-bar">
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="stm-sticky-btn">
                 {labels.startProject}
               </a>
             </div>
 
-              {/* ── M6: TOOLKIT MARQUEE — Final block before footer ── */}
               <Suspense fallback={null}>
                 <ServicesMarqueeSection liteMobile />
               </Suspense>
@@ -536,7 +515,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
           ) : (
             <>
               {/* ╔══════════════════════════════════════════════════════════╗
-                  ║  DESKTOP — Screen Test editorial layout (≥ 768px)       ║
+                  ║  DESKTOP — Screen Test editorial layout (>= 768px)      ║
                   ╚══════════════════════════════════════════════════════════╝ */}
               <div>
 
@@ -546,7 +525,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 <nav className="st-breadcrumb" aria-label="Breadcrumb">
                   <Link to={getHomePath(locale)}>{labels.home}</Link>
                   <span aria-hidden="true">/</span>
-                  <Link to={getHomeSectionHref(locale, 'services')}>{labels.services}</Link>
+                  <span>{labels.verticals}</span>
                   <span aria-hidden="true">/</span>
                   <span>{page.breadcrumbLabel}</span>
                 </nav>
@@ -589,7 +568,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                     <p className="st-pullquote">{page.sectionIntroText}</p>
                     <div className="st-market-strip">
                       {page.marketItems.map((item, i) => (
-                        <span key={item}>{i > 0 && <span className="st-middot" aria-hidden="true">·</span>}{item}</span>
+                        <span key={item}>{i > 0 && <span className="st-middot" aria-hidden="true">&middot;</span>}{item}</span>
                       ))}
                     </div>
                   </div>
@@ -688,7 +667,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                     <p className="st-fit-label st-fit-label--yes">{labels.yes}</p>
                     <ul className="st-fit-list">
                       {page.bestFitItems.map((item) => (
-                        <li key={item} className="st-fit-item"><span className="st-fit-dash st-fit-dash--teal" aria-hidden="true">—</span><span>{item}</span></li>
+                        <li key={item} className="st-fit-item"><span className="st-fit-dash st-fit-dash--teal" aria-hidden="true">&mdash;</span><span>{item}</span></li>
                       ))}
                     </ul>
                   </div>
@@ -696,7 +675,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                     <p className="st-fit-label st-fit-label--no">{labels.no}</p>
                     <ul className="st-fit-list">
                       {page.notFitItems.map((item) => (
-                        <li key={item} className="st-fit-item st-fit-item--muted"><span className="st-fit-dash" aria-hidden="true">—</span><span>{item}</span></li>
+                        <li key={item} className="st-fit-item st-fit-item--muted"><span className="st-fit-dash" aria-hidden="true">&mdash;</span><span>{item}</span></li>
                       ))}
                     </ul>
                   </div>
@@ -722,14 +701,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 <p className="mt-6 text-xs text-foreground/40">{locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026'}</p>
                 {relatedPages.length > 0 && (
                   <div className="st-related">
-                    <p className="st-eyebrow mb-5">{labels.alsoOffered}</p>
+                    <p className="st-eyebrow mb-5">{labels.relatedServices}</p>
                     {page.relatedServiceIds.map((relatedId, index) => {
                       const rel = relatedPages[index];
                       if (!rel) return null;
                       return (
                         <Link key={relatedId} to={getServicePath(relatedId, locale)} className="st-related-row group">
                           <span className="st-related-title">{rel.title}</span>
-                          <span className="st-related-arrow">→</span>
+                          <span className="st-related-arrow">&rarr;</span>
                         </Link>
                       );
                     })}
@@ -738,7 +717,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </div>
             </RevealSection>
 
-              {/* ── D7: TOOLKIT MARQUEE — Final block before footer ── */}
               <Suspense fallback={null}>
                 <ServicesMarqueeSection liteMobile />
               </Suspense>
@@ -787,4 +765,4 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
   );
 };
 
-export default ServiceLandingPage;
+export default VerticalLandingPage;

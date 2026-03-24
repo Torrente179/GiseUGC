@@ -86,6 +86,61 @@
       .boot-noscript dl { margin: 0; }
       .boot-noscript dt { margin-top: 16px; font-family: 'DM Sans', system-ui, sans-serif; font-weight: 600; }
       .boot-noscript dd { margin: 8px 0 0; font-family: 'DM Sans', system-ui, sans-serif; line-height: 1.8; }
+      .boot-expanded {
+        max-width: 840px;
+        margin: 48px auto 0;
+        padding: 0 24px;
+      }
+      .boot-section-heading {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-weight: 700;
+        font-size: 1.8rem;
+        letter-spacing: -0.04em;
+        margin: 0 0 12px;
+      }
+      .boot-section-text {
+        line-height: 1.8;
+        color: rgba(47,42,36,0.72);
+        margin: 0 0 28px;
+      }
+      .boot-subsection-heading {
+        font-family: 'DM Sans', system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #9f9366;
+        margin: 24px 0 12px;
+      }
+      .boot-dl {
+        margin: 0 0 20px;
+      }
+      .boot-dl dt {
+        font-weight: 600;
+        margin-top: 14px;
+      }
+      .boot-dl dd {
+        margin: 6px 0 0;
+        line-height: 1.8;
+        color: rgba(47,42,36,0.72);
+      }
+      .boot-fit-list {
+        margin: 0 0 20px;
+        padding-left: 18px;
+        line-height: 1.85;
+        color: rgba(47,42,36,0.74);
+      }
+      .boot-fit-list li + li { margin-top: 6px; }
+      .boot-process {
+        margin: 0 0 20px;
+        padding-left: 18px;
+        line-height: 1.85;
+        color: rgba(47,42,36,0.74);
+      }
+      .boot-process li + li { margin-top: 10px; }
+      .boot-process strong {
+        color: #2f2a24;
+      }
       @media (max-width: 1023px) { .boot-shell { padding-top: 96px; } .boot-grid { grid-template-columns: 1fr; gap: 24px; } }</style>
   </head>
   <body>
@@ -113,6 +168,45 @@
             <ul class="boot-list"><li>Hook + dolor + solución + CTA</li><li>Variaciones de hook</li><li>Problema-solución con demo</li><li>Antes/después narrativo</li></ul>
           </aside>
         </div>
+
+        <section class="boot-expanded" aria-label="Detalles del servicio">
+          <h2 class="boot-section-heading">Por qué este formato convierte tan bien</h2>
+          <p class="boot-section-text">El formato problema-solución replica cómo tomamos decisiones: primero sentimos el dolor, luego buscamos la salida. Un video problema solución UGC bien hecho hace que el espectador se identifique en los primeros segundos y esté listo para la solución cuando la presentas.</p>
+
+          <h3 class="boot-subsection-heading">Tipos de piezas problema-solución</h3>
+          <dl class="boot-dl">
+            <dt>Hook de dolor + solución</dt>
+            <dd>Piezas cortas que abren con la frustración real del usuario y cierran con el producto como respuesta directa.</dd>
+            <dt>Antes/después</dt>
+            <dd>Formato visual que muestra el contraste entre el problema y el resultado con el producto.</dd>
+            <dt>Storytelling de experiencia</dt>
+            <dd>Narrativa breve en primera persona que conecta con el dolor y presenta la solución de forma orgánica.</dd>
+            <dt>Variaciones de hook</dt>
+            <dd>Múltiples aperturas para testear cuál engancha mejor a distintos segmentos de audiencia.</dd>
+          </dl>
+
+          <h3 class="boot-subsection-heading">Mejor encaje</h3>
+          <ul class="boot-fit-list">
+            <li>Productos que resuelven un problema real y específico que se puede mostrar en 30-60 segundos.</li>
+            <li>Marcas de ecommerce, suplementos, apps o servicios con un dolor de usuario claro y medible.</li>
+            <li>Equipos de performance que quieren piezas con estructura de retención probada para paid social.</li>
+          </ul>
+
+          <h3 class="boot-subsection-heading">No es la mejor opción si</h3>
+          <ul class="boot-fit-list">
+            <li>El producto es aspiracional y no tiene un pain-point claro que resolver.</li>
+            <li>Lo que necesitas es puro branding sin intención de conversión directa.</li>
+            <li>El beneficio no se puede demostrar o contar en menos de un minuto.</li>
+          </ul>
+
+          <h3 class="boot-subsection-heading">Cómo construyo un video problema-solución</h3>
+          <ol class="boot-process">
+            <li><strong>1. Pain-point y audiencia</strong> Definimos el dolor específico, quién lo siente y cómo se expresa en lenguaje real.</li>
+            <li><strong>2. Estructura hook-pain-solution</strong> Armo variaciones de apertura para testear y un cuerpo que conecta dolor con producto de forma creíble.</li>
+            <li><strong>3. Grabación con intención</strong> Grabo con foco en que el espectador se sienta identificado rápido y reciba la solución con naturalidad.</li>
+            <li><strong>4. Entrega con variaciones</strong> Recibes varias versiones de hook para testear cuál convierte mejor en tu público específico.</li>
+          </ol>
+        </section>
       </section>
       <noscript>
         <article class="boot-noscript">
@@ -120,6 +214,40 @@
           <p>Creo creativos con el formato hook-problema-solución-CTA, el más efectivo para direct response.</p>
           <h3>Tipos de creativos</h3>
           <ul><li>Hook + dolor + solución + CTA</li><li>Variaciones de hook</li><li>Problema-solución con demo</li><li>Antes/después narrativo</li></ul>
+          <!-- SERVICE-EXPANDED-NOSCRIPT -->
+          <h3>Por qué este formato convierte tan bien</h3>
+          <p>El formato problema-solución replica cómo tomamos decisiones: primero sentimos el dolor, luego buscamos la salida. Un video problema solución UGC bien hecho hace que el espectador se identifique en los primeros segundos y esté listo para la solución cuando la presentas.</p>
+          <h3>Tipos de piezas problema-solución</h3>
+          <dl>
+            <dt>Hook de dolor + solución</dt>
+            <dd>Piezas cortas que abren con la frustración real del usuario y cierran con el producto como respuesta directa.</dd>
+            <dt>Antes/después</dt>
+            <dd>Formato visual que muestra el contraste entre el problema y el resultado con el producto.</dd>
+            <dt>Storytelling de experiencia</dt>
+            <dd>Narrativa breve en primera persona que conecta con el dolor y presenta la solución de forma orgánica.</dd>
+            <dt>Variaciones de hook</dt>
+            <dd>Múltiples aperturas para testear cuál engancha mejor a distintos segmentos de audiencia.</dd>
+          </dl>
+          <h3>Mejor encaje</h3>
+          <ul>
+            <li>Productos que resuelven un problema real y específico que se puede mostrar en 30-60 segundos.</li>
+            <li>Marcas de ecommerce, suplementos, apps o servicios con un dolor de usuario claro y medible.</li>
+            <li>Equipos de performance que quieren piezas con estructura de retención probada para paid social.</li>
+          </ul>
+          <h3>No es la mejor opción si</h3>
+          <ul>
+            <li>El producto es aspiracional y no tiene un pain-point claro que resolver.</li>
+            <li>Lo que necesitas es puro branding sin intención de conversión directa.</li>
+            <li>El beneficio no se puede demostrar o contar en menos de un minuto.</li>
+          </ul>
+          <h3>Cómo construyo un video problema-solución</h3>
+          <ol>
+            <li><strong>1. Pain-point y audiencia</strong> Definimos el dolor específico, quién lo siente y cómo se expresa en lenguaje real.</li>
+            <li><strong>2. Estructura hook-pain-solution</strong> Armo variaciones de apertura para testear y un cuerpo que conecta dolor con producto de forma creíble.</li>
+            <li><strong>3. Grabación con intención</strong> Grabo con foco en que el espectador se sienta identificado rápido y reciba la solución con naturalidad.</li>
+            <li><strong>4. Entrega con variaciones</strong> Recibes varias versiones de hook para testear cuál convierte mejor en tu público específico.</li>
+          </ol>
+          <!-- /SERVICE-EXPANDED-NOSCRIPT -->
           <!-- SERVICE-FAQ-NOSCRIPT -->
           <h3>Preguntas frecuentes sobre UGC problema-solución</h3>
           <dl>
