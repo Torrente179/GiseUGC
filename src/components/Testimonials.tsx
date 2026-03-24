@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type TouchEvent, type WheelEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { blurRevealUp, easeOutExpo, springHoverTransition, springSmooth, springSnappy, staggerContainer } from '@/components/motion/variants';
@@ -120,18 +120,26 @@ const Testimonials = () => {
   const shouldReduceMotion = useReducedMotion();
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
   const thumbnailRailRef = useRef<HTMLDivElement | null>(null);
   const thumbnailButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
+  const goTo = (index: number) => {
+    setDirection(index > activeIndex ? 1 : -1);
+    setActiveIndex(index);
+  };
+
   const nextTestimonial = () => {
-    setActiveIndex((prevIndex) => (prevIndex + 1) % TESTIMONIAL_IMAGES.length);
+    setDirection(1);
+    setActiveIndex((prev) => (prev + 1) % TESTIMONIAL_IMAGES.length);
   };
 
   const prevTestimonial = () => {
-    setActiveIndex((prevIndex) => (prevIndex - 1 + TESTIMONIAL_IMAGES.length) % TESTIMONIAL_IMAGES.length);
+    setDirection(-1);
+    setActiveIndex((prev) => (prev - 1 + TESTIMONIAL_IMAGES.length) % TESTIMONIAL_IMAGES.length);
   };
 
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
@@ -208,9 +216,43 @@ const Testimonials = () => {
     event.currentTarget.scrollLeft += event.deltaY;
   };
 
+  const slideVariants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 40 : -40,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? -40 : 40,
+      opacity: 0,
+    }),
+  };
+
+  const NavButton = ({ onClick, ariaLabel, children, className = '' }: {
+    onClick: () => void;
+    ariaLabel: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <motion.button
+      onClick={onClick}
+      className={`h-10 w-10 md:h-11 md:w-11 rounded-full border border-border/60 bg-card/90 backdrop-blur-sm flex items-center justify-center text-foreground/70 transition-colors hover:bg-card hover:border-primary/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${className}`}
+      aria-label={ariaLabel}
+      whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.05 }}
+      whileTap={shouldReduceMotion ? undefined : { scale: 0.93 }}
+      transition={springSnappy}
+    >
+      {children}
+    </motion.button>
+  );
+
   return (
     <section id="testimonials" className="studio-section bg-background">
       <div className="studio-container">
+        {/* Header */}
         <motion.div
           className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-10 md:mb-12"
           initial="hidden"
@@ -227,27 +269,21 @@ const Testimonials = () => {
             </h2>
           </div>
 
-          <motion.div className="hidden md:flex items-center gap-3" variants={blurRevealUp(18, 0.62)}>
-            <motion.button
-              onClick={prevTestimonial}
-              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
-              aria-label={t('testimonials.ariaPrev')}
-              whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.06 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
-              transition={springSnappy}
-            >
-              <ChevronLeft className="h-5 w-5 text-primary" />
-            </motion.button>
-            <motion.button
-              onClick={nextTestimonial}
-              className="h-11 w-11 rounded-full bg-card border border-primary/20 flex items-center justify-center shadow-sm"
-              aria-label={t('testimonials.ariaNext')}
-              whileHover={shouldReduceMotion ? undefined : { y: -3, scale: 1.06 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.94 }}
-              transition={springSnappy}
-            >
-              <ChevronRight className="h-5 w-5 text-primary" />
-            </motion.button>
+          {/* Desktop: nav arrows + counter */}
+          <motion.div className="hidden md:flex items-center gap-4" variants={blurRevealUp(18, 0.62)}>
+            <span className="text-sm font-medium tabular-nums text-muted-foreground tracking-wide">
+              {String(activeIndex + 1).padStart(2, '0')}
+              <span className="mx-1 text-border">/</span>
+              {String(TESTIMONIAL_IMAGES.length).padStart(2, '0')}
+            </span>
+            <div className="flex items-center gap-2">
+              <NavButton onClick={prevTestimonial} ariaLabel={t('testimonials.ariaPrev')}>
+                <ChevronLeft className="h-4.5 w-4.5" />
+              </NavButton>
+              <NavButton onClick={nextTestimonial} ariaLabel={t('testimonials.ariaNext')}>
+                <ChevronRight className="h-4.5 w-4.5" />
+              </NavButton>
+            </div>
           </motion.div>
         </motion.div>
 
@@ -259,72 +295,117 @@ const Testimonials = () => {
           transition={{ duration: 0.62 }}
         />
 
+        {/* Main carousel */}
         <motion.div
-          className="relative overflow-hidden"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+          className="relative"
           initial={{ opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.68 }}
         >
-          <motion.div
-            className="flex will-change-transform"
-            animate={{ x: `-${activeIndex * 100}%` }}
-            transition={{ type: 'spring', stiffness: 188, damping: 24, mass: 0.95 }}
+          {/* Image area */}
+          <div
+            className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-card border border-border/50"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
-            {TESTIMONIAL_IMAGES.map((testimonial, index) => (
-              <article key={testimonial.id} className="min-w-full">
-                <div className="rounded-[1.5rem] border border-border/80 bg-card/70 p-3 md:p-4 lg:p-5">
+            <div className="relative overflow-hidden min-h-[220px] md:min-h-[320px] lg:min-h-[360px]">
+              <AnimatePresence mode="wait" custom={direction} initial={false}>
+                <motion.article
+                  key={activeIndex}
+                  custom={direction}
+                  variants={shouldReduceMotion ? undefined : slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    x: { type: 'spring', stiffness: 300, damping: 30, mass: 0.8 },
+                    opacity: { duration: 0.2, ease: easeOutExpo },
+                  }}
+                  className="flex items-center justify-center w-full px-4 py-5 md:px-8 md:py-7 lg:px-10 lg:py-8"
+                >
                   <button
                     type="button"
-                    onClick={() => setZoomedIndex(index)}
-                    className="mx-auto block w-full max-w-[980px] overflow-hidden rounded-2xl border border-border/70 bg-background/55 transition-colors hover:border-primary/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:max-w-[760px] lg:max-w-[820px]"
-                    aria-label={`Open testimonial image ${index + 1}`}
+                    onClick={() => setZoomedIndex(activeIndex)}
+                    className="mx-auto block w-full max-w-[720px] overflow-hidden rounded-xl bg-background/40 ring-1 ring-border/40 transition-all hover:ring-primary/30 hover:shadow-lg hover:shadow-primary/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-zoom-in"
+                    aria-label={`Open testimonial image ${activeIndex + 1}`}
                   >
                     <img
-                      src={testimonial.src}
-                      alt={testimonial.alt}
-                      width={testimonial.width}
-                      height={testimonial.height}
-                      className="mx-auto h-auto max-h-[70vh] w-full object-contain md:max-h-[44vh] lg:max-h-[42vh]"
-                      loading={index === activeIndex ? 'eager' : 'lazy'}
+                      src={TESTIMONIAL_IMAGES[activeIndex].src}
+                      alt={TESTIMONIAL_IMAGES[activeIndex].alt}
+                      width={TESTIMONIAL_IMAGES[activeIndex].width}
+                      height={TESTIMONIAL_IMAGES[activeIndex].height}
+                      className="mx-auto h-auto w-full object-contain max-h-[60vh] md:max-h-[44vh] lg:max-h-[42vh]"
+                      loading="eager"
                       decoding="async"
                     />
                   </button>
-                </div>
-              </article>
-            ))}
-          </motion.div>
+                </motion.article>
+              </AnimatePresence>
+            </div>
+
+            {/* Mobile nav overlay */}
+            <div className="absolute inset-y-0 left-0 flex items-center pl-2 md:hidden pointer-events-none">
+              <button
+                type="button"
+                onClick={prevTestimonial}
+                className="pointer-events-auto h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 flex items-center justify-center text-foreground/60 active:scale-95 transition-transform"
+                aria-label={t('testimonials.ariaPrev')}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 md:hidden pointer-events-none">
+              <button
+                type="button"
+                onClick={nextTestimonial}
+                className="pointer-events-auto h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 flex items-center justify-center text-foreground/60 active:scale-95 transition-transform"
+                aria-label={t('testimonials.ariaNext')}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Progress bar */}
+          <div className="mt-4 md:mt-5 flex items-center gap-1.5 justify-center md:hidden">
+            <span className="text-xs font-medium tabular-nums text-muted-foreground/70">
+              {activeIndex + 1} / {TESTIMONIAL_IMAGES.length}
+            </span>
+          </div>
         </motion.div>
 
-        <div className="mt-3 md:mt-4">
+        {/* Thumbnail rail */}
+        <div className="mt-4 md:mt-6">
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => scrollThumbnailRail('left')}
-              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-card text-primary transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="hidden md:inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/50 bg-card text-foreground/50 transition-colors hover:border-primary/30 hover:text-foreground/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label="Scroll testimonials left"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-3.5 w-3.5" />
             </button>
 
             <div
               ref={thumbnailRailRef}
-              className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1"
+              className="flex snap-x snap-mandatory gap-2 overflow-x-auto scrollbar-none pb-1"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               onWheel={handleThumbnailWheel}
             >
               {TESTIMONIAL_IMAGES.map((testimonial, index) => (
                 <motion.button
                   key={testimonial.id}
                   ref={setThumbnailButtonRef(index)}
-                  onClick={() => setActiveIndex(index)}
-                  className={`relative h-16 w-24 shrink-0 snap-start overflow-hidden rounded-lg border bg-background/55 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:h-20 md:w-32 ${
-                    activeIndex === index ? 'border-primary/70 ring-1 ring-primary/40' : 'border-border/65 hover:border-primary/30'
+                  onClick={() => goTo(index)}
+                  className={`relative shrink-0 snap-start overflow-hidden rounded-lg transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                    activeIndex === index
+                      ? 'h-[4.25rem] w-[6.5rem] md:h-[5rem] md:w-[8rem] ring-2 ring-primary/50 border border-primary/20 shadow-sm shadow-primary/[0.06]'
+                      : 'h-[4.25rem] w-[6.5rem] md:h-[5rem] md:w-[8rem] border border-border/40 opacity-50 hover:opacity-80 hover:border-border/70'
                   }`}
                   aria-label={t('testimonials.ariaGoTo', { index: index + 1 })}
-                  whileHover={shouldReduceMotion ? undefined : { scale: 1.03 }}
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
                   whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
                   transition={springHoverTransition}
                 >
@@ -333,7 +414,7 @@ const Testimonials = () => {
                     alt=""
                     width={testimonial.width}
                     height={testimonial.height}
-                    className="h-full w-full object-contain"
+                    className="h-full w-full object-contain bg-background/30"
                     loading="lazy"
                     decoding="async"
                   />
@@ -344,15 +425,16 @@ const Testimonials = () => {
             <button
               type="button"
               onClick={() => scrollThumbnailRail('right')}
-              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-card text-primary transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="hidden md:inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/50 bg-card text-foreground/50 transition-colors hover:border-primary/30 hover:text-foreground/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label="Scroll testimonials right"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-3.5 w-3.5" />
             </button>
           </div>
         </div>
       </div>
 
+      {/* Zoom dialog */}
       <Dialog open={zoomedIndex !== null} onOpenChange={(isOpen) => !isOpen && setZoomedIndex(null)}>
         <DialogContent className="max-h-[95vh] max-w-[95vw] border-border/70 bg-card/95 p-3 md:p-4">
           <DialogTitle className="sr-only">Testimonial image preview</DialogTitle>
