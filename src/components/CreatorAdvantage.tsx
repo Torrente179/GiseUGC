@@ -106,7 +106,7 @@ const CreatorAdvantage = () => {
       className={`relative isolate mx-auto overflow-hidden border border-border/50 bg-card/80 shadow-[0_34px_80px_-56px_rgba(47,42,36,0.48)] ${
         isMobile
           ? 'w-full max-w-[440px] rounded-[1.7rem] px-3.5 pb-3.5 pt-5 sm:p-4 pointer-events-none select-none'
-          : 'h-[560px] w-full max-w-[720px] rounded-[2rem] px-6 pb-6 pt-6 xl:h-[590px] xl:px-7 xl:pb-7 xl:pt-7 cursor-default'
+          : 'h-[560px] w-full max-w-[720px] rounded-[2rem] px-6 pb-6 pt-5 xl:h-[590px] xl:px-7 xl:pb-7 xl:pt-6 cursor-default'
       }`}
       onMouseEnter={isMobile ? undefined : () => setCollageHovered(true)}
       onMouseLeave={isMobile ? undefined : () => setCollageHovered(false)}
@@ -160,7 +160,7 @@ const CreatorAdvantage = () => {
 
         <div
           className={`relative flex-1 ${
-            isMobile ? 'mt-3 min-h-[320px] sm:min-h-[356px]' : 'mt-2 min-h-0 xl:mt-3'
+            isMobile ? 'mt-3 min-h-[320px] sm:min-h-[356px]' : 'mt-0 min-h-0 xl:mt-1'
           }`}
         >
           <div
