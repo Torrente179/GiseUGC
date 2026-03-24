@@ -2055,6 +2055,44 @@
   }
 
   /* ════════════════════════════════
+     5b. EXPLORE — Industries + Resources
+     ════════════════════════════════ */
+  .st-explore-grid {
+    display: grid;
+    gap: 3rem;
+  }
+
+  @media (min-width: 768px) {
+    .st-explore-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+  }
+
+  .st-explore-col {
+    min-width: 0;
+  }
+
+  .st-explore-label {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: hsl(var(--foreground) / 0.3);
+    margin-bottom: 1rem;
+  }
+
+  .st-explore-links {
+    /* Uses st-related-row which is already defined */
+  }
+
+  .st-explore-links .st-related-row:first-child {
+    border-top: 1px solid hsl(var(--foreground) / 0.08);
+  }
+
+
+  /* ════════════════════════════════
      6. THE CLOSE — CTA + Related
      ════════════════════════════════ */
   .st-close {
@@ -2189,6 +2227,27 @@
   .st-related-row:hover .st-related-arrow {
     color: hsl(var(--primary));
     transform: translateX(3px);
+  }
+
+  /* ── Explore section overrides — must come after st-related base rules ── */
+  .st-section--warm .st-related-title {
+    color: hsl(var(--foreground) / 0.7);
+  }
+
+  .st-section--warm .st-related-arrow {
+    color: hsl(var(--foreground) / 0.3);
+  }
+
+  .st-section--warm .st-related-row:hover .st-related-title {
+    color: hsl(var(--foreground));
+  }
+
+  .st-section--warm .st-related-row {
+    border-bottom-color: hsl(var(--foreground) / 0.12);
+  }
+
+  .st-section--warm .st-explore-links .st-related-row:first-child {
+    border-top-color: hsl(var(--foreground) / 0.12);
   }
 
   /* ═══════════════════════════════════════════════════
@@ -2675,6 +2734,75 @@
     opacity: 0.4;
     flex-shrink: 0;
     margin-left: 0.75rem;
+  }
+
+  /* ── M3b+c: EXPLORE — Industries + Resources (mobile) ── */
+  .stm-explore {
+    padding: 1.5rem 0 0.5rem;
+    border-top: 1px solid hsl(var(--foreground) / 0.06);
+  }
+
+  .stm-explore-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+    color: hsl(var(--foreground) / 0.85);
+    padding: 0 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .stm-explore-sublabel {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: hsl(var(--foreground) / 0.3);
+    padding: 0 1.25rem;
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .stm-explore-sublabel:first-of-type {
+    margin-top: 0;
+  }
+
+  .stm-explore-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .stm-explore-pill {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: -0.005em;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid hsl(var(--foreground) / 0.1);
+    color: hsl(var(--foreground) / 0.65);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .stm-explore-pill:active {
+    border-color: hsl(var(--primary) / 0.5);
+    color: hsl(var(--primary));
+  }
+
+  .stm-explore .stm-all-services {
+    padding: 0 1.25rem;
+  }
+
+  .stm-explore .stm-service-row:first-child {
+    border-top: 1px solid hsl(var(--foreground) / 0.08);
   }
 
   /* ── M5: MOBILE CTA ── */

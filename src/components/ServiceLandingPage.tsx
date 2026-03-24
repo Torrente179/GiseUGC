@@ -523,36 +523,39 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </div>
             </section>
 
-            {/* ── M3b: INDUSTRIES — Vertical cross-links ── */}
-            {relevantVerticals.length > 0 && (
-              <section className="stm-related">
-                <p className="st-eyebrow px-5 mb-3">{locale === 'es' ? 'Por industria' : 'By industry'}</p>
+            {/* ── M3b+c: EXPLORE — Industries + Resources combined ── */}
+            {(relevantVerticals.length > 0 || resourceLinks.length > 0) && (
+              <section className="stm-explore">
+                <p className="st-eyebrow px-5 mb-1">{locale === 'es' ? 'Explorar' : 'Explore'}</p>
+                <p className="stm-explore-title">{locale === 'es' ? 'Verticales y recursos' : 'Verticals & resources'}</p>
+
+                {relevantVerticals.length > 0 && (
+                  <>
+                    <p className="stm-explore-sublabel">{locale === 'es' ? 'Por industria' : 'By industry'}</p>
+                    <div className="stm-explore-pills">
+                      {relevantVerticals.map((verticalId) => {
+                        const verticalPage = getVerticalPageContent(verticalId, locale);
+                        return (
+                          <Link key={verticalId} to={getVerticalPath(verticalId, locale)} className="stm-explore-pill">
+                            {verticalPage.navLabel}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+
+                <p className="stm-explore-sublabel">{locale === 'es' ? 'Recursos' : 'Resources'}</p>
                 <div className="stm-all-services">
-                  {relevantVerticals.map((verticalId) => {
-                    const verticalPage = getVerticalPageContent(verticalId, locale);
-                    return (
-                      <Link key={verticalId} to={getVerticalPath(verticalId, locale)} className="stm-service-row">
-                        <span className="stm-service-label">{verticalPage.navLabel}</span>
-                        <span className="stm-service-arrow">→</span>
-                      </Link>
-                    );
-                  })}
+                  {resourceLinks.map((resource) => (
+                    <Link key={resource.id} to={getResourcePath(resource.id, locale)} className="stm-service-row">
+                      <span className="stm-service-label">{resource.label}</span>
+                      <span className="stm-service-arrow">→</span>
+                    </Link>
+                  ))}
                 </div>
               </section>
             )}
-
-            {/* ── M3c: RESOURCES — Authority page cross-links ── */}
-            <section className="stm-related">
-              <p className="st-eyebrow px-5 mb-3">{locale === 'es' ? 'Recursos' : 'Resources'}</p>
-              <div className="stm-all-services">
-                {resourceLinks.map((resource) => (
-                  <Link key={resource.id} to={getResourcePath(resource.id, locale)} className="stm-service-row">
-                    <span className="stm-service-label">{resource.label}</span>
-                    <span className="stm-service-arrow">→</span>
-                  </Link>
-                ))}
-              </div>
-            </section>
 
             {/* ── M4: ALL SERVICES — Full list, app-like ── */}
             {allOtherServiceIds.length > 0 && (
@@ -775,40 +778,44 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </div>
             </RevealSection>
 
-            {/* ── D5b: INDUSTRIES — Vertical cross-links ── */}
-            {relevantVerticals.length > 0 && (
-              <RevealSection className="st-section">
+            {/* ── D5b+c: EXPLORE — Industries + Resources combined ── */}
+            {(relevantVerticals.length > 0 || resourceLinks.length > 0) && (
+              <RevealSection className="st-section st-section--warm">
                 <div className="st-container">
-                  <p className="st-eyebrow mb-4">{locale === 'es' ? 'Por industria' : 'By industry'}</p>
-                  <h2 className="st-section-title mb-8">{locale === 'es' ? 'Verticales donde aplico este servicio' : 'Industries where I apply this service'}</h2>
-                  <div className="flex flex-wrap gap-3">
-                    {relevantVerticals.map((verticalId) => {
-                      const verticalPage = getVerticalPageContent(verticalId, locale);
-                      return (
-                        <Link key={verticalId} to={getVerticalPath(verticalId, locale)} className="st-cta-secondary">
-                          {verticalPage.navLabel}
-                        </Link>
-                      );
-                    })}
+                  <p className="st-eyebrow mb-4">{locale === 'es' ? 'Explorar' : 'Explore'}</p>
+                  <h2 className="st-section-title mb-10">{locale === 'es' ? 'Contexto y verticales relacionadas' : 'Related context and verticals'}</h2>
+                  <div className="st-explore-grid">
+                    {relevantVerticals.length > 0 && (
+                      <div className="st-explore-col">
+                        <p className="st-explore-label">{locale === 'es' ? 'Por industria' : 'By industry'}</p>
+                        <div className="st-explore-links">
+                          {relevantVerticals.map((verticalId) => {
+                            const verticalPage = getVerticalPageContent(verticalId, locale);
+                            return (
+                              <Link key={verticalId} to={getVerticalPath(verticalId, locale)} className="st-related-row group">
+                                <span className="st-related-title">{verticalPage.navLabel}</span>
+                                <span className="st-related-arrow">→</span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                    <div className="st-explore-col">
+                      <p className="st-explore-label">{locale === 'es' ? 'Recursos' : 'Resources'}</p>
+                      <div className="st-explore-links">
+                        {resourceLinks.map((resource) => (
+                          <Link key={resource.id} to={getResourcePath(resource.id, locale)} className="st-related-row group">
+                            <span className="st-related-title">{resource.label}</span>
+                            <span className="st-related-arrow">→</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </RevealSection>
             )}
-
-            {/* ── D5c: RESOURCES — Authority page cross-links ── */}
-            <RevealSection className="st-section">
-              <div className="st-container">
-                <p className="st-eyebrow mb-4">{locale === 'es' ? 'Recursos' : 'Resources'}</p>
-                <h2 className="st-section-title mb-8">{locale === 'es' ? 'Aprende más sobre UGC' : 'Learn more about UGC'}</h2>
-                <div className="flex flex-wrap gap-3">
-                  {resourceLinks.map((resource) => (
-                    <Link key={resource.id} to={getResourcePath(resource.id, locale)} className="st-cta-secondary">
-                      {resource.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </RevealSection>
 
             {/* ── D6: THE CLOSE ── */}
             <RevealSection className="st-close">
