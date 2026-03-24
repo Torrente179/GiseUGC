@@ -297,3 +297,17 @@ Generated at: `2026-03-20T18:38:23.762Z`
 ### Verification
 1. `npx eslint src/components/CreatorAdvantage.tsx`
 2. `npx vite build --mode development`
+
+## 2026-03-24 creator advantage desktop vertical rebalance
+
+### Runtime touchpoints
+- `src/components/CreatorAdvantage.tsx`
+
+### What changed
+1. Reduced the desktop-only shell top padding and stage top margin so the three collage cards sit higher again without touching the chip container.
+2. Kept mobile spacing untouched in this pass.
+3. Left the chip flow-layout fix in place, preserving the no-clipping behavior.
+
+### Verification
+1. `npx eslint src/components/CreatorAdvantage.tsx`
+2. `npx vite build --mode development`
