@@ -15,8 +15,9 @@ interface CollageClip {
   labelKey: string;
   previewSrc: string;
   posterSrc: string;
-  cornerClass: string;
-  hoverClass: string;
+  desktopBaseClass: string;
+  desktopHoverClass: string;
+  mobileClass: string;
 }
 
 type NavigatorConnection = {
@@ -36,24 +37,27 @@ const COLLAGE_CLIPS: CollageClip[] = [
     labelKey: 'portfolio.collageClip1',
     previewSrc: r2PreviewVideo('ugc-clothing-showcase-1.mp4'),
     posterSrc: r2Poster('ugc-clothing-showcase-1-poster.jpg'),
-    cornerClass: 'top-[13%] left-[8%] w-[29%] -rotate-[6deg] z-30',
-    hoverClass: 'top-[12%] left-[16%] w-[29%] -rotate-[2deg] z-40',
+    desktopBaseClass: 'top-[18%] left-[6.5%] w-[31%] -rotate-[8deg] z-20',
+    desktopHoverClass: 'top-[16%] left-[12%] w-[30%] -rotate-[4deg] z-30',
+    mobileClass: 'top-[17%] left-[4%] w-[35%] -rotate-[9deg] z-20',
   },
   {
     id: 2,
     labelKey: 'portfolio.collageClip2',
     previewSrc: r2PreviewVideo('ugc-clothing-showcase-2.mp4'),
     posterSrc: r2Poster('ugc-clothing-showcase-2-poster.jpg'),
-    cornerClass: 'top-[5%] left-[35%] w-[30%] rotate-0 z-50',
-    hoverClass: 'top-[7%] left-[35%] w-[30%] rotate-0 z-50 scale-[1.03]',
+    desktopBaseClass: 'top-[8%] left-1/2 w-[30.5%] -translate-x-1/2 rotate-0 z-40',
+    desktopHoverClass: 'top-[6%] left-1/2 w-[31.5%] -translate-x-1/2 rotate-0 z-50 scale-[1.035]',
+    mobileClass: 'top-[3%] left-1/2 w-[34%] -translate-x-1/2 rotate-0 z-40',
   },
   {
     id: 3,
     labelKey: 'portfolio.collageClip3',
     previewSrc: r2PreviewVideo('ugc-clothing-showcase-3.mp4'),
     posterSrc: r2Poster('ugc-clothing-showcase-3-poster.jpg'),
-    cornerClass: 'top-[13%] right-[8%] w-[29%] rotate-[6deg] z-30',
-    hoverClass: 'top-[12%] right-[16%] w-[29%] rotate-[2deg] z-40',
+    desktopBaseClass: 'top-[18%] right-[6.5%] w-[31%] rotate-[8deg] z-20',
+    desktopHoverClass: 'top-[16%] right-[12%] w-[30%] rotate-[4deg] z-30',
+    mobileClass: 'top-[17%] right-[4%] w-[35%] rotate-[9deg] z-20',
   },
 ];
 
@@ -92,6 +96,166 @@ const CreatorAdvantage = () => {
       handleHashLinkClick(event);
     },
     [handleHashLinkClick],
+  );
+
+  const collageIsActive = collageHovered && !shouldReduceMotion;
+  const collageStatusLabel = collageIsActive ? t('portfolio.collageHintPlaying') : t('portfolio.collageHintIdle');
+
+  const renderCollageShell = (isMobile: boolean) => (
+    <div
+      className={`relative isolate mx-auto overflow-hidden border border-border/50 bg-card/80 shadow-[0_34px_80px_-56px_rgba(47,42,36,0.48)] ${
+        isMobile
+          ? 'w-full max-w-[440px] rounded-[1.7rem] p-3.5 sm:p-4 pointer-events-none select-none'
+          : 'h-[560px] w-full max-w-[720px] rounded-[2rem] p-5 xl:h-[590px] xl:p-6 cursor-default'
+      }`}
+      onMouseEnter={isMobile ? undefined : () => setCollageHovered(true)}
+      onMouseLeave={isMobile ? undefined : () => setCollageHovered(false)}
+    >
+      <div
+        className="absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background:
+            'radial-gradient(circle at 50% 14%, hsl(var(--primary) / 0.18) 0%, transparent 34%), radial-gradient(circle at 18% 28%, hsl(var(--secondary) / 0.34) 0%, transparent 36%), radial-gradient(circle at 82% 32%, hsl(var(--accent) / 0.18) 0%, transparent 34%), linear-gradient(180deg, hsl(var(--primary) / 0.78) 0%, hsl(var(--accent) / 0.34) 38%, hsl(var(--secondary) / 0.52) 70%, hsl(var(--card)) 100%)',
+        }}
+      />
+      <div
+        className={`absolute inset-[1px] border border-white/40 dark:border-white/8 ${
+          isMobile ? 'rounded-[calc(1.7rem-1px)]' : 'rounded-[calc(2rem-1px)]'
+        }`}
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 bg-white/10 dark:bg-slate-950/18" aria-hidden="true" />
+      <div
+        className={`absolute left-[9%] top-[11%] rounded-full blur-3xl ${
+          isMobile ? 'h-28 w-28 opacity-75' : 'h-40 w-40 opacity-70'
+        }`}
+        aria-hidden="true"
+        style={{ background: 'radial-gradient(circle, hsl(var(--primary) / 0.34) 0%, transparent 72%)' }}
+      />
+      <div
+        className={`absolute right-[-5%] top-[20%] rounded-full blur-3xl ${
+          isMobile ? 'h-32 w-32 opacity-45' : 'h-48 w-48 opacity-40'
+        }`}
+        aria-hidden="true"
+        style={{ background: 'radial-gradient(circle, hsl(var(--accent) / 0.32) 0%, transparent 72%)' }}
+      />
+      <div
+        className={`absolute left-1/2 top-[16%] -translate-x-1/2 rounded-full blur-3xl ${
+          isMobile ? 'h-[42%] w-[68%] opacity-35' : 'h-[54%] w-[56%] opacity-40'
+        }`}
+        aria-hidden="true"
+        style={{ background: 'radial-gradient(circle, hsl(var(--pure-linen) / 0.44) 0%, transparent 72%)' }}
+      />
+
+      <div className="relative z-20 flex h-full flex-col">
+        <div className="pointer-events-none absolute left-3 top-3 z-30 sm:left-4 sm:top-4">
+          <div className="inline-flex max-w-[78vw] items-center gap-2 rounded-full border border-white/60 bg-white/56 px-3 py-2 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.45)] backdrop-blur-md dark:border-white/10 dark:bg-slate-950/38">
+            <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_0_5px_hsl(var(--primary)/0.15)]" aria-hidden="true" />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/74 sm:text-[11px]">
+              {collageStatusLabel}
+            </span>
+          </div>
+        </div>
+
+        <div className={`relative flex-1 ${isMobile ? 'min-h-[320px] pt-12 sm:min-h-[356px]' : 'min-h-0 pt-14'}`}>
+          <div
+            className={`absolute left-1/2 -translate-x-1/2 rounded-full blur-3xl ${
+              isMobile ? 'bottom-[13%] h-[17%] w-[82%] opacity-25' : 'bottom-[15%] h-[18%] w-[78%] opacity-30'
+            }`}
+            aria-hidden="true"
+            style={{ background: 'radial-gradient(circle, hsl(var(--foreground) / 0.22) 0%, transparent 70%)' }}
+          />
+          <div
+            className={`absolute left-1/2 h-px -translate-x-1/2 bg-foreground/12 ${
+              isMobile ? 'bottom-[14%] w-[76%]' : 'bottom-[15%] w-[72%]'
+            }`}
+            aria-hidden="true"
+          />
+
+          {COLLAGE_CLIPS.map((clip) => {
+            const cardClass = isMobile
+              ? clip.mobileClass
+              : collageIsActive
+                ? clip.desktopHoverClass
+                : clip.desktopBaseClass;
+
+            return (
+              <div
+                key={clip.id}
+                className={`pointer-events-none absolute origin-center overflow-hidden rounded-[1.45rem] border border-white/80 bg-white/10 shadow-[0_24px_52px_-30px_rgba(47,42,36,0.56)] transition-[top,left,right,width,transform,opacity] duration-700 ${cardClass}`}
+                style={{
+                  aspectRatio: '9/16',
+                  transitionTimingFunction: 'cubic-bezier(0.22,1,0.36,1)',
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/10" aria-hidden="true" />
+                <LazyVideo
+                  className="h-full w-full object-cover pointer-events-none"
+                  src={clip.previewSrc}
+                  poster={clip.posterSrc}
+                  lqip={getLqip(clip.previewSrc)}
+                  muted
+                  autoPlay
+                  loop
+                  playsInline
+                  preload={isMobile ? 'metadata' : connectionProfile.slow ? 'metadata' : 'auto'}
+                  loadWhenVisible
+                  rootMargin={isMobile ? '120px 0px' : undefined}
+                  pauseOffscreen
+                  aria-label={t(clip.labelKey)}
+                />
+                <div className="absolute inset-0 ring-1 ring-inset ring-white/18" aria-hidden="true" />
+                <div className="pointer-events-none absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/65 bg-white/68 text-foreground/78 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.4)] backdrop-blur-sm dark:border-white/12 dark:bg-slate-950/42">
+                  <Play className="h-3.5 w-3.5 translate-x-[1px]" fill="currentColor" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className={`relative z-30 ${isMobile ? 'mt-1.5' : 'mt-2'}`}>
+          <div className="rounded-[1.35rem] border border-white/60 bg-white/58 p-3.5 shadow-[0_18px_40px_-30px_rgba(0,0,0,0.5)] backdrop-blur-md dark:border-white/10 dark:bg-slate-950/38 sm:p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="section-label mb-2 text-foreground/45">{t('portfolio.collageEyebrow')}</p>
+                <p className="max-w-[18rem] text-[0.9rem] font-medium leading-snug text-foreground/82 sm:text-[0.96rem]">
+                  {collageStatusLabel}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 pt-0.5" aria-hidden="true">
+                {COLLAGE_CLIPS.map((clip, index) => (
+                  <span
+                    key={clip.id}
+                    className={`h-2.5 rounded-full transition-all duration-300 ${
+                      index === 1
+                        ? 'w-8 bg-primary/90'
+                        : collageIsActive
+                          ? 'w-3 bg-foreground/22'
+                          : 'w-2.5 bg-foreground/14'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className={`mt-3 ${isMobile ? 'grid grid-cols-3 gap-2' : 'flex flex-wrap gap-2.5'}`}>
+              {COLLAGE_CLIPS.map((clip) => (
+                <div
+                  key={clip.id}
+                  className={`rounded-full border border-foreground/8 bg-white/44 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/68 backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-foreground/72 ${
+                    isMobile ? 'text-center' : 'inline-flex max-w-full items-center gap-2 px-3'
+                  }`}
+                >
+                  <span className="text-foreground/42">{String(clip.id).padStart(2, '0')}</span>
+                  {!isMobile ? <span className="truncate">{t(clip.labelKey)}</span> : null}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 
   return (
@@ -148,96 +312,19 @@ const CreatorAdvantage = () => {
           </motion.div>
 
           <motion.div
-            className="hidden lg:block relative h-[530px] xl:h-[560px] w-full max-w-[720px] mx-auto rounded-[1.75rem] border border-border/60 overflow-hidden cursor-pointer shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.4)]"
-            role="presentation"
-            onMouseEnter={() => setCollageHovered(true)}
-            onMouseLeave={() => setCollageHovered(false)}
+            className="hidden lg:block"
             variants={revealUp(24, 0.72)}
             whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
             transition={springHoverTransition}
           >
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  'linear-gradient(180deg, hsl(var(--coastal-teal)) 0%, hsl(var(--washed-khaki)) 38%, hsl(var(--warm-sand)) 72%, hsl(var(--pure-linen)) 100%)',
-              }}
-            />
-            <div className="absolute inset-0 bg-card/20" />
-
-            {COLLAGE_CLIPS.map((clip) => (
-              <div
-                key={clip.id}
-                className={`absolute rounded-2xl border-[2.5px] border-white/90 shadow-xl overflow-hidden origin-center will-change-transform transition-[top,left,right,width,transform,opacity] duration-700 ${collageHovered ? clip.hoverClass : clip.cornerClass}`}
-                style={{
-                  aspectRatio: '9/16',
-                  transitionTimingFunction: 'cubic-bezier(0.22,1,0.36,1)',
-                }}
-              >
-                <LazyVideo
-                  className="h-full w-full object-cover"
-                  src={clip.previewSrc}
-                  poster={clip.posterSrc}
-                  lqip={getLqip(clip.previewSrc)}
-                  muted
-                  autoPlay
-                  loop
-                  playsInline
-                  preload={connectionProfile.slow ? 'metadata' : 'auto'}
-                  loadWhenVisible
-                  pauseOffscreen
-                  aria-label={t(clip.labelKey)}
-                />
-
-                <div
-                  className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-500 ${collageHovered ? 'opacity-0' : 'opacity-100'}`}
-                >
-                  <div className="h-9 w-9 rounded-full bg-white/70 backdrop-blur-sm flex items-center justify-center shadow-md">
-                    <Play className="h-4 w-4 text-foreground/80 ml-0.5" fill="currentColor" />
-                  </div>
-                </div>
-              </div>
-            ))}
+            {renderCollageShell(false)}
           </motion.div>
 
           <motion.div
-            className="lg:hidden relative w-full max-w-[440px] rounded-[1.25rem] border border-border/60 p-4 overflow-hidden shadow-lg mx-auto pointer-events-none select-none"
-            role="presentation"
+            className="lg:hidden"
             variants={revealUp(20, 0.6)}
           >
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  'linear-gradient(180deg, hsl(var(--coastal-teal)) 0%, hsl(var(--washed-khaki)) 38%, hsl(var(--warm-sand)) 72%, hsl(var(--pure-linen)) 100%)',
-              }}
-            />
-            <div className="absolute inset-0 bg-card/15" />
-
-            <div className="relative z-10 w-full h-[320px] sm:h-[360px]">
-              {COLLAGE_CLIPS.map((clip, index) => (
-                <div
-                  key={clip.id}
-                  className={`absolute rounded-xl border-2 border-white/85 shadow-md overflow-hidden ${index === 0 ? 'top-[19%] left-[8%] w-[33%] -rotate-[7deg] z-20' : index === 1 ? 'top-[6%] left-[34%] w-[32%] rotate-0 z-40' : 'top-[19%] right-[8%] w-[33%] rotate-[7deg] z-20'} pointer-events-none`}
-                  style={{ aspectRatio: '9/14' }}
-                >
-                  <LazyVideo
-                    className="h-full w-full object-cover pointer-events-none"
-                    src={clip.previewSrc}
-                    poster={clip.posterSrc}
-                    lqip={getLqip(clip.previewSrc)}
-                    muted
-                    loop
-                    playsInline
-                    autoPlay
-                    preload="metadata"
-                    rootMargin="120px 0px"
-                    pauseOffscreen
-                    aria-label={t(clip.labelKey)}
-                  />
-                </div>
-              ))}
-            </div>
+            {renderCollageShell(true)}
           </motion.div>
         </motion.div>
       </div>

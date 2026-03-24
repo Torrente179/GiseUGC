@@ -245,3 +245,27 @@ Generated at: `2026-03-20T18:38:23.762Z`
 
 ### Verification
 1. `npm run check:mobile-regression`
+
+## 2026-03-24 creator advantage collage shell redesign
+
+### Runtime touchpoints
+- `src/components/CreatorAdvantage.tsx`
+
+### Direction
+1. Kept the existing homepage copy, CTA routing, and autoplay collage concept, but rebuilt the surrounding shell so the section reads like a composed proof stage instead of a generic rounded gradient box.
+2. Chose a lighter editorial direction that stays inside the current Nordic atelier palette rather than introducing a new component style or a louder effect stack.
+
+### What changed
+1. Replaced the old empty gradient frame with a layered collage shell: radial light falloff, softer atmospheric depth, a restrained status chip, and a bottom information rail that gives the videos structure and context.
+2. Split the clip positioning data into explicit desktop and mobile layouts so the three portrait videos keep a deliberate stagger on wide screens and a tighter, less wasteful composition on phones.
+3. Kept the hover response only on desktop, still honoring reduced-motion, while leaving mobile as a static composed layout with the same passive autoplay behavior.
+4. Preserved all existing functional behavior inside the section: same `LazyVideo` sources, same autoplay/loop/inline playback, same visibility-based loading, same contact CTA anchor behavior on desktop, and the same floating contact dock trigger on mobile.
+
+### Safeguards
+1. No heading hierarchy, link structure, or localized copy changed.
+2. No new dependencies were added.
+3. The section remains non-interactive aside from the CTA, so keyboard flow and mobile touch behavior are unchanged.
+
+### Verification
+1. `npx eslint src/components/CreatorAdvantage.tsx`
+2. `npm run build:dev`
