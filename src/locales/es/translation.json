@@ -200,7 +200,9 @@
     },
     "ariaPrev": "Testimonio anterior",
     "ariaNext": "Siguiente testimonio",
-    "ariaGoTo": "Ir al testimonio {{index}}"
+    "ariaGoTo": "Ir al testimonio {{index}}",
+    "reviewCount": "{{count}} reseñas",
+    "hoverHint": "Haz clic en una reseña para ampliar"
   },
   "contact": {
     "sectionSubtitle": "Ponte en Contacto",

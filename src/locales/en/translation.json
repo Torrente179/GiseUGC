@@ -200,7 +200,9 @@
     },
     "ariaPrev": "Previous testimonial",
     "ariaNext": "Next testimonial",
-    "ariaGoTo": "Go to testimonial {{index}}"
+    "ariaGoTo": "Go to testimonial {{index}}",
+    "reviewCount": "{{count}} reviews",
+    "hoverHint": "Click any review to expand"
   },
   "contact": {
     "sectionSubtitle": "Get In Touch",
