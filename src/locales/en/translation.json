@@ -202,9 +202,7 @@
     "ariaNext": "Next testimonial",
     "ariaGoTo": "Go to testimonial {{index}}",
     "reviewCount": "{{count}} reviews",
-    "hoverHint": "Click any review to expand",
-    "focusHint": "Click to focus. Click again to expand",
-    "swipeHint": "Swipe left or right and tap to focus"
+    "hoverHint": "Click any review to expand"
   },
   "contact": {
     "sectionSubtitle": "Get In Touch",
