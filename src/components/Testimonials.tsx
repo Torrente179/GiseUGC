@@ -1,9 +1,10 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { blurRevealUp, staggerContainer } from '@/components/motion/variants';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TestimonialImage {
   id: number;
@@ -40,9 +41,10 @@ interface MarqueeRowProps {
   direction?: 'left' | 'right';
   speed?: number; // seconds for one full cycle
   paused: boolean;
-  onClickItem: (index: number) => void;
+  activeIndex: number | null;
+  onClickItem: (index: number, trigger?: HTMLButtonElement | null) => void;
   globalIndexOffset: number;
-  shouldReduceMotion: boolean | null;
+  isMobile: boolean;
 }
 
 const MarqueeRow = ({
@@ -50,40 +52,58 @@ const MarqueeRow = ({
   direction = 'left',
   speed = 60,
   paused,
+  activeIndex,
   onClickItem,
   globalIndexOffset,
-  shouldReduceMotion,
+  isMobile,
 }: MarqueeRowProps) => {
-  // Triple the items for seamless loop
-  const tripled = [...items, ...items, ...items];
+  // On desktop we loop the wall infinitely; on mobile we render one pass and allow swipe selection.
+  const renderedItems = isMobile ? items : [...items, ...items, ...items];
+  const hasSelection = activeIndex !== null;
 
   return (
     <div
-      className="marquee-row relative flex overflow-hidden"
-      style={{
-        maskImage: 'linear-gradient(to right, transparent, black 4%, black 96%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to right, transparent, black 4%, black 96%, transparent)',
-      }}
+      className={`marquee-row relative flex ${isMobile ? 'overflow-x-auto scrollbar-hide snap-x snap-mandatory overscroll-x-contain' : 'overflow-hidden'}`}
+      style={
+        isMobile
+          ? { WebkitOverflowScrolling: 'touch' }
+          : {
+              maskImage: 'linear-gradient(to right, transparent, black 4%, black 96%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, black 4%, black 96%, transparent)',
+            }
+      }
     >
       <div
-        className={`marquee-track flex gap-3 md:gap-4 ${paused ? 'marquee-paused' : ''}`}
-        style={{
-          animationDuration: `${speed}s`,
-          animationDirection: direction === 'right' ? 'reverse' : 'normal',
-        }}
+        className={`marquee-track flex gap-3 md:gap-4 ${paused ? 'marquee-paused' : ''} ${isMobile ? 'w-max px-4' : ''}`}
+        style={
+          isMobile
+            ? { animation: 'none' }
+            : {
+                animationDuration: `${speed}s`,
+                animationDirection: direction === 'right' ? 'reverse' : 'normal',
+              }
+        }
       >
-        {tripled.map((item, i) => {
+        {renderedItems.map((item, i) => {
           const originalIndex = (i % items.length) + globalIndexOffset;
+          const isSelected = activeIndex === originalIndex;
           return (
             <button
               key={`${item.id}-${i}`}
               type="button"
-              onClick={() => onClickItem(originalIndex)}
-              className="testimonial-card group relative shrink-0 overflow-hidden rounded-xl md:rounded-2xl border border-border/30 bg-card/80 shadow-sm transition-all duration-300 hover:border-primary/20 hover:shadow-md hover:shadow-primary/[0.04] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-zoom-in"
+              onClick={(event) => onClickItem(originalIndex, event.currentTarget)}
+              className={`testimonial-card group relative shrink-0 overflow-hidden rounded-xl md:rounded-2xl border bg-card/80 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                isMobile ? 'snap-center touch-manipulation' : 'cursor-zoom-in'
+              } ${
+                isSelected
+                  ? 'border-primary/55 shadow-lg shadow-primary/[0.14] ring-2 ring-primary/45 ring-offset-2 ring-offset-background md:-translate-y-0.5'
+                  : 'border-border/30 shadow-sm hover:border-primary/20 hover:shadow-md hover:shadow-primary/[0.04] hover:-translate-y-0.5'
+              } ${hasSelection && !isSelected ? 'opacity-60 scale-[0.985]' : 'opacity-100'}`}
               style={{
-                width: 'clamp(260px, 28vw, 380px)',
+                width: isMobile ? 'clamp(238px, 82vw, 360px)' : 'clamp(260px, 28vw, 380px)',
               }}
               aria-label={`View ${item.alt}`}
+              aria-pressed={isSelected}
             >
               <div className="relative overflow-hidden">
                 <img
@@ -108,25 +128,46 @@ const MarqueeRow = ({
 const Testimonials = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const zoomedTestimonial = zoomedIndex === null ? null : TESTIMONIAL_IMAGES[zoomedIndex];
 
+  const stepZoomedIndex = useCallback((step: 1 | -1) => {
+    setZoomedIndex((prev) => {
+      if (prev === null) return prev;
+      return (prev + step + TESTIMONIAL_IMAGES.length) % TESTIMONIAL_IMAGES.length;
+    });
+  }, []);
+
+  const handleSelectItem = useCallback((index: number, trigger?: HTMLButtonElement | null) => {
+    if (isMobile) {
+      trigger?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+
+    setActiveIndex((current) => {
+      // First click selects/focuses the card. Second click opens the zoom view.
+      if (current === index) {
+        setZoomedIndex(index);
+      }
+      return index;
+    });
+  }, [isMobile]);
+
   // Keyboard navigation in zoom mode
   const handleZoomKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (zoomedIndex === null) return;
       if (e.key === 'ArrowRight') {
-        setZoomedIndex((prev) => (prev !== null ? (prev + 1) % TESTIMONIAL_IMAGES.length : null));
+        stepZoomedIndex(1);
       } else if (e.key === 'ArrowLeft') {
-        setZoomedIndex((prev) =>
-          prev !== null ? (prev - 1 + TESTIMONIAL_IMAGES.length) % TESTIMONIAL_IMAGES.length : null,
-        );
+        stepZoomedIndex(-1);
       }
     },
-    [zoomedIndex],
+    [zoomedIndex, stepZoomedIndex],
   );
 
   useEffect(() => {
@@ -136,8 +177,14 @@ const Testimonials = () => {
     }
   }, [zoomedIndex, handleZoomKeyDown]);
 
-  // Pause marquee on reduced motion preference
-  const effectivePaused = isPaused || !!shouldReduceMotion;
+  useEffect(() => {
+    if (zoomedIndex !== null) {
+      setActiveIndex(zoomedIndex);
+    }
+  }, [zoomedIndex]);
+
+  // Pause marquee on reduced motion, hover/focus, or when the user explicitly selected a card.
+  const effectivePaused = isPaused || activeIndex !== null || !!shouldReduceMotion;
 
   return (
     <section id="testimonials" className="studio-section bg-background overflow-hidden">
@@ -208,9 +255,10 @@ const Testimonials = () => {
             direction="left"
             speed={shouldReduceMotion ? 999999 : 55}
             paused={effectivePaused}
-            onClickItem={setZoomedIndex}
+            activeIndex={activeIndex}
+            onClickItem={handleSelectItem}
             globalIndexOffset={0}
-            shouldReduceMotion={shouldReduceMotion}
+            isMobile={isMobile}
           />
 
           {/* Row 2 — scrolls right */}
@@ -219,18 +267,16 @@ const Testimonials = () => {
             direction="right"
             speed={shouldReduceMotion ? 999999 : 65}
             paused={effectivePaused}
-            onClickItem={setZoomedIndex}
+            activeIndex={activeIndex}
+            onClickItem={handleSelectItem}
             globalIndexOffset={7}
-            shouldReduceMotion={shouldReduceMotion}
+            isMobile={isMobile}
           />
         </div>
 
-        {/* Hover hint — desktop only */}
-        <div className="hidden md:flex items-center justify-center mt-4">
-          <p className="text-xs text-muted-foreground/50 tracking-wide transition-opacity duration-300"
-            style={{ opacity: isPaused ? 1 : 0 }}
-          >
-            {t('testimonials.hoverHint')}
+        <div className="flex items-center justify-center mt-4 px-4">
+          <p className="text-center text-xs text-muted-foreground/60 tracking-wide">
+            {isMobile ? t('testimonials.swipeHint') : t('testimonials.focusHint')}
           </p>
         </div>
       </motion.div>
@@ -257,11 +303,7 @@ const Testimonials = () => {
               <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30">
                 <button
                   type="button"
-                  onClick={() =>
-                    setZoomedIndex((prev) =>
-                      prev !== null ? (prev - 1 + TESTIMONIAL_IMAGES.length) % TESTIMONIAL_IMAGES.length : null,
-                    )
-                  }
+                  onClick={() => stepZoomedIndex(-1)}
                   className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-md hover:bg-muted/30"
                   aria-label={t('testimonials.ariaPrev')}
                 >
@@ -277,11 +319,7 @@ const Testimonials = () => {
 
                 <button
                   type="button"
-                  onClick={() =>
-                    setZoomedIndex((prev) =>
-                      prev !== null ? (prev + 1) % TESTIMONIAL_IMAGES.length : null,
-                    )
-                  }
+                  onClick={() => stepZoomedIndex(1)}
                   className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-md hover:bg-muted/30"
                   aria-label={t('testimonials.ariaNext')}
                 >

@@ -202,7 +202,9 @@
     "ariaNext": "Siguiente testimonio",
     "ariaGoTo": "Ir al testimonio {{index}}",
     "reviewCount": "{{count}} reseñas",
-    "hoverHint": "Haz clic en una reseña para ampliar"
+    "hoverHint": "Haz clic en una reseña para ampliar",
+    "focusHint": "Haz clic para enfocar. Haz clic de nuevo para ampliar",
+    "swipeHint": "Desliza a izquierda o derecha y toca para enfocar"
   },
   "contact": {
     "sectionSubtitle": "Ponte en Contacto",
