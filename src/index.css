@@ -808,6 +808,38 @@
     will-change: auto;
   }
 
+  /* PretextLineReveal — line-by-line CSS reveal */
+  .pretext-line-wrap {
+    display: block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+    transform: translateZ(0);
+  }
+
+  .pretext-line {
+    display: block;
+    transform: translate3d(0, 108%, 0);
+    opacity: 0;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transition: transform 0.76s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.76s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pretext-line-reveal[data-visible='true'] .pretext-line {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    will-change: auto;
+  }
+
+  .pretext-line-reveal[data-ready='false'] .pretext-line {
+    transform: none;
+    opacity: 1;
+    transition: none;
+    will-change: auto;
+  }
+
   /* Hero block stagger entrance */
   .hero-reveal {
     transform: translateY(16px);
@@ -828,6 +860,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .lite-split-word,
+    .pretext-line,
     .hero-reveal {
       transform: none;
       opacity: 1;
@@ -1044,6 +1077,11 @@
   .testimonial-card {
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+  }
+
+  /* Mobile snap-scroll row — hide scrollbar */
+  .testimonial-scroll-row::-webkit-scrollbar {
+    display: none;
   }
 
   @media (prefers-reduced-motion: reduce) {

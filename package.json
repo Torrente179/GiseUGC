@@ -19,6 +19,7 @@
     "video:catalog": "node scripts/generate-nuevos-r2-catalog.mjs"
   },
   "dependencies": {
+    "@chenglou/pretext": "^0.0.3",
     "@emailjs/browser": "^4.4.1",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-accordion": "^1.2.0",

@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } fr
 import { Diamond, Sparkles, Zap, ArrowDownRight, ChevronDown, Play } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
+import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { premiumEase, easeOutExpo, springSnappy } from '@/components/motion/variants';
 import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
@@ -336,7 +337,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               <motion.div className="space-y-6 max-w-[50rem]" variants={cinematicItemVariants}>
                 <span className="section-label">{t('hero.introduction.eyebrow')}</span>
                 <h2 className="max-w-[16ch] text-balance text-4xl md:text-[3.4rem] lg:text-[3.35rem] xl:text-[3.65rem] font-serif text-foreground leading-[0.98] tracking-tight-serif">
-                  <LiteSplitTextReveal text={t('hero.introduction.title')} delay={0} stagger={0.07} className="block text-balance" />
+                  <PretextLineReveal text={t('hero.introduction.title')} delay={0} stagger={0.1} className="block" />
                 </h2>
               </motion.div>
               <motion.div className="lg:pt-14 xl:pt-16" variants={cinematicItemVariants}>

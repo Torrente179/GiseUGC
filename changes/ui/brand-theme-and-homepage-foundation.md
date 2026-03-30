@@ -91,3 +91,26 @@ This condenses the February homepage rebuild that established the current visual
 ### SEO guardrail
 1. This pass changed font loading and typography declarations only.
 2. Metadata, canonicals, hreflang, robots, sitemap, llms, JSON-LD, FAQ content, and route-level SEO wiring were intentionally left unchanged.
+
+## 2026-03-30 line-aware display headline pass
+
+### Runtime touchpoints in this pass
+- `package.json`
+- `package-lock.json`
+- `src/components/motion/PretextLineReveal.tsx`
+- `src/components/Hero.tsx`
+- `src/components/HeroIntroduction.tsx`
+- `src/components/CreatorAdvantage.tsx`
+- `src/components/LegalPage.tsx`
+- `src/index.css`
+
+### What changed
+1. Added `@chenglou/pretext` and introduced a shared `PretextLineReveal` wrapper that derives the active font, line-height, and measured width from the live DOM, then animates real wrapped lines instead of guessing with word-by-word spans.
+2. Swapped the homepage intro headline, the secondary intro headline, and the creator-advantage collage title onto the new line-aware renderer so long editorial copy keeps cleaner wraps and more deliberate reveal motion.
+3. Applied the same treatment to legal-page H1s, keeping the narrow, high-contrast display typography but reducing awkward line breaks when titles run long in either locale.
+4. Kept the existing `LiteSplitTextReveal` for the hero name lockup, since that treatment is effectively single-line branding and does not benefit from the extra line-measurement overhead.
+
+### Safeguards
+1. The shared wrapper remeasures on resize and after web-font loading, so line decisions stay synced with the actual `Cormorant Garamond` and `DM Sans` runtime typography instead of freezing on fallback metrics.
+2. Reduced-motion users fall back to static visible lines, preserving readability without animation.
+3. The change stays scoped to premium display headings only; body copy, cards, buttons, and utility labels still rely on native browser layout.

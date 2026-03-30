@@ -10,6 +10,7 @@ import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageSeo from '@/components/PageSeo';
+import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import TheaterVideo from '@/components/media/TheaterVideo';
 
 const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
@@ -383,7 +384,9 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               {/* Overlaid content at bottom */}
               <div className="stm-hero-bottom">
                 <p className="st-eyebrow st-eyebrow--light mb-2">{page.heroEyebrow}</p>
-                <h1 className="stm-hero-title">{page.heroTitle}</h1>
+                <h1 className="stm-hero-title">
+                  <PretextLineReveal text={page.heroTitle} delay={0} stagger={0.1} className="block" />
+                </h1>
                 <p className="stm-hero-hook">{page.heroSummary}</p>
               </div>
 
@@ -617,7 +620,9 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 <div className="st-hero-split">
                   <div className="st-hero-text">
                     <p className="st-eyebrow">{page.heroEyebrow}</p>
-                    <h1 className="st-hero-title">{page.heroTitle}</h1>
+                    <h1 className="st-hero-title">
+                      <PretextLineReveal text={page.heroTitle} delay={0} stagger={0.1} className="block" />
+                    </h1>
                     <p className="st-hero-hook">{page.heroSummary}</p>
                     <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary">{labels.startProject}</a>
                   </div>

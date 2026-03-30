@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Play } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
-import SplitTextReveal from '@/components/motion/SplitTextReveal';
+import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
@@ -277,11 +277,11 @@ const CreatorAdvantage = () => {
               {t('portfolio.collageEyebrow')}
             </motion.p>
             <h3 className="text-3xl md:text-[2.4rem] font-serif font-medium tracking-tight leading-tight mb-5">
-              <SplitTextReveal
+              <PretextLineReveal
                 text={t('portfolio.collageTitle')}
                 delay={0.06}
-                className="font-serif"
-                wordClassName="font-serif"
+                stagger={0.1}
+                className="block"
               />
             </h3>
             <motion.p className="strategic-body text-muted-foreground mb-6" variants={revealUp(16, 0.62)}>

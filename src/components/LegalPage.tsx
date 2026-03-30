@@ -4,6 +4,7 @@ import { ArrowUpRight, Mail } from 'lucide-react';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import PageSeo from '@/components/PageSeo';
+import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { getLegalPageContent } from '@/data/legal-pages';
 import { getHomePath, type LegalPageId, type SiteLocale } from '@/lib/locale-path';
 
@@ -127,7 +128,7 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
               <div className="space-y-6">
                 <p className="section-label text-muted-foreground">{page.eyebrow}</p>
                 <h1 className="max-w-[14ch] text-4xl font-serif font-bold leading-[0.92] tracking-tight text-balance text-foreground md:text-5xl lg:text-[4.5rem]">
-                  {page.title}
+                  <PretextLineReveal text={page.title} delay={0} stagger={0.1} className="block" />
                 </h1>
                 <p className="max-w-3xl text-base font-light leading-[1.9] text-foreground/78 md:text-[1.04rem]">
                   {page.intro}

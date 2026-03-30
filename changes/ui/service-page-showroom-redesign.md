@@ -567,3 +567,18 @@ No heading changes, no metadata changes, no schema changes. CSS-only.
 ### Verification
 1. Desktop 1440×900 — both cards visually balanced, inspected computed styles confirmed
 2. No console errors related to changes
+
+## 2026-03-30 service hero title line-measurement upgrade
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+- `src/components/motion/PretextLineReveal.tsx`
+- `src/index.css`
+
+### What changed
+1. Replaced the direct `page.heroTitle` render in both service-page hero variants with the shared `PretextLineReveal` wrapper.
+2. The mobile overlay hero (`.stm-hero-title`) and the desktop split hero (`.st-hero-title`) now animate by actual wrapped lines, which better fits the tight serif metrics (`max-width` in `ch`, aggressive tracking, compressed line-height) used in the current showroom design.
+3. This keeps the premium display treatment while reducing awkward line stacking on longer Spanish service titles and preserving cleaner rhythm when titles change across locales.
+
+### Verification
+1. `npm run build`
