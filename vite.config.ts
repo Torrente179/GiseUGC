@@ -17,6 +17,26 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
+    // Defer-CSS: convert Vite's auto-injected <link rel="stylesheet"> tags into
+    // the non-blocking `media="print" onload="this.media='all'"` pattern so the
+    // browser can render the inlined boot-shell CSS before the full stylesheet
+    // arrives. Only applied in production builds (dev keeps normal behavior for HMR).
+    {
+      name: 'defer-non-critical-css',
+      apply: 'build',
+      transformIndexHtml: {
+        order: 'post',
+        handler(html) {
+          return html.replace(
+            /<link\s+rel="stylesheet"\s+crossorigin\s+href="([^"]+\.css)"\s*\/?>/g,
+            (_match, href) =>
+              `<link rel="preload" as="style" crossorigin href="${href}">` +
+              `<link rel="stylesheet" crossorigin href="${href}" media="print" onload="this.media='all'">` +
+              `<noscript><link rel="stylesheet" crossorigin href="${href}"></noscript>`,
+          );
+        },
+      },
+    },
   ].filter(Boolean),
   build: {
     rollupOptions: {

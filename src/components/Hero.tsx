@@ -7,7 +7,7 @@ import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { premiumEase, easeOutExpo, springSnappy } from '@/components/motion/variants';
-import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
+import { LEGACY_REEL_CLIPS, posterThumbSrc } from '@/data/portfolio-clips';
 
 interface HeroProps {
   showIntroduction?: boolean;
@@ -49,22 +49,36 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   const shouldReduceMotion = useReducedMotion();
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   const [currentClipIndex, setCurrentClipIndex] = useState(0);
+  const [isDesktopViewport, setIsDesktopViewport] = useState(false);
   const containerRef = useRef<HTMLElement>(null);
   const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
 
   const handleImageLoad = useCallback(() => setHeroImageLoaded(true), []);
 
-  // TikTok-style auto-cycling through all clips
+  // Desktop-only gate: hero phone-frame video is inside `hidden lg:flex`.
+  // Even when visually hidden, <video src> + autoPlay still buffer on mobile Chrome,
+  // wasting ~28MB of data per Lighthouse trace. Skip cycling + preload on mobile.
   useEffect(() => {
-    if (shouldReduceMotion) return;
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(min-width: 1024px)');
+    const update = () => setIsDesktopViewport(mql.matches);
+    update();
+    mql.addEventListener('change', update);
+    return () => mql.removeEventListener('change', update);
+  }, []);
+
+  // TikTok-style auto-cycling through all clips (desktop only)
+  useEffect(() => {
+    if (shouldReduceMotion || !isDesktopViewport) return;
     const interval = setInterval(() => {
       setCurrentClipIndex((prev) => (prev + 1) % LEGACY_REEL_CLIPS.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, [shouldReduceMotion]);
+  }, [shouldReduceMotion, isDesktopViewport]);
 
-  // Preload next video for smooth transitions
+  // Preload next video for smooth transitions (desktop only)
   useEffect(() => {
+    if (!isDesktopViewport) return;
     const nextIndex = (currentClipIndex + 1) % LEGACY_REEL_CLIPS.length;
     const nextClip = LEGACY_REEL_CLIPS[nextIndex];
     const nextVideo = videoRefs.current.get(nextIndex);
@@ -74,7 +88,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       preloadEl.preload = 'auto';
       preloadEl.muted = true;
     }
-  }, [currentClipIndex]);
+  }, [currentClipIndex, isDesktopViewport]);
 
   const currentClip = LEGACY_REEL_CLIPS[currentClipIndex];
 
@@ -178,11 +192,14 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <LiteSplitTextReveal text="Saldarriaga" delay={0.4} stagger={0.06} className="block text-accent luxury-accent align-baseline" />
               </h1>
 
-              <motion.div variants={shouldReduceMotion ? undefined : cinematicItemVariants}>
-                <p className="font-sans text-xs md:text-sm font-bold uppercase tracking-[0.3em] text-white/70 mb-6 cinematic-subtitle">
-                  {t('hero.subtitle')}
-                </p>
-              </motion.div>
+              {/*
+                LCP element. Skip the staggered reveal so Lighthouse counts the paint
+                at hydration time instead of hydration + 0.3s delay + 1.2s duration.
+                Other cinematic items (line, pills, CTAs) still animate on stagger.
+              */}
+              <p className="font-sans text-xs md:text-sm font-bold uppercase tracking-[0.3em] text-white/70 mb-6 cinematic-subtitle">
+                {t('hero.subtitle')}
+              </p>
 
               <motion.div
                 className="hidden md:block w-24 md:w-40 h-px bg-white/30 my-8 origin-left"
@@ -231,23 +248,26 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               <a href="#portfolio" onClick={handleHashLinkClick} className="hero-phone-frame cursor-pointer">
                 <div className="hero-phone-notch" />
                 <AnimatePresence mode="popLayout" initial={false}>
-                  <motion.video
-                    key={currentClip.id}
-                    className="hero-phone-video"
-                    src={currentClip.mobileSrc}
-                    poster={currentClip.posterSrc}
-                    muted
-                    loop
-                    playsInline
-                    autoPlay
-                    ref={(el) => {
-                      if (el) videoRefs.current.set(currentClipIndex, el);
-                    }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 1.2, ease: 'easeInOut' }}
-                  />
+                  {isDesktopViewport && (
+                    <motion.video
+                      key={currentClip.id}
+                      className="hero-phone-video"
+                      src={currentClip.mobileSrc}
+                      poster={currentClip.posterSrc}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      preload="metadata"
+                      ref={(el) => {
+                        if (el) videoRefs.current.set(currentClipIndex, el);
+                      }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1.2, ease: 'easeInOut' }}
+                    />
+                  )}
                 </AnimatePresence>
                 {/* Play indicator overlay */}
                 <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-sm px-2.5 py-1">
@@ -289,10 +309,13 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                     className="aspect-[9/16] rounded-xl overflow-hidden border border-white/15 relative group"
                   >
                     <img
-                      src={clip.posterSrc}
+                      src={posterThumbSrc(clip.posterSrc)}
                       alt=""
+                      width="92"
+                      height="164"
                       className="w-full h-full object-cover transition-transform duration-300 group-active:scale-105"
                       loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
                       <Play className="w-4 h-4 text-white/80 fill-white/80" />

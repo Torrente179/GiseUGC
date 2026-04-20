@@ -87,6 +87,33 @@ const FloatingContactDock = () => {
   useEffect(() => {
     const desktopMediaQuery = window.matchMedia('(min-width: 768px)');
     let rafId: number | null = null;
+    let cachedFooter: HTMLElement | null = null;
+
+    // Forced-reflow mitigation: the previous version re-queried `#contact` and
+    // read `offsetHeight` on every scroll tick. Now we cache the visible footer
+    // reference and only refresh it on resize / DOM mutations. Scroll handlers
+    // only read `getBoundingClientRect` (still a layout read, but cheaper and
+    // unavoidable for bottom-of-page detection).
+    // Cache hit path skips `offsetHeight` (layout read) — only validates on
+    // resize/DOM-detach. This keeps scroll-tick work to a single `getBoundingClientRect`.
+    const resolveFooter = (): HTMLElement | null => {
+      if (cachedFooter && cachedFooter.isConnected) {
+        return cachedFooter;
+      }
+      const candidates = document.querySelectorAll<HTMLElement>('#contact');
+      for (const candidate of candidates) {
+        if (candidate.offsetHeight > 0) {
+          cachedFooter = candidate;
+          return candidate;
+        }
+      }
+      cachedFooter = null;
+      return null;
+    };
+
+    const invalidateFooter = () => {
+      cachedFooter = null;
+    };
 
     const evaluateDockState = () => {
       rafId = null;
@@ -96,11 +123,7 @@ const FloatingContactDock = () => {
         return;
       }
 
-      const footerCandidates = document.querySelectorAll<HTMLElement>('#contact');
-      let footer: HTMLElement | null = null;
-      for (const candidate of footerCandidates) {
-        if (candidate.offsetHeight > 0) { footer = candidate; break; }
-      }
+      const footer = resolveFooter();
       const isAtAbsoluteBottom = footer
         ? footer.getBoundingClientRect().bottom <= window.innerHeight + 2
         : (() => {
@@ -119,12 +142,17 @@ const FloatingContactDock = () => {
       rafId = window.requestAnimationFrame(evaluateDockState);
     };
 
+    const handleResize = () => {
+      invalidateFooter();
+      requestDockStateUpdate();
+    };
+
     const handleMediaChange = () => {
       requestDockStateUpdate();
     };
 
     window.addEventListener('scroll', requestDockStateUpdate, { passive: true });
-    window.addEventListener('resize', requestDockStateUpdate);
+    window.addEventListener('resize', handleResize);
     if (typeof desktopMediaQuery.addEventListener === 'function') {
       desktopMediaQuery.addEventListener('change', handleMediaChange);
     } else {
@@ -134,7 +162,7 @@ const FloatingContactDock = () => {
 
     return () => {
       window.removeEventListener('scroll', requestDockStateUpdate);
-      window.removeEventListener('resize', requestDockStateUpdate);
+      window.removeEventListener('resize', handleResize);
       if (typeof desktopMediaQuery.removeEventListener === 'function') {
         desktopMediaQuery.removeEventListener('change', handleMediaChange);
       } else {

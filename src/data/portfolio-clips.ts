@@ -27,6 +27,15 @@ export const r2PreviewVideo = (filename: string) =>
 
 export const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
 
+// Small locally-hosted 280w webp thumbs used by the Hero mobile 4-tile strip.
+// Derived from the R2 poster URL so data stays single-sourced.
+// Script: scripts/generate-poster-thumbs.sh
+export const posterThumbSrc = (posterSrc: string): string => {
+  const match = posterSrc.match(/\/([^/]+)-poster\.jpg$/);
+  if (!match) return posterSrc;
+  return `/uploads/videos/poster-thumbs/${match[1]}-poster-thumb.webp`;
+};
+
 export const FEATURED_REEL_CLIP_IDS = [1, 2, 4, 7] as const;
 
 export const LEGACY_REEL_CLIPS: ReelClip[] = [
