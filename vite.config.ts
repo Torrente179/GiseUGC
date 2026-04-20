@@ -83,9 +83,32 @@ export default defineConfig(({ mode }) => ({
         ugcAdFormatsEn: path.resolve(__dirname, 'en/resources/ugc-ad-formats-guide/index.html'),
       },
       output: {
-        manualChunks: {
-          'framer-motion': ['framer-motion'],
-          'i18n-core': ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('framer-motion')) return 'framer-motion';
+            if (
+              id.includes('i18next') ||
+              id.includes('react-i18next') ||
+              id.includes('i18next-browser-languagedetector')
+            ) {
+              return 'i18n-core';
+            }
+            if (id.includes('@radix-ui')) return 'radix';
+            if (id.includes('@tanstack')) return 'tanstack';
+            if (id.includes('@vercel')) return 'vercel-sdk';
+            if (id.includes('@emailjs')) return 'emailjs';
+            if (id.includes('embla-carousel')) return 'embla';
+            if (
+              id.includes('react-dom') ||
+              id.includes('react-router') ||
+              id.includes('scheduler')
+            ) {
+              return 'react-core';
+            }
+            if (id.includes('lucide-react')) return 'lucide';
+            if (id.includes('date-fns')) return 'date-fns';
+            if (id.includes('lenis')) return 'lenis';
+          }
         },
       },
     },
