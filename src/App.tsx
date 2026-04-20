@@ -3,6 +3,7 @@ import { useLocation, useNavigationType } from 'react-router-dom';
 import { Analytics, track } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useTranslation } from 'react-i18next';
+import { LazyMotion, domAnimation } from 'framer-motion';
 import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import ServiceLandingPage from '@/components/ServiceLandingPage';
@@ -254,12 +255,12 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <LazyMotion features={domAnimation} strict>
       <ThemeRuntimeSync />
       <AppRoutes />
       <Analytics />
       <SpeedInsights />
-    </>
+    </LazyMotion>
   );
 };
 

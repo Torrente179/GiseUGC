@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { easeOutExpo } from '@/components/motion/variants';
 
@@ -31,7 +31,7 @@ const SplitTextReveal = ({
   }
 
   return (
-    <motion.span
+    <m.span
       key={content}
       className={cn('inline-block', className)}
       initial="hidden"
@@ -49,7 +49,7 @@ const SplitTextReveal = ({
     >
       {words.map((word, index) => (
         <span key={`${word}-${index}`} className={descenderSafeMaskClassName}>
-          <motion.span
+          <m.span
             className={cn('inline-block', wordClassName)}
             style={{ willChange: 'transform, opacity' }}
             variants={{
@@ -69,10 +69,10 @@ const SplitTextReveal = ({
           >
             {word}
             {index < words.length - 1 ? '\u00A0' : ''}
-          </motion.span>
+          </m.span>
         </span>
       ))}
-    </motion.span>
+    </m.span>
   );
 };
 

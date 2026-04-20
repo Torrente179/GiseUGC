@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback, useEffect, useMemo, memo, startTransition, type TouchEvent, type SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Pause, Play, Volume2, VolumeX, X } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -1160,7 +1160,7 @@ const Portfolio = () => {
         </div>
       )}
       <div className="studio-container">
-        <motion.div
+        <m.div
           className="studio-header mb-10 md:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10"
           initial="hidden"
           whileInView="visible"
@@ -1168,10 +1168,10 @@ const Portfolio = () => {
           variants={staggerContainer(0.12, 0.05)}
         >
           <div className="text-center md:text-left">
-            <motion.div className="inline-flex items-center gap-2 mb-6" variants={revealUp(14, 0.56)}>
+            <m.div className="inline-flex items-center gap-2 mb-6" variants={revealUp(14, 0.56)}>
               <span className="h-px w-8 bg-accent/40" />
               <p className="section-label text-accent text-sm md:text-base">{t('portfolio.sectionSubtitle')}</p>
-            </motion.div>
+            </m.div>
             <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95]">
               <SplitTextReveal text={t('portfolio.sectionTitle')} delay={0.06} />
               <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">
@@ -1179,14 +1179,14 @@ const Portfolio = () => {
               </span>
             </h2>
           </div>
-          <motion.div className="lg:max-w-xs text-center lg:text-right" variants={revealUp(20, 0.64)}>
+          <m.div className="lg:max-w-xs text-center lg:text-right" variants={revealUp(20, 0.64)}>
             <p className="strategic-body text-foreground/45 text-lg md:text-xl italic">
               {t('portfolio.reelDescription')}
             </p>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="studio-rule mb-10 md:mb-12"
           initial={{ opacity: 0, scaleX: 0.7 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
@@ -1194,7 +1194,7 @@ const Portfolio = () => {
           transition={{ duration: 0.66 }}
         />
 
-        <motion.div
+        <m.div
           className="mb-12 md:mb-14"
           initial="hidden"
           whileInView="visible"
@@ -1236,7 +1236,7 @@ const Portfolio = () => {
                   const isWarmMobileCard = isMobile && mobileCardDistance <= 1;
 
                   return (
-                    <motion.button
+                    <m.button
                       type="button"
                       key={clip.id}
                       data-reel-card="true"
@@ -1271,13 +1271,13 @@ const Portfolio = () => {
                         forcePause={isTheaterOpen || !isActiveMobileCard}
                         aria-hidden="true"
                       />
-                    </motion.button>
+                    </m.button>
                   );
                 })}
               </div>
             </div>
           </div>
-        </motion.div>
+        </m.div>
 
       </div>
 

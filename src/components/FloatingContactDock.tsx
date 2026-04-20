@@ -9,7 +9,7 @@ import {
   Facebook,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { m, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { springSnappy } from '@/components/motion/variants';
 import {
   consumePendingContactDockAction,
@@ -273,7 +273,7 @@ const FloatingContactDock = () => {
   ];
 
   return createPortal(
-    <motion.div
+    <m.div
       className="floating-contact-dock fixed bottom-5 md:bottom-8 right-5 md:right-8 z-[9999] pointer-events-none"
       initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
       animate={hasEntrance ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
@@ -338,7 +338,7 @@ const FloatingContactDock = () => {
         style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
       >
         {contactPlatforms.map((platform, index) => (
-          <motion.a
+          <m.a
             key={platform.id}
             href={platform.href}
             target="_blank"
@@ -352,10 +352,10 @@ const FloatingContactDock = () => {
             whileTap={shouldReduceMotion ? undefined : { scale: 0.92 }}
           >
             {platform.icon}
-          </motion.a>
+          </m.a>
         ))}
       </div>
-    </motion.div>,
+    </m.div>,
     document.body
   );
 };

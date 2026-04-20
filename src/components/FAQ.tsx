@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import {
   Accordion,
@@ -23,25 +23,25 @@ const FAQ = () => {
   return (
     <section id="faq" className="studio-section bg-muted/30">
       <div className="studio-container">
-        <motion.div
+        <m.div
           className="mb-8 md:mb-10"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={staggerContainer(0.12, 0.04)}
         >
-          <motion.p
+          <m.p
             className="section-label text-muted-foreground mb-3"
             variants={blurRevealUp(14, 0.56)}
           >
             {t('faq.sectionSubtitle')}
-          </motion.p>
+          </m.p>
           <h2 className="studio-title text-[clamp(2.2rem,7vw,3.6rem)] leading-[0.94]">
             <SplitTextReveal text={t('faq.sectionTitle')} delay={0.08} />
           </h2>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="studio-rule mb-8 md:mb-10"
           initial={{ opacity: 0, scaleX: 0.7 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
@@ -49,7 +49,7 @@ const FAQ = () => {
           transition={{ duration: 0.62 }}
         />
 
-        <motion.div
+        <m.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
@@ -62,7 +62,7 @@ const FAQ = () => {
           >
             {Array.isArray(items) &&
               items.map((item, index) => (
-                <motion.div
+                <m.div
                   key={index}
                   variants={blurRevealUp(14, 0.52)}
                 >
@@ -77,10 +77,10 @@ const FAQ = () => {
                       {item.answer}
                     </AccordionContent>
                   </AccordionItem>
-                </motion.div>
+                </m.div>
               ))}
           </Accordion>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

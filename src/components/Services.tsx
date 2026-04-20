@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Film, Globe, Lightbulb, Megaphone, Mic, PlayCircle, Sparkles, Star } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, springSmooth, staggerContainer } from '@/components/motion/variants';
 import { getLocaleFromPath, getServicePath, type ServicePageId } from '@/lib/locale-path';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const MotionLink = motion.create(Link);
+const MotionLink = m.create(Link);
 
 const Services = () => {
   const { t } = useTranslation();
@@ -79,7 +79,7 @@ const Services = () => {
   return (
     <section id="services" className="studio-section bg-background pt-16 md:pt-20">
       <div className="studio-container">
-        <motion.div
+        <m.div
           className="studio-header mb-12"
           initial="hidden"
           whileInView="visible"
@@ -87,22 +87,22 @@ const Services = () => {
           variants={staggerContainer(0.12, 0.04)}
         >
           <div className="text-center md:text-left">
-            <motion.p className="section-label text-muted-foreground mb-4" variants={revealUp(14, 0.45)}>
+            <m.p className="section-label text-muted-foreground mb-4" variants={revealUp(14, 0.45)}>
               {t('services.sectionSubtitle')}
-            </motion.p>
+            </m.p>
             <h2 className="studio-title">
               <SplitTextReveal text={t('services.sectionTitle')} delay={0.08} />
             </h2>
           </div>
-          <motion.p
+          <m.p
             className="studio-subtitle lg:justify-self-end text-center md:text-right max-w-lg"
             variants={revealUp(18, 0.5)}
           >
             {t('services.motionSubtitle')}
-          </motion.p>
-        </motion.div>
+          </m.p>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="studio-rule mb-16 md:mb-20"
           initial={{ opacity: 0, scaleX: 0.7 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
@@ -110,7 +110,7 @@ const Services = () => {
           transition={{ duration: 0.68 }}
         />
 
-        <motion.div
+        <m.div
           className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4"
           {...(!isMobile ? {
             initial: 'hidden' as const,
@@ -135,13 +135,13 @@ const Services = () => {
               whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
               transition={springSmooth}
             >
-              <motion.div
+              <m.div
                 className="mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110"
                 whileHover={shouldReduceMotion ? undefined : { rotate: -6, scale: 1.08 }}
                 transition={springHoverTransition}
               >
                 {service.icon}
-              </motion.div>
+              </m.div>
               <h3 className="text-lg md:text-2xl font-serif font-medium tracking-tight text-foreground mb-1 leading-tight">
                 {t(service.titleKey)}
               </h3>
@@ -159,7 +159,7 @@ const Services = () => {
               </span>
             </MotionLink>
           ))}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

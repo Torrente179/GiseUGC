@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Briefcase, Eye, Star, Users } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import { blurRevealUp, springSmooth, staggerContainer } from '@/components/motion/variants';
 
 interface CounterProps {
@@ -86,7 +86,7 @@ const SocialProof = () => {
   ];
 
   return (
-    <motion.section
+    <m.section
       className="relative z-20 py-20 bg-secondary/35 border-y border-muted/30"
       initial="hidden"
       whileInView="visible"
@@ -97,7 +97,7 @@ const SocialProof = () => {
         <div className="relative overflow-hidden group">
           <div className="grid grid-cols-2 lg:grid-cols-4 items-center gap-y-12 lg:gap-0">
             {stats.map((stat, index) => (
-              <motion.div
+              <m.div
                 key={stat.labelKey}
                 className="flex flex-col items-center px-4 relative group/item"
                 variants={blurRevealUp(18, 0.62)}
@@ -118,12 +118,12 @@ const SocialProof = () => {
                 </span>
 
                 <span className="section-label text-muted-foreground">{t(stat.labelKey)}</span>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
       </div>
-    </motion.section>
+    </m.section>
   );
 };
 

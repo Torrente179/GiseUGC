@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { m, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Diamond, Sparkles, Zap, ArrowDownRight, ChevronDown, Play } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
@@ -121,7 +121,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       {/* ─── 100vh Cinematic Window ─── */}
       <div className="relative min-h-[100svh] w-full flex flex-col justify-end">
         {/* Background Image Layer (poster / fallback / SEO) */}
-        <motion.div
+        <m.div
           className="absolute inset-0 z-0 origin-top overflow-hidden"
           style={shouldReduceMotion ? {} : { y: yImage, scale: scaleImage }}
         >
@@ -165,7 +165,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               onLoad={handleImageLoad}
             />
           </picture>
-        </motion.div>
+        </m.div>
 
         {/* Animated Atmosphere Orbs */}
         <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden" aria-hidden="true">
@@ -178,7 +178,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
         <div className="absolute inset-0 z-10 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none opacity-80" />
 
         {/* Content Layer */}
-        <motion.div
+        <m.div
           className="container relative z-20 mx-auto px-6 md:px-12 pb-14 md:pb-24 pt-28 md:pt-32 w-full"
           initial="hidden"
           animate="visible"
@@ -201,21 +201,21 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 {t('hero.subtitle')}
               </p>
 
-              <motion.div
+              <m.div
                 className="hidden md:block w-24 md:w-40 h-px bg-white/30 my-8 origin-left"
                 variants={shouldReduceMotion ? undefined : cinematicLineVariants}
               />
 
               <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center mt-6 md:mt-0">
                 {/* Description: visually hidden on mobile, still in DOM for SEO */}
-                <motion.p
+                <m.p
                   className="sr-only md:not-sr-only md:font-sans md:font-light md:text-lg md:text-white/80 md:max-w-sm md:cinematic-subtitle"
                   variants={shouldReduceMotion ? undefined : cinematicItemVariants}
                 >
                   {t('hero.description')}
-                </motion.p>
+                </m.p>
 
-                <motion.div
+                <m.div
                   className="flex flex-row sm:flex-col gap-3"
                   variants={shouldReduceMotion ? undefined : cinematicItemVariants}
                 >
@@ -235,12 +235,12 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                     <ArrowDownRight className="w-3.5 h-3.5" />
                     {t('hero.buttonContact')}
                   </a>
-                </motion.div>
+                </m.div>
               </div>
             </div>
 
             {/* Right side: Phone-frame video reel + compact metrics */}
-            <motion.div
+            <m.div
               className="hidden lg:flex flex-col items-center gap-5 lg:self-end lg:-mr-4 xl:-mr-8"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
@@ -249,7 +249,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <div className="hero-phone-notch" />
                 <AnimatePresence mode="popLayout" initial={false}>
                   {isDesktopViewport && (
-                    <motion.video
+                    <m.video
                       key={currentClip.id}
                       className="hero-phone-video"
                       src={currentClip.mobileSrc}
@@ -288,10 +288,10 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <span className="w-px h-4 bg-white/20" />
                 <span className="text-[10px] font-bold uppercase tracking-prestige">{t('hero.proofCaption')}</span>
               </div>
-            </motion.div>
+            </m.div>
 
             {/* Mobile-only: Fixed 4-card reel strip (thumbnails rotate daily) */}
-            <motion.div
+            <m.div
               className="lg:hidden w-full"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
@@ -323,30 +323,30 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                   </a>
                 ))}
               </div>
-            </motion.div>
+            </m.div>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Scroll Indicator */}
-        <motion.div
+        <m.div
           className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.2, duration: 0.8, ease: premiumEase }}
         >
-          <motion.div
+          <m.div
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
             <ChevronDown className="w-5 h-5 text-white/40" />
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
 
       {/* ─── Introduction (desktop only, scrolls up naturally) ─── */}
       {showIntroduction && (
         <div className="bg-background relative z-30">
-          <motion.div
+          <m.div
             className="container mx-auto px-6 md:px-12 py-24 border-t border-border/40"
             initial="hidden"
             whileInView="visible"
@@ -357,19 +357,19 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             }}
           >
             <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-12 lg:gap-16 xl:gap-20 items-start">
-              <motion.div className="space-y-6 max-w-[50rem]" variants={cinematicItemVariants}>
+              <m.div className="space-y-6 max-w-[50rem]" variants={cinematicItemVariants}>
                 <span className="section-label">{t('hero.introduction.eyebrow')}</span>
                 <h2 className="max-w-[16ch] text-balance text-4xl md:text-[3.4rem] lg:text-[3.35rem] xl:text-[3.65rem] font-serif text-foreground leading-[0.98] tracking-tight-serif">
                   <PretextLineReveal text={t('hero.introduction.title')} delay={0} stagger={0.1} className="block" />
                 </h2>
-              </motion.div>
-              <motion.div className="lg:pt-14 xl:pt-16" variants={cinematicItemVariants}>
+              </m.div>
+              <m.div className="lg:pt-14 xl:pt-16" variants={cinematicItemVariants}>
                 <p className="strategic-body max-w-[35rem] text-[1.18rem] leading-[1.58] font-normal text-foreground/72 md:text-[1.3rem]">
                   {t('hero.introduction.description')}
                 </p>
-              </motion.div>
+              </m.div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       )}
     </section>

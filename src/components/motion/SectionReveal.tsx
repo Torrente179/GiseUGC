@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import { easeOutExpo } from '@/components/motion/variants';
 
 type RevealDirection = 'up' | 'left' | 'right' | 'scale';
@@ -109,7 +109,7 @@ const SectionReveal = ({
     );
   }
 
-  const MotionTag = Tag === 'footer' ? motion.footer : Tag === 'div' ? motion.div : motion.section;
+  const MotionTag = Tag === 'footer' ? m.footer : Tag === 'div' ? m.div : m.section;
 
   return (
     <MotionTag
@@ -156,12 +156,12 @@ const SectionRevealItem = ({
   }
 
   return (
-    <motion.div
+    <m.div
       className={className}
       variants={getDirectionalVariants(direction, distance, duration, blur)}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 };
 

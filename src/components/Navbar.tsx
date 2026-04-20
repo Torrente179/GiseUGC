@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import {
   Menu,
   X,
@@ -499,7 +499,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
         </div>
       </div>
 
-      <motion.nav
+      <m.nav
         className={cn(
           'fixed top-0 left-0 w-full z-[110] transition-[padding] duration-300',
           isScrolled
@@ -585,7 +585,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                 </button>
               </div>
               <ThemeToggle />
-              <motion.a
+              <m.a
                 href={homeSectionHref('contact')}
                 onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
                   if (onHomePage) {
@@ -601,7 +601,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                 transition={springSnappy}
               >
                 {t('navbar.hireMe')}
-              </motion.a>
+              </m.a>
             </div>
 
             <div className={cn('md:hidden flex items-center', compactMobile ? 'gap-1' : 'gap-2')}>
@@ -657,7 +657,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
             </div>
           </div>
         </div>
-      </motion.nav>
+      </m.nav>
     </>
   );
 };

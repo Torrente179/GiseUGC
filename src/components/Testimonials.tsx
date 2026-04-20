@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, m, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { blurRevealUp, staggerContainer } from '@/components/motion/variants';
@@ -143,7 +143,7 @@ const Testimonials = () => {
     <section id="testimonials" className="studio-section bg-background overflow-hidden">
       <div className="studio-container">
         {/* Header */}
-        <motion.div
+        <m.div
           className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8 md:mb-10"
           initial="hidden"
           whileInView="visible"
@@ -151,16 +151,16 @@ const Testimonials = () => {
           variants={staggerContainer(0.12, 0.04)}
         >
           <div>
-            <motion.p className="section-label text-muted-foreground mb-3" variants={blurRevealUp(14, 0.56)}>
+            <m.p className="section-label text-muted-foreground mb-3" variants={blurRevealUp(14, 0.56)}>
               {t('testimonials.sectionSubtitle')}
-            </motion.p>
+            </m.p>
             <h2 className="studio-title">
               <SplitTextReveal text={t('testimonials.sectionTitle')} delay={0.08} />
             </h2>
           </div>
 
           {/* Proof badge */}
-          <motion.div
+          <m.div
             className="flex items-center gap-3"
             variants={blurRevealUp(18, 0.62)}
           >
@@ -176,10 +176,10 @@ const Testimonials = () => {
               <span className="mx-1.5 text-border/60">·</span>
               {t('testimonials.reviewCount', { count: TESTIMONIAL_IMAGES.length })}
             </span>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="studio-rule mb-6 md:mb-8"
           initial={{ opacity: 0, scaleX: 0.7 }}
           whileInView={{ opacity: 1, scaleX: 1 }}
@@ -189,7 +189,7 @@ const Testimonials = () => {
       </div>
 
       {/* Marquee area — full bleed */}
-      <motion.div
+      <m.div
         ref={containerRef}
         className="relative"
         initial={{ opacity: 0, y: 22 }}
@@ -233,7 +233,7 @@ const Testimonials = () => {
             {t('testimonials.hoverHint')}
           </p>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Zoom dialog */}
       <Dialog open={zoomedIndex !== null} onOpenChange={(isOpen) => !isOpen && setZoomedIndex(null)}>
