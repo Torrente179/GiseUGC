@@ -1,16 +1,19 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
 import { Analytics, track } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { useTranslation } from 'react-i18next';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import Index from '@/pages/Index';
-import NotFound from '@/pages/NotFound';
-import ServiceLandingPage from '@/components/ServiceLandingPage';
-import VerticalLandingPage from '@/components/VerticalLandingPage';
-import ResourcePage from '@/components/ResourcePage';
-import LegalPage from '@/components/LegalPage';
 import ThemeRuntimeSync from '@/components/ThemeRuntimeSync';
+
+// Lazy route-level pages. These only render for off-home URLs so we avoid
+// paying for them on the most common (homepage) entry.
+const NotFound = lazy(() => import('@/pages/NotFound'));
+const ServiceLandingPage = lazy(() => import('@/components/ServiceLandingPage'));
+const VerticalLandingPage = lazy(() => import('@/components/VerticalLandingPage'));
+const ResourcePage = lazy(() => import('@/components/ResourcePage'));
+const LegalPage = lazy(() => import('@/components/LegalPage'));
 import {
   getLocaleFromPath,
   getLegalPageRouteEntries,
@@ -182,43 +185,45 @@ const AppRoutes = () => {
         A new key per pathname ensures a fresh instance for each service URL.
         The wrapper carries a CSS fade-in so the page appears smoothly.
       */}
-      {currentServiceEntry && (
-        <div key={location.pathname} className="page-enter">
-          <ServiceLandingPage
-            serviceId={currentServiceEntry.serviceId}
-            locale={currentServiceEntry.locale}
-          />
-        </div>
-      )}
+      <Suspense fallback={null}>
+        {currentServiceEntry && (
+          <div key={location.pathname} className="page-enter">
+            <ServiceLandingPage
+              serviceId={currentServiceEntry.serviceId}
+              locale={currentServiceEntry.locale}
+            />
+          </div>
+        )}
 
-      {currentVerticalEntry && (
-        <div key={location.pathname} className="page-enter">
-          <VerticalLandingPage
-            verticalId={currentVerticalEntry.verticalId}
-            locale={currentVerticalEntry.locale}
-          />
-        </div>
-      )}
+        {currentVerticalEntry && (
+          <div key={location.pathname} className="page-enter">
+            <VerticalLandingPage
+              verticalId={currentVerticalEntry.verticalId}
+              locale={currentVerticalEntry.locale}
+            />
+          </div>
+        )}
 
-      {currentResourceEntry && (
-        <div key={location.pathname} className="page-enter">
-          <ResourcePage
-            resourceId={currentResourceEntry.resourceId}
-            locale={currentResourceEntry.locale}
-          />
-        </div>
-      )}
+        {currentResourceEntry && (
+          <div key={location.pathname} className="page-enter">
+            <ResourcePage
+              resourceId={currentResourceEntry.resourceId}
+              locale={currentResourceEntry.locale}
+            />
+          </div>
+        )}
 
-      {currentLegalEntry && (
-        <div key={location.pathname} className="page-enter">
-          <LegalPage
-            pageId={currentLegalEntry.pageId}
-            locale={currentLegalEntry.locale}
-          />
-        </div>
-      )}
+        {currentLegalEntry && (
+          <div key={location.pathname} className="page-enter">
+            <LegalPage
+              pageId={currentLegalEntry.pageId}
+              locale={currentLegalEntry.locale}
+            />
+          </div>
+        )}
 
-      {!isKnownRoute && <NotFound />}
+        {!isKnownRoute && <NotFound />}
+      </Suspense>
     </>
   );
 };
