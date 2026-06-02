@@ -43,13 +43,66 @@ const cinematicLineVariants = {
   },
 };
 
+type HeroPictureLayerProps = {
+  heroImageLoaded: boolean;
+  onImageLoad: () => void;
+  altText: string;
+};
+
+// Shared full-bleed responsive hero image. Rendered statically on mobile /
+// reduced-motion, and inside the parallax wrapper on desktop.
+const HeroPictureLayer = ({ heroImageLoaded, onImageLoad, altText }: HeroPictureLayerProps) => (
+  <picture>
+    <source
+      media="(max-width: 767px)"
+      type="image/webp"
+      srcSet="/uploads/gisela-hero-mobile-768.webp 768w, /uploads/gisela-hero-mobile-992.webp 992w"
+      sizes="100vw"
+    />
+    <source
+      media="(max-width: 767px)"
+      type="image/jpeg"
+      srcSet="/uploads/gisela-hero-mobile-992.jpg 992w"
+      sizes="100vw"
+    />
+    <source
+      media="(min-width: 1024px)"
+      type="image/webp"
+      srcSet="/uploads/gisela-hero-desktop-1600.webp 1600w, /uploads/gisela-hero-desktop-2048.webp 2048w"
+      sizes="100vw"
+    />
+    <source
+      media="(min-width: 1024px)"
+      type="image/jpeg"
+      srcSet="/uploads/gisela-hero-desktop-2048.jpg 2048w"
+      sizes="100vw"
+    />
+    <source
+      type="image/webp"
+      srcSet="/uploads/gisela-hero-400.webp 400w, /uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
+      sizes="100vw"
+    />
+    <img
+      src="/uploads/gisela-hero-585.jpg"
+      alt={altText}
+      className={`w-full h-full object-cover object-[44%_0%] md:object-[50%_12%] lg:object-[50%_34%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+      loading="eager"
+      fetchPriority="high"
+      decoding="async"
+      onLoad={onImageLoad}
+    />
+  </picture>
+);
+
 const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { t } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const shouldReduceMotion = useReducedMotion();
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   const [currentClipIndex, setCurrentClipIndex] = useState(0);
-  const [isDesktopViewport, setIsDesktopViewport] = useState(false);
+  const [isDesktopViewport, setIsDesktopViewport] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches,
+  );
   const containerRef = useRef<HTMLElement>(null);
   const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
 
@@ -107,14 +160,16 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     handleHashLinkClick(event);
   };
 
-  // Parallax effect for the background image
+  // Parallax: translate-only (no `scale`, which forces full-image re-rasterization
+  // every frame). The scroll listener is kept mounted at all breakpoints so the hero
+  // image never remounts when crossing the desktop boundary; the transform is simply
+  // not applied on mobile / reduced-motion.
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
   });
-
   const yImage = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
-  const scaleImage = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
+  const enableParallax = isDesktopViewport && !shouldReduceMotion;
 
   return (
     <section ref={containerRef} id="home" className="relative w-full overflow-hidden bg-black">
@@ -123,48 +178,13 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
         {/* Background Image Layer (poster / fallback / SEO) */}
         <m.div
           className="absolute inset-0 z-0 origin-top overflow-hidden"
-          style={shouldReduceMotion ? {} : { y: yImage, scale: scaleImage }}
+          style={enableParallax ? { y: yImage } : undefined}
         >
-          <picture>
-            <source
-              media="(max-width: 767px)"
-              type="image/webp"
-              srcSet="/uploads/gisela-hero-mobile-768.webp 768w, /uploads/gisela-hero-mobile-992.webp 992w"
-              sizes="100vw"
-            />
-            <source
-              media="(max-width: 767px)"
-              type="image/jpeg"
-              srcSet="/uploads/gisela-hero-mobile-992.jpg 992w"
-              sizes="100vw"
-            />
-            <source
-              media="(min-width: 1024px)"
-              type="image/webp"
-              srcSet="/uploads/gisela-hero-desktop-1600.webp 1600w, /uploads/gisela-hero-desktop-2048.webp 2048w"
-              sizes="100vw"
-            />
-            <source
-              media="(min-width: 1024px)"
-              type="image/jpeg"
-              srcSet="/uploads/gisela-hero-desktop-2048.jpg 2048w"
-              sizes="100vw"
-            />
-            <source
-              type="image/webp"
-              srcSet="/uploads/gisela-hero-400.webp 400w, /uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
-              sizes="100vw"
-            />
-            <img
-              src="/uploads/gisela-hero-585.jpg"
-              alt={t('hero.imageAlt')}
-              className={`w-full h-full object-cover object-[44%_0%] md:object-[50%_12%] lg:object-[50%_34%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-              onLoad={handleImageLoad}
-            />
-          </picture>
+          <HeroPictureLayer
+            heroImageLoaded={heroImageLoaded}
+            onImageLoad={handleImageLoad}
+            altText={t('hero.imageAlt')}
+          />
         </m.div>
 
         {/* Animated Atmosphere Orbs */}

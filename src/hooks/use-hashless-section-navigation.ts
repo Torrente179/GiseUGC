@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import type { MouseEvent } from 'react';
-import { getLenis } from '@/lib/smooth-scroll';
 
 let activeScrollFrameId: number | null = null;
 
@@ -35,7 +34,7 @@ const premiumEaseScroll = (t: number): number => {
 };
 
 /**
- * Smooth scroll using Lenis when available (desktop), with JS-powered fallback.
+ * JS-powered smooth scroll using a premium easing curve (interruptible via rAF).
  */
 const smoothScrollTo = (targetElement: HTMLElement, duration = 900) => {
   const targetY = targetElement.getBoundingClientRect().top + window.scrollY;
@@ -44,16 +43,6 @@ const smoothScrollTo = (targetElement: HTMLElement, duration = 900) => {
   const absoluteDistance = Math.abs(distance);
 
   if (absoluteDistance < 1) return;
-
-  // Use Lenis when available — physics-based, interruptible scrolling
-  const lenis = getLenis();
-  if (lenis) {
-    lenis.scrollTo(targetElement, {
-      duration: Math.min(1.05, Math.max(0.72, absoluteDistance / 2200)),
-      offset: 0,
-    });
-    return;
-  }
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     window.scrollTo(0, targetY);

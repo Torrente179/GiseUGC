@@ -25,7 +25,6 @@ import {
 } from '@/lib/locale-path';
 import { getChatGptReferralContext } from '@/lib/referral-attribution';
 import { startMobileMediaPressureObserver } from '@/lib/perf-debug';
-import { getLenis } from '@/lib/smooth-scroll';
 
 // Persist scroll positions across SPA navigations, keyed by React Router location.key
 const scrollPositions = new Map<string, number>();
@@ -41,14 +40,9 @@ const verticalRouteEntries = getVerticalPageRouteEntries();
 const resourceRouteEntries = getResourcePageRouteEntries();
 const legalRouteEntries = getLegalPageRouteEntries();
 
-// Scroll to a Y position, using Lenis when available for an immediate (non-animated) jump
+// Scroll to a Y position immediately (non-animated jump)
 const jumpToY = (y: number) => {
-  const lenis = getLenis();
-  if (lenis) {
-    lenis.scrollTo(y, { immediate: true });
-  } else {
-    window.scrollTo({ top: y, left: 0, behavior: 'auto' });
-  }
+  window.scrollTo({ top: y, left: 0, behavior: 'auto' });
 };
 
 // Smooth-scroll to a section element by ID, retrying until it appears in the DOM.
@@ -56,13 +50,8 @@ const jumpToY = (y: number) => {
 const scrollToSection = (sectionId: string, attempts = 0) => {
   const element = document.getElementById(sectionId);
   if (element) {
-    const lenis = getLenis();
-    if (lenis) {
-      lenis.scrollTo(element, { duration: 0.75, offset: -80 });
-    } else {
-      const y = element.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top: Math.max(0, y), left: 0, behavior: 'smooth' });
-    }
+    const y = element.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top: Math.max(0, y), left: 0, behavior: 'smooth' });
     // Clear the hash from the URL without triggering a React Router navigation
     const cleanPath = window.location.pathname + window.location.search;
     window.history.replaceState(null, '', cleanPath);

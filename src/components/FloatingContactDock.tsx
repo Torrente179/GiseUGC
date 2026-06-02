@@ -286,7 +286,7 @@ const FloatingContactDock = () => {
       {/* Mobile: toggle + vertical reveal */}
       <div className="pointer-events-auto md:hidden flex flex-col items-end">
         <div
-          className={`mb-2.5 rounded-[1.3rem] border border-white/45 bg-card/62 backdrop-blur-xl supports-[backdrop-filter]:bg-card/58 p-2.5 shadow-[0_20px_38px_-22px_hsl(var(--foreground)/0.85)] flex flex-col items-end gap-2 transition-all duration-300 ${
+          className={`mb-2.5 rounded-[1.3rem] border border-white/45 bg-card/95 p-2.5 shadow-[0_20px_38px_-22px_hsl(var(--foreground)/0.85)] flex flex-col items-end gap-2 transition-all duration-300 ${
             mobileOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
           }`}
         >
@@ -295,7 +295,7 @@ const FloatingContactDock = () => {
               key={platform.id}
               href={platform.href}
               aria-label={t(platform.ariaKey)}
-              className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/45 ${platform.toneClass} ${platform.hoverToneClass} backdrop-blur-xl shadow-[0_12px_24px_-18px_hsl(var(--foreground)/0.9)] transition-all duration-300 hover:-translate-y-0.5`}
+              className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/45 ${platform.toneClass} ${platform.hoverToneClass} shadow-[0_12px_24px_-18px_hsl(var(--foreground)/0.9)] transition-all duration-300 hover:-translate-y-0.5`}
               style={{
                 transitionDelay: mobileOpen ? `${index * 25}ms` : '0ms',
               }}
@@ -309,7 +309,7 @@ const FloatingContactDock = () => {
           aria-expanded={mobileOpen}
           aria-label={mobileOpen ? t('floatingContact.toggleCloseAria') : t('floatingContact.toggleOpenAria')}
           onClick={() => setMobileOpen((prev) => !prev)}
-          className="group relative inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/60 bg-card/80 supports-[backdrop-filter]:bg-card/66 backdrop-blur-xl text-foreground shadow-[0_24px_46px_-22px_hsl(var(--foreground)/0.95),0_0_0_1px_hsl(var(--primary)/0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/55 hover:text-primary"
+          className="group relative inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/60 bg-card/95 text-foreground shadow-[0_24px_46px_-22px_hsl(var(--foreground)/0.95),0_0_0_1px_hsl(var(--primary)/0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/55 hover:text-primary"
         >
           <span
             aria-hidden="true"
@@ -330,7 +330,7 @@ const FloatingContactDock = () => {
 
       {/* Desktop: horizontal row */}
       <div
-        className={`hidden md:flex dock-breathe items-center gap-3 rounded-full border border-white/40 bg-card/62 supports-[backdrop-filter]:bg-card/48 backdrop-blur-2xl px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform,filter] duration-500 ${
+        className={`hidden md:flex dock-breathe items-center gap-3 rounded-full border border-white/40 bg-card/95 px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform,filter] duration-500 ${
           isDesktopDockGhosted
             ? 'opacity-10 scale-[0.94] translate-y-2 blur-[1.5px] pointer-events-none'
             : 'opacity-100 scale-100 translate-y-0 blur-0 pointer-events-auto'
