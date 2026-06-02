@@ -120,6 +120,25 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     return () => mql.removeEventListener('change', update);
   }, []);
 
+  // Gate for the popLayout phone-frame reel. On a normal desktop load this is
+  // already true, so the reel mounts immediately. But when the desktop breakpoint
+  // becomes active at RUNTIME (window resize / tablet rotation), we defer the mount
+  // by one frame: mounting framer-motion's popLayout in the SAME commit as the
+  // lg-breakpoint layout change made its PopChild measure a not-yet-settled layout
+  // and throw, which unmounted the whole app (blank page).
+  const [reelReady, setReelReady] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches,
+  );
+  useEffect(() => {
+    if (!isDesktopViewport) {
+      setReelReady(false);
+      return;
+    }
+    if (reelReady) return;
+    const raf = requestAnimationFrame(() => setReelReady(true));
+    return () => cancelAnimationFrame(raf);
+  }, [isDesktopViewport, reelReady]);
+
   // TikTok-style auto-cycling through all clips (desktop only)
   useEffect(() => {
     if (shouldReduceMotion || !isDesktopViewport) return;
@@ -267,8 +286,17 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               {/* Phone Frame with smooth cycling */}
               <a href="#portfolio" onClick={handleHashLinkClick} className="hero-phone-frame cursor-pointer">
                 <div className="hero-phone-notch" />
-                <AnimatePresence mode="popLayout" initial={false}>
-                  {isDesktopViewport && (
+                {/*
+                  popLayout keeps the cross-fade clean (each exiting clip is removed
+                  after its fade — default mode leaks a <video> per cycle). Gated on
+                  `reelReady` (not isDesktopViewport directly) so that on a runtime
+                  breakpoint change the mount is deferred one frame past the layout
+                  settle — otherwise popLayout's PopChild measured mid-layout and
+                  crashed the page. `initial={false}` skips the enter animation so the
+                  reel never flashes in.
+                */}
+                {reelReady && (
+                  <AnimatePresence mode="popLayout" initial={false}>
                     <m.video
                       key={currentClip.id}
                       className="hero-phone-video"
@@ -287,8 +315,8 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                       exit={{ opacity: 0 }}
                       transition={{ duration: 1.2, ease: 'easeInOut' }}
                     />
-                  )}
-                </AnimatePresence>
+                  </AnimatePresence>
+                )}
                 {/* Play indicator overlay */}
                 <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-sm px-2.5 py-1">
                   <Play className="w-2.5 h-2.5 text-white fill-white" />
