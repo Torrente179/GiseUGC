@@ -201,6 +201,9 @@
     "ariaPrev": "Previous testimonial",
     "ariaNext": "Next testimonial",
     "ariaGoTo": "Go to testimonial {{index}}",
+    "ariaClose": "Close viewer",
+    "ariaDialog": "Testimonials viewer",
+    "swipeHint": "Swipe or use ← → · Esc to close",
     "reviewCount": "{{count}} reviews",
     "hoverHint": "Click any review to expand"
   },

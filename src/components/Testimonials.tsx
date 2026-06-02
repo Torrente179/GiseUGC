@@ -1,8 +1,9 @@
-import { useCallback, useRef, useState, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, m, useReducedMotion } from 'framer-motion';
+import useEmblaCarousel from 'embla-carousel-react';
+import { X } from 'lucide-react';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { blurRevealUp, staggerContainer } from '@/components/motion/variants';
 
 interface TestimonialImage {
@@ -42,7 +43,6 @@ interface MarqueeRowProps {
   paused: boolean;
   onClickItem: (index: number) => void;
   globalIndexOffset: number;
-  shouldReduceMotion: boolean | null;
 }
 
 const MarqueeRow = ({
@@ -52,7 +52,6 @@ const MarqueeRow = ({
   paused,
   onClickItem,
   globalIndexOffset,
-  shouldReduceMotion,
 }: MarqueeRowProps) => {
   // Triple the items for seamless loop
   const tripled = [...items, ...items, ...items];
@@ -104,40 +103,258 @@ const MarqueeRow = ({
   );
 };
 
+/* ─── Lightbox carousel ───
+   A self-contained, full-screen viewer. Deliberately NOT a Radix Dialog:
+   the page sets `body { overflow-x: hidden }`, which makes <body> a scroll
+   container and breaks react-remove-scroll's scroll lock (the page jumps /
+   freezes on close). We lock scroll ourselves with the position:fixed pattern,
+   which is immune to that and restores the exact scroll position. */
+interface LightboxProps {
+  images: TestimonialImage[];
+  startIndex: number;
+  onClose: () => void;
+  reduceMotion: boolean;
+  labels: {
+    prev: string;
+    next: string;
+    close: string;
+    dialog: string;
+    hint: string;
+  };
+}
+
+const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: LightboxProps) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'center',
+    startIndex,
+    skipSnaps: false,
+    duration: reduceMotion ? 0 : 24,
+  });
+  const [selected, setSelected] = useState(startIndex);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  // Keep the active-slide highlight in sync with embla.
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelected(emblaApi.selectedScrollSnap());
+    emblaApi.on('select', onSelect);
+    onSelect();
+    return () => {
+      emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi]);
+
+  // Keyboard: arrows navigate, Escape closes, Tab is trapped inside the viewer.
+  useEffect(() => {
+    const node = rootRef.current;
+    node?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        scrollNext();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        scrollPrev();
+      } else if (e.key === 'Tab' && node) {
+        const focusable = node.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose, scrollNext, scrollPrev]);
+
+  const transition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.42, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
+
+  return (
+    <m.div
+      ref={rootRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={labels.dialog}
+      tabIndex={-1}
+      className="fixed inset-0 z-[10000] flex flex-col bg-black/85 backdrop-blur-xl outline-none"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: reduceMotion ? 0 : 0.28 }}
+      onMouseDown={(e) => {
+        // Backdrop click closes; clicks bubbling up from cards/buttons don't.
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      {/* Top bar: counter + close */}
+      <div className="flex shrink-0 items-center justify-between px-4 py-4 md:px-8 md:py-5">
+        <span className="text-sm font-medium tabular-nums text-white/55 tracking-wide">
+          {selected + 1}
+          <span className="mx-1.5 text-white/25">/</span>
+          {images.length}
+        </span>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={labels.close}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      {/* Carousel */}
+      <div className="relative flex min-h-0 flex-1 items-center">
+        <div className="h-full w-full overflow-hidden" ref={emblaRef}>
+          <div className="flex h-full touch-pan-y">
+            {images.map((item, i) => {
+              const isActive = i === selected;
+              return (
+                <div
+                  key={item.id}
+                  className="flex min-w-0 flex-[0_0_90%] items-center justify-center px-2 sm:flex-[0_0_74%] sm:px-3 lg:flex-[0_0_60%]"
+                >
+                  <m.figure
+                    className="relative max-h-full overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl shadow-black/40"
+                    animate={{
+                      scale: isActive ? 1 : 0.9,
+                      opacity: isActive ? 1 : 0.35,
+                    }}
+                    transition={transition}
+                  >
+                    <div className="max-h-[78vh] overflow-y-auto overscroll-contain">
+                      <img
+                        src={item.src}
+                        alt={item.alt}
+                        width={item.width}
+                        height={item.height}
+                        className="block h-auto w-full select-none object-contain"
+                        loading="eager"
+                        decoding="async"
+                        draggable={false}
+                      />
+                    </div>
+                  </m.figure>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Arrows */}
+        <button
+          type="button"
+          onClick={scrollPrev}
+          aria-label={labels.prev}
+          className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white/85 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:left-6 md:h-12 md:w-12"
+        >
+          <svg className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          onClick={scrollNext}
+          aria-label={labels.next}
+          className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white/85 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:right-6 md:h-12 md:w-12"
+        >
+          <svg className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Bottom: dot strip + hint */}
+      <div className="flex shrink-0 flex-col items-center gap-3 px-4 py-5 md:py-6">
+        <div className="flex max-w-full items-center gap-1.5 overflow-x-auto">
+          {images.map((item, i) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => emblaApi?.scrollTo(i)}
+              aria-label={`${labels.dialog} ${i + 1}`}
+              aria-current={i === selected}
+              className={`h-1.5 shrink-0 rounded-full transition-all duration-300 ${
+                i === selected ? 'w-6 bg-white' : 'w-1.5 bg-white/30 hover:bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
+        <p className="text-xs tracking-wide text-white/40">{labels.hint}</p>
+      </div>
+    </m.div>
+  );
+};
+
 /* ─── Main Component ─── */
 const Testimonials = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  const zoomedTestimonial = zoomedIndex === null ? null : TESTIMONIAL_IMAGES[zoomedIndex];
+  const reduceMotion = !!shouldReduceMotion;
+  const isOpen = zoomedIndex !== null;
 
-  // Keyboard navigation in zoom mode
-  const handleZoomKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (zoomedIndex === null) return;
-      if (e.key === 'ArrowRight') {
-        setZoomedIndex((prev) => (prev !== null ? (prev + 1) % TESTIMONIAL_IMAGES.length : null));
-      } else if (e.key === 'ArrowLeft') {
-        setZoomedIndex((prev) =>
-          prev !== null ? (prev - 1 + TESTIMONIAL_IMAGES.length) % TESTIMONIAL_IMAGES.length : null,
-        );
-      }
-    },
-    [zoomedIndex],
-  );
+  // Pause the marquee on hover, reduced motion, or while the viewer is open.
+  const effectivePaused = isPaused || reduceMotion || isOpen;
 
+  // Lock body scroll while the viewer is open. Managed here (not inside the
+  // viewer's unmount) so the lock releases the instant the viewer closes —
+  // never waiting on an exit animation. Uses position:fixed + restore, which
+  // is immune to `body { overflow-x: hidden }` (that breaks library scroll
+  // locks and was the original "scrolling crashes on close" bug).
   useEffect(() => {
-    if (zoomedIndex !== null) {
-      window.addEventListener('keydown', handleZoomKeyDown);
-      return () => window.removeEventListener('keydown', handleZoomKeyDown);
-    }
-  }, [zoomedIndex, handleZoomKeyDown]);
-
-  // Pause marquee on reduced motion preference
-  const effectivePaused = isPaused || !!shouldReduceMotion;
+    if (!isOpen) return;
+    const { body } = document;
+    const scrollY = window.scrollY;
+    const scrollbarGap = window.innerWidth - document.documentElement.clientWidth;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      width: body.style.width,
+      overflow: body.style.overflow,
+      paddingRight: body.style.paddingRight,
+    };
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
+    body.style.overflow = 'hidden';
+    if (scrollbarGap > 0) body.style.paddingRight = `${scrollbarGap}px`;
+    return () => {
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.left = prev.left;
+      body.style.right = prev.right;
+      body.style.width = prev.width;
+      body.style.overflow = prev.overflow;
+      body.style.paddingRight = prev.paddingRight;
+      window.scrollTo(0, scrollY);
+    };
+  }, [isOpen]);
 
   return (
     <section id="testimonials" className="studio-section bg-background overflow-hidden">
@@ -190,7 +407,6 @@ const Testimonials = () => {
 
       {/* Marquee area — full bleed */}
       <m.div
-        ref={containerRef}
         className="relative"
         initial={{ opacity: 0, y: 22 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -206,22 +422,20 @@ const Testimonials = () => {
           <MarqueeRow
             items={ROW_1}
             direction="left"
-            speed={shouldReduceMotion ? 999999 : 55}
+            speed={reduceMotion ? 999999 : 55}
             paused={effectivePaused}
             onClickItem={setZoomedIndex}
             globalIndexOffset={0}
-            shouldReduceMotion={shouldReduceMotion}
           />
 
           {/* Row 2 — scrolls right */}
           <MarqueeRow
             items={ROW_2}
             direction="right"
-            speed={shouldReduceMotion ? 999999 : 65}
+            speed={reduceMotion ? 999999 : 65}
             paused={effectivePaused}
             onClickItem={setZoomedIndex}
             globalIndexOffset={7}
-            shouldReduceMotion={shouldReduceMotion}
           />
         </div>
 
@@ -235,66 +449,25 @@ const Testimonials = () => {
         </div>
       </m.div>
 
-      {/* Zoom dialog */}
-      <Dialog open={zoomedIndex !== null} onOpenChange={(isOpen) => !isOpen && setZoomedIndex(null)}>
-        <DialogContent className="max-h-[95vh] max-w-[95vw] sm:max-w-2xl border-border/70 bg-card/95 backdrop-blur-md p-3 md:p-5">
-          <DialogTitle className="sr-only">Testimonial image preview</DialogTitle>
-          {zoomedTestimonial && (
-            <div className="relative">
-              <div className="flex max-h-[85vh] items-center justify-center overflow-auto">
-                <img
-                  src={zoomedTestimonial.src}
-                  alt={zoomedTestimonial.alt}
-                  width={zoomedTestimonial.width}
-                  height={zoomedTestimonial.height}
-                  className="h-auto max-h-[85vh] w-auto max-w-full rounded-lg object-contain"
-                  loading="eager"
-                  decoding="async"
-                />
-              </div>
-
-              {/* Navigation inside dialog */}
-              <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setZoomedIndex((prev) =>
-                      prev !== null ? (prev - 1 + TESTIMONIAL_IMAGES.length) % TESTIMONIAL_IMAGES.length : null,
-                    )
-                  }
-                  className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-md hover:bg-muted/30"
-                  aria-label={t('testimonials.ariaPrev')}
-                >
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                  </svg>
-                  <span className="hidden sm:inline">{t('testimonials.ariaPrev')}</span>
-                </button>
-
-                <span className="text-xs tabular-nums text-muted-foreground/60">
-                  {(zoomedIndex ?? 0) + 1} / {TESTIMONIAL_IMAGES.length}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setZoomedIndex((prev) =>
-                      prev !== null ? (prev + 1) % TESTIMONIAL_IMAGES.length : null,
-                    )
-                  }
-                  className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-md hover:bg-muted/30"
-                  aria-label={t('testimonials.ariaNext')}
-                >
-                  <span className="hidden sm:inline">{t('testimonials.ariaNext')}</span>
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      {/* Zoom viewer */}
+      <AnimatePresence>
+        {zoomedIndex !== null && (
+          <Lightbox
+            key="testimonial-lightbox"
+            images={TESTIMONIAL_IMAGES}
+            startIndex={zoomedIndex}
+            onClose={() => setZoomedIndex(null)}
+            reduceMotion={reduceMotion}
+            labels={{
+              prev: t('testimonials.ariaPrev'),
+              next: t('testimonials.ariaNext'),
+              close: t('testimonials.ariaClose'),
+              dialog: t('testimonials.ariaDialog'),
+              hint: t('testimonials.swipeHint'),
+            }}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 };

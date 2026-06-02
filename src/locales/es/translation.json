@@ -201,6 +201,9 @@
     "ariaPrev": "Testimonio anterior",
     "ariaNext": "Siguiente testimonio",
     "ariaGoTo": "Ir al testimonio {{index}}",
+    "ariaClose": "Cerrar visor",
+    "ariaDialog": "Visor de testimonios",
+    "swipeHint": "Desliza o usa ← → · Esc para cerrar",
     "reviewCount": "{{count}} reseñas",
     "hoverHint": "Haz clic en una reseña para ampliar"
   },
