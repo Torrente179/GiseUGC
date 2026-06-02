@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useEffect, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { m, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { Diamond, Sparkles, Zap, ArrowDownRight, ChevronDown, Play } from 'lucide-react';
+import { m, useReducedMotion } from 'framer-motion';
+import { ArrowDownRight, ChevronDown, Play } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import LiteSplitTextReveal from '@/components/motion/LiteSplitTextReveal';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
-import { premiumEase, easeOutExpo, springSnappy } from '@/components/motion/variants';
+import { premiumEase, easeOutExpo } from '@/components/motion/variants';
 import { LEGACY_REEL_CLIPS, posterThumbSrc } from '@/data/portfolio-clips';
 
 interface HeroProps {
@@ -24,13 +24,11 @@ const cinematicContainerVariants = {
 };
 
 const cinematicItemVariants = {
-  hidden: { opacity: 0, y: 30, filter: 'blur(8px)' },
+  hidden: { opacity: 0, y: 18 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 1.2, ease: easeOutExpo },
-    transitionEnd: { filter: 'none' },
+    transition: { duration: 0.72, ease: easeOutExpo },
   },
 };
 
@@ -49,8 +47,10 @@ type HeroPictureLayerProps = {
   altText: string;
 };
 
-// Shared full-bleed responsive hero image. Rendered statically on mobile /
-// reduced-motion, and inside the parallax wrapper on desktop.
+const HERO_REEL_CLIP = LEGACY_REEL_CLIPS[0];
+
+// Shared full-bleed responsive hero image. Kept static to avoid scroll-bound
+// repaint work on the site’s most expensive first viewport.
 const HeroPictureLayer = ({ heroImageLoaded, onImageLoad, altText }: HeroPictureLayerProps) => (
   <picture>
     <source
@@ -99,12 +99,9 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const shouldReduceMotion = useReducedMotion();
   const [heroImageLoaded, setHeroImageLoaded] = useState(false);
-  const [currentClipIndex, setCurrentClipIndex] = useState(0);
   const [isDesktopViewport, setIsDesktopViewport] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches,
   );
-  const containerRef = useRef<HTMLElement>(null);
-  const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
 
   const handleImageLoad = useCallback(() => setHeroImageLoaded(true), []);
 
@@ -120,56 +117,6 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     return () => mql.removeEventListener('change', update);
   }, []);
 
-  // Gate for the popLayout phone-frame reel. On a normal desktop load this is
-  // already true, so the reel mounts immediately. But when the desktop breakpoint
-  // becomes active at RUNTIME (window resize / tablet rotation), we defer the mount
-  // by one frame: mounting framer-motion's popLayout in the SAME commit as the
-  // lg-breakpoint layout change made its PopChild measure a not-yet-settled layout
-  // and throw, which unmounted the whole app (blank page).
-  const [reelReady, setReelReady] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches,
-  );
-  useEffect(() => {
-    if (!isDesktopViewport) {
-      setReelReady(false);
-      return;
-    }
-    if (reelReady) return;
-    const raf = requestAnimationFrame(() => setReelReady(true));
-    return () => cancelAnimationFrame(raf);
-  }, [isDesktopViewport, reelReady]);
-
-  // TikTok-style auto-cycling through all clips (desktop only)
-  useEffect(() => {
-    if (shouldReduceMotion || !isDesktopViewport) return;
-    const interval = setInterval(() => {
-      setCurrentClipIndex((prev) => (prev + 1) % LEGACY_REEL_CLIPS.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [shouldReduceMotion, isDesktopViewport]);
-
-  // Preload next video for smooth transitions (desktop only)
-  useEffect(() => {
-    if (!isDesktopViewport) return;
-    const nextIndex = (currentClipIndex + 1) % LEGACY_REEL_CLIPS.length;
-    const nextClip = LEGACY_REEL_CLIPS[nextIndex];
-    const nextVideo = videoRefs.current.get(nextIndex);
-    if (!nextVideo) {
-      const preloadEl = document.createElement('video');
-      preloadEl.src = nextClip.mobileSrc;
-      preloadEl.preload = 'auto';
-      preloadEl.muted = true;
-    }
-  }, [currentClipIndex, isDesktopViewport]);
-
-  const currentClip = LEGACY_REEL_CLIPS[currentClipIndex];
-
-  const heroPills = [
-    { icon: Sparkles, labelKey: 'hero.pillStrategy' },
-    { icon: Diamond, labelKey: 'hero.pillAesthetic' },
-    { icon: Zap, labelKey: 'hero.pillConversion' },
-  ];
-
   const handleContactCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (isMobileViewport()) {
       event.preventDefault();
@@ -179,37 +126,19 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     handleHashLinkClick(event);
   };
 
-  // Parallax: translate-only (no `scale`, which forces full-image re-rasterization
-  // every frame). The scroll listener is kept mounted at all breakpoints so the hero
-  // image never remounts when crossing the desktop boundary; the transform is simply
-  // not applied on mobile / reduced-motion.
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
-  });
-  const yImage = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
-  const enableParallax = isDesktopViewport && !shouldReduceMotion;
-
   return (
-    <section ref={containerRef} id="home" className="relative w-full overflow-hidden bg-black">
+    <section id="home" className="relative w-full overflow-hidden bg-black">
       {/* ─── 100vh Cinematic Window ─── */}
       <div className="relative min-h-[100svh] w-full flex flex-col justify-end">
         {/* Background Image Layer (poster / fallback / SEO) */}
-        <m.div
+        <div
           className="absolute inset-0 z-0 origin-top overflow-hidden"
-          style={enableParallax ? { y: yImage } : undefined}
         >
           <HeroPictureLayer
             heroImageLoaded={heroImageLoaded}
             onImageLoad={handleImageLoad}
             altText={t('hero.imageAlt')}
           />
-        </m.div>
-
-        {/* Animated Atmosphere Orbs */}
-        <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden" aria-hidden="true">
-          <div className="hero-orb hero-orb-1" />
-          <div className="hero-orb hero-orb-2" />
         </div>
 
         {/* Cinematic Overlays */}
@@ -283,50 +212,29 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               className="hidden lg:flex flex-col items-center gap-5 lg:self-end lg:-mr-4 xl:-mr-8"
               variants={shouldReduceMotion ? undefined : cinematicItemVariants}
             >
-              {/* Phone Frame with smooth cycling */}
+              {/* Phone Frame with one stable desktop-only reel */}
               <a href="#portfolio" onClick={handleHashLinkClick} className="hero-phone-frame cursor-pointer">
                 <div className="hero-phone-notch" />
-                {/*
-                  popLayout keeps the cross-fade clean (each exiting clip is removed
-                  after its fade — default mode leaks a <video> per cycle). Gated on
-                  `reelReady` (not isDesktopViewport directly) so that on a runtime
-                  breakpoint change the mount is deferred one frame past the layout
-                  settle — otherwise popLayout's PopChild measured mid-layout and
-                  crashed the page. `initial={false}` skips the enter animation so the
-                  reel never flashes in.
-                */}
-                {reelReady && (
-                  <AnimatePresence mode="popLayout" initial={false}>
-                    <m.video
-                      key={currentClip.id}
-                      className="hero-phone-video"
-                      src={currentClip.mobileSrc}
-                      poster={currentClip.posterSrc}
-                      muted
-                      loop
-                      playsInline
-                      autoPlay
-                      preload="metadata"
-                      ref={(el) => {
-                        if (el) videoRefs.current.set(currentClipIndex, el);
-                      }}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 1.2, ease: 'easeInOut' }}
-                    />
-                  </AnimatePresence>
+                {isDesktopViewport && (
+                  <video
+                    className="hero-phone-video"
+                    src={HERO_REEL_CLIP.mobileSrc}
+                    poster={HERO_REEL_CLIP.posterSrc}
+                    muted
+                    loop
+                    playsInline
+                    autoPlay={!shouldReduceMotion}
+                    preload="metadata"
+                  />
                 )}
                 {/* Play indicator overlay */}
-                <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-sm px-2.5 py-1">
+                <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1">
                   <Play className="w-2.5 h-2.5 text-white fill-white" />
                   <span className="text-[9px] font-bold uppercase tracking-prestige text-white/90">UGC Reel</span>
                 </div>
                 {/* Clip counter */}
-                <div className="absolute top-3 right-3 z-10 rounded-full bg-black/50 backdrop-blur-sm px-2.5 py-1">
-                  <span className="text-[9px] font-bold uppercase tracking-prestige text-white/80">
-                    {currentClipIndex + 1}/{LEGACY_REEL_CLIPS.length}
-                  </span>
+                <div className="absolute top-3 right-3 z-10 rounded-full bg-black/60 px-2.5 py-1">
+                  <span className="text-[9px] font-bold uppercase tracking-prestige text-white/80">Featured</span>
                 </div>
               </a>
 
@@ -382,12 +290,9 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.2, duration: 0.8, ease: premiumEase }}
         >
-          <m.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          >
+          <div>
             <ChevronDown className="w-5 h-5 text-white/40" />
-          </m.div>
+          </div>
         </m.div>
       </div>
 

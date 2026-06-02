@@ -10,6 +10,7 @@
     "prebuild:dev": "npm run video:catalog && npm run service:entrypoints",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "check:push": "npm run lint && npm run build",
     "check:mobile-regression": "node scripts/mobile-regression-check.mjs",
     "preview": "vite preview",
     "service:entrypoints": "node scripts/enrich-service-entrypoints.mjs",

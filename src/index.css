@@ -136,7 +136,8 @@
   }
 
   html {
-    /* Native scroll; in-page anchor jumps are JS-eased via useHashlessSectionNavigation */
+    /* Native smooth anchor scroll with fixed-header offset */
+    scroll-padding-top: 88px;
   }
 
   body {
@@ -274,8 +275,8 @@
   }
 
   .glass {
-    @apply backdrop-blur-[12px] border border-border/60 shadow-sm;
-    background-color: hsl(var(--pure-linen) / 0.72);
+    @apply border border-border/60 shadow-sm;
+    background-color: hsl(var(--pure-linen) / 0.86);
   }
 
   .dark .glass {
@@ -284,8 +285,8 @@
   }
 
   .glass-dark {
-    @apply backdrop-blur-md border border-border/80;
-    background-color: hsl(var(--card) / 0.82);
+    @apply border border-border/80;
+    background-color: hsl(var(--card) / 0.94);
   }
 
   .theater-control {
@@ -294,7 +295,6 @@
     background-color: hsl(var(--theater-control-bg) / 0.82);
     border: 1px solid hsl(var(--theater-control-border) / 0.88);
     color: hsl(var(--theater-control-fg));
-    backdrop-filter: blur(8px);
     box-shadow: 0 10px 22px -16px rgba(0, 0, 0, 0.75);
   }
 
@@ -318,7 +318,6 @@
     text-transform: uppercase;
     letter-spacing: 0.15em;
     line-height: 1;
-    backdrop-filter: blur(6px);
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.14);
   }
 
@@ -332,12 +331,7 @@
 
   @media (max-width: 767px) {
     .theater-control {
-      backdrop-filter: blur(6px);
       box-shadow: 0 8px 18px -14px rgba(0, 0, 0, 0.66);
-    }
-
-    .theater-meta-chip {
-      backdrop-filter: blur(4px);
     }
   }
 
@@ -381,7 +375,7 @@
   }
 
   .studio-panel {
-    @apply rounded-[1.75rem] border border-border/80 bg-card/80 backdrop-blur-sm shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.6)];
+    @apply rounded-[1.75rem] border border-border/80 bg-card/95 shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.6)];
   }
 
   .transition-all-custom {
@@ -427,11 +421,11 @@
   }
 
   .ultra-glass-panel {
-    @apply rounded-[1.25rem] border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)];
+    @apply rounded-[1.25rem] border border-white/10 bg-black/20 shadow-[0_24px_52px_-24px_rgba(0,0,0,0.55)];
   }
 
   .hero-chip-cinematic {
-    @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/20 px-4 py-2 text-[10px] font-bold uppercase tracking-prestige text-white/90 backdrop-blur-md cursor-default;
+    @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-4 py-2 text-[10px] font-bold uppercase tracking-prestige text-white/90 cursor-default;
     transition: border-color var(--duration-fast) var(--ease-out-expo), background-color var(--duration-fast) var(--ease-out-expo), color var(--duration-fast) var(--ease-out-expo);
   }
 
@@ -488,63 +482,13 @@
     display: block;
   }
 
-  /* ─── Hero Atmospheric Orbs ─── */
-  .hero-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.18;
-    will-change: transform;
-    backface-visibility: hidden;
-  }
-
-  .hero-orb-1 {
-    width: 45vw;
-    height: 45vw;
-    max-width: 600px;
-    max-height: 600px;
-    bottom: -10%;
-    left: -8%;
-    background: radial-gradient(circle, hsl(var(--coastal-teal) / 0.6), transparent 70%);
-    animation: hero-orb-drift-1 14s ease-in-out infinite;
-  }
-
-  .hero-orb-2 {
-    width: 35vw;
-    height: 35vw;
-    max-width: 480px;
-    max-height: 480px;
-    top: 10%;
-    right: -5%;
-    background: radial-gradient(circle, hsl(var(--washed-khaki) / 0.5), transparent 70%);
-    animation: hero-orb-drift-2 18s ease-in-out infinite;
-  }
-
-  @keyframes hero-orb-drift-1 {
-    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-    33% { transform: translate3d(4vw, -3vw, 0) scale(1.08); }
-    66% { transform: translate3d(-2vw, 2vw, 0) scale(0.95); }
-  }
-
-  @keyframes hero-orb-drift-2 {
-    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-    40% { transform: translate3d(-3vw, 4vw, 0) scale(1.05); }
-    70% { transform: translate3d(2vw, -2vw, 0) scale(0.92); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero-orb {
-      animation: none;
-    }
-  }
-
   .cafe-panel {
-    @apply rounded-[1.35rem] border border-border/90 bg-card backdrop-blur-sm elegant-shadow;
+    @apply rounded-[1.35rem] border border-border/90 bg-card elegant-shadow;
     background-color: hsl(var(--card) / 0.98);
   }
 
   .cafe-card {
-    @apply rounded-2xl border border-border/90 bg-card backdrop-blur-sm elegant-shadow;
+    @apply rounded-2xl border border-border/90 bg-card elegant-shadow;
     transition: border-color 350ms var(--ease-out-expo), box-shadow 350ms var(--ease-out-expo);
     background-color: hsl(var(--card) / 0.98);
   }
@@ -872,25 +816,8 @@
     }
   }
 
-  /* ─── Skeleton Shimmer ─── */
-  @keyframes skeleton-shimmer {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
-  }
-
   .skeleton-shimmer {
-    background: linear-gradient(
-      90deg,
-      hsl(var(--muted) / 0.15) 0%,
-      hsl(var(--muted) / 0.35) 40%,
-      hsl(var(--muted) / 0.15) 80%
-    );
-    background-size: 200% 100%;
-    animation: skeleton-shimmer 1.8s ease-in-out infinite;
+    background: hsl(var(--muted) / 0.22);
   }
 
   /* ─── Navbar: hide on desktop when theater (video preview) is open ─── */
@@ -925,16 +852,6 @@
     right: 0;
   }
 
-  /* ─── CTA Button Shimmer ─── */
-  @keyframes cta-shimmer {
-    0% {
-      transform: translate3d(-100%, 0, 0) skewX(-15deg);
-    }
-    100% {
-      transform: translate3d(200%, 0, 0) skewX(-15deg);
-    }
-  }
-
   .btn-shimmer {
     position: relative;
     overflow: hidden;
@@ -942,48 +859,11 @@
   }
 
   .btn-shimmer::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsl(var(--pure-linen) / 0.18),
-      transparent
-    );
-    transform: translate3d(-100%, 0, 0) skewX(-15deg);
-    animation: cta-shimmer 4.1s cubic-bezier(0.22, 1, 0.36, 1) infinite;
-    animation-delay: 1.5s;
-    pointer-events: none;
-    backface-visibility: hidden;
-  }
-
-  /* ─── Dock Breathe ─── */
-  @keyframes dock-breathe {
-    0%, 100% {
-      transform: scale3d(1, 1, 1);
-    }
-    50% {
-      transform: scale3d(1.01, 1.01, 1);
-    }
+    content: none;
   }
 
   .dock-breathe {
-    animation: dock-breathe 4.6s ease-in-out infinite;
     backface-visibility: hidden;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .dock-breathe {
-      animation: none;
-    }
-
-    .btn-shimmer::after {
-      animation: none;
-    }
   }
 
   /* ─── Image Load Fade-In ─── */
@@ -1135,14 +1015,12 @@
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     color: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(6px);
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.22);
   }
 
   .st-chip--dark {
     border-color: hsl(var(--pure-linen) / 0.18);
     color: hsl(var(--pure-linen) / 0.5);
-    backdrop-filter: none;
     background: hsl(var(--pure-linen) / 0.04);
   }
 
@@ -1215,15 +1093,14 @@
     overflow: hidden;
   }
 
-  /* Decorative gradient orbs behind hero */
+  /* Static decorative gradients behind hero */
   .st-hero::before,
   .st-hero::after {
     content: '';
     position: absolute;
     border-radius: 50%;
     pointer-events: none;
-    filter: blur(80px);
-    opacity: 0.5;
+    opacity: 0.22;
   }
 
   .st-hero::before {
@@ -1418,7 +1295,6 @@
     height: 3.5rem;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
     transition: transform var(--duration-fast) var(--ease-out-expo),
@@ -1544,7 +1420,6 @@
       background: hsl(var(--background) / 0.7);
       border: 1px solid hsl(var(--border) / 0.25);
       border-radius: 1.25rem;
-      backdrop-filter: blur(8px);
       box-shadow: 0 20px 50px -28px hsl(var(--foreground) / 0.12);
     }
 
@@ -1632,8 +1507,7 @@
     height: 24rem;
     border-radius: 999px;
     background: radial-gradient(circle, hsl(var(--secondary) / 0.18) 0%, transparent 68%);
-    filter: blur(20px);
-    opacity: 0.65;
+    opacity: 0.24;
   }
 
   .dark .st-proof-wall::before,
@@ -1776,7 +1650,6 @@
     background: hsl(var(--pure-linen) / 0.9);
     border-color: rgba(255, 255, 255, 0.65);
     box-shadow: 0 18px 34px -22px rgba(0, 0, 0, 0.42);
-    backdrop-filter: blur(14px);
   }
 
   .dark .st-play-btn--proof {

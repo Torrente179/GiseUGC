@@ -112,33 +112,27 @@ export const revealFromRight = (distance = 30, duration = DURATION_MEDIUM, delay
   },
 });
 
-/** Blur-in: filter-blur + opacity (premium content reveal — the Apple signature) */
+/** Kept for API compatibility: now GPU-safe opacity only, no paint-heavy filter blur. */
 export const blurIn = (duration = 0.66, delay = 0): Variants => ({
   hidden: {
     opacity: 0,
-    filter: 'blur(5px)',
   },
   visible: {
     opacity: 1,
-    filter: 'blur(0px)',
     transition: { duration, delay, ease: easeOutExpo },
-    transitionEnd: { filter: 'none' },
   },
 });
 
-/** Blur-reveal-up: combines translate-Y + blur + opacity for premium section entrances */
+/** Kept for API compatibility: now translate-Y + opacity only, no paint-heavy filter blur. */
 export const blurRevealUp = (distance = 18, duration = 0.66, delay = 0): Variants => ({
   hidden: {
     opacity: 0,
     y: distance,
-    filter: 'blur(4px)',
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration, delay, ease: easeOutExpo },
-    transitionEnd: { filter: 'none' },
   },
 });
 

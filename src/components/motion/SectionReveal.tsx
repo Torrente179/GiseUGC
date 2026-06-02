@@ -18,7 +18,7 @@ interface SectionRevealProps {
   delay?: number;
   /** Viewport intersection threshold to trigger */
   amount?: number;
-  /** Include blur transition (the premium "emerging from soft focus" feel) */
+  /** Legacy flag retained for callers; reveal motion no longer uses paint-heavy blur. */
   blur?: boolean;
   /** Distance in px for directional reveals */
   distance?: number;
@@ -32,14 +32,10 @@ const getDirectionalVariants = (
   direction: RevealDirection,
   distance: number,
   duration: number,
-  blur: boolean,
+  _blur: boolean,
 ) => {
-  const blurHidden = blur ? { filter: 'blur(4px)' } : {};
-  const blurVisible = blur ? { filter: 'blur(0px)' } : {};
-  const transitionEnd = blur ? { filter: 'none' } : {};
-
-  const baseHidden: Record<string, unknown> = { opacity: 0, ...blurHidden };
-  const baseVisible: Record<string, unknown> = { opacity: 1, ...blurVisible };
+  const baseHidden: Record<string, unknown> = { opacity: 0 };
+  const baseVisible: Record<string, unknown> = { opacity: 1 };
 
   switch (direction) {
     case 'up':
@@ -49,7 +45,6 @@ const getDirectionalVariants = (
           ...baseVisible,
           y: 0,
           transition: { duration, ease: easeOutExpo },
-          transitionEnd,
         },
       };
     case 'left':
@@ -59,7 +54,6 @@ const getDirectionalVariants = (
           ...baseVisible,
           x: 0,
           transition: { duration, ease: easeOutExpo },
-          transitionEnd,
         },
       };
     case 'right':
@@ -69,7 +63,6 @@ const getDirectionalVariants = (
           ...baseVisible,
           x: 0,
           transition: { duration, ease: easeOutExpo },
-          transitionEnd,
         },
       };
     case 'scale':
@@ -79,7 +72,6 @@ const getDirectionalVariants = (
           ...baseVisible,
           scale: 1,
           transition: { duration, ease: easeOutExpo },
-          transitionEnd,
         },
       };
   }

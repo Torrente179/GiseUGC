@@ -86,37 +86,22 @@ const FloatingContactDock = () => {
 
   useEffect(() => {
     const desktopMediaQuery = window.matchMedia('(min-width: 768px)');
-    let rafId: number | null = null;
-    let cachedFooter: HTMLElement | null = null;
+    let observer: IntersectionObserver | null = null;
+    let resizeFrameId: number | null = null;
 
-    // Forced-reflow mitigation: the previous version re-queried `#contact` and
-    // read `offsetHeight` on every scroll tick. Now we cache the visible footer
-    // reference and only refresh it on resize / DOM mutations. Scroll handlers
-    // only read `getBoundingClientRect` (still a layout read, but cheaper and
-    // unavoidable for bottom-of-page detection).
-    // Cache hit path skips `offsetHeight` (layout read) — only validates on
-    // resize/DOM-detach. This keeps scroll-tick work to a single `getBoundingClientRect`.
     const resolveFooter = (): HTMLElement | null => {
-      if (cachedFooter && cachedFooter.isConnected) {
-        return cachedFooter;
-      }
       const candidates = document.querySelectorAll<HTMLElement>('#contact');
       for (const candidate of candidates) {
         if (candidate.offsetHeight > 0) {
-          cachedFooter = candidate;
           return candidate;
         }
       }
-      cachedFooter = null;
       return null;
     };
 
-    const invalidateFooter = () => {
-      cachedFooter = null;
-    };
-
-    const evaluateDockState = () => {
-      rafId = null;
+    const connectObserver = () => {
+      observer?.disconnect();
+      observer = null;
 
       if (!desktopMediaQuery.matches) {
         setIsDesktopDockGhosted(false);
@@ -124,54 +109,53 @@ const FloatingContactDock = () => {
       }
 
       const footer = resolveFooter();
-      const isAtAbsoluteBottom = footer
-        ? footer.getBoundingClientRect().bottom <= window.innerHeight + 2
-        : (() => {
-            const scrollingElement = document.scrollingElement ?? document.documentElement;
-            const maxScrollTop = Math.max(0, scrollingElement.scrollHeight - window.innerHeight);
-            return window.scrollY >= maxScrollTop - 2;
-          })();
+      if (!footer || typeof IntersectionObserver === 'undefined') {
+        setIsDesktopDockGhosted(false);
+        return;
+      }
 
-      setIsDesktopDockGhosted((previous) =>
-        previous === isAtAbsoluteBottom ? previous : isAtAbsoluteBottom
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          const shouldGhost = Boolean(entry?.isIntersecting);
+          setIsDesktopDockGhosted((previous) => (previous === shouldGhost ? previous : shouldGhost));
+        },
+        {
+          root: null,
+          rootMargin: '0px 0px -18% 0px',
+          threshold: 0,
+        },
       );
-    };
-
-    const requestDockStateUpdate = () => {
-      if (rafId !== null) return;
-      rafId = window.requestAnimationFrame(evaluateDockState);
+      observer.observe(footer);
     };
 
     const handleResize = () => {
-      invalidateFooter();
-      requestDockStateUpdate();
+      if (resizeFrameId !== null) return;
+      resizeFrameId = window.requestAnimationFrame(() => {
+        resizeFrameId = null;
+        connectObserver();
+      });
     };
 
-    const handleMediaChange = () => {
-      requestDockStateUpdate();
-    };
-
-    window.addEventListener('scroll', requestDockStateUpdate, { passive: true });
     window.addEventListener('resize', handleResize);
     if (typeof desktopMediaQuery.addEventListener === 'function') {
-      desktopMediaQuery.addEventListener('change', handleMediaChange);
+      desktopMediaQuery.addEventListener('change', connectObserver);
     } else {
-      desktopMediaQuery.addListener(handleMediaChange);
+      desktopMediaQuery.addListener(connectObserver);
     }
-    requestDockStateUpdate();
+    connectObserver();
 
     return () => {
-      window.removeEventListener('scroll', requestDockStateUpdate);
       window.removeEventListener('resize', handleResize);
       if (typeof desktopMediaQuery.removeEventListener === 'function') {
-        desktopMediaQuery.removeEventListener('change', handleMediaChange);
+        desktopMediaQuery.removeEventListener('change', connectObserver);
       } else {
-        desktopMediaQuery.removeListener(handleMediaChange);
+        desktopMediaQuery.removeListener(connectObserver);
       }
 
-      if (rafId !== null) {
-        window.cancelAnimationFrame(rafId);
+      if (resizeFrameId !== null) {
+        window.cancelAnimationFrame(resizeFrameId);
       }
+      observer?.disconnect();
     };
   }, []);
 
@@ -313,7 +297,7 @@ const FloatingContactDock = () => {
         >
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-1 rounded-full bg-primary/18 blur-md opacity-70 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100"
+            className="pointer-events-none absolute -inset-1 rounded-full bg-primary/12 opacity-70 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100"
           />
           <MessageCircle
             className={`absolute h-[22px] w-[22px] transition-all duration-300 ${
@@ -330,10 +314,10 @@ const FloatingContactDock = () => {
 
       {/* Desktop: horizontal row */}
       <div
-        className={`hidden md:flex dock-breathe items-center gap-3 rounded-full border border-white/40 bg-card/95 px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform,filter] duration-500 ${
+        className={`hidden md:flex dock-breathe items-center gap-3 rounded-full border border-white/40 bg-card/95 px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform] duration-500 ${
           isDesktopDockGhosted
-            ? 'opacity-10 scale-[0.94] translate-y-2 blur-[1.5px] pointer-events-none'
-            : 'opacity-100 scale-100 translate-y-0 blur-0 pointer-events-auto'
+            ? 'opacity-10 scale-[0.94] translate-y-2 pointer-events-none'
+            : 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
         }`}
         style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
       >

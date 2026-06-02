@@ -79,20 +79,53 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
   const onHomePage = isHomePath(location.pathname);
 
   useEffect(() => {
-    const syncScrolledState = () => {
-      const nextIsScrolled = window.scrollY > SCROLL_THRESHOLD;
+    if (typeof IntersectionObserver === 'undefined') {
+      let frameId: number | null = null;
+      const syncScrolledState = () => {
+        frameId = null;
+        const nextIsScrolled = window.scrollY > SCROLL_THRESHOLD;
+        setIsScrolled((previousValue) =>
+          previousValue === nextIsScrolled ? previousValue : nextIsScrolled,
+        );
+      };
+      const requestScrolledState = () => {
+        if (frameId !== null) return;
+        frameId = window.requestAnimationFrame(syncScrolledState);
+      };
+
+      syncScrolledState();
+      window.addEventListener('scroll', requestScrolledState, { passive: true });
+      window.addEventListener('resize', requestScrolledState);
+
+      return () => {
+        window.removeEventListener('scroll', requestScrolledState);
+        window.removeEventListener('resize', requestScrolledState);
+        if (frameId !== null) window.cancelAnimationFrame(frameId);
+      };
+    }
+
+    const sentinel = document.createElement('div');
+    sentinel.setAttribute('aria-hidden', 'true');
+    sentinel.style.position = 'absolute';
+    sentinel.style.top = `${SCROLL_THRESHOLD}px`;
+    sentinel.style.left = '0';
+    sentinel.style.width = '1px';
+    sentinel.style.height = '1px';
+    sentinel.style.pointerEvents = 'none';
+    document.body.prepend(sentinel);
+
+    const observer = new IntersectionObserver(([entry]) => {
+      const nextIsScrolled = !entry?.isIntersecting;
       setIsScrolled((previousValue) =>
         previousValue === nextIsScrolled ? previousValue : nextIsScrolled,
       );
-    };
+    });
 
-    syncScrolledState();
-    window.addEventListener('scroll', syncScrolledState, { passive: true });
-    window.addEventListener('resize', syncScrolledState);
+    observer.observe(sentinel);
 
     return () => {
-      window.removeEventListener('scroll', syncScrolledState);
-      window.removeEventListener('resize', syncScrolledState);
+      observer.disconnect();
+      sentinel.remove();
     };
   }, []);
 
@@ -395,7 +428,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
         }`}
       >
         <div
-          className={`absolute inset-0 bg-background/96 backdrop-blur-md transition-opacity duration-500 ${
+          className={`absolute inset-0 bg-background transition-opacity duration-500 ${
             mobileMenuOpen ? 'opacity-100' : 'opacity-0'
           }`}
           style={mobileMenuOpen ? { opacity: mobileMenuBackdropOpacity } : undefined}
@@ -464,8 +497,6 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
             }}
           >
             <div className="relative overflow-hidden rounded-[1.7rem] border border-border/80 bg-gradient-to-br from-card via-card to-secondary/55 p-4 shadow-[0_28px_46px_-34px_hsl(var(--foreground)/0.85)]">
-              <div className="pointer-events-none absolute -left-8 -top-8 h-24 w-24 rounded-full bg-primary/15 blur-2xl" />
-              <div className="pointer-events-none absolute -right-6 -bottom-8 h-20 w-20 rounded-full bg-accent/15 blur-2xl" />
               <p className="section-label text-muted-foreground">{t('navbar.hireMe')}</p>
               <div className="mt-3 grid grid-cols-4 gap-2">
                 {contactPlatforms.map((platform) => (

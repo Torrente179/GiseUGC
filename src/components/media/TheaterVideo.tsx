@@ -232,7 +232,7 @@ const TheaterVideo = memo(
           onClick={togglePlayback}
           aria-label={isPlaying ? 'Pause' : 'Play'}
         >
-          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/45 bg-black/40 backdrop-blur-sm shadow-[0_10px_24px_-16px_rgba(0,0,0,0.88)]">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/45 bg-black/55 shadow-[0_10px_24px_-16px_rgba(0,0,0,0.88)]">
             {isPlaying ? (
               <Pause className="h-5 w-5 text-white/90" fill="currentColor" />
             ) : (
@@ -242,7 +242,7 @@ const TheaterVideo = memo(
         </button>
         <button
           type="button"
-          className="absolute left-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/40 bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/55"
+          className="absolute left-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/40 bg-black/55 text-white transition-colors hover:bg-black/70"
           onClick={toggleMute}
           aria-label={isMuted ? 'Unmute video' : 'Mute video'}
         >
