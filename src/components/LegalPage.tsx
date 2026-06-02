@@ -133,7 +133,7 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
                 <p className="max-w-3xl text-base font-light leading-[1.9] text-foreground/78 md:text-[1.04rem]">
                   {page.intro}
                 </p>
-                <div className="rounded-[1.5rem] border border-border/70 bg-card/92 px-5 py-4 shadow-[0_24px_48px_-40px_hsl(var(--foreground)/0.55)]">
+                <div className="rounded-[1.5rem] border border-border/70 bg-card/70 px-5 py-4 shadow-[0_24px_48px_-40px_hsl(var(--foreground)/0.55)] backdrop-blur-sm">
                   <p className="section-label mb-2 text-muted-foreground">{labels.audience}</p>
                   <p className="text-sm font-light leading-[1.85] text-foreground/78 md:text-[0.98rem]">
                     {page.audienceNote}

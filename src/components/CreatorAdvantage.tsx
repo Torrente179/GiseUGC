@@ -1,4 +1,4 @@
-import { useCallback, useState, type MouseEvent } from 'react';
+import { useCallback, useMemo, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Play } from 'lucide-react';
 import { m, useReducedMotion } from 'framer-motion';
@@ -6,21 +6,36 @@ import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
-import { r2Poster } from '@/data/portfolio-clips';
+import LazyVideo from '@/components/media/LazyVideo';
+import VIDEO_LQIP from '@/data/video-lqip';
+import { r2Poster, r2PreviewVideo } from '@/data/portfolio-clips';
 
 interface CollageClip {
   id: number;
   labelKey: string;
+  previewSrc: string;
   posterSrc: string;
   desktopBaseClass: string;
   desktopHoverClass: string;
   mobileClass: string;
 }
 
+type NavigatorConnection = {
+  effectiveType?: 'slow-2g' | '2g' | '3g' | '4g';
+  saveData?: boolean;
+};
+
+const getLqip = (url: string) => {
+  const filename = url.split('/').pop() ?? '';
+  const key = filename.replace(/-preview\.mp4$/, '').replace(/-poster\.jpg$/, '').replace(/\.mp4$/, '');
+  return VIDEO_LQIP[key] || undefined;
+};
+
 const COLLAGE_CLIPS: CollageClip[] = [
   {
     id: 1,
     labelKey: 'portfolio.collageClip1',
+    previewSrc: r2PreviewVideo('ugc-clothing-showcase-1.mp4'),
     posterSrc: r2Poster('ugc-clothing-showcase-1-poster.jpg'),
     desktopBaseClass: 'top-[18%] left-[6.5%] w-[31%] -rotate-[8deg] z-20',
     desktopHoverClass: 'top-[16%] left-[12%] w-[30%] -rotate-[4deg] z-30',
@@ -29,6 +44,7 @@ const COLLAGE_CLIPS: CollageClip[] = [
   {
     id: 2,
     labelKey: 'portfolio.collageClip2',
+    previewSrc: r2PreviewVideo('ugc-clothing-showcase-2.mp4'),
     posterSrc: r2Poster('ugc-clothing-showcase-2-poster.jpg'),
     desktopBaseClass: 'top-[8%] left-1/2 w-[30.5%] -translate-x-1/2 rotate-0 z-40',
     desktopHoverClass: 'top-[6%] left-1/2 w-[31.5%] -translate-x-1/2 rotate-0 z-50 scale-[1.035]',
@@ -37,6 +53,7 @@ const COLLAGE_CLIPS: CollageClip[] = [
   {
     id: 3,
     labelKey: 'portfolio.collageClip3',
+    previewSrc: r2PreviewVideo('ugc-clothing-showcase-3.mp4'),
     posterSrc: r2Poster('ugc-clothing-showcase-3-poster.jpg'),
     desktopBaseClass: 'top-[18%] right-[6.5%] w-[31%] rotate-[8deg] z-20',
     desktopHoverClass: 'top-[16%] right-[12%] w-[30%] rotate-[4deg] z-30',
@@ -49,6 +66,24 @@ const CreatorAdvantage = () => {
   const shouldReduceMotion = useReducedMotion();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const [collageHovered, setCollageHovered] = useState(false);
+
+  const connectionProfile = useMemo(() => {
+    if (typeof navigator === 'undefined') {
+      return { constrained: false, slow: false };
+    }
+
+    const connection = (navigator as Navigator & { connection?: NavigatorConnection }).connection;
+    if (!connection) {
+      return { constrained: false, slow: false };
+    }
+
+    const constrained =
+      Boolean(connection.saveData) ||
+      connection.effectiveType === 'slow-2g' ||
+      connection.effectiveType === '2g';
+    const slow = constrained || connection.effectiveType === '3g';
+    return { constrained, slow };
+  }, []);
 
   const handleContactCtaClick = useCallback(
     (event: MouseEvent<HTMLAnchorElement>) => {
@@ -92,21 +127,21 @@ const CreatorAdvantage = () => {
       />
       <div className="absolute inset-0 bg-white/10 dark:bg-slate-950/18" aria-hidden="true" />
       <div
-        className={`absolute left-[9%] top-[11%] rounded-full ${
+        className={`absolute left-[9%] top-[11%] rounded-full blur-3xl ${
           isMobile ? 'h-28 w-28 opacity-75' : 'h-40 w-40 opacity-70'
         }`}
         aria-hidden="true"
         style={{ background: 'radial-gradient(circle, hsl(var(--primary) / 0.34) 0%, transparent 72%)' }}
       />
       <div
-        className={`absolute right-[-5%] top-[20%] rounded-full ${
+        className={`absolute right-[-5%] top-[20%] rounded-full blur-3xl ${
           isMobile ? 'h-32 w-32 opacity-45' : 'h-48 w-48 opacity-40'
         }`}
         aria-hidden="true"
         style={{ background: 'radial-gradient(circle, hsl(var(--accent) / 0.32) 0%, transparent 72%)' }}
       />
       <div
-        className={`absolute left-1/2 top-[16%] -translate-x-1/2 rounded-full ${
+        className={`absolute left-1/2 top-[16%] -translate-x-1/2 rounded-full blur-3xl ${
           isMobile ? 'h-[42%] w-[68%] opacity-35' : 'h-[54%] w-[56%] opacity-40'
         }`}
         aria-hidden="true"
@@ -115,7 +150,7 @@ const CreatorAdvantage = () => {
 
       <div className="relative z-20 flex h-full flex-col">
         <div className="pointer-events-none relative z-30 self-start">
-          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/60 bg-white/74 px-3 py-2 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.45)] dark:border-white/10 dark:bg-slate-950/72 sm:px-4">
+          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/60 bg-white/56 px-3 py-2 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.45)] backdrop-blur-md dark:border-white/10 dark:bg-slate-950/38 sm:px-4">
             <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_0_5px_hsl(var(--primary)/0.15)]" aria-hidden="true" />
             <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/74 sm:text-[11px]">
               {collageStatusLabel}
@@ -129,7 +164,7 @@ const CreatorAdvantage = () => {
           }`}
         >
           <div
-            className={`absolute left-1/2 -translate-x-1/2 rounded-full ${
+            className={`absolute left-1/2 -translate-x-1/2 rounded-full blur-3xl ${
               isMobile ? 'bottom-[13%] h-[17%] w-[82%] opacity-25' : 'bottom-[15%] h-[18%] w-[78%] opacity-30'
             }`}
             aria-hidden="true"
@@ -159,15 +194,23 @@ const CreatorAdvantage = () => {
                 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/10" aria-hidden="true" />
-                <img
+                <LazyVideo
                   className="h-full w-full object-cover pointer-events-none"
-                  src={clip.posterSrc}
-                  alt={t(clip.labelKey)}
-                  loading="lazy"
-                  decoding="async"
+                  src={clip.previewSrc}
+                  poster={clip.posterSrc}
+                  lqip={getLqip(clip.previewSrc)}
+                  muted
+                  autoPlay
+                  loop
+                  playsInline
+                  preload={isMobile ? 'metadata' : connectionProfile.slow ? 'metadata' : 'auto'}
+                  loadWhenVisible
+                  rootMargin={isMobile ? '120px 0px' : undefined}
+                  pauseOffscreen
+                  aria-label={t(clip.labelKey)}
                 />
                 <div className="absolute inset-0 ring-1 ring-inset ring-white/18" aria-hidden="true" />
-                <div className="pointer-events-none absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/65 bg-white/78 text-foreground/78 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.4)] dark:border-white/12 dark:bg-slate-950/72">
+                <div className="pointer-events-none absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/65 bg-white/68 text-foreground/78 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.4)] backdrop-blur-sm dark:border-white/12 dark:bg-slate-950/42">
                   <Play className="h-3.5 w-3.5 translate-x-[1px]" fill="currentColor" />
                 </div>
               </div>
@@ -176,7 +219,7 @@ const CreatorAdvantage = () => {
         </div>
 
         <div className={`relative z-30 ${isMobile ? 'mt-1.5' : 'mt-2'}`}>
-          <div className="rounded-[1.35rem] border border-white/60 bg-white/76 p-3.5 shadow-[0_18px_40px_-30px_rgba(0,0,0,0.5)] dark:border-white/10 dark:bg-slate-950/72 sm:p-4">
+          <div className="rounded-[1.35rem] border border-white/60 bg-white/58 p-3.5 shadow-[0_18px_40px_-30px_rgba(0,0,0,0.5)] backdrop-blur-md dark:border-white/10 dark:bg-slate-950/38 sm:p-4">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="section-label mb-2 text-foreground/45">{t('portfolio.collageEyebrow')}</p>
@@ -204,7 +247,7 @@ const CreatorAdvantage = () => {
               {COLLAGE_CLIPS.map((clip) => (
                 <div
                   key={clip.id}
-                  className={`rounded-full border border-foreground/8 bg-white/64 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/68 dark:border-white/10 dark:bg-white/5 dark:text-foreground/72 ${
+                  className={`rounded-full border border-foreground/8 bg-white/44 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/68 backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-foreground/72 ${
                     isMobile ? 'text-center' : 'inline-flex w-full min-w-0 items-center justify-center gap-2 px-3'
                   }`}
                 >

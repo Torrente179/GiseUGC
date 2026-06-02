@@ -193,13 +193,15 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
     const lqipStyle: React.CSSProperties | undefined = showLqip
       ? {
           ...style,
+          filter: 'blur(12px)',
+          transform: 'scale(1.05)',
           opacity: 1,
-          transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
         }
       : {
           ...style,
           opacity: mediaReady || !lqip ? 1 : 0,
-          transition: 'opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
         };
 
     return (

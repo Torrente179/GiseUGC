@@ -728,7 +728,7 @@ const VerticalLandingPage = ({ verticalId, locale }: VerticalLandingPageProps) =
         {/* ── Theater overlay (shared) ── */}
         {activeProofItem && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4" onClick={closeProofTheater}>
-            <div className="absolute inset-0" style={{ backgroundColor: 'hsl(var(--theater-backdrop) / 0.86)' }} />
+            <div className="absolute inset-0 backdrop-blur-[6px] md:backdrop-blur-[10px]" style={{ backgroundColor: 'hsl(var(--theater-backdrop) / 0.74)' }} />
             <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)' }} />
             <div className="relative w-full max-w-[430px]">
               <button type="button" className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigateProofTheater(-1); }} aria-label={labels.previewPrev}><ChevronLeft className="h-4 w-4 md:h-5 md:w-5" /></button>

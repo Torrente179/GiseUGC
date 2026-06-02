@@ -58,7 +58,7 @@ const FAQ = () => {
           <Accordion
             type="single"
             collapsible
-            className="w-full max-w-4xl mx-auto rounded-[1.25rem] border border-border/70 bg-card/92 px-5 md:px-7"
+            className="w-full max-w-4xl mx-auto rounded-[1.25rem] border border-border/70 bg-card/70 px-5 md:px-7 backdrop-blur-[1px]"
           >
             {Array.isArray(items) &&
               items.map((item, index) => (

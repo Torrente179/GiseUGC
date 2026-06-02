@@ -123,7 +123,7 @@ const Services = () => {
             <MotionLink
               key={service.titleKey}
               to={getServicePath(servicePageByCard[index], locale)}
-              className="group rounded-[1.25rem] md:rounded-[1.5rem] border border-border/70 bg-card/88 p-5 md:p-8 transition-[border-color,box-shadow,transform] duration-[350ms] hover:border-primary/30 hover:shadow-xl"
+              className="group rounded-[1.25rem] md:rounded-[1.5rem] border border-border/70 bg-card/50 p-5 md:p-8 backdrop-blur-md transition-[border-color,box-shadow] duration-[350ms] hover:border-primary/30 hover:shadow-xl"
               style={{ transitionTimingFunction: 'var(--ease-out-expo)' }}
               variants={revealUp(18, 0.45)}
               {...(isMobile ? {
