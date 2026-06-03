@@ -26,7 +26,7 @@ const NavbarControls = ({ compact = false, currentLocale, onLocaleChange }: Navb
   return (
     <div
       className={cn(
-        'nav-control-rail inline-flex items-center rounded-full border border-border/25 bg-background/45 backdrop-blur-md',
+        'nav-control-rail inline-flex items-center',
         compact ? 'h-9 gap-0 p-0.5' : 'h-10 gap-0 p-0.5',
       )}
       role="group"

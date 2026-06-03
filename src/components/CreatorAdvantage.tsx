@@ -354,7 +354,7 @@ const CreatorAdvantage = () => {
             <m.a
               href="#contact"
               onClick={handleContactCtaClick}
-              className="btn-primary-nordic px-7 py-3"
+              className="btn-primary-nordic btn-primary-nordic--lg"
               whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.02 }}
               whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
               transition={springHoverTransition}

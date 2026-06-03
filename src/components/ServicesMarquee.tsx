@@ -650,7 +650,7 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
                 <div className="absolute inset-y-0 left-4 md:left-12 z-30 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
                         onClick={() => scroll('left')}
-                        className="h-12 w-12 rounded-full bg-card/80 border border-border/50 flex items-center justify-center text-primary backdrop-blur-md shadow-lg hover:bg-primary hover:text-white transition-all hover:scale-110"
+                        className="btn-icon-pill h-12 w-12 text-primary hover:bg-primary hover:text-primary-foreground"
                         aria-label="Scroll left"
                     >
                         <ChevronLeft className="h-6 w-6" />
@@ -659,7 +659,7 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
                 <div className="absolute inset-y-0 right-4 md:right-12 z-30 flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
                         onClick={() => scroll('right')}
-                        className="h-12 w-12 rounded-full bg-card/80 border border-border/50 flex items-center justify-center text-primary backdrop-blur-md shadow-lg hover:bg-primary hover:text-white transition-all hover:scale-110"
+                        className="btn-icon-pill h-12 w-12 text-primary hover:bg-primary hover:text-primary-foreground"
                         aria-label="Scroll right"
                     >
                         <ChevronRight className="h-6 w-6" />

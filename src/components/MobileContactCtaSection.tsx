@@ -10,7 +10,7 @@ const MobileContactCtaSection = () => {
         <button
           type="button"
           onClick={toggleContactDock}
-          className="btn-primary-nordic px-8 py-3.5 transition-transform duration-300 active:scale-[0.98]"
+          className="btn-primary-nordic btn-primary-nordic--lg"
         >
           {t('hero.buttonContact')}
         </button>

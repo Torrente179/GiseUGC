@@ -573,7 +573,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                     navigate(homeSectionHref('contact'));
                   }
                 }}
-                className="btn-primary-nordic px-4 py-2"
+                className="btn-primary-nordic btn-primary-nordic--sm"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
                 transition={springSnappy}
@@ -593,8 +593,8 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                 onPointerDown={handleMobileMenuButtonPointerDown}
                 onClick={handleMobileMenuButtonClick}
                 className={cn(
-                  'inline-flex items-center justify-center rounded-full border border-border/40 bg-background/60 backdrop-blur-md text-foreground transition-colors hover:text-primary',
-                  compactMobile ? 'h-9 w-9' : 'h-11 w-11',
+                  'btn-icon-pill',
+                  compactMobile ? 'h-9 w-9' : 'h-10 w-10',
                 )}
                 aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
                 aria-expanded={mobileMenuOpen}

@@ -192,7 +192,7 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={isSubmitting || cooldown}
-                className="w-full btn-primary-nordic py-3.5 rounded-xl flex items-center justify-center gap-2 hover-grow btn-press disabled:opacity-70 disabled:cursor-not-allowed"
+                className="btn-primary-nordic btn-primary-nordic--lg w-full btn-press disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {cooldown
                   ? `${t('contact.form.submitButton')} (${cooldownTime}s)`

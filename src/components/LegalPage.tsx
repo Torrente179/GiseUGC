@@ -181,7 +181,7 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
                     </p>
                     <a
                       href={`mailto:${page.contactEmail}`}
-                      className="btn-primary-nordic mt-5 inline-flex gap-2 px-5 py-3 text-foreground"
+                      className="btn-primary-nordic btn-primary-nordic--lg mt-5"
                     >
                       {labels.emailCta}
                       <Mail className="h-4 w-4" />
@@ -277,14 +277,14 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
                 <div className="flex flex-col gap-3 lg:items-end">
                   <a
                     href={`mailto:${page.contactEmail}`}
-                    className="btn-primary-nordic inline-flex gap-2 px-6 py-3.5 text-foreground"
+                    className="btn-primary-nordic btn-primary-nordic--lg"
                   >
                     {page.contactEmail}
                     <Mail className="h-4 w-4" />
                   </a>
                   <Link
                     to={page.counterpartPath}
-                    className="btn-secondary-nordic inline-flex gap-2 px-6 py-3.5"
+                    className="btn-secondary-nordic btn-surface-nordic--lg"
                   >
                     {page.counterpartLabel}
                     <ArrowUpRight className="h-4 w-4" />

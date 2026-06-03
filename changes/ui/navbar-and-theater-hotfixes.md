@@ -43,8 +43,11 @@ The right side of the navbar read as three unrelated UI-kit pieces: a bordered E
 - Softer Framer hover on CTA: `scale: 1.02` (was `1.04` + `y: -1`).
 
 #### CSS (`index.css`)
-- `.nav-control-rail`: subtle inset + drop shadow.
-- `.btn-primary-nordic`: `text-primary-foreground`, `text-[13px] font-semibold`, `normal-case`, `tracking-[0.02em]`, inset highlight, hover `brightness-[0.97]` on primary (removed jump to accent khaki on hover).
+- `.surface-pill`: shared frosted pill (border, blur, inset + drop shadow) — used by `.nav-control-rail`, `.btn-surface-nordic`, `.btn-icon-pill`.
+- `.nav-control-rail`: `@apply surface-pill`.
+- `.btn-primary-nordic` (+ `--sm` / `--lg`): filled teal CTA matching navbar “Contáctame” — `text-primary-foreground`, sentence case, inset highlight.
+- `.btn-surface-nordic` (+ sizes): ghost/frosted secondary CTAs; `.btn-secondary-nordic` aliases surface variant.
+- Legacy aliases mapped: `.st-cta-primary`, `.st-cta-secondary`, `.stm-sticky-btn`, `.ft-cta`.
 
 ### Files changed
 - `src/components/NavbarControls.tsx` (new)

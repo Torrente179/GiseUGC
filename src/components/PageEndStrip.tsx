@@ -4,7 +4,7 @@ import { getLegalPath, getLocaleFromPath } from '@/lib/locale-path';
 import { cn } from '@/lib/utils';
 
 const pillClass =
-  'inline-flex h-8 items-center justify-center rounded-full px-3 text-[10px] font-sans font-medium tracking-[0.08em] text-muted-foreground transition-colors hover:text-foreground/90';
+  'inline-flex h-8 min-h-0 items-center justify-center rounded-full px-3 text-[10px] font-sans font-medium tracking-[0.08em] text-muted-foreground shadow-none transition-colors hover:bg-foreground/[0.06] hover:text-foreground/90';
 
 const PageEndStrip = () => {
   const { t } = useTranslation();
@@ -23,10 +23,7 @@ const PageEndStrip = () => {
         </p>
 
         <nav
-          className={cn(
-            'page-end-legal-rail inline-flex w-fit items-center gap-0 rounded-full',
-            'border border-border/25 bg-background/45 p-0.5 backdrop-blur-md',
-          )}
+          className="page-end-legal-rail nav-control-rail inline-flex w-fit items-center gap-0 p-0.5"
           aria-label={locale === 'es' ? 'Enlaces legales' : 'Legal links'}
         >
           {legalLinks.map((link, index) => (

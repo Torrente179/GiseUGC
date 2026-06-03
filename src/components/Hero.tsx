@@ -124,7 +124,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <a
                   href="#portfolio"
                   onClick={handleHashLinkClick}
-                  className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-primary px-7 py-3.5 text-[11px] font-bold uppercase tracking-prestige text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_38px_-16px_hsl(var(--primary)/0.5)] sm:w-auto"
+                  className="btn-primary-nordic btn-primary-nordic--lg w-full sm:w-auto"
                 >
                   <ArrowDownRight className="h-3.5 w-3.5" />
                   {t('hero.buttonPortfolio')}
@@ -132,7 +132,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <a
                   href="#contact"
                   onClick={handleContactCtaClick}
-                  className="inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-foreground/25 bg-background/40 px-7 py-3.5 text-[11px] font-bold uppercase tracking-prestige text-foreground backdrop-blur-sm transition-all duration-300 hover:border-foreground/45 hover:bg-background/70 sm:w-auto"
+                  className="btn-surface-nordic btn-surface-nordic--lg w-full sm:w-auto"
                 >
                   <ArrowDownRight className="h-3.5 w-3.5" />
                   {t('hero.buttonContact')}
