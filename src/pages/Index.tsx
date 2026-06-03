@@ -19,6 +19,9 @@ const HeroIntroductionSection = lazy(() => import('@/components/HeroIntroduction
 const MobileFiverrRatingSection = lazy(() => import('@/components/MobileFiverrRatingSection'));
 const MobileContactCtaSection = lazy(() => import('@/components/MobileContactCtaSection'));
 const DesktopFiverrRatingSection = lazy(() => import('@/components/DesktopFiverrRatingSection'));
+
+// Fiverr rating card hidden from the DOM — flip to true to restore.
+const SHOW_FIVERR_RATING = false;
 const TestimonialsSection = lazy(() => import('@/components/Testimonials'));
 const FAQSection = lazy(() => import('@/components/FAQ'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
@@ -122,15 +125,17 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
       </DeferredSection>
       {isMobile ? <ServicesSection /> : null}
       {isMobile ? <CreatorAdvantageSection /> : null}
-      <DeferredSection
-        enabled={isMobile}
-        mountId="mobile-rating-card"
-        rootMargin="900px 0px"
-        queueDelayMs={100}
-        skeleton={<SectionSkeleton id="mobile-rating-card" minHeightClass="min-h-[460px]" />}
-      >
-        <MobileFiverrRatingSection />
-      </DeferredSection>
+      {SHOW_FIVERR_RATING && (
+        <DeferredSection
+          enabled={isMobile}
+          mountId="mobile-rating-card"
+          rootMargin="900px 0px"
+          queueDelayMs={100}
+          skeleton={<SectionSkeleton id="mobile-rating-card" minHeightClass="min-h-[460px]" />}
+        >
+          <MobileFiverrRatingSection />
+        </DeferredSection>
+      )}
       <DeferredSection
         enabled={isMobile}
         mountId="testimonials-mobile"
@@ -170,15 +175,17 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
       </DeferredSection>
       {!isMobile ? <ServicesSection /> : null}
       {!isMobile ? <CreatorAdvantageSection /> : null}
-      <DeferredSection
-        enabled={!isMobile}
-        mountId="desktop-rating-card"
-        rootMargin="850px 0px"
-        queueDelayMs={100}
-        skeleton={<SectionSkeleton id="desktop-rating-card" minHeightClass="min-h-[460px]" />}
-      >
-        <DesktopFiverrRatingSection />
-      </DeferredSection>
+      {SHOW_FIVERR_RATING && (
+        <DeferredSection
+          enabled={!isMobile}
+          mountId="desktop-rating-card"
+          rootMargin="850px 0px"
+          queueDelayMs={100}
+          skeleton={<SectionSkeleton id="desktop-rating-card" minHeightClass="min-h-[460px]" />}
+        >
+          <DesktopFiverrRatingSection />
+        </DeferredSection>
+      )}
       <DeferredSection
         enabled={!isMobile}
         mountId="testimonials-desktop"
