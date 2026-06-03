@@ -138,7 +138,7 @@ const Services = () => {
               <div className="mb-5 md:mb-6 text-primary/70 transition-colors duration-300 group-hover:text-primary">
                 {service.icon}
               </div>
-              <h3 className="type-marketing-display text-lg md:text-2xl font-semibold tracking-tight-marketing mb-1 leading-[1.12]">
+              <h3 className="type-marketing-display text-base md:text-lg font-semibold tracking-tight-marketing mb-1 leading-[1.2]">
                 {t(service.titleKey)}
               </h3>
               {service.subtitleKey && (

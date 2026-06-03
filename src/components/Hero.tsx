@@ -165,7 +165,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 xl:gap-20">
               <m.div className="max-w-[50rem] space-y-6" variants={introItem}>
                 <span className="section-label">{t('hero.introduction.eyebrow')}</span>
-                <h2 className="type-marketing-display max-w-[20ch] text-4xl leading-[1.08] tracking-tight-marketing md:text-[3.4rem] lg:text-[3.35rem] xl:text-[3.65rem]">
+                <h2 className="type-marketing-display max-w-[22ch] text-[1.65rem] leading-[1.14] tracking-tight-marketing sm:text-[1.85rem] md:text-[2rem] lg:text-[2.1rem]">
                   <PretextLineReveal text={t('hero.introduction.title')} delay={0} stagger={0.1} className="block" />
                 </h2>
               </m.div>

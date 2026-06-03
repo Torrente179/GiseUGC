@@ -91,7 +91,7 @@ const Contact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] gap-6 md:gap-7 max-w-6xl mx-auto">
           <aside className="studio-panel p-7 md:p-8 lg:p-9 flex flex-col justify-between">
             <div>
-              <h3 className="type-marketing-display text-[2rem] md:text-[2.2rem] font-semibold tracking-tight-marketing mb-5 leading-[1.1]">
+              <h3 className="type-marketing-display text-[1.5rem] md:text-[1.65rem] font-semibold tracking-tight-marketing mb-5 leading-[1.14]">
                 {t('contact.heading')}
               </h3>
               <p className="strategic-body text-muted-foreground mb-7">{t('contact.description')}</p>

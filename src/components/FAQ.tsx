@@ -44,7 +44,7 @@ const FAQ = () => {
             >
               {t('faq.sectionSubtitle')}
             </m.p>
-            <h2 className="studio-title text-[clamp(2.2rem,5.5vw,3.4rem)] leading-[1.08] mb-6">
+            <h2 className="studio-title mb-6">
               <SplitTextReveal text={t('faq.sectionTitle')} delay={0.08} />
             </h2>
             <m.div className="flex flex-col items-start gap-2" variants={blurRevealUp(14, 0.54)}>
@@ -75,7 +75,7 @@ const FAQ = () => {
                       value={`item-${index}`}
                       className="faq-answer border-b border-border/60"
                     >
-                      <AccordionTrigger className="group type-marketing-display gap-6 text-left text-[1.2rem] md:text-[1.34rem] font-semibold leading-[1.15] tracking-tight-marketing py-5 md:py-6 hover:no-underline hover:text-primary transition-colors duration-300 [&[data-state=open]]:text-primary [&>svg]:text-primary/70 [&>svg]:transition-transform [&>svg]:duration-300">
+                      <AccordionTrigger className="group type-marketing-display gap-6 text-left text-[1.05rem] md:text-[1.125rem] font-semibold leading-[1.35] tracking-tight-marketing py-5 md:py-6 hover:no-underline hover:text-primary transition-colors duration-300 [&[data-state=open]]:text-primary [&>svg]:text-primary/70 [&>svg]:transition-transform [&>svg]:duration-300">
                         {item.question}
                       </AccordionTrigger>
                       <AccordionContent className="font-sans text-foreground/75 text-[0.95rem] md:text-base leading-[1.7] pb-6 max-w-2xl">

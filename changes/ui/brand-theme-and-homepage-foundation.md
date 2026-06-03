@@ -147,3 +147,14 @@ This condenses the February homepage rebuild that established the current visual
 
 ### Verification
 1. `npm run build`
+
+## 2026-06-03 marketing type scale proportion pass
+
+### What changed
+1. Added `--type-section`, `--type-hero`, `--type-hero-mobile`, and `--type-lead` tokens so marketing copy scales consistently instead of jumping to 3–5rem.
+2. Section titles (`.studio-title`) now cap near **2rem**; service heroes use **~1.75–2.375rem**; mobile service H1 no longer uses `7.5vw` (which blew up on phones).
+3. `.st-pullquote` / `.stm-quote` dropped to lead size (~17–19px) with normal weight so intro paragraphs read as supporting copy, not secondary heroes.
+4. Removed oversized Tailwind overrides on FAQ, hero intro, legal, and service card headings.
+
+### Verification
+1. `npm run build`

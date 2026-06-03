@@ -221,7 +221,7 @@ const ResourcePage = ({ resourceId, locale }: ResourcePageProps) => {
               </nav>
 
               <p className="st-eyebrow mb-3">{page.heroEyebrow}</p>
-              <h1 className="type-marketing-display text-3xl font-semibold tracking-tight-marketing md:text-4xl lg:text-5xl lg:leading-[1.1] max-w-3xl">
+              <h1 className="type-marketing-display text-[1.75rem] font-semibold tracking-tight-marketing md:text-[2rem] lg:text-[2.25rem] lg:leading-[1.14] max-w-3xl">
                 {page.heroTitle}
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/70 md:text-lg">
