@@ -93,7 +93,8 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
           ))}
         </div>
 
-        {/* ─── Legibility scrim (theme-aware) ─── */}
+        {/* ─── Frosted haze + feathered scrim (theme-aware) ─── */}
+        <div className="hero-wall-haze" aria-hidden="true" />
         <div className="hero-wall-scrim" aria-hidden="true" />
 
         {/* ─── Content (visible by default — no JS-gated reveal) ─── */}

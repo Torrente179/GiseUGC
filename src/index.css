@@ -541,18 +541,39 @@
     pointer-events: none;
   }
 
+  /* Frosted, feathered haze behind the headline — dreamy depth, not a flat wash */
+  .hero-wall-haze {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    backdrop-filter: blur(16px) saturate(1.08);
+    -webkit-backdrop-filter: blur(16px) saturate(1.08);
+    -webkit-mask-image: radial-gradient(140% 110% at 4% 98%, #000 0%, #000 30%, rgba(0, 0, 0, 0.35) 56%, transparent 78%);
+            mask-image: radial-gradient(140% 110% at 4% 98%, #000 0%, #000 30%, rgba(0, 0, 0, 0.35) 56%, transparent 78%);
+  }
+
   .hero-wall-scrim {
     position: absolute;
     inset: 0;
     pointer-events: none;
     background:
-      linear-gradient(to top, hsl(var(--background)) 4%, hsl(var(--background) / 0.55) 34%, hsl(var(--background) / 0) 66%),
-      linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background) / 0.6) 30%, hsl(var(--background) / 0) 60%);
+      /* readability: feathered radial at the headline, translucent so the blurred reels still glow through */
+      radial-gradient(140% 110% at 4% 98%, hsl(var(--background)) 0%, hsl(var(--background) / 0.94) 32%, hsl(var(--background) / 0.5) 58%, hsl(var(--background) / 0) 82%),
+      /* soft top fade so the navbar floats */
+      linear-gradient(to bottom, hsl(var(--background) / 0.45) 0%, hsl(var(--background) / 0) 15%),
+      /* warm atmospheric glow, upper-right */
+      radial-gradient(72% 56% at 88% 12%, hsl(var(--primary) / 0.08), transparent 62%);
   }
 
   @media (max-width: 1023px) {
+    .hero-wall-haze {
+      -webkit-mask-image: linear-gradient(to top, #000 32%, rgba(0, 0, 0, 0.4) 56%, transparent 82%);
+              mask-image: linear-gradient(to top, #000 32%, rgba(0, 0, 0, 0.4) 56%, transparent 82%);
+    }
     .hero-wall-scrim {
-      background: linear-gradient(to top, hsl(var(--background)) 22%, hsl(var(--background) / 0.72) 48%, hsl(var(--background) / 0.12) 100%);
+      background:
+        linear-gradient(to top, hsl(var(--background)) 26%, hsl(var(--background) / 0.72) 52%, hsl(var(--background) / 0) 86%),
+        radial-gradient(82% 42% at 80% 8%, hsl(var(--primary) / 0.07), transparent 60%);
     }
   }
 

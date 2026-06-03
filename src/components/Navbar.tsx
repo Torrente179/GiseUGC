@@ -517,15 +517,15 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
         <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
           <div
             className={cn(
-              'flex items-center justify-between border px-4 md:px-6 backdrop-blur-md transition-[background-color,border-color,box-shadow,padding,border-radius] duration-300',
-              compactMobile ? 'rounded-[0.9rem] md:rounded-[1.15rem]' : 'rounded-[1.15rem]',
+              'flex items-center justify-between border px-4 md:px-6 backdrop-blur-xl transition-[background-color,border-color,box-shadow,padding,border-radius] duration-300',
+              compactMobile ? 'rounded-[0.9rem] md:rounded-[1.25rem]' : 'rounded-[1.25rem]',
               isScrolled
                 ? compactMobile
-                  ? 'border-border/80 bg-card/95 py-1 md:py-2 shadow-[0_16px_36px_-28px_hsl(var(--foreground)/0.22)]'
-                  : 'border-border/80 bg-card/95 py-2 shadow-[0_16px_36px_-28px_hsl(var(--foreground)/0.22)]'
+                  ? 'border-border/50 bg-card/90 py-1 md:py-2 shadow-[0_18px_44px_-30px_hsl(var(--foreground)/0.3)]'
+                  : 'border-border/50 bg-card/90 py-2 shadow-[0_18px_44px_-30px_hsl(var(--foreground)/0.3)]'
                 : compactMobile
-                  ? 'border-border/40 bg-card/85 py-1.5 md:py-3 shadow-sm'
-                  : 'border-border/40 bg-card/85 py-3 shadow-sm',
+                  ? 'border-border/25 bg-card/60 py-1.5 md:py-3 shadow-[0_12px_36px_-20px_hsl(var(--foreground)/0.25)]'
+                  : 'border-border/25 bg-card/60 py-3 shadow-[0_12px_36px_-20px_hsl(var(--foreground)/0.25)]',
             )}
           >
             <a
@@ -568,7 +568,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
             </div>
 
             <div className="hidden md:flex items-center gap-2.5">
-              <div className="flex items-center gap-1 rounded-full border border-border bg-card px-1 py-1">
+              <div className="flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-1 py-1">
                 <button
                   onClick={() => changeLanguage('es')}
                   className={languageButtonClass('es')}
