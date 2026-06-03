@@ -11,7 +11,7 @@ import {
   Facebook,
 } from 'lucide-react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import ThemeToggle from '@/components/ThemeToggle';
+import NavbarControls from '@/components/NavbarControls';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { springSnappy } from '@/components/motion/variants';
 import {
@@ -64,7 +64,7 @@ type NavbarProps = {
 
 const Navbar = ({ compactMobile = false }: NavbarProps) => {
   const location = useLocation();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -376,16 +376,9 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
     navigate(targetPath);
   };
 
-  const languageButtonClass = (language: string, compact = false) =>
-    cn(
-      'inline-flex items-center justify-center rounded-full font-bold uppercase',
-      compact
-        ? 'min-h-8 min-w-8 px-1.5 py-1 text-[9px] tracking-[0.22em]'
-        : 'min-h-10 min-w-10 px-2.5 py-2 text-[11px] tracking-[0.32em]',
-      i18n.resolvedLanguage === language
-        ? 'bg-primary/22 text-foreground shadow-[inset_0_0_0_1px_hsl(var(--primary)/0.35)]'
-        : 'text-foreground/85 hover:text-primary',
-    );
+  const hireMeCtaLabel = t('navbar.hireMeCta', {
+    defaultValue: currentLocale === 'es' ? 'Contáctame' : 'Hire me',
+  });
 
   return (
     <>
@@ -568,24 +561,8 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
               ))}
             </div>
 
-            <div className="hidden md:flex items-center gap-2.5">
-              <div className="flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-1 py-1">
-                <button
-                  onClick={() => changeLanguage('es')}
-                  className={languageButtonClass('es')}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
-                >
-                  ES
-                </button>
-                <button
-                  onClick={() => changeLanguage('en')}
-                  className={languageButtonClass('en')}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
-                >
-                  EN
-                </button>
-              </div>
-              <ThemeToggle />
+            <div className="hidden md:flex items-center gap-2">
+              <NavbarControls currentLocale={currentLocale} onLocaleChange={changeLanguage} />
               <m.a
                 href={homeSectionHref('contact')}
                 onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -596,38 +573,22 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                     navigate(homeSectionHref('contact'));
                   }
                 }}
-                className="btn-primary-nordic px-5 py-2.5"
-                whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
+                className="btn-primary-nordic px-4 py-2"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+                whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
                 transition={springSnappy}
               >
-                {t('navbar.hireMe')}
+                {hireMeCtaLabel}
+                <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               </m.a>
             </div>
 
             <div className={cn('md:hidden flex items-center', compactMobile ? 'gap-1' : 'gap-2')}>
-              <div
-                className={cn(
-                  'flex items-center rounded-full border border-border/40 bg-background/60 backdrop-blur-md',
-                  compactMobile ? 'gap-0.5 px-0.5 py-0.5' : 'gap-1 px-1 py-1',
-                )}
-              >
-                <button
-                  onClick={() => changeLanguage('es')}
-                  className={languageButtonClass('es', compactMobile)}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
-                >
-                  ES
-                </button>
-                <button
-                  onClick={() => changeLanguage('en')}
-                  className={languageButtonClass('en', compactMobile)}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
-                >
-                  EN
-                </button>
-              </div>
-              <ThemeToggle compact={compactMobile} />
+              <NavbarControls
+                compact={compactMobile}
+                currentLocale={currentLocale}
+                onLocaleChange={changeLanguage}
+              />
               <button
                 onPointerDown={handleMobileMenuButtonPointerDown}
                 onClick={handleMobileMenuButtonClick}

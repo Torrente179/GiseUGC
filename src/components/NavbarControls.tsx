@@ -1,0 +1,85 @@
+import { useTranslation } from 'react-i18next';
+import { m, useReducedMotion } from 'framer-motion';
+import ThemeToggle from '@/components/ThemeToggle';
+import { cn } from '@/lib/utils';
+import type { SiteLocale } from '@/lib/locale-path';
+
+const LOCALES: SiteLocale[] = ['es', 'en'];
+
+type NavbarControlsProps = {
+  compact?: boolean;
+  currentLocale: SiteLocale;
+  onLocaleChange: (locale: SiteLocale) => void;
+};
+
+const NavbarControls = ({ compact = false, currentLocale, onLocaleChange }: NavbarControlsProps) => {
+  const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
+
+  const segmentClass = cn(
+    'relative z-10 inline-flex items-center justify-center rounded-full font-sans font-medium uppercase transition-colors duration-200',
+    compact
+      ? 'h-8 min-w-[2rem] px-2 text-[10px] tracking-[0.08em]'
+      : 'h-9 min-w-[2.35rem] px-2.5 text-[11px] tracking-[0.1em]',
+  );
+
+  return (
+    <div
+      className={cn(
+        'nav-control-rail inline-flex items-center rounded-full border border-border/25 bg-background/45 backdrop-blur-md',
+        compact ? 'h-9 gap-0 p-0.5' : 'h-10 gap-0 p-0.5',
+      )}
+      role="group"
+      aria-label={t('languageSwitcher.changeLanguage', { defaultValue: 'Language and theme' })}
+    >
+      <div className="relative flex items-center">
+        {LOCALES.map((locale) => {
+          const isActive = currentLocale === locale;
+
+          return (
+            <button
+              key={locale}
+              type="button"
+              onClick={() => onLocaleChange(locale)}
+              className={cn(
+                segmentClass,
+                isActive
+                  ? 'text-foreground'
+                  : 'text-muted-foreground hover:text-foreground/90',
+              )}
+              aria-label={
+                locale === 'es'
+                  ? `${t('languageSwitcher.changeLanguage', { defaultValue: 'Change language' })} a Español`
+                  : `${t('languageSwitcher.changeLanguage', { defaultValue: 'Change language' })} to English`
+              }
+              aria-pressed={isActive}
+            >
+              {isActive && (
+                <m.span
+                  layoutId="navbar-locale-pill"
+                  className="absolute inset-0 rounded-full bg-foreground/[0.07] dark:bg-white/[0.09]"
+                  transition={
+                    shouldReduceMotion
+                      ? { duration: 0 }
+                      : { type: 'spring', stiffness: 420, damping: 34 }
+                  }
+                  aria-hidden="true"
+                />
+              )}
+              <span className="relative">{locale}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <span
+        className={cn('shrink-0 bg-border/35', compact ? 'mx-0.5 h-4 w-px' : 'mx-0.5 h-4 w-px')}
+        aria-hidden="true"
+      />
+
+      <ThemeToggle variant="segment" compact={compact} />
+    </div>
+  );
+};
+
+export default NavbarControls;
