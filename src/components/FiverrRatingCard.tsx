@@ -6,7 +6,7 @@ interface FiverrRatingCardProps {
 }
 
 const fiverrRatingDistribution = [
-  { stars: 5, count: 143 },
+  { stars: 5, count: 158 },
   { stars: 4, count: 9 },
   { stars: 3, count: 3 },
   { stars: 2, count: 0 },
@@ -46,7 +46,7 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
           <div className="mt-1.5 flex items-center gap-2.5">
             <Star className="h-4 w-4 fill-current text-accent dark:text-accent/80" />
             <span className="text-xl font-semibold leading-none text-primary">4.8</span>
-            <span className="text-xl text-accent/85 dark:text-accent/75 leading-none">(158)</span>
+            <span className="text-xl text-accent/85 dark:text-accent/75 leading-none">(173)</span>
           </div>
 
           <p className="text-sm md:text-[15px] leading-[1.45] text-foreground/82 mt-2.5">

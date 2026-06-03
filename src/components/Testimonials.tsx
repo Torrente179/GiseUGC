@@ -31,6 +31,9 @@ const TESTIMONIAL_IMAGES: TestimonialImage[] = [
   { id: 14, src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8680.PNG', alt: 'Client testimonial – screenshot 14', width: 1284, height: 1054 },
 ];
 
+const FIVERR_AGGREGATE_RATING = 4.8;
+const FIVERR_REVIEW_COUNT = 173;
+
 // Split into two rows for the marquee
 const ROW_1 = TESTIMONIAL_IMAGES.slice(0, 7);
 const ROW_2 = TESTIMONIAL_IMAGES.slice(7, 14);
@@ -382,16 +385,27 @@ const Testimonials = () => {
             variants={blurRevealUp(18, 0.62)}
           >
             <div className="flex items-center gap-1.5">
-              {[...Array(5)].map((_, i) => (
-                <svg key={i} className="h-3.5 w-3.5 text-amber-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
+              {[...Array(5)].map((_, i) => {
+                const fillPercent = Math.max(0, Math.min(100, (FIVERR_AGGREGATE_RATING - i) * 100));
+
+                return (
+                  <span key={i} className="relative inline-flex h-3.5 w-3.5 text-amber-500" aria-hidden="true">
+                    <svg className="absolute inset-0 h-3.5 w-3.5 text-amber-500/25" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    <span className="absolute inset-0 overflow-hidden" style={{ width: `${fillPercent}%` }}>
+                      <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </span>
+                  </span>
+                );
+              })}
             </div>
             <span className="text-sm font-medium text-muted-foreground tabular-nums tracking-wide">
-              5.0
+              {FIVERR_AGGREGATE_RATING.toFixed(1)}
               <span className="mx-1.5 text-border/60">·</span>
-              {t('testimonials.reviewCount', { count: TESTIMONIAL_IMAGES.length })}
+              {t('testimonials.reviewCount', { count: FIVERR_REVIEW_COUNT })}
             </span>
           </m.div>
         </m.div>

@@ -200,12 +200,12 @@
     color: hsl(var(--primary));
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
+  h1:not(.section-label),
+  h2:not(.section-label),
+  h3:not(.section-label),
+  h4:not(.section-label),
+  h5:not(.section-label),
+  h6:not(.section-label),
   .hero-title {
     font-family: var(--font-marketing);
     font-weight: 600;
@@ -213,18 +213,18 @@
     color: hsl(var(--foreground));
   }
 
-  h1:not(.type-brand-display),
+  h1:not(.type-brand-display):not(.section-label),
   .hero-title {
     font-size: var(--type-hero);
     line-height: 1.12;
   }
 
-  h2:not(.type-brand-display) {
+  h2:not(.type-brand-display):not(.section-label) {
     font-size: var(--type-section);
     line-height: 1.14;
   }
 
-  h3:not(.type-brand-display) {
+  h3:not(.type-brand-display):not(.section-label) {
     font-size: clamp(1.125rem, 1vw + 0.8rem, 1.375rem);
     line-height: 1.2;
   }
@@ -245,7 +245,13 @@
     color: hsl(var(--foreground));
   }
 
-  .section-label {
+  .section-label,
+  h1.section-label,
+  h2.section-label,
+  h3.section-label,
+  h4.section-label,
+  h5.section-label,
+  h6.section-label {
     font-family: var(--font-sans);
     font-weight: 700;
     font-size: 10px;
@@ -705,6 +711,10 @@
     box-shadow:
       inset 0 1px 0 hsl(var(--primary-foreground) / 0.06),
       0 10px 28px -22px hsl(var(--foreground) / 0.35);
+  }
+
+  .page-end-legal-rail {
+    box-shadow: inset 0 1px 0 hsl(var(--primary-foreground) / 0.04);
   }
 
   .btn-primary-nordic {
