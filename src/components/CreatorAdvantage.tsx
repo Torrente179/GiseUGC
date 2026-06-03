@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type MouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Play } from 'lucide-react';
 import { m, useReducedMotion } from 'framer-motion';
@@ -8,7 +8,7 @@ import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navig
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import LazyVideo from '@/components/media/LazyVideo';
 import VIDEO_LQIP from '@/data/video-lqip';
-import { r2Poster, r2PreviewVideo } from '@/data/portfolio-clips';
+import { LEGACY_REEL_CLIPS, r2Poster, r2PreviewVideo } from '@/data/portfolio-clips';
 
 interface CollageClip {
   id: number;
@@ -61,6 +61,10 @@ const COLLAGE_CLIPS: CollageClip[] = [
   },
 ];
 
+// Legacy 3-phone collage — hidden from the DOM but kept for easy restore.
+// Flip to true to bring it back in place of the phone-UI reel.
+const SHOW_LEGACY_COLLAGE = false;
+
 const CreatorAdvantage = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
@@ -100,6 +104,50 @@ const CreatorAdvantage = () => {
 
   const collageIsActive = collageHovered && !shouldReduceMotion;
   const collageStatusLabel = 'UGC enfocado en conversion';
+
+  // ── Phone-UI reel (relocated from the original hero) ──
+  const reelClips = LEGACY_REEL_CLIPS;
+  const [reelIndex, setReelIndex] = useState(0);
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+    const id = window.setInterval(
+      () => setReelIndex((prev) => (prev + 1) % reelClips.length),
+      3500,
+    );
+    return () => window.clearInterval(id);
+  }, [shouldReduceMotion, reelClips.length]);
+  const reelClip = reelClips[reelIndex];
+
+  const renderPhoneReel = () => (
+    <a
+      href="#portfolio"
+      onClick={handleHashLinkClick}
+      className="hero-phone-frame mx-auto cursor-pointer"
+      aria-label={t('portfolio.collageCta')}
+    >
+      <div className="hero-phone-notch" />
+      <video
+        key={reelClip.id}
+        className="hero-phone-video"
+        src={reelClip.mobileSrc}
+        poster={reelClip.posterSrc}
+        muted
+        loop
+        autoPlay
+        playsInline
+        preload="metadata"
+      />
+      <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 backdrop-blur-sm">
+        <Play className="h-2.5 w-2.5 fill-white text-white" />
+        <span className="text-[9px] font-bold uppercase tracking-prestige text-white/90">UGC Reel</span>
+      </div>
+      <div className="absolute right-3 top-3 z-10 rounded-full bg-black/50 px-2.5 py-1 backdrop-blur-sm">
+        <span className="text-[9px] font-bold uppercase tracking-prestige text-white/80">
+          {reelIndex + 1}/{reelClips.length}
+        </span>
+      </div>
+    </a>
+  );
 
   const renderCollageShell = (isMobile: boolean) => (
     <div
@@ -316,19 +364,19 @@ const CreatorAdvantage = () => {
           </m.div>
 
           <m.div
-            className="hidden lg:block"
+            className="hidden lg:flex lg:justify-center"
             variants={revealUp(24, 0.72)}
             whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
             transition={springHoverTransition}
           >
-            {renderCollageShell(false)}
+            {SHOW_LEGACY_COLLAGE ? renderCollageShell(false) : renderPhoneReel()}
           </m.div>
 
           <m.div
-            className="lg:hidden"
+            className="flex justify-center lg:hidden"
             variants={revealUp(20, 0.6)}
           >
-            {renderCollageShell(true)}
+            {SHOW_LEGACY_COLLAGE ? renderCollageShell(true) : renderPhoneReel()}
           </m.div>
         </m.div>
       </div>
