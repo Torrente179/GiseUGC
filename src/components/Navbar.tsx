@@ -501,31 +501,32 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
 
       <m.nav
         className={cn(
-          'fixed top-0 left-0 w-full z-[110] transition-[padding] duration-300',
+          'fixed top-0 left-0 w-full z-[110] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300',
           isScrolled
-            ? compactMobile
-              ? 'py-0 md:py-3'
-              : 'py-3'
-            : compactMobile
-              ? 'py-0 md:py-5'
-              : 'py-5',
+            ? 'border-b border-border/40 bg-background/72 backdrop-blur-xl shadow-[0_12px_34px_-30px_hsl(var(--foreground)/0.5)]'
+            : 'border-b border-transparent bg-transparent',
         )}
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
       >
-        <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
+        {!isScrolled && (
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background/55 to-transparent dark:from-background/65"
+            aria-hidden="true"
+          />
+        )}
+        <div className="container relative mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
           <div
             className={cn(
-              'flex items-center justify-between border px-4 md:px-6 backdrop-blur-xl transition-[background-color,border-color,box-shadow,padding,border-radius] duration-300',
-              compactMobile ? 'rounded-[0.9rem] md:rounded-[1.25rem]' : 'rounded-[1.25rem]',
+              'flex items-center justify-between transition-[padding] duration-300',
               isScrolled
                 ? compactMobile
-                  ? 'border-border/50 bg-card/90 py-1 md:py-2 shadow-[0_18px_44px_-30px_hsl(var(--foreground)/0.3)]'
-                  : 'border-border/50 bg-card/90 py-2 shadow-[0_18px_44px_-30px_hsl(var(--foreground)/0.3)]'
+                  ? 'py-2 md:py-2.5'
+                  : 'py-2.5 md:py-3'
                 : compactMobile
-                  ? 'border-border/25 bg-card/60 py-1.5 md:py-3 shadow-[0_12px_36px_-20px_hsl(var(--foreground)/0.25)]'
-                  : 'border-border/25 bg-card/60 py-3 shadow-[0_12px_36px_-20px_hsl(var(--foreground)/0.25)]',
+                  ? 'py-3 md:py-4'
+                  : 'py-4 md:py-5',
             )}
           >
             <a
@@ -560,7 +561,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                       navigate(link.href);
                     }
                   }}
-                  className="section-label text-foreground/80 transition-colors hover:text-primary nav-link-underline"
+                  className="section-label text-foreground/90 transition-colors hover:text-primary nav-link-underline"
                 >
                   {t(link.key)}
                 </a>
@@ -607,7 +608,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
             <div className={cn('md:hidden flex items-center', compactMobile ? 'gap-1' : 'gap-2')}>
               <div
                 className={cn(
-                  'flex items-center rounded-full border border-border bg-card',
+                  'flex items-center rounded-full border border-border/40 bg-background/60 backdrop-blur-md',
                   compactMobile ? 'gap-0.5 px-0.5 py-0.5' : 'gap-1 px-1 py-1',
                 )}
               >
@@ -631,7 +632,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                 onPointerDown={handleMobileMenuButtonPointerDown}
                 onClick={handleMobileMenuButtonClick}
                 className={cn(
-                  'inline-flex items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:text-primary',
+                  'inline-flex items-center justify-center rounded-full border border-border/40 bg-background/60 backdrop-blur-md text-foreground transition-colors hover:text-primary',
                   compactMobile ? 'h-9 w-9' : 'h-11 w-11',
                 )}
                 aria-label={mobileMenuOpen ? t('navbar.closeMenu') : t('navbar.openMenu')}
