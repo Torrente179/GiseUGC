@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState, type MouseEvent } from 'react';
+import { useMemo, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { m } from 'framer-motion';
 import { ArrowDownRight } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
+import LazyVideo from '@/components/media/LazyVideo';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { getLocaleFromPath } from '@/lib/locale-path';
-import { LEGACY_REEL_CLIPS, posterThumbSrc, type ReelClip } from '@/data/portfolio-clips';
+import { LEGACY_REEL_CLIPS, type ReelClip } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 
 interface HeroProps {
@@ -21,10 +22,6 @@ const COL_VIS = ['flex', 'flex', 'hidden sm:flex', 'hidden lg:flex', 'hidden lg:
 
 // Full catalog — rotated daily so the wall cycles through every reel.
 const ALL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS];
-
-// Tiles that autoplay (desktop only): columns 0/2/4 at staggered rows, both
-// loop-duplicates, so motion is spread across the wall (~6 live videos).
-const LIVE_ROWS: Record<number, number> = { 0: 2, 2: 0, 4: 3 };
 
 // Deterministic daily shuffle (mirrors the Portfolio's seeded reshuffle).
 const shuffleWithSeed = <T,>(items: T[], seed: number): T[] => {
@@ -47,19 +44,6 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { t } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
-
-  // Live video tiles only on desktop (data/perf); mobile shows posters.
-  const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches,
-  );
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mql = window.matchMedia('(min-width: 1024px)');
-    const update = () => setIsDesktop(mql.matches);
-    update();
-    mql.addEventListener('change', update);
-    return () => mql.removeEventListener('change', update);
-  }, []);
 
   // Rotate the whole catalog by the UTC day bucket — fresh selection every 24h.
   const utcDayBucket = Math.floor(Date.now() / 86400000);
@@ -91,37 +75,20 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               key={c}
               className={`${COL_VIS[c]} flex-1 flex-col gap-3 hero-wall-col-anim ${COL_MODS[c]}`}
             >
-              {[...col, ...col].map((clip, i) => {
-                const baseRow = LIVE_ROWS[c];
-                const live =
-                  isDesktop && baseRow !== undefined && (i === baseRow || i === baseRow + TILES_PER_COL);
-                return (
-                  <div key={`${clip.id}-${i}`} className="hero-wall-tile">
-                    {live ? (
-                      <video
-                        src={clip.mobileSrc}
-                        poster={clip.posterSrc}
-                        muted
-                        loop
-                        autoPlay
-                        playsInline
-                        preload="metadata"
-                      />
-                    ) : (
-                      <img
-                        src={posterThumbSrc(clip.posterSrc)}
-                        onError={(e) => {
-                          const img = e.currentTarget;
-                          if (img.src !== clip.posterSrc) img.src = clip.posterSrc;
-                        }}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    )}
-                  </div>
-                );
-              })}
+              {[...col, ...col].map((clip, i) => (
+                <div key={`${clip.id}-${i}`} className="hero-wall-tile">
+                  <LazyVideo
+                    src={clip.previewSrc}
+                    poster={clip.posterSrc}
+                    muted
+                    loop
+                    autoPlay
+                    playsInline
+                    pauseOffscreen
+                    unloadWhenOffscreen
+                  />
+                </div>
+              ))}
             </div>
           ))}
         </div>
