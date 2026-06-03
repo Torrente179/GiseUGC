@@ -79,8 +79,10 @@
     --radius: 1.25rem;
     /* Single believable shadow — replaces layered glows/halos */
     --shadow-soft: 0 18px 44px -30px hsl(var(--foreground) / 0.30);
-    --font-display: 'Cormorant Garamond', Georgia, serif;
-    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-brand: 'Cormorant Garamond', Georgia, serif;
+    --font-marketing: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--font-brand);
+    --font-sans: var(--font-marketing);
   }
 
   /* Dark mode variables */
@@ -186,7 +188,7 @@
   }
 
   .brand-logo {
-    font-family: var(--font-display);
+    font-family: var(--font-brand);
     font-weight: 700;
     letter-spacing: -0.04em;
     text-transform: none;
@@ -200,19 +202,35 @@
   h5,
   h6,
   .hero-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.04em;
+    font-family: var(--font-marketing);
+    font-weight: 600;
+    letter-spacing: -0.025em;
     color: hsl(var(--foreground));
   }
 
   h1,
   .hero-title {
-    line-height: 0.92;
+    line-height: 1.08;
   }
 
   h2 {
-    line-height: 0.95;
+    line-height: 1.1;
+  }
+
+  .type-brand-display {
+    font-family: var(--font-brand);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: hsl(var(--foreground));
+  }
+
+  .type-marketing-display {
+    font-family: var(--font-marketing);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    text-wrap: balance;
+    color: hsl(var(--foreground));
   }
 
   .section-label {
@@ -227,7 +245,7 @@
 
   /* De-cheesed: editorial display italic, not a wedding-script font */
   .luxury-accent {
-    font-family: var(--font-display);
+    font-family: var(--font-brand);
     font-style: italic;
     font-weight: 500;
     letter-spacing: -0.01em;
@@ -272,6 +290,10 @@
 
   .text-balance {
     text-wrap: balance;
+  }
+
+  .tracking-tight-marketing {
+    letter-spacing: -0.025em;
   }
 
   .glass {
@@ -370,7 +392,25 @@
   }
 
   .studio-title {
-    @apply text-3xl md:text-4xl lg:text-[3.2rem] font-serif font-bold tracking-tight-serif leading-[0.95] text-foreground;
+    font-family: var(--font-marketing);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    text-wrap: balance;
+    color: hsl(var(--foreground));
+    font-size: 1.875rem;
+  }
+
+  @media (min-width: 768px) {
+    .studio-title {
+      font-size: 2.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .studio-title {
+      font-size: 3.2rem;
+    }
   }
 
   .studio-subtitle {
@@ -441,7 +481,7 @@
   }
 
   .cinematic-title {
-    font-family: var(--font-display);
+    font-family: var(--font-brand);
     font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 0.86;
@@ -1285,11 +1325,12 @@
   }
 
   .st-section-title {
-    font-family: var(--font-display);
+    font-family: var(--font-marketing);
     font-weight: 600;
     font-size: clamp(1.6rem, 3.5vw, 2.6rem);
-    letter-spacing: -0.035em;
-    line-height: 1.05;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    text-wrap: balance;
     color: hsl(var(--foreground));
   }
 
@@ -1429,15 +1470,16 @@
   }
 
   .st-hero-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(2.8rem, 7vw, 5rem);
-    letter-spacing: -0.045em;
-    line-height: 0.88;
+    font-family: var(--font-marketing);
+    font-weight: 600;
+    font-size: clamp(2.2rem, 5.5vw, 4.25rem);
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    text-wrap: balance;
     color: hsl(var(--foreground));
     margin-top: 1rem;
     margin-bottom: 1.5rem;
-    max-width: 14ch;
+    max-width: 22ch;
   }
 
   @media (min-width: 1024px) {
@@ -1607,10 +1649,10 @@
   }
 
   .st-pullquote {
-    font-family: var(--font-display);
-    font-weight: 300;
+    font-family: var(--font-marketing);
+    font-weight: 500;
     font-size: clamp(1.35rem, 2.8vw, 2.2rem);
-    line-height: 1.4;
+    line-height: 1.45;
     letter-spacing: -0.02em;
     color: hsl(var(--foreground));
     padding-left: 1.5rem;
@@ -1914,15 +1956,15 @@
   }
 
   .st-proof-headline {
-    font-family: var(--font-display);
+    font-family: var(--font-marketing);
     font-weight: 500;
     font-style: italic;
     font-size: clamp(1.7rem, 2.2vw, 2.35rem);
-    line-height: 1.04;
-    letter-spacing: -0.04em;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
     color: hsl(var(--foreground));
     margin-bottom: 0.85rem;
-    max-width: 12ch;
+    max-width: 18ch;
   }
 
   .st-proof-body {
@@ -2023,7 +2065,7 @@
     position: absolute;
     top: 0.5rem;
     right: 0.75rem;
-    font-family: var(--font-display);
+    font-family: var(--font-brand);
     font-weight: 700;
     font-size: 5rem;
     line-height: 1;
@@ -2042,11 +2084,11 @@
   }
 
   .st-process-step-title {
-    font-family: var(--font-display);
+    font-family: var(--font-marketing);
     font-weight: 600;
     font-size: 1.15rem;
     letter-spacing: -0.02em;
-    line-height: 1.2;
+    line-height: 1.25;
     color: hsl(var(--foreground));
     margin-bottom: 0.6rem;
     position: relative;
@@ -2315,10 +2357,10 @@
   }
 
   .st-close-text {
-    font-family: var(--font-display);
-    font-weight: 400;
+    font-family: var(--font-marketing);
+    font-weight: 500;
     font-size: clamp(1.3rem, 2.8vw, 2.2rem);
-    line-height: 1.35;
+    line-height: 1.4;
     letter-spacing: -0.025em;
     color: hsl(var(--foreground) / 0.7);
     max-width: 580px;
@@ -2383,8 +2425,8 @@
   }
 
   .st-related-title {
-    font-family: var(--font-display);
-    font-weight: 500;
+    font-family: var(--font-marketing);
+    font-weight: 600;
     font-size: 1.1rem;
     letter-spacing: -0.02em;
     color: hsl(var(--foreground) / 0.45);
@@ -2489,14 +2531,15 @@
   }
 
   .stm-hero-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(2rem, 9vw, 2.8rem);
-    letter-spacing: -0.04em;
-    line-height: 0.92;
+    font-family: var(--font-marketing);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 7.5vw, 2.55rem);
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    text-wrap: balance;
     color: hsl(var(--pure-linen));
     margin-bottom: 0.75rem;
-    max-width: 16ch;
+    max-width: 24ch;
   }
 
   .stm-hero-hook {
@@ -2827,8 +2870,8 @@
   }
 
   .stm-quote {
-    font-family: var(--font-display);
-    font-weight: 300;
+    font-family: var(--font-marketing);
+    font-weight: 500;
     font-size: 1.15rem;
     line-height: 1.45;
     letter-spacing: -0.015em;
@@ -2921,8 +2964,8 @@
   }
 
   .stm-explore-title {
-    font-family: var(--font-display);
-    font-weight: 500;
+    font-family: var(--font-marketing);
+    font-weight: 600;
     font-size: 1.25rem;
     letter-spacing: -0.02em;
     color: hsl(var(--foreground) / 0.85);
@@ -2990,10 +3033,10 @@
   }
 
   .stm-cta-text {
-    font-family: var(--font-display);
-    font-weight: 300;
+    font-family: var(--font-marketing);
+    font-weight: 500;
     font-size: 1.1rem;
-    line-height: 1.4;
+    line-height: 1.45;
     letter-spacing: -0.015em;
     color: hsl(var(--foreground) / 0.7);
     margin-bottom: 1.25rem;
@@ -3105,11 +3148,11 @@
   }
 
   .ft-statement {
-    font-family: var(--font-display);
+    font-family: var(--font-marketing);
     font-weight: 600;
     font-size: clamp(2.4rem, 6vw, 4.5rem);
-    letter-spacing: -0.04em;
-    line-height: 0.98;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
     color: hsl(var(--foreground));
     max-width: 18ch;
     margin: 0;

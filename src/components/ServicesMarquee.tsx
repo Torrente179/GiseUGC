@@ -590,7 +590,7 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
             <div id={sectionId} className="mt-16 mb-12 overflow-hidden">
                 <div className="studio-container">
                     <div className="px-4 mb-10 text-center mx-auto">
-                        <h3 className="text-3xl font-serif font-bold tracking-tight-serif leading-[0.95] text-foreground max-w-5xl mx-auto">
+                        <h3 className="type-brand-display text-3xl font-bold tracking-tight-serif leading-[0.95] max-w-5xl mx-auto">
                             El toolkit completo para anunciantes <span className="luxury-accent text-accent inline-block transform rotate-[-2deg] ml-2">modernos</span>
                         </h3>
                         <p className="strategic-body text-base text-muted-foreground mt-6 max-w-3xl mx-auto">
@@ -632,7 +632,7 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
         <div id={sectionId} className="mt-16 md:mt-20 mb-12 md:mb-16 overflow-hidden">
             <div className="studio-container">
                 <div className="px-4 mb-12 md:mb-20 text-center mx-auto">
-                    <h3 className="text-3xl md:text-5xl lg:text-5xl font-serif font-bold tracking-tight-serif leading-[0.95] text-foreground max-w-5xl mx-auto">
+                    <h3 className="type-brand-display text-3xl md:text-5xl lg:text-5xl font-bold tracking-tight-serif leading-[0.95] max-w-5xl mx-auto">
                         El toolkit completo para anunciantes <span className="luxury-accent text-accent inline-block transform rotate-[-2deg] ml-2">modernos</span>
                     </h3>
                     <p className="strategic-body text-base md:text-xl text-muted-foreground mt-6 max-w-3xl mx-auto">

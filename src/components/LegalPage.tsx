@@ -127,7 +127,7 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
             <div className="grid gap-8 lg:grid-cols-[minmax(0,0.64fr)_minmax(320px,0.36fr)] lg:gap-10">
               <div className="space-y-6">
                 <p className="section-label text-muted-foreground">{page.eyebrow}</p>
-                <h1 className="max-w-[14ch] text-4xl font-serif font-bold leading-[0.92] tracking-tight text-balance text-foreground md:text-5xl lg:text-[4.5rem]">
+                <h1 className="type-marketing-display max-w-[22ch] text-4xl font-semibold leading-[1.08] tracking-tight-marketing md:text-5xl lg:text-[4.5rem]">
                   <PretextLineReveal text={page.title} delay={0} stagger={0.1} className="block" />
                 </h1>
                 <p className="max-w-3xl text-base font-light leading-[1.9] text-foreground/78 md:text-[1.04rem]">
@@ -173,7 +173,7 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
 
                   <div className="rounded-[1.4rem] border border-border/70 bg-background/72 p-5">
                     <p className="section-label mb-3 text-muted-foreground">{labels.contact}</p>
-                    <h2 className="text-[1.65rem] font-serif font-semibold leading-[0.98] tracking-tight text-foreground">
+                    <h2 className="type-marketing-display text-[1.65rem] font-semibold leading-[1.1] tracking-tight-marketing">
                       {page.contactTitle}
                     </h2>
                     <p className="mt-3 text-sm font-light leading-[1.85] text-foreground/75">
@@ -227,7 +227,7 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
                     </div>
 
                     <div>
-                      <h2 className="text-3xl font-serif font-bold leading-[0.97] tracking-tight text-foreground md:text-[2.5rem]">
+                      <h2 className="type-marketing-display text-3xl font-semibold leading-[1.08] tracking-tight-marketing md:text-[2.5rem]">
                         {section.title}
                       </h2>
 
@@ -266,7 +266,7 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
               <div className="grid gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(220px,0.3fr)] lg:items-end">
                 <div>
                   <p className="section-label mb-3 text-muted-foreground">{labels.summary}</p>
-                  <h2 className="max-w-[16ch] text-3xl font-serif font-semibold leading-[0.98] tracking-tight text-foreground md:text-[2.65rem]">
+                  <h2 className="type-marketing-display max-w-[20ch] text-3xl font-semibold leading-[1.1] tracking-tight-marketing md:text-[2.65rem]">
                     {page.contactTitle}
                   </h2>
                   <p className="mt-4 max-w-3xl text-sm font-light leading-[1.9] text-foreground/76 md:text-[1rem]">

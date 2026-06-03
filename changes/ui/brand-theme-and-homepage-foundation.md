@@ -114,3 +114,36 @@ This condenses the February homepage rebuild that established the current visual
 1. The shared wrapper remeasures on resize and after web-font loading, so line decisions stay synced with the actual `Cormorant Garamond` and `DM Sans` runtime typography instead of freezing on fallback metrics.
 2. Reduced-motion users fall back to static visible lines, preserving readability without animation.
 3. The change stays scoped to premium display headings only; body copy, cards, buttons, and utility labels still rely on native browser layout.
+
+## 2026-06-03 premium typography split (brand vs marketing)
+
+### Runtime touchpoints in this pass
+- `src/index.css`
+- `tailwind.config.ts`
+- `index.html`, `en/index.html`
+- `servicios/*/index.html`, `en/services/*/index.html`
+- `src/components/Hero.tsx`
+- `src/components/HeroIntroduction.tsx`
+- `src/components/Portfolio.tsx`
+- `src/components/ServicesMarquee.tsx`
+- `src/components/CreatorAdvantage.tsx`
+- `src/components/Services.tsx`
+- `src/components/FAQ.tsx`
+- `src/components/SocialProof.tsx`
+- `src/components/LegalPage.tsx`
+- `src/components/ResourcePage.tsx`
+- `src/components/Contact.tsx`
+
+### What changed
+1. Introduced a three-tier font system: `--font-brand` (Cormorant Garamond), `--font-marketing` (DM Sans), and `--font-sans` (DM Sans body/UI).
+2. Added `.type-brand-display` and `.type-marketing-display` utilities; global `h1–h6` now default to marketing sans (600 weight, looser line-height) instead of display serif.
+3. **Preserved on Cormorant:** hero name lockup (`Gisela` / `Saldarriaga`), navbar `.brand-logo`, portfolio `Historias que` / `Convierten`, toolkit marquee headline with `.luxury-accent` on “modernos”.
+4. **Moved to marketing sans:** service/vertical `.st-hero-title` / `.stm-hero-title`, collage funnel title, `.studio-title` sections, intro H2s, FAQ/legal/resource headings, and static `.boot-title` SEO shells.
+5. Relaxed service hero metrics (`max-width` ~22ch, `line-height` 1.08, weight 600) so long Spanish SEO lines no longer read as tight luxury captions.
+6. Removed dead **Alex Brush** from font URLs; boot-shell `Saldarriaga` accent now uses Cormorant italic to match the live hero.
+
+### SEO guardrail
+1. Typography and font-loading only — no metadata, schema, or route copy changes.
+
+### Verification
+1. `npm run build`

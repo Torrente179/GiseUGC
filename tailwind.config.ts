@@ -22,9 +22,10 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				serif: ['"Cormorant Garamond"', '"DM Sans"', 'serif'],
-				sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-				/* Alex Brush script font removed — de-cheese polish */
+				brand: ['var(--font-brand)'],
+				marketing: ['var(--font-marketing)'],
+				serif: ['var(--font-brand)'],
+				sans: ['var(--font-marketing)'],
 			},
 			letterSpacing: {
 				'tight-serif': '-0.04em',

@@ -19,7 +19,7 @@ const HeroIntroduction = () => {
         >
           <m.div className="space-y-4" variants={blurRevealUp(18, 0.62)}>
             <span className="section-label">{t('hero.introduction.eyebrow')}</span>
-            <h2 className="text-3xl sm:text-4xl font-serif text-foreground leading-[0.95] tracking-tight-serif text-balance">
+            <h2 className="type-marketing-display text-3xl sm:text-4xl leading-[1.08] tracking-tight-marketing">
               <PretextLineReveal text={t('hero.introduction.title')} delay={0} stagger={0.1} className="block" />
             </h2>
           </m.div>
