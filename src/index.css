@@ -88,6 +88,8 @@
     --type-hero: clamp(1.625rem, 2.2vw + 0.55rem, 2.375rem);
     --type-hero-mobile: clamp(1.3125rem, 3.6vw + 0.45rem, 1.75rem);
     --type-lead: clamp(1.0625rem, 0.25vw + 0.95rem, 1.1875rem);
+    /* Home hero: clearance below fixed navbar (mobile only) */
+    --site-nav-offset: 4.75rem;
   }
 
   /* Dark mode variables */
@@ -542,6 +544,18 @@
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  /* Home hero — reel wall starts below fixed nav (mobile only; desktop unchanged) */
+  @media (max-width: 767px) {
+    #home .hero-wall,
+    #home .hero-wall-haze,
+    #home .hero-wall-scrim {
+      top: calc(env(safe-area-inset-top, 0px) + var(--site-nav-offset));
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
   }
 
   /* ─── Hero Reel Wall ─── */
