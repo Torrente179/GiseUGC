@@ -232,7 +232,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 at hydration time instead of hydration + 0.3s delay + 1.2s duration.
                 Other cinematic items (line, pills, CTAs) still animate on stagger.
               */}
-              <p className="font-sans text-xs md:text-sm font-bold uppercase tracking-[0.3em] text-white/70 mb-6 cinematic-subtitle">
+              <p className="font-sans text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-white/75 mb-6 cinematic-subtitle">
                 {t('hero.subtitle')}
               </p>
 

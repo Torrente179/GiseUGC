@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { m, useReducedMotion } from 'framer-motion';
+import { m } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import {
   Accordion,
@@ -7,7 +7,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { blurRevealUp, springSmooth, staggerContainer } from '@/components/motion/variants';
+import { blurRevealUp, staggerContainer } from '@/components/motion/variants';
+import { getLocaleFromPath } from '@/lib/locale-path';
+import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 
 interface FAQItem {
   question: string;
@@ -16,71 +18,75 @@ interface FAQItem {
 
 const FAQ = () => {
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
+  const { handleHashLinkClick } = useHashlessSectionNavigation();
+  const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
 
   const items = t('faq.items', { returnObjects: true }) as FAQItem[];
 
+  const stillQuestion = locale === 'es' ? '¿No encuentras tu respuesta?' : 'Still can’t find your answer?';
+  const talkLabel = locale === 'es' ? 'Hablemos' : 'Let’s talk';
+
   return (
-    <section id="faq" className="studio-section bg-muted/30">
+    <section id="faq" className="studio-section bg-background border-t border-border/40">
       <div className="studio-container">
-        <m.div
-          className="mb-8 md:mb-10"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer(0.12, 0.04)}
-        >
-          <m.p
-            className="section-label text-muted-foreground mb-3"
-            variants={blurRevealUp(14, 0.56)}
+        <div className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr] lg:gap-16 xl:gap-24">
+          {/* Left — editorial header, sticky on desktop */}
+          <m.div
+            className="lg:sticky lg:top-28 lg:self-start"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={staggerContainer(0.12, 0.04)}
           >
-            {t('faq.sectionSubtitle')}
-          </m.p>
-          <h2 className="studio-title text-[clamp(2.2rem,7vw,3.6rem)] leading-[0.94]">
-            <SplitTextReveal text={t('faq.sectionTitle')} delay={0.08} />
-          </h2>
-        </m.div>
+            <m.p
+              className="section-label text-muted-foreground mb-4"
+              variants={blurRevealUp(14, 0.56)}
+            >
+              {t('faq.sectionSubtitle')}
+            </m.p>
+            <h2 className="studio-title text-[clamp(2.2rem,5.5vw,3.4rem)] leading-[0.96] mb-6">
+              <SplitTextReveal text={t('faq.sectionTitle')} delay={0.08} />
+            </h2>
+            <m.div className="flex flex-col items-start gap-2" variants={blurRevealUp(14, 0.54)}>
+              <p className="studio-subtitle">{stillQuestion}</p>
+              <a
+                href="#contact"
+                onClick={handleHashLinkClick}
+                className="group inline-flex items-center gap-1.5 text-sm font-semibold tracking-tight text-primary"
+              >
+                {talkLabel}
+                <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+              </a>
+            </m.div>
+          </m.div>
 
-        <m.div
-          className="studio-rule mb-8 md:mb-10"
-          initial={{ opacity: 0, scaleX: 0.7 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.62 }}
-        />
-
-        <m.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={staggerContainer(0.06, 0.08)}
-        >
-          <Accordion
-            type="single"
-            collapsible
-            className="w-full max-w-4xl mx-auto rounded-[1.25rem] border border-border/70 bg-card/70 px-5 md:px-7 backdrop-blur-[1px]"
+          {/* Right — answers as clean hairline rows */}
+          <m.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            variants={staggerContainer(0.06, 0.05)}
           >
-            {Array.isArray(items) &&
-              items.map((item, index) => (
-                <m.div
-                  key={index}
-                  variants={blurRevealUp(14, 0.52)}
-                >
-                  <AccordionItem
-                    value={`item-${index}`}
-                    className="faq-answer border-b border-border/70 last:border-b-0"
-                  >
-                    <AccordionTrigger className="font-serif text-left text-[1.26rem] md:text-[1.4rem] lg:text-[1.48rem] font-semibold leading-[1.08] tracking-tight text-foreground py-5 md:py-6 hover:no-underline hover:text-primary transition-colors duration-300 [&[data-state=open]]:text-primary [&>svg]:text-foreground/70 [&>svg]:transition-transform [&>svg]:duration-300">
-                      {item.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="font-sans text-foreground/80 text-sm md:text-base leading-relaxed pb-5 md:pb-6">
-                      {item.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                </m.div>
-              ))}
-          </Accordion>
-        </m.div>
+            <Accordion type="single" collapsible className="w-full border-t border-border/60">
+              {Array.isArray(items) &&
+                items.map((item, index) => (
+                  <m.div key={index} variants={blurRevealUp(12, 0.5)}>
+                    <AccordionItem
+                      value={`item-${index}`}
+                      className="faq-answer border-b border-border/60"
+                    >
+                      <AccordionTrigger className="group gap-6 font-serif text-left text-[1.2rem] md:text-[1.34rem] font-semibold leading-[1.12] tracking-tight text-foreground py-5 md:py-6 hover:no-underline hover:text-primary transition-colors duration-300 [&[data-state=open]]:text-primary [&>svg]:text-primary/70 [&>svg]:transition-transform [&>svg]:duration-300">
+                        {item.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="font-sans text-foreground/75 text-[0.95rem] md:text-base leading-[1.7] pb-6 max-w-2xl">
+                        {item.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </m.div>
+                ))}
+            </Accordion>
+          </m.div>
+        </div>
       </div>
     </section>
   );

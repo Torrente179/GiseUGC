@@ -517,7 +517,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
         <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
           <div
             className={cn(
-              'flex items-center justify-between border px-4 md:px-6 transition-[background-color,border-color,box-shadow,padding,border-radius] duration-300',
+              'flex items-center justify-between border px-4 md:px-6 backdrop-blur-md transition-[background-color,border-color,box-shadow,padding,border-radius] duration-300',
               compactMobile ? 'rounded-[0.9rem] md:rounded-[1.15rem]' : 'rounded-[1.15rem]',
               isScrolled
                 ? compactMobile

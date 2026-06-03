@@ -77,6 +77,7 @@ const Footer = () => {
               >
                 {t('footer.primaryCta')}
               </a>
+              <p className="ft-facts">{t('footer.studioFactLocation')} · {t('footer.studioFactLanguages')}</p>
             </div>
 
             {/* Services column */}
