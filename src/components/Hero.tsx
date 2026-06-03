@@ -67,7 +67,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
   return (
     <section id="home" className="relative w-full overflow-hidden bg-background">
-      <div className="hero-home-shell relative min-h-[100svh] w-full">
+      <div className="relative min-h-[100svh] w-full">
         {/* ─── Living wall of reels ─── */}
         <div className="hero-wall" aria-hidden="true">
           {columns.map((col, c) => (
@@ -98,8 +98,8 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
         <div className="hero-wall-scrim" aria-hidden="true" />
 
         {/* ─── Content (visible by default — no JS-gated reveal) ─── */}
-        <div className="relative z-10 flex min-h-full items-end">
-          <div className="container mx-auto px-6 pb-20 pt-4 md:px-12 md:pb-24 md:pt-28">
+        <div className="relative z-10 flex min-h-[100svh] items-end">
+          <div className="container mx-auto px-6 pb-16 pt-28 md:px-12 md:pb-24">
             <div className="hero-enter max-w-2xl">
               <div className="mb-6 flex items-center gap-3">
                 <img
