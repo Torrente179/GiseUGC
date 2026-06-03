@@ -114,7 +114,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <span className="section-label text-foreground/70">{roleLabel}</span>
               </div>
 
-              <h1 className="type-brand-display mb-6 leading-[0.86] tracking-tight-serif text-[15vw] sm:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem]">
+              <h1 className="mb-6 font-serif leading-[0.86] tracking-tight-serif text-foreground text-[15vw] sm:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem]">
                 <span className="block">Gisela</span>
                 <span className="block font-light italic">Saldarriaga</span>
               </h1>

@@ -200,12 +200,12 @@
     color: hsl(var(--primary));
   }
 
-  h1:not(.section-label),
-  h2:not(.section-label),
-  h3:not(.section-label),
-  h4:not(.section-label),
-  h5:not(.section-label),
-  h6:not(.section-label),
+  h1:not(.section-label):not(.type-brand-display):not(.font-serif),
+  h2:not(.section-label):not(.type-brand-display):not(.font-serif),
+  h3:not(.section-label):not(.type-brand-display):not(.font-serif),
+  h4:not(.section-label):not(.type-brand-display):not(.font-serif),
+  h5:not(.section-label):not(.type-brand-display):not(.font-serif),
+  h6:not(.section-label):not(.type-brand-display):not(.font-serif),
   .hero-title {
     font-family: var(--font-marketing);
     font-weight: 600;
@@ -213,25 +213,35 @@
     color: hsl(var(--foreground));
   }
 
-  h1:not(.type-brand-display):not(.section-label),
+  h1.font-serif,
+  h2.font-serif,
+  h3.font-serif,
+  h1.type-brand-display,
+  h2.type-brand-display,
+  h3.type-brand-display {
+    font-family: var(--font-brand);
+    letter-spacing: -0.04em;
+    color: hsl(var(--foreground));
+  }
+
+  h1:not(.type-brand-display):not(.section-label):not(.font-serif),
   .hero-title {
     font-size: var(--type-hero);
     line-height: 1.12;
   }
 
-  h2:not(.type-brand-display):not(.section-label) {
+  h2:not(.type-brand-display):not(.section-label):not(.font-serif) {
     font-size: var(--type-section);
     line-height: 1.14;
   }
 
-  h3:not(.type-brand-display):not(.section-label) {
+  h3:not(.type-brand-display):not(.section-label):not(.font-serif) {
     font-size: clamp(1.125rem, 1vw + 0.8rem, 1.375rem);
     line-height: 1.2;
   }
 
   .type-brand-display {
     font-family: var(--font-brand);
-    font-weight: 700;
     letter-spacing: -0.04em;
     color: hsl(var(--foreground));
   }

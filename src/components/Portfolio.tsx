@@ -1172,7 +1172,7 @@ const Portfolio = () => {
               <span className="h-px w-8 bg-accent/40" />
               <p className="section-label text-accent text-sm md:text-base">{t('portfolio.sectionSubtitle')}</p>
             </m.div>
-            <h2 className="type-brand-display text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight-serif leading-[0.95]">
+            <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95]">
               <SplitTextReveal text={t('portfolio.sectionTitle')} delay={0.06} />
               <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">
                 <SplitTextReveal text={t('portfolio.sectionTitleAccent')} delay={0.22} />
