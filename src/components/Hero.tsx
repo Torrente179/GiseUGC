@@ -4,8 +4,9 @@ import { m } from 'framer-motion';
 import { ArrowDownRight } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
-import LazyVideo from '@/components/media/LazyVideo';
+import HeroWallTile from '@/components/HeroWallTile';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { getLocaleFromPath } from '@/lib/locale-path';
 import { LEGACY_REEL_CLIPS, type ReelClip } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
@@ -42,6 +43,7 @@ const introItem = {
 
 const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
 
@@ -66,10 +68,13 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   };
 
   return (
-    <section id="home" className="relative w-full overflow-hidden bg-background">
+    <section id="home" className="relative w-full overflow-hidden bg-background max-md:overflow-hidden">
       <div className="relative min-h-[100svh] w-full">
         {/* ─── Living wall of reels ─── */}
-        <div className="hero-wall" aria-hidden="true">
+        <div
+          className="hero-wall max-md:!top-[calc(env(safe-area-inset-top,0px)+5.5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
+          aria-hidden="true"
+        >
           {columns.map((col, c) => (
             <div
               key={c}
@@ -77,15 +82,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             >
               {[...col, ...col].map((clip, i) => (
                 <div key={`${clip.id}-${i}`} className="hero-wall-tile">
-                  <LazyVideo
-                    src={clip.previewSrc}
-                    poster={clip.posterSrc}
-                    muted
-                    loop
-                    autoPlay
-                    playsInline
-                    loadWhenVisible={false}
-                  />
+                  <HeroWallTile clip={clip} playVideo={!isMobile || i === 0} />
                 </div>
               ))}
             </div>
@@ -97,9 +94,9 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
         <div className="hero-wall-scrim" aria-hidden="true" />
 
         {/* ─── Content (visible by default — no JS-gated reveal) ─── */}
-        <div className="hero-home-content relative z-10 flex min-h-[100svh] items-end">
-          <div className="hero-home-content-spacer hidden max-md:block" aria-hidden="true" />
-          <div className="container mx-auto w-full px-6 pb-16 pt-28 max-md:pt-0 max-md:pb-24 md:px-12 md:pb-24">
+        <div className="relative z-10 flex min-h-[100svh] max-md:flex-col max-md:pt-[calc(env(safe-area-inset-top,0px)+5.5rem)] md:items-end">
+          <div className="max-md:min-h-[38svh] max-md:flex-1 max-md:shrink-0 md:hidden" aria-hidden="true" />
+          <div className="container mx-auto w-full shrink-0 px-6 pb-16 max-md:mt-auto max-md:pb-24 max-md:pt-0 md:px-12 md:pb-24 md:pt-28">
             <div className="hero-enter max-w-2xl">
               <div className="mb-6 flex items-center gap-3">
                 <img
