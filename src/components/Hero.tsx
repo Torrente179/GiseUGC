@@ -206,11 +206,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
           />
         </m.div>
 
-        {/* Animated Atmosphere Orbs */}
-        <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden" aria-hidden="true">
-          <div className="hero-orb hero-orb-1" />
-          <div className="hero-orb hero-orb-2" />
-        </div>
+        {/* Atmosphere orbs removed — de-cheese polish; depth comes from the photo + cinematic overlay */}
 
         {/* Cinematic Overlays */}
         <div className="absolute inset-0 z-10 cinematic-overlay mix-blend-multiply pointer-events-none" />
@@ -228,7 +224,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             <div className="max-w-4xl">
               <h1 className="cinematic-title text-white text-[12vw] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[6.5rem] xl:text-[7.5rem] -ml-1 md:-ml-2 mb-4">
                 <LiteSplitTextReveal text="Gisela" delay={0.2} stagger={0.06} className="block" />
-                <LiteSplitTextReveal text="Saldarriaga" delay={0.4} stagger={0.06} className="block text-accent luxury-accent align-baseline" />
+                <LiteSplitTextReveal text="Saldarriaga" delay={0.4} stagger={0.06} className="block font-light italic text-white/80 align-baseline" />
               </h1>
 
               {/*
@@ -261,7 +257,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                   <a
                     href="#portfolio"
                     onClick={handleHashLinkClick}
-                    className="btn-shimmer inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white text-black text-[10px] font-bold uppercase tracking-prestige transition-all hover:scale-[1.02] hover:shadow-[0_14px_34px_-8px_rgba(255,255,255,0.25)]"
+                    className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white text-black text-[10px] font-bold uppercase tracking-prestige transition-all hover:scale-[1.02] hover:shadow-[0_14px_34px_-8px_rgba(255,255,255,0.25)]"
                   >
                     <ArrowDownRight className="w-3.5 h-3.5" />
                     {t('hero.buttonPortfolio')}

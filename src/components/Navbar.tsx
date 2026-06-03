@@ -595,7 +595,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                     navigate(homeSectionHref('contact'));
                   }
                 }}
-                className="btn-primary-nordic btn-shimmer px-5 py-2.5"
+                className="btn-primary-nordic px-5 py-2.5"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
                 transition={springSnappy}

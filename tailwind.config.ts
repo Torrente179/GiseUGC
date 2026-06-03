@@ -24,7 +24,7 @@ export default {
 			fontFamily: {
 				serif: ['"Cormorant Garamond"', '"DM Sans"', 'serif'],
 				sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-				script: ['"Alex Brush"', 'cursive'],
+				/* Alex Brush script font removed — de-cheese polish */
 			},
 			letterSpacing: {
 				'tight-serif': '-0.04em',

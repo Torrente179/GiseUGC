@@ -20,8 +20,8 @@
     /* #9F9366 */
     --muted-earth: 30 14.4% 49.0%;
     /* #8F7D6B */
-    --pure-linen: 300 100% 99.8%;
-    /* #FFFEFF */
+    --pure-linen: 40 33% 98.8%;
+    /* warm paper white — de-cheesed from #FFFEFF (warmth, never beige) */
     --warm-sand: 37 35.8% 78.6%;
     /* #DCCDB5 */
     --soft-stone: 35 14.3% 67.1%;
@@ -77,9 +77,10 @@
     --theater-overlay-title: 0 0% 98%;
 
     --radius: 1.25rem;
+    /* Single believable shadow — replaces layered glows/halos */
+    --shadow-soft: 0 18px 44px -30px hsl(var(--foreground) / 0.30);
     --font-display: 'Cormorant Garamond', Georgia, serif;
     --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-    --font-script: 'Alex Brush', cursive;
   }
 
   /* Dark mode variables */
@@ -224,12 +225,12 @@
     color: hsl(var(--accent));
   }
 
+  /* De-cheesed: editorial display italic, not a wedding-script font */
   .luxury-accent {
-    font-family: var(--font-script);
-    font-weight: 400;
-    font-size: 1.4em;
-    line-height: 1;
-    letter-spacing: 0.01em;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.01em;
     color: hsl(var(--accent));
   }
 
@@ -444,11 +445,11 @@
     font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 0.86;
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.38);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
   }
 
   .cinematic-subtitle {
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.32);
   }
 
   /* ─── Hero Phone Frame ─── */
@@ -462,8 +463,7 @@
     overflow: hidden;
     box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.06),
-      0 30px 60px -10px rgba(0, 0, 0, 0.7),
-      0 0 40px -5px hsl(var(--coastal-teal) / 0.15);
+      0 30px 60px -10px rgba(0, 0, 0, 0.55);
   }
 
   .hero-phone-notch {
@@ -3003,12 +3003,12 @@
   .ft-statement {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-size: clamp(1.9rem, 3.4vw, 3rem);
     letter-spacing: -0.035em;
-    line-height: 1.05;
+    line-height: 1.04;
     color: hsl(var(--pure-linen));
     margin-top: 1.25rem;
-    max-width: 16ch;
+    max-width: 15ch;
   }
 
   .ft-desc {
@@ -3187,9 +3187,9 @@
   .ftm-statement {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 1.6rem;
+    font-size: 1.95rem;
     letter-spacing: -0.035em;
-    line-height: 1.05;
+    line-height: 1.04;
     color: hsl(var(--pure-linen));
     margin-top: 1rem;
     max-width: 14ch;
@@ -3280,30 +3280,26 @@
   .ftm-social-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 1.25rem;
+    gap: 0.85rem 1.4rem;
+    margin-top: 1.5rem;
   }
 
+  /* De-cheesed: plain text links, not chip pills (matches desktop) */
   .ftm-social-pill {
     display: inline-flex;
     align-items: center;
     font-family: var(--font-sans);
     font-weight: 500;
-    font-size: 0.72rem;
-    letter-spacing: 0.02em;
-    padding: 0.4rem 0.75rem;
-    border-radius: 999px;
-    border: 1px solid hsl(var(--pure-linen) / 0.08);
-    color: hsl(var(--pure-linen) / 0.35);
+    font-size: 0.8rem;
+    letter-spacing: 0.01em;
+    color: hsl(var(--pure-linen) / 0.5);
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
-    transition: border-color var(--duration-fast) var(--ease-out-expo),
-                color var(--duration-fast) var(--ease-out-expo);
+    transition: color var(--duration-fast) var(--ease-out-expo);
   }
 
   .ftm-social-pill:active {
-    border-color: hsl(var(--primary) / 0.35);
-    color: hsl(var(--pure-linen) / 0.6);
+    color: hsl(var(--pure-linen) / 0.85);
   }
 
   /* Bottom info */

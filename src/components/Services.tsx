@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Film, Globe, Lightbulb, Megaphone, Mic, PlayCircle, Sparkles, Star } from 'lucide-react';
 import { m, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
-import { revealUp, springHoverTransition, springSmooth, staggerContainer } from '@/components/motion/variants';
+import { revealUp, springSmooth, staggerContainer } from '@/components/motion/variants';
 import { getLocaleFromPath, getServicePath, type ServicePageId } from '@/lib/locale-path';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -28,48 +28,48 @@ const Services = () => {
 
   const serviceData = [
     {
-      icon: <Megaphone className="h-8 w-8 text-primary/80" />,
+      icon: <Megaphone className="h-6 w-6 text-primary/70" />,
       titleKey: 'services.service1.title',
       subtitleKey: 'services.service1.subtitle',
       descriptionKey: 'services.service1.description',
     },
     {
-      icon: <Star className="h-8 w-8 text-primary/80" />,
+      icon: <Star className="h-6 w-6 text-primary/70" />,
       titleKey: 'services.service2.title',
       descriptionKey: 'services.service2.description',
     },
     {
-      icon: <PlayCircle className="h-8 w-8 text-primary/80" />,
+      icon: <PlayCircle className="h-6 w-6 text-primary/70" />,
       titleKey: 'services.service3.title',
       subtitleKey: 'services.service3.subtitle',
       descriptionKey: 'services.service3.description',
     },
     {
-      icon: <Lightbulb className="h-8 w-8 text-primary/80" />,
+      icon: <Lightbulb className="h-6 w-6 text-primary/70" />,
       titleKey: 'services.service4.title',
       subtitleKey: 'services.service4.subtitle',
       descriptionKey: 'services.service4.description',
     },
     {
-      icon: <Sparkles className="h-8 w-8 text-primary/80" />,
+      icon: <Sparkles className="h-6 w-6 text-primary/70" />,
       titleKey: 'services.service5.title',
       subtitleKey: 'services.service5.subtitle',
       descriptionKey: 'services.service5.description',
     },
     {
-      icon: <Film className="h-8 w-8 text-primary/80" />,
+      icon: <Film className="h-6 w-6 text-primary/70" />,
       titleKey: 'services.service6.title',
       subtitleKey: 'services.service6.subtitle',
       descriptionKey: 'services.service6.description',
     },
     {
-      icon: <Globe className="h-8 w-8 text-primary/80" />,
+      icon: <Globe className="h-6 w-6 text-primary/70" />,
       titleKey: 'services.service7.title',
       subtitleKey: 'services.service7.subtitle',
       descriptionKey: 'services.service7.description',
     },
     {
-      icon: <Mic className="h-8 w-8 text-primary/80" />,
+      icon: <Mic className="h-6 w-6 text-primary/70" />,
       titleKey: 'services.service8.title',
       subtitleKey: 'services.service8.subtitle',
       descriptionKey: 'services.service8.description',
@@ -123,7 +123,7 @@ const Services = () => {
             <MotionLink
               key={service.titleKey}
               to={getServicePath(servicePageByCard[index], locale)}
-              className="group rounded-[1.25rem] md:rounded-[1.5rem] border border-border/70 bg-card/50 p-5 md:p-8 backdrop-blur-md transition-[border-color,box-shadow] duration-[350ms] hover:border-primary/30 hover:shadow-xl"
+              className="group flex flex-col rounded-[1.25rem] md:rounded-[1.5rem] border border-border/60 bg-card p-5 md:p-8 transition-[border-color,box-shadow] duration-[350ms] hover:border-primary/40 hover:shadow-[var(--shadow-soft)]"
               style={{ transitionTimingFunction: 'var(--ease-out-expo)' }}
               variants={revealUp(18, 0.45)}
               {...(isMobile ? {
@@ -131,17 +131,13 @@ const Services = () => {
                 whileInView: 'visible' as const,
                 viewport: { once: true, amount: 0.2 },
               } : {})}
-              whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.015 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+              whileHover={shouldReduceMotion ? undefined : { y: -3 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.99 }}
               transition={springSmooth}
             >
-              <m.div
-                className="mb-4 md:mb-6 inline-flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-xl md:rounded-2xl border border-border/60 bg-background/80 text-primary transition-transform duration-500 group-hover:scale-110"
-                whileHover={shouldReduceMotion ? undefined : { rotate: -6, scale: 1.08 }}
-                transition={springHoverTransition}
-              >
+              <div className="mb-5 md:mb-6 text-primary/70 transition-colors duration-300 group-hover:text-primary">
                 {service.icon}
-              </m.div>
+              </div>
               <h3 className="text-lg md:text-2xl font-serif font-medium tracking-tight text-foreground mb-1 leading-tight">
                 {t(service.titleKey)}
               </h3>
@@ -154,8 +150,9 @@ const Services = () => {
               <p className="strategic-body text-muted-foreground text-sm md:text-base line-clamp-3 md:line-clamp-none">
                 {t(service.descriptionKey)}
               </p>
-              <span className="mt-5 inline-flex text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition-colors group-hover:text-accent">
+              <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
                 {exploreLabel}
+                <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
               </span>
             </MotionLink>
           ))}
