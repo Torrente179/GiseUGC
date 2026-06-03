@@ -28,10 +28,9 @@ const servicePageIds: ServicePageId[] = [
 ];
 
 /* ════════════════════════════════════════════════════════════════════
-   "END CREDITS" FOOTER
-   Dark, confident, final. Two separate render paths.
-   Desktop: editorial 3-column grid.
-   Mobile: app-like stacked layout.
+   FOOTER — Light-linen "bold close"
+   One responsive, theme-aware structure: oversized statement + teal CTA,
+   then demoted link columns, then a quiet bottom bar.
    ════════════════════════════════════════════════════════════════════ */
 
 const Footer = () => {
@@ -43,143 +42,92 @@ const Footer = () => {
     href: getServicePath(serviceId, locale),
     label: t(`footer.services.${serviceId}`),
   }));
-  const legalLinks = [
-    {
-      href: getLegalPath('privacy-policy', locale),
-      label: t('footer.privacyPolicy'),
-    },
-    {
-      href: getLegalPath('terms-content-use', locale),
-      label: t('footer.termsContentUse'),
-    },
+
+  const connectLinks = [
+    { href: whatsappUrl, label: 'WhatsApp' },
+    { href: fiverrUrl, label: 'Fiverr' },
+    { href: telegramUrl, label: 'Telegram' },
+    { href: instagramUrl, label: 'Instagram' },
+    { href: tiktokUrl, label: 'TikTok' },
+    { href: linkedinUrl, label: 'LinkedIn' },
   ];
+
+  const legalLinks = [
+    { href: getLegalPath('privacy-policy', locale), label: t('footer.privacyPolicy') },
+    { href: getLegalPath('terms-content-use', locale), label: t('footer.termsContentUse') },
+  ];
+
+  const connectTitle = locale === 'es' ? 'Conectar' : 'Connect';
+  const studioTitle = locale === 'es' ? 'Estudio' : 'Studio';
 
   return (
     <footer id="contact" className="ft-root">
-
-      {/* ╔══════════════════════════════════════════════════════════╗
-          ║  DESKTOP — Editorial 3-column grid (≥ 768px)            ║
-          ╚══════════════════════════════════════════════════════════╝ */}
-      <div className="ft-desktop hidden md:block">
-        <div className="ft-container">
-          {/* Top row: brand + nav columns */}
-          <div className="ft-grid">
-            {/* Brand column */}
-            <div className="ft-brand">
-              <p className="ft-logo">Gisela<span className="ft-logo-dot">.</span>UGC</p>
-              <h2 className="ft-statement">{t('footer.title')}</h2>
-              <p className="ft-desc">{t('footer.description')}</p>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ft-cta"
-              >
-                {t('footer.primaryCta')}
-              </a>
-              <p className="ft-facts">{t('footer.studioFactLocation')} · {t('footer.studioFactLanguages')}</p>
-            </div>
-
-            {/* Services column */}
-            <nav className="ft-nav-col" aria-label={t('footer.servicesTitle')}>
-              <p className="ft-nav-label">{t('footer.servicesTitle')}</p>
-              {serviceLinks.map((link) => (
-                <a key={link.href} href={link.href} className="ft-nav-link">
-                  {link.label}
-                </a>
-              ))}
-            </nav>
-
-            {/* Connect column */}
-            <div className="ft-nav-col">
-              <p className="ft-nav-label">{locale === 'es' ? 'Conectar' : 'Connect'}</p>
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="ft-nav-link">WhatsApp</a>
-              <a href={fiverrUrl} target="_blank" rel="noopener noreferrer" className="ft-nav-link">Fiverr</a>
-              <a href={telegramUrl} target="_blank" rel="noopener noreferrer" className="ft-nav-link">Telegram</a>
-              <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="ft-nav-link">Instagram</a>
-              <a href={tiktokUrl} target="_blank" rel="noopener noreferrer" className="ft-nav-link">TikTok</a>
-              <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="ft-nav-link">LinkedIn</a>
-            </div>
-          </div>
-
-          {/* Bottom bar */}
-          <div className="ft-bar">
-            <p className="ft-bar-text">{t('footer.bottomNote')}</p>
-            <div className="ft-bar-meta">
-              <p className="ft-bar-text ft-bar-copyright">{t('footer.copyright', { year: currentYear })}</p>
-              <span className="ft-bar-separator" aria-hidden="true" />
-              <nav className="ft-bar-links" aria-label={t('footer.legalTitle')}>
-                {legalLinks.map((link, index) => (
-                  <Fragment key={link.href}>
-                    <Link to={link.href} className="ft-bar-link">
-                      {link.label}
-                    </Link>
-                    {index < legalLinks.length - 1 ? (
-                      <span className="ft-bar-divider" aria-hidden="true">/</span>
-                    ) : null}
-                  </Fragment>
-                ))}
-              </nav>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ╔══════════════════════════════════════════════════════════╗
-          ║  MOBILE — App-like stacked layout (< 768px)             ║
-          ╚══════════════════════════════════════════════════════════╝ */}
-      <div className="ftm-mobile md:hidden">
-        {/* Brand + CTA */}
-        <div className="ftm-top">
+      <div className="ft-shell">
+        {/* Bold statement close */}
+        <div className="ft-close">
           <p className="ft-logo">Gisela<span className="ft-logo-dot">.</span>UGC</p>
-          <h2 className="ftm-statement">{t('footer.title')}</h2>
+          <h2 className="ft-statement">{t('footer.title')}</h2>
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="ftm-cta"
+            className="ft-cta"
           >
             {t('footer.primaryCta')}
+            <span className="ft-cta-arrow" aria-hidden="true">&rarr;</span>
           </a>
-          {/* Secondary links inline */}
-          <div className="ftm-secondary-links">
-            <a href={fiverrUrl} target="_blank" rel="noopener noreferrer">Fiverr</a>
-            <span className="ftm-dot" aria-hidden="true">·</span>
-            <a href={telegramUrl} target="_blank" rel="noopener noreferrer">Telegram</a>
+        </div>
+
+        {/* Demoted link columns */}
+        <div className="ft-links">
+          <nav className="ft-col" aria-label={t('footer.servicesTitle')}>
+            <p className="ft-col-label">{t('footer.servicesTitle')}</p>
+            {serviceLinks.map((link) => (
+              <Link key={link.href} to={link.href} className="ft-link">
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <nav className="ft-col" aria-label={connectTitle}>
+            <p className="ft-col-label">{connectTitle}</p>
+            {connectLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ft-link"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="ft-col ft-col--studio">
+            <p className="ft-col-label">{studioTitle}</p>
+            <p className="ft-meta">{t('footer.description')}</p>
+            <p className="ft-meta">
+              {t('footer.studioFactLocation')} · {t('footer.studioFactLanguages')}
+            </p>
           </div>
         </div>
 
-        {/* Service links */}
-        <nav className="ftm-services" aria-label={t('footer.servicesTitle')}>
-          {serviceLinks.map((link) => (
-            <Link key={link.href} to={link.href} className="ftm-service-link">
-              <span>{link.label}</span>
-              <span className="ftm-service-arrow" aria-hidden="true">→</span>
-            </Link>
-          ))}
-        </nav>
-
-        {/* Social row */}
-        <div className="ftm-social-row">
-          <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="ftm-social-pill">Instagram</a>
-          <a href={tiktokUrl} target="_blank" rel="noopener noreferrer" className="ftm-social-pill">TikTok</a>
-          <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="ftm-social-pill">LinkedIn</a>
-        </div>
-
-        {/* Bottom info */}
-        <div className="ftm-bottom">
-          <p className="ftm-bottom-text">{t('footer.studioFactLocation')}</p>
-          <p className="ftm-bottom-text">{t('footer.studioFactLanguages')}</p>
-          <div className="ftm-legal-card">
-            <p className="ftm-bottom-text ftm-bottom-copyright">{t('footer.copyright', { year: currentYear })}</p>
-            <nav className="ftm-legal-links" aria-label={t('footer.legalTitle')}>
-              {legalLinks.map((link) => (
-                <Link key={link.href} to={link.href} className="ftm-legal-link">
+        {/* Bottom bar */}
+        <div className="ft-bar">
+          <p className="ft-bar-copy">{t('footer.copyright', { year: currentYear })}</p>
+          <nav className="ft-bar-legal" aria-label={t('footer.legalTitle')}>
+            {legalLinks.map((link, index) => (
+              <Fragment key={link.href}>
+                <Link to={link.href} className="ft-bar-link">
                   {link.label}
                 </Link>
-              ))}
-            </nav>
-          </div>
+                {index < legalLinks.length - 1 ? (
+                  <span className="ft-bar-divider" aria-hidden="true">/</span>
+                ) : null}
+              </Fragment>
+            ))}
+          </nav>
         </div>
       </div>
     </footer>
