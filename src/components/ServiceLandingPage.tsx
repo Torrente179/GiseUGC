@@ -12,6 +12,7 @@ import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import TheaterVideo from '@/components/media/TheaterVideo';
+import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 
 const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
@@ -363,19 +364,15 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   onClick={() => openProofClip(0)}
                   aria-label={`${labels.openSample}: ${leadProof.example.title}`}
                 >
-                  <img
-                    src={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
+                  <AutoplayPreviewVideo
+                    src={leadProof.clip.previewSrc}
+                    poster={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
                     className="stm-hero-poster-img"
-                    alt=""
                     aria-hidden="true"
-                    decoding="async"
-                    fetchPriority="high"
-                    onError={handlePosterError(leadProof.clip.posterSrc)}
+                    preload="auto"
+                    pauseOffscreen={false}
                   />
                   <div className="stm-hero-poster-overlay" />
-                  <div className="st-play-btn">
-                    <Play className="h-5 w-5 ml-0.5" />
-                  </div>
                 </button>
               ) : (
                 <div className="stm-hero-poster stm-hero-poster--empty" />
@@ -418,19 +415,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                         className="stm-reel-card"
                       >
                         <div className="stm-reel-card-media">
-                          <img
-                            src={posterSrc}
+                          <AutoplayPreviewVideo
+                            src={clip.previewSrc}
+                            poster={posterSrc}
                             className="stm-reel-card-img"
-                            alt=""
                             aria-hidden="true"
-                            decoding="async"
-                            loading="lazy"
-                            onError={handlePosterError(clip.posterSrc)}
+                            pauseOffscreen={false}
                           />
                           <div className="stm-reel-card-gradient" />
-                          <div className="st-play-btn st-play-btn--small">
-                            <Play className="h-3.5 w-3.5 ml-0.5" />
-                          </div>
                           <div className="stm-reel-card-bottom">
                             <span className="stm-reel-card-name">{example.title}</span>
                             <div className="stm-reel-card-chips">

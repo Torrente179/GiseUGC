@@ -1,17 +1,27 @@
-import { useEffect, useRef } from 'react';
-import type { ReelClip } from '@/data/portfolio-clips';
+import { useEffect, useRef, type VideoHTMLAttributes } from 'react';
 
-type HeroWallTileProps = {
-  clip: ReelClip;
-  /** On mobile only the lead tile per column should decode video (iOS limit). */
-  playVideo: boolean;
+type AutoplayPreviewVideoProps = Omit<
+  VideoHTMLAttributes<HTMLVideoElement>,
+  'autoPlay' | 'loop' | 'muted' | 'playsInline' | 'poster' | 'src'
+> & {
+  src: string;
+  poster: string;
+  pauseOffscreen?: boolean;
+  rootMargin?: string;
 };
 
-const HeroWallTile = ({ clip, playVideo }: HeroWallTileProps) => {
+const AutoplayPreviewVideo = ({
+  src,
+  poster,
+  pauseOffscreen = true,
+  rootMargin = '120px 0px',
+  preload = 'metadata',
+  ...props
+}: AutoplayPreviewVideoProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const inViewportRef = useRef(true);
 
   useEffect(() => {
-    if (!playVideo) return;
     const node = videoRef.current;
     if (!node) return;
 
@@ -25,6 +35,7 @@ const HeroWallTile = ({ clip, playVideo }: HeroWallTileProps) => {
 
     const play = () => {
       if (cancelled) return;
+      if (pauseOffscreen && !inViewportRef.current) return;
       node.play().catch(() => undefined);
     };
     const resumePlayback = () => {
@@ -36,50 +47,57 @@ const HeroWallTile = ({ clip, playVideo }: HeroWallTileProps) => {
 
     play();
     node.addEventListener('loadedmetadata', resumePlayback);
-    node.addEventListener('loadeddata', play);
+    node.addEventListener('loadeddata', resumePlayback);
     node.addEventListener('canplay', resumePlayback);
     node.addEventListener('pause', resumePlayback);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('pageshow', resumePlayback);
 
+    let observer: IntersectionObserver | undefined;
+    if (pauseOffscreen && typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          const isVisible = entry?.isIntersecting ?? true;
+          inViewportRef.current = isVisible;
+          if (isVisible) {
+            resumePlayback();
+          } else {
+            node.pause();
+          }
+        },
+        { rootMargin },
+      );
+      observer.observe(node);
+    }
+
     return () => {
       cancelled = true;
+      observer?.disconnect();
       node.removeEventListener('loadedmetadata', resumePlayback);
-      node.removeEventListener('loadeddata', play);
+      node.removeEventListener('loadeddata', resumePlayback);
       node.removeEventListener('canplay', resumePlayback);
       node.removeEventListener('pause', resumePlayback);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('pageshow', resumePlayback);
+      node.pause();
     };
-  }, [playVideo, clip.previewSrc]);
-
-  if (!playVideo) {
-    return (
-      <img
-        src={clip.posterSrc}
-        alt=""
-        width={360}
-        height={640}
-        loading="eager"
-        decoding="async"
-        className="h-full w-full object-cover"
-      />
-    );
-  }
+  }, [pauseOffscreen, rootMargin, src]);
 
   return (
     <video
+      {...props}
       ref={videoRef}
-      src={clip.previewSrc}
-      poster={clip.posterSrc}
-      className="h-full w-full object-cover"
+      src={src}
+      poster={poster}
       muted
       loop
       playsInline
       autoPlay
-      preload="auto"
+      preload={preload}
+      disablePictureInPicture
+      disableRemotePlayback
     />
   );
 };
 
-export default HeroWallTile;
+export default AutoplayPreviewVideo;
