@@ -546,7 +546,7 @@
     display: block;
   }
 
-  /* Home hero — reel wall starts below fixed nav (mobile only; desktop unchanged) */
+  /* Home hero — mobile app layout only (desktop rules unchanged below) */
   @media (max-width: 767px) {
     #home .hero-wall,
     #home .hero-wall-haze,
@@ -555,6 +555,26 @@
       right: 0;
       bottom: 0;
       left: 0;
+    }
+
+    #home .hero-home-content {
+      box-sizing: border-box;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      min-height: 100svh;
+      padding-top: calc(env(safe-area-inset-top, 0px) + var(--site-nav-offset));
+    }
+
+    /* Breathing room under nav; copy + CTAs stay in lower viewport */
+    #home .hero-home-content-spacer {
+      flex: 1 1 auto;
+      min-height: 34svh;
+    }
+
+    #home .hero-home-content .container {
+      flex-shrink: 0;
+      margin-top: auto;
     }
   }
 

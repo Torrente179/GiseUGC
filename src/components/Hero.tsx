@@ -84,8 +84,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                     loop
                     autoPlay
                     playsInline
-                    pauseOffscreen
-                    unloadWhenOffscreen
+                    loadWhenVisible={false}
                   />
                 </div>
               ))}
@@ -98,8 +97,9 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
         <div className="hero-wall-scrim" aria-hidden="true" />
 
         {/* ─── Content (visible by default — no JS-gated reveal) ─── */}
-        <div className="relative z-10 flex min-h-[100svh] items-end max-md:flex-col max-md:justify-end max-md:pt-[calc(env(safe-area-inset-top,0px)+4.75rem)]">
-          <div className="container mx-auto w-full px-6 pb-16 pt-28 max-md:pt-0 max-md:pb-20 md:px-12 md:pb-24">
+        <div className="hero-home-content relative z-10 flex min-h-[100svh] items-end">
+          <div className="hero-home-content-spacer hidden max-md:block" aria-hidden="true" />
+          <div className="container mx-auto w-full px-6 pb-16 pt-28 max-md:pt-0 max-md:pb-24 md:px-12 md:pb-24">
             <div className="hero-enter max-w-2xl">
               <div className="mb-6 flex items-center gap-3">
                 <img
@@ -114,7 +114,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <span className="section-label text-foreground/70">{roleLabel}</span>
               </div>
 
-              <h1 className="mb-6 font-serif leading-[0.86] tracking-tight-serif text-foreground text-[15vw] sm:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem]">
+              <h1 className="mb-6 max-md:mb-4 font-serif leading-[0.86] tracking-tight-serif text-foreground max-md:text-[2.85rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem]">
                 <span className="block">Gisela</span>
                 <span className="block font-light italic">Saldarriaga</span>
               </h1>
