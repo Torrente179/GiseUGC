@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { m } from 'framer-motion';
 import { ArrowDownRight } from 'lucide-react';
@@ -6,18 +6,37 @@ import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navig
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { getLocaleFromPath } from '@/lib/locale-path';
-import { LEGACY_REEL_CLIPS, posterThumbSrc } from '@/data/portfolio-clips';
+import { LEGACY_REEL_CLIPS, posterThumbSrc, type ReelClip } from '@/data/portfolio-clips';
+import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 
 interface HeroProps {
   showIntroduction?: boolean;
 }
 
-// Each wall column starts at a different clip so the mosaic doesn't repeat across columns.
-const COLUMN_OFFSETS = [0, 2, 4, 6, 8];
+const N_COLS = 5;
 const TILES_PER_COL = 4;
 const COL_MODS = ['', 'hero-wall-down', 'hero-wall-slow', 'hero-wall-down hero-wall-slow', ''];
 // Mobile shows 2 columns, tablet 3, desktop 5.
 const COL_VIS = ['flex', 'flex', 'hidden sm:flex', 'hidden lg:flex', 'hidden lg:flex'];
+
+// Full catalog — rotated daily so the wall cycles through every reel.
+const ALL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS];
+
+// Tiles that autoplay (desktop only): columns 0/2/4 at staggered rows, both
+// loop-duplicates, so motion is spread across the wall (~6 live videos).
+const LIVE_ROWS: Record<number, number> = { 0: 2, 2: 0, 4: 3 };
+
+// Deterministic daily shuffle (mirrors the Portfolio's seeded reshuffle).
+const shuffleWithSeed = <T,>(items: T[], seed: number): T[] => {
+  const arr = [...items];
+  let s = seed % 233280;
+  for (let i = arr.length - 1; i > 0; i--) {
+    s = (s * 9301 + 49297) % 233280;
+    const j = Math.floor((s / 233280) * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
 
 const introItem = {
   hidden: { opacity: 0, y: 24 },
@@ -42,9 +61,11 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     return () => mql.removeEventListener('change', update);
   }, []);
 
-  const clips = LEGACY_REEL_CLIPS;
-  const columns = COLUMN_OFFSETS.map((off) =>
-    Array.from({ length: TILES_PER_COL }, (_, r) => clips[(off + r) % clips.length]),
+  // Rotate the whole catalog by the UTC day bucket — fresh selection every 24h.
+  const utcDayBucket = Math.floor(Date.now() / 86400000);
+  const dailyClips = useMemo(() => shuffleWithSeed(ALL_CLIPS, utcDayBucket), [utcDayBucket]);
+  const columns = Array.from({ length: N_COLS }, (_, c) =>
+    Array.from({ length: TILES_PER_COL }, (_, r) => dailyClips[(c * TILES_PER_COL + r) % dailyClips.length]),
   );
 
   const roleLabel = locale === 'es'
@@ -71,7 +92,9 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               className={`${COL_VIS[c]} flex-1 flex-col gap-3 hero-wall-col-anim ${COL_MODS[c]}`}
             >
               {[...col, ...col].map((clip, i) => {
-                const live = isDesktop && i === 1 && (c === 1 || c === 3);
+                const baseRow = LIVE_ROWS[c];
+                const live =
+                  isDesktop && baseRow !== undefined && (i === baseRow || i === baseRow + TILES_PER_COL);
                 return (
                   <div key={`${clip.id}-${i}`} className="hero-wall-tile">
                     {live ? (
@@ -87,6 +110,10 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                     ) : (
                       <img
                         src={posterThumbSrc(clip.posterSrc)}
+                        onError={(e) => {
+                          const img = e.currentTarget;
+                          if (img.src !== clip.posterSrc) img.src = clip.posterSrc;
+                        }}
                         alt=""
                         loading="lazy"
                         decoding="async"
