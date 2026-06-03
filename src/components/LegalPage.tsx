@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Mail } from 'lucide-react';
-import Footer from '@/components/Footer';
+import SiteFooter from '@/components/SiteFooter';
 import Navbar from '@/components/Navbar';
 import PageSeo from '@/components/PageSeo';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
@@ -296,7 +296,7 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
         </section>
       </main>
 
-      <Footer />
+      <SiteFooter />
     </div>
   );
 };

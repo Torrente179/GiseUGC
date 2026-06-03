@@ -6,7 +6,7 @@ import { getResourcePageContent, getResourcePath, type ResourcePageId } from '@/
 import { getServicePageContent } from '@/data/service-pages';
 import { getVerticalPageContent } from '@/data/vertical-pages';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
 
 const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
@@ -455,7 +455,7 @@ const ResourcePage = ({ resourceId, locale }: ResourcePageProps) => {
           </Suspense>
         </main>
 
-        <Footer />
+        <SiteFooter />
         <Suspense fallback={null}>
           <FloatingContactDock />
         </Suspense>

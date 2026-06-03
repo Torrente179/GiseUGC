@@ -10,7 +10,7 @@ import { useDeferredMount } from '@/hooks/use-deferred-mount';
 import { mark, measure, startLongTaskObserver } from '@/lib/perf-debug';
 import PageSeo from '@/components/PageSeo';
 import { getHomePath, type SiteLocale } from '@/lib/locale-path';
-import Footer from '@/components/Footer';
+import SiteFooter from '@/components/SiteFooter';
 
 const SocialProofSection = lazy(() => import('@/components/SocialProof'));
 const ServicesSection = lazy(() => import('@/components/Services'));
@@ -205,7 +205,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
       >
         <ServicesMarqueeSection />
       </DeferredSection>
-      <Footer />
+      <SiteFooter />
 
       <Suspense fallback={null}>
         <FloatingContactDockSection />

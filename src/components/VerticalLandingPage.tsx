@@ -8,7 +8,7 @@ import { getServicePageContent, getRelatedServiceSummaries } from '@/data/servic
 import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
 import TheaterVideo from '@/components/media/TheaterVideo';
 
@@ -758,7 +758,7 @@ const VerticalLandingPage = ({ verticalId, locale }: VerticalLandingPageProps) =
           </div>
         )}
 
-        <Footer />
+        <SiteFooter />
         <Suspense fallback={null}><FloatingContactDock /></Suspense>
       </div>
     </>
