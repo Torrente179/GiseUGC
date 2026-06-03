@@ -88,6 +88,8 @@
     --type-hero: clamp(1.625rem, 2.2vw + 0.55rem, 2.375rem);
     --type-hero-mobile: clamp(1.3125rem, 3.6vw + 0.45rem, 1.75rem);
     --type-lead: clamp(1.0625rem, 0.25vw + 0.95rem, 1.1875rem);
+    /* Fixed navbar clearance — home hero mobile shell */
+    --site-nav-offset: 4.75rem;
   }
 
   /* Dark mode variables */
@@ -544,6 +546,13 @@
     display: block;
   }
 
+  /* Homepage hero — inset below fixed nav on mobile (app-like safe zone) */
+  @media (max-width: 767px) {
+    .hero-home-shell {
+      padding-top: calc(env(safe-area-inset-top, 0px) + var(--site-nav-offset));
+    }
+  }
+
   /* ─── Hero Reel Wall ─── */
   .hero-wall {
     position: absolute;
@@ -628,6 +637,12 @@
     }
     .hero-wall-scrim {
       background:
+        linear-gradient(
+          to bottom,
+          hsl(var(--background) / 0.78) 0%,
+          hsl(var(--background) / 0.42) 12%,
+          hsl(var(--background) / 0) 22%
+        ),
         linear-gradient(to top, hsl(var(--background)) 26%, hsl(var(--background) / 0.72) 52%, hsl(var(--background) / 0) 86%),
         radial-gradient(82% 42% at 80% 8%, hsl(var(--primary) / 0.07), transparent 60%);
     }
