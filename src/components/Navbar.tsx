@@ -503,8 +503,8 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
         className={cn(
           'fixed top-0 left-0 w-full z-[110] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300',
           isScrolled
-            ? 'border-b border-border/40 bg-background/72 backdrop-blur-xl shadow-[0_12px_34px_-30px_hsl(var(--foreground)/0.5)]'
-            : 'border-b border-transparent bg-transparent',
+            ? 'border-b border-border/40 bg-background/80 backdrop-blur-xl shadow-[0_14px_36px_-30px_hsl(var(--foreground)/0.5)]'
+            : 'border-b border-border/15 bg-background/40 backdrop-blur-md',
         )}
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}

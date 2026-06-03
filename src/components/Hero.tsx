@@ -7,7 +7,7 @@ import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import LazyVideo from '@/components/media/LazyVideo';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { getLocaleFromPath } from '@/lib/locale-path';
-import { LEGACY_REEL_CLIPS, posterThumbSrc, type ReelClip } from '@/data/portfolio-clips';
+import { LEGACY_REEL_CLIPS, type ReelClip } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 
 interface HeroProps {
@@ -19,10 +19,6 @@ const TILES_PER_COL = 4;
 const COL_MODS = ['', 'hero-wall-down', 'hero-wall-slow', 'hero-wall-down hero-wall-slow', ''];
 // Mobile shows 2 columns, tablet 3, desktop 5.
 const COL_VIS = ['flex', 'flex', 'hidden sm:flex', 'hidden lg:flex', 'hidden lg:flex'];
-
-// A deliberate mix: which `column-row` tiles autoplay vs. stay a still frame
-// (~45%, spread across rows/columns so every visible band blends motion + stills).
-const LIVE_CELLS = new Set(['0-0', '0-2', '1-1', '1-3', '2-0', '2-3', '3-2', '4-1', '4-3']);
 
 // Full catalog — rotated daily so the wall cycles through every reel.
 const ALL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS];
@@ -79,36 +75,20 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               key={c}
               className={`${COL_VIS[c]} flex-1 flex-col gap-3 hero-wall-col-anim ${COL_MODS[c]}`}
             >
-              {[...col, ...col].map((clip, i) => {
-                const live = LIVE_CELLS.has(`${c}-${i % TILES_PER_COL}`);
-                return (
-                  <div key={`${clip.id}-${i}`} className="hero-wall-tile">
-                    {live ? (
-                      <LazyVideo
-                        src={clip.previewSrc}
-                        poster={clip.posterSrc}
-                        muted
-                        loop
-                        autoPlay
-                        playsInline
-                        pauseOffscreen
-                        unloadWhenOffscreen
-                      />
-                    ) : (
-                      <img
-                        src={posterThumbSrc(clip.posterSrc)}
-                        onError={(e) => {
-                          const img = e.currentTarget;
-                          if (img.src !== clip.posterSrc) img.src = clip.posterSrc;
-                        }}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    )}
-                  </div>
-                );
-              })}
+              {[...col, ...col].map((clip, i) => (
+                <div key={`${clip.id}-${i}`} className="hero-wall-tile">
+                  <LazyVideo
+                    src={clip.previewSrc}
+                    poster={clip.posterSrc}
+                    muted
+                    loop
+                    autoPlay
+                    playsInline
+                    pauseOffscreen
+                    unloadWhenOffscreen
+                  />
+                </div>
+              ))}
             </div>
           ))}
         </div>
