@@ -75,18 +75,22 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
           className="hero-wall max-md:!top-[calc(env(safe-area-inset-top,0px)+5.5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
           aria-hidden="true"
         >
-          {columns.map((col, c) => (
-            <div
-              key={c}
-              className={`${COL_VIS[c]} flex-1 flex-col gap-3 hero-wall-col-anim ${COL_MODS[c]}`}
-            >
-              {[...col, ...col].map((clip, i) => (
-                <div key={`${clip.id}-${i}`} className="hero-wall-tile">
-                  <HeroWallTile clip={clip} playVideo={!isMobile || i === 0} />
-                </div>
-              ))}
-            </div>
-          ))}
+          {columns.map((col, c) => {
+            const playColumnVideos = !isMobile || c < 2;
+
+            return (
+              <div
+                key={c}
+                className={`${COL_VIS[c]} flex-1 flex-col gap-3 hero-wall-col-anim ${COL_MODS[c]}`}
+              >
+                {[...col, ...col].map((clip, i) => (
+                  <div key={`${clip.id}-${i}`} className="hero-wall-tile">
+                    <HeroWallTile clip={clip} playVideo={playColumnVideos} />
+                  </div>
+                ))}
+              </div>
+            );
+          })}
         </div>
 
         {/* ─── Frosted haze + feathered scrim (theme-aware) ─── */}

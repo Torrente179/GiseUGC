@@ -14,14 +14,40 @@ const HeroWallTile = ({ clip, playVideo }: HeroWallTileProps) => {
     if (!playVideo) return;
     const node = videoRef.current;
     if (!node) return;
+
+    let cancelled = false;
     node.muted = true;
     node.defaultMuted = true;
+    node.playsInline = true;
+
     const play = () => {
+      if (cancelled || document.visibilityState === 'hidden') return;
       node.play().catch(() => undefined);
     };
+    const resumePlayback = () => {
+      window.requestAnimationFrame(play);
+    };
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') resumePlayback();
+    };
+
     play();
+    node.addEventListener('loadedmetadata', resumePlayback);
     node.addEventListener('loadeddata', play);
-    return () => node.removeEventListener('loadeddata', play);
+    node.addEventListener('canplay', resumePlayback);
+    node.addEventListener('pause', resumePlayback);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pageshow', resumePlayback);
+
+    return () => {
+      cancelled = true;
+      node.removeEventListener('loadedmetadata', resumePlayback);
+      node.removeEventListener('loadeddata', play);
+      node.removeEventListener('canplay', resumePlayback);
+      node.removeEventListener('pause', resumePlayback);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pageshow', resumePlayback);
+    };
   }, [playVideo, clip.previewSrc]);
 
   if (!playVideo) {
