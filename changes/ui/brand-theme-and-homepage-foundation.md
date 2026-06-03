@@ -137,7 +137,7 @@ This condenses the February homepage rebuild that established the current visual
 ### What changed
 1. Introduced a three-tier font system: `--font-brand` (Cormorant Garamond), `--font-marketing` (DM Sans), and `--font-sans` (DM Sans body/UI).
 2. Added `.type-brand-display` and `.type-marketing-display` utilities; global `h1–h6` now default to marketing sans (600 weight, looser line-height) instead of display serif.
-3. **Preserved on Cormorant:** hero name lockup (`Gisela` / `Saldarriaga`), navbar `.brand-logo`, portfolio `Historias que` / `Convierten`, toolkit marquee headline with `.luxury-accent` on “modernos”.
+3. **Preserved on Cormorant (must keep `font-serif` + original Tailwind sizes):** hero name lockup (`Gisela` / `Saldarriaga`), navbar `.brand-logo` (`Gise.UGC`), portfolio `Historias que` / `Convierten`, toolkit headline *El toolkit completo para anunciantes* with `.luxury-accent` on “modernos”. These must not receive global marketing `h1–h6` font-family or clamped font-size rules.
 4. **Moved to marketing sans:** service/vertical `.st-hero-title` / `.stm-hero-title`, collage funnel title, `.studio-title` sections, intro H2s, FAQ/legal/resource headings, and static `.boot-title` SEO shells.
 5. Relaxed service hero metrics (`max-width` ~22ch, `line-height` 1.08, weight 600) so long Spanish SEO lines no longer read as tight luxury captions.
 6. Removed dead **Alex Brush** from font URLs; boot-shell `Saldarriaga` accent now uses Cormorant italic to match the live hero.
@@ -158,3 +158,47 @@ This condenses the February homepage rebuild that established the current visual
 
 ### Verification
 1. `npm run build`
+
+## 2026-06-03 toolkit card label regression fix
+
+**Commit:** `e5605a7` (bundled with page end strip)
+
+### Problem
+The marketing type pass applied global `h3` font-size clamps to every `h3`, including the marquee service cards that use `h3.section-label` for the small uppercase titles under each video (e.g. “UGC Ads”). Those labels jumped from **10px** uppercase to ~18–22px and read like secondary headlines.
+
+### What changed
+1. `src/index.css` — global heading selectors now exclude `.section-label`; `h3.section-label` (and `h1–h6.section-label`) are pinned back to the label system: `font-sans`, `10px`, uppercase, accent color.
+2. `ServicesMarquee.tsx` — card titles unchanged in markup (`h3.section-label text-foreground/80`); fix is CSS-only.
+
+### Verification
+1. Visual check: toolkit marquee card captions stay small caps under posters; main toolkit headline remains large serif.
+
+## 2026-06-03 preserved brand lockup restore
+
+**Commit:** `2e11812` — `fix(typography): restore preserved brand lockup headlines`
+
+### Problem
+After the typography split, four intentional Cormorant lockups were wrong on the live site:
+1. Global `h1–h6:not(.section-label)` set `font-family: var(--font-marketing)` with **higher specificity** than `.type-brand-display`, so preserved titles rendered in **DM Sans**.
+2. `.type-brand-display` forced `font-weight: 700` on the whole hero `h1`, breaking the **`font-light italic`** line on “Saldarriaga”.
+3. Preserved headings without `.type-brand-display` still inherited marketing **font-size tokens** (`--type-hero`, `--type-section`, `h3` clamp), overriding Tailwind scale classes on hero, portfolio, and toolkit headlines.
+
+### What changed
+1. **Components** — Restored pre-split class strings:
+   - `Hero.tsx`: `font-serif text-foreground` + original `text-[15vw] sm:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem]`
+   - `Portfolio.tsx`: `font-serif text-foreground` + `text-5xl md:text-7xl lg:text-[5.5rem]`
+   - `ServicesMarquee.tsx` (mobile + desktop toolkit `h3`): `font-serif text-foreground` + original `text-3xl` / `md:text-5xl` stack
+2. **`index.css`** — Marketing font/size rules exclude `.font-serif` and `.type-brand-display`; explicit `h1–h3.font-serif` (and `h*.type-brand-display`) lock `font-family` to `--font-brand`. Removed `font-weight: 700` from `.type-brand-display` so child spans can set weight. **`.brand-logo` left on its own rule** (primary/accent color from navbar classes unchanged).
+
+### Preserved lockup checklist (do not change without explicit approval)
+| Surface | Element | Font | Notes |
+|--------|---------|------|--------|
+| Hero | `h1` Gisela / Saldarriaga | Cormorant (`font-serif`) | Second line stays `font-light italic` |
+| Navbar | `.brand-logo` | Cormorant | `Gise.UGC`, accent color via `text-accent` |
+| Portfolio | `h2` Historias / Convierten | Cormorant | “Convierten” keeps `.luxury-accent` |
+| Toolkit | `h3` El toolkit completo… | Cormorant | “modernos” keeps `.luxury-accent` |
+| Toolkit cards | `h3.section-label` | DM Sans 10px | Not a display headline |
+
+### Verification
+1. `npm run build`
+2. Visual: hero name, portfolio section title, toolkit main headline, and navbar wordmark all in Cormorant at pre-split sizes; card labels under marquee remain small caps.

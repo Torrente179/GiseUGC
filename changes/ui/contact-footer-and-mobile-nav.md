@@ -4,6 +4,8 @@
 This consolidates the February work on contact entry points, footer structure, and mobile navigation behavior. Those notes all converged on the current contact system: app-first deep links, a persistent floating dock, real social/profile wiring, simplified footer layout, and clearer mobile menu interactions.
 
 ## Current runtime touchpoints
+- `src/components/SiteFooter.tsx`
+- `src/components/PageEndStrip.tsx`
 - `src/components/FloatingContactDock.tsx`
 - `src/components/Navbar.tsx`
 - `src/components/Footer.tsx`
@@ -175,3 +177,39 @@ Generated at: `2026-03-18T14:36:10.837Z`
 ### Verification
 1. `npx eslint src/components/Footer.tsx`
 2. `npm run build`
+
+## 2026-06-03 temporary full footer gate + minimal page end strip
+
+**Commits:** `7ba4e4a` (footer gate), `e5605a7` (page end strip + marquee label CSS)
+
+### Problem
+The full editorial footer was not ready to ship, but pages still needed a legal closing row and crawlable privacy/terms links after the toolkit marquee. Hiding the footer with `display: none` would remove those links from the DOM.
+
+### What changed
+
+#### `SiteFooter.tsx` (new wrapper)
+1. `SHOW_SITE_FOOTER = false` — when false, render only `PageEndStrip`; when true, render full `Footer` (no strip). Used on homepage, service/vertical pages, legal, and resource routes via existing `SiteFooter` import sites.
+2. Export `SHOW_SITE_FOOTER` so a single flag controls sitewide behavior.
+
+#### `PageEndStrip.tsx` (new)
+1. Minimal `role="contentinfo"` footer after main content: `GiselaSaldarriaga.com · {year}` plus a frosted pill rail for localized legal links (`getLegalPath` + `footer.privacyPolicy` / `footer.termsContentUse`).
+2. Typography: `font-sans`, 10px meta line — intentionally not display serif.
+
+#### Regression note: `#contact` anchor
+1. Full `Footer.tsx` still owns `id="contact"` when `SHOW_SITE_FOOTER` is true.
+2. While the flag is false, navbar hire CTA (`href="#contact"` / `navbar.hireMeCta`) may not scroll to a contact block until the full footer returns or `#contact` moves to another section.
+
+### Files changed
+- `src/components/SiteFooter.tsx`
+- `src/components/PageEndStrip.tsx`
+- `src/index.css` (`.page-end-strip`, `.page-end-legal-rail` if present)
+- Page shells that import `SiteFooter` (unchanged import path)
+
+### SEO guardrail
+1. Legal links remain real `<Link>` routes in the DOM when the full footer is hidden.
+2. No metadata, schema, or copy changes in this pass.
+
+### Verification
+1. `npm run build`
+2. Confirm homepage ends with copyright + privacy/terms pills, not the large footer hero.
+3. Before re-enabling full footer: restore or relocate `#contact` for navbar CTA behavior.
