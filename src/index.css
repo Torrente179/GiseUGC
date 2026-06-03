@@ -500,12 +500,12 @@
   }
 
   .hero-wall-col-anim {
-    animation: hero-wall-up 64s linear infinite;
+    animation: hero-wall-up 45s linear infinite;
     will-change: transform;
     backface-visibility: hidden;
   }
   .hero-wall-down { animation-name: hero-wall-down; }
-  .hero-wall-slow { animation-duration: 88s; }
+  .hero-wall-slow { animation-duration: 62s; }
 
   @keyframes hero-wall-up {
     from { transform: translateY(0); }
