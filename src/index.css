@@ -662,7 +662,7 @@
   }
 
   .btn-primary-nordic {
-    @apply inline-flex items-center justify-center rounded-full bg-primary text-foreground font-sans text-[10px] font-bold uppercase tracking-prestige hover:bg-accent hover:-translate-y-[1px] hover:shadow-[0_14px_30px_-15px_hsla(var(--accent)/0.5)];
+    @apply inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-[#2392ae] dark:to-[#17778f] text-primary-foreground font-sans text-[10px] font-bold uppercase tracking-prestige hover:-translate-y-[1.5px] hover:shadow-[0_10px_25px_-8px_rgba(44,167,200,0.5)] active:translate-y-[0px] active:shadow-sm;
     transition: color var(--duration-fast) var(--ease-out-expo), background-color var(--duration-fast) var(--ease-out-expo), border-color var(--duration-fast) var(--ease-out-expo), box-shadow var(--duration-fast) var(--ease-out-expo), transform var(--duration-fast) var(--ease-out-expo);
   }
 

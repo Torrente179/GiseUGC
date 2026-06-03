@@ -378,13 +378,13 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
 
   const languageButtonClass = (language: string, compact = false) =>
     cn(
-      'inline-flex items-center justify-center rounded-full font-bold uppercase',
+      'inline-flex items-center justify-center rounded-full font-bold uppercase transition-colors duration-300',
       compact
         ? 'min-h-8 min-w-8 px-1.5 py-1 text-[9px] tracking-[0.22em]'
         : 'min-h-10 min-w-10 px-2.5 py-2 text-[11px] tracking-[0.32em]',
       i18n.resolvedLanguage === language
-        ? 'bg-primary/22 text-foreground shadow-[inset_0_0_0_1px_hsl(var(--primary)/0.35)]'
-        : 'text-foreground/85 hover:text-primary',
+        ? 'text-foreground font-extrabold'
+        : 'text-foreground/60 dark:text-foreground/50 hover:text-foreground',
     );
 
   return (
@@ -569,21 +569,24 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
             </div>
 
             <div className="hidden md:flex items-center gap-2.5">
-              <div className="flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-1 py-1">
-                <button
-                  onClick={() => changeLanguage('es')}
-                  className={languageButtonClass('es')}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
-                >
-                  ES
-                </button>
-                <button
-                  onClick={() => changeLanguage('en')}
-                  className={languageButtonClass('en')}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
-                >
-                  EN
-                </button>
+              <div className="relative flex items-center gap-0.5 rounded-full border border-border/30 bg-secondary/35 dark:bg-black/20 p-1">
+                {(['es', 'en'] as const).map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => changeLanguage(lang)}
+                    className={cn(languageButtonClass(lang, false), 'relative')}
+                    aria-label={t('languageSwitcher.changeLanguage') + (lang === 'es' ? ' a Español' : ' to English')}
+                  >
+                    {i18n.resolvedLanguage === lang && (
+                      <m.span
+                        layoutId="activeLangDesktop"
+                        className="absolute inset-0 rounded-full bg-background dark:bg-zinc-800 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] border border-border/20"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{lang.toUpperCase()}</span>
+                  </button>
+                ))}
               </div>
               <ThemeToggle />
               <m.a
@@ -596,7 +599,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                     navigate(homeSectionHref('contact'));
                   }
                 }}
-                className="btn-primary-nordic px-5 py-2.5"
+                className="btn-primary-nordic btn-shimmer px-5 py-2.5"
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.04, y: -1 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.96 }}
                 transition={springSnappy}
@@ -608,24 +611,27 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
             <div className={cn('md:hidden flex items-center', compactMobile ? 'gap-1' : 'gap-2')}>
               <div
                 className={cn(
-                  'flex items-center rounded-full border border-border/40 bg-background/60 backdrop-blur-md',
-                  compactMobile ? 'gap-0.5 px-0.5 py-0.5' : 'gap-1 px-1 py-1',
+                  'relative flex items-center rounded-full border border-border/30 bg-secondary/35 dark:bg-black/20',
+                  compactMobile ? 'gap-0.5 p-0.5' : 'gap-1 p-1',
                 )}
               >
-                <button
-                  onClick={() => changeLanguage('es')}
-                  className={languageButtonClass('es', compactMobile)}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' a Español'}
-                >
-                  ES
-                </button>
-                <button
-                  onClick={() => changeLanguage('en')}
-                  className={languageButtonClass('en', compactMobile)}
-                  aria-label={t('languageSwitcher.changeLanguage') + ' to English'}
-                >
-                  EN
-                </button>
+                {(['es', 'en'] as const).map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => changeLanguage(lang)}
+                    className={cn(languageButtonClass(lang, compactMobile), 'relative')}
+                    aria-label={t('languageSwitcher.changeLanguage') + (lang === 'es' ? ' a Español' : ' to English')}
+                  >
+                    {i18n.resolvedLanguage === lang && (
+                      <m.span
+                        layoutId="activeLangMobile"
+                        className="absolute inset-0 rounded-full bg-background dark:bg-zinc-800 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] border border-border/20"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{lang.toUpperCase()}</span>
+                  </button>
+                ))}
               </div>
               <ThemeToggle compact={compactMobile} />
               <button
