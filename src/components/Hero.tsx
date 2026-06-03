@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { m, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Diamond, Sparkles, Zap, ArrowDownRight, ChevronDown, Play } from 'lucide-react';
@@ -44,12 +44,14 @@ const cinematicLineVariants = {
 };
 
 type HeroPictureLayerProps = {
+  heroImageLoaded: boolean;
+  onImageLoad: () => void;
   altText: string;
 };
 
 // Shared full-bleed responsive hero image. Rendered statically on mobile /
 // reduced-motion, and inside the parallax wrapper on desktop.
-const HeroPictureLayer = ({ altText }: HeroPictureLayerProps) => (
+const HeroPictureLayer = ({ heroImageLoaded, onImageLoad, altText }: HeroPictureLayerProps) => (
   <picture>
     <source
       media="(max-width: 767px)"
@@ -83,10 +85,11 @@ const HeroPictureLayer = ({ altText }: HeroPictureLayerProps) => (
     <img
       src="/uploads/gisela-hero-585.jpg"
       alt={altText}
-      className="w-full h-full object-cover object-[44%_0%] md:object-[50%_12%] lg:object-[50%_34%]"
+      className={`w-full h-full object-cover object-[44%_0%] md:object-[50%_12%] lg:object-[50%_34%] transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
       loading="eager"
       fetchPriority="high"
       decoding="async"
+      onLoad={onImageLoad}
     />
   </picture>
 );
@@ -95,12 +98,15 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { t } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const shouldReduceMotion = useReducedMotion();
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
   const [currentClipIndex, setCurrentClipIndex] = useState(0);
   const [isDesktopViewport, setIsDesktopViewport] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches,
   );
   const containerRef = useRef<HTMLElement>(null);
   const videoRefs = useRef<Map<number, HTMLVideoElement>>(new Map());
+
+  const handleImageLoad = useCallback(() => setHeroImageLoaded(true), []);
 
   // Desktop-only gate: hero phone-frame video is inside `hidden lg:flex`.
   // Even when visually hidden, <video src> + autoPlay still buffer on mobile Chrome,
@@ -194,6 +200,8 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
           style={enableParallax ? { y: yImage } : undefined}
         >
           <HeroPictureLayer
+            heroImageLoaded={heroImageLoaded}
+            onImageLoad={handleImageLoad}
             altText={t('hero.imageAlt')}
           />
         </m.div>
