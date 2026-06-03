@@ -85,7 +85,7 @@ const ThemeToggle = ({ compact = false }: ThemeToggleProps) => {
         return (
             <button
                 type="button"
-                className={`${toggleSizeClass} rounded-full flex items-center justify-center border border-border/30 bg-secondary/35 dark:bg-black/20 backdrop-blur-md`}
+                className={`${toggleSizeClass} rounded-full flex items-center justify-center border border-border bg-card`}
                 aria-label="Toggle theme"
             >
                 <span className={`${iconSizeClass} bg-muted-foreground/20 rounded-full animate-pulse`} />
@@ -100,11 +100,11 @@ const ThemeToggle = ({ compact = false }: ThemeToggleProps) => {
             type="button"
             onPointerDown={handlePointerDown}
             onClick={handleClick}
-            className={`relative ${toggleSizeClass} rounded-full flex items-center justify-center border border-border/30 bg-secondary/35 dark:bg-black/20 hover:bg-secondary/60 dark:hover:bg-zinc-800/40 backdrop-blur-md transition-all duration-300 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06)] btn-press`}
+            className={`relative ${toggleSizeClass} rounded-full flex items-center justify-center border border-border bg-card transition-colors hover:bg-secondary btn-press`}
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-            <Sun className={`absolute ${iconSizeClass} text-amber-500 transition-all duration-500 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 rotate-90 scale-50'}`} />
-            <Moon className={`absolute ${iconSizeClass} text-indigo-400 dark:text-sky-300 transition-all duration-500 [transition-timing-function:cubic-bezier(0.34,1.56,0.64,1)] ${isDark ? 'opacity-0 -rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'}`} />
+            <Sun className={`absolute ${iconSizeClass} text-primary transition-all duration-300 ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 rotate-90 scale-50'}`} />
+            <Moon className={`absolute ${iconSizeClass} text-primary transition-all duration-300 ${isDark ? 'opacity-0 -rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'}`} />
         </button>
     );
 };
