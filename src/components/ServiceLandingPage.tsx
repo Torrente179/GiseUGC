@@ -632,7 +632,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   ╚══════════════════════════════════════════════════════════╝ */}
               <div>
 
-            {/* ── D1: CINEMATIC HERO — featured clip as ambient background ── */}
+            {/* ── D1: CINEMATIC HERO — featured clip as key-art on the right ── */}
             <section className="svc-cine-hero">
               {leadProof && (
                 <div className="svc-cine-hero-bg" aria-hidden="true">
@@ -647,6 +647,31 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 </div>
               )}
               <div className="svc-cine-hero-scrim" aria-hidden="true" />
+              {leadProof && (
+                <button
+                  type="button"
+                  className="svc-cine-hero-media group"
+                  onClick={() => openProofClip(0)}
+                  aria-label={`${labels.openSample}: ${leadProof.example.title}`}
+                >
+                  <span className="svc-cine-hero-media-clip">
+                    <AutoplayPreviewVideo
+                      src={leadProof.clip.previewSrc}
+                      poster={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
+                      className="svc-cine-hero-media-video"
+                      aria-hidden="true"
+                      preload="auto"
+                      pauseOffscreen={false}
+                    />
+                  </span>
+                  <span className="svc-cine-hero-media-shade" aria-hidden="true" />
+                  <span className="st-play-btn svc-cine-hero-media-play"><Play className="h-5 w-5 ml-0.5" /></span>
+                  <span className="svc-cine-hero-media-caption">
+                    <span className="st-chip">{page.navLabel}</span>
+                    {formatDuration(leadProof.clip.durationSeconds) && <span className="st-chip">{formatDuration(leadProof.clip.durationSeconds)}</span>}
+                  </span>
+                </button>
+              )}
               <div className="st-container svc-cine-hero-inner">
                 <div className="svc-cine-hero-text">
                   <nav className="st-breadcrumb svc-cine-hero-breadcrumb" aria-label="Breadcrumb">
@@ -663,26 +688,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   <p className="svc-cine-hero-hook">{page.heroSummary}</p>
                   <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary">{labels.startProject}</a>
                 </div>
-                {leadProof && (
-                  <div className="svc-cine-hero-frame-wrap">
-                    <button type="button" className="svc-cine-hero-frame group" onClick={() => openProofClip(0)} aria-label={`${labels.openSample}: ${leadProof.example.title}`}>
-                      <AutoplayPreviewVideo
-                        src={leadProof.clip.previewSrc}
-                        poster={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
-                        className="svc-cine-hero-frame-video"
-                        aria-hidden="true"
-                        preload="auto"
-                        pauseOffscreen={false}
-                      />
-                      <div className="svc-cine-hero-frame-overlay" />
-                      <div className="st-play-btn"><Play className="h-5 w-5 ml-0.5" /></div>
-                      <div className="svc-cine-hero-frame-caption">
-                        <span className="st-chip">{page.navLabel}</span>
-                        {formatDuration(leadProof.clip.durationSeconds) && <span className="st-chip">{formatDuration(leadProof.clip.durationSeconds)}</span>}
-                      </div>
-                    </button>
-                  </div>
-                )}
               </div>
             </section>
 
