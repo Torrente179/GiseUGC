@@ -8,7 +8,11 @@ export interface ReelClip {
   mainSrc: string;
   mobileSrc: string;
   previewSrc: string;
+  hlsSrc?: string;
+  mobileHlsSrc?: string;
+  previewHlsSrc?: string;
   posterSrc: string;
+  highQualityPosterSrc?: string;
   language?: ReelClipLocale;
   durationSeconds?: number;
   publishedAt?: string;
@@ -26,6 +30,23 @@ export const r2PreviewVideo = (filename: string) =>
   `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
 
 export const r2Poster = (filename: string) => `${R2_MEDIA_BASE_URL}/videos/posters/${filename}`;
+
+export const r2HlsMaster = (filename: string, rendition: 'main' | 'mobile' | 'preview' = 'main') => {
+  const baseName = filename.split('/').pop()?.replace(/\.[^.]+$/u, '') ?? filename;
+  return `${R2_MEDIA_BASE_URL}/videos/hls/${encodeURIComponent(baseName)}/${rendition}/master.m3u8`;
+};
+
+export const servicePosterSrcFromMain = (mainSrc: string, fallbackSrc: string) => {
+  const filename = mainSrc.split('/').pop();
+  if (!filename) return fallbackSrc;
+  const decodedFilename = decodeURIComponent(filename);
+  const baseName = decodedFilename.replace(/\.[^.]+$/u, '');
+  if (!baseName) return fallbackSrc;
+  return `/uploads/videos/service-posters/${encodeURIComponent(baseName)}.jpg`;
+};
+
+export const getBestPosterSrc = (clip: ReelClip) =>
+  clip.highQualityPosterSrc ?? servicePosterSrcFromMain(clip.mainSrc, clip.posterSrc);
 
 // Small locally-hosted 280w webp thumbs used by the Hero mobile 4-tile strip.
 // Derived from the R2 poster URL so data stays single-sourced.

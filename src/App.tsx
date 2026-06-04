@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
 import { Analytics, track } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
@@ -67,11 +67,6 @@ const AppRoutes = () => {
   const navigationType = useNavigationType();
   const { i18n } = useTranslation();
   const prevLocationKeyRef = useRef<string | null>(null);
-  const [keepHomeMounted, setKeepHomeMounted] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return !window.matchMedia('(max-width: 767px)').matches;
-  });
-
   const onHome = isHomePath(location.pathname);
   const locale = getLocaleFromPath(location.pathname);
 
@@ -103,21 +98,6 @@ const AppRoutes = () => {
   const isKnownRoute = onHome || currentServiceEntry !== null || currentVerticalEntry !== null || currentResourceEntry !== null || currentLegalEntry !== null;
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mediaQuery = window.matchMedia('(max-width: 767px)');
-    const syncKeepHomeMounted = () => setKeepHomeMounted(!mediaQuery.matches);
-
-    syncKeepHomeMounted();
-    if (typeof mediaQuery.addEventListener === 'function') {
-      mediaQuery.addEventListener('change', syncKeepHomeMounted);
-      return () => mediaQuery.removeEventListener('change', syncKeepHomeMounted);
-    }
-
-    mediaQuery.addListener(syncKeepHomeMounted);
-    return () => mediaQuery.removeListener(syncKeepHomeMounted);
-  }, []);
-
-  useEffect(() => {
     // Keep locale in sync with the current path
     const locale = getLocaleFromPath(location.pathname);
     if (i18n.resolvedLanguage !== locale) {
@@ -132,9 +112,8 @@ const AppRoutes = () => {
 
     if (navigationType === 'POP') {
       // Browser back / forward — restore exact saved scroll position.
-      // Two rAF hops let the browser finish layout (especially display:none→block
-      // for the homepage) before we set scroll, preventing the main-thread freeze
-      // on mobile where layout and scroll restoration would otherwise compete.
+      // Two rAF hops let the browser finish route layout before restoring scroll,
+      // preventing main-thread contention on media-heavy pages.
       const savedY = scrollPositions.get(location.key) ?? 0;
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -153,21 +132,8 @@ const AppRoutes = () => {
 
   return (
     <>
-      {/*
-        Keep home mounted on desktop for instant returns.
-        On mobile, unmount it off-route so hidden video-heavy sections do not
-        keep consuming media resources while browsing service pages.
-      */}
-      {keepHomeMounted ? (
-        <div
-          style={{ display: onHome ? 'block' : 'none' }}
-          aria-hidden={!onHome ? true : undefined}
-        >
-          <Index locale={locale} />
-        </div>
-      ) : (
-        onHome ? <Index locale={locale} /> : null
-      )}
+      {/* Unmount home off-route so hidden video-heavy sections release media resources. */}
+      {onHome ? <Index locale={locale} /> : null}
 
       {/*
         Service pages mount on first visit and unmount when navigating away.

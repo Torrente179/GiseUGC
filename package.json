@@ -15,6 +15,8 @@
     "service:entrypoints": "node scripts/enrich-service-entrypoints.mjs",
     "video:encode": "bash scripts/encode-videos.sh",
     "video:encode:dry": "bash scripts/encode-videos.sh --dry-run",
+    "video:hls": "bash scripts/encode-hls.sh",
+    "video:hls:dry": "bash scripts/encode-hls.sh --dry-run",
     "video:service-posters": "bash scripts/generate-service-posters.sh",
     "video:catalog": "node scripts/generate-nuevos-r2-catalog.mjs"
   },
@@ -58,6 +60,7 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.0",
     "framer-motion": "^12.34.0",
+    "hls.js": "^1.6.16",
     "i18next": "^24.2.3",
     "i18next-browser-languagedetector": "^8.0.4",
     "i18next-http-backend": "^3.0.2",

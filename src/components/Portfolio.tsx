@@ -5,9 +5,9 @@ import { m, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useIsMobile } from '@/hooks/use-mobile';
-import LazyVideo from '@/components/media/LazyVideo';
-import VIDEO_LQIP from '@/data/video-lqip';
+import AdaptiveVideo from '@/components/media/AdaptiveVideo';
 import {
+  getBestPosterSrc,
   LEGACY_REEL_CLIPS,
   type ReelClip,
 } from '@/data/portfolio-clips';
@@ -41,11 +41,7 @@ const STARTUP_PREWARM_DELAY_DESKTOP_MS = 300;
 const STARTUP_PREWARM_DELAY_MOBILE_MS = 220;
 const PORTFOLIO_PREWARM_ROOT_MARGIN = '1800px 0px';
 const shouldPreferMobileTheaterSource = false;
-const getLqip = (url: string) => {
-  const filename = url.split('/').pop() ?? '';
-  const key = filename.replace(/-preview\.mp4$/, '').replace(/-poster\.jpg$/, '').replace(/\.mp4$/, '');
-  return VIDEO_LQIP[key] || undefined;
-};
+const isQuickTimeSource = (src?: string) => Boolean(src && /\.mov(?:$|\?)/iu.test(src));
 const DAY_MS = 86_400_000;
 const getUtcDayBucket = () => Math.floor(Date.now() / DAY_MS);
 
@@ -71,11 +67,13 @@ const ALL_REEL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLI
 
 const TheaterVideo = memo(({
   sources,
+  hlsSources = [],
   poster,
   enableStartupFallback,
   startupFallbackMs,
 }: {
   sources: string[];
+  hlsSources?: (string | undefined)[];
   poster: string;
   enableStartupFallback: boolean;
   startupFallbackMs: number;
@@ -87,7 +85,9 @@ const TheaterVideo = memo(({
   const [isMuted, setIsMuted] = useState(false);
   const [activeSourceIndex, setActiveSourceIndex] = useState(0);
   const sourceKey = sources.join('|');
+  const hlsSourceKey = hlsSources.filter(Boolean).join('|');
   const activeSource = sources[activeSourceIndex] ?? sources[0] ?? '';
+  const activeHlsSource = hlsSources[activeSourceIndex] ?? hlsSources[0];
 
   const clearStartupTimeout = useCallback(() => {
     if (startupTimeoutRef.current !== null) {
@@ -209,7 +209,7 @@ const TheaterVideo = memo(({
 
   useEffect(() => {
     setActiveSourceIndex(0);
-  }, [sourceKey]);
+  }, [hlsSourceKey, sourceKey]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -244,16 +244,22 @@ const TheaterVideo = memo(({
 
   return (
     <div className="relative overflow-hidden bg-black">
-      <video
+      <AdaptiveVideo
         ref={videoRef}
         className="w-full aspect-[9/16] object-cover"
         src={activeSource}
+        hlsSrc={activeHlsSource}
         poster={poster}
         preload="auto"
         autoPlay
+        muted
         playsInline
-        disablePictureInPicture
-        disableRemotePlayback
+        loop={false}
+        loadStrategy="immediate"
+        playbackPriority="theater"
+        requestPlaybackSlot
+        pauseOffscreen={false}
+        unloadWhenOffscreen={false}
         onLoadedMetadata={(event) => {
           event.currentTarget.defaultPlaybackRate = 1;
           event.currentTarget.playbackRate = 1;
@@ -612,11 +618,13 @@ const Portfolio = () => {
     (clip: ReelClip | null) => {
       if (!clip) return [];
 
-      const orderedSources = isMobile
-        ? shouldPreferMobileTheaterSource
-          ? [clip.mobileSrc, clip.mainSrc]
-          : [clip.mainSrc, clip.mobileSrc]
-        : [clip.mainSrc];
+      const orderedSources = isQuickTimeSource(clip.mainSrc)
+        ? [clip.mobileSrc, clip.mainSrc]
+        : isMobile
+          ? shouldPreferMobileTheaterSource
+            ? [clip.mobileSrc, clip.mainSrc]
+            : [clip.mainSrc, clip.mobileSrc]
+          : [clip.mainSrc, clip.mobileSrc];
 
       return orderedSources.filter((source, index, sources): source is string => {
         if (!source) return false;
@@ -1050,11 +1058,28 @@ const Portfolio = () => {
 
   const theaterSources = useMemo(() => {
     if (!activeReelPreview) return [];
-    const playbackSources = isMobile
-      ? shouldPreferMobileTheaterSource
-        ? [activeReelPreview.mobileSrc, activeReelPreview.mainSrc, activeReelPreview.previewSrc]
-        : [activeReelPreview.mainSrc, activeReelPreview.mobileSrc, activeReelPreview.previewSrc]
-      : [activeReelPreview.mainSrc, activeReelPreview.mobileSrc, activeReelPreview.previewSrc];
+    const playbackSources = isQuickTimeSource(activeReelPreview.mainSrc)
+      ? [activeReelPreview.mobileSrc, activeReelPreview.mainSrc, activeReelPreview.previewSrc]
+      : isMobile
+        ? shouldPreferMobileTheaterSource
+          ? [activeReelPreview.mobileSrc, activeReelPreview.mainSrc, activeReelPreview.previewSrc]
+          : [activeReelPreview.mainSrc, activeReelPreview.mobileSrc, activeReelPreview.previewSrc]
+        : [activeReelPreview.mainSrc, activeReelPreview.mobileSrc, activeReelPreview.previewSrc];
+    return playbackSources.filter(
+      (source, index, allSources): source is string =>
+        Boolean(source) && allSources.indexOf(source) === index,
+    );
+  }, [activeReelPreview, isMobile]);
+
+  const theaterHlsSources = useMemo(() => {
+    if (!activeReelPreview) return [];
+    const playbackSources = isQuickTimeSource(activeReelPreview.mainSrc)
+      ? [activeReelPreview.mobileHlsSrc, activeReelPreview.hlsSrc, activeReelPreview.previewHlsSrc]
+      : isMobile
+        ? shouldPreferMobileTheaterSource
+          ? [activeReelPreview.mobileHlsSrc, activeReelPreview.hlsSrc, activeReelPreview.previewHlsSrc]
+          : [activeReelPreview.hlsSrc, activeReelPreview.mobileHlsSrc, activeReelPreview.previewHlsSrc]
+        : [activeReelPreview.hlsSrc, activeReelPreview.mobileHlsSrc, activeReelPreview.previewHlsSrc];
     return playbackSources.filter(
       (source, index, allSources): source is string =>
         Boolean(source) && allSources.indexOf(source) === index,
@@ -1256,19 +1281,21 @@ const Portfolio = () => {
                       whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
                       transition={springHoverTransition}
                     >
-                      <LazyVideo
+                      <AdaptiveVideo
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         src={clip.previewSrc}
-                        poster={clip.posterSrc}
-                        lqip={getLqip(clip.previewSrc)}
+                        hlsSrc={clip.previewHlsSrc}
+                        poster={isWarmMobileCard || !isMobile ? getBestPosterSrc(clip) : clip.posterSrc}
                         muted
                         autoPlay={!isMobile || isActiveMobileCard}
                         loop
                         playsInline
-                        preload={isWarmMobileCard ? 'auto' : 'none'}
+                        preload={isWarmMobileCard ? 'metadata' : 'none'}
                         rootMargin="100px 0px"
                         pauseOffscreen
+                        unloadWhenOffscreen
                         forcePause={isTheaterOpen || !isActiveMobileCard}
+                        playbackPriority={isActiveMobileCard ? 'preview' : 'background'}
                         aria-hidden="true"
                       />
                     </m.button>
@@ -1449,7 +1476,8 @@ const Portfolio = () => {
 
                 <TheaterVideo
                   sources={theaterSources}
-                  poster={activeReelPreview.posterSrc}
+                  hlsSources={theaterHlsSources}
+                  poster={getBestPosterSrc(activeReelPreview)}
                   enableStartupFallback={isMobile}
                   startupFallbackMs={theaterStartupFallbackMs}
                 />

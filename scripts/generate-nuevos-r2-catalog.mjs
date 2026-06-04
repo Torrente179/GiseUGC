@@ -85,6 +85,10 @@ function toR2VideoUrl(folder, filename) {
   return `${R2_MEDIA_BASE_URL}/videos/${folder}/${encodeURIComponent(filename)}`;
 }
 
+function toR2HlsUrl(baseName, rendition) {
+  return `${R2_MEDIA_BASE_URL}/videos/hls/${encodeURIComponent(baseName)}/${rendition}/master.m3u8`;
+}
+
 function stripExtension(filename) {
   return filename.replace(/\.[^/.]+$/u, '');
 }
@@ -265,6 +269,10 @@ export const NUEVOS_R2_BLOCK_REPORT: {
           mobile: toR2VideoUrl('mobile', `${baseName}-mobile.mp4`),
           preview: toR2VideoUrl('previews', `${baseName}-preview.mp4`),
           poster: toR2VideoUrl('posters', `${baseName}-poster.jpg`),
+          highQualityPoster: `/uploads/videos/service-posters/${encodeURIComponent(baseName)}.jpg`,
+          hls: toR2HlsUrl(baseName, 'main'),
+          mobileHls: toR2HlsUrl(baseName, 'mobile'),
+          previewHls: toR2HlsUrl(baseName, 'preview'),
         },
       };
     })
@@ -272,11 +280,22 @@ export const NUEVOS_R2_BLOCK_REPORT: {
 
   const statuses = await Promise.all(
     candidates.map(async (candidate) => {
-      const [mainStatus, mobileStatus, previewStatus, posterStatus] = await Promise.all([
+      const [
+        mainStatus,
+        mobileStatus,
+        previewStatus,
+        posterStatus,
+        hlsStatus,
+        mobileHlsStatus,
+        previewHlsStatus,
+      ] = await Promise.all([
         checkUrl(candidate.assets.main, args.timeoutMs),
         checkUrl(candidate.assets.mobile, args.timeoutMs),
         checkUrl(candidate.assets.preview, args.timeoutMs),
         checkUrl(candidate.assets.poster, args.timeoutMs),
+        checkUrl(candidate.assets.hls, args.timeoutMs),
+        checkUrl(candidate.assets.mobileHls, args.timeoutMs),
+        checkUrl(candidate.assets.previewHls, args.timeoutMs),
       ]);
 
       return {
@@ -286,6 +305,9 @@ export const NUEVOS_R2_BLOCK_REPORT: {
           mobile: mobileStatus,
           preview: previewStatus,
           poster: posterStatus,
+          hls: hlsStatus,
+          mobileHls: mobileHlsStatus,
+          previewHls: previewHlsStatus,
         },
       };
     }),
@@ -322,7 +344,11 @@ export const NUEVOS_R2_BLOCK_REPORT: {
         mainSrc: candidate.assets.main,
         mobileSrc: candidate.assets.mobile,
         previewSrc: candidate.assets.preview,
+        ...(assetStatuses.hls === 200 ? { hlsSrc: candidate.assets.hls } : {}),
+        ...(assetStatuses.mobileHls === 200 ? { mobileHlsSrc: candidate.assets.mobileHls } : {}),
+        ...(assetStatuses.previewHls === 200 ? { previewHlsSrc: candidate.assets.previewHls } : {}),
         posterSrc: candidate.assets.poster,
+        highQualityPosterSrc: candidate.assets.highQualityPoster,
         durationSeconds: Number.isFinite(candidate.durationSeconds) ? candidate.durationSeconds : undefined,
         language: candidate.language,
       });
@@ -350,6 +376,7 @@ export const NUEVOS_R2_BLOCK_REPORT: {
     mainSrc: '${escapeSingleQuotes(clip.mainSrc)}',
     mobileSrc: '${escapeSingleQuotes(clip.mobileSrc)}',
     previewSrc: '${escapeSingleQuotes(clip.previewSrc)}',
+${clip.hlsSrc ? `    hlsSrc: '${escapeSingleQuotes(clip.hlsSrc)}',\n` : ''}${clip.mobileHlsSrc ? `    mobileHlsSrc: '${escapeSingleQuotes(clip.mobileHlsSrc)}',\n` : ''}${clip.previewHlsSrc ? `    previewHlsSrc: '${escapeSingleQuotes(clip.previewHlsSrc)}',\n` : ''}    highQualityPosterSrc: '${escapeSingleQuotes(clip.highQualityPosterSrc)}',
     posterSrc: '${escapeSingleQuotes(clip.posterSrc)}',
     durationSeconds: ${clip.durationSeconds ?? 'undefined'},
     language: '${clip.language}',

@@ -5,7 +5,7 @@ import type { ServicePageId, SiteLocale, VerticalPageId, ResourcePageId } from '
 import { getHomePath, getHomeSectionHref, getServicePath, getVerticalPath, getResourcePath } from '@/lib/locale-path';
 import { getServicePageContent, getRelatedServiceSummaries, getAllServiceIds } from '@/data/service-pages';
 import { getVerticalPageContent } from '@/data/vertical-pages';
-import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
+import { getBestPosterSrc, LEGACY_REEL_CLIPS, servicePosterSrcFromMain } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
@@ -19,19 +19,12 @@ const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee')
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
-const SERVICE_POSTER_BASE_PATH = '/uploads/videos/service-posters';
 
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
 const clipMap = new Map([...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS].map((clip) => [clip.id, clip]));
 const formatDuration = (seconds?: number) => (seconds ? `${Math.round(seconds)}s` : null);
-const getHighQualityServicePosterSrc = (mainSrc: string, fallbackSrc: string) => {
-  const filename = mainSrc.split('/').pop();
-  if (!filename) return fallbackSrc;
-  const decodedFilename = decodeURIComponent(filename);
-  const baseName = decodedFilename.replace(/\.[^.]+$/u, '');
-  if (!baseName) return fallbackSrc;
-  return `${SERVICE_POSTER_BASE_PATH}/${encodeURIComponent(baseName)}.jpg`;
-};
+const getHighQualityServicePosterSrc = servicePosterSrcFromMain;
+const isQuickTimeSource = (src?: string) => Boolean(src && /\.mov(?:$|\?)/iu.test(src));
 
 /* ── Internal linking maps ── */
 const SERVICE_TO_VERTICALS: Record<ServicePageId, VerticalPageId[]> = {
@@ -207,9 +200,22 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
   const theaterSources = useMemo(() => {
     const clip = activeProofItem?.clip;
     if (!clip) return [];
-    const preferred = isMobileViewport
-      ? [clip.mainSrc, clip.mobileSrc, clip.previewSrc]
-      : [clip.mainSrc, clip.mobileSrc, clip.previewSrc];
+    const preferred = isQuickTimeSource(clip.mainSrc)
+      ? [clip.mobileSrc, clip.mainSrc, clip.previewSrc]
+      : isMobileViewport
+        ? [clip.mobileSrc, clip.mainSrc, clip.previewSrc]
+        : [clip.mainSrc, clip.mobileSrc, clip.previewSrc];
+    return preferred.filter((s, i, a): s is string => !!s && a.indexOf(s) === i);
+  }, [activeProofItem, isMobileViewport]);
+
+  const theaterHlsSources = useMemo(() => {
+    const clip = activeProofItem?.clip;
+    if (!clip) return [];
+    const preferred = isQuickTimeSource(clip.mainSrc)
+      ? [clip.mobileHlsSrc, clip.hlsSrc, clip.previewHlsSrc]
+      : isMobileViewport
+        ? [clip.mobileHlsSrc, clip.hlsSrc, clip.previewHlsSrc]
+        : [clip.hlsSrc, clip.mobileHlsSrc, clip.previewHlsSrc];
     return preferred.filter((s, i, a): s is string => !!s && a.indexOf(s) === i);
   }, [activeProofItem, isMobileViewport]);
 
@@ -399,11 +405,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 >
                   <AutoplayPreviewVideo
                     src={leadProof.clip.previewSrc}
-                    poster={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
+                    hlsSrc={leadProof.clip.previewHlsSrc}
+                    poster={getBestPosterSrc(leadProof.clip)}
                     className="stm-hero-poster-img"
                     aria-hidden="true"
-                    preload="auto"
-                    pauseOffscreen={false}
+                    preload="metadata"
+                    playbackPriority="hero"
+                    rootMargin="220px 0px"
+                    forcePause={isProofTheaterOpen}
                   />
                   <div className="stm-hero-poster-overlay" />
                 </button>
@@ -450,10 +459,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                         <div className="stm-reel-card-media">
                           <AutoplayPreviewVideo
                             src={clip.previewSrc}
+                            hlsSrc={clip.previewHlsSrc}
                             poster={posterSrc}
                             className="stm-reel-card-img"
                             aria-hidden="true"
-                            pauseOffscreen={false}
+                            playbackPriority="preview"
+                            rootMargin="180px 0px"
+                            forcePause={isProofTheaterOpen}
                           />
                           <div className="stm-reel-card-gradient" />
                           <div className="stm-reel-card-bottom">
@@ -638,11 +650,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 <div className="svc-cine-hero-bg" aria-hidden="true">
                   <AutoplayPreviewVideo
                     src={leadProof.clip.previewSrc}
-                    poster={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
+                    hlsSrc={leadProof.clip.previewHlsSrc}
+                    poster={getBestPosterSrc(leadProof.clip)}
                     className="svc-cine-hero-bg-video"
                     aria-hidden="true"
-                    preload="auto"
-                    pauseOffscreen={false}
+                    preload="metadata"
+                    playbackPriority="ambient"
+                    rootMargin="260px 0px"
+                    forcePause={isProofTheaterOpen}
                   />
                 </div>
               )}
@@ -652,10 +667,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   <span className="svc-cine-hero-media-clip">
                     <AutoplayPreviewVideo
                       src={leadProof.clip.mobileSrc}
-                      poster={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
+                      hlsSrc={leadProof.clip.mobileHlsSrc ?? leadProof.clip.hlsSrc}
+                      poster={getBestPosterSrc(leadProof.clip)}
                       className="svc-cine-hero-media-video"
                       aria-hidden="true"
-                      preload="auto"
+                      preload="metadata"
+                      playbackPriority="hero"
+                      rootMargin="260px 0px"
+                      forcePause={isProofTheaterOpen}
                     />
                   </span>
                   <span className="svc-cine-hero-media-shade" aria-hidden="true" />
@@ -740,10 +759,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                           {isHovered && (
                             <AutoplayPreviewVideo
                               src={clip.previewSrc}
+                              hlsSrc={clip.previewHlsSrc}
                               poster={posterSrc}
                               className="svc-cine-card-video"
                               aria-hidden="true"
-                              pauseOffscreen={false}
+                              playbackPriority="preview"
+                              rootMargin="180px 0px"
+                              forcePause={isProofTheaterOpen}
                             />
                           )}
                           <div className="svc-cine-card-gradient" />
@@ -933,6 +955,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 <div className="relative">
                   <TheaterVideo
                     sources={theaterSources}
+                    hlsSources={theaterHlsSources}
                     poster={getHighQualityServicePosterSrc(activeProofItem.clip.mainSrc, activeProofItem.clip.posterSrc)}
                     enableStartupFallback={isMobileViewport}
                     startupFallbackMs={isMobileViewport ? 300 : 420}

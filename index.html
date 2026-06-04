@@ -411,21 +411,10 @@
           var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
           if (conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) return;
         } catch (_) {}
-        var isMobile = window.innerWidth < 768;
-        if (!isMobile) {
-          var preloadVideo = document.createElement('link');
-          preloadVideo.rel = 'preload';
-          preloadVideo.as = 'video';
-          preloadVideo.href = 'https://media.giselasaldarriaga.com/videos/previews/ugc-lifestyle-review-preview.mp4';
-          preloadVideo.crossOrigin = '';
-          preloadVideo.fetchPriority = 'high';
-          document.head.appendChild(preloadVideo);
-        }
         var preloadPoster = document.createElement('link');
         preloadPoster.rel = 'preload';
         preloadPoster.as = 'image';
         preloadPoster.href = 'https://media.giselasaldarriaga.com/videos/posters/ugc-lifestyle-review-poster.jpg';
-        preloadPoster.crossOrigin = '';
         document.head.appendChild(preloadPoster);
       })();
     </script>

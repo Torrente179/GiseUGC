@@ -1,4 +1,4 @@
-import { useMemo, type MouseEvent } from 'react';
+import { useEffect, useMemo, useState, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { m } from 'framer-motion';
 import { ArrowDownRight } from 'lucide-react';
@@ -41,6 +41,13 @@ const introItem = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
+const getVisibleHeroColumnCount = () => {
+  if (typeof window === 'undefined') return N_COLS;
+  if (window.matchMedia('(min-width: 1024px)').matches) return 5;
+  if (window.matchMedia('(min-width: 640px)').matches) return 3;
+  return 2;
+};
+
 const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -53,6 +60,14 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   const columns = Array.from({ length: N_COLS }, (_, c) =>
     Array.from({ length: TILES_PER_COL }, (_, r) => dailyClips[(c * TILES_PER_COL + r) % dailyClips.length]),
   );
+  const [visibleColumnCount, setVisibleColumnCount] = useState(getVisibleHeroColumnCount);
+
+  useEffect(() => {
+    const update = () => setVisibleColumnCount(getVisibleHeroColumnCount());
+    update();
+    window.addEventListener('resize', update, { passive: true });
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   const roleLabel = locale === 'es'
     ? 'Creadora UGC bilingüe · Medellín'
@@ -76,7 +91,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
           className="hero-wall max-md:!top-[calc(env(safe-area-inset-top,0px)+5.5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
           aria-hidden="true"
         >
-          {columns.map((col, c) => {
+          {columns.slice(0, visibleColumnCount).map((col, c) => {
             const playColumnVideos = !isMobile || c < 2;
 
             return (

@@ -9,6 +9,8 @@ import {
   type MouseEvent,
   type SyntheticEvent,
 } from 'react';
+import { useMediaPlaybackSlot } from '@/hooks/use-media-playback-slot';
+import type { MediaPlaybackPriority } from '@/lib/media-playback-scheduler';
 
 type LazyVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poster'> & {
   src: string;
@@ -20,6 +22,8 @@ type LazyVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poste
   forcePause?: boolean;
   unloadWhenOffscreen?: boolean;
   unloadWhenForcedPause?: boolean;
+  playbackPriority?: MediaPlaybackPriority;
+  requestPlaybackSlot?: boolean;
 };
 
 const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
@@ -36,6 +40,8 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       forcePause = false,
       unloadWhenOffscreen = false,
       unloadWhenForcedPause = false,
+      playbackPriority = 'preview',
+      requestPlaybackSlot = true,
       onMouseEnter,
       onTouchStart,
       onFocus,
@@ -52,10 +58,19 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
     const [isInViewport, setIsInViewport] = useState(true);
     const [shouldLoad, setShouldLoad] = useState(!loadWhenVisible);
     const [mediaReady, setMediaReady] = useState(false);
-    const shouldAttachSource =
+    const sourceEligible =
       shouldLoad &&
       (!unloadWhenOffscreen || isInViewport) &&
       (!unloadWhenForcedPause || !forcePause);
+    const wantsPlaybackSlot = autoPlay && sourceEligible && !forcePause && isInViewport;
+    const hasPlaybackSlot = useMediaPlaybackSlot(
+      wantsPlaybackSlot,
+      playbackPriority,
+      requestPlaybackSlot,
+    );
+    const shouldAttachSource =
+      sourceEligible && (!autoPlay || !requestPlaybackSlot || hasPlaybackSlot);
+    const shouldPlay = autoPlay && shouldAttachSource && hasPlaybackSlot && !forcePause;
 
     useEffect(() => {
       return () => {
@@ -101,7 +116,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
     }, [loadWhenVisible, rootMargin, shouldLoad]);
 
     useEffect(() => {
-      if (!shouldAttachSource || !autoPlay || forcePause) return;
+      if (!shouldAttachSource || !shouldPlay) return;
       if (pauseOffscreen && !isInViewportRef.current) return;
       const node = internalRef.current;
       if (!node) return;
@@ -110,7 +125,29 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
       if (playPromise) {
         playPromise.catch(() => undefined);
       }
-    }, [autoPlay, forcePause, pauseOffscreen, shouldAttachSource]);
+    }, [pauseOffscreen, shouldAttachSource, shouldPlay]);
+
+    useEffect(() => {
+      const node = internalRef.current;
+      if (!node) return;
+
+      if (!shouldAttachSource) {
+        node.pause();
+        node.removeAttribute('src');
+        node.load();
+        setMediaReady(false);
+        return;
+      }
+
+      if (!shouldPlay) {
+        node.pause();
+      }
+    }, [shouldAttachSource, shouldPlay]);
+
+    useEffect(() => {
+      if (hasPlaybackSlot) return;
+      internalRef.current?.pause();
+    }, [hasPlaybackSlot]);
 
     useEffect(() => {
       if (!forcePause) return;
@@ -132,7 +169,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
             node.pause();
             return;
           }
-          if (!pauseOffscreen || !autoPlay) return;
+          if (!pauseOffscreen || !shouldPlay) return;
           if (entry.isIntersecting) {
             node.play().catch(() => undefined);
           } else {
@@ -144,7 +181,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
 
       observer.observe(node);
       return () => observer.disconnect();
-    }, [pauseOffscreen, autoPlay, forcePause, unloadWhenOffscreen]);
+    }, [pauseOffscreen, forcePause, shouldPlay, unloadWhenOffscreen]);
 
     const assignRef = (node: HTMLVideoElement | null) => {
       internalRef.current = node;
@@ -213,7 +250,7 @@ const LazyVideo = forwardRef<HTMLVideoElement, LazyVideoProps>(
         src={shouldAttachSource ? src : undefined}
         poster={effectivePoster}
         preload={shouldAttachSource ? preload : 'none'}
-        autoPlay={autoPlay}
+        autoPlay={shouldPlay}
         disablePictureInPicture
         disableRemotePlayback
         onCanPlay={handleCanPlay}

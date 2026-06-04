@@ -7,6 +7,7 @@ import { revealUp, springHoverTransition, staggerContainer } from '@/components/
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import LazyVideo from '@/components/media/LazyVideo';
+import AdaptiveVideo from '@/components/media/AdaptiveVideo';
 import VIDEO_LQIP from '@/data/video-lqip';
 import { LEGACY_REEL_CLIPS, r2Poster, r2PreviewVideo } from '@/data/portfolio-clips';
 
@@ -126,16 +127,19 @@ const CreatorAdvantage = () => {
       aria-label={t('portfolio.collageCta')}
     >
       <div className="hero-phone-notch" />
-      <video
+      <AdaptiveVideo
         key={reelClip.id}
         className="hero-phone-video"
         src={reelClip.mobileSrc}
+        hlsSrc={reelClip.mobileHlsSrc ?? reelClip.hlsSrc}
         poster={reelClip.posterSrc}
         muted
         loop
         autoPlay
         playsInline
         preload="metadata"
+        playbackPriority="preview"
+        rootMargin="180px 0px"
       />
       <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 backdrop-blur-sm">
         <Play className="h-2.5 w-2.5 fill-white text-white" />

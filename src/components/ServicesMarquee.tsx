@@ -167,6 +167,11 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
 
     const playLoopingVideo = useCallback((video: HTMLVideoElement | null) => {
         if (!video) return;
+        const hasAttachedSource = Boolean(video.currentSrc || video.src || video.querySelector('source')?.src);
+        if (!hasAttachedSource) {
+            video.pause();
+            return;
+        }
         video.defaultPlaybackRate = 1;
         video.playbackRate = 1;
         const playPromise = video.play();
@@ -705,7 +710,7 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
                                             playsInline
                                             pauseOffscreen
                                             forcePause={expandedCard !== null && expandedCard !== index}
-                                            loadWhenVisible={!isPriorityWarmCard}
+                                            loadWhenVisible
                                             preload={isPriorityWarmCard ? 'metadata' : 'none'}
                                             rootMargin={isPriorityWarmCard ? '520px 0px' : '120px 0px'}
                                         />

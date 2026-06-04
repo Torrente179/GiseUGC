@@ -8,9 +8,11 @@ import {
 } from 'react';
 import { Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import AdaptiveVideo from '@/components/media/AdaptiveVideo';
 
 export interface TheaterVideoProps {
   sources: string[];
+  hlsSources?: (string | undefined)[];
   poster: string;
   enableStartupFallback?: boolean;
   startupFallbackMs?: number;
@@ -22,6 +24,7 @@ const DEFAULT_STARTUP_FALLBACK_MS = 400;
 const TheaterVideo = memo(
   ({
     sources,
+    hlsSources = [],
     poster,
     enableStartupFallback = false,
     startupFallbackMs = DEFAULT_STARTUP_FALLBACK_MS,
@@ -34,7 +37,9 @@ const TheaterVideo = memo(
     const [isMuted, setIsMuted] = useState(false);
     const [activeSourceIndex, setActiveSourceIndex] = useState(0);
     const sourceKey = sources.join('|');
+    const hlsSourceKey = hlsSources.filter(Boolean).join('|');
     const activeSource = sources[activeSourceIndex] ?? sources[0] ?? '';
+    const activeHlsSource = hlsSources[activeSourceIndex] ?? hlsSources[0];
 
     const clearStartupTimeout = useCallback(() => {
       if (startupTimeoutRef.current !== null) {
@@ -166,7 +171,7 @@ const TheaterVideo = memo(
 
     useEffect(() => {
       setActiveSourceIndex(0);
-    }, [sourceKey]);
+    }, [hlsSourceKey, sourceKey]);
 
     useEffect(() => {
       const video = videoRef.current;
@@ -201,16 +206,22 @@ const TheaterVideo = memo(
 
     return (
       <div className={cn('relative overflow-hidden bg-black', className)}>
-        <video
+        <AdaptiveVideo
           ref={videoRef}
           className="w-full aspect-[9/16] object-cover"
-          src={activeSource || undefined}
+          src={activeSource}
+          hlsSrc={activeHlsSource}
           poster={poster}
           preload="metadata"
           autoPlay
+          muted={false}
           playsInline
-          disablePictureInPicture
-          disableRemotePlayback
+          loop={false}
+          loadStrategy="immediate"
+          playbackPriority="theater"
+          requestPlaybackSlot
+          pauseOffscreen={false}
+          unloadWhenOffscreen={false}
           onLoadedMetadata={(event) => {
             event.currentTarget.defaultPlaybackRate = 1;
             event.currentTarget.playbackRate = 1;

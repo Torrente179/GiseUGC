@@ -1,101 +1,55 @@
-import { useEffect, useRef, type VideoHTMLAttributes } from 'react';
+import type { VideoHTMLAttributes } from 'react';
+import AdaptiveVideo from '@/components/media/AdaptiveVideo';
+import type { MediaPlaybackPriority } from '@/lib/media-playback-scheduler';
 
 type AutoplayPreviewVideoProps = Omit<
   VideoHTMLAttributes<HTMLVideoElement>,
   'autoPlay' | 'loop' | 'muted' | 'playsInline' | 'poster' | 'src'
 > & {
   src: string;
+  hlsSrc?: string;
   poster: string;
   pauseOffscreen?: boolean;
   rootMargin?: string;
+  unloadWhenOffscreen?: boolean;
+  playbackPriority?: MediaPlaybackPriority;
+  requestPlaybackSlot?: boolean;
+  loadStrategy?: 'immediate' | 'visible';
+  forcePause?: boolean;
 };
 
 const AutoplayPreviewVideo = ({
   src,
+  hlsSrc,
   poster,
   pauseOffscreen = true,
   rootMargin = '120px 0px',
+  unloadWhenOffscreen = true,
+  playbackPriority = 'preview',
+  requestPlaybackSlot = true,
+  loadStrategy = 'visible',
+  forcePause = false,
   preload = 'metadata',
   ...props
 }: AutoplayPreviewVideoProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const inViewportRef = useRef(true);
-
-  useEffect(() => {
-    const node = videoRef.current;
-    if (!node) return;
-
-    let cancelled = false;
-    node.muted = true;
-    node.defaultMuted = true;
-    node.playsInline = true;
-    node.setAttribute('muted', '');
-    node.setAttribute('playsinline', '');
-    node.setAttribute('webkit-playsinline', '');
-
-    const play = () => {
-      if (cancelled) return;
-      if (pauseOffscreen && !inViewportRef.current) return;
-      node.play().catch(() => undefined);
-    };
-    const resumePlayback = () => {
-      window.requestAnimationFrame(play);
-    };
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') resumePlayback();
-    };
-
-    play();
-    node.addEventListener('loadedmetadata', resumePlayback);
-    node.addEventListener('loadeddata', resumePlayback);
-    node.addEventListener('canplay', resumePlayback);
-    node.addEventListener('pause', resumePlayback);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('pageshow', resumePlayback);
-
-    let observer: IntersectionObserver | undefined;
-    if (pauseOffscreen && typeof IntersectionObserver !== 'undefined') {
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          const isVisible = entry?.isIntersecting ?? true;
-          inViewportRef.current = isVisible;
-          if (isVisible) {
-            resumePlayback();
-          } else {
-            node.pause();
-          }
-        },
-        { rootMargin },
-      );
-      observer.observe(node);
-    }
-
-    return () => {
-      cancelled = true;
-      observer?.disconnect();
-      node.removeEventListener('loadedmetadata', resumePlayback);
-      node.removeEventListener('loadeddata', resumePlayback);
-      node.removeEventListener('canplay', resumePlayback);
-      node.removeEventListener('pause', resumePlayback);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('pageshow', resumePlayback);
-      node.pause();
-    };
-  }, [pauseOffscreen, rootMargin, src]);
-
   return (
-    <video
+    <AdaptiveVideo
       {...props}
-      ref={videoRef}
       src={src}
+      hlsSrc={hlsSrc}
       poster={poster}
       muted
       loop
       playsInline
       autoPlay
       preload={preload}
-      disablePictureInPicture
-      disableRemotePlayback
+      pauseOffscreen={pauseOffscreen}
+      rootMargin={rootMargin}
+      unloadWhenOffscreen={unloadWhenOffscreen}
+      playbackPriority={playbackPriority}
+      requestPlaybackSlot={requestPlaybackSlot}
+      loadStrategy={loadStrategy}
+      forcePause={forcePause}
     />
   );
 };
