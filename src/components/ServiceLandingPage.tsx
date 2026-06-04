@@ -13,7 +13,6 @@ import PageSeo from '@/components/PageSeo';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import TheaterVideo from '@/components/media/TheaterVideo';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
-import HeroShowcaseVideo from '@/components/media/HeroShowcaseVideo';
 
 const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
@@ -651,11 +650,12 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               {leadProof && (
                 <div className="svc-cine-hero-media" aria-hidden="true">
                   <span className="svc-cine-hero-media-clip">
-                    <HeroShowcaseVideo
+                    <AutoplayPreviewVideo
                       src={leadProof.clip.mobileSrc}
                       poster={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
                       className="svc-cine-hero-media-video"
-                      playSeconds={4}
+                      aria-hidden="true"
+                      preload="auto"
                     />
                   </span>
                   <span className="svc-cine-hero-media-shade" aria-hidden="true" />

@@ -2576,6 +2576,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     min-height: 88vh;
     padding-top: 7rem;
     padding-bottom: 0;
@@ -2622,10 +2623,8 @@
     position: relative;
     z-index: 3;
     width: 100%;
-    flex: 1 1 auto;
-    display: flex;
-    align-items: flex-end;
-    padding-bottom: 1.5rem;
+    flex: 0 0 auto;
+    padding-bottom: 1.75rem;
     pointer-events: none;
   }
 
