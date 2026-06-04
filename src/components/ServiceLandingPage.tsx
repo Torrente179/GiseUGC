@@ -689,14 +689,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary">{labels.startProject}</a>
                 </div>
               </div>
-            </section>
 
-            {/* ── D2: DEMO CARDS ROW — featured work, Crunchyroll "Trending" strip ── */}
-            {proofExamples.length > 0 && (
-              <RevealSection className="svc-cine-row" id="examples">
+              {/* Demo cards rail — integrated at the bottom of the hero stage */}
+              {proofExamples.length > 0 && (
+              <div className="svc-cine-hero-rail" id="examples">
                 <div className="st-container">
                   <div className="svc-cine-row-head">
-                    <p className="st-eyebrow">{labels.theWork}</p>
+                    <p className="st-eyebrow st-eyebrow--light">{labels.theWork}</p>
                     <h2 className="sr-only">{page.featuredTitle}</h2>
                     {(demoCanScrollLeft || demoCanScrollRight) && (
                       <div className="svc-cine-row-nav">
@@ -774,10 +773,11 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                     );
                   })}
                 </div>
-              </RevealSection>
-            )}
+              </div>
+              )}
+            </section>
 
-            {/* ── D2: THE BRIEF ── */}
+            {/* ── D3: THE BRIEF ── */}
             <RevealSection className="st-section st-section--tight st-section--warm">
               <div className="st-container">
                 <div className="st-brief-grid">

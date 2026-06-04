@@ -2575,19 +2575,17 @@
     isolation: isolate;
     overflow: hidden;
     display: flex;
-    align-items: flex-end;
-    min-height: 78vh;
+    flex-direction: column;
+    min-height: 88vh;
     padding-top: 7rem;
-    padding-bottom: 3rem;
+    padding-bottom: 0;
     background: hsl(var(--svc-hero-ink));
   }
 
   @media (min-width: 1024px) {
     .svc-cine-hero {
-      align-items: center;
-      min-height: 90vh;
-      padding-top: 8rem;
-      padding-bottom: 4rem;
+      min-height: 100vh;
+      padding-top: 6.5rem;
     }
   }
 
@@ -2617,13 +2615,16 @@
     pointer-events: none;
     background:
       linear-gradient(to right, hsl(var(--svc-hero-ink)) 0%, hsl(var(--svc-hero-ink) / 0.86) 26%, hsl(var(--svc-hero-ink) / 0.34) 52%, hsl(var(--svc-hero-ink) / 0) 74%),
-      linear-gradient(to top, hsl(var(--svc-hero-ink) / 0.72) 0%, transparent 42%);
+      linear-gradient(to top, hsl(var(--svc-hero-ink) / 0.92) 0%, hsl(var(--svc-hero-ink) / 0.45) 26%, transparent 58%);
   }
 
   .svc-cine-hero-inner {
     position: relative;
     z-index: 3;
     width: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
     pointer-events: none;
   }
 
@@ -2660,8 +2661,8 @@
     line-height: 1.12;
     text-wrap: balance;
     color: hsl(var(--pure-linen));
-    margin-top: 1rem;
-    margin-bottom: 1.25rem;
+    margin-top: 0.85rem;
+    margin-bottom: 0.95rem;
     max-width: 18ch;
     text-shadow: 0 2px 34px hsl(var(--svc-hero-ink) / 0.65);
   }
@@ -2678,7 +2679,7 @@
     line-height: 1.65;
     color: hsl(var(--pure-linen) / 0.74);
     max-width: 40ch;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-shadow: 0 1px 20px hsl(var(--svc-hero-ink) / 0.55);
   }
 
@@ -2756,6 +2757,41 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
+  }
+
+  /* ── Demo cards rail — integrated at the bottom of the hero stage ── */
+  .svc-cine-hero-rail {
+    position: relative;
+    z-index: 3;
+    flex: 0 0 auto;
+    width: 100%;
+    padding-bottom: 1.6rem;
+    pointer-events: auto;
+  }
+
+  .svc-cine-hero-rail .svc-cine-row-head {
+    margin-bottom: 0.9rem;
+  }
+
+  .svc-cine-hero-rail .svc-cine-card {
+    width: clamp(140px, 13vw, 166px);
+  }
+
+  .svc-cine-hero-rail .svc-cine-card-media {
+    box-shadow: 0 20px 44px -26px rgba(0, 0, 0, 0.75);
+    outline: 1px solid hsl(var(--pure-linen) / 0.07);
+    outline-offset: -1px;
+  }
+
+  .svc-cine-hero-rail .svc-cine-arrow {
+    background: hsl(var(--pure-linen) / 0.08);
+    border-color: hsl(var(--pure-linen) / 0.18);
+    color: hsl(var(--pure-linen) / 0.8);
+  }
+
+  .svc-cine-hero-rail .svc-cine-arrow:hover:not(:disabled) {
+    background: hsl(var(--pure-linen));
+    color: hsl(var(--svc-hero-ink));
   }
 
   /* ── Demo-card row — horizontal poster strip ── */
