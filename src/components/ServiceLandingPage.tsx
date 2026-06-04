@@ -328,6 +328,39 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     [],
   );
 
+  /* ── Demo-card row (desktop) — hover preview + arrow scroll ── */
+  const demoTrackRef = useRef<HTMLDivElement>(null);
+  const [hoveredDemoIndex, setHoveredDemoIndex] = useState<number | null>(null);
+  const [demoCanScrollLeft, setDemoCanScrollLeft] = useState(false);
+  const [demoCanScrollRight, setDemoCanScrollRight] = useState(false);
+
+  const updateDemoArrows = useCallback(() => {
+    const el = demoTrackRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setDemoCanScrollLeft(scrollLeft > 8);
+    setDemoCanScrollRight(scrollLeft + clientWidth < scrollWidth - 8);
+  }, []);
+
+  const scrollDemoRow = useCallback((direction: 1 | -1) => {
+    const el = demoTrackRef.current;
+    if (!el) return;
+    el.scrollBy({ left: direction * el.clientWidth * 0.82, behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    if (isMobileViewport) return;
+    const el = demoTrackRef.current;
+    if (!el) return;
+    updateDemoArrows();
+    el.addEventListener('scroll', updateDemoArrows, { passive: true });
+    window.addEventListener('resize', updateDemoArrows);
+    return () => {
+      el.removeEventListener('scroll', updateDemoArrows);
+      window.removeEventListener('resize', updateDemoArrows);
+    };
+  }, [isMobileViewport, proofExamples.length, updateDemoArrows]);
+
   return (
     <>
       <PageSeo
@@ -599,48 +632,145 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   ╚══════════════════════════════════════════════════════════╝ */}
               <div>
 
-            {/* ── D1: COLD OPEN ── */}
-            <section className="st-hero">
-              <div className="st-container">
-                <nav className="st-breadcrumb" aria-label="Breadcrumb">
-                  <Link to={getHomePath(locale)}>{labels.home}</Link>
-                  <span aria-hidden="true">/</span>
-                  <Link to={getHomeSectionHref(locale, 'services')}>{labels.services}</Link>
-                  <span aria-hidden="true">/</span>
-                  <span>{page.breadcrumbLabel}</span>
-                </nav>
-                <div className="st-hero-split">
-                  <div className="st-hero-text">
-                    <p className="st-eyebrow">{page.heroEyebrow}</p>
-                    <h1 className="st-hero-title">
-                      <PretextLineReveal text={page.heroTitle} delay={0} stagger={0.1} className="block" />
-                    </h1>
-                    <p className="st-hero-hook">{page.heroSummary}</p>
-                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary">{labels.startProject}</a>
-                  </div>
-                  {leadProof && (
-                    <div className="st-hero-media">
-                      <button type="button" className="st-letterbox group" onClick={() => openProofClip(0)} aria-label={`${labels.openSample}: ${leadProof.example.title}`}>
-                        <img
-                          src={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
-                          className="st-letterbox-img"
-                          alt=""
-                          aria-hidden="true"
-                          decoding="async"
-                          fetchPriority="high"
-                          onError={handlePosterError(leadProof.clip.posterSrc)}
-                        />
-                        <div className="st-play-btn"><Play className="h-5 w-5 ml-0.5" /></div>
-                        <div className="st-letterbox-caption">
-                          <span className="st-chip">{page.navLabel}</span>
-                          {formatDuration(leadProof.clip.durationSeconds) && <span className="st-chip">{formatDuration(leadProof.clip.durationSeconds)}</span>}
-                        </div>
-                      </button>
-                    </div>
-                  )}
+            {/* ── D1: CINEMATIC HERO — featured clip as ambient background ── */}
+            <section className="svc-cine-hero">
+              {leadProof && (
+                <div className="svc-cine-hero-bg" aria-hidden="true">
+                  <AutoplayPreviewVideo
+                    src={leadProof.clip.previewSrc}
+                    poster={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
+                    className="svc-cine-hero-bg-video"
+                    aria-hidden="true"
+                    preload="auto"
+                    pauseOffscreen={false}
+                  />
                 </div>
+              )}
+              <div className="svc-cine-hero-scrim" aria-hidden="true" />
+              <div className="st-container svc-cine-hero-inner">
+                <div className="svc-cine-hero-text">
+                  <nav className="st-breadcrumb svc-cine-hero-breadcrumb" aria-label="Breadcrumb">
+                    <Link to={getHomePath(locale)}>{labels.home}</Link>
+                    <span aria-hidden="true">/</span>
+                    <Link to={getHomeSectionHref(locale, 'services')}>{labels.services}</Link>
+                    <span aria-hidden="true">/</span>
+                    <span>{page.breadcrumbLabel}</span>
+                  </nav>
+                  <p className="st-eyebrow st-eyebrow--light">{page.heroEyebrow}</p>
+                  <h1 className="svc-cine-hero-title">
+                    <PretextLineReveal text={page.heroTitle} delay={0} stagger={0.1} className="block" />
+                  </h1>
+                  <p className="svc-cine-hero-hook">{page.heroSummary}</p>
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary">{labels.startProject}</a>
+                </div>
+                {leadProof && (
+                  <div className="svc-cine-hero-frame-wrap">
+                    <button type="button" className="svc-cine-hero-frame group" onClick={() => openProofClip(0)} aria-label={`${labels.openSample}: ${leadProof.example.title}`}>
+                      <AutoplayPreviewVideo
+                        src={leadProof.clip.previewSrc}
+                        poster={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
+                        className="svc-cine-hero-frame-video"
+                        aria-hidden="true"
+                        preload="auto"
+                        pauseOffscreen={false}
+                      />
+                      <div className="svc-cine-hero-frame-overlay" />
+                      <div className="st-play-btn"><Play className="h-5 w-5 ml-0.5" /></div>
+                      <div className="svc-cine-hero-frame-caption">
+                        <span className="st-chip">{page.navLabel}</span>
+                        {formatDuration(leadProof.clip.durationSeconds) && <span className="st-chip">{formatDuration(leadProof.clip.durationSeconds)}</span>}
+                      </div>
+                    </button>
+                  </div>
+                )}
               </div>
             </section>
+
+            {/* ── D2: DEMO CARDS ROW — featured work, Crunchyroll "Trending" strip ── */}
+            {proofExamples.length > 0 && (
+              <RevealSection className="svc-cine-row" id="examples">
+                <div className="st-container">
+                  <div className="svc-cine-row-head">
+                    <p className="st-eyebrow">{labels.theWork}</p>
+                    <h2 className="sr-only">{page.featuredTitle}</h2>
+                    {(demoCanScrollLeft || demoCanScrollRight) && (
+                      <div className="svc-cine-row-nav">
+                        <button
+                          type="button"
+                          className="svc-cine-arrow"
+                          onClick={() => scrollDemoRow(-1)}
+                          disabled={!demoCanScrollLeft}
+                          aria-label={labels.previewPrev}
+                        >
+                          <ChevronLeft className="h-5 w-5" />
+                        </button>
+                        <button
+                          type="button"
+                          className="svc-cine-arrow"
+                          onClick={() => scrollDemoRow(1)}
+                          disabled={!demoCanScrollRight}
+                          aria-label={labels.previewNext}
+                        >
+                          <ChevronRight className="h-5 w-5" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="svc-cine-track scrollbar-hide" ref={demoTrackRef}>
+                  {proofExamples.map(({ example, clip }, index) => {
+                    const duration = formatDuration(clip.durationSeconds);
+                    const posterSrc = getHighQualityServicePosterSrc(clip.mainSrc, clip.posterSrc);
+                    const isHovered = hoveredDemoIndex === index;
+                    return (
+                      <button
+                        key={example.clipId}
+                        type="button"
+                        className="svc-cine-card group"
+                        onClick={() => openProofClip(index)}
+                        onMouseEnter={() => setHoveredDemoIndex(index)}
+                        onMouseLeave={() => setHoveredDemoIndex((cur) => (cur === index ? null : cur))}
+                        onFocus={() => setHoveredDemoIndex(index)}
+                        onBlur={() => setHoveredDemoIndex((cur) => (cur === index ? null : cur))}
+                        aria-label={`${labels.openSample}: ${example.title}`}
+                      >
+                        <div className="svc-cine-card-media">
+                          <img
+                            src={posterSrc}
+                            className="svc-cine-card-poster"
+                            alt=""
+                            aria-hidden="true"
+                            decoding="async"
+                            loading="lazy"
+                            onError={handlePosterError(clip.posterSrc)}
+                          />
+                          {isHovered && (
+                            <AutoplayPreviewVideo
+                              src={clip.previewSrc}
+                              poster={posterSrc}
+                              className="svc-cine-card-video"
+                              aria-hidden="true"
+                              pauseOffscreen={false}
+                            />
+                          )}
+                          <div className="svc-cine-card-gradient" />
+                          <div className="st-play-btn svc-cine-card-play">
+                            <Play className="h-4 w-4 ml-0.5" />
+                          </div>
+                          <div className="svc-cine-card-bottom">
+                            <span className="svc-cine-card-name">{example.title}</span>
+                            <div className="svc-cine-card-chips">
+                              {duration && <span className="st-chip">{duration}</span>}
+                              {clip.language && <span className="st-chip">{clip.language === 'es' ? 'ES' : 'EN'}</span>}
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </RevealSection>
+            )}
 
             {/* ── D2: THE BRIEF ── */}
             <RevealSection className="st-section st-section--tight st-section--warm">
@@ -669,57 +799,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 </div>
               </div>
             </RevealSection>
-
-            {/* ── D3: THE PROOF ── */}
-            {proofExamples.length > 0 && (
-              <RevealSection className="st-proof-wall" id="examples">
-                <div className="st-container">
-                  <p className="st-eyebrow mb-10">{labels.theWork}</p>
-                  <h2 className="sr-only">{page.featuredTitle}</h2>
-                  <div className="st-proof-gallery">
-                    {proofExamples.map(({ example, clip }, index) => {
-                      const duration = formatDuration(clip.durationSeconds);
-                      const posterSrc = getHighQualityServicePosterSrc(clip.mainSrc, clip.posterSrc);
-                      return (
-                        <article key={example.clipId} className={`st-proof-column st-proof-column--${(index % 3) + 1}`}>
-                          <button
-                            type="button"
-                            onClick={() => openProofClip(index)}
-                            aria-label={`${labels.openSample}: ${example.title}`}
-                            className="st-proof-column-trigger group"
-                          >
-                            <div className="st-proof-stage">
-                              <img
-                                src={posterSrc}
-                                className="st-proof-stage-poster"
-                                alt=""
-                                aria-hidden="true"
-                                decoding="async"
-                                loading="lazy"
-                                onError={handlePosterError(clip.posterSrc)}
-                              />
-                              <div className="st-proof-stage-overlay" />
-                              <div className="st-play-btn st-play-btn--proof">
-                                <Play className="h-4 w-4 ml-0.5" />
-                              </div>
-                            </div>
-
-                            <div className="st-proof-copy">
-                              <h3 className="st-proof-headline">{example.title}</h3>
-                              <p className="st-proof-body">{example.description}</p>
-                              <div className="st-proof-meta">
-                                {duration && <span className="st-proof-meta-chip">{duration}</span>}
-                                {clip.language && <span className="st-proof-meta-chip">{clip.language === 'es' ? 'Español' : 'English'}</span>}
-                              </div>
-                            </div>
-                          </button>
-                        </article>
-                      );
-                    })}
-                  </div>
-                </div>
-              </RevealSection>
-            )}
 
             {/* ── D4: THE PROCESS ── */}
             <RevealSection className="st-section st-section--warm">

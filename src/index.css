@@ -2560,6 +2560,387 @@
   }
 
   /* ═══════════════════════════════════════════════════
+     SERVICE — CINEMATIC HERO + DEMO ROW (desktop ≥ 768px)
+     Crunchyroll-style discovery FORM on the brand's own
+     dark palette. New classes only — the shared
+     st-hero, st-letterbox and st-proof classes (reused by
+     the verticals and resources pages) are left untouched.
+     ═══════════════════════════════════════════════════ */
+
+  /* ── Cinematic hero — featured clip as ambient background ── */
+  .svc-cine-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    min-height: 78vh;
+    padding-top: 7rem;
+    padding-bottom: 3rem;
+    background: hsl(var(--deep-ebony));
+  }
+
+  @media (min-width: 1024px) {
+    .svc-cine-hero {
+      align-items: center;
+      min-height: 90vh;
+      padding-top: 8rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  .svc-cine-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .svc-cine-hero-bg-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 28%;
+    filter: blur(38px) saturate(1.2) brightness(0.72);
+    transform: scale(1.16);
+    opacity: 0.62;
+  }
+
+  .svc-cine-hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, hsl(var(--deep-ebony) / 0.92) 0%, hsl(var(--deep-ebony) / 0.72) 38%, hsl(var(--deep-ebony) / 0.38) 72%, hsl(var(--deep-ebony) / 0.55) 100%),
+      linear-gradient(0deg, hsl(var(--deep-ebony) / 0.88) 0%, transparent 55%),
+      radial-gradient(circle at 78% 36%, hsl(var(--primary) / 0.2) 0%, transparent 46%);
+  }
+
+  .svc-cine-hero-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .svc-cine-hero-inner {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 3.5rem;
+    }
+  }
+
+  .svc-cine-hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 38rem;
+  }
+
+  .svc-cine-hero-breadcrumb,
+  .svc-cine-hero-breadcrumb a {
+    color: hsl(var(--pure-linen) / 0.4);
+  }
+
+  .svc-cine-hero-breadcrumb {
+    margin-bottom: 1.75rem;
+  }
+
+  .svc-cine-hero-breadcrumb a:hover {
+    color: hsl(var(--pure-linen) / 0.7);
+  }
+
+  .svc-cine-hero-title {
+    font-family: var(--font-marketing);
+    font-weight: 600;
+    font-size: var(--type-hero);
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+    text-wrap: balance;
+    color: hsl(var(--pure-linen));
+    margin-top: 1rem;
+    margin-bottom: 1.25rem;
+    max-width: 20ch;
+  }
+
+  .svc-cine-hero-hook {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+    line-height: 1.65;
+    color: hsl(var(--pure-linen) / 0.72);
+    max-width: 46ch;
+    margin-bottom: 2rem;
+  }
+
+  .svc-cine-hero-frame-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (min-width: 1024px) {
+    .svc-cine-hero-frame-wrap {
+      justify-content: flex-end;
+    }
+  }
+
+  .svc-cine-hero-frame {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 9 / 16;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    border: 1px solid hsl(var(--pure-linen) / 0.1);
+    background: hsl(var(--deep-ebony));
+    cursor: pointer;
+    box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.8);
+    transition:
+      transform var(--duration-medium) var(--ease-premium),
+      box-shadow var(--duration-medium) var(--ease-premium);
+  }
+
+  @media (min-width: 1024px) {
+    .svc-cine-hero-frame { max-width: 340px; }
+  }
+
+  .svc-cine-hero-frame:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 50px 100px -40px rgba(0, 0, 0, 0.85);
+  }
+
+  .svc-cine-hero-frame-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .svc-cine-hero-frame-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 52%, hsl(var(--deep-ebony) / 0.55) 100%);
+  }
+
+  .svc-cine-hero-frame-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.1rem;
+  }
+
+  /* ── Demo-card row — horizontal poster strip ── */
+  .svc-cine-row {
+    position: relative;
+    overflow: hidden;
+    padding: 3.5rem 0 4rem;
+    background:
+      radial-gradient(circle at 14% 18%, hsl(var(--primary) / 0.1), transparent 26%),
+      linear-gradient(180deg, hsl(var(--pure-linen)) 0%, hsl(var(--background)) 60%, hsl(var(--pure-linen)) 100%);
+  }
+
+  .dark .svc-cine-row {
+    background: hsl(var(--card));
+  }
+
+  @media (min-width: 768px) {
+    .svc-cine-row { padding: 4.5rem 0 5.5rem; }
+  }
+
+  .svc-cine-row-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .svc-cine-row-nav {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .svc-cine-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 999px;
+    border: 1px solid hsl(var(--border) / 0.6);
+    background: hsl(var(--pure-linen) / 0.7);
+    color: hsl(var(--foreground) / 0.7);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition:
+      transform var(--duration-fast) var(--ease-out-expo),
+      background-color var(--duration-fast) var(--ease-out-expo),
+      color var(--duration-fast) var(--ease-out-expo),
+      opacity var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .svc-cine-arrow:hover:not(:disabled) {
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+    transform: translateY(-1px);
+  }
+
+  .svc-cine-arrow:disabled {
+    opacity: 0.32;
+    cursor: default;
+  }
+
+  .dark .svc-cine-arrow {
+    background: hsl(var(--pure-linen) / 0.06);
+    border-color: hsl(var(--pure-linen) / 0.16);
+    color: hsl(var(--pure-linen) / 0.7);
+  }
+
+  .dark .svc-cine-arrow:hover:not(:disabled) {
+    background: hsl(var(--pure-linen));
+    color: hsl(var(--deep-ebony));
+  }
+
+  .svc-cine-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.5rem 1.5rem;
+    scroll-padding-left: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .svc-cine-track {
+      gap: 1.25rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      padding-left: max(3rem, calc((100% - 1200px) / 2 + 3rem));
+      padding-right: 1.5rem;
+      scroll-padding-left: max(3rem, calc((100% - 1200px) / 2 + 3rem));
+    }
+  }
+
+  .svc-cine-card {
+    flex: 0 0 auto;
+    width: clamp(180px, 22vw, 248px);
+    scroll-snap-align: start;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .svc-cine-card-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: hsl(var(--deep-ebony));
+    box-shadow: 0 22px 50px -34px hsl(var(--foreground) / 0.45);
+    transition:
+      transform var(--duration-medium) var(--ease-premium),
+      box-shadow var(--duration-medium) var(--ease-premium);
+  }
+
+  .svc-cine-card:hover .svc-cine-card-media,
+  .svc-cine-card:focus-visible .svc-cine-card-media {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 62px -34px hsl(var(--foreground) / 0.5);
+  }
+
+  .svc-cine-card:focus-visible .svc-cine-card-media {
+    outline: 2px solid hsl(var(--primary) / 0.7);
+    outline-offset: 3px;
+  }
+
+  .svc-cine-card-poster,
+  .svc-cine-card-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .svc-cine-card-video {
+    z-index: 1;
+  }
+
+  .svc-cine-card-gradient {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(to top, hsl(var(--deep-ebony) / 0.85) 0%, transparent 46%);
+  }
+
+  .svc-cine-card-play {
+    z-index: 4;
+    width: 3rem;
+    height: 3rem;
+    opacity: 0;
+  }
+
+  .svc-cine-card:hover .svc-cine-card-play,
+  .svc-cine-card:focus-visible .svc-cine-card-play {
+    opacity: 1;
+  }
+
+  .svc-cine-card-bottom {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.85rem 0.9rem;
+  }
+
+  .svc-cine-card-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.82rem;
+    line-height: 1.3;
+    color: hsl(var(--pure-linen));
+    margin-bottom: 0.5rem;
+    text-align: left;
+  }
+
+  .svc-cine-card-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc-cine-hero-bg-video { display: none; }
+    .svc-cine-hero-frame,
+    .svc-cine-card-media {
+      transition: none;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════
      SCREEN TEST — MOBILE APP-LIKE EXPERIENCE
      Independent layout for < 768px. Not a responsive
      adaptation — a separate design language.
