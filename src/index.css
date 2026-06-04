@@ -2569,6 +2569,8 @@
 
   /* ── Cinematic hero — featured clip as ambient background ── */
   .svc-cine-hero {
+    /* Near-black blend tone (not pitch black) — scoped to the hero only */
+    --svc-hero-ink: 0 0% 7%;
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -2577,7 +2579,7 @@
     min-height: 78vh;
     padding-top: 7rem;
     padding-bottom: 3rem;
-    background: hsl(var(--deep-ebony));
+    background: hsl(var(--svc-hero-ink));
   }
 
   @media (min-width: 1024px) {
@@ -2602,7 +2604,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center 22%;
-    filter: blur(46px) saturate(1.25) brightness(0.7);
+    filter: blur(46px) saturate(0.55) brightness(0.5);
     transform: scale(1.2);
     opacity: 0.5;
   }
@@ -2614,9 +2616,8 @@
     z-index: 1;
     pointer-events: none;
     background:
-      linear-gradient(to right, hsl(var(--deep-ebony)) 0%, hsl(var(--deep-ebony) / 0.86) 26%, hsl(var(--deep-ebony) / 0.34) 52%, hsl(var(--deep-ebony) / 0) 74%),
-      linear-gradient(to top, hsl(var(--deep-ebony) / 0.7) 0%, transparent 42%),
-      radial-gradient(60% 50% at 16% 30%, hsl(var(--primary) / 0.12) 0%, transparent 60%);
+      linear-gradient(to right, hsl(var(--svc-hero-ink)) 0%, hsl(var(--svc-hero-ink) / 0.86) 26%, hsl(var(--svc-hero-ink) / 0.34) 52%, hsl(var(--svc-hero-ink) / 0) 74%),
+      linear-gradient(to top, hsl(var(--svc-hero-ink) / 0.72) 0%, transparent 42%);
   }
 
   .svc-cine-hero-inner {
@@ -2662,7 +2663,7 @@
     margin-top: 1rem;
     margin-bottom: 1.25rem;
     max-width: 18ch;
-    text-shadow: 0 2px 34px hsl(var(--deep-ebony) / 0.6);
+    text-shadow: 0 2px 34px hsl(var(--svc-hero-ink) / 0.65);
   }
 
   /* Win over the global `h1:not(...)` dark-heading rule (specificity 0,3,1) */
@@ -2678,7 +2679,7 @@
     color: hsl(var(--pure-linen) / 0.74);
     max-width: 40ch;
     margin-bottom: 2rem;
-    text-shadow: 0 1px 20px hsl(var(--deep-ebony) / 0.5);
+    text-shadow: 0 1px 20px hsl(var(--svc-hero-ink) / 0.55);
   }
 
   /* Crisp featured clip — right half, bleeds to the edge, left edge feathered */
@@ -2731,7 +2732,7 @@
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background: linear-gradient(to top, hsl(var(--deep-ebony) / 0.5) 0%, transparent 34%);
+    background: linear-gradient(to top, hsl(var(--svc-hero-ink) / 0.55) 0%, transparent 34%);
   }
 
   .svc-cine-hero-media-play {
