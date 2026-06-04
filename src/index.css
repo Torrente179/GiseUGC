@@ -2691,13 +2691,8 @@
     bottom: 0;
     width: 60%;
     z-index: 2;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
     overflow: hidden;
-    -webkit-tap-highlight-color: transparent;
+    pointer-events: none;
   }
 
   @media (min-width: 1024px) {
@@ -2721,11 +2716,6 @@
     height: 100%;
     object-fit: cover;
     object-position: center 16%;
-    transition: transform var(--duration-slow) var(--ease-premium);
-  }
-
-  .svc-cine-hero-media:hover .svc-cine-hero-media-video {
-    transform: scale(1.03);
   }
 
   .svc-cine-hero-media-shade {
@@ -2734,29 +2724,6 @@
     z-index: 1;
     pointer-events: none;
     background: linear-gradient(to top, hsl(var(--svc-hero-ink) / 0.55) 0%, transparent 34%);
-  }
-
-  .svc-cine-hero-media-play {
-    z-index: 2;
-    left: 64%;
-    width: 4rem;
-    height: 4rem;
-    opacity: 0.82;
-  }
-
-  .svc-cine-hero-media:hover .svc-cine-hero-media-play {
-    opacity: 1;
-  }
-
-  .svc-cine-hero-media-caption {
-    position: absolute;
-    z-index: 2;
-    right: 1.6rem;
-    bottom: 1.4rem;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
   }
 
   /* ── Demo cards rail — integrated at the bottom of the hero stage ── */

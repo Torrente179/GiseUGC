@@ -13,6 +13,7 @@ import PageSeo from '@/components/PageSeo';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import TheaterVideo from '@/components/media/TheaterVideo';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
+import HeroShowcaseVideo from '@/components/media/HeroShowcaseVideo';
 
 const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
@@ -648,29 +649,17 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               )}
               <div className="svc-cine-hero-scrim" aria-hidden="true" />
               {leadProof && (
-                <button
-                  type="button"
-                  className="svc-cine-hero-media group"
-                  onClick={() => openProofClip(0)}
-                  aria-label={`${labels.openSample}: ${leadProof.example.title}`}
-                >
+                <div className="svc-cine-hero-media" aria-hidden="true">
                   <span className="svc-cine-hero-media-clip">
-                    <AutoplayPreviewVideo
-                      src={leadProof.clip.previewSrc}
+                    <HeroShowcaseVideo
+                      src={leadProof.clip.mobileSrc}
                       poster={getHighQualityServicePosterSrc(leadProof.clip.mainSrc, leadProof.clip.posterSrc)}
                       className="svc-cine-hero-media-video"
-                      aria-hidden="true"
-                      preload="auto"
-                      pauseOffscreen={false}
+                      playSeconds={4}
                     />
                   </span>
                   <span className="svc-cine-hero-media-shade" aria-hidden="true" />
-                  <span className="st-play-btn svc-cine-hero-media-play"><Play className="h-5 w-5 ml-0.5" /></span>
-                  <span className="svc-cine-hero-media-caption">
-                    <span className="st-chip">{page.navLabel}</span>
-                    {formatDuration(leadProof.clip.durationSeconds) && <span className="st-chip">{formatDuration(leadProof.clip.durationSeconds)}</span>}
-                  </span>
-                </button>
+                </div>
               )}
               <div className="st-container svc-cine-hero-inner">
                 <div className="svc-cine-hero-text">
