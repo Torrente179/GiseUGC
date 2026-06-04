@@ -2624,7 +2624,8 @@
     width: 100%;
     flex: 1 1 auto;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    padding-bottom: 1.5rem;
     pointer-events: none;
   }
 
