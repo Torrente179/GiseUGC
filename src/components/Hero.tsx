@@ -69,7 +69,8 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
 
   return (
     <section id="home" className="relative w-full overflow-hidden bg-background max-md:overflow-hidden">
-      <div className="relative min-h-[100svh] w-full">
+      {/* Hero viewport is always dark ("black theme"), independent of the global light/dark toggle */}
+      <div className="dark relative min-h-[100svh] w-full bg-background text-foreground">
         {/* ─── Living wall of reels ─── */}
         <div
           className="hero-wall max-md:!top-[calc(env(safe-area-inset-top,0px)+5.5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
