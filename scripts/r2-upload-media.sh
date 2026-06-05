@@ -21,10 +21,9 @@ cd "$ROOT"
 
 # Load only R2_* keys from .env (avoids sourcing unrelated multi-word values).
 if [[ -f .env ]]; then
-  set -a
-  # shellcheck disable=SC1090
-  source <(grep -E '^R2_[A-Z0-9_]+=' .env)
-  set +a
+  while IFS= read -r line; do
+    [[ -n "$line" ]] && export "$line"
+  done <<< "$(grep -E '^R2_[A-Z0-9_]+=' .env || true)"
 fi
 
 : "${R2_ACCESS_KEY_ID:?set R2_ACCESS_KEY_ID in .env}"

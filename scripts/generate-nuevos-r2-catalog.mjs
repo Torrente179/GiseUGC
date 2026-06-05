@@ -8,6 +8,7 @@ const DEFAULT_MANIFEST_PATH = 'public/uploads/videos/nuevos/manifest.csv';
 const DEFAULT_OUTPUT_PATH = 'src/data/nuevos-r2-ready.ts';
 const DEFAULT_SEO_OVERRIDES_PATH = 'scripts/nuevos-seo-overrides.json';
 const DAY_MS = 86_400_000;
+const URL_CHECK_RETRIES = 2;
 const VALID_REEL_CATEGORIES = new Set(['fashion', 'beauty', 'tech', 'lifestyle']);
 
 function parseArgs(argv) {
@@ -159,6 +160,22 @@ function createRequestController(timeoutMs) {
 }
 
 async function checkUrl(url, timeoutMs) {
+  for (let attempt = 0; attempt <= URL_CHECK_RETRIES; attempt += 1) {
+    const status = await checkUrlOnce(url, timeoutMs);
+    if (status === 200 || attempt === URL_CHECK_RETRIES) return status;
+    await sleep(300 * (attempt + 1));
+  }
+
+  return -1;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+async function checkUrlOnce(url, timeoutMs) {
   const { controller, timeoutId } = createRequestController(timeoutMs);
   try {
     const response = await fetch(url, {
