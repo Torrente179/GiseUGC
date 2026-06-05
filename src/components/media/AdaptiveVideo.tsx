@@ -158,9 +158,20 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
       }
 
       if (canPlayNativeHls(video)) {
+        // Safari/iOS play the .m3u8 directly. If that source errors (e.g. a
+        // missing/404 master, or an incompletely uploaded ladder), fall back to
+        // the progressive MP4 instead of leaving a broken video element.
+        const handleNativeHlsError = () => {
+          if (cancelled) return;
+          if (video.getAttribute('src') !== hlsSrc) return;
+          video.removeEventListener('error', handleNativeHlsError);
+          attachFallbackSource(video, src);
+        };
+        video.addEventListener('error', handleNativeHlsError);
         attachFallbackSource(video, hlsSrc);
         return () => {
           cancelled = true;
+          video.removeEventListener('error', handleNativeHlsError);
         };
       }
 

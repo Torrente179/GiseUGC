@@ -405,7 +405,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                 >
                   <AutoplayPreviewVideo
                     src={leadProof.clip.previewSrc}
-                    hlsSrc={leadProof.clip.previewHlsSrc}
+                    hlsSrc={leadProof.clip.hlsSrc ?? leadProof.clip.previewHlsSrc}
                     poster={getBestPosterSrc(leadProof.clip)}
                     className="stm-hero-poster-img"
                     aria-hidden="true"

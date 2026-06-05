@@ -1,36 +1,72 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Multi-codec adaptive HLS (CMAF / fMP4) for R2 delivery.
+#
+# Produces ONE adaptive ladder per clip (the `main` rendition). Adaptive HLS
+# already serves the right resolution to every device, so the old separate
+# main/mobile/preview ladders were redundant — this builds a single ladder that
+# every player adapts within.
+#
+# Each resolution tier is encoded in THREE codecs so every browser gets the most
+# efficient stream it can decode, with universal fallback:
+#   • AV1  (libsvtav1)  → Chrome / Firefox / Edge (and new Apple silicon)
+#   • HEVC (libx265, hvc1 tag) → Safari / iOS native HLS
+#   • H.264 (libx264 high) → universal fallback
+#
+# Output:
+#   tmp/video-hls/<base>/main/master.m3u8
+#   tmp/video-hls/<base>/main/<width>p/<codec>/{index.m3u8,init.mp4,segment_*.m4s}
+#
+# Upload each <base> folder to:  videos/hls/<base>/
+# Runtime URL (see r2HlsMaster / catalog): videos/hls/<base>/main/master.m3u8
+# ─────────────────────────────────────────────────────────────────────────────
+
 usage() {
   cat <<'EOF'
-Create adaptive HLS renditions for R2 delivery.
-
-Outputs:
-  tmp/video-hls/<base>/main/master.m3u8
-  tmp/video-hls/<base>/mobile/master.m3u8
-  tmp/video-hls/<base>/preview/master.m3u8
-
-Each master contains 2s fMP4 segments and a quality ladder capped by the
-source dimensions. Upload each <base> folder to:
-  videos/hls/<base>/
+Create a multi-codec (AV1 + HEVC + H.264) adaptive HLS ladder per clip.
 
 Usage:
   bash scripts/encode-hls.sh [options] [file1.mp4 file2.mov ...]
 
 Options:
-  --input-dir DIR          Input directory (default: public/uploads/videos)
-  --output-dir DIR         Output directory (default: tmp/video-hls)
-  --preview-seconds N      Preview duration in seconds (default: 4)
-  --overwrite              Overwrite existing outputs
-  --dry-run                Print commands without running ffmpeg
-  -h, --help               Show help
+  --input-dir DIR     Input directory (default: public/uploads/videos)
+  --output-dir DIR    Output directory (default: tmp/video-hls)
+  --overwrite         Overwrite existing outputs
+  --dry-run           Print ffmpeg commands without running them
+  -h, --help          Show help
+
+Tunable via env (encode speed vs quality):
+  AV1_PRESET   (default 7)      libsvtav1 preset (0=slow/best .. 13=fast)
+  HEVC_PRESET  (default medium) libx265 preset
+  H264_PRESET  (default slow)   libx264 preset
+  AUDIO_KBPS   (default 128)    AAC audio bitrate for the ladder
 EOF
 }
+
+AV1_PRESET="${AV1_PRESET:-7}"
+HEVC_PRESET="${HEVC_PRESET:-medium}"
+H264_PRESET="${H264_PRESET:-slow}"
+AUDIO_KBPS="${AUDIO_KBPS:-128}"
+
+# Resolution ladder (horizontal pixels). Each tier is gated by the source width
+# so we never upscale. For vertical phone video the "width" is the short side.
+declare -a MAIN_LADDER=(360 540 720 1080 1440 2160)
+declare -a CODECS=(av1 hevc h264)
 
 require_binary() {
   local binary="$1"
   if ! command -v "$binary" >/dev/null 2>&1; then
     echo "Missing required binary: $binary" >&2
+    exit 1
+  fi
+}
+
+require_encoder() {
+  local enc="$1"
+  if ! ffmpeg -hide_banner -encoders 2>/dev/null | grep -q "[[:space:]]${enc}[[:space:]]"; then
+    echo "Missing required ffmpeg encoder: $enc (rebuild/reinstall ffmpeg)." >&2
     exit 1
   fi
 }
@@ -46,163 +82,179 @@ run_cmd() {
 }
 
 probe_field() {
-  local file="$1"
-  local field="$2"
-  ffprobe -v error -select_streams v:0 -show_entries "stream=${field}" -of default=nw=1:nk=1 "$file"
-}
-
-bitrate_for_width() {
-  case "$1" in
-    360) echo 600 ;;
-    540) echo 1100 ;;
-    720) echo 2200 ;;
-    1080) echo 4200 ;;
-    *) echo 2200 ;;
-  esac
+  ffprobe -v error -select_streams v:0 -show_entries "stream=$2" -of default=nw=1:nk=1 "$1"
 }
 
 file_size_bytes() {
-  local file="$1"
-  if stat -f%z "$file" >/dev/null 2>&1; then
-    stat -f%z "$file"
-  else
-    stat -c%s "$file"
-  fi
+  if stat -f%z "$1" >/dev/null 2>&1; then stat -f%z "$1"; else stat -c%s "$1"; fi
 }
 
 human_size() {
-  local bytes="$1"
-  awk -v b="$bytes" 'BEGIN {
-    split("B KB MB GB TB", unit, " ");
-    i = 1;
+  awk -v b="$1" 'BEGIN {
+    split("B KB MB GB TB", u, " "); i = 1;
     while (b >= 1024 && i < 5) { b /= 1024; i++; }
-    printf "%.2f %s", b, unit[i];
+    printf "%.2f %s", b, u[i];
   }'
 }
 
-write_master_playlist() {
-  local rendition_dir="$1"
-  local source_width="$2"
-  local source_height="$3"
-  local master_path="$rendition_dir/master.m3u8"
+# Target video bitrate (kbps) per codec/width. AV1 & HEVC ≈ 55-65% of H.264 for
+# equal perceptual quality, so they look the same while shipping fewer bytes.
+bitrate_for() {
+  local codec="$1" w="$2"
+  case "$codec" in
+    h264)
+      case "$w" in
+        360) echo 700;; 540) echo 1300;; 720) echo 2600;;
+        1080) echo 6000;; 1440) echo 10000;; 2160) echo 18000;; *) echo 2600;;
+      esac;;
+    hevc)
+      case "$w" in
+        360) echo 450;; 540) echo 820;; 720) echo 1650;;
+        1080) echo 3800;; 1440) echo 6300;; 2160) echo 11500;; *) echo 1650;;
+      esac;;
+    av1)
+      case "$w" in
+        360) echo 400;; 540) echo 750;; 720) echo 1500;;
+        1080) echo 3400;; 1440) echo 5700;; 2160) echo 10500;; *) echo 1500;;
+      esac;;
+  esac
+}
 
-  {
-    echo '#EXTM3U'
-    echo '#EXT-X-VERSION:7'
-    for variant_dir in "$rendition_dir"/*p; do
-      [[ -d "$variant_dir" ]] || continue
-      local playlist="$variant_dir/index.m3u8"
-      [[ -f "$playlist" ]] || continue
-      local width height bandwidth average_bandwidth label bitrate
-      label="$(basename "$variant_dir")"
-      width="${label%p}"
-      bitrate="$(bitrate_for_width "$width")"
-      height="$(awk -v sw="$source_width" -v sh="$source_height" -v w="$width" 'BEGIN {
-        h = int((sh * w / sw) + 0.5);
-        if (h % 2 == 1) h += 1;
-        print h;
-      }')"
-      average_bandwidth="$((bitrate * 1000))"
-      bandwidth="$((bitrate * 1300))"
-      echo "#EXT-X-STREAM-INF:BANDWIDTH=${bandwidth},AVERAGE-BANDWIDTH=${average_bandwidth},RESOLUTION=${width}x${height},FRAME-RATE=30.000"
-      echo "${label}/index.m3u8"
-    done
-  } > "$master_path"
+# RFC 6381 CODECS string per codec/width. hls.js calls
+# MediaSource.isTypeSupported() with this, so it must be valid or the variant is
+# silently dropped. Levels scale with resolution.
+codec_string() {
+  local codec="$1" w="$2"
+  case "$codec" in
+    h264)
+      case "$w" in
+        360|540) echo "avc1.64001e";;  # High@3.0
+        720) echo "avc1.64001f";;       # High@3.1
+        1080) echo "avc1.640028";;      # High@4.0
+        1440) echo "avc1.640032";;      # High@5.0
+        2160) echo "avc1.640033";;      # High@5.1
+        *) echo "avc1.640028";;
+      esac;;
+    hevc)
+      case "$w" in
+        360|540|720) echo "hvc1.1.6.L93.B0";;  # Main@3.1
+        1080) echo "hvc1.1.6.L120.B0";;        # Main@4.0
+        1440) echo "hvc1.1.6.L150.B0";;        # Main@5.0
+        2160) echo "hvc1.1.6.L153.B0";;        # Main@5.1
+        *) echo "hvc1.1.6.L120.B0";;
+      esac;;
+    av1)
+      # av01.<profile>.<level><tier>.<bit-depth>; Main profile, 8-bit.
+      case "$w" in
+        360|540) echo "av01.0.04M.08";;
+        720) echo "av01.0.05M.08";;
+        1080) echo "av01.0.08M.08";;
+        1440) echo "av01.0.12M.08";;
+        2160) echo "av01.0.13M.08";;
+        *) echo "av01.0.08M.08";;
+      esac;;
+  esac
 }
 
 encode_variant() {
-  local source_path="$1"
-  local output_dir="$2"
-  local max_width="$3"
-  local video_kbps="$4"
-  local include_audio="$5"
-  local duration_value="${6:-}"
-
+  local codec="$1" source_path="$2" output_dir="$3" max_width="$4" video_kbps="$5"
   mkdir -p "$output_dir"
 
-  local map_audio=()
-  local audio_args=()
-  if [[ "$include_audio" == "1" ]]; then
-    map_audio=(-map '0:a:0?')
-    audio_args=(-c:a aac -b:a 96k -ac 2 -ar 48000)
-  else
-    audio_args=(-an)
-  fi
+  local maxrate=$(( video_kbps * 14 / 10 ))
+  local bufsize=$(( video_kbps * 2 ))
+  local vfilter="scale='min(${max_width},iw)':-2:flags=lanczos,fps=30,format=yuv420p"
+
+  local -a vcodec=()
+  local -a rate=()
+  case "$codec" in
+    av1)
+      # SVT-AV1 only allows a max-bitrate cap in CRF mode, so use plain
+      # target-bitrate VBR (no -maxrate/-bufsize) for the ladder tiers.
+      vcodec=(-c:v libsvtav1 -preset "$AV1_PRESET" -g 60 -svtav1-params "scd=0" -pix_fmt yuv420p)
+      rate=(-b:v "${video_kbps}k")
+      ;;
+    hevc)
+      vcodec=(-c:v libx265 -preset "$HEVC_PRESET" -tag:v hvc1 \
+        -x265-params "keyint=60:min-keyint=60:scenecut=0" -pix_fmt yuv420p)
+      rate=(-b:v "${video_kbps}k" -maxrate "${maxrate}k" -bufsize "${bufsize}k")
+      ;;
+    h264)
+      vcodec=(-c:v libx264 -preset "$H264_PRESET" -profile:v high \
+        -x264-params "keyint=60:min-keyint=60:scenecut=0" -pix_fmt yuv420p)
+      rate=(-b:v "${video_kbps}k" -maxrate "${maxrate}k" -bufsize "${bufsize}k")
+      ;;
+  esac
 
   run_cmd ffmpeg -hide_banner -loglevel error "$OVERWRITE_FLAG" \
-    ${duration_value:+-t "$duration_value"} \
     -i "$source_path" \
-    -map 0:v:0 ${map_audio[@]+"${map_audio[@]}"} \
-    -vf "scale='min(${max_width},iw)':-2:flags=lanczos,fps=30,format=yuv420p" \
-    -c:v libx264 -preset slow -profile:v high -level 4.1 \
-    -b:v "${video_kbps}k" -maxrate "$((video_kbps * 13 / 10))k" -bufsize "$((video_kbps * 2))k" \
-    -x264-params "keyint=60:min-keyint=60:scenecut=0" \
-    "${audio_args[@]}" \
+    -map 0:v:0 -map '0:a:0?' \
+    -vf "$vfilter" \
+    "${vcodec[@]}" \
+    "${rate[@]}" \
+    -c:a aac -b:a "${AUDIO_KBPS}k" -ac 2 -ar 48000 \
     -hls_time 2 \
     -hls_playlist_type vod \
     -hls_segment_type fmp4 \
     -hls_fmp4_init_filename init.mp4 \
     -hls_segment_filename "$output_dir/segment_%03d.m4s" \
     "$output_dir/index.m3u8"
-
 }
 
+write_master_playlist() {
+  local rendition_dir="$1" source_width="$2" source_height="$3"
+  local master_path="$rendition_dir/master.m3u8"
+
+  {
+    echo '#EXTM3U'
+    echo '#EXT-X-VERSION:7'
+    for width in "${MAIN_LADDER[@]}"; do
+      (( width > source_width )) && continue
+      for codec in "${CODECS[@]}"; do
+        local variant_playlist="$rendition_dir/${width}p/${codec}/index.m3u8"
+        [[ -f "$variant_playlist" ]] || continue
+        local kbps height avg peak cs
+        kbps="$(bitrate_for "$codec" "$width")"
+        height="$(awk -v sw="$source_width" -v sh="$source_height" -v w="$width" 'BEGIN {
+          h = int((sh * w / sw) + 0.5); if (h % 2 == 1) h += 1; print h;
+        }')"
+        avg=$(( kbps * 1000 ))
+        peak=$(( kbps * 1400 ))
+        cs="$(codec_string "$codec" "$width")"
+        echo "#EXT-X-STREAM-INF:BANDWIDTH=${peak},AVERAGE-BANDWIDTH=${avg},RESOLUTION=${width}x${height},FRAME-RATE=30.000,CODECS=\"${cs}\""
+        echo "${width}p/${codec}/index.m3u8"
+      done
+    done
+  } > "$master_path"
+}
+
+# ── Args ─────────────────────────────────────────────────────────────────────
 INPUT_DIR="public/uploads/videos"
 OUTPUT_DIR="tmp/video-hls"
-PREVIEW_SECONDS=4
 OVERWRITE=0
 DRY_RUN=0
 FILES=()
 
 while (($#)); do
   case "$1" in
-    --input-dir)
-      INPUT_DIR="$2"
-      shift 2
-      ;;
-    --output-dir)
-      OUTPUT_DIR="$2"
-      shift 2
-      ;;
-    --preview-seconds)
-      PREVIEW_SECONDS="$2"
-      shift 2
-      ;;
-    --overwrite)
-      OVERWRITE=1
-      shift
-      ;;
-    --dry-run)
-      DRY_RUN=1
-      shift
-      ;;
-    -h|--help)
-      usage
-      exit 0
-      ;;
-    --)
-      shift
-      while (($#)); do FILES+=("$1"); shift; done
-      ;;
-    -*)
-      echo "Unknown option: $1" >&2
-      usage
-      exit 1
-      ;;
-    *)
-      FILES+=("$1")
-      shift
-      ;;
+    --input-dir) INPUT_DIR="$2"; shift 2;;
+    --output-dir) OUTPUT_DIR="$2"; shift 2;;
+    --overwrite) OVERWRITE=1; shift;;
+    --dry-run) DRY_RUN=1; shift;;
+    -h|--help) usage; exit 0;;
+    --) shift; while (($#)); do FILES+=("$1"); shift; done;;
+    -*) echo "Unknown option: $1" >&2; usage; exit 1;;
+    *) FILES+=("$1"); shift;;
   esac
 done
 
 require_binary ffmpeg
 require_binary ffprobe
+require_encoder libsvtav1
+require_encoder libx265
+require_encoder libx264
 
 OVERWRITE_FLAG="-n"
-if [[ "$OVERWRITE" -eq 1 ]]; then
-  OVERWRITE_FLAG="-y"
-fi
+[[ "$OVERWRITE" -eq 1 ]] && OVERWRITE_FLAG="-y"
 
 declare -a SOURCES=()
 if [[ "${#FILES[@]}" -gt 0 ]]; then
@@ -220,7 +272,7 @@ else
     SOURCES+=("$source_file")
   done < <(
     find "$INPUT_DIR" "$INPUT_DIR/nuevos" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) \
-      ! -iname '*-preview.mp4' ! -iname '*-mobile.mp4' | sort
+      ! -iname '*-preview.mp4' ! -iname '*-mobile.mp4' 2>/dev/null | sort
   )
 fi
 
@@ -232,59 +284,38 @@ fi
 mkdir -p "$OUTPUT_DIR"
 manifest_path="$OUTPUT_DIR/manifest.csv"
 if [[ "$DRY_RUN" -eq 0 ]]; then
-  printf 'source,hls_base,main_master,mobile_master,preview_master,bytes\n' > "$manifest_path"
+  printf 'source,hls_base,main_master,bytes\n' > "$manifest_path"
 fi
 
-declare -a LADDER_WIDTHS=(360 540 720 1080)
 for source_path in "${SOURCES[@]}"; do
   filename="$(basename "$source_path")"
   base_name="${filename%.*}"
   source_width="$(probe_field "$source_path" width)"
   source_height="$(probe_field "$source_path" height)"
   base_dir="$OUTPUT_DIR/$base_name"
+  rendition_dir="$base_dir/main"
 
   echo ""
-  echo "Source: $source_path"
+  echo "Source: $source_path  (${source_width}x${source_height})"
   echo "  HLS base: $base_dir"
 
-  for rendition in main mobile preview; do
-    rendition_dir="$base_dir/$rendition"
-    include_audio=1
-    duration=""
-    if [[ "$rendition" == "preview" ]]; then
-      include_audio=0
-      duration="$PREVIEW_SECONDS"
-    fi
-
-    for width in "${LADDER_WIDTHS[@]}"; do
-      if (( width > source_width )); then
-        continue
-      fi
-      if [[ "$rendition" == "preview" && "$width" -gt 720 ]]; then
-        continue
-      fi
-      encode_variant "$source_path" "$rendition_dir/${width}p" "$width" "$(bitrate_for_width "$width")" "$include_audio" "$duration"
+  for width in "${MAIN_LADDER[@]}"; do
+    (( width > source_width )) && continue
+    for codec in "${CODECS[@]}"; do
+      kbps="$(bitrate_for "$codec" "$width")"
+      echo "  • ${width}p ${codec} @ ${kbps}k"
+      encode_variant "$codec" "$source_path" "$rendition_dir/${width}p/${codec}" "$width" "$kbps"
     done
-
-    if [[ "$DRY_RUN" -eq 0 ]]; then
-      write_master_playlist "$rendition_dir" "$source_width" "$source_height"
-    fi
   done
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
+    write_master_playlist "$rendition_dir" "$source_width" "$source_height"
     bytes="$(find "$base_dir" -type f -exec stat -f%z {} \; 2>/dev/null | awk '{s+=$1} END {print s+0}')"
-    printf '%s,%s,%s,%s,%s,%s\n' \
-      "$source_path" "$base_dir" \
-      "$base_dir/main/master.m3u8" \
-      "$base_dir/mobile/master.m3u8" \
-      "$base_dir/preview/master.m3u8" \
-      "$bytes" >> "$manifest_path"
+    printf '%s,%s,%s,%s\n' "$source_path" "$base_dir" "$rendition_dir/master.m3u8" "$bytes" >> "$manifest_path"
     echo "  Output size: $(human_size "$bytes")"
   fi
 done
 
 echo ""
 echo "Done."
-if [[ "$DRY_RUN" -eq 0 ]]; then
-  echo "Manifest: $manifest_path"
-fi
+[[ "$DRY_RUN" -eq 0 ]] && echo "Manifest: $manifest_path"

@@ -7,9 +7,10 @@ Batch transcode source videos into:
 1) short preview loops (for cards) and
 2) mobile-friendly full videos (for theater/modal playback)
 
-Defaults are tuned for "quality-first instant feel":
-- preview: 4 seconds, ~700 KB target, no audio
-- mobile full: ~5 MB target per clip, AAC audio, faststart enabled
+Defaults are tuned for "quality-first instant feel". These MP4s are now the
+fallbacks behind the adaptive HLS ladder (see encode-hls.sh):
+- preview: 6s 720p CRF 20 loop, no audio (small card loops + HLS MP4 fallback)
+- mobile full: 720p CRF 22, 128k AAC, faststart (HLS MP4 fallback)
 
 Usage:
   bash scripts/encode-videos.sh [options] [file1.mp4 file2.mov ...]
@@ -76,12 +77,22 @@ run_cmd() {
 
 INPUT_DIR="public/uploads/videos"
 OUTPUT_DIR="tmp/video-encodes"
-PREVIEW_SECONDS=4
+# Previews feed only small/decorative surfaces (hero-wall tiles, marquee cards,
+# blurred backdrops). 720p is sharp on those and starts fast; the prominent
+# showcase quality comes from the adaptive HLS main ladder (encode-hls.sh).
+PREVIEW_SECONDS=6
 PREVIEW_TARGET_KB=700
-PREVIEW_WIDTH=480
+PREVIEW_WIDTH=720
+PREVIEW_CRF=22
+# Cap preview bitrate so high-motion clips don't balloon a small card loop.
+PREVIEW_MAXRATE_K=2500
+PREVIEW_BUFSIZE_K=5000
 MOBILE_TARGET_MB=5
 MOBILE_WIDTH=720
-AUDIO_BITRATE_K=96
+MOBILE_CRF=22
+AUDIO_BITRATE_K=128
+PREVIEW_ONLY=0
+MOBILE_ONLY=0
 OVERWRITE=0
 DRY_RUN=0
 FILES=()
@@ -122,6 +133,14 @@ while (($#)); do
       ;;
     --overwrite)
       OVERWRITE=1
+      shift
+      ;;
+    --preview-only)
+      PREVIEW_ONLY=1
+      shift
+      ;;
+    --mobile-only)
+      MOBILE_ONLY=1
       shift
       ;;
     --dry-run)
@@ -191,8 +210,8 @@ else
   while IFS= read -r source_file; do
     SOURCES+=("$source_file")
   done < <(
-    find "$INPUT_DIR" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) \
-      ! -iname '*-preview.mp4' ! -iname '*-mobile.mp4' | sort
+    find "$INPUT_DIR" "$INPUT_DIR/nuevos" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) \
+      ! -iname '*-preview.mp4' ! -iname '*-mobile.mp4' 2>/dev/null | sort
   )
 fi
 
@@ -228,52 +247,34 @@ for source_path in "${SOURCES[@]}"; do
     continue
   fi
 
-  preview_video_kbps="$(awk -v kb="$PREVIEW_TARGET_KB" -v sec="$PREVIEW_SECONDS" 'BEGIN {
-    if (sec <= 0) { print 1200; exit; }
-    target = (kb * 8) / sec;
-    if (target < 250) target = 250;
-    if (target > 2400) target = 2400;
-    printf "%.0f", target;
-  }')"
-
-  mobile_video_kbps="$(awk -v mb="$MOBILE_TARGET_MB" -v dur="$duration" -v a="$AUDIO_BITRATE_K" 'BEGIN {
-    if (dur <= 0) { print 1800; exit; }
-    total = (mb * 8192) / dur;
-    video = total - a - 16;
-    if (video < 300) video = 300;
-    if (video > 4200) video = 4200;
-    printf "%.0f", video;
-  }')"
-
-  preview_maxrate_kbps=$((preview_video_kbps * 12 / 10))
-  preview_bufsize_kbps=$((preview_video_kbps * 2))
-  mobile_maxrate_kbps=$((mobile_video_kbps * 13 / 10))
-  mobile_bufsize_kbps=$((mobile_video_kbps * 2))
-
-  preview_filter="scale='min(${PREVIEW_WIDTH},iw)':-2:flags=lanczos,fps=24,format=yuv420p"
+  preview_filter="scale='min(${PREVIEW_WIDTH},iw)':-2:flags=lanczos,fps=30,format=yuv420p"
   mobile_filter="scale='min(${MOBILE_WIDTH},iw)':-2:flags=lanczos,fps=30,format=yuv420p"
 
   echo ""
   echo "Source: $source_path"
   echo "  Duration: ${duration}s"
-  echo "  Preview target bitrate: ${preview_video_kbps}k"
-  echo "  Mobile target bitrate: ${mobile_video_kbps}k (+ ${AUDIO_BITRATE_K}k audio)"
+  echo "  Preview: ${PREVIEW_WIDTH}px CRF ${PREVIEW_CRF}, ${PREVIEW_SECONDS}s loop, no audio"
+  echo "  Mobile : ${MOBILE_WIDTH}px CRF ${MOBILE_CRF} (+ ${AUDIO_BITRATE_K}k audio)"
 
-  if [[ -f "$preview_path" && "$OVERWRITE" -eq 0 ]]; then
+  if [[ "$MOBILE_ONLY" -eq 1 ]]; then
+    echo "  Preview skipped (--mobile-only)"
+  elif [[ -f "$preview_path" && "$OVERWRITE" -eq 0 ]]; then
     echo "  Preview exists, skipping: $preview_path"
   else
     run_cmd ffmpeg -hide_banner -loglevel error "$overwrite_flag" \
       -ss 0 -t "$PREVIEW_SECONDS" -i "$source_path" \
       -map 0:v:0 -an \
       -vf "$preview_filter" \
-      -c:v libx264 -preset medium -profile:v high \
-      -b:v "${preview_video_kbps}k" -maxrate "${preview_maxrate_kbps}k" -bufsize "${preview_bufsize_kbps}k" \
-      -x264-params "keyint=24:min-keyint=24:scenecut=0" \
+      -c:v libx264 -preset slow -profile:v high \
+      -crf "$PREVIEW_CRF" -maxrate "${PREVIEW_MAXRATE_K}k" -bufsize "${PREVIEW_BUFSIZE_K}k" \
+      -x264-params "keyint=60:min-keyint=60:scenecut=0" \
       -movflags +faststart \
       "$preview_path"
   fi
 
-  if [[ -f "$mobile_path" && "$OVERWRITE" -eq 0 ]]; then
+  if [[ "$PREVIEW_ONLY" -eq 1 ]]; then
+    echo "  Mobile skipped (--preview-only)"
+  elif [[ -f "$mobile_path" && "$OVERWRITE" -eq 0 ]]; then
     echo "  Mobile exists, skipping: $mobile_path"
   else
     run_cmd ffmpeg -hide_banner -loglevel error "$overwrite_flag" \
@@ -281,8 +282,8 @@ for source_path in "${SOURCES[@]}"; do
       -map 0:v:0 -map 0:a:0? \
       -vf "$mobile_filter" \
       -c:v libx264 -preset slow -profile:v high -level 4.0 \
-      -b:v "${mobile_video_kbps}k" -maxrate "${mobile_maxrate_kbps}k" -bufsize "${mobile_bufsize_kbps}k" \
-      -x264-params "keyint=30:min-keyint=30:scenecut=0" \
+      -crf "$MOBILE_CRF" -maxrate 4000k -bufsize 8000k \
+      -x264-params "keyint=60:min-keyint=60:scenecut=0" \
       -c:a aac -b:a "${AUDIO_BITRATE_K}k" -ac 2 -ar 48000 \
       -movflags +faststart \
       "$mobile_path"
