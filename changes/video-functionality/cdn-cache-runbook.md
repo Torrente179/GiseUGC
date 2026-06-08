@@ -64,6 +64,31 @@ curl -sS -X PUT \
 
 ---
 
+## ⚠️ Gotcha — purge stale negative-cached 404s (do this after first upload)
+
+Cloudflare caches `404` responses. Any `videos/hls/<base>/main/master.m3u8` (or
+other key) that was requested **before** it was uploaded — e.g. by the catalog
+generator's HEAD checks or manual `curl` — gets a `404` cached at the edge with a
+long TTL. After uploading the real object, the edge keeps serving the stale
+`404` (symptom: direct R2 `GET` works and `…/master.m3u8?v=1` returns `200`, but
+the plain URL returns `404` with `cf-cache-status: HIT`). HLS playback then fails
+and silently falls back to MP4.
+
+Fix once, after the first upload:
+- Dashboard → **Caching → Configuration → Purge Everything** (simplest), or purge
+  by prefix `https://media.giselasaldarriaga.com/videos/hls/`.
+- API:
+  ```bash
+  curl -sS -X POST \
+    "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
+    -H "Authorization: Bearer ${CF_API_TOKEN}" \
+    -H "Content-Type: application/json" \
+    --data '{"purge_everything":true}'
+  ```
+
+Verify: `curl -sI https://media.giselasaldarriaga.com/videos/hls/<base>/main/master.m3u8`
+returns `200` on a plain GET (not just HEAD).
+
 ## Layer 2 — Correct `Cache-Control` at the R2 origin (hardening)
 
 New encodes get the header at upload time; existing assets get a backfill.
