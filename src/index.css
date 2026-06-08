@@ -3008,17 +3008,30 @@
     inset: 0;
     background: linear-gradient(
       to top,
-      hsl(var(--deep-ebony) / 0.92) 0%,
-      hsl(var(--deep-ebony) / 0.55) 35%,
-      transparent 65%
+      hsl(var(--deep-ebony) / 0.96) 0%,
+      hsl(var(--deep-ebony) / 0.72) 30%,
+      hsl(var(--deep-ebony) / 0.28) 56%,
+      transparent 80%
     );
     pointer-events: none;
   }
 
+  /* Elegant frosted scrim behind the hero copy — mirrors the desktop cinematic
+     blur and keeps the lettering readable over any video frame. */
   .stm-hero-bottom {
     position: relative;
     z-index: 3;
-    padding: 0 1.25rem 2rem;
+    padding: 4rem 1.25rem 2rem;
+    background: linear-gradient(
+      to top,
+      hsl(var(--deep-ebony) / 0.82) 0%,
+      hsl(var(--deep-ebony) / 0.5) 52%,
+      hsl(var(--deep-ebony) / 0) 100%
+    );
+    -webkit-backdrop-filter: blur(18px) saturate(0.85);
+    backdrop-filter: blur(18px) saturate(0.85);
+    -webkit-mask-image: linear-gradient(to top, #000 70%, transparent 100%);
+    mask-image: linear-gradient(to top, #000 70%, transparent 100%);
   }
 
   .stm-hero-title {
@@ -3031,6 +3044,12 @@
     color: hsl(var(--pure-linen));
     margin-bottom: 0.65rem;
     max-width: 28ch;
+    text-shadow: 0 2px 30px hsl(var(--deep-ebony) / 0.85), 0 1px 4px hsl(var(--deep-ebony) / 0.7);
+  }
+
+  /* Beat the global `h1:not(...)` dark-heading rule so the hero title stays light/legible */
+  .stm-hero .stm-hero-bottom h1.stm-hero-title {
+    color: hsl(var(--pure-linen));
   }
 
   .stm-hero-hook {
@@ -3038,8 +3057,9 @@
     font-weight: 300;
     font-size: 0.88rem;
     line-height: 1.55;
-    color: hsl(var(--pure-linen) / 0.6);
+    color: hsl(var(--pure-linen) / 0.82);
     max-width: 32ch;
+    text-shadow: 0 1px 16px hsl(var(--deep-ebony) / 0.7);
   }
 
   /* ── M2: SWIPEABLE PROOF REEL ── */
