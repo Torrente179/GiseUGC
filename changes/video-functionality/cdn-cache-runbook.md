@@ -64,6 +64,56 @@ curl -sS -X PUT \
 
 ---
 
+## Layer 1b — CORS for hls.js (REQUIRED for adaptive HLS in Chrome/Firefox/Edge)
+
+Safari/iOS play HLS natively (no CORS needed). Chrome/Firefox/Edge play it via
+`hls.js`, which fetches the playlists and segments over XHR — a **cross-origin**
+request (`www.giselasaldarriaga.com` → `media.giselasaldarriaga.com`). Without an
+`Access-Control-Allow-Origin` header on the media responses, those fetches are
+blocked and playback silently falls back to MP4. The media domain currently
+sends no CORS headers, so this must be added.
+
+Use a **Cloudflare Transform Rule** (applies at the edge, including to cached
+responses — no R2 CORS needed, and avoids duplicate-header issues):
+
+Dashboard → zone `giselasaldarriaga.com` → **Rules → Transform Rules → Modify
+Response Header → Create rule**:
+- Name: `media-videos-cors`
+- When incoming requests match:
+  `(http.host eq "media.giselasaldarriaga.com" and starts_with(http.request.uri.path, "/videos/"))`
+- Then → **Set static** response headers:
+  - `Access-Control-Allow-Origin` = `*`
+  - (optional hardening) `Access-Control-Allow-Methods` = `GET, HEAD, OPTIONS`
+  - (optional hardening) `Access-Control-Allow-Headers` = `*`
+
+Use **Set** (not Add) so there is never a duplicate `Access-Control-Allow-Origin`
+header (duplicates are rejected by browsers). Transform Rules apply to cached
+responses, so no purge is required for this one.
+
+API form:
+```bash
+curl -sS -X PUT \
+  "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/rulesets/phases/http_response_headers_transform/entrypoint" \
+  -H "Authorization: Bearer ${CF_API_TOKEN}" -H "Content-Type: application/json" \
+  --data '{
+    "rules": [{
+      "description": "media-videos-cors",
+      "expression": "(http.host eq \"media.giselasaldarriaga.com\" and starts_with(http.request.uri.path, \"/videos/\"))",
+      "action": "rewrite",
+      "action_parameters": { "headers": {
+        "Access-Control-Allow-Origin": { "operation": "set", "value": "*" }
+      } }
+    }]
+  }'
+```
+
+Verify:
+```bash
+curl -sI -H "Origin: https://www.giselasaldarriaga.com" \
+  https://media.giselasaldarriaga.com/videos/hls/IMG_8435/main/master.m3u8 \
+  | grep -i access-control-allow-origin     # expect: access-control-allow-origin: *
+```
+
 ## ⚠️ Gotcha — purge stale negative-cached 404s (do this after first upload)
 
 Cloudflare caches `404` responses. Any `videos/hls/<base>/main/master.m3u8` (or
