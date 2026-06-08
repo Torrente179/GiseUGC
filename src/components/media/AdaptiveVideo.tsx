@@ -184,14 +184,32 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
           }
 
           const hls = new Hls({
+            // Cap to the rendition that fits the element's CSS size (ignore the
+            // retina DPR multiplier so a 1080p screen doesn't pull 4K for a loop).
             capLevelToPlayerSize: true,
+            ignoreDevicePixelRatio: true,
             startLevel: -1,
+            // Assume a fast connection so playback OPENS at a high rendition
+            // instead of ramping up from 360p (the visible "low then high" jump).
+            abrEwmaDefaultEstimate: 8_000_000,
             maxBufferLength: playbackPriority === 'theater' ? 30 : 8,
             maxMaxBufferLength: playbackPriority === 'theater' ? 60 : 16,
           });
           hlsInstance = hls;
           hls.on(Hls.Events.ERROR, (_event, data) => {
             if (data.fatal) fallbackToMp4();
+          });
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            if (cancelled) return;
+            // Highest rendition allowed by the player size (no low-quality ramp).
+            const topLevel = hls.maxAutoLevel >= 0 ? hls.maxAutoLevel : hls.levels.length - 1;
+            if (topLevel < 0) return;
+            hls.startLevel = topLevel;
+            // Background/hero loops pin to the top rendition (never ramp or drop).
+            // Theater starts at the top but keeps adaptivity for long playback.
+            if (playbackPriority !== 'theater') {
+              hls.currentLevel = topLevel;
+            }
           });
           hls.loadSource(hlsSrc);
           hls.attachMedia(video);
