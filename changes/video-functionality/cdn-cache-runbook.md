@@ -1,5 +1,24 @@
 # CDN Edge-Cache + R2 Upload Runbook
 
+## ✅ Status (2026-06): RESOLVED — caching is live
+
+Edge caching, CORS, and adaptive HLS are all working in production:
+- `cf-cache-status: HIT` across master.m3u8 / segments / previews / posters
+  (Origin'd, real-browser requests warm `MISS → HIT`).
+- `access-control-allow-origin: *` present on cached responses, so hls.js loads
+  from the edge cross-origin.
+
+**The non-obvious gotcha that blocked it:** the Cache Rule + `Cache-Control` +
+CORS + purge were all provably correct, yet `/videos/*` kept returning `DYNAMIC`.
+Root cause was the **R2 custom-domain ↔ Cloudflare cache binding** getting into a
+non-cacheable state (it had cached once, then stopped; nothing in the Rules engine
+or zone settings explained it). **Fix: in R2 → bucket → Settings → Custom Domains,
+*remove* `media.giselasaldarriaga.com` and *Connect Domain* again.** That
+re-provisions DNS/SSL and re-establishes the cache binding; the existing zone
+Cache Rule then engages immediately. The note that `media → public.r2.dev` is the
+*normal* R2 custom-domain CNAME placeholder (routing is by binding, not target) —
+so do NOT try to "fix" that DNS record; reconnect the custom domain instead.
+
 ## Why this exists
 
 A live probe of `media.giselasaldarriaga.com` found every video/poster returning

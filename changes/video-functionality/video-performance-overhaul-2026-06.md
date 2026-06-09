@@ -117,9 +117,17 @@ Done with a scoped Cloudflare API token (Cache Rules / Transform Rules / Cache P
   quality goal. HLS masters + segments serve `200`.
 - Higher-quality 720p previews; Safari fallback hardening; lazy hls.js.
 
-**Pending (blocked on infra — see §7):**
-- **Edge caching is still off** (`DYNAMIC`) due to the `public.r2.dev` routing (§4.5).
-  The site currently serves uncached from the R2 dev endpoint.
+**Edge caching — RESOLVED (2026-06).** `cf-cache-status: HIT` across
+master/segments/previews/posters; cached responses keep `access-control-allow-origin: *`.
+The §4.5 `public.r2.dev` theory was wrong — that CNAME is the *normal* R2
+custom-domain placeholder. Root cause was the R2 custom-domain ↔ cache binding in
+a non-cacheable state; **fixed by removing + reconnecting the custom domain in
+R2 → bucket → Settings → Custom Domains** (the zone Cache Rule then engaged). See
+`cdn-cache-runbook.md` → "Status (2026-06): RESOLVED".
+
+Everything from this overhaul is now live: edge caching, adaptive AV1/HEVC HLS in
+all browsers, HLS opening at the top rendition (no 480p ramp), Spanish accents,
+and the legible/frosted mobile services hero.
 
 ---
 
