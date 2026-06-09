@@ -5,6 +5,7 @@ import { ArrowDownRight } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
+import HeroReelDeck from '@/components/HeroReelDeck';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getLocaleFromPath } from '@/lib/locale-path';
@@ -44,12 +45,12 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
   // Rotate the catalog by the UTC day bucket — fresh selection every 24h.
   const utcDayBucket = Math.floor(Date.now() / 86400000);
   const dailyClips = useMemo(() => shuffleWithSeed(ALL_CLIPS, utcDayBucket), [utcDayBucket]);
-  // Curated cluster: a few large reels that all play — no 40-tile decode tax.
-  // Desktop shows three; mobile shows one featured. A separate clip is the
-  // blurred atmospheric backdrop.
-  const reelCount = isMobile ? 1 : 3;
-  const heroReels = useMemo(() => dailyClips.slice(0, reelCount), [dailyClips, reelCount]);
-  const ambientClip = dailyClips[reelCount % dailyClips.length] ?? dailyClips[0];
+  // Rotating "ramillete" of reel cards — the focus auto-cycles through the deck.
+  // Only the focused card decodes video, so it stays light on every device.
+  // A separate clip is the blurred atmospheric backdrop.
+  const deckCount = isMobile ? 4 : 6;
+  const deckClips = useMemo(() => dailyClips.slice(0, deckCount), [dailyClips, deckCount]);
+  const ambientClip = dailyClips[deckCount % dailyClips.length] ?? dailyClips[0];
 
   const roleLabel = locale === 'es'
     ? 'Creadora UGC bilingüe · Medellín'
@@ -86,41 +87,9 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
               rootMargin="0px"
             />
           </div>
-          {/* Featured reels — large, all playing */}
-          <div className="hero-reel-cluster">
-            {heroReels.map((clip, i) => {
-              // Width-driven so the cluster scales to fit any desktop width
-              // (height follows the 9:16 ratio). Mobile shows one prominent reel.
-              const width = isMobile
-                ? 'min(72vw, 22rem)'
-                : i === 0
-                  ? 'min(21vw, 20rem)'
-                  : 'min(15.5vw, 15rem)';
-              return (
-                <div
-                  key={clip.id}
-                  className="hero-reel"
-                  style={{
-                    width,
-                    height: `calc(${width} * 16 / 9)`,
-                    marginTop: !isMobile && i === 1 ? '-3rem' : !isMobile && i === 2 ? '3rem' : 0,
-                    zIndex: i === 0 ? 2 : 1,
-                    animationDelay: `${i * -2.5}s`,
-                  }}
-                >
-                  <AutoplayPreviewVideo
-                    src={clip.previewSrc}
-                    hlsSrc={clip.hlsSrc}
-                    poster={getBestPosterSrc(clip)}
-                    className="hero-reel-video"
-                    preload="metadata"
-                    playbackPriority={i === 0 ? 'hero' : 'preview'}
-                    loadStrategy="immediate"
-                    rootMargin="0px"
-                  />
-                </div>
-              );
-            })}
+          {/* Rotating "ramillete" of reels — focus auto-cycles through the deck */}
+          <div className="hero-deck-wrap">
+            <HeroReelDeck clips={deckClips} fan={isMobile ? 1 : 3} />
           </div>
         </div>
 

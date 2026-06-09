@@ -634,34 +634,39 @@
     opacity: 0.5;
   }
 
-  /* Sharp featured reels, right side on desktop */
-  .hero-reel-cluster {
+  /* Rotating "ramillete" deck — focus auto-cycles, cards turn + float back */
+  .hero-deck-wrap {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
-    width: 58%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(0.75rem, 1.6vw, 1.5rem);
-    padding: 5rem 3vw 3rem;
+    width: 56%;
+    pointer-events: none;
   }
-  .hero-reel {
+  .hero-deck {
     position: relative;
-    flex: 0 0 auto;
+    width: 100%;
+    height: 100%;
+    perspective: 1600px;
+    perspective-origin: 42% 46%;
+    pointer-events: auto;
+  }
+  .hero-deck-card {
+    position: absolute;
+    left: 42%;
+    top: 50%;
+    width: clamp(11rem, 18vw, 18rem);
     aspect-ratio: 9 / 16;
-    border-radius: 1.1rem;
+    border-radius: 1.15rem;
     overflow: hidden;
     background: hsl(var(--muted) / 0.4);
-    box-shadow: 0 32px 64px -34px rgba(0, 0, 0, 0.7), inset 0 0 0 1px hsl(var(--foreground) / 0.06);
-    animation: hero-reel-float 7.5s ease-in-out infinite;
-    will-change: transform;
+    box-shadow: 0 44px 90px -38px rgba(0, 0, 0, 0.85), inset 0 0 0 1px hsl(var(--foreground) / 0.08);
+    transform-style: preserve-3d;
     backface-visibility: hidden;
+    transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease;
+    will-change: transform, opacity;
   }
-  /* Absolutely positioned so the video's intrinsic 1080×1920 doesn't drive the
-     flex item — the reel sizes purely from its height + aspect-ratio. */
-  .hero-reel-video {
+  .hero-deck-face {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -669,26 +674,20 @@
     object-fit: cover;
     display: block;
   }
-  /* Per-reel sizing/stagger is set inline in Hero.tsx (build dropped the
-     .hero-reel--N selectors), so only shared reel styles live here. */
-
-  @keyframes hero-reel-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-14px); }
-  }
+  .hero-deck-video { z-index: 1; }
 
   @media (max-width: 767px) {
-    .hero-reel-cluster {
-      width: 100%;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 1.5rem 1rem 0;
+    .hero-deck-wrap { width: 100%; }
+    .hero-deck { perspective: 1200px; perspective-origin: 50% 32%; }
+    .hero-deck-card {
+      left: 47%;
+      top: 30%;
+      width: clamp(11rem, 50vw, 15rem);
     }
-    .hero-reel { margin-top: 0 !important; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-reel { animation: none; }
+    .hero-deck-card { transition: opacity 0.4s ease; }
   }
 
   /* Frosted, feathered haze behind the headline — dreamy depth, not a flat wash */
