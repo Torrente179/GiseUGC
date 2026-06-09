@@ -8,6 +8,7 @@ This folder is organized by subsystem instead of by date.
   - Start here for the current site map, section order, and project-level working rules.
 - `ui/`
   - Hero, navbar, footer, contact flows, FAQ, rating cards, motion polish, and visual evolution.
+  - **Latest:** `2026-06-10-hero-ramillete-deck.md` — 3D auto-cycling card deck replacing the hero wall; `2026-06-10-mobile-services-hero-and-i18n-accents.md` — frosted scrim + Spanish accent fixes.
 - `carousel-functionality/`
   - Services marquee, swipe behavior, loop logic, resize stability, and regression guidance.
 - `video-functionality/`
