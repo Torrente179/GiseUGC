@@ -1,27 +1,21 @@
-import { useEffect, useMemo, useState, type MouseEvent } from 'react';
+import { useMemo, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { m } from 'framer-motion';
 import { ArrowDownRight } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
-import HeroWallTile from '@/components/HeroWallTile';
+import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getLocaleFromPath } from '@/lib/locale-path';
-import { LEGACY_REEL_CLIPS, type ReelClip } from '@/data/portfolio-clips';
+import { LEGACY_REEL_CLIPS, getBestPosterSrc, type ReelClip } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 
 interface HeroProps {
   showIntroduction?: boolean;
 }
 
-const N_COLS = 5;
-const TILES_PER_COL = 4;
-const COL_MODS = ['', 'hero-wall-down', 'hero-wall-slow', 'hero-wall-down hero-wall-slow', ''];
-// Mobile shows 2 columns, tablet 3, desktop 5.
-const COL_VIS = ['flex', 'flex', 'hidden sm:flex', 'hidden lg:flex', 'hidden lg:flex'];
-
-// Full catalog — rotated daily so the wall cycles through every reel.
+// Full catalog — rotated daily so the hero cycles through the reels.
 const ALL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS];
 
 // Deterministic daily shuffle (mirrors the Portfolio's seeded reshuffle).
@@ -41,33 +35,21 @@ const introItem = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
-const getVisibleHeroColumnCount = () => {
-  if (typeof window === 'undefined') return N_COLS;
-  if (window.matchMedia('(min-width: 1024px)').matches) return 5;
-  if (window.matchMedia('(min-width: 640px)').matches) return 3;
-  return 2;
-};
-
 const Hero = ({ showIntroduction = true }: HeroProps) => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
 
-  // Rotate the whole catalog by the UTC day bucket — fresh selection every 24h.
+  // Rotate the catalog by the UTC day bucket — fresh selection every 24h.
   const utcDayBucket = Math.floor(Date.now() / 86400000);
   const dailyClips = useMemo(() => shuffleWithSeed(ALL_CLIPS, utcDayBucket), [utcDayBucket]);
-  const columns = Array.from({ length: N_COLS }, (_, c) =>
-    Array.from({ length: TILES_PER_COL }, (_, r) => dailyClips[(c * TILES_PER_COL + r) % dailyClips.length]),
-  );
-  const [visibleColumnCount, setVisibleColumnCount] = useState(getVisibleHeroColumnCount);
-
-  useEffect(() => {
-    const update = () => setVisibleColumnCount(getVisibleHeroColumnCount());
-    update();
-    window.addEventListener('resize', update, { passive: true });
-    return () => window.removeEventListener('resize', update);
-  }, []);
+  // Curated cluster: a few large reels that all play — no 40-tile decode tax.
+  // Desktop shows three; mobile shows one featured. A separate clip is the
+  // blurred atmospheric backdrop.
+  const reelCount = isMobile ? 1 : 3;
+  const heroReels = useMemo(() => dailyClips.slice(0, reelCount), [dailyClips, reelCount]);
+  const ambientClip = dailyClips[reelCount % dailyClips.length] ?? dailyClips[0];
 
   const roleLabel = locale === 'es'
     ? 'Creadora UGC bilingüe · Medellín'
@@ -86,27 +68,60 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
     <section id="home" className="relative w-full overflow-hidden bg-background max-md:overflow-hidden">
       {/* Hero viewport is always dark ("black theme"), independent of the global light/dark toggle */}
       <div className="dark relative min-h-[100svh] w-full bg-background text-foreground">
-        {/* ─── Living wall of reels ─── */}
+        {/* ─── Curated reel showcase (a few large reels, all playing) ─── */}
         <div
-          className="hero-wall max-md:!top-[calc(env(safe-area-inset-top,0px)+5.5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
+          className="hero-stage max-md:!top-[calc(env(safe-area-inset-top,0px)+5.5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
           aria-hidden="true"
         >
-          {columns.slice(0, visibleColumnCount).map((col, c) => {
-            const playColumnVideos = !isMobile || c < 2;
-
-            return (
-              <div
-                key={c}
-                className={`${COL_VIS[c]} flex-1 flex-col gap-3 hero-wall-col-anim ${COL_MODS[c]}`}
-              >
-                {[...col, ...col].map((clip, i) => (
-                  <div key={`${clip.id}-${i}`} className="hero-wall-tile">
-                    <HeroWallTile clip={clip} playVideo={playColumnVideos} />
-                  </div>
-                ))}
-              </div>
-            );
-          })}
+          {/* Atmospheric blurred backdrop — a single decoder for dreamy depth */}
+          <div className="hero-stage-bg">
+            <AutoplayPreviewVideo
+              src={ambientClip.previewSrc}
+              hlsSrc={ambientClip.hlsSrc}
+              poster={getBestPosterSrc(ambientClip)}
+              className="hero-stage-bg-video"
+              preload="metadata"
+              playbackPriority="background"
+              loadStrategy="immediate"
+              rootMargin="0px"
+            />
+          </div>
+          {/* Featured reels — large, all playing */}
+          <div className="hero-reel-cluster">
+            {heroReels.map((clip, i) => {
+              // Width-driven so the cluster scales to fit any desktop width
+              // (height follows the 9:16 ratio). Mobile shows one prominent reel.
+              const width = isMobile
+                ? 'min(72vw, 22rem)'
+                : i === 0
+                  ? 'min(21vw, 20rem)'
+                  : 'min(15.5vw, 15rem)';
+              return (
+                <div
+                  key={clip.id}
+                  className="hero-reel"
+                  style={{
+                    width,
+                    height: `calc(${width} * 16 / 9)`,
+                    marginTop: !isMobile && i === 1 ? '-3rem' : !isMobile && i === 2 ? '3rem' : 0,
+                    zIndex: i === 0 ? 2 : 1,
+                    animationDelay: `${i * -2.5}s`,
+                  }}
+                >
+                  <AutoplayPreviewVideo
+                    src={clip.previewSrc}
+                    hlsSrc={clip.hlsSrc}
+                    poster={getBestPosterSrc(clip)}
+                    className="hero-reel-video"
+                    preload="metadata"
+                    playbackPriority={i === 0 ? 'hero' : 'preview'}
+                    loadStrategy="immediate"
+                    rootMargin="0px"
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* ─── Frosted haze + feathered scrim (theme-aware) ─── */}

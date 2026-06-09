@@ -612,6 +612,85 @@
     pointer-events: none;
   }
 
+  /* ─── Curated reel showcase ─── a few large reels, all playing (decode-light) */
+  .hero-stage {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  /* Atmospheric blurred backdrop — one decoder, dreamy depth */
+  .hero-stage-bg {
+    position: absolute;
+    inset: 0;
+  }
+  .hero-stage-bg-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 22%;
+    filter: blur(44px) saturate(0.72) brightness(0.5);
+    transform: scale(1.18);
+    opacity: 0.5;
+  }
+
+  /* Sharp featured reels, right side on desktop */
+  .hero-reel-cluster {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 58%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.75rem, 1.6vw, 1.5rem);
+    padding: 5rem 3vw 3rem;
+  }
+  .hero-reel {
+    position: relative;
+    flex: 0 0 auto;
+    aspect-ratio: 9 / 16;
+    border-radius: 1.1rem;
+    overflow: hidden;
+    background: hsl(var(--muted) / 0.4);
+    box-shadow: 0 32px 64px -34px rgba(0, 0, 0, 0.7), inset 0 0 0 1px hsl(var(--foreground) / 0.06);
+    animation: hero-reel-float 7.5s ease-in-out infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+  /* Absolutely positioned so the video's intrinsic 1080×1920 doesn't drive the
+     flex item — the reel sizes purely from its height + aspect-ratio. */
+  .hero-reel-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* Per-reel sizing/stagger is set inline in Hero.tsx (build dropped the
+     .hero-reel--N selectors), so only shared reel styles live here. */
+
+  @keyframes hero-reel-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  @media (max-width: 767px) {
+    .hero-reel-cluster {
+      width: 100%;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 1.5rem 1rem 0;
+    }
+    .hero-reel { margin-top: 0 !important; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-reel { animation: none; }
+  }
+
   /* Frosted, feathered haze behind the headline — dreamy depth, not a flat wash */
   .hero-wall-haze {
     position: absolute;
