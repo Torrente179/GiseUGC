@@ -25,6 +25,14 @@
         } catch (_) {}
 
         const root = document.documentElement;
+
+        // The home hero is always dark — boot dark on home paths so the
+        // static shell doesn't flash light before React paints the hero.
+        try {
+          var bootPath = window.location.pathname.replace(/\/+$/, '') || '/';
+          if (bootPath === '/' || bootPath === '/en') root.classList.add('boot-home');
+        } catch (_) {}
+
         const storageKey = 'theme';
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
         const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -405,19 +413,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://media.giselasaldarriaga.com" crossorigin />
     <link rel="dns-prefetch" href="//media.giselasaldarriaga.com" />
-    <script>
-      (function () {
-        try {
-          var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-          if (conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) return;
-        } catch (_) {}
-        var preloadPoster = document.createElement('link');
-        preloadPoster.rel = 'preload';
-        preloadPoster.as = 'image';
-        preloadPoster.href = 'https://media.giselasaldarriaga.com/videos/posters/ugc-lifestyle-review-poster.jpg';
-        document.head.appendChild(preloadPoster);
-      })();
-    </script>
     <link
       rel="preload"
       as="style"
@@ -427,30 +422,9 @@
       rel="preload"
       as="image"
       type="image/webp"
-      href="/uploads/gisela-hero-mobile-768.webp"
-      imagesrcset="/uploads/gisela-hero-mobile-768.webp 768w, /uploads/gisela-hero-mobile-992.webp 992w"
-      imagesizes="100vw"
-      media="(max-width: 767px)"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      type="image/webp"
       href="/uploads/gisela-hero-585.webp"
       imagesrcset="/uploads/gisela-hero-400.webp 400w, /uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-640.webp 640w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
-      imagesizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, 43vw"
-      media="(min-width: 768px) and (max-width: 1023px)"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      type="image/webp"
-      href="/uploads/gisela-hero-desktop-1600.webp"
-      imagesrcset="/uploads/gisela-hero-desktop-1600.webp 1600w, /uploads/gisela-hero-desktop-2048.webp 2048w"
-      imagesizes="100vw"
-      media="(min-width: 1024px)"
+      imagesizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 43vw, 76vw"
       fetchpriority="high"
     />
     <link
@@ -500,6 +474,9 @@
         letter-spacing: -0.025em;
         text-wrap: balance;
       }
+      .boot-name {
+        display: block;
+      }
       .boot-name-accent {
         color: #9f9366;
         display: inline-block;
@@ -510,6 +487,17 @@
         font-style: italic;
         letter-spacing: -0.02em;
         line-height: 1;
+      }
+      .boot-role {
+        display: block;
+        margin-top: 0.65rem;
+        font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+        font-size: clamp(1rem, 1.6vw, 1.2rem);
+        font-weight: 500;
+        font-style: normal;
+        letter-spacing: 0;
+        line-height: 1.3;
+        color: #5d564f;
       }
       .boot-accent {
         color: #9f9366;
@@ -555,6 +543,9 @@
         width: min(25rem, 100%);
         border-radius: 26px;
         overflow: hidden;
+        /* Tonal placeholder so the card never reads as a blank white box
+           while the photo decodes */
+        background: #ece5d8;
         box-shadow: 0 28px 64px -42px rgba(47, 42, 36, 0.42);
       }
       .boot-image {
@@ -562,6 +553,49 @@
         aspect-ratio: 4 / 5;
         display: block;
         object-fit: cover;
+      }
+      /* ─── Home boots straight into the dark hero look ───
+         The real home hero is always dark; matching it here means the boot
+         shell reads as the page's first frame instead of a light flash. */
+      html.boot-home,
+      .boot-home .boot-shell {
+        background: hsl(222 28% 8%);
+      }
+      .boot-home .boot-shell {
+        color: hsl(42 38% 92%);
+      }
+      .boot-home .boot-label,
+      .boot-home .boot-name-accent {
+        color: hsl(42 30% 64%);
+      }
+      .boot-home .boot-title {
+        /* !important: the compiled app CSS (render-blocking in prod) styles
+           every h1 with higher specificity; the boot shell must still win */
+        color: hsl(42 38% 92%) !important;
+        font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif !important;
+        font-weight: 600;
+        font-size: clamp(2.4rem, 5.5vw, 4.25rem);
+        letter-spacing: -0.04em !important;
+        line-height: 0.95;
+      }
+      .boot-home .boot-name-accent {
+        font-family: inherit;
+        font-size: 1em;
+        margin-left: 0.05em;
+      }
+      .boot-home .boot-role,
+      .boot-home .boot-signature,
+      .boot-home .boot-summary {
+        color: hsl(38 20% 72%);
+      }
+      .boot-home .boot-point {
+        border-color: hsl(42 30% 60% / 0.28);
+        background: hsl(222 24% 12% / 0.72);
+        color: hsl(38 20% 76%);
+      }
+      .boot-home .boot-image-wrap {
+        background: hsl(222 24% 11%);
+        box-shadow: 0 28px 64px -42px rgba(0, 0, 0, 0.85);
       }
       .boot-noscript h2,
       .boot-noscript h3 {
@@ -592,7 +626,8 @@
           <div>
             <p class="boot-label">Creadora UGC bilingüe para TikTok Ads, Meta y e-commerce</p>
             <h1 class="boot-title">
-              Gisela <span class="boot-name-accent">Saldarriaga</span>, creadora UGC y portavoz
+              <span class="boot-name">Gisela <span class="boot-name-accent">Saldarriaga</span></span>
+              <span class="boot-role">Creadora UGC y portavoz</span>
             </h1>
             <p class="boot-signature">Videos UGC bilingües con presencia natural y enfoque en conversión</p>
             <p class="boot-summary">
