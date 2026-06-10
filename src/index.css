@@ -630,7 +630,9 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 26%;
+    /* low Y anchor shows the upper band of the 9:16 source — the face sits
+       lower in the viewport instead of being bisected by the crop */
+    object-position: center 10%;
     filter: blur(26px) saturate(1.08) brightness(0.58);
     transform: scale(1.22);
     animation: hero-bg-drift 36s ease-in-out infinite;
@@ -674,7 +676,7 @@
     position: absolute;
     left: 42%;
     top: 50%;
-    width: clamp(11rem, 18vw, 18rem);
+    width: clamp(12rem, 21vw, 21rem);
     aspect-ratio: 9 / 16;
     border-radius: 1rem;
     overflow: hidden;
@@ -731,14 +733,14 @@
     position: relative;
     width: 100%;
     height: 100%;
-    --story-card-w: clamp(10rem, 44vw, 12.5rem);
+    --story-card-w: clamp(11rem, 50vw, 14rem);
     touch-action: pan-y;
     pointer-events: auto;
   }
   .hero-story-card {
     position: absolute;
     left: 50%;
-    top: 1.75rem;
+    top: 1rem;
     width: var(--story-card-w);
     aspect-ratio: 9 / 16;
     border-radius: 1rem;
@@ -797,7 +799,7 @@
   .hero-story-progress {
     position: absolute;
     left: 50%;
-    top: 0.5rem;
+    top: 0.25rem;
     transform: translateX(-50%);
     width: var(--story-card-w);
     display: flex;
@@ -862,9 +864,25 @@
   @media (max-width: 767px) {
     /* No backdrop-filter on mobile GPUs — gradients only */
     .hero-wall-haze { display: none; }
+    /* Calmer ambient: darker + slightly desaturated so the blurred poster
+       reads as atmosphere, not a murky blob behind the headline */
+    .hero-stage-bg-video {
+      filter: blur(30px) saturate(0.85) brightness(0.42);
+    }
+    /* Smooth multi-stop ramp (no banding) — solid behind the text, clear
+       over the story cards; only their last rows sink softly into the fog */
     .hero-wall-scrim {
       background:
-        linear-gradient(to top, hsl(var(--background)) 0%, hsl(var(--background) / 0.96) 24%, hsl(var(--background) / 0.62) 38%, hsl(var(--background) / 0) 52%),
+        linear-gradient(
+          to top,
+          hsl(var(--background)) 0%,
+          hsl(var(--background) / 0.98) 20%,
+          hsl(var(--background) / 0.9) 30%,
+          hsl(var(--background) / 0.75) 38%,
+          hsl(var(--background) / 0.5) 43%,
+          hsl(var(--background) / 0.2) 48%,
+          hsl(var(--background) / 0) 53%
+        ),
         linear-gradient(to bottom, hsl(var(--background) / 0.6) 0%, hsl(var(--background) / 0) 12%);
     }
   }

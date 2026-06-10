@@ -72,7 +72,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
       <div className="dark relative min-h-[100svh] w-full bg-background text-foreground">
         {/* ─── Curated reel showcase (a few large reels, all playing) ─── */}
         <div
-          className="hero-stage max-md:!top-[calc(env(safe-area-inset-top,0px)+5.5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
+          className="hero-stage max-md:!top-[calc(env(safe-area-inset-top,0px)+5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
           aria-hidden="true"
         >
           {/* Atmospheric blurred backdrop — poster-only on mobile so the story
@@ -120,9 +120,9 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             the inner container re-enables them so CTAs stay tappable */}
         <div className="relative z-10 flex min-h-[100svh] max-md:pointer-events-none max-md:flex-col max-md:pt-[calc(env(safe-area-inset-top,0px)+5.5rem)] md:items-end">
           <div className="max-md:min-h-[38svh] max-md:flex-1 max-md:shrink-0 md:hidden" aria-hidden="true" />
-          <div className="container mx-auto w-full shrink-0 px-6 pb-16 max-md:pointer-events-auto max-md:mt-auto max-md:pb-24 max-md:pt-0 md:px-12 md:pb-24 md:pt-28">
+          <div className="container mx-auto w-full shrink-0 px-6 pb-16 max-md:pointer-events-auto max-md:mt-auto max-md:pb-6 max-md:pt-0 md:px-12 md:pb-24 md:pt-28">
             <div className="hero-enter max-w-2xl">
-              <div className="mb-6 flex items-center gap-3">
+              <div className="mb-6 max-md:mb-3 flex items-center gap-3">
                 <img
                   src="/uploads/gisela-hero-585.jpg"
                   alt=""
@@ -130,7 +130,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                   height="40"
                   loading="eager"
                   decoding="async"
-                  className="h-10 w-10 shrink-0 rounded-full object-cover object-[50%_16%] ring-1 ring-foreground/15"
+                  className="h-10 w-10 max-md:h-8 max-md:w-8 shrink-0 rounded-full object-cover object-[50%_16%] ring-1 ring-foreground/15"
                 />
                 <span className="section-label text-foreground/70">{roleLabel}</span>
               </div>
@@ -140,11 +140,11 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <span className="block font-light italic">Saldarriaga</span>
               </h1>
 
-              <p className="mb-8 max-w-lg text-lg font-light leading-snug text-foreground/80 md:text-xl">
+              <p className="mb-8 max-md:mb-5 max-w-lg text-lg max-md:text-base font-light leading-snug text-foreground/80 md:text-xl">
                 {t('hero.subtitle')}
               </p>
 
-              <div className="mb-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="mb-9 max-md:mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <a
                   href="#portfolio"
                   onClick={handleHashLinkClick}
