@@ -864,16 +864,6 @@ const Portfolio = () => {
     };
   }, [isMobile, showcaseReelClips.length]);
 
-  const scrollReels = (direction: 'left' | 'right') => {
-    const container = reelScrollRef.current;
-    if (!container) return;
-    const scrollAmount = reelScrollStepRef.current;
-    container.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    });
-  };
-
   const handleReelCardTouchStart = useCallback(
     (event: TouchEvent<HTMLButtonElement>, clip: ReelClip) => {
       const touch = event.touches[0];
@@ -1231,24 +1221,6 @@ const Portfolio = () => {
             <div className="absolute inset-y-0 left-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
             <div className="absolute inset-y-0 right-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-l from-background via-background/80 to-transparent" />
 
-            {/* Mobile navigation arrows */}
-            <button
-              type="button"
-              className="md:hidden absolute left-2 top-1/2 -translate-y-1/2 z-30 h-10 w-10 rounded-full bg-foreground/60 backdrop-blur-sm flex items-center justify-center text-white hover:bg-foreground/80 transition-colors"
-              onClick={() => scrollReels('left')}
-              aria-label={t('portfolio.reelAriaPrev')}
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-30 h-10 w-10 rounded-full bg-foreground/60 backdrop-blur-sm flex items-center justify-center text-white hover:bg-foreground/80 transition-colors"
-              onClick={() => scrollReels('right')}
-              aria-label={t('portfolio.reelAriaNext')}
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-
             <div className="relative z-10 mx-auto px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
               <div
                 ref={reelScrollRef}
@@ -1301,6 +1273,17 @@ const Portfolio = () => {
                     </m.button>
                   );
                 })}
+              </div>
+              {/* Mobile: position counter instead of arrow chrome — swipe and
+                  the peeking next card are the affordance */}
+              <div className="md:hidden flex items-center justify-center gap-2.5 pt-1">
+                <span className="section-label text-muted-foreground tabular-nums">
+                  {String(activeMobileReelIndex + 1).padStart(2, '0')}
+                </span>
+                <span className="h-px w-7 bg-accent/40" />
+                <span className="section-label text-muted-foreground/60 tabular-nums">
+                  {String(showcaseReelClips.length).padStart(2, '0')}
+                </span>
               </div>
             </div>
           </div>

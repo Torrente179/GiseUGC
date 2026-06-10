@@ -119,10 +119,17 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
             Mobile: wrapper lets touches pass through to the story stack;
             the inner container re-enables them so CTAs stay tappable */}
         <div className="relative z-10 flex min-h-[100svh] max-md:pointer-events-none max-md:flex-col max-md:pt-[calc(env(safe-area-inset-top,0px)+5.5rem)] md:items-end">
-          <div className="max-md:min-h-[38svh] max-md:flex-1 max-md:shrink-0 md:hidden" aria-hidden="true" />
+          {/* Spacer = story-card height + breathing room, so the text block
+              can never collide with the reel card */}
+          <div
+            className="max-md:min-h-[calc(clamp(10.5rem,46vw,13rem)*1.7778+1.5rem)] max-md:flex-1 max-md:shrink-0 md:hidden"
+            aria-hidden="true"
+          />
           <div className="container mx-auto w-full shrink-0 px-6 pb-16 max-md:pointer-events-auto max-md:mt-auto max-md:pb-6 max-md:pt-0 md:px-12 md:pb-24 md:pt-28">
             <div className="hero-enter max-w-2xl">
               <div className="mb-6 max-md:mb-3 flex items-center gap-3">
+                {/* Desktop only — on mobile she's already on screen in the reel,
+                    so the avatar would be a duplicate */}
                 <img
                   src="/uploads/gisela-hero-585.jpg"
                   alt=""
@@ -130,7 +137,7 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                   height="40"
                   loading="eager"
                   decoding="async"
-                  className="h-10 w-10 max-md:h-8 max-md:w-8 shrink-0 rounded-full object-cover object-[50%_16%] ring-1 ring-foreground/15"
+                  className="h-10 w-10 max-md:hidden shrink-0 rounded-full object-cover object-[50%_16%] ring-1 ring-foreground/15"
                 />
                 <span className="section-label text-foreground/70">{roleLabel}</span>
               </div>
@@ -163,10 +170,11 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 </a>
               </div>
 
-              <div className="flex items-center gap-3.5 text-foreground/65">
-                <span className="font-serif text-2xl font-bold text-foreground">{t('hero.proofValue')}</span>
-                <span className="h-4 w-px bg-foreground/25" />
-                <span className="text-[10px] font-bold uppercase tracking-prestige">{t('hero.proofCaption')}</span>
+              {/* pr clears the floating contact bubble on small screens */}
+              <div className="flex items-center gap-3.5 text-foreground/65 max-md:pr-14">
+                <span className="font-serif text-2xl font-bold text-foreground whitespace-nowrap">{t('hero.proofValue')}</span>
+                <span className="h-4 w-px shrink-0 bg-foreground/25" />
+                <span className="text-[10px] font-bold uppercase tracking-prestige max-md:leading-[1.5]">{t('hero.proofCaption')}</span>
               </div>
             </div>
           </div>

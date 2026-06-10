@@ -132,9 +132,9 @@ const HeroStoryStack = ({ clips, advanceMs = 4200 }: HeroStoryStackProps) => {
       {clips.map((clip, i) => {
         const r = (i - active + n) % n;
         const oldR = (i - prevActiveRef.current + n) % n;
-        // A card jumping from offscreen-left ("prev") back into the right
-        // stack must teleport, not streak across the screen.
-        const snap = oldR === n - 1 && r === n - 2;
+        // A card swapping between the left sliver ("prev") and the right
+        // stack must teleport, not streak across the screen — both directions.
+        const snap = (oldR === n - 1 && r === n - 2) || (oldR === n - 2 && r === n - 1);
         const poster = getBestPosterSrc(clip);
         return (
           <div

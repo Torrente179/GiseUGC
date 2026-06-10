@@ -498,6 +498,10 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
           isScrolled
             ? 'border-b border-border/40 bg-background/80 backdrop-blur-xl shadow-[0_14px_36px_-30px_hsl(var(--foreground)/0.5)]'
             : 'border-b border-border/15 bg-background/40 backdrop-blur-md',
+          // The home hero is always dark — while the bar floats over it, use
+          // dark tokens regardless of the global theme so it doesn't read as
+          // a light strip pasted on a dark scene.
+          onHomePage && !isScrolled && !mobileMenuOpen && 'dark',
         )}
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}

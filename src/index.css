@@ -733,14 +733,14 @@
     position: relative;
     width: 100%;
     height: 100%;
-    --story-card-w: clamp(11rem, 50vw, 14rem);
+    --story-card-w: clamp(10.5rem, 46vw, 13rem);
     touch-action: pan-y;
     pointer-events: auto;
   }
   .hero-story-card {
     position: absolute;
     left: 50%;
-    top: 1rem;
+    top: 0.5rem;
     width: var(--story-card-w);
     aspect-ratio: 9 / 16;
     border-radius: 1rem;
@@ -768,18 +768,19 @@
   }
   .hero-story-card--snap { transition: none; }
   .hero-story-card[data-pos='focus'] { transform: translateX(-50%) scale(1); }
+  /* Neighbours read as quiet slivers at both screen edges — a hint that the
+     deck continues, never a competitor to the focused card */
   .hero-story-card[data-pos='next'] {
-    transform: translateX(72%) translateY(1.5%) scale(0.92);
-    filter: brightness(0.58) saturate(0.7);
+    transform: translateX(100%) translateY(2%) scale(0.9);
+    filter: brightness(0.5) saturate(0.72);
   }
   .hero-story-card[data-pos='back'] {
-    transform: translateX(86%) translateY(3%) scale(0.86);
-    filter: brightness(0.46) saturate(0.7);
+    transform: translateX(102%) translateY(3.5%) scale(0.84);
+    filter: brightness(0.4) saturate(0.7);
   }
-  /* Fully offscreen left: -250% of card width clears the centered anchor */
   .hero-story-card[data-pos='prev'] {
-    transform: translateX(-250%) scale(0.92);
-    filter: brightness(0.58) saturate(0.7);
+    transform: translateX(-200%) translateY(2%) scale(0.9);
+    filter: brightness(0.5) saturate(0.72);
   }
   .hero-story-face {
     position: absolute;
@@ -796,16 +797,19 @@
   }
   .hero-story-video[data-ready] { opacity: 1; }
 
+  /* Progress lives inside the card, stories-style — anchored to the same
+     object it describes instead of floating in the stage */
   .hero-story-progress {
     position: absolute;
     left: 50%;
-    top: 0.25rem;
+    top: 1.15rem;
     transform: translateX(-50%);
-    width: var(--story-card-w);
+    width: calc(var(--story-card-w) - 1.4rem);
     display: flex;
     gap: 0.3rem;
     z-index: 4;
     pointer-events: none;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
   }
   .hero-story-seg {
     flex: 1;
