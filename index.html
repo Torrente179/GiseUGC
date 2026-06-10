@@ -434,18 +434,92 @@
     </noscript>
     <style>
       /* ─── Boot surface ───
-         While the JS bundle loads, the page shows nothing but a plain
-         surface in the destination page's background color — no visible
-         placeholder UI. The SEO copy stays in the DOM, visually hidden. */
+         While the JS bundle loads: a plain surface in the destination
+         page's background color, with the brand wordmark and a hairline
+         progress sweep. The loader only fades in after a beat, so fast
+         loads never see it. The SEO copy stays in the DOM, visually
+         hidden. */
       .boot-shell {
+        --boot-bg: #fdfcfb;
+        --boot-ink: hsl(33 13% 16%);
+        --boot-gold: hsl(47 23% 51%);
+        --boot-track: hsl(47 23% 51% / 0.22);
         min-height: 100vh;
-        background: #fdfcfb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--boot-bg);
       }
       /* The home hero is always dark; dark-theme users get dark everywhere */
-      html.boot-home,
+      html.boot-home {
+        background: hsl(222 28% 8%);
+      }
       html.boot-home .boot-shell,
       html.dark .boot-shell {
-        background: hsl(222 28% 8%);
+        --boot-bg: hsl(222 28% 8%);
+        --boot-ink: hsl(42 38% 92%);
+        --boot-gold: hsl(42 28% 60%);
+        --boot-track: hsl(42 28% 60% / 0.22);
+      }
+      .boot-loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.15rem;
+        opacity: 0;
+        animation: boot-appear 0.6s ease 0.35s forwards;
+      }
+      .boot-mark {
+        font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+        font-weight: 700;
+        font-size: clamp(1.7rem, 3vw, 2.25rem);
+        letter-spacing: -0.04em;
+        line-height: 1;
+        color: var(--boot-gold);
+      }
+      .boot-mark-suffix {
+        font-weight: 500;
+        color: var(--boot-ink);
+      }
+      .boot-line {
+        position: relative;
+        width: 8.5rem;
+        height: 1px;
+        overflow: hidden;
+        background: var(--boot-track);
+      }
+      .boot-line-fill {
+        position: absolute;
+        inset: 0;
+        background: var(--boot-gold);
+        animation: boot-sweep 1.5s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+      }
+      @keyframes boot-appear {
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes boot-sweep {
+        0% {
+          transform: translateX(-101%);
+        }
+        55% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(101%);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .boot-loader {
+          animation: none;
+          opacity: 1;
+        }
+        .boot-line-fill {
+          animation: none;
+          transform: none;
+          opacity: 0.5;
+        }
       }
       .boot-seo {
         position: absolute;
@@ -470,6 +544,10 @@
   <body>
     <div id="root">
       <section class="boot-shell">
+        <div class="boot-loader" aria-hidden="true">
+          <span class="boot-mark">Gisela<span class="boot-mark-suffix">.UGC</span></span>
+          <span class="boot-line"><span class="boot-line-fill"></span></span>
+        </div>
         <div class="boot-seo">
           <p>Creadora UGC bilingüe para TikTok Ads, Meta y e-commerce</p>
           <h1>Gisela Saldarriaga, creadora UGC y portavoz</h1>
