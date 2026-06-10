@@ -48,7 +48,9 @@
         root.classList.toggle('dark', shouldUseDark);
         root.style.colorScheme = activeTheme;
         if (themeColorMeta) {
-          themeColorMeta.setAttribute('content', shouldUseDark ? '#0f121a' : '#fffefe');
+          // Home boots dark regardless of theme; ThemeRuntimeSync re-syncs after mount
+          var bootDark = shouldUseDark || root.classList.contains('boot-home');
+          themeColorMeta.setAttribute('content', bootDark ? '#0f121a' : '#fffefe');
         }
       })();
     </script>
@@ -419,15 +421,6 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..700&family=DM+Sans:wght@300..700&display=swap"
     />
     <link
-      rel="preload"
-      as="image"
-      type="image/webp"
-      href="/uploads/gisela-hero-585.webp"
-      imagesrcset="/uploads/gisela-hero-400.webp 400w, /uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-640.webp 640w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
-      imagesizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 43vw, 76vw"
-      fetchpriority="high"
-    />
-    <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..700&family=DM+Sans:wght@300..700&display=swap"
       media="print"
@@ -440,162 +433,30 @@
       />
     </noscript>
     <style>
+      /* ─── Boot surface ───
+         While the JS bundle loads, the page shows nothing but a plain
+         surface in the destination page's background color — no visible
+         placeholder UI. The SEO copy stays in the DOM, visually hidden. */
       .boot-shell {
         min-height: 100vh;
-        display: flex;
-        align-items: center;
-        padding: 96px 24px 64px;
-        background: #fffefe;
-        color: #2f2a24;
-        font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #fdfcfb;
       }
-      .boot-grid {
-        width: min(1200px, 100%);
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
-        gap: 3rem;
-        align-items: center;
-      }
-      .boot-label {
-        margin: 0 0 0.9rem;
-        color: #9f9366;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
-      .boot-title {
-        margin: 0;
-        font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-        font-weight: 600;
-        font-size: clamp(1.625rem, 4vw, 2.25rem);
-        line-height: 1.08;
-        letter-spacing: -0.025em;
-        text-wrap: balance;
-      }
-      .boot-name {
-        display: block;
-      }
-      .boot-name-accent {
-        color: #9f9366;
-        display: inline-block;
-        margin-left: 0.15rem;
-        font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-        font-size: 1.05em;
-        font-weight: 300;
-        font-style: italic;
-        letter-spacing: -0.02em;
-        line-height: 1;
-      }
-      .boot-role {
-        display: block;
-        margin-top: 0.65rem;
-        font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-        font-size: clamp(1rem, 1.6vw, 1.2rem);
-        font-weight: 500;
-        font-style: normal;
-        letter-spacing: 0;
-        line-height: 1.3;
-        color: #5d564f;
-      }
-      .boot-accent {
-        color: #9f9366;
-        display: block;
-        margin-top: 0.45rem;
-      }
-      .boot-signature {
-        margin: 1.25rem 0 0;
-        color: #5d564f;
-        max-width: 26rem;
-        font-size: 0.95rem;
-        font-weight: 500;
-        letter-spacing: 0.02em;
-        line-height: 1.55;
-      }
-      .boot-summary {
-        margin: 1.35rem 0 0;
-        max-width: 35rem;
-        color: #5d564f;
-        font-size: 1rem;
-        line-height: 1.7;
-      }
-      .boot-points {
-        margin: 1.2rem 0 0;
-        padding: 0;
-        list-style: none;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.6rem;
-      }
-      .boot-point {
-        padding: 0.45rem 0.75rem;
-        border: 1px solid rgba(159, 147, 102, 0.2);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.72);
-        color: #5d564f;
-        font-size: 0.86rem;
-        font-weight: 600;
-        line-height: 1.2;
-      }
-      .boot-image-wrap {
-        justify-self: end;
-        width: min(25rem, 100%);
-        border-radius: 26px;
-        overflow: hidden;
-        /* Tonal placeholder so the card never reads as a blank white box
-           while the photo decodes */
-        background: #ece5d8;
-        box-shadow: 0 28px 64px -42px rgba(47, 42, 36, 0.42);
-      }
-      .boot-image {
-        width: 100%;
-        aspect-ratio: 4 / 5;
-        display: block;
-        object-fit: cover;
-      }
-      /* ─── Home boots straight into the dark hero look ───
-         The real home hero is always dark; matching it here means the boot
-         shell reads as the page's first frame instead of a light flash. */
+      /* The home hero is always dark; dark-theme users get dark everywhere */
       html.boot-home,
-      .boot-home .boot-shell {
+      html.boot-home .boot-shell,
+      html.dark .boot-shell {
         background: hsl(222 28% 8%);
       }
-      .boot-home .boot-shell {
-        color: hsl(42 38% 92%);
-      }
-      .boot-home .boot-label,
-      .boot-home .boot-name-accent {
-        color: hsl(42 30% 64%);
-      }
-      .boot-home .boot-title {
-        /* !important: the compiled app CSS (render-blocking in prod) styles
-           every h1 with higher specificity; the boot shell must still win */
-        color: hsl(42 38% 92%) !important;
-        font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif !important;
-        font-weight: 600;
-        font-size: clamp(2.4rem, 5.5vw, 4.25rem);
-        letter-spacing: -0.04em !important;
-        line-height: 0.95;
-      }
-      .boot-home .boot-name-accent {
-        font-family: inherit;
-        font-size: 1em;
-        margin-left: 0.05em;
-      }
-      .boot-home .boot-role,
-      .boot-home .boot-signature,
-      .boot-home .boot-summary {
-        color: hsl(38 20% 72%);
-      }
-      .boot-home .boot-point {
-        border-color: hsl(42 30% 60% / 0.28);
-        background: hsl(222 24% 12% / 0.72);
-        color: hsl(38 20% 76%);
-      }
-      .boot-home .boot-image-wrap {
-        background: hsl(222 24% 11%);
-        box-shadow: 0 28px 64px -42px rgba(0, 0, 0, 0.85);
+      .boot-seo {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
       }
       .boot-noscript h2,
       .boot-noscript h3 {
@@ -603,57 +464,26 @@
         font-weight: 600;
         letter-spacing: -0.025em;
       }
-      @media (max-width: 1023px) {
-        .boot-shell {
-          padding-top: 88px;
-        }
-        .boot-grid {
-          grid-template-columns: 1fr;
-          gap: 2.2rem;
-        }
-        .boot-image-wrap {
-          justify-self: center;
-          width: min(24rem, 86vw);
-        }
-      }
     </style>
   </head>
 
   <body>
     <div id="root">
       <section class="boot-shell">
-        <div class="boot-grid">
-          <div>
-            <p class="boot-label">Creadora UGC bilingüe para TikTok Ads, Meta y e-commerce</p>
-            <h1 class="boot-title">
-              <span class="boot-name">Gisela <span class="boot-name-accent">Saldarriaga</span></span>
-              <span class="boot-role">Creadora UGC y portavoz</span>
-            </h1>
-            <p class="boot-signature">Videos UGC bilingües con presencia natural y enfoque en conversión</p>
-            <p class="boot-summary">
-              Creo anuncios UGC, demos de producto, reseñas y videos de portavoz en español e inglés para
-              marcas de beauty, lifestyle, SaaS y e-commerce que venden en Estados Unidos, España y Latinoamérica.
-            </p>
-            <ul class="boot-points" aria-label="Servicios principales">
-              <li class="boot-point">TikTok y Meta Ads</li>
-              <li class="boot-point">Demos y reseñas</li>
-              <li class="boot-point">Videos de portavoz</li>
-              <li class="boot-point">Español e inglés</li>
-            </ul>
-          </div>
-          <div class="boot-image-wrap">
-            <img
-              class="boot-image"
-              src="/uploads/gisela-hero-585.jpg"
-              srcset="/uploads/gisela-hero-400.webp 400w, /uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-640.webp 640w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
-              sizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 43vw, 76vw"
-              alt="Gisela Saldarriaga, creadora UGC y portavoz"
-              width="585"
-              height="731"
-              decoding="async"
-              fetchpriority="high"
-            />
-          </div>
+        <div class="boot-seo">
+          <p>Creadora UGC bilingüe para TikTok Ads, Meta y e-commerce</p>
+          <h1>Gisela Saldarriaga, creadora UGC y portavoz</h1>
+          <p>Videos UGC bilingües con presencia natural y enfoque en conversión</p>
+          <p>
+            Creo anuncios UGC, demos de producto, reseñas y videos de portavoz en español e inglés para
+            marcas de beauty, lifestyle, SaaS y e-commerce que venden en Estados Unidos, España y Latinoamérica.
+          </p>
+          <ul aria-label="Servicios principales">
+            <li>TikTok y Meta Ads</li>
+            <li>Demos y reseñas</li>
+            <li>Videos de portavoz</li>
+            <li>Español e inglés</li>
+          </ul>
         </div>
       </section>
       <noscript>
