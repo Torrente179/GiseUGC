@@ -6,6 +6,7 @@ import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navig
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 import HeroReelDeck from '@/components/HeroReelDeck';
+import HeroStoryStack from '@/components/HeroStoryStack';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getLocaleFromPath } from '@/lib/locale-path';
@@ -74,22 +75,39 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
           className="hero-stage max-md:!top-[calc(env(safe-area-inset-top,0px)+5.5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
           aria-hidden="true"
         >
-          {/* Atmospheric blurred backdrop — a single decoder for dreamy depth */}
+          {/* Atmospheric blurred backdrop — poster-only on mobile so the story
+              card keeps the playback budget's only decoder slot */}
           <div className="hero-stage-bg">
-            <AutoplayPreviewVideo
-              src={ambientClip.previewSrc}
-              hlsSrc={ambientClip.hlsSrc}
-              poster={getBestPosterSrc(ambientClip)}
-              className="hero-stage-bg-video"
-              preload="metadata"
-              playbackPriority="background"
-              loadStrategy="immediate"
-              rootMargin="0px"
-            />
+            {isMobile ? (
+              <img
+                src={getBestPosterSrc(ambientClip)}
+                alt=""
+                aria-hidden="true"
+                loading="eager"
+                decoding="async"
+                className="hero-stage-bg-video"
+              />
+            ) : (
+              <AutoplayPreviewVideo
+                src={ambientClip.previewSrc}
+                hlsSrc={ambientClip.hlsSrc}
+                poster={getBestPosterSrc(ambientClip)}
+                className="hero-stage-bg-video"
+                preload="metadata"
+                playbackPriority="background"
+                loadStrategy="immediate"
+                rootMargin="0px"
+              />
+            )}
           </div>
-          {/* Rotating "ramillete" of reels — focus auto-cycles through the deck */}
+          {/* Reels: desktop fans a 3D "ramillete"; mobile gets an app-native
+              story stack (centered card, edge peek, segmented progress) */}
           <div className="hero-deck-wrap">
-            <HeroReelDeck clips={deckClips} fan={isMobile ? 1 : 3} />
+            {isMobile ? (
+              <HeroStoryStack clips={deckClips} />
+            ) : (
+              <HeroReelDeck clips={deckClips} fan={3} />
+            )}
           </div>
         </div>
 
@@ -97,10 +115,12 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
         <div className="hero-wall-haze" aria-hidden="true" />
         <div className="hero-wall-scrim" aria-hidden="true" />
 
-        {/* ─── Content (visible by default — no JS-gated reveal) ─── */}
-        <div className="relative z-10 flex min-h-[100svh] max-md:flex-col max-md:pt-[calc(env(safe-area-inset-top,0px)+5.5rem)] md:items-end">
+        {/* ─── Content (visible by default — no JS-gated reveal) ───
+            Mobile: wrapper lets touches pass through to the story stack;
+            the inner container re-enables them so CTAs stay tappable */}
+        <div className="relative z-10 flex min-h-[100svh] max-md:pointer-events-none max-md:flex-col max-md:pt-[calc(env(safe-area-inset-top,0px)+5.5rem)] md:items-end">
           <div className="max-md:min-h-[38svh] max-md:flex-1 max-md:shrink-0 md:hidden" aria-hidden="true" />
-          <div className="container mx-auto w-full shrink-0 px-6 pb-16 max-md:mt-auto max-md:pb-24 max-md:pt-0 md:px-12 md:pb-24 md:pt-28">
+          <div className="container mx-auto w-full shrink-0 px-6 pb-16 max-md:pointer-events-auto max-md:mt-auto max-md:pb-24 max-md:pt-0 md:px-12 md:pb-24 md:pt-28">
             <div className="hero-enter max-w-2xl">
               <div className="mb-6 flex items-center gap-3">
                 <img

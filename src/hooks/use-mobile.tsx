@@ -11,10 +11,15 @@ export function useIsMobile() {
   React.useEffect(() => {
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
     const onChange = () => {
-      setIsMobile(getIsMobile())
+      // Transition: breakpoint flips swap lazy-loaded sections (Index.tsx
+      // ternaries have no Suspense boundary). A synchronous update that
+      // suspends would unmount the whole root — white screen on rotation.
+      React.startTransition(() => {
+        setIsMobile(getIsMobile())
+      })
     }
     mql.addEventListener("change", onChange)
-    setIsMobile(getIsMobile())
+    onChange()
     return () => mql.removeEventListener("change", onChange)
   }, [])
 
