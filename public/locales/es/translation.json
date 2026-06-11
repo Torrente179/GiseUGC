@@ -15,7 +15,7 @@
     "subtitle": "UGC bilingüe, demos y videos de portavoz para marcas que venden en social",
     "signature": "Creadora UGC bilingüe y portavoz para TikTok Ads, Meta Ads y demos de producto",
     "description": "Creo anuncios UGC, demos de producto, reseñas y videos de portavoz en español e inglés para marcas de ecommerce, beauty, lifestyle, SaaS y tecnología que venden en Estados Unidos, España y Latinoamérica.",
-    "buttonPortfolio": "Explorar reels",
+    "buttonPortfolio": "Ver Mi Trabajo",
     "buttonContact": "Contactar",
     "imageAlt": "Gisela Saldarriaga",
     "scrollPrompt": "Explora Mis Servicios",
@@ -33,39 +33,6 @@
     },
     "headline": "UGC con presencia",
     "headlineAccent": "y conversión"
-  },
-  "director": {
-    "eyebrow": "Reel Director · Selección curada",
-    "title": "Seis formas de hacer que una marca se sienta humana.",
-    "hint": "Desplázate para dirigir la secuencia · selecciona el reel activo para verlo completo",
-    "play": "Ver reel completo",
-    "fallbackIntro": "Una selección dirigida de presencia, producción y storytelling UGC. Selecciona cualquier capítulo para verlo completo.",
-    "chapters": {
-      "presence": {
-        "label": "Presencia frente a cámara",
-        "statement": "Claridad, energía y confianza desde el primer segundo."
-      },
-      "production": {
-        "label": "Rango de producción",
-        "statement": "Del set al resultado final, con criterio visual en cada plano."
-      },
-      "tech": {
-        "label": "Tecnología que se entiende",
-        "statement": "Mensajes complejos convertidos en historias simples y cercanas."
-      },
-      "proof": {
-        "label": "Prueba que se siente real",
-        "statement": "Testimonios con naturalidad, intención y credibilidad."
-      },
-      "lifestyle": {
-        "label": "Producto en contexto",
-        "statement": "Lifestyle UGC que integra la marca en momentos cotidianos."
-      },
-      "convert": {
-        "label": "Creatividad para convertir",
-        "statement": "Hooks, ritmo y llamados a la acción diseñados para vender."
-      }
-    }
   },
   "services": {
     "sectionSubtitle": "Lo Que Ofrezco",

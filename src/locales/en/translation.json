@@ -17,7 +17,7 @@
     "headlineAccent": "and conversion focus",
     "signature": "Bilingual UGC creator and spokesperson for TikTok ads, Meta ads, and product demos",
     "description": "I create UGC ads, product demos, reviews, and spokesperson videos in Spanish and English for global brands.",
-    "buttonPortfolio": "Explore reels",
+    "buttonPortfolio": "See My Work",
     "buttonContact": "Contact",
     "imageAlt": "Gisela Saldarriaga, UGC creator and spokesperson",
     "scrollPrompt": "Explore My Services",
@@ -32,39 +32,6 @@
       "eyebrow": "Creative UGC",
       "title": "A more human presence for campaigns that need credibility",
       "description": "I work with brands that need TikTok ads, Meta ads, demos, testimonials, and speaking-to-camera assets with a polished visual standard. I produce remotely from Medellin for teams in the US, Spain, and LatAm."
-    }
-  },
-  "director": {
-    "eyebrow": "Reel Director · Curated selection",
-    "title": "Six ways to make a brand feel human.",
-    "hint": "Scroll to direct the sequence · select the active reel to watch it in full",
-    "play": "Watch full reel",
-    "fallbackIntro": "A directed selection of presence, production, and UGC storytelling. Select any chapter to watch it in full.",
-    "chapters": {
-      "presence": {
-        "label": "On-camera presence",
-        "statement": "Clarity, energy, and trust from the first second."
-      },
-      "production": {
-        "label": "Production range",
-        "statement": "From the set to the final cut, with visual intention in every frame."
-      },
-      "tech": {
-        "label": "Tech made clear",
-        "statement": "Complex messages turned into simple, approachable stories."
-      },
-      "proof": {
-        "label": "Proof that feels real",
-        "statement": "Testimonials with natural delivery, intent, and credibility."
-      },
-      "lifestyle": {
-        "label": "Product in context",
-        "statement": "Lifestyle UGC that places the brand inside real moments."
-      },
-      "convert": {
-        "label": "Creative built to convert",
-        "statement": "Hooks, pacing, and calls to action designed to sell."
-      }
     }
   },
   "services": {

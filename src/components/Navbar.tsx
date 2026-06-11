@@ -68,7 +68,6 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
   const shouldReduceMotion = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isOverDarkScene, setIsOverDarkScene] = useState(false);
   const [mobileMenuDragOffset, setMobileMenuDragOffset] = useState(0);
   const [isMobileMenuDragging, setIsMobileMenuDragging] = useState(false);
   const [isMobileMenuSwipeDismissing, setIsMobileMenuSwipeDismissing] = useState(false);
@@ -85,14 +84,6 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
       setIsScrolled((previousValue) =>
         previousValue === nextIsScrolled ? previousValue : nextIsScrolled,
       );
-      const navProbeY = 52;
-      const isDarkSceneAtProbe = ['home', 'reel-director'].some((id) => {
-        const scene = document.getElementById(id);
-        if (!scene) return false;
-        const rect = scene.getBoundingClientRect();
-        return rect.top <= navProbeY && rect.bottom > navProbeY;
-      });
-      setIsOverDarkScene(isDarkSceneAtProbe);
     };
 
     syncScrolledState();
@@ -510,7 +501,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
           // The home hero is always dark — while the bar floats over it, use
           // dark tokens regardless of the global theme so it doesn't read as
           // a light strip pasted on a dark scene.
-          onHomePage && isOverDarkScene && !mobileMenuOpen && 'dark',
+          onHomePage && !isScrolled && !mobileMenuOpen && 'dark',
         )}
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}

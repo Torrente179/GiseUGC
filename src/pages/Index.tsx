@@ -11,7 +11,6 @@ import { mark, measure, startLongTaskObserver } from '@/lib/perf-debug';
 import PageSeo from '@/components/PageSeo';
 import { getHomePath, type SiteLocale } from '@/lib/locale-path';
 import SiteFooter from '@/components/SiteFooter';
-import SpatialReelDirector from '@/components/SpatialReelDirector';
 
 const SocialProofSection = lazy(() => import('@/components/SocialProof'));
 const ServicesSection = lazy(() => import('@/components/Services'));
@@ -112,10 +111,8 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         }}
       />
       <Navbar />
-      <Hero showIntroduction={false} />
-      <SpatialReelDirector />
-      <HeroIntroductionSection />
-      {!isMobile ? <SocialProofSection /> : null}
+      <Hero showIntroduction={!isMobile} />
+      {isMobile ? <HeroIntroductionSection /> : <SocialProofSection />}
 
       <DeferredSection
         enabled={isMobile}

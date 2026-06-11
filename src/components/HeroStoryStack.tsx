@@ -23,8 +23,7 @@ const prefersReducedMotion = () =>
  */
 const HeroStoryStack = ({ clips, advanceMs = 4200 }: HeroStoryStackProps) => {
   const n = clips.length;
-  const shouldReduceMotion = prefersReducedMotion();
-  const cycleMs = shouldReduceMotion ? Math.max(advanceMs, 8000) : advanceMs;
+  const cycleMs = prefersReducedMotion() ? Math.max(advanceMs, 8000) : advanceMs;
   const [active, setActive] = useState(0);
   const [cycle, setCycle] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -51,14 +50,14 @@ const HeroStoryStack = ({ clips, advanceMs = 4200 }: HeroStoryStackProps) => {
 
   // Remaining-time timer — press-and-hold subtracts elapsed, resume continues.
   useEffect(() => {
-    if (shouldReduceMotion || n <= 1 || paused) return undefined;
+    if (n <= 1 || paused) return undefined;
     startedAtRef.current = performance.now();
     timerRef.current = window.setTimeout(() => {
       if (inViewRef.current) goTo(activeRef.current + 1);
     }, Math.max(250, remainingRef.current));
     return () => window.clearTimeout(timerRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cycle, n, paused, shouldReduceMotion]);
+  }, [cycle, paused, n]);
 
   // Stop cycling while the hero is scrolled away.
   useEffect(() => {
@@ -152,7 +151,7 @@ const HeroStoryStack = ({ clips, advanceMs = 4200 }: HeroStoryStackProps) => {
               decoding="async"
               className="hero-story-face"
             />
-            {r === 0 && !shouldReduceMotion && (
+            {r === 0 && (
               <AutoplayPreviewVideo
                 src={clip.previewSrc}
                 poster={poster}
