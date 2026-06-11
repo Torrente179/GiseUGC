@@ -40,6 +40,7 @@ const FloatingContactDock = () => {
   const shouldReduceMotion = useReducedMotion();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktopDockGhosted, setIsDesktopDockGhosted] = useState(false);
+  const [isDesktopDockHiddenByDirector, setIsDesktopDockHiddenByDirector] = useState(false);
   const [hasEntrance, setHasEntrance] = useState(false);
 
   // Delayed entrance — dock slides up after page settles
@@ -120,6 +121,7 @@ const FloatingContactDock = () => {
 
       if (!desktopMediaQuery.matches) {
         setIsDesktopDockGhosted(false);
+        setIsDesktopDockHiddenByDirector(false);
         return;
       }
 
@@ -131,9 +133,18 @@ const FloatingContactDock = () => {
             const maxScrollTop = Math.max(0, scrollingElement.scrollHeight - window.innerHeight);
             return window.scrollY >= maxScrollTop - 2;
           })();
+      const directorRect = document.getElementById('reel-director')?.getBoundingClientRect();
+      const isDirectorVisible = Boolean(
+        directorRect &&
+        directorRect.top < window.innerHeight &&
+        directorRect.bottom > 0,
+      );
 
       setIsDesktopDockGhosted((previous) =>
         previous === isAtAbsoluteBottom ? previous : isAtAbsoluteBottom
+      );
+      setIsDesktopDockHiddenByDirector((previous) =>
+        previous === isDirectorVisible ? previous : isDirectorVisible
       );
     };
 
@@ -331,7 +342,9 @@ const FloatingContactDock = () => {
       {/* Desktop: horizontal row */}
       <div
         className={`hidden md:flex dock-breathe items-center gap-3 rounded-full border border-white/40 bg-card/95 px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform,filter] duration-500 ${
-          isDesktopDockGhosted
+          isDesktopDockHiddenByDirector
+            ? 'opacity-0 scale-[0.94] translate-y-3 blur-[1.5px] pointer-events-none'
+            : isDesktopDockGhosted
             ? 'opacity-10 scale-[0.94] translate-y-2 blur-[1.5px] pointer-events-none'
             : 'opacity-100 scale-100 translate-y-0 blur-0 pointer-events-auto'
         }`}

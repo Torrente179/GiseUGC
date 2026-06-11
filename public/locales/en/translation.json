@@ -15,7 +15,7 @@
     "subtitle": "Bilingual UGC, product demos, and spokesperson videos for brands that sell through social",
     "signature": "Bilingual UGC creator and spokesperson for TikTok ads, Meta ads, and product demos",
     "description": "I create bilingual UGC ads, product demos, reviews, and spokesperson videos in Spanish and English for ecommerce, beauty, lifestyle, SaaS, and tech brands selling in the US, Spain, and LatAm.",
-    "buttonPortfolio": "See My Work",
+    "buttonPortfolio": "Explore reels",
     "buttonContact": "Contact",
     "imageAlt": "Gisela Saldarriaga",
     "scrollPrompt": "Explore My Services",
@@ -33,6 +33,39 @@
     },
     "headline": "UGC with presence",
     "headlineAccent": "and conversion focus"
+  },
+  "director": {
+    "eyebrow": "Reel Director · Curated selection",
+    "title": "Six ways to make a brand feel human.",
+    "hint": "Scroll to direct the sequence · select the active reel to watch it in full",
+    "play": "Watch full reel",
+    "fallbackIntro": "A directed selection of presence, production, and UGC storytelling. Select any chapter to watch it in full.",
+    "chapters": {
+      "presence": {
+        "label": "On-camera presence",
+        "statement": "Clarity, energy, and trust from the first second."
+      },
+      "production": {
+        "label": "Production range",
+        "statement": "From the set to the final cut, with visual intention in every frame."
+      },
+      "tech": {
+        "label": "Tech made clear",
+        "statement": "Complex messages turned into simple, approachable stories."
+      },
+      "proof": {
+        "label": "Proof that feels real",
+        "statement": "Testimonials with natural delivery, intent, and credibility."
+      },
+      "lifestyle": {
+        "label": "Product in context",
+        "statement": "Lifestyle UGC that places the brand inside real moments."
+      },
+      "convert": {
+        "label": "Creative built to convert",
+        "statement": "Hooks, pacing, and calls to action designed to sell."
+      }
+    }
   },
   "services": {
     "sectionSubtitle": "What I Offer",

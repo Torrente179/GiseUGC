@@ -86,6 +86,8 @@ export default defineConfig(({ mode }) => ({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('framer-motion')) return 'framer-motion';
+            if (id.includes('node_modules/gsap') || id.includes('node_modules/@gsap')) return 'gsap';
+            if (id.includes('node_modules/three')) return 'three';
             if (
               id.includes('i18next') ||
               id.includes('react-i18next') ||

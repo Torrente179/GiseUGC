@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import Index from '@/pages/Index';
 import ThemeRuntimeSync from '@/components/ThemeRuntimeSync';
+import { ReelTheaterProvider } from '@/components/reel-theater/ReelTheaterProvider';
 
 // Lazy route-level pages. These only render for off-home URLs so we avoid
 // paying for them on the most common (homepage) entry.
@@ -217,7 +218,9 @@ const App = () => {
   return (
     <LazyMotion features={domAnimation} strict>
       <ThemeRuntimeSync />
-      <AppRoutes />
+      <ReelTheaterProvider>
+        <AppRoutes />
+      </ReelTheaterProvider>
       <Analytics />
       <SpeedInsights />
     </LazyMotion>
