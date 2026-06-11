@@ -25,6 +25,8 @@ import {
 } from '@/lib/locale-path';
 import { getChatGptReferralContext } from '@/lib/referral-attribution';
 import { startMobileMediaPressureObserver } from '@/lib/perf-debug';
+import { initSmoothScroll, scrollToY } from '@/lib/motion/smooth-scroll';
+import { whenIdle } from '@/lib/motion/gsap-core';
 
 // Persist scroll positions across SPA navigations, keyed by React Router location.key
 const scrollPositions = new Map<string, number>();
@@ -42,7 +44,7 @@ const legalRouteEntries = getLegalPageRouteEntries();
 
 // Scroll to a Y position immediately (non-animated jump)
 const jumpToY = (y: number) => {
-  window.scrollTo({ top: y, left: 0, behavior: 'auto' });
+  scrollToY(y, { immediate: true });
 };
 
 // Smooth-scroll to a section element by ID, retrying until it appears in the DOM.
@@ -51,7 +53,7 @@ const scrollToSection = (sectionId: string, attempts = 0) => {
   const element = document.getElementById(sectionId);
   if (element) {
     const y = element.getBoundingClientRect().top + window.scrollY - 80;
-    window.scrollTo({ top: Math.max(0, y), left: 0, behavior: 'smooth' });
+    scrollToY(Math.max(0, y));
     // Clear the hash from the URL without triggering a React Router navigation
     const cleanPath = window.location.pathname + window.location.search;
     window.history.replaceState(null, '', cleanPath);
@@ -188,6 +190,10 @@ const App = () => {
     const stopMobileMediaObserver = startMobileMediaPressureObserver();
     return () => stopMobileMediaObserver?.();
   }, []);
+
+  // Site-wide smooth scrolling (desktop only; the facade guards viewport,
+  // pointer type and reduced motion). Idle-deferred to stay off the LCP path.
+  useEffect(() => whenIdle(() => { void initSmoothScroll(); }), []);
 
   useEffect(() => {
     if (hasTrackedChatGptLanding) return;

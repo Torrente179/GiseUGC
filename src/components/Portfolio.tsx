@@ -6,6 +6,8 @@ import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useVelocitySkew } from '@/hooks/use-velocity-skew';
+import { scrollToY, startSmoothScroll, stopSmoothScroll } from '@/lib/motion/smooth-scroll';
+import { ensureAutoRefresh, loadGsap, shouldEnableRichMotion } from '@/lib/motion/gsap-core';
 import AdaptiveVideo from '@/components/media/AdaptiveVideo';
 import {
   getBestPosterSrc,
@@ -325,8 +327,12 @@ const Portfolio = () => {
 
   const portfolioSectionRef = useRef<HTMLElement | null>(null);
   const reelScrollRef = useRef<HTMLDivElement>(null);
-  // Scroll-velocity shear on the reel rail — the strip feels like it has weight.
+  // Scroll-velocity shear on the gallery track — the strip feels like it has weight.
   const railSkewRef = useVelocitySkew<HTMLDivElement>();
+  // Desktop "Gallery" chapter: pinned stage + horizontally scrubbed track.
+  const galleryStageRef = useRef<HTMLDivElement>(null);
+  const galleryTrackRef = useRef<HTMLDivElement>(null);
+  const galleryCounterRef = useRef<HTMLSpanElement>(null);
   const reelScrollStepRef = useRef(212);
   const reelCardTouchStartRef = useRef<{ x: number; y: number } | null>(null);
   const reelCardDidDragRef = useRef(false);
@@ -349,6 +355,63 @@ const Portfolio = () => {
     (clip: ReelClip) => (clip.titleKey ? t(clip.titleKey) : clip.title ?? `Clip ${clip.id}`),
     [t],
   );
+
+  // ── Gallery pin (desktop): the stage holds one viewport while vertical
+  // scroll scrubs the track horizontally through every reel. The live
+  // counter writes textContent directly — no React state at 60fps.
+  const showcaseCount = showcaseReelClips.length;
+  useEffect(() => {
+    if (isMobile || !shouldEnableRichMotion()) return;
+
+    let cancelled = false;
+    let revert: (() => void) | undefined;
+
+    loadGsap().then(({ gsap, ScrollTrigger }) => {
+      const stage = galleryStageRef.current;
+      const track = galleryTrackRef.current;
+      if (cancelled || !stage || !track) return;
+
+      ensureAutoRefresh(ScrollTrigger);
+
+      const ctx = gsap.context(() => {
+        const distance = () =>
+          Math.max(0, track.scrollWidth - (track.parentElement?.clientWidth ?? 0));
+
+        // The scrub owns the track — disable the native swipe fallback.
+        if (track.parentElement) gsap.set(track.parentElement, { overflowX: 'hidden' });
+
+        gsap.to(track, {
+          x: () => -distance(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: stage,
+            start: 'top top',
+            end: () => `+=${distance()}`,
+            pin: true,
+            scrub: 0.85,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const counter = galleryCounterRef.current;
+              if (!counter || showcaseCount === 0) return;
+              const index = Math.min(
+                showcaseCount - 1,
+                Math.round(self.progress * (showcaseCount - 1)),
+              );
+              counter.textContent = String(index + 1).padStart(2, '0');
+            },
+          },
+        });
+      }, stage);
+
+      revert = () => ctx.revert();
+    });
+
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
+  }, [isMobile, showcaseCount]);
 
   useEffect(() => {
     const now = Date.now();
@@ -776,6 +839,7 @@ const Portfolio = () => {
     htmlElement.style.overflow = 'hidden';
     htmlElement.style.overscrollBehavior = 'none';
     htmlElement.dataset.theater = 'open';
+    stopSmoothScroll();
 
     return () => {
       delete htmlElement.dataset.theater;
@@ -789,8 +853,9 @@ const Portfolio = () => {
       htmlElement.style.overflow = previousHtmlStyles.overflow;
       htmlElement.style.overscrollBehavior = previousHtmlStyles.overscrollBehavior;
       htmlElement.style.scrollBehavior = 'auto';
-      window.scrollTo(0, scrollY);
+      scrollToY(scrollY, { immediate: true });
       htmlElement.style.scrollBehavior = previousHtmlStyles.scrollBehavior;
+      startSmoothScroll();
     };
   }, [isTheaterOpen]);
 
@@ -1094,9 +1159,93 @@ const Portfolio = () => {
     return getProtectedSourcesForClip(instantPrewarmClip);
   }, [getProtectedSourcesForClip, instantPrewarmClip]);
 
+  // ── Shared chapter header (mobile rail + desktop pinned gallery) ──
+  const galleryHeader = (
+    <m.div
+      className="studio-header mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.32 }}
+      variants={staggerContainer(0.12, 0.05)}
+    >
+      <div className="text-center md:text-left">
+        <m.div className="inline-flex items-center gap-2 mb-6" variants={revealUp(14, 0.56)}>
+          <span className="h-px w-8 bg-accent/40" />
+          <p className="section-label text-accent text-sm md:text-base">{t('portfolio.sectionSubtitle')}</p>
+        </m.div>
+        <h2 className="text-5xl md:text-6xl lg:text-7xl font-serif text-foreground tracking-tight-serif leading-[0.95]">
+          <SplitTextReveal text={t('portfolio.sectionTitle')} delay={0.06} />
+          <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">
+            <SplitTextReveal text={t('portfolio.sectionTitleAccent')} delay={0.22} />
+          </span>
+        </h2>
+      </div>
+      <m.div className="lg:max-w-xs text-center lg:text-right" variants={revealUp(20, 0.64)}>
+        <p className="strategic-body text-foreground/45 text-lg md:text-xl italic">
+          {t('portfolio.reelDescription')}
+        </p>
+      </m.div>
+    </m.div>
+  );
+
+  // ── Shared reel card (mobile rail + desktop gallery track) ──
+  const renderReelCard = (clip: ReelClip, index: number) => {
+    const mobileCardDistance = Math.abs(activeMobileReelIndex - index);
+    const isActiveMobileCard = !isMobile || mobileCardDistance === 0;
+    const isWarmMobileCard = isMobile && mobileCardDistance <= 1;
+
+    return (
+      <m.button
+        type="button"
+        key={clip.id}
+        data-reel-card="true"
+        className={
+          isMobile
+            ? 'group relative shrink-0 w-[70vw] sm:w-[55vw] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-manipulation'
+            : 'dc-gallery-card group relative shrink-0 aspect-[9/16] overflow-hidden text-left touch-manipulation'
+        }
+        onMouseEnter={() => scheduleInteractionPrewarm(clip)}
+        onMouseLeave={clearInteractionPrewarm}
+        onPointerDown={() => scheduleInteractionPrewarm(clip)}
+        onFocus={() => scheduleInteractionPrewarm(clip)}
+        onBlur={clearInteractionPrewarm}
+        onTouchStart={(event) => handleReelCardTouchStart(event, clip)}
+        onTouchMove={handleReelCardTouchMove}
+        onTouchEnd={handleReelCardTouchEnd}
+        onTouchCancel={handleReelCardTouchEnd}
+        onClick={() => handleReelCardClick(clip)}
+        aria-label={getReelTitle(clip)}
+        whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.02 }}
+        whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
+        transition={springHoverTransition}
+      >
+        <AdaptiveVideo
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          src={clip.previewSrc}
+          hlsSrc={clip.previewHlsSrc}
+          poster={isWarmMobileCard || !isMobile ? getBestPosterSrc(clip) : clip.posterSrc}
+          muted
+          autoPlay={!isMobile || isActiveMobileCard}
+          loop
+          playsInline
+          preload={isWarmMobileCard ? 'metadata' : 'none'}
+          rootMargin="100px 0px"
+          pauseOffscreen
+          unloadWhenOffscreen
+          forcePause={isTheaterOpen || !isActiveMobileCard}
+          playbackPriority={isActiveMobileCard ? 'preview' : 'background'}
+          aria-hidden="true"
+        />
+      </m.button>
+    );
+  };
 
   return (
-    <section ref={portfolioSectionRef} id="portfolio" className="studio-section bg-secondary/5 pt-20 pb-16">
+    <section
+      ref={portfolioSectionRef}
+      id="portfolio"
+      className={isMobile ? 'studio-section bg-secondary/5 pt-20 pb-16' : 'relative bg-secondary/5'}
+    >
       {!isMobile && !isTheaterOpen && instantPrewarmSources.length > 0 && (
         <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
           {instantPrewarmSources.map((src, index) => (
@@ -1177,32 +1326,9 @@ const Portfolio = () => {
           ))}
         </div>
       )}
+      {isMobile ? (
       <div className="studio-container">
-        <m.div
-          className="studio-header mb-10 md:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.32 }}
-          variants={staggerContainer(0.12, 0.05)}
-        >
-          <div className="text-center md:text-left">
-            <m.div className="inline-flex items-center gap-2 mb-6" variants={revealUp(14, 0.56)}>
-              <span className="h-px w-8 bg-accent/40" />
-              <p className="section-label text-accent text-sm md:text-base">{t('portfolio.sectionSubtitle')}</p>
-            </m.div>
-            <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-serif text-foreground tracking-tight-serif leading-[0.95]">
-              <SplitTextReveal text={t('portfolio.sectionTitle')} delay={0.06} />
-              <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">
-                <SplitTextReveal text={t('portfolio.sectionTitleAccent')} delay={0.22} />
-              </span>
-            </h2>
-          </div>
-          <m.div className="lg:max-w-xs text-center lg:text-right" variants={revealUp(20, 0.64)}>
-            <p className="strategic-body text-foreground/45 text-lg md:text-xl italic">
-              {t('portfolio.reelDescription')}
-            </p>
-          </m.div>
-        </m.div>
+        {galleryHeader}
 
         <m.div
           className="studio-rule mb-10 md:mb-12"
@@ -1224,58 +1350,13 @@ const Portfolio = () => {
             <div className="absolute inset-y-0 left-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
             <div className="absolute inset-y-0 right-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-l from-background via-background/80 to-transparent" />
 
-            <div ref={railSkewRef} className="relative z-10 mx-auto px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
+            <div className="relative z-10 mx-auto px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
               <div
                 ref={reelScrollRef}
                 className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-proximity md:snap-none overscroll-x-contain scroll-smooth"
                 style={{ WebkitOverflowScrolling: 'touch' }}
               >
-                {showcaseReelClips.map((clip, index) => {
-                  const mobileCardDistance = Math.abs(activeMobileReelIndex - index);
-                  const isActiveMobileCard = !isMobile || mobileCardDistance === 0;
-                  const isWarmMobileCard = isMobile && mobileCardDistance <= 1;
-
-                  return (
-                    <m.button
-                      type="button"
-                      key={clip.id}
-                      data-reel-card="true"
-                      className="group relative shrink-0 w-[70vw] sm:w-[55vw] md:w-[180px] lg:w-[200px] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-colors snap-center touch-manipulation"
-                      onMouseEnter={() => scheduleInteractionPrewarm(clip)}
-                      onMouseLeave={clearInteractionPrewarm}
-                      onPointerDown={() => scheduleInteractionPrewarm(clip)}
-                      onFocus={() => scheduleInteractionPrewarm(clip)}
-                      onBlur={clearInteractionPrewarm}
-                      onTouchStart={(event) => handleReelCardTouchStart(event, clip)}
-                      onTouchMove={handleReelCardTouchMove}
-                      onTouchEnd={handleReelCardTouchEnd}
-                      onTouchCancel={handleReelCardTouchEnd}
-                      onClick={() => handleReelCardClick(clip)}
-                      aria-label={getReelTitle(clip)}
-                      whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.02 }}
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.985 }}
-                      transition={springHoverTransition}
-                    >
-                      <AdaptiveVideo
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        src={clip.previewSrc}
-                        hlsSrc={clip.previewHlsSrc}
-                        poster={isWarmMobileCard || !isMobile ? getBestPosterSrc(clip) : clip.posterSrc}
-                        muted
-                        autoPlay={!isMobile || isActiveMobileCard}
-                        loop
-                        playsInline
-                        preload={isWarmMobileCard ? 'metadata' : 'none'}
-                        rootMargin="100px 0px"
-                        pauseOffscreen
-                        unloadWhenOffscreen
-                        forcePause={isTheaterOpen || !isActiveMobileCard}
-                        playbackPriority={isActiveMobileCard ? 'preview' : 'background'}
-                        aria-hidden="true"
-                      />
-                    </m.button>
-                  );
-                })}
+                {showcaseReelClips.map(renderReelCard)}
               </div>
               {/* Mobile: position counter instead of arrow chrome — swipe and
                   the peeking next card are the affordance */}
@@ -1293,6 +1374,42 @@ const Portfolio = () => {
         </m.div>
 
       </div>
+      ) : (
+        /* ── Desktop Gallery chapter: pinned stage, horizontal scrub ──
+           The outer div is a static "pin shell": ScrollTrigger re-parents
+           the stage into its own .pin-spacer inside it, so React (which
+           inserts conditional prewarm siblings into the section) never
+           reconciles against the re-parented node. */
+        <div>
+        <div ref={galleryStageRef} className="dc-gallery-stage">
+          <div className="studio-container w-full">
+            {galleryHeader}
+          </div>
+          <div className="dc-gallery-viewport">
+            <div
+              ref={(node) => {
+                galleryTrackRef.current = node;
+                railSkewRef.current = node;
+              }}
+              className="dc-gallery-track"
+            >
+              {showcaseReelClips.map(renderReelCard)}
+            </div>
+          </div>
+          <div className="studio-container w-full">
+            <div className="dc-gallery-meta">
+              <span ref={galleryCounterRef} className="section-label text-foreground/70 !text-xs tabular-nums">
+                01
+              </span>
+              <span className="h-px w-8 bg-accent/40" aria-hidden="true" />
+              <span className="section-label text-muted-foreground/60 !text-xs tabular-nums">
+                {String(showcaseReelClips.length).padStart(2, '0')}
+              </span>
+            </div>
+          </div>
+        </div>
+        </div>
+      )}
 
       {activeReelPreview && (
         <div

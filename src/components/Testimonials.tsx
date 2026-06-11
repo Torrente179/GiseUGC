@@ -5,6 +5,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { X } from 'lucide-react';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { blurRevealUp, staggerContainer } from '@/components/motion/variants';
+import { scrollToY, startSmoothScroll, stopSmoothScroll } from '@/lib/motion/smooth-scroll';
 
 interface TestimonialImage {
   id: number;
@@ -347,6 +348,7 @@ const Testimonials = () => {
     body.style.width = '100%';
     body.style.overflow = 'hidden';
     if (scrollbarGap > 0) body.style.paddingRight = `${scrollbarGap}px`;
+    stopSmoothScroll();
     return () => {
       body.style.position = prev.position;
       body.style.top = prev.top;
@@ -355,7 +357,8 @@ const Testimonials = () => {
       body.style.width = prev.width;
       body.style.overflow = prev.overflow;
       body.style.paddingRight = prev.paddingRight;
-      window.scrollTo(0, scrollY);
+      scrollToY(scrollY, { immediate: true });
+      startSmoothScroll();
     };
   }, [isOpen]);
 

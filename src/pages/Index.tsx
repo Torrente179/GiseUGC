@@ -1,6 +1,7 @@
 import { lazy, memo, Suspense, useEffect, type ReactNode } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import ManifestoChapter from '@/components/chapters/ManifestoChapter';
 import CreatorAdvantageSection from '@/components/CreatorAdvantage';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { clearUrlHash } from '@/hooks/use-hashless-section-navigation';
@@ -13,16 +14,9 @@ import ScrollProgressHairline from '@/components/motion/ScrollProgressHairline';
 import { getHomePath, type SiteLocale } from '@/lib/locale-path';
 import SiteFooter from '@/components/SiteFooter';
 
-const SocialProofSection = lazy(() => import('@/components/SocialProof'));
 const ServicesSection = lazy(() => import('@/components/Services'));
 const PortfolioSection = lazy(() => import('@/components/Portfolio'));
-const HeroIntroductionSection = lazy(() => import('@/components/HeroIntroduction'));
-const MobileFiverrRatingSection = lazy(() => import('@/components/MobileFiverrRatingSection'));
 const MobileContactCtaSection = lazy(() => import('@/components/MobileContactCtaSection'));
-const DesktopFiverrRatingSection = lazy(() => import('@/components/DesktopFiverrRatingSection'));
-
-// Fiverr rating card hidden from the DOM — flip to true to restore.
-const SHOW_FIVERR_RATING = false;
 const TestimonialsSection = lazy(() => import('@/components/Testimonials'));
 const FAQSection = lazy(() => import('@/components/FAQ'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
@@ -113,40 +107,55 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
       />
       <Navbar />
       <ScrollProgressHairline />
-      <Hero showIntroduction={!isMobile} />
-      {isMobile ? <HeroIntroductionSection /> : <SocialProofSection />}
 
-      <DeferredSection
-        enabled={isMobile}
-        mountId="portfolio-mobile"
-        rootMargin="1100px 0px"
-        queueDelayMs={80}
-        skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />}
-      >
-        <PortfolioSection />
-      </DeferredSection>
-      {isMobile ? <ServicesSection /> : null}
-      {isMobile ? <CreatorAdvantageSection /> : null}
-      {SHOW_FIVERR_RATING && (
+      {/* Chapter 1 — Reel Constellation */}
+      <Hero />
+
+      {/* Chapter 2 — Manifesto (statement + proof numerals) */}
+      <ManifestoChapter />
+
+      {/* Chapter 3 — Gallery. Desktop mounts eagerly (its pinned stage must
+          exist before ScrollTrigger measures the page); mobile keeps the
+          deferred mount — no pin there, and boot stays lean. */}
+      {isMobile ? (
         <DeferredSection
-          enabled={isMobile}
-          mountId="mobile-rating-card"
-          rootMargin="900px 0px"
-          queueDelayMs={100}
-          skeleton={<SectionSkeleton id="mobile-rating-card" minHeightClass="min-h-[460px]" />}
+          enabled
+          mountId="portfolio-mobile"
+          rootMargin="1100px 0px"
+          queueDelayMs={80}
+          skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />}
         >
-          <MobileFiverrRatingSection />
+          <PortfolioSection />
         </DeferredSection>
+      ) : (
+        <Suspense
+          fallback={<SectionSkeleton id="portfolio" minHeightClass="min-h-[100svh]" variant="cards" />}
+        >
+          <FadeInOnMount>
+            <PortfolioSection />
+          </FadeInOnMount>
+        </Suspense>
       )}
+
+      {/* Chapter 4 — Services (index redesign lands in session 2) */}
+      <Suspense fallback={<SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />}>
+        <ServicesSection />
+      </Suspense>
+
+      {/* Chapter 5 — Method */}
+      <CreatorAdvantageSection />
+
+      {/* Chapter 6 — Proof */}
       <DeferredSection
-        enabled={isMobile}
-        mountId="testimonials-mobile"
+        enabled
+        mountId="testimonials"
         rootMargin="850px 0px"
         queueDelayMs={100}
         skeleton={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}
       >
         <TestimonialsSection />
       </DeferredSection>
+
       <DeferredSection
         enabled={isMobile}
         mountId="mobile-contact-cta"
@@ -156,57 +165,23 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
       >
         <MobileContactCtaSection />
       </DeferredSection>
-      {isMobile ? <FAQSection /> : null}
+
+      {/* Chapter 7 — FAQ */}
+      <Suspense fallback={<SectionSkeleton id="faq" minHeightClass="min-h-[480px]" />}>
+        <FAQSection />
+      </Suspense>
+
+      {/* Toolkit marquee → finale (full Finale chapter lands in session 2) */}
       <DeferredSection
-        enabled={isMobile}
-        mountId="services-marquee-mobile"
+        enabled
+        mountId="services-marquee"
         rootMargin="1250px 0px"
-        queueDelayMs={120}
-        skeleton={<SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />}
-      >
-        <ServicesMarqueeSection sectionId="services" />
-      </DeferredSection>
-      <DeferredSection
-        enabled={!isMobile}
-        mountId="portfolio-desktop"
-        rootMargin="950px 0px"
-        queueDelayMs={80}
-        skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />}
-      >
-        <PortfolioSection />
-      </DeferredSection>
-      {!isMobile ? <ServicesSection /> : null}
-      {!isMobile ? <CreatorAdvantageSection /> : null}
-      {SHOW_FIVERR_RATING && (
-        <DeferredSection
-          enabled={!isMobile}
-          mountId="desktop-rating-card"
-          rootMargin="850px 0px"
-          queueDelayMs={100}
-          skeleton={<SectionSkeleton id="desktop-rating-card" minHeightClass="min-h-[460px]" />}
-        >
-          <DesktopFiverrRatingSection />
-        </DeferredSection>
-      )}
-      <DeferredSection
-        enabled={!isMobile}
-        mountId="testimonials-desktop"
-        rootMargin="800px 0px"
-        queueDelayMs={100}
-        skeleton={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}
-      >
-        <TestimonialsSection />
-      </DeferredSection>
-      {!isMobile ? <FAQSection /> : null}
-      <DeferredSection
-        enabled={!isMobile}
-        mountId="services-marquee-desktop"
-        rootMargin="700px 0px"
         queueDelayMs={120}
         skeleton={<SectionSkeleton minHeightClass="min-h-[520px]" variant="cards" />}
       >
-        <ServicesMarqueeSection />
+        <ServicesMarqueeSection sectionId={isMobile ? 'services-marquee' : undefined} />
       </DeferredSection>
+
       <SiteFooter />
 
       <Suspense fallback={null}>

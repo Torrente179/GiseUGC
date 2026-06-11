@@ -26,6 +26,23 @@ export const loadGsap = (): Promise<GsapBundle> => {
   return bundlePromise;
 };
 
+/**
+ * Deferred home sections grow the document after mount, which invalidates
+ * ScrollTrigger's measurements (especially under pins). One debounced
+ * ResizeObserver on <body> keeps every trigger honest — attach once.
+ */
+let autoRefreshAttached = false;
+export const ensureAutoRefresh = (scrollTrigger: GsapBundle['ScrollTrigger']): void => {
+  if (autoRefreshAttached || typeof document === 'undefined') return;
+  autoRefreshAttached = true;
+  let timer = 0;
+  const observer = new ResizeObserver(() => {
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => scrollTrigger.refresh(), 240);
+  });
+  observer.observe(document.body);
+};
+
 export const prefersReducedMotion = (): boolean =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -1,12 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { loadGsap, shouldEnableRichMotion, whenIdle } from '@/lib/motion/gsap-core';
+import { ensureAutoRefresh, loadGsap, shouldEnableRichMotion, whenIdle } from '@/lib/motion/gsap-core';
 
 /**
  * A 1.5px brand-teal thread along the very top of the viewport that fills
  * with reading progress. Desktop only, idle-loaded.
- *
- * Deferred home sections grow the document after mount, so a debounced
- * ResizeObserver on <body> keeps ScrollTrigger's "max" end honest.
  */
 const ScrollProgressHairline = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -22,6 +19,8 @@ const ScrollProgressHairline = () => {
       const el = ref.current;
       if (cancelled || !el) return;
 
+      ensureAutoRefresh(ScrollTrigger);
+
       const tween = gsap.fromTo(
         el,
         { scaleX: 0 },
@@ -32,16 +31,7 @@ const ScrollProgressHairline = () => {
         },
       );
 
-      let refreshTimer = 0;
-      const bodyObserver = new ResizeObserver(() => {
-        window.clearTimeout(refreshTimer);
-        refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 240);
-      });
-      bodyObserver.observe(document.body);
-
       cleanup = () => {
-        window.clearTimeout(refreshTimer);
-        bodyObserver.disconnect();
         tween.scrollTrigger?.kill();
         tween.kill();
       };
