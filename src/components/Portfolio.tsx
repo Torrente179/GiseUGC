@@ -5,6 +5,7 @@ import { m, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useVelocitySkew } from '@/hooks/use-velocity-skew';
 import AdaptiveVideo from '@/components/media/AdaptiveVideo';
 import {
   getBestPosterSrc,
@@ -324,6 +325,8 @@ const Portfolio = () => {
 
   const portfolioSectionRef = useRef<HTMLElement | null>(null);
   const reelScrollRef = useRef<HTMLDivElement>(null);
+  // Scroll-velocity shear on the reel rail — the strip feels like it has weight.
+  const railSkewRef = useVelocitySkew<HTMLDivElement>();
   const reelScrollStepRef = useRef(212);
   const reelCardTouchStartRef = useRef<{ x: number; y: number } | null>(null);
   const reelCardDidDragRef = useRef(false);
@@ -1221,7 +1224,7 @@ const Portfolio = () => {
             <div className="absolute inset-y-0 left-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
             <div className="absolute inset-y-0 right-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-l from-background via-background/80 to-transparent" />
 
-            <div className="relative z-10 mx-auto px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
+            <div ref={railSkewRef} className="relative z-10 mx-auto px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
               <div
                 ref={reelScrollRef}
                 className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-proximity md:snap-none overscroll-x-contain scroll-smooth"

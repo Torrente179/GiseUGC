@@ -107,7 +107,8 @@ export default defineConfig(({ mode }) => ({
             }
             if (id.includes('lucide-react')) return 'lucide';
             if (id.includes('date-fns')) return 'date-fns';
-            if (id.includes('lenis')) return 'lenis';
+            if (id.includes('node_modules/gsap')) return 'gsap';
+            if (id.includes('node_modules/three')) return 'three';
           }
         },
       },

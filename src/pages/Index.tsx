@@ -9,6 +9,7 @@ import FadeInOnMount from '@/components/motion/FadeInOnMount';
 import { useDeferredMount } from '@/hooks/use-deferred-mount';
 import { mark, measure, startLongTaskObserver } from '@/lib/perf-debug';
 import PageSeo from '@/components/PageSeo';
+import ScrollProgressHairline from '@/components/motion/ScrollProgressHairline';
 import { getHomePath, type SiteLocale } from '@/lib/locale-path';
 import SiteFooter from '@/components/SiteFooter';
 
@@ -111,6 +112,7 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         }}
       />
       <Navbar />
+      <ScrollProgressHairline />
       <Hero showIntroduction={!isMobile} />
       {isMobile ? <HeroIntroductionSection /> : <SocialProofSection />}
 

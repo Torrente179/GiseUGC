@@ -891,18 +891,104 @@
     }
   }
 
-  /* Safe transform-only entrance — never hides content if the animation is paused */
-  .hero-enter {
-    animation: hero-enter 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* ─── Hero entrance cascade ───
+     Name lines rise out of overflow masks; byline, subtitle, CTAs and proof
+     follow in a stagger. CSS-driven so the entrance never waits on JS. */
+  .hero-line-mask {
+    overflow: hidden;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
   }
-  @keyframes hero-enter {
-    from { transform: translateY(16px); }
-    to { transform: translateY(0); }
+
+  .hero-line {
+    transform: translate3d(0, 112%, 0);
+    animation: hero-line-rise 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.12s forwards;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .hero-line-late {
+    animation-delay: 0.26s;
+  }
+
+  @keyframes hero-line-rise {
+    to { transform: translate3d(0, 0, 0); }
+  }
+
+  .hero-cascade-item {
+    animation: hero-cascade-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(0.52s + var(--cascade-i, 0) * 0.11s);
+  }
+
+  @keyframes hero-cascade-rise {
+    from { opacity: 0; transform: translate3d(0, 26px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+
+  /* Byline hairline draws once its row has landed */
+  .hero-byline-rule {
+    transform-origin: left center;
+    animation: hero-rule-draw 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
+  }
+
+  @keyframes hero-rule-draw {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  /* ─── Hero silk atmosphere (three.js, desktop only) ───
+     Sits over the blurred poster inside .hero-stage-bg; fades in once the
+     first frame has rendered. A sliver of the poster bleeds through. */
+  .hero-atmosphere {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-atmosphere-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+  }
+
+  .hero-atmosphere-canvas[data-ready] {
+    opacity: 0.96;
+  }
+
+  /* Magnetized CTAs: GSAP owns transform — keep it out of the CSS transition */
+  .is-magnetic {
+    transition-property: color, background-color, border-color, box-shadow, filter;
+  }
+
+  /* ─── Scroll progress hairline (desktop) ─── */
+  .scroll-progress-hairline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 120;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: linear-gradient(to right, hsl(var(--primary) / 0.9), hsl(var(--primary) / 0.5));
+    pointer-events: none;
+  }
+
+  @media (max-width: 767px) {
+    .scroll-progress-hairline { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .hero-wall-col-anim { animation: none; }
-    .hero-enter { animation: none; }
+    .hero-line,
+    .hero-cascade-item,
+    .hero-byline-rule {
+      animation: none;
+      transform: none;
+      opacity: 1;
+    }
+    .scroll-progress-hairline { display: none; }
   }
 
   /* ─── Hero Atmospheric Orbs ─── */
