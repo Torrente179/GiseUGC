@@ -127,35 +127,31 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
           />
           <div className="container mx-auto w-full shrink-0 px-6 pb-16 max-md:pointer-events-auto max-md:mt-auto max-md:pb-6 max-md:pt-0 md:px-12 md:pb-24 md:pt-28">
             <div className="hero-enter max-w-2xl">
-              <div className="mb-6 max-md:mb-3 flex items-center gap-3">
-                {/* Desktop only — on mobile she's already on screen in the reel,
-                    so the avatar would be a duplicate */}
-                <img
-                  src="/uploads/gisela-hero-585.jpg"
-                  alt=""
-                  width="40"
-                  height="40"
-                  loading="eager"
-                  decoding="async"
-                  className="h-10 w-10 max-md:hidden shrink-0 rounded-full object-cover object-[50%_16%] ring-1 ring-foreground/15"
-                />
-                <span className="section-label text-foreground/70">{roleLabel}</span>
-              </div>
-
-              <h1 className="mb-6 max-md:mb-4 font-serif leading-[0.86] tracking-tight-serif text-foreground max-md:text-[2.85rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem]">
+              {/* ── Identity: the serif name is the brand; the role reads as
+                  a refined byline beneath it (no avatar — she is already on
+                  screen in the reels) ── */}
+              <h1 className="mb-3 md:mb-4 font-serif leading-[0.86] tracking-tight-serif text-foreground max-md:text-[2.85rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem]">
                 <span className="block">Gisela</span>
                 <span className="block font-light italic">Saldarriaga</span>
               </h1>
 
-              <p className="mb-8 max-md:mb-5 max-w-lg text-lg max-md:text-base font-light leading-snug text-foreground/80 md:text-xl">
+              <div className="mb-4 md:mb-6 flex items-center gap-2.5">
+                <span className="h-px w-7 bg-primary/90" aria-hidden="true" />
+                <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-prestige text-foreground/60">
+                  {roleLabel}
+                </span>
+              </div>
+
+              <p className="mb-7 md:mb-9 max-w-lg text-[0.95rem] md:text-xl font-light leading-relaxed md:leading-snug text-foreground/75 md:text-foreground/80">
                 {t('hero.subtitle')}
               </p>
 
-              <div className="mb-9 max-md:mb-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+              {/* ── One primary action; Contactar joins inline on desktop ── */}
+              <div className="flex items-center gap-3">
                 <a
                   href="#portfolio"
                   onClick={handleHashLinkClick}
-                  className="btn-primary-nordic btn-primary-nordic--lg w-full sm:w-auto"
+                  className="btn-primary-nordic btn-primary-nordic--lg max-md:w-full"
                 >
                   <ArrowDownRight className="h-3.5 w-3.5" />
                   {t('hero.buttonPortfolio')}
@@ -163,18 +159,31 @@ const Hero = ({ showIntroduction = true }: HeroProps) => {
                 <a
                   href="#contact"
                   onClick={handleContactCtaClick}
-                  className="btn-surface-nordic btn-surface-nordic--lg w-full sm:w-auto"
+                  className="btn-surface-nordic btn-surface-nordic--lg max-md:hidden"
                 >
-                  <ArrowDownRight className="h-3.5 w-3.5" />
                   {t('hero.buttonContact')}
                 </a>
               </div>
 
-              {/* pr clears the floating contact bubble on small screens */}
-              <div className="flex items-center gap-3.5 text-foreground/65 max-md:pr-14">
-                <span className="font-serif text-2xl font-bold text-foreground whitespace-nowrap">{t('hero.proofValue')}</span>
-                <span className="h-4 w-px shrink-0 bg-foreground/25" />
-                <span className="text-[10px] font-bold uppercase tracking-prestige max-md:leading-[1.5]">{t('hero.proofCaption')}</span>
+              {/* ── Footer strip: hairline rule, proof anchored left; on
+                  mobile a quiet Contactar pill balances the right side
+                  (pr clears the floating contact bubble) ── */}
+              <div className="mt-6 md:mt-9 flex items-center justify-between gap-4 border-t border-foreground/15 pt-4 md:pt-5 md:justify-start max-md:pr-14">
+                <div>
+                  <div className="font-serif text-[1.45rem] md:text-2xl font-bold leading-none text-foreground whitespace-nowrap">
+                    {t('hero.proofValue')}
+                  </div>
+                  <div className="mt-1.5 text-[10px] font-bold uppercase tracking-prestige text-foreground/55">
+                    {t('hero.proofCaption')}
+                  </div>
+                </div>
+                <a
+                  href="#contact"
+                  onClick={handleContactCtaClick}
+                  className="md:hidden inline-flex h-11 shrink-0 items-center rounded-full border border-foreground/25 px-5 text-sm font-medium text-foreground/90 transition-colors duration-200 active:bg-foreground/10"
+                >
+                  {t('hero.buttonContact')}
+                </a>
               </div>
             </div>
           </div>
