@@ -6,9 +6,7 @@ import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getLocaleFromPath } from '@/lib/locale-path';
-import { useVelocitySkew } from '@/hooks/use-velocity-skew';
 import { scrollToY, startSmoothScroll, stopSmoothScroll } from '@/lib/motion/smooth-scroll';
-import { ensureAutoRefresh, loadGsap, shouldEnableRichMotion } from '@/lib/motion/gsap-core';
 import AdaptiveVideo from '@/components/media/AdaptiveVideo';
 import {
   getBestPosterSrc,
@@ -328,10 +326,8 @@ const Portfolio = () => {
 
   const portfolioSectionRef = useRef<HTMLElement | null>(null);
   const reelScrollRef = useRef<HTMLDivElement>(null);
-  // Scroll-velocity shear on the gallery track — the strip feels like it has weight.
-  const railSkewRef = useVelocitySkew<HTMLDivElement>();
-  // Desktop "Gallery" chapter: pinned stage + horizontally scrubbed track.
-  const galleryStageRef = useRef<HTMLDivElement>(null);
+  // Desktop "Gallery" chapter: a free-scroll horizontal rail the visitor drives.
+  const galleryViewportRef = useRef<HTMLDivElement>(null);
   const galleryTrackRef = useRef<HTMLDivElement>(null);
   const galleryCounterRef = useRef<HTMLSpanElement>(null);
   const reelScrollStepRef = useRef(212);
@@ -388,62 +384,88 @@ const Portfolio = () => {
     [isEs],
   );
 
-  // ── Gallery pin (desktop): the stage holds one viewport while vertical
-  // scroll scrubs the track horizontally through every reel. The live
-  // counter writes textContent directly — no React state at 60fps.
+  // ── Gallery rail (desktop): a free-scroll horizontal strip the visitor
+  // drives — drag with the mouse, the arrows, the trackpad, or a wheel over
+  // the rail. Vertical page scroll passes straight through (no pin, no trap).
+  // The live counter tracks the leftmost visible card via a rAF-throttled
+  // scroll listener (textContent, no React state at 60fps).
   const showcaseCount = showcaseReelClips.length;
   useEffect(() => {
-    if (isMobile || !shouldEnableRichMotion()) return;
+    if (isMobile) return;
+    const viewport = galleryViewportRef.current;
+    const track = galleryTrackRef.current;
+    if (!viewport || !track) return;
 
-    let cancelled = false;
-    let revert: (() => void) | undefined;
+    let raf = 0;
+    const updateCounter = () => {
+      raf = 0;
+      const counter = galleryCounterRef.current;
+      if (!counter || showcaseCount === 0) return;
+      const max = Math.max(1, track.scrollWidth - viewport.clientWidth);
+      const ratio = viewport.scrollLeft / max;
+      const index = Math.min(showcaseCount - 1, Math.round(ratio * (showcaseCount - 1)));
+      counter.textContent = String(index + 1).padStart(2, '0');
+    };
+    const onScroll = () => {
+      if (raf === 0) raf = requestAnimationFrame(updateCounter);
+    };
+    viewport.addEventListener('scroll', onScroll, { passive: true });
 
-    loadGsap().then(({ gsap, ScrollTrigger }) => {
-      const stage = galleryStageRef.current;
-      const track = galleryTrackRef.current;
-      if (cancelled || !stage || !track) return;
-
-      ensureAutoRefresh(ScrollTrigger);
-
-      const ctx = gsap.context(() => {
-        const distance = () =>
-          Math.max(0, track.scrollWidth - (track.parentElement?.clientWidth ?? 0));
-
-        // The scrub owns the track — disable the native swipe fallback.
-        if (track.parentElement) gsap.set(track.parentElement, { overflowX: 'hidden' });
-
-        gsap.to(track, {
-          x: () => -distance(),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: stage,
-            start: 'top top',
-            end: () => `+=${distance()}`,
-            pin: true,
-            scrub: 0.85,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              const counter = galleryCounterRef.current;
-              if (!counter || showcaseCount === 0) return;
-              const index = Math.min(
-                showcaseCount - 1,
-                Math.round(self.progress * (showcaseCount - 1)),
-              );
-              counter.textContent = String(index + 1).padStart(2, '0');
-            },
-          },
-        });
-      }, stage);
-
-      revert = () => ctx.revert();
-    });
+    // Pointer drag-to-scroll for mouse users (trackpads already swipe natively).
+    let dragging = false;
+    let startX = 0;
+    let startLeft = 0;
+    let moved = false;
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse') return;
+      dragging = true;
+      moved = false;
+      startX = event.clientX;
+      startLeft = viewport.scrollLeft;
+    };
+    const onPointerMove = (event: PointerEvent) => {
+      if (!dragging) return;
+      const dx = event.clientX - startX;
+      if (Math.abs(dx) > 4) {
+        moved = true;
+        viewport.classList.add('is-dragging');
+      }
+      viewport.scrollLeft = startLeft - dx;
+    };
+    const endDrag = () => {
+      dragging = false;
+      viewport.classList.remove('is-dragging');
+    };
+    // Swallow the click that ends a drag so a card doesn't open the theater.
+    const onClickCapture = (event: MouseEvent) => {
+      if (moved) {
+        event.preventDefault();
+        event.stopPropagation();
+        moved = false;
+      }
+    };
+    viewport.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerup', endDrag);
+    viewport.addEventListener('click', onClickCapture, true);
 
     return () => {
-      cancelled = true;
-      revert?.();
+      if (raf) cancelAnimationFrame(raf);
+      viewport.removeEventListener('scroll', onScroll);
+      viewport.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', endDrag);
+      viewport.removeEventListener('click', onClickCapture, true);
     };
   }, [isMobile, showcaseCount]);
+
+  const scrollGalleryBy = useCallback((direction: 1 | -1) => {
+    const viewport = galleryViewportRef.current;
+    if (!viewport) return;
+    const card = viewport.querySelector<HTMLElement>('[data-reel-card="true"]');
+    const step = card ? card.offsetWidth + 24 : viewport.clientWidth * 0.8;
+    viewport.scrollBy({ left: step * 2 * direction, behavior: 'smooth' });
+  }, []);
 
   useEffect(() => {
     const now = Date.now();
@@ -1294,7 +1316,7 @@ const Portfolio = () => {
     <section
       ref={portfolioSectionRef}
       id="portfolio"
-      className={isMobile ? 'studio-section bg-secondary/5 pt-20 pb-16' : 'relative bg-secondary/5'}
+      className="studio-section bg-secondary/5 pt-20 pb-16"
     >
       {!isMobile && !isTheaterOpen && instantPrewarmSources.length > 0 && (
         <div className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
@@ -1425,35 +1447,41 @@ const Portfolio = () => {
 
       </div>
       ) : (
-        /* ── Desktop Gallery chapter: pinned stage, horizontal scrub ──
-           The outer div is a static "pin shell": ScrollTrigger re-parents
-           the stage into its own .pin-spacer inside it, so React (which
-           inserts conditional prewarm siblings into the section) never
-           reconciles against the re-parented node. */
-        <div>
-        <div ref={galleryStageRef} className="dc-gallery-stage">
+        /* ── Desktop Gallery: free-scroll horizontal rail ── */
+        <div className="dc-gallery">
           <div className="studio-container w-full">
             {galleryHeader}
           </div>
-          <div className="dc-gallery-viewport">
-            <div
-              ref={(node) => {
-                galleryTrackRef.current = node;
-                railSkewRef.current = node;
-              }}
-              className="dc-gallery-track"
+          <div className="dc-gallery-shell">
+            <button
+              type="button"
+              className="dc-gallery-arrow dc-gallery-arrow--prev"
+              onClick={() => scrollGalleryBy(-1)}
+              aria-label={isEs ? 'Reels anteriores' : 'Previous reels'}
             >
-              {showcaseReelClips.map((clip, index) => (
-                <div key={clip.id} className="dc-track-item">
-                  <span className="dc-ghost-num" aria-hidden="true">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  {renderReelCard(clip, index)}
-                </div>
-              ))}
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              className="dc-gallery-arrow dc-gallery-arrow--next"
+              onClick={() => scrollGalleryBy(1)}
+              aria-label={isEs ? 'Más reels' : 'More reels'}
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+            <div ref={galleryViewportRef} className="dc-gallery-viewport">
+              <div ref={galleryTrackRef} className="dc-gallery-track">
+                {showcaseReelClips.map((clip, index) => (
+                  <div key={clip.id} className="dc-track-item">
+                    <span className="dc-ghost-num" aria-hidden="true">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    {renderReelCard(clip, index)}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
         </div>
       )}
 

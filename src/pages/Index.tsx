@@ -114,28 +114,17 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
       {/* Chapter 2 — Manifesto (statement + proof numerals) */}
       <ManifestoChapter />
 
-      {/* Chapter 3 — Gallery. Desktop mounts eagerly (its pinned stage must
-          exist before ScrollTrigger measures the page); mobile keeps the
-          deferred mount — no pin there, and boot stays lean. */}
-      {isMobile ? (
-        <DeferredSection
-          enabled
-          mountId="portfolio-mobile"
-          rootMargin="1100px 0px"
-          queueDelayMs={80}
-          skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[900px]" variant="cards" />}
-        >
-          <PortfolioSection />
-        </DeferredSection>
-      ) : (
-        <Suspense
-          fallback={<SectionSkeleton id="portfolio" minHeightClass="min-h-[100svh]" variant="cards" />}
-        >
-          <FadeInOnMount>
-            <PortfolioSection />
-          </FadeInOnMount>
-        </Suspense>
-      )}
+      {/* Chapter 3 — Gallery (free-scroll reel rail). Deferred on both
+          breakpoints — no pin anymore, so boot stays lean. */}
+      <DeferredSection
+        enabled
+        mountId="portfolio"
+        rootMargin={isMobile ? '1100px 0px' : '950px 0px'}
+        queueDelayMs={80}
+        skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[760px]" variant="cards" />}
+      >
+        <PortfolioSection />
+      </DeferredSection>
 
       {/* Chapter 4 — Services (index redesign lands in session 2) */}
       <Suspense fallback={<SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />}>

@@ -966,45 +966,52 @@
      Home page as a chaptered cinematic scroll.
      ═══════════════════════════════════════════════════ */
 
-  /* ── Chapter 1: Reel Constellation (hero) ── */
-  .dc-constellation {
+  /* ── Chapter 1: "Muro de trabajo" — full-bleed reel wall ── */
+  .dc-wall {
     position: absolute;
     inset: 0;
-    z-index: 2;
+    z-index: 1;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    overflow: hidden;
+    background: hsl(var(--background));
   }
 
-  .dc-constellation-canvas {
-    display: block;
+  .dc-wall-col {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    will-change: transform;
+  }
+
+  /* The track is taller than the column and holds the doubled poster list, so
+     GSAP can loop yPercent seamlessly. */
+  .dc-wall-track {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    will-change: transform;
+  }
+
+  .dc-wall-tile {
     width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 1.1s ease;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    border-radius: 0.6rem;
+    background: hsl(var(--muted) / 0.4);
   }
 
-  .dc-constellation-canvas[data-ready] {
-    opacity: 1;
-  }
-
-  /* Readability scrim — the field is already deep; just seat the edges */
-  .dc-hero-scrim {
+  /* Scrim — anchors the type bottom-left, fades the top under the navbar */
+  .dc-wall-scrim {
     position: absolute;
     inset: 0;
     z-index: 5;
     pointer-events: none;
     background:
-      radial-gradient(70% 65% at 12% 90%, hsl(var(--background) / 0.72) 0%, transparent 55%),
-      linear-gradient(to bottom, hsl(var(--background) / 0.4) 0%, transparent 12%),
-      linear-gradient(to top, hsl(var(--background) / 0.4) 0%, transparent 12%);
-  }
-
-  /* ── "Cartel de estudio" poster composition ── */
-  .dc-poster-frame {
-    position: absolute;
-    inset: 1.25rem;
-    z-index: 15;
-    border: 1px solid hsl(var(--foreground) / 0.13);
-    border-radius: 6px;
-    pointer-events: none;
+      linear-gradient(105deg, hsl(var(--background) / 0.95) 16%, hsl(var(--background) / 0.5) 46%, hsl(var(--background) / 0.12) 100%),
+      linear-gradient(to top, hsl(var(--background) / 0.85) 0%, transparent 34%),
+      linear-gradient(to bottom, hsl(var(--background) / 0.7) 0%, transparent 16%);
   }
 
   .dc-poster-meta {
@@ -1019,107 +1026,32 @@
     color: hsl(var(--foreground) / 0.5);
   }
 
-  .dc-name {
-    display: grid;
-    grid-template-areas:
-      'a card rest'
-      'b b b';
-    grid-template-columns: max-content max-content 1fr;
-    column-gap: 1.6rem;
-    align-items: start;
-    position: relative;
-  }
-
-  .dc-name .dc-name-h1 {
-    display: contents;
+  /* Name lockup — stacked (name over italic surname) */
+  .dc-name-stack {
+    display: block;
   }
 
   .dc-name-a {
-    grid-area: a;
     display: block;
-    position: relative;
-    z-index: 1;
     font-family: var(--font-brand);
     font-weight: 600;
     text-transform: uppercase;
-    font-size: clamp(2.7rem, 10.2vw, 9.6rem);
+    font-size: clamp(2.7rem, 8.6vw, 7.6rem);
     line-height: 0.85;
     letter-spacing: -0.02em;
     color: hsl(var(--foreground));
   }
 
   .dc-name-b {
-    grid-area: b;
     display: block;
-    position: relative;
-    z-index: 1;
     font-family: var(--font-brand);
     font-style: italic;
     font-weight: 500;
-    font-size: clamp(2.2rem, 7.8vw, 7.2rem);
+    font-size: clamp(2.2rem, 6.2vw, 5.4rem);
     line-height: 0.9;
     letter-spacing: -0.015em;
     color: hsl(var(--warm-sand));
-    margin: -0.04em 0 0 0.9em;
-  }
-
-  @media (max-width: 767px) {
-    .dc-name-b { margin-left: 0.35em; }
-  }
-
-  .dc-hero-card {
-    grid-area: card;
-    position: relative;
-    width: clamp(7rem, 9.6vw, 9.5rem);
-    aspect-ratio: 9 / 16;
-    border-radius: 0.85rem;
-    overflow: hidden;
-    border: 1px solid hsl(var(--warm-sand) / 0.45);
-    background: hsl(var(--card));
-    transform: rotate(-3.5deg);
-    margin-top: -1.1rem;
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.4),
-      0 28px 56px -30px rgba(0, 0, 0, 0.7);
-  }
-
-  .dc-hero-card-caption {
-    position: absolute;
-    bottom: 8px;
-    left: 0;
-    right: 0;
-    z-index: 2;
-    text-align: center;
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: rgba(244, 239, 230, 0.75);
-    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
-  }
-
-  /* Tucks behind the right end of the italic line */
-  .dc-hero-ghost {
-    position: absolute;
-    left: 54%;
-    top: 30%;
-    z-index: 0;
-    width: clamp(4.6rem, 6.2vw, 6.2rem);
-    aspect-ratio: 9 / 16;
-    border-radius: 0.7rem;
-    overflow: hidden;
-    border: 1px solid hsl(var(--warm-sand) / 0.2);
-    opacity: 0.45;
-    transform: rotate(4deg);
-    pointer-events: none;
-  }
-
-  .dc-hero-ghost img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.55) saturate(0.85);
+    margin-left: 0.35em;
   }
 
   .dc-pitch {
@@ -1436,19 +1368,11 @@
     background: hsl(var(--accent) / 0.6);
   }
 
-  /* ── Chapter 3: Gallery (pinned horizontal portfolio, desktop) ── */
-  .dc-gallery-stage {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100svh;
-    overflow: hidden;
-    padding-top: 5rem; /* clearance under the fixed navbar */
-    padding-bottom: 1.5rem;
+  /* ── Chapter 3: Gallery — free-scroll horizontal rail (desktop) ── */
+  .dc-gallery-shell {
+    position: relative;
   }
 
-  /* Natively swipeable by default (tablets / reduced motion / no-JS); the
-     pin rig locks it to overflow hidden when the scrub owns the track. */
   .dc-gallery-viewport {
     width: 100%;
     overflow-x: auto;
@@ -1456,24 +1380,34 @@
     padding: 3rem 0 1.5rem;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    scroll-snap-type: x proximity;
   }
 
   .dc-gallery-viewport::-webkit-scrollbar {
     display: none;
   }
 
+  .dc-gallery-viewport.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
+  }
+
   .dc-gallery-track {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 1.5rem;
     width: max-content;
     padding-left: max(3rem, calc((100vw - 1400px) / 2 + 3rem));
     padding-right: 14vw;
-    will-change: transform;
+  }
+
+  .dc-track-item {
+    scroll-snap-align: start;
   }
 
   .dc-gallery-card {
-    width: clamp(230px, calc((100svh - 21rem) * 9 / 16), 340px);
+    width: clamp(248px, 22vw, 330px);
     border-radius: 1.15rem;
     border: 1px solid hsl(var(--border) / 0.8);
     background: hsl(var(--muted) / 0.3);
@@ -1486,14 +1420,36 @@
     box-shadow: 0 30px 58px -32px hsl(var(--foreground) / 0.55);
   }
 
-  .dc-gallery-meta {
+  /* Prev/next arrows — float over the rail edges, hidden on touch */
+  .dc-gallery-arrow {
+    position: absolute;
+    top: calc(50% + 1rem);
+    z-index: 20;
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--background) / 0.85);
+    color: hsl(var(--foreground));
+    backdrop-filter: blur(8px);
+    transform: translateY(-50%);
+    transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .dc-constellation { display: none; }
+  .dc-gallery-arrow:hover {
+    background: hsl(var(--primary));
+    border-color: hsl(var(--primary));
+    color: hsl(var(--pure-linen));
+  }
+
+  .dc-gallery-arrow--prev { left: 1.25rem; }
+  .dc-gallery-arrow--next { right: 1.25rem; }
+
+  @media (hover: none) {
+    .dc-gallery-arrow { display: none; }
   }
 
   /* ─── Scroll progress hairline (desktop) ─── */
