@@ -1,8 +1,9 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowDownRight } from 'lucide-react';
+import { ArrowUpRight, Play } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import HeroStoryStack from '@/components/HeroStoryStack';
+import AdaptiveVideo from '@/components/media/AdaptiveVideo';
 import { useConstellationScroll } from '@/hooks/use-constellation-scroll';
 import { useMagnetic } from '@/hooks/use-magnetic';
 import { shouldEnableRichMotion, whenIdle } from '@/lib/motion/gsap-core';
@@ -38,19 +39,24 @@ const saveDataRequested = (): boolean => {
 
 const CONSTELLATION_CLIP_COUNT = 14;
 const MOBILE_DECK_COUNT = 4;
-/** DOM poster collage: instant paint under the canvas + no-WebGL fallback. */
-const FALLBACK_CARD_COUNT = 4;
+
+const CATEGORY_LABELS: Record<ReelClip['category'], { es: string; en: string }> = {
+  fashion: { es: 'moda', en: 'fashion' },
+  beauty: { es: 'belleza', en: 'beauty' },
+  tech: { es: 'tech', en: 'tech' },
+  lifestyle: { es: 'lifestyle', en: 'lifestyle' },
+};
 
 const Hero = () => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
+  const isEs = locale === 'es';
 
   const sectionRef = useRef<HTMLElement>(null);
   useConstellationScroll(sectionRef, !isMobile);
   const magneticPrimary = useMagnetic<HTMLAnchorElement>();
-  const magneticSecondary = useMagnetic<HTMLAnchorElement>(0.18);
 
   // Constellation: desktop, fine pointer, no reduced motion, no save-data —
   // and only once the browser is idle so it never competes with the LCP.
@@ -69,10 +75,21 @@ const Hero = () => {
   );
   const storyClips = useMemo(() => dailyClips.slice(0, MOBILE_DECK_COUNT), [dailyClips]);
   const ambientClip = dailyClips[MOBILE_DECK_COUNT % dailyClips.length] ?? dailyClips[0];
+  // The poster's interleaved live card uses a clip the backdrop field doesn't.
+  const focusClip = dailyClips[CONSTELLATION_CLIP_COUNT % dailyClips.length] ?? dailyClips[0];
+  const ghostClip =
+    dailyClips[(CONSTELLATION_CLIP_COUNT + 1) % dailyClips.length] ?? dailyClips[0];
 
-  const roleLabel = locale === 'es'
-    ? 'Creadora UGC bilingüe · Medellín'
-    : 'Bilingual UGC creator · Medellín';
+  const year = new Date().getFullYear();
+  const focusCategory = CATEGORY_LABELS[focusClip.category][isEs ? 'es' : 'en'];
+  const pitch = isEs
+    ? 'Contenido que se siente humano — y vende en social.'
+    : 'Content that feels human — and sells on social.';
+  const creditLines = [
+    isEs ? 'Creadora UGC bilingüe — ES / EN' : 'Bilingual UGC creator — ES / EN',
+    isEs ? 'Demos · testimonios · portavoz' : 'Demos · testimonials · spokesperson',
+    `${t('hero.proofValue')} · ${t('hero.proofCaption')}`,
+  ];
 
   const handleContactCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (isMobileViewport()) {
@@ -83,80 +100,9 @@ const Hero = () => {
     handleHashLinkClick(event);
   };
 
-  const identityBlock = (
-    <div className="hero-cascade max-w-2xl">
-      {/* ── Identity: the serif name is the brand; each line rises
-          out of its own mask — transform-only, CSS-driven ── */}
-      <h1 className="mb-3 md:mb-4 font-serif leading-[0.86] tracking-tight-serif text-foreground max-md:text-[2.85rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem]">
-        <span className="hero-line-mask block">
-          <span className="hero-line block">Gisela</span>
-        </span>
-        <span className="hero-line-mask block">
-          <span className="hero-line hero-line-late block font-light italic">Saldarriaga</span>
-        </span>
-      </h1>
-
-      <div className="hero-cascade-item mb-4 md:mb-6 flex items-center gap-2.5" style={{ '--cascade-i': 0 } as CSSProperties}>
-        <span className="hero-byline-rule h-px w-7 bg-primary/90" aria-hidden="true" />
-        <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-prestige text-foreground/60">
-          {roleLabel}
-        </span>
-      </div>
-
-      <p className="hero-cascade-item mb-7 md:mb-9 max-w-lg text-[0.95rem] md:text-xl font-light leading-relaxed md:leading-snug text-foreground/75 md:text-foreground/80" style={{ '--cascade-i': 1 } as CSSProperties}>
-        {t('hero.subtitle')}
-      </p>
-
-      {/* ── One primary action; Contactar joins inline on desktop ── */}
-      <div className="hero-cascade-item flex items-center gap-3" style={{ '--cascade-i': 2 } as CSSProperties}>
-        <a
-          ref={magneticPrimary}
-          href="#portfolio"
-          onClick={handleHashLinkClick}
-          className="btn-primary-nordic btn-primary-nordic--lg max-md:w-full"
-        >
-          <ArrowDownRight className="h-3.5 w-3.5" />
-          {t('hero.buttonPortfolio')}
-        </a>
-        <a
-          ref={magneticSecondary}
-          href="#contact"
-          onClick={handleContactCtaClick}
-          className="btn-surface-nordic btn-surface-nordic--lg max-md:hidden"
-        >
-          {t('hero.buttonContact')}
-        </a>
-      </div>
-
-      {/* ── Footer strip: hairline rule, proof anchored left; on
-          mobile a quiet Contactar pill balances the right side
-          (pr clears the floating contact bubble) ── */}
-      <div className="hero-cascade-item mt-6 md:mt-9 flex items-center justify-between gap-4 border-t border-foreground/15 pt-4 md:pt-5 md:justify-start max-md:pr-14" style={{ '--cascade-i': 3 } as CSSProperties}>
-        <div>
-          <div className="font-serif text-[1.45rem] md:text-2xl font-bold leading-none text-foreground whitespace-nowrap">
-            {t('hero.proofValue')}
-          </div>
-          <div className="mt-1.5 text-[10px] font-bold uppercase tracking-prestige text-foreground/55">
-            {t('hero.proofCaption')}
-          </div>
-        </div>
-        <a
-          href="#contact"
-          onClick={handleContactCtaClick}
-          className="md:hidden inline-flex h-11 shrink-0 items-center rounded-full border border-foreground/25 px-5 text-sm font-medium text-foreground/90 transition-colors duration-200 active:bg-foreground/10"
-        >
-          {t('hero.buttonContact')}
-        </a>
-      </div>
-    </div>
-  );
-
   return (
     <section ref={sectionRef} id="home" className="relative w-full bg-background max-md:overflow-hidden">
-      {/* Hero viewport is always dark ("black theme"), independent of the
-          global light/dark toggle. On desktop the scroll rig pins this stage
-          and flies the constellation camera through the work. The outer div
-          is a static pin shell — ScrollTrigger re-parents the stage into a
+      {/* Static pin shell — ScrollTrigger re-parents the stage into a
           .pin-spacer inside it, away from any edge React reconciles. */}
       <div>
       <div
@@ -164,7 +110,7 @@ const Hero = () => {
         className="dark relative min-h-[100svh] w-full overflow-hidden bg-background text-foreground md:h-[100svh]"
       >
         {isMobile ? (
-          /* ─── Mobile: app-native story stack (unchanged, approved) ─── */
+          /* ─── Mobile: app-native story stack behind the poster type ─── */
           <div
             className="hero-stage max-md:!top-[calc(env(safe-area-inset-top,0px)+5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
             aria-hidden="true"
@@ -184,55 +130,166 @@ const Hero = () => {
             </div>
           </div>
         ) : (
-          /* ─── Desktop: reel constellation ───
-             DOM poster collage paints instantly (and remains as the
-             no-WebGL / reduced-motion fallback); the 3D field fades in
-             over it once the browser is idle. */
-          <>
-            <div className="dc-constellation-fallback" aria-hidden="true">
-              {constellationClips.slice(0, FALLBACK_CARD_COUNT).map((clip, index) => (
-                <img
-                  key={clip.id}
-                  src={getBestPosterSrc(clip)}
-                  alt=""
-                  loading={index < 2 ? 'eager' : 'lazy'}
-                  decoding="async"
-                  className={`dc-fc dc-fc-${index + 1}`}
-                />
-              ))}
-            </div>
-            {constellationOn && (
-              <Suspense fallback={null}>
-                <ReelConstellation clips={constellationClips} />
-              </Suspense>
-            )}
-          </>
+          /* ─── Desktop: deep reel field behind the poster ─── */
+          constellationOn && (
+            <Suspense fallback={null}>
+              <ReelConstellation clips={constellationClips} />
+            </Suspense>
+          )
         )}
 
-        {/* ─── Readability scrim (mobile keeps its tuned ramp) ─── */}
+        {/* ─── Readability scrim ─── */}
         {isMobile ? (
           <div className="hero-wall-scrim" aria-hidden="true" />
         ) : (
           <div className="dc-hero-scrim" aria-hidden="true" />
         )}
 
-        {/* ─── Content (visible by default — no JS-gated reveal) ───
-            Mobile: wrapper lets touches pass through to the story stack;
-            the inner container re-enables them so CTAs stay tappable */}
-        <div
-          data-hero-identity
-          className="relative z-10 flex min-h-[100svh] max-md:pointer-events-none max-md:flex-col max-md:pt-[calc(env(safe-area-inset-top,0px)+5.5rem)] md:h-full md:items-end"
-        >
-          {/* Spacer = story-card height + breathing room, so the text block
-              can never collide with the reel card */}
-          <div
-            className="max-md:min-h-[calc(clamp(10.5rem,46vw,13rem)*1.7778+1.5rem)] max-md:flex-1 max-md:shrink-0 md:hidden"
-            aria-hidden="true"
-          />
-          <div className="container mx-auto w-full shrink-0 px-6 pb-16 max-md:pointer-events-auto max-md:mt-auto max-md:pb-6 max-md:pt-0 md:px-12 md:pb-24 md:pt-28">
-            {identityBlock}
+        {isMobile ? (
+          /* ════ Mobile poster: type-led, flow layout ════ */
+          <div className="relative z-10 flex min-h-[100svh] max-md:pointer-events-none max-md:flex-col max-md:pt-[calc(env(safe-area-inset-top,0px)+5.5rem)]">
+            <div
+              className="max-md:min-h-[calc(clamp(10.5rem,46vw,13rem)*1.7778+1rem)] max-md:flex-1 max-md:shrink-0"
+              aria-hidden="true"
+            />
+            <div
+              data-hero-identity
+              className="container mx-auto w-full shrink-0 px-6 pb-6 max-md:pointer-events-auto max-md:mt-auto"
+            >
+              <h1 className="dc-name-h1 mb-4">
+                <span className="hero-line-mask block">
+                  <span className="hero-line dc-name-a block text-[2.8rem]">Gisela</span>
+                </span>
+                <span className="hero-line-mask block">
+                  <span className="hero-line hero-line-late dc-name-b block text-[2.3rem]">Saldarriaga</span>
+                </span>
+              </h1>
+
+              <p className="hero-cascade-item dc-pitch mb-4 max-w-[20rem] text-[1.05rem]" style={{ '--cascade-i': 0 } as CSSProperties}>
+                {pitch}
+              </p>
+
+              <div className="hero-cascade-item dc-credits mb-6" style={{ '--cascade-i': 1 } as CSSProperties}>
+                {creditLines.map((line) => (
+                  <span key={line} className="block">{line}</span>
+                ))}
+              </div>
+
+              <div className="hero-cascade-item flex items-center gap-3 max-md:pr-24" style={{ '--cascade-i': 2 } as CSSProperties}>
+                <a
+                  href="#portfolio"
+                  onClick={handleHashLinkClick}
+                  className="dc-cta-primary flex-1 justify-center"
+                >
+                  {t('hero.buttonPortfolio')}
+                  <ArrowUpRight className="h-4 w-4" />
+                </a>
+                <a
+                  href="#contact"
+                  onClick={handleContactCtaClick}
+                  className="dc-cta-ghost shrink-0"
+                >
+                  {t('hero.buttonContact')}
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* ════ Desktop poster: "Cartel de estudio" ════ */
+          <div data-hero-identity className="absolute inset-0 z-10">
+            {/* Corner metadata (clears the fixed navbar) */}
+            <div className="hero-cascade-item dc-poster-meta left-12 top-[6.25rem]" style={{ '--cascade-i': 0 } as CSSProperties}>
+              Gisela Saldarriaga — {isEs ? 'estudio UGC' : 'UGC studio'}
+            </div>
+            <div className="hero-cascade-item dc-poster-meta right-12 top-[6.25rem] text-right" style={{ '--cascade-i': 0 } as CSSProperties}>
+              Medellín, CO — {year}
+            </div>
+
+            {/* The typographic event: name interleaved with the live reel */}
+            <div className="dc-name absolute left-12 right-12 top-[16svh]">
+              <h1 className="dc-name-h1">
+                <span className="dc-name-a">
+                  <span className="hero-line-mask block">
+                    <span className="hero-line block">Gisela</span>
+                  </span>
+                </span>
+                <span className="dc-name-b">
+                  <span className="hero-line-mask block">
+                    <span className="hero-line hero-line-late block">Saldarriaga</span>
+                  </span>
+                </span>
+              </h1>
+
+              <div className="dc-hero-card hero-cascade-item" style={{ '--cascade-i': 1 } as CSSProperties}>
+                <AdaptiveVideo
+                  className="absolute inset-0 h-full w-full object-cover"
+                  src={focusClip.previewSrc}
+                  hlsSrc={focusClip.previewHlsSrc}
+                  poster={getBestPosterSrc(focusClip)}
+                  muted
+                  autoPlay
+                  loop
+                  playsInline
+                  preload="metadata"
+                  loadStrategy="immediate"
+                  rootMargin="0px"
+                  pauseOffscreen
+                  playbackPriority="hero"
+                  aria-hidden="true"
+                />
+                <span className="dc-reel-chip dc-reel-chip--num">Nº 01</span>
+                <span className="dc-hero-card-caption">reel · {focusCategory}</span>
+              </div>
+
+              <div className="dc-hero-ghost hero-cascade-item" style={{ '--cascade-i': 3 } as CSSProperties} aria-hidden="true">
+                <img src={getBestPosterSrc(ghostClip)} alt="" loading="lazy" decoding="async" />
+              </div>
+            </div>
+
+            {/* Credits block, lower left */}
+            <div className="absolute bottom-12 left-12 max-w-[21rem]">
+              <p className="hero-cascade-item dc-pitch mb-4" style={{ '--cascade-i': 2 } as CSSProperties}>
+                {pitch}
+              </p>
+              <div className="hero-cascade-item dc-credits" style={{ '--cascade-i': 3 } as CSSProperties}>
+                {creditLines.map((line) => (
+                  <span key={line} className="block">{line}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Action cluster, lower right (clears the floating contact dock) */}
+            <div className="hero-cascade-item absolute bottom-28 right-12 flex flex-col items-end gap-3.5" style={{ '--cascade-i': 4 } as CSSProperties}>
+              <a
+                ref={magneticPrimary}
+                href="#portfolio"
+                onClick={handleHashLinkClick}
+                className="dc-cta-primary"
+              >
+                {isEs ? 'Ver el trabajo' : 'See the work'}
+                <ArrowUpRight className="h-4 w-4" />
+              </a>
+              <a
+                href="#contact"
+                onClick={handleContactCtaClick}
+                className="dc-cta-ghost"
+              >
+                {t('hero.buttonContact')}
+              </a>
+            </div>
+
+            {/* Scroll cue, bottom center */}
+            <div className="hero-cascade-item dc-poster-meta bottom-9 left-[42%]" style={{ '--cascade-i': 4 } as CSSProperties}>
+              <span className="inline-flex items-center gap-2">
+                <Play className="h-3 w-3 rotate-90" aria-hidden="true" />
+                {isEs ? 'desplázate' : 'scroll'}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Inset poster frame (desktop) */}
+        {!isMobile && <div className="dc-poster-frame" aria-hidden="true" />}
 
         {/* ─── Exit veil: stage fades to ink as the camera clears the field ─── */}
         {!isMobile && (

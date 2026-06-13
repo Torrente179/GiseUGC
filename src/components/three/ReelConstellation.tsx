@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { constellationState } from '@/components/three/constellation-state';
-import { registerMediaPlaybackEntry } from '@/lib/media-playback-scheduler';
 import { getBestPosterSrc, type ReelClip } from '@/data/portfolio-clips';
 
 /**
@@ -19,25 +18,27 @@ import { getBestPosterSrc, type ReelClip } from '@/data/portfolio-clips';
  */
 
 const CAMERA_START_Z = 9;
-const CAMERA_END_Z = -38;
+const CAMERA_END_Z = -43;
 const FOG_COLOR = 0x0f121a; // matches the dark hero background (222 28% 8%)
+/** The DOM poster owns the foreground — the field stays a deep backdrop. */
+const FIELD_OPACITY = 0.72;
 
 /** Hand-tuned slots: a corridor down the middle, work on both flanks. */
 const CARD_SLOTS: ReadonlyArray<{ x: number; y: number; z: number; ry: number; rz: number }> = [
-  { x: 2.7, y: 0.05, z: 3.4, ry: -0.16, rz: 0.012 },   // focus card (video)
-  { x: -3.4, y: 0.65, z: 1.2, ry: 0.18, rz: -0.02 },
-  { x: 4.9, y: -0.85, z: -1.6, ry: -0.2, rz: 0.025 },
-  { x: -2.3, y: -0.5, z: -4.4, ry: 0.14, rz: 0.018 },
-  { x: 3.1, y: 1.15, z: -7.2, ry: -0.12, rz: -0.022 },
-  { x: -5.2, y: 0.25, z: -9.8, ry: 0.22, rz: 0.014 },
-  { x: 1.9, y: -1.1, z: -12.6, ry: -0.1, rz: 0.02 },
-  { x: -3.0, y: 1.0, z: -15.4, ry: 0.16, rz: -0.016 },
-  { x: 5.6, y: 0.3, z: -18.2, ry: -0.24, rz: 0.01 },
-  { x: -1.8, y: -0.75, z: -21.0, ry: 0.1, rz: 0.024 },
-  { x: 3.8, y: 0.85, z: -23.8, ry: -0.18, rz: -0.012 },
-  { x: -4.6, y: -0.35, z: -26.6, ry: 0.2, rz: 0.016 },
-  { x: 2.2, y: 0.55, z: -29.6, ry: -0.14, rz: 0.02 },
-  { x: -2.9, y: 0.05, z: -32.4, ry: 0.12, rz: -0.018 },
+  { x: 4.9, y: -0.85, z: -6.6, ry: -0.2, rz: 0.025 },
+  { x: -3.4, y: 0.65, z: -3.8, ry: 0.18, rz: -0.02 },
+  { x: 2.7, y: 1.25, z: -9.4, ry: -0.16, rz: 0.012 },
+  { x: -2.3, y: -0.5, z: -12.4, ry: 0.14, rz: 0.018 },
+  { x: 3.1, y: 0.15, z: -15.2, ry: -0.12, rz: -0.022 },
+  { x: -5.2, y: 0.25, z: -17.8, ry: 0.22, rz: 0.014 },
+  { x: 1.9, y: -1.1, z: -20.6, ry: -0.1, rz: 0.02 },
+  { x: -3.0, y: 1.0, z: -23.4, ry: 0.16, rz: -0.016 },
+  { x: 5.6, y: 0.3, z: -26.2, ry: -0.24, rz: 0.01 },
+  { x: -1.8, y: -0.75, z: -29.0, ry: 0.1, rz: 0.024 },
+  { x: 3.8, y: 0.85, z: -31.8, ry: -0.18, rz: -0.012 },
+  { x: -4.6, y: -0.35, z: -34.6, ry: 0.2, rz: 0.016 },
+  { x: 2.2, y: 0.55, z: -37.6, ry: -0.14, rz: 0.02 },
+  { x: -2.9, y: 0.05, z: -40.4, ry: 0.12, rz: -0.018 },
 ];
 
 /** Shared rounded-rect alpha mask so the cards read as app reels, not slabs. */
@@ -91,7 +92,7 @@ const ReelConstellation = ({ clips }: ReelConstellationProps) => {
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(FOG_COLOR);
-    scene.fog = new THREE.FogExp2(FOG_COLOR, 0.055);
+    scene.fog = new THREE.FogExp2(FOG_COLOR, 0.062);
 
     const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 80);
     camera.position.set(0, 0, CAMERA_START_Z);
@@ -135,47 +136,7 @@ const ReelConstellation = ({ clips }: ReelConstellationProps) => {
       cards.push({ mesh, material, slot, phase: i * 1.7, floatSpeed: 0.32 + (i % 4) * 0.05 });
     }
 
-    // ── Focus-card video texture — one decoder, negotiated with the budget ──
-    const focusClip = sceneClips[0];
-    const video = document.createElement('video');
-    video.muted = true;
-    video.loop = true;
-    video.playsInline = true;
-    video.preload = 'metadata';
-    video.crossOrigin = 'anonymous';
-    video.src = focusClip.previewSrc;
-    video.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;';
-    video.tabIndex = -1;
-    host.appendChild(video);
-
-    let videoTexture: THREE.VideoTexture | null = null;
-    let videoGranted = false;
     let inView = true;
-
-    const posterMap = cards[0]?.material.map ?? null;
-    const refreshFocus = () => {
-      const focus = cards[0];
-      if (!focus) return;
-      if (videoGranted && inView && !document.hidden) {
-        if (!videoTexture) {
-          videoTexture = new THREE.VideoTexture(video);
-          videoTexture.colorSpace = THREE.SRGBColorSpace;
-          disposables.push(videoTexture);
-        }
-        void video.play().catch(() => {});
-        focus.material.map = videoTexture;
-      } else {
-        video.pause();
-        focus.material.map = posterMap;
-      }
-      focus.material.needsUpdate = true;
-    };
-
-    const playbackEntry = registerMediaPlaybackEntry((granted) => {
-      videoGranted = granted;
-      refreshFocus();
-    }, 'hero');
-    playbackEntry.update(true);
 
     // ── Render loop ──
     const canvas = renderer.domElement;
@@ -225,7 +186,7 @@ const ReelConstellation = ({ clips }: ReelConstellationProps) => {
         // Entrance: staggered float-in on mount
         const reveal = THREE.MathUtils.clamp((elapsed - 0.1 - i * 0.055) / 0.9, 0, 1);
         const eased = 1 - Math.pow(1 - reveal, 3);
-        material.opacity = eased * ahead;
+        material.opacity = eased * ahead * FIELD_OPACITY;
         mesh.visible = material.opacity > 0.01;
       }
 
@@ -255,18 +216,13 @@ const ReelConstellation = ({ clips }: ReelConstellationProps) => {
     const intersectionObserver = new IntersectionObserver(
       ([entry]) => {
         inView = entry.isIntersecting;
-        playbackEntry.update(inView);
-        refreshFocus();
         resume();
       },
       { rootMargin: '160px 0px' },
     );
     intersectionObserver.observe(host);
 
-    const onVisibility = () => {
-      refreshFocus();
-      resume();
-    };
+    const onVisibility = () => resume();
     document.addEventListener('visibilitychange', onVisibility);
 
     const onPointerMove = (event: PointerEvent) => {
@@ -290,16 +246,11 @@ const ReelConstellation = ({ clips }: ReelConstellationProps) => {
 
     return () => {
       if (rafId !== 0) cancelAnimationFrame(rafId);
-      playbackEntry.unregister();
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('webglcontextlost', onContextLost);
-      video.pause();
-      video.removeAttribute('src');
-      video.load();
-      video.remove();
       disposables.forEach((d) => d.dispose());
       canvas.remove();
     };

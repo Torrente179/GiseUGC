@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { m } from 'framer-motion';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { blurRevealUp, staggerContainer } from '@/components/motion/variants';
+import { getLocaleFromPath } from '@/lib/locale-path';
 
 /**
  * Chapter 2 — Manifesto. The studio statement and the proof numerals as one
@@ -54,6 +55,8 @@ const AnimatedCounter = ({ end, suffix = '', duration = 1800 }: CounterProps) =>
 
 const ManifestoChapter = () => {
   const { t } = useTranslation();
+  const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
+  const isEs = locale === 'es';
 
   const stats = [
     { value: 50, suffix: '+', labelKey: 'socialProof.brands' },
@@ -73,7 +76,7 @@ const ManifestoChapter = () => {
       >
         {/* ── Statement ── */}
         <m.span className="dc-chapter-label mb-8 md:mb-12" variants={blurRevealUp(12, 0.5)}>
-          {t('hero.introduction.eyebrow')}
+          {isEs ? 'Capítulo 01 — manifiesto' : 'Chapter 01 — manifesto'}
         </m.span>
 
         <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-20">

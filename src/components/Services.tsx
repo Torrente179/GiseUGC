@@ -1,158 +1,100 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Film, Globe, Lightbulb, Megaphone, Mic, PlayCircle, Sparkles, Star } from 'lucide-react';
-import { m, useReducedMotion } from 'framer-motion';
-import SplitTextReveal from '@/components/motion/SplitTextReveal';
-import { revealUp, springSmooth, staggerContainer } from '@/components/motion/variants';
+import { ArrowUpRight } from 'lucide-react';
+import { m } from 'framer-motion';
+import { revealUp, staggerContainer } from '@/components/motion/variants';
 import { getLocaleFromPath, getServicePath, type ServicePageId } from '@/lib/locale-path';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { LEGACY_REEL_CLIPS, getBestPosterSrc } from '@/data/portfolio-clips';
 
 const MotionLink = m.create(Link);
 
+/**
+ * Chapter 03 — Servicios. An editorial index: numbered serif rows instead of
+ * an icon-card grid. Hovering a row (desktop) tilts in a reel preview.
+ */
 const Services = () => {
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
-  const servicePageByCard: ServicePageId[] = [
-    'ugc-ads-tiktok-meta',
-    'ugc-testimonials-reviews',
-    'ugc-product-demo',
-    'ugc-problem-solution',
-    'ugc-lifestyle',
-    'ugc-broll-footage',
-    'bilingual-ugc-creator',
-    'spokesperson-videos',
-  ];
-  const exploreLabel = locale === 'es' ? 'Ver página' : 'View page';
+  const isEs = locale === 'es';
 
-  const serviceData = [
-    {
-      icon: <Megaphone className="h-6 w-6 text-primary/70" />,
-      titleKey: 'services.service1.title',
-      subtitleKey: 'services.service1.subtitle',
-      descriptionKey: 'services.service1.description',
-    },
-    {
-      icon: <Star className="h-6 w-6 text-primary/70" />,
-      titleKey: 'services.service2.title',
-      descriptionKey: 'services.service2.description',
-    },
-    {
-      icon: <PlayCircle className="h-6 w-6 text-primary/70" />,
-      titleKey: 'services.service3.title',
-      subtitleKey: 'services.service3.subtitle',
-      descriptionKey: 'services.service3.description',
-    },
-    {
-      icon: <Lightbulb className="h-6 w-6 text-primary/70" />,
-      titleKey: 'services.service4.title',
-      subtitleKey: 'services.service4.subtitle',
-      descriptionKey: 'services.service4.description',
-    },
-    {
-      icon: <Sparkles className="h-6 w-6 text-primary/70" />,
-      titleKey: 'services.service5.title',
-      subtitleKey: 'services.service5.subtitle',
-      descriptionKey: 'services.service5.description',
-    },
-    {
-      icon: <Film className="h-6 w-6 text-primary/70" />,
-      titleKey: 'services.service6.title',
-      subtitleKey: 'services.service6.subtitle',
-      descriptionKey: 'services.service6.description',
-    },
-    {
-      icon: <Globe className="h-6 w-6 text-primary/70" />,
-      titleKey: 'services.service7.title',
-      subtitleKey: 'services.service7.subtitle',
-      descriptionKey: 'services.service7.description',
-    },
-    {
-      icon: <Mic className="h-6 w-6 text-primary/70" />,
-      titleKey: 'services.service8.title',
-      subtitleKey: 'services.service8.subtitle',
-      descriptionKey: 'services.service8.description',
-    },
+  const rows: Array<{
+    pageId: ServicePageId;
+    titleKey: string;
+    metaKey?: string;
+  }> = [
+    { pageId: 'ugc-ads-tiktok-meta', titleKey: 'services.service1.title', metaKey: 'services.service1.subtitle' },
+    { pageId: 'ugc-testimonials-reviews', titleKey: 'services.service2.title' },
+    { pageId: 'ugc-product-demo', titleKey: 'services.service3.title', metaKey: 'services.service3.subtitle' },
+    { pageId: 'ugc-problem-solution', titleKey: 'services.service4.title', metaKey: 'services.service4.subtitle' },
+    { pageId: 'ugc-lifestyle', titleKey: 'services.service5.title', metaKey: 'services.service5.subtitle' },
+    { pageId: 'ugc-broll-footage', titleKey: 'services.service6.title', metaKey: 'services.service6.subtitle' },
+    { pageId: 'bilingual-ugc-creator', titleKey: 'services.service7.title', metaKey: 'services.service7.subtitle' },
+    { pageId: 'spokesperson-videos', titleKey: 'services.service8.title', metaKey: 'services.service8.subtitle' },
   ];
 
   return (
     <section id="services" className="studio-section bg-background pt-16 md:pt-20">
       <div className="studio-container">
         <m.div
-          className="studio-header mb-12"
+          className="mb-10 md:mb-14 flex flex-row items-end justify-between gap-6"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={staggerContainer(0.12, 0.04)}
         >
-          <div className="text-center md:text-left">
-            <m.p className="section-label text-muted-foreground mb-4" variants={revealUp(14, 0.45)}>
-              {t('services.sectionSubtitle')}
-            </m.p>
-            <h2 className="studio-title">
-              <SplitTextReveal text={t('services.sectionTitle')} delay={0.08} />
-            </h2>
+          <div>
+            <m.span className="dc-chapter-label" variants={revealUp(12, 0.45)}>
+              {isEs ? 'Capítulo 03 — servicios' : 'Chapter 03 — services'}
+            </m.span>
+            <m.h2
+              className="mt-3 font-serif text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight-serif leading-[1]"
+              variants={revealUp(16, 0.55)}
+            >
+              {isEs ? 'Lo que ' : 'What I '}
+              <span className="italic text-primary">{isEs ? 'produzco' : 'produce'}</span>
+            </m.h2>
           </div>
           <m.p
-            className="studio-subtitle lg:justify-self-end text-center md:text-right max-w-lg"
-            variants={revealUp(18, 0.5)}
+            className="dc-index-meta hidden max-w-[16rem] !text-muted-foreground/70 md:block"
+            variants={revealUp(16, 0.6)}
           >
-            {t('services.motionSubtitle')}
+            {isEs ? '8 formatos · cada uno con su página' : '8 formats · each with its own page'}
           </m.p>
         </m.div>
 
         <m.div
-          className="studio-rule mb-16 md:mb-20"
-          initial={{ opacity: 0, scaleX: 0.7 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.68 }}
-        />
-
-        <m.div
-          className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4"
-          {...(!isMobile ? {
-            initial: 'hidden' as const,
-            whileInView: 'visible' as const,
-            viewport: { once: true, amount: 0.15 },
-            variants: staggerContainer(0.05, 0.02),
-          } : {})}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={staggerContainer(0.05, 0.02)}
+          className="border-t border-border/70"
         >
-          {serviceData.map((service, index) => (
+          {rows.map((row, index) => (
             <MotionLink
-              key={service.titleKey}
-              to={getServicePath(servicePageByCard[index], locale)}
-              className="group flex flex-col rounded-[1.25rem] md:rounded-[1.5rem] border border-border/60 bg-card p-5 md:p-8 transition-[border-color,box-shadow] duration-[350ms] hover:border-primary/40 hover:shadow-[var(--shadow-soft)]"
-              style={{ transitionTimingFunction: 'var(--ease-out-expo)' }}
-              variants={revealUp(18, 0.45)}
-              {...(isMobile ? {
-                initial: 'hidden' as const,
-                whileInView: 'visible' as const,
-                viewport: { once: true, amount: 0.2 },
-              } : {})}
-              whileHover={shouldReduceMotion ? undefined : { y: -3 }}
-              whileTap={shouldReduceMotion ? undefined : { scale: 0.99 }}
-              transition={springSmooth}
+              key={row.pageId}
+              to={getServicePath(row.pageId, locale)}
+              className="dc-index-row group"
+              variants={revealUp(16, 0.45)}
             >
-              <div className="mb-5 md:mb-6 text-primary/70 transition-colors duration-300 group-hover:text-primary">
-                {service.icon}
-              </div>
-              <h3 className="type-marketing-display text-base md:text-lg font-semibold tracking-tight-marketing mb-1 leading-[1.2]">
-                {t(service.titleKey)}
-              </h3>
-              {service.subtitleKey && (
-                <p className="text-sm md:text-base text-muted-foreground/70 mb-3 md:mb-4 italic">
-                  {t(service.subtitleKey)}
-                </p>
+              <span className="dc-index-num">{String(index + 1).padStart(2, '0')}</span>
+              <span className="dc-index-title">{t(row.titleKey)}</span>
+              {!isMobile && row.metaKey && (
+                <span className="dc-index-meta max-w-[15rem]">{t(row.metaKey)}</span>
               )}
-              {!service.subtitleKey && <div className="mb-3 md:mb-4" />}
-              <p className="strategic-body text-muted-foreground text-sm md:text-base line-clamp-3 md:line-clamp-none">
-                {t(service.descriptionKey)}
-              </p>
-              <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
-                {exploreLabel}
-                <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
+              {!isMobile && (
+                <span className="dc-index-preview" aria-hidden="true">
+                  <img
+                    src={getBestPosterSrc(LEGACY_REEL_CLIPS[index % LEGACY_REEL_CLIPS.length])}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+              )}
+              <span className="dc-index-arrow" aria-hidden="true">
+                <ArrowUpRight className="h-4 w-4" />
               </span>
             </MotionLink>
           ))}

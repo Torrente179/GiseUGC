@@ -5,6 +5,7 @@ import { m, useReducedMotion } from 'framer-motion';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { revealUp, springHoverTransition, staggerContainer } from '@/components/motion/variants';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { getLocaleFromPath } from '@/lib/locale-path';
 import { useVelocitySkew } from '@/hooks/use-velocity-skew';
 import { scrollToY, startSmoothScroll, stopSmoothScroll } from '@/lib/motion/smooth-scroll';
 import { ensureAutoRefresh, loadGsap, shouldEnableRichMotion } from '@/lib/motion/gsap-core';
@@ -354,6 +355,37 @@ const Portfolio = () => {
   const getReelTitle = useCallback(
     (clip: ReelClip) => (clip.titleKey ? t(clip.titleKey) : clip.title ?? `Clip ${clip.id}`),
     [t],
+  );
+
+  // ── Card metadata (chips + title band) ──
+  const pageLocale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
+  const isEs = pageLocale === 'es';
+  const categoryLabel = useCallback(
+    (category: ReelClip['category']) => {
+      const labels: Record<ReelClip['category'], [string, string]> = {
+        fashion: ['moda', 'fashion'],
+        beauty: ['belleza', 'beauty'],
+        tech: ['tech', 'tech'],
+        lifestyle: ['lifestyle', 'lifestyle'],
+      };
+      return labels[category][isEs ? 0 : 1];
+    },
+    [isEs],
+  );
+  const formatClipMeta = useCallback(
+    (clip: ReelClip) => {
+      const parts: string[] = [];
+      if (clip.durationSeconds) {
+        const m = Math.floor(clip.durationSeconds / 60);
+        const s = String(Math.round(clip.durationSeconds % 60)).padStart(2, '0');
+        parts.push(`${m}:${s}`);
+      }
+      parts.push(
+        clip.language === 'en' ? (isEs ? 'inglés' : 'English') : isEs ? 'español' : 'Spanish',
+      );
+      return parts.join(' · ');
+    },
+    [isEs],
   );
 
   // ── Gallery pin (desktop): the stage holds one viewport while vertical
@@ -1162,28 +1194,33 @@ const Portfolio = () => {
   // ── Shared chapter header (mobile rail + desktop pinned gallery) ──
   const galleryHeader = (
     <m.div
-      className="studio-header mb-10 md:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10"
+      className="mb-8 md:mb-10 flex flex-row items-end justify-between gap-6"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.32 }}
       variants={staggerContainer(0.12, 0.05)}
     >
-      <div className="text-center md:text-left">
-        <m.div className="inline-flex items-center gap-2 mb-6" variants={revealUp(14, 0.56)}>
-          <span className="h-px w-8 bg-accent/40" />
-          <p className="section-label text-accent text-sm md:text-base">{t('portfolio.sectionSubtitle')}</p>
-        </m.div>
-        <h2 className="text-5xl md:text-6xl lg:text-7xl font-serif text-foreground tracking-tight-serif leading-[0.95]">
-          <SplitTextReveal text={t('portfolio.sectionTitle')} delay={0.06} />
-          <span className="luxury-accent block mt-4 lg:mt-0 lg:ml-4 text-accent">
-            <SplitTextReveal text={t('portfolio.sectionTitleAccent')} delay={0.22} />
+      <div>
+        <m.span className="dc-chapter-label" variants={revealUp(12, 0.5)}>
+          {isEs ? 'Capítulo 02 — el trabajo' : 'Chapter 02 — the work'}
+        </m.span>
+        <h2 className="mt-3 font-serif text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight-serif leading-[1]">
+          <SplitTextReveal text={isEs ? 'Reels que' : 'Reels that'} delay={0.06} />{' '}
+          <span className="italic text-primary">
+            <SplitTextReveal text={isEs ? 'venden' : 'sell'} delay={0.2} />
           </span>
         </h2>
       </div>
-      <m.div className="lg:max-w-xs text-center lg:text-right" variants={revealUp(20, 0.64)}>
-        <p className="strategic-body text-foreground/45 text-lg md:text-xl italic">
-          {t('portfolio.reelDescription')}
-        </p>
+      <m.div className="text-right shrink-0" variants={revealUp(16, 0.6)}>
+        {!isMobile && (
+          <div className="font-serif text-2xl tabular-nums text-foreground leading-none">
+            <span ref={galleryCounterRef}>01</span>
+            <span className="text-muted-foreground/60"> / {String(showcaseReelClips.length).padStart(2, '0')}</span>
+          </div>
+        )}
+        <div className="dc-index-meta mt-2 !text-muted-foreground/70">
+          {isMobile ? (isEs ? 'desliza →' : 'swipe →') : isEs ? 'desplázate →' : 'scroll →'}
+        </div>
       </m.div>
     </m.div>
   );
@@ -1236,6 +1273,19 @@ const Portfolio = () => {
           playbackPriority={isActiveMobileCard ? 'preview' : 'background'}
           aria-hidden="true"
         />
+        <span className="dc-reel-chip dc-reel-chip--num" aria-hidden="true">
+          Nº {String(index + 1).padStart(2, '0')}
+        </span>
+        <span className="dc-reel-chip dc-reel-chip--cat" aria-hidden="true">
+          {categoryLabel(clip.category)}
+        </span>
+        <span className="dc-reel-play" aria-hidden="true">
+          <Play className="h-5 w-5 fill-current" />
+        </span>
+        <span className="dc-reel-band" aria-hidden="true">
+          <span className="dc-reel-title">{getReelTitle(clip)}</span>
+          <span className="dc-reel-meta">{formatClipMeta(clip)}</span>
+        </span>
       </m.button>
     );
   };
@@ -1393,18 +1443,14 @@ const Portfolio = () => {
               }}
               className="dc-gallery-track"
             >
-              {showcaseReelClips.map(renderReelCard)}
-            </div>
-          </div>
-          <div className="studio-container w-full">
-            <div className="dc-gallery-meta">
-              <span ref={galleryCounterRef} className="section-label text-foreground/70 !text-xs tabular-nums">
-                01
-              </span>
-              <span className="h-px w-8 bg-accent/40" aria-hidden="true" />
-              <span className="section-label text-muted-foreground/60 !text-xs tabular-nums">
-                {String(showcaseReelClips.length).padStart(2, '0')}
-              </span>
+              {showcaseReelClips.map((clip, index) => (
+                <div key={clip.id} className="dc-track-item">
+                  <span className="dc-ghost-num" aria-hidden="true">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  {renderReelCard(clip, index)}
+                </div>
+              ))}
             </div>
           </div>
         </div>
