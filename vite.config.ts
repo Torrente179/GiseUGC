@@ -94,9 +94,7 @@ export default defineConfig(({ mode }) => ({
               return 'i18n-core';
             }
             if (id.includes('@radix-ui')) return 'radix';
-            if (id.includes('@tanstack')) return 'tanstack';
             if (id.includes('@vercel')) return 'vercel-sdk';
-            if (id.includes('@emailjs')) return 'emailjs';
             if (id.includes('embla-carousel')) return 'embla';
             if (
               id.includes('react-dom') ||

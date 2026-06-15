@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useMemo, useRef } from 'react';
+import { Suspense, lazy, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import type { SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getHomeSectionHref, getServicePath, getVerticalPath } from '@/lib/locale-path';
@@ -8,6 +8,7 @@ import { getVerticalPageContent } from '@/data/vertical-pages';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
+import { RevealSection } from '@/components/motion/RevealSection';
 
 const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
@@ -44,46 +45,6 @@ const localeLabels = {
   },
 } as const;
 
-/* ── Scroll-reveal hook (IntersectionObserver, CSS-only) ── */
-function useScrollReveal<T extends HTMLElement>() {
-  const ref = useRef<T>(null);
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || typeof IntersectionObserver === 'undefined') {
-      node?.classList.add('is-visible');
-      return;
-    }
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          node.classList.add('is-visible');
-          observer.unobserve(node);
-        }
-      },
-      { rootMargin: '0px 0px -40px 0px', threshold: 0.06 },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-  return ref;
-}
-
-function RevealSection({
-  children,
-  className = '',
-  id,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  id?: string;
-}) {
-  const ref = useScrollReveal<HTMLElement>();
-  return (
-    <section ref={ref} id={id} className={`svc-reveal ${className}`}>
-      {children}
-    </section>
-  );
-}
 
 /* ════════════════════════════════════════════════════════════════════
    RESOURCE PAGE — Editorial article layout

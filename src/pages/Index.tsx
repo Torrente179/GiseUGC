@@ -8,6 +8,7 @@ import { clearUrlHash } from '@/hooks/use-hashless-section-navigation';
 import SectionSkeleton from '@/components/motion/SectionSkeleton';
 import FadeInOnMount from '@/components/motion/FadeInOnMount';
 import { useDeferredMount } from '@/hooks/use-deferred-mount';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { mark, measure, startLongTaskObserver } from '@/lib/perf-debug';
 import PageSeo from '@/components/PageSeo';
 import ScrollProgressHairline from '@/components/motion/ScrollProgressHairline';
@@ -56,7 +57,15 @@ const DeferredSection = ({
   if (!enabled) return null;
 
   if (shouldMount) {
-    return <Suspense fallback={skeleton}><FadeInOnMount>{children}</FadeInOnMount></Suspense>;
+    // A failure in one deferred section degrades silently (and is logged in
+    // ErrorBoundary.componentDidCatch) instead of taking down the whole page.
+    return (
+      <Suspense fallback={skeleton}>
+        <ErrorBoundary section={mountId} silent>
+          <FadeInOnMount>{children}</FadeInOnMount>
+        </ErrorBoundary>
+      </Suspense>
+    );
   }
 
   return <div ref={placeholderRef}>{skeleton}</div>;
@@ -127,9 +136,11 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
       </DeferredSection>
 
       {/* Chapter 4 — Services (index redesign lands in session 2) */}
-      <Suspense fallback={<SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />}>
-        <ServicesSection />
-      </Suspense>
+      <ErrorBoundary section="services" silent>
+        <Suspense fallback={<SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />}>
+          <ServicesSection />
+        </Suspense>
+      </ErrorBoundary>
 
       {/* Chapter 5 — Method */}
       <CreatorAdvantageSection />
@@ -156,9 +167,11 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
       </DeferredSection>
 
       {/* Chapter 7 — FAQ */}
-      <Suspense fallback={<SectionSkeleton id="faq" minHeightClass="min-h-[480px]" />}>
-        <FAQSection />
-      </Suspense>
+      <ErrorBoundary section="faq" silent>
+        <Suspense fallback={<SectionSkeleton id="faq" minHeightClass="min-h-[480px]" />}>
+          <FAQSection />
+        </Suspense>
+      </ErrorBoundary>
 
       {/* Toolkit marquee → finale (full Finale chapter lands in session 2) */}
       <DeferredSection
@@ -173,9 +186,11 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
 
       <SiteFooter />
 
-      <Suspense fallback={null}>
-        <FloatingContactDockSection />
-      </Suspense>
+      <ErrorBoundary section="floating-contact-dock" silent>
+        <Suspense fallback={null}>
+          <FloatingContactDockSection />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 });

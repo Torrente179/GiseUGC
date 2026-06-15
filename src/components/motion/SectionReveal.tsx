@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { m, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion, type Variants } from 'framer-motion';
 import { easeOutExpo } from '@/components/motion/variants';
 
 type RevealDirection = 'up' | 'left' | 'right' | 'scale';
@@ -33,10 +33,10 @@ const getDirectionalVariants = (
   distance: number,
   duration: number,
   blur: boolean,
-) => {
+): Variants => {
   const blurHidden = blur ? { filter: 'blur(4px)' } : {};
   const blurVisible = blur ? { filter: 'blur(0px)' } : {};
-  const transitionEnd = blur ? { filter: 'none' } : {};
+  const transitionEnd: { filter?: string } = blur ? { filter: 'none' } : {};
 
   const baseHidden: Record<string, unknown> = { opacity: 0, ...blurHidden };
   const baseVisible: Record<string, unknown> = { opacity: 1, ...blurVisible };

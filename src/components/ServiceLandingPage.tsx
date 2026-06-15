@@ -11,6 +11,7 @@ import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
+import { RevealSection } from '@/components/motion/RevealSection';
 import TheaterVideo from '@/components/media/TheaterVideo';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 
@@ -95,46 +96,6 @@ const localeLabels = {
   },
 } as const;
 
-/* ── Scroll-reveal hook (IntersectionObserver, CSS-only) ── */
-function useScrollReveal<T extends HTMLElement>() {
-  const ref = useRef<T>(null);
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || typeof IntersectionObserver === 'undefined') {
-      node?.classList.add('is-visible');
-      return;
-    }
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          node.classList.add('is-visible');
-          observer.unobserve(node);
-        }
-      },
-      { rootMargin: '0px 0px -40px 0px', threshold: 0.06 },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-  return ref;
-}
-
-function RevealSection({
-  children,
-  className = '',
-  id,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  id?: string;
-}) {
-  const ref = useScrollReveal<HTMLElement>();
-  return (
-    <section ref={ref} id={id} className={`svc-reveal ${className}`}>
-      {children}
-    </section>
-  );
-}
 
 /* ════════════════════════════════════════════════════════════════════
    SCREEN TEST — Service Landing Page
