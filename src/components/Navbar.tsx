@@ -5,6 +5,7 @@ import {
   Menu,
   X,
   ArrowRight,
+  ChevronLeft,
   Send,
   Instagram,
   Linkedin,
@@ -526,24 +527,39 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                   : 'py-4 md:py-5',
             )}
           >
-            <a
-              href={homeSectionHref('home')}
-              className={cn(
-                'brand-logo md:text-2xl text-accent',
-                compactMobile ? 'text-lg' : 'text-xl',
+            <div className="flex items-center gap-1.5">
+              {!onHomePage && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.history.length > 1) navigate(-1);
+                    else navigate(homeSectionHref('home'));
+                  }}
+                  className={cn('btn-icon-pill md:hidden', compactMobile ? 'h-9 w-9' : 'h-10 w-10')}
+                  aria-label={t('navbar.back', { defaultValue: currentLocale === 'es' ? 'Volver' : 'Back' })}
+                >
+                  <ChevronLeft className={compactMobile ? 'h-[18px] w-[18px]' : 'h-5 w-5'} aria-hidden="true" />
+                </button>
               )}
-              onClick={(event) => {
-                if (onHomePage) {
-                  handleHashLinkClick(event, closeMobileMenu);
-                } else {
-                  event.preventDefault();
-                  closeMobileMenu();
-                  navigate(homeSectionHref('home'));
-                }
-              }}
-            >
-              Gisela<span className="text-foreground font-medium">.UGC</span>
-            </a>
+              <a
+                href={homeSectionHref('home')}
+                className={cn(
+                  'brand-logo md:text-2xl text-accent',
+                  compactMobile ? 'text-lg' : 'text-xl',
+                )}
+                onClick={(event) => {
+                  if (onHomePage) {
+                    handleHashLinkClick(event, closeMobileMenu);
+                  } else {
+                    event.preventDefault();
+                    closeMobileMenu();
+                    navigate(homeSectionHref('home'));
+                  }
+                }}
+              >
+                Gisela<span className="text-foreground font-medium">.UGC</span>
+              </a>
+            </div>
 
             <div className="hidden md:flex items-center gap-7">
               {desktopNavLinkKeys.map((link) => (

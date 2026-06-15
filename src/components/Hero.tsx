@@ -146,7 +146,7 @@ const Hero = () => {
             />
             <div
               data-hero-identity
-              className="container mx-auto w-full shrink-0 px-6 pb-6 max-md:pointer-events-auto max-md:mt-auto"
+              className="hero-mobile-foot container mx-auto w-full shrink-0 px-6 pb-6 max-md:pointer-events-auto max-md:mt-auto"
             >
               {nameLockup}
 

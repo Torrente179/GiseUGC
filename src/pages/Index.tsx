@@ -17,7 +17,6 @@ import SiteFooter from '@/components/SiteFooter';
 
 const ServicesSection = lazy(() => import('@/components/Services'));
 const PortfolioSection = lazy(() => import('@/components/Portfolio'));
-const MobileContactCtaSection = lazy(() => import('@/components/MobileContactCtaSection'));
 const TestimonialsSection = lazy(() => import('@/components/Testimonials'));
 const FAQSection = lazy(() => import('@/components/FAQ'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
@@ -154,16 +153,6 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         skeleton={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}
       >
         <TestimonialsSection />
-      </DeferredSection>
-
-      <DeferredSection
-        enabled={isMobile}
-        mountId="mobile-contact-cta"
-        rootMargin="800px 0px"
-        queueDelayMs={100}
-        skeleton={<SectionSkeleton id="mobile-contact-cta" minHeightClass="min-h-[120px]" />}
-      >
-        <MobileContactCtaSection />
       </DeferredSection>
 
       {/* Chapter 7 — FAQ */}

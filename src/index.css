@@ -1452,6 +1452,213 @@
     .dc-gallery-arrow { display: none; }
   }
 
+  /* ═══════════════════════════════════════════════════
+     Mobile app shell — bottom tab bar + bottom sheets
+     ═══════════════════════════════════════════════════ */
+
+  .mtabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 120;
+    padding: 0.4rem 0.6rem calc(0.4rem + env(safe-area-inset-bottom, 0px));
+    pointer-events: none;
+    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease;
+  }
+
+  .mtabbar.is-hidden {
+    transform: translateY(135%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (min-width: 768px) {
+    .mtabbar { display: none; }
+  }
+
+  .mtabbar-inner {
+    pointer-events: auto;
+    display: flex;
+    align-items: stretch;
+    gap: 0.25rem;
+    max-width: 30rem;
+    margin: 0 auto;
+    border-radius: 1.25rem;
+    padding: 0.3rem;
+    background: hsl(var(--background) / 0.78);
+    border: 1px solid hsl(var(--border) / 0.7);
+    box-shadow:
+      0 -2px 22px -14px hsl(var(--foreground) / 0.5),
+      0 10px 26px -18px hsl(var(--foreground) / 0.6);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+
+  /* Solid fallback where backdrop-filter is unsupported (older engines) */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .mtabbar-inner { background: hsl(var(--background) / 0.97); }
+  }
+
+  .mtab {
+    position: relative;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-height: 3.1rem;
+    padding: 0.4rem 0.2rem;
+    border-radius: 0.95rem;
+    color: hsl(var(--muted-foreground));
+    background: transparent;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.2s ease;
+  }
+
+  .mtab.is-active { color: hsl(var(--primary)); }
+
+  .mtab-pill {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 0.95rem;
+    background: hsl(var(--primary) / 0.13);
+  }
+
+  .mtab-icon {
+    position: relative;
+    z-index: 1;
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+
+  .mtab-label {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-sans);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+
+  /* Keep the footer / last content above the fixed bar */
+  @media (max-width: 767px) {
+    body { padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px)); }
+    .hero-mobile-foot { padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px) + 0.25rem); }
+  }
+
+  /* ── Bottom sheets (vaul) ── */
+
+  /* vaul animates open/close via a transform/opacity transition and finalizes
+     on `transitionend`. The global `*:not(:focus-visible)` outline-offset
+     transition (index.css base layer) clobbers it, stalling the sheet closed.
+     Restore vaul's transitions with !important so the sheet animates open. */
+  [data-vaul-drawer] {
+    transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1) !important;
+  }
+
+  [data-vaul-overlay] {
+    transition: opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1) !important;
+  }
+
+  .msheet {
+    border-color: hsl(var(--border));
+    background: hsl(var(--background));
+    padding: 0 1.1rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    max-height: 86svh;
+  }
+
+  .msheet-head { padding: 0.4rem 0 0.9rem; }
+
+  .msheet-title {
+    font-family: var(--font-brand);
+    font-size: 1.55rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: hsl(var(--foreground));
+  }
+
+  .msheet-sub {
+    margin-top: 0.2rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.85rem;
+  }
+
+  .msheet-list { display: flex; flex-direction: column; }
+
+  .msheet-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.8rem 0.25rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+    text-decoration: none;
+    color: hsl(var(--foreground));
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .msheet-row:last-child { border-bottom: none; }
+  .msheet-row:active { background: hsl(var(--muted) / 0.4); }
+
+  .msheet-glyph {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 999px;
+    font-size: 18px;
+  }
+
+  .msheet-label {
+    flex: 1;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  .msheet-nav-label {
+    flex: 1;
+    font-family: var(--font-brand);
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+
+  .msheet-arrow {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .msheet-controls {
+    margin-top: 1.2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .msheet-legal {
+    margin-top: 1.2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+
+  .msheet-legal-link {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: hsl(var(--muted-foreground));
+    text-decoration: none;
+  }
+
   /* ─── Scroll progress hairline (desktop) ─── */
   .scroll-progress-hairline {
     position: fixed;

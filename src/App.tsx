@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import Index from '@/pages/Index';
 import ThemeRuntimeSync from '@/components/ThemeRuntimeSync';
+import MobileAppShell from '@/components/mobile/MobileAppShell';
+import { useIsMobile } from '@/hooks/use-mobile';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
 // Lazy route-level pages. These only render for off-home URLs so we avoid
@@ -72,6 +74,7 @@ const AppRoutes = () => {
   const prevLocationKeyRef = useRef<string | null>(null);
   const onHome = isHomePath(location.pathname);
   const locale = getLocaleFromPath(location.pathname);
+  const isMobile = useIsMobile();
 
   // Find the matching service route entry for the current URL (null when on home/404)
   const currentServiceEntry = useMemo(() => {
@@ -135,8 +138,14 @@ const AppRoutes = () => {
 
   return (
     <>
-      {/* Unmount home off-route so hidden video-heavy sections release media resources. */}
-      {onHome ? <Index locale={locale} /> : null}
+      {/* Unmount home off-route so hidden video-heavy sections release media resources.
+          Keyed by locale so the route cross-fade fires on navigation/locale change,
+          not on in-page section scrolling. */}
+      {onHome ? (
+        <div key={`home-${locale}`} className="page-enter">
+          <Index locale={locale} />
+        </div>
+      ) : null}
 
       {/*
         Service pages mount on first visit and unmount when navigating away.
@@ -182,6 +191,9 @@ const AppRoutes = () => {
 
         {!isKnownRoute && <NotFound />}
       </Suspense>
+
+      {/* App-like mobile chrome: bottom tab bar + contact/menu sheets, site-wide */}
+      {isMobile && <MobileAppShell />}
     </>
   );
 };

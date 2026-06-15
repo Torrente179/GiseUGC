@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 import {
   ChevronUp,
   MessageCircle,
@@ -37,6 +38,7 @@ const ThreadsIcon = ({ className }: { className?: string }) => (
 
 const FloatingContactDock = () => {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const shouldReduceMotion = useReducedMotion();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktopDockGhosted, setIsDesktopDockGhosted] = useState(false);
@@ -271,6 +273,9 @@ const FloatingContactDock = () => {
       hoverToneClass: 'hover:bg-indigo-500/25',
     },
   ];
+
+  // Mobile contact is handled by the app shell's bottom tab bar + contact sheet.
+  if (isMobile) return null;
 
   return createPortal(
     <m.div
