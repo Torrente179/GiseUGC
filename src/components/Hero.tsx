@@ -2,7 +2,6 @@ import { useMemo, useRef, type CSSProperties, type MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowUpRight } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
-import HeroStoryStack from '@/components/HeroStoryStack';
 import { useHeroWall } from '@/hooks/use-hero-wall';
 import { useMagnetic } from '@/hooks/use-magnetic';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
@@ -26,8 +25,8 @@ const shuffleWithSeed = <T,>(items: T[], seed: number): T[] => {
   return arr;
 };
 
-const WALL_COLUMNS = 5;
-const MOBILE_DECK_COUNT = 4;
+const WALL_COLUMNS_DESKTOP = 5;
+const WALL_COLUMNS_MOBILE = 3;
 
 const Hero = () => {
   const { t } = useTranslation();
@@ -43,16 +42,23 @@ const Hero = () => {
   // Rotate the catalog by the UTC day bucket — fresh selection every 24h.
   const utcDayBucket = Math.floor(Date.now() / 86400000);
   const dailyClips = useMemo(() => shuffleWithSeed(ALL_CLIPS, utcDayBucket), [utcDayBucket]);
-  const storyClips = useMemo(() => dailyClips.slice(0, MOBILE_DECK_COUNT), [dailyClips]);
-  const ambientClip = dailyClips[MOBILE_DECK_COUNT % dailyClips.length] ?? dailyClips[0];
 
   // Deal the catalog column-by-column so each column holds a distinct vertical
   // strip of reels; each strip is doubled in markup for a seamless drift loop.
+  // Fewer, wider columns on mobile so the reels read at a usable size.
+  const columnCount = isMobile ? WALL_COLUMNS_MOBILE : WALL_COLUMNS_DESKTOP;
+  // Cap unique tiles per column: 6 is more than a viewport-height tall once
+  // doubled, so the loop stays seamless while keeping the poster payload lean.
+  const tilesPerColumn = 6;
   const wallColumns = useMemo(() => {
-    const cols: ReelClip[][] = Array.from({ length: WALL_COLUMNS }, () => []);
-    dailyClips.forEach((clip, i) => cols[i % WALL_COLUMNS].push(clip));
-    return cols.map((col) => (col.length >= 3 ? col : [...col, ...col].slice(0, 3)));
-  }, [dailyClips]);
+    const cols: ReelClip[][] = Array.from({ length: columnCount }, () => []);
+    dailyClips.forEach((clip, i) => cols[i % columnCount].push(clip));
+    return cols.map((col) => {
+      let filled = col;
+      while (filled.length < 4) filled = [...filled, ...col];
+      return filled.slice(0, tilesPerColumn);
+    });
+  }, [dailyClips, columnCount]);
 
   const pitch = isEs
     ? 'Contenido que se siente humano — y vende en social.'
@@ -92,50 +98,30 @@ const Hero = () => {
         data-hero-viewport
         className="dark relative min-h-[100svh] w-full overflow-hidden bg-background text-foreground md:h-[100svh]"
       >
-        {isMobile ? (
-          /* ─── Mobile: app-native story stack behind the poster type ─── */
-          <div
-            className="hero-stage max-md:!top-[calc(env(safe-area-inset-top,0px)+5rem)] max-md:right-0 max-md:bottom-0 max-md:left-0"
-            aria-hidden="true"
-          >
-            <div className="hero-stage-bg">
-              <img
-                src={getBestPosterSrc(ambientClip)}
-                alt=""
-                aria-hidden="true"
-                loading="eager"
-                decoding="async"
-                className="hero-stage-bg-video"
-              />
-            </div>
-            <div className="hero-deck-wrap">
-              <HeroStoryStack clips={storyClips} />
-            </div>
-          </div>
-        ) : (
-          /* ─── Desktop: full-bleed "Muro de trabajo" reel wall ─── */
-          <div className="dc-wall" data-hero-wall aria-hidden="true">
-            {wallColumns.map((col, ci) => (
-              <div key={ci} className="dc-wall-col" data-wall-col>
-                <div className="dc-wall-track" data-wall-track>
-                  {[...col, ...col].map((clip, ti) => (
-                    <img
-                      key={`${clip.id}-${ti}`}
-                      src={getBestPosterSrc(clip)}
-                      alt=""
-                      loading={ci < 3 && ti < 2 ? 'eager' : 'lazy'}
-                      decoding="async"
-                      className="dc-wall-tile"
-                    />
-                  ))}
-                </div>
+        {/* ─── Full-bleed "Muro de trabajo" reel wall (mobile + desktop) ───
+            Desktop drift + pointer parallax is GSAP (useHeroWall); mobile
+            drift is the CSS `.dc-wall-track` keyframe (no JS on touch). */}
+        <div className="dc-wall" data-hero-wall aria-hidden="true">
+          {wallColumns.map((col, ci) => (
+            <div key={ci} className="dc-wall-col" data-wall-col>
+              <div className="dc-wall-track" data-wall-track>
+                {[...col, ...col].map((clip, ti) => (
+                  <img
+                    key={`${clip.id}-${ti}`}
+                    src={getBestPosterSrc(clip)}
+                    alt=""
+                    loading={ci < 2 && ti < 2 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    className="dc-wall-tile"
+                  />
+                ))}
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
 
         {/* ─── Readability scrim ─── */}
-        <div className={isMobile ? 'hero-wall-scrim' : 'dc-wall-scrim'} aria-hidden="true" />
+        <div className="dc-wall-scrim" aria-hidden="true" />
 
         {isMobile ? (
           /* ════ Mobile: type-led flow layout ════ */

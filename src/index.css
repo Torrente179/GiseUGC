@@ -1002,6 +1002,40 @@
     background: hsl(var(--muted) / 0.4);
   }
 
+  /* Mobile gets no GSAP — drive the seamless drift with a CSS keyframe
+     (translateY 0 → -50% over the doubled list), alternating direction and
+     speed per column. */
+  @media (max-width: 767px) {
+    .dc-wall { gap: 0.4rem; padding: 0.4rem; }
+    .dc-wall-tile { border-radius: 0.7rem; }
+    .dc-wall-track { animation: dc-wall-drift 34s linear infinite; }
+    .dc-wall-col:nth-child(2) .dc-wall-track { animation-duration: 26s; animation-direction: reverse; }
+    .dc-wall-col:nth-child(3) .dc-wall-track { animation-duration: 40s; }
+
+    /* The desktop scrim is a left-heavy diagonal (name sits bottom-left on a
+       wide frame); on a narrow phone that darkens the whole wall. Use a
+       bottom-heavy vertical scrim so the reels read across the top and the
+       type stays legible over the dark lower half. */
+    .dc-wall-scrim {
+      background:
+        linear-gradient(to top,
+          hsl(var(--background)) 0%,
+          hsl(var(--background) / 0.86) 24%,
+          hsl(var(--background) / 0.32) 50%,
+          transparent 74%),
+        linear-gradient(to bottom, hsl(var(--background) / 0.5) 0%, transparent 13%);
+    }
+  }
+
+  @keyframes dc-wall-drift {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(0, -50%, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dc-wall-track { animation: none !important; }
+  }
+
   /* Scrim — anchors the type bottom-left, fades the top under the navbar */
   .dc-wall-scrim {
     position: absolute;
