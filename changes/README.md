@@ -8,7 +8,7 @@ This folder is organized by subsystem instead of by date.
   - Start here for the current site map, section order, and project-level working rules.
 - `ui/`
   - Hero, navbar, footer, contact flows, FAQ, rating cards, motion polish, and visual evolution.
-  - **Latest:** `../2026-06-14-home-redesign-arc-overview.md` — full GSAP + three.js home reimagining map (live = "Muro de trabajo" reel-wall hero `bc37c57`); see also the dated `2026-06-1x-*` docs at the `changes/` root for each session, incl. the B/C/A hero-direction audition.
+  - **Latest:** `../2026-06-14-home-redesign-arc-overview.md` — full GSAP + three.js home reimagining map; **current live**: "Muro de trabajo" reel-wall hero on desktop *and* mobile (`bc37c57`, `e803d8e`) + a native mobile app shell (bottom tab bar + contact sheet, `e04a208`). See the dated `2026-06-1x-*` docs at the `changes/` root for each session (incl. the B/C/A hero audition and the mobile app shell).
 - `carousel-functionality/`
   - Services marquee, swipe behavior, loop logic, resize stability, and regression guidance.
 - `video-functionality/`
