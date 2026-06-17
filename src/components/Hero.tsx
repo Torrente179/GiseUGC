@@ -1,12 +1,10 @@
-import { useMemo, useRef, type CSSProperties, type MouseEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowUpRight } from 'lucide-react';
-import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
+import { useTheme } from 'next-themes';
 import { useHeroWall } from '@/hooks/use-hero-wall';
-import { useMagnetic } from '@/hooks/use-magnetic';
-import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getLocaleFromPath } from '@/lib/locale-path';
+import { cn } from '@/lib/utils';
 import { LEGACY_REEL_CLIPS, getBestPosterSrc, type ReelClip } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 
@@ -31,13 +29,22 @@ const WALL_COLUMNS_MOBILE = 3;
 const Hero = () => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
-  const { handleHashLinkClick } = useHashlessSectionNavigation();
   const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
   const isEs = locale === 'es';
 
+  // The hero follows the global light/dark theme. Read the class that
+  // next-themes' blocking script already applied so the first paint matches
+  // (no light flash for dark users), then keep it in sync with the toggle.
+  const { resolvedTheme } = useTheme();
+  const [isDark, setIsDark] = useState(
+    () => typeof document !== 'undefined' && document.documentElement.classList.contains('dark'),
+  );
+  useEffect(() => {
+    if (resolvedTheme) setIsDark(resolvedTheme === 'dark');
+  }, [resolvedTheme]);
+
   const sectionRef = useRef<HTMLElement>(null);
   useHeroWall(sectionRef, !isMobile);
-  const magneticPrimary = useMagnetic<HTMLAnchorElement>();
 
   // Rotate the catalog by the UTC day bucket — fresh selection every 24h.
   const utcDayBucket = Math.floor(Date.now() / 86400000);
@@ -69,15 +76,6 @@ const Hero = () => {
     `${t('hero.proofValue')} · ${t('hero.proofCaption')}`,
   ];
 
-  const handleContactCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (isMobileViewport()) {
-      event.preventDefault();
-      toggleContactDock();
-      return;
-    }
-    handleHashLinkClick(event);
-  };
-
   // ── Name lockup (shared between mobile flow and desktop overlay) ──
   const nameLockup = (
     <h1 className="dc-name-h1 dc-name-stack">
@@ -92,11 +90,13 @@ const Hero = () => {
 
   return (
     <section ref={sectionRef} id="home" className="relative w-full bg-background max-md:overflow-hidden">
-      {/* Hero viewport is always dark ("black theme"), independent of the
-          global light/dark toggle. */}
+      {/* Hero viewport follows the global light/dark theme. */}
       <div
         data-hero-viewport
-        className="dark relative min-h-[100svh] w-full overflow-hidden bg-background text-foreground md:h-[100svh]"
+        className={cn(
+          'relative min-h-[100svh] w-full overflow-hidden bg-background text-foreground md:h-[100svh]',
+          isDark && 'dark',
+        )}
       >
         {/* ─── Full-bleed "Muro de trabajo" reel wall (mobile + desktop) ───
             Desktop drift + pointer parallax is GSAP (useHeroWall); mobile
@@ -140,20 +140,10 @@ const Hero = () => {
                 {pitch}
               </p>
 
-              <div className="hero-cascade-item dc-credits mb-6" style={{ '--cascade-i': 1 } as CSSProperties}>
+              <div className="hero-cascade-item dc-credits" style={{ '--cascade-i': 1 } as CSSProperties}>
                 {creditLines.map((line) => (
                   <span key={line} className="block">{line}</span>
                 ))}
-              </div>
-
-              <div className="hero-cascade-item flex items-center gap-3 max-md:pr-24" style={{ '--cascade-i': 2 } as CSSProperties}>
-                <a href="#portfolio" onClick={handleHashLinkClick} className="dc-cta-primary flex-1 justify-center">
-                  {t('hero.buttonPortfolio')}
-                  <ArrowUpRight className="h-4 w-4" />
-                </a>
-                <a href="#contact" onClick={handleContactCtaClick} className="dc-cta-ghost shrink-0">
-                  {t('hero.buttonContact')}
-                </a>
               </div>
             </div>
           </div>
@@ -173,19 +163,10 @@ const Hero = () => {
                 <p className="hero-cascade-item dc-pitch mb-4 mt-5 max-w-[24rem]" style={{ '--cascade-i': 1 } as CSSProperties}>
                   {pitch}
                 </p>
-                <div className="hero-cascade-item dc-credits mb-7" style={{ '--cascade-i': 2 } as CSSProperties}>
+                <div className="hero-cascade-item dc-credits" style={{ '--cascade-i': 2 } as CSSProperties}>
                   {creditLines.map((line) => (
                     <span key={line} className="block">{line}</span>
                   ))}
-                </div>
-                <div className="hero-cascade-item flex items-center gap-5" style={{ '--cascade-i': 3 } as CSSProperties}>
-                  <a ref={magneticPrimary} href="#portfolio" onClick={handleHashLinkClick} className="dc-cta-primary">
-                    {isEs ? 'Ver el trabajo' : 'See the work'}
-                    <ArrowUpRight className="h-4 w-4" />
-                  </a>
-                  <a href="#contact" onClick={handleContactCtaClick} className="dc-cta-ghost">
-                    {t('hero.buttonContact')}
-                  </a>
                 </div>
               </div>
 

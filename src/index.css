@@ -1025,6 +1025,19 @@
           transparent 74%),
         linear-gradient(to bottom, hsl(var(--background) / 0.5) 0%, transparent 13%);
     }
+
+    /* In the dark hero, fade to the near-black "theater" backdrop used on the
+       services page rather than the warmer --background — the blurred warm
+       posters bleed through --background and read brownish. */
+    .dark .dc-wall-scrim {
+      background:
+        linear-gradient(to top,
+          hsl(var(--theater-backdrop)) 0%,
+          hsl(var(--theater-backdrop) / 0.88) 24%,
+          hsl(var(--theater-backdrop) / 0.34) 50%,
+          transparent 74%),
+        linear-gradient(to bottom, hsl(var(--theater-backdrop) / 0.5) 0%, transparent 13%);
+    }
   }
 
   @keyframes dc-wall-drift {
