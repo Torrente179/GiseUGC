@@ -1152,8 +1152,15 @@
     font-size: clamp(2.2rem, 6.2vw, 5.4rem);
     line-height: 0.9;
     letter-spacing: -0.015em;
-    color: hsl(var(--warm-sand));
+    /* Light theme: a deeper antique gold so the surname keeps its warm,
+       classy character but actually reads against the light blurred hero —
+       the pale --warm-sand only has contrast on the dark theme. */
+    color: hsl(36 44% 42%);
     margin-left: 0.35em;
+  }
+
+  .dark .dc-name-b {
+    color: hsl(var(--warm-sand));
   }
 
   .dc-pitch {
