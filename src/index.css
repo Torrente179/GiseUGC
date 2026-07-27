@@ -556,10 +556,11 @@
     left: 50%;
     width: max-content;
     margin: 0;
+    padding-inline: 0.04em;
     transform: translate(-50%, -50%);
     color: var(--title-ink);
     font-family: var(--font-brand);
-    font-size: clamp(14rem, 27vw, 30rem);
+    font-size: clamp(13.5rem, 25.5vw, 28.5rem);
     font-weight: 700;
     line-height: 0.68;
     letter-spacing: -0.075em;
@@ -826,7 +827,7 @@
 
     #home .title-sequence-hero__name {
       top: 39%;
-      font-size: clamp(8rem, 39vw, 11rem);
+      font-size: clamp(6.25rem, 31vw, 9.1rem);
       letter-spacing: -0.085em;
     }
 
@@ -901,10 +902,6 @@
   }
 
   @media (max-width: 360px) {
-    #home .title-sequence-hero__name {
-      font-size: 7.65rem;
-    }
-
     .title-sequence-frame,
     .title-sequence-frame:nth-of-type(2) {
       width: 50vw;
