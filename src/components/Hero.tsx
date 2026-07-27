@@ -39,8 +39,17 @@ const Hero = () => {
         </p>
 
         <h1 className="title-sequence-hero__name">
-          Gisela
+          <span className="title-sequence-hero__word">
+            Gisel
+            <span className="title-sequence-hero__letter-a">a</span>
+          </span>
         </h1>
+
+        <span className="title-sequence-hero__a-strokes" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </span>
 
         <figure className="title-sequence-hero__frames">
           <figcaption className="sr-only">{sequenceDescription}</figcaption>
