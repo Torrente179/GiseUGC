@@ -5349,3 +5349,8 @@
 
   /* Mobile footer merged into the responsive .ft-* structure above. */
 }
+
+/* Legacy title decoration must never render if stale markup is restored from cache. */
+.title-sequence-hero__a-strokes {
+  display: none !important;
+}
