@@ -966,16 +966,16 @@
     }
 
     .title-sequence-frame:nth-of-type(1) {
-      transform: translateY(0.9rem) rotate(-3.4deg);
+      transform: translateY(0.2rem) rotate(-1.45deg);
     }
 
     .title-sequence-frame:nth-of-type(2) {
       width: min(76vw, 40svh);
-      transform: translateY(-0.2rem) rotate(0.8deg);
+      transform: translateY(0) rotate(0);
     }
 
     .title-sequence-frame:nth-of-type(3) {
-      transform: translateY(0.85rem) rotate(3.2deg);
+      transform: translateY(0.2rem) rotate(1.45deg);
     }
 
     .title-sequence-frame__film {
