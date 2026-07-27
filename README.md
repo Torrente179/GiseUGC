@@ -68,4 +68,4 @@ Push to `main` → Vercel builds and deploys production. Security headers (CSP, 
 
 ## Docs
 
-`ARCHITECTURE.md` is an older deep-dive and may lag the current home layout. Day-to-day design/decision history lives in the `changes/` log directory.
+`ARCHITECTURE.md` is an older deep-dive and may lag the current home layout. Day-to-day design/decision history lives in the `changes/` log directory. The current homepage opening is documented in [`changes/2026-07-27-editorial-title-sequence-hero.md`](changes/2026-07-27-editorial-title-sequence-hero.md).

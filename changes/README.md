@@ -8,7 +8,7 @@ This folder is organized by subsystem instead of by date.
   - Start here for the current site map, section order, and project-level working rules.
 - `ui/`
   - Hero, navbar, footer, contact flows, FAQ, rating cards, motion polish, and visual evolution.
-  - **Latest:** `../2026-06-14-home-redesign-arc-overview.md` — full GSAP + three.js home reimagining map; **current live**: "Muro de trabajo" reel-wall hero on desktop *and* mobile (`bc37c57`, `e803d8e`) + a native mobile app shell (bottom tab bar + contact sheet, `e04a208`). See the dated `2026-06-1x-*` docs at the `changes/` root for each session (incl. the B/C/A hero audition and the mobile app shell).
+  - **Current live hero:** `../2026-07-27-editorial-title-sequence-hero.md` — “CHAPTER 00” editorial opening with a solid `GISELA` title, three real film-strip stills, exact Medellín metadata, and a dedicated mobile app-quality composition. Earlier “Muro de trabajo,” wide contact-sheet, pencil-texture, and blue-mark experiments are historical rather than current.
 - `carousel-functionality/`
   - Services marquee, swipe behavior, loop logic, resize stability, and regression guidance.
 - `video-functionality/`
@@ -41,3 +41,11 @@ For any change that touches carousel, touch/drag input, smooth scrolling, or sec
 ## Why this exists
 
 Recent regressions came from mobile-only interaction differences such as viewport changes, touch axis locking, and carousel offset resets. Grouping notes by subsystem makes it easier to see how a behavior evolved before changing it again.
+
+## Current Homepage Hero Source of Truth
+
+For any homepage hero or top-of-page navbar change, read:
+
+- [`2026-07-27-editorial-title-sequence-hero.md`](./2026-07-27-editorial-title-sequence-hero.md)
+
+It records the approved composition, real source assets, responsive behavior, accessibility requirements, superseded experiments, validation, and regression guardrails.
