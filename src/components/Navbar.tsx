@@ -499,6 +499,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
           isScrolled
             ? 'border-b border-border/40 bg-background/80 backdrop-blur-xl shadow-[0_14px_36px_-30px_hsl(var(--foreground)/0.5)]'
             : 'border-b border-border/15 bg-background/40 backdrop-blur-md',
+          onHomePage && !isScrolled && 'title-sequence-nav',
         )}
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
