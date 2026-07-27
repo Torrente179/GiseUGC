@@ -793,7 +793,7 @@
     }
     to {
       opacity: 1;
-      clip-path: inset(0 0 0 0);
+      clip-path: inset(0 -0.12em 0 -0.08em);
       letter-spacing: -0.075em;
     }
   }
@@ -820,14 +820,14 @@
     }
 
     .title-sequence-hero__chapter {
-      top: calc(env(safe-area-inset-top, 0px) + 5.7rem);
+      top: calc(env(safe-area-inset-top, 0px) + clamp(8rem, 27svh, 14rem));
       font-size: 0.56rem;
       letter-spacing: 0.25em;
     }
 
     #home .title-sequence-hero__name {
-      top: 39%;
-      font-size: clamp(6.25rem, 31vw, 9.1rem);
+      top: 38%;
+      font-size: clamp(6.1rem, 30vw, 8.9rem);
       letter-spacing: -0.085em;
     }
 
