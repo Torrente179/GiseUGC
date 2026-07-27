@@ -558,13 +558,16 @@
     margin: 0;
     padding-inline: 0.04em;
     transform: translate(-50%, -50%);
+    background: none;
     color: var(--title-ink);
+    -webkit-text-fill-color: var(--title-ink);
     font-family: var(--font-brand);
     font-size: clamp(13.5rem, 25.5vw, 28.5rem);
     font-weight: 700;
     line-height: 0.68;
     letter-spacing: -0.075em;
     text-transform: uppercase;
+    text-shadow: none;
     white-space: nowrap;
     animation: title-sequence-name 1000ms var(--ease-out-expo) 100ms both;
   }
