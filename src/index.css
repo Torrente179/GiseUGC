@@ -527,6 +527,39 @@
     background-size: 6px 6px, 8px 8px;
   }
 
+  /* ── Key light ──
+     One practical light source raking the stage. `use-hero-key-light.ts`
+     publishes its position as --key-nx / --key-ny (unitless, -1…1, 0 = viewport
+     centre) on the stage; this layer is the only thing that reads them, so the
+     paper and the film frames are lit by the same lamp.
+
+     `multiply` rather than an additive blend: the paper is already at 98.8%
+     lightness, so brightening it does nothing visible. White in the gradient is
+     a multiply no-op, which leaves the paper untouched where the light lands
+     and lets it fall off warm everywhere else — light raking a sheet, and the
+     same technique the stage's ::after grain already uses.
+
+     Sits above the wordmark (z 1) and the frames (z 3) so it lights both, below
+     the chapter/metadata type (z 6) so that stays crisp, and below the grain
+     (z 8). The stage's `isolation: isolate` keeps the blend group contained.
+
+     No JS (touch, small viewport, reduced motion) → the vars fall back to 0 and
+     the light sits centred and static, which is a perfectly good still. */
+  .title-sequence-hero__keylight {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    background: radial-gradient(
+      58% 62% at calc(50% + var(--key-nx, 0) * 42%) calc(50% + var(--key-ny, 0) * 42%),
+      rgba(255, 255, 255, 1) 0%,
+      rgba(246, 241, 233, 1) 38%,
+      rgba(232, 224, 211, 1) 72%,
+      rgba(224, 215, 200, 1) 100%
+    );
+  }
+
   .title-sequence-hero__chapter,
   .title-sequence-hero__metadata {
     position: absolute;

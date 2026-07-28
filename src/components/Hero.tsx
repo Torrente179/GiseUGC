@@ -1,4 +1,5 @@
-import { type CSSProperties } from 'react';
+import { useRef, type CSSProperties } from 'react';
+import { useHeroKeyLight } from '@/hooks/use-hero-key-light';
 import { getLocaleFromPath } from '@/lib/locale-path';
 
 type EditorialFrame = {
@@ -31,9 +32,15 @@ const Hero = () => {
     ? 'Tres fotogramas de Gisela creando una reseña UGC de producto.'
     : 'Three frames of Gisela creating a UGC product review.';
 
+  // The key light publishes its position on the stage, so the lit layer
+  // inherits it. The hook gates itself to desktop-sized viewports with a fine
+  // pointer and no reduced-motion preference.
+  const stageRef = useRef<HTMLDivElement>(null);
+  useHeroKeyLight(stageRef);
+
   return (
     <section id="home" className="title-sequence-hero relative w-full overflow-hidden">
-      <div className="title-sequence-hero__stage">
+      <div ref={stageRef} className="title-sequence-hero__stage">
         <p className="title-sequence-hero__chapter" aria-hidden="true">
           Chapter 00
         </p>
@@ -73,6 +80,11 @@ const Hero = () => {
             </div>
           ))}
         </figure>
+
+        {/* One light source, lerped toward the pointer by use-hero-key-light.
+            Rakes the paper and the film frames; the wordmark keeps its solid
+            fill. */}
+        <div className="title-sequence-hero__keylight" aria-hidden="true" />
 
         <p className="title-sequence-hero__metadata">
           Medellín <span aria-hidden="true">·</span> ES / EN <span aria-hidden="true">·</span> UGC
