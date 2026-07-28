@@ -400,61 +400,20 @@
         ]
       }
     </script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://media.giselasaldarriaga.com" crossorigin />
-    <link rel="dns-prefetch" href="//media.giselasaldarriaga.com" />
-    <script>
-      (function () {
-        try {
-          var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-          if (conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) return;
-        } catch (_) {}
-        var isMobile = window.innerWidth < 768;
-        if (!isMobile) {
-          var preloadVideo = document.createElement('link');
-          preloadVideo.rel = 'preload';
-          preloadVideo.as = 'video';
-          preloadVideo.href = 'https://media.giselasaldarriaga.com/videos/previews/ugc-lifestyle-review-preview.mp4';
-          preloadVideo.crossOrigin = '';
-          preloadVideo.fetchPriority = 'high';
-          document.head.appendChild(preloadVideo);
-        }
-        var preloadPoster = document.createElement('link');
-        preloadPoster.rel = 'preload';
-        preloadPoster.as = 'image';
-        preloadPoster.href = 'https://media.giselasaldarriaga.com/videos/posters/ugc-lifestyle-review-poster.jpg';
-        preloadPoster.crossOrigin = '';
-        document.head.appendChild(preloadPoster);
-      })();
-    </script>
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..700&family=DM+Sans:wght@300..700&display=swap"
+      href="/fonts/dm-sans-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
     <link
       rel="preload"
-      as="image"
-      type="image/webp"
-      href="/uploads/gisela-hero-585.webp"
-      imagesrcset="/uploads/gisela-hero-400.webp 400w, /uploads/gisela-hero-585.webp 585w, /uploads/gisela-hero-640.webp 640w, /uploads/gisela-hero-800.webp 800w, /uploads/gisela-hero-1200.webp 1200w"
-      imagesizes="(min-width: 1280px) 400px, (min-width: 1024px) 380px, (min-width: 768px) 43vw, 76vw"
-      fetchpriority="high"
+      href="/fonts/cormorant-garamond-hero.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..700&family=DM+Sans:wght@300..700&display=swap"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..700&family=DM+Sans:wght@300..700&display=swap"
-      />
-    </noscript>
     <style>
       .boot-shell {
         min-height: 100vh;
@@ -665,6 +624,6 @@
         </article>
       </noscript>
     </div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/entry-home.tsx"></script>
   </body>
 </html>

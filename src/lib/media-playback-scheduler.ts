@@ -39,25 +39,8 @@ const getConnectionProfile = () => {
   };
 };
 
-const getPlaybackBudget = () => {
-  if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return 0;
-  if (typeof window === 'undefined') return 6;
-
-  const { constrained, slow } = getConnectionProfile();
-  if (constrained) return 1;
-
-  if (window.matchMedia('(max-width: 767px)').matches) return slow ? 1 : 2;
-  if (window.matchMedia('(max-width: 1023px)').matches) return slow ? 2 : 4;
-
-  const cores = navigator.hardwareConcurrency || 6;
-  if (slow) return 3;
-  if (cores >= 10) return 8;
-  if (cores >= 6) return 6;
-  return 4;
-};
-
 const reconcile = () => {
-  const budget = getPlaybackBudget();
+  const isHidden = typeof document !== 'undefined' && document.visibilityState === 'hidden';
   const activeEntries = [...entries.values()]
     .filter((entry) => entry.active)
     .sort((a, b) => {
@@ -66,7 +49,9 @@ const reconcile = () => {
       return a.createdAt - b.createdAt;
     });
 
-  const grantedIds = new Set(activeEntries.slice(0, budget).map((entry) => entry.id));
+  const theaterEntry = activeEntries.find((entry) => entry.priority === 'theater');
+  const selectedEntry = isHidden ? undefined : theaterEntry ?? activeEntries[0];
+  const grantedIds = new Set(selectedEntry ? [selectedEntry.id] : []);
   entries.forEach((entry) => {
     entry.setGranted(entry.active && grantedIds.has(entry.id));
   });

@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { useMediaPlaybackSlot } from '@/hooks/use-media-playback-slot';
 import type { MediaPlaybackPriority } from '@/lib/media-playback-scheduler';
+import { useMediaSession } from '@/components/media/MediaSessionProvider';
 
 type AdaptiveVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poster'> & {
   src: string;
@@ -21,11 +22,25 @@ type AdaptiveVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'p
   forcePause?: boolean;
   playbackPriority?: MediaPlaybackPriority;
   requestPlaybackSlot?: boolean;
+  activationQuery?: string;
 };
 
-const canPlayNativeHls = (video: HTMLVideoElement) =>
-  video.canPlayType('application/vnd.apple.mpegurl') !== '' ||
-  video.canPlayType('application/x-mpegURL') !== '';
+const shouldUseNativeHls = (video: HTMLVideoElement) => {
+  const canPlay =
+    video.canPlayType('application/vnd.apple.mpegurl') !== '' ||
+    video.canPlayType('application/x-mpegURL') !== '';
+  if (!canPlay || typeof navigator === 'undefined') return false;
+
+  const userAgent = navigator.userAgent;
+  const isIos =
+    /iPad|iPhone|iPod/u.test(userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isDesktopSafari =
+    /Safari/u.test(userAgent) &&
+    !/Chrome|Chromium|CriOS|Edg|OPR|FxiOS/u.test(userAgent);
+
+  return isIos || isDesktopSafari;
+};
 
 const attachFallbackSource = (video: HTMLVideoElement, src: string) => {
   if (video.getAttribute('src') === src) return;
@@ -51,6 +66,7 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
       forcePause = false,
       playbackPriority = 'preview',
       requestPlaybackSlot = true,
+      activationQuery,
       onCanPlay,
       onLoadedMetadata,
       ...props
@@ -58,10 +74,18 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
     forwardedRef,
   ) => {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const mediaSession = useMediaSession();
     const [isInViewport, setIsInViewport] = useState(loadStrategy === 'immediate');
     const [shouldLoad, setShouldLoad] = useState(loadStrategy === 'immediate');
-    const sourceEligible = shouldLoad && (!unloadWhenOffscreen || isInViewport);
-    const wantsPlaybackSlot = autoPlay && sourceEligible && isInViewport && !forcePause;
+    const [isActivationMatch, setIsActivationMatch] = useState(!activationQuery);
+    const sessionForcePause =
+      forcePause || (Boolean(mediaSession?.theaterActive) && playbackPriority !== 'theater');
+    const sourceEligible =
+      shouldLoad &&
+      isActivationMatch &&
+      (!unloadWhenOffscreen || isInViewport) &&
+      !sessionForcePause;
+    const wantsPlaybackSlot = autoPlay && sourceEligible && isInViewport;
     const hasPlaybackSlot = useMediaPlaybackSlot(
       wantsPlaybackSlot,
       playbackPriority,
@@ -69,9 +93,22 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
     );
     const shouldAttachSource =
       sourceEligible && (!autoPlay || !requestPlaybackSlot || hasPlaybackSlot);
-    const shouldPlay = autoPlay && shouldAttachSource && isInViewport && !forcePause && hasPlaybackSlot;
+    const shouldPlay = autoPlay && shouldAttachSource && isInViewport && hasPlaybackSlot;
 
     useImperativeHandle(forwardedRef, () => videoRef.current as HTMLVideoElement, []);
+
+    useEffect(() => {
+      if (!activationQuery) {
+        setIsActivationMatch(true);
+        return undefined;
+      }
+
+      const query = window.matchMedia(activationQuery);
+      const sync = () => setIsActivationMatch(query.matches);
+      sync();
+      query.addEventListener('change', sync);
+      return () => query.removeEventListener('change', sync);
+    }, [activationQuery]);
 
     useEffect(() => {
       const video = videoRef.current;
@@ -157,7 +194,7 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
         };
       }
 
-      if (canPlayNativeHls(video)) {
+      if (shouldUseNativeHls(video)) {
         // Safari/iOS play the .m3u8 directly. If that source errors (e.g. a
         // missing/404 master, or an incompletely uploaded ladder), fall back to
         // the progressive MP4 instead of leaving a broken video element.
@@ -175,7 +212,7 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
         };
       }
 
-      void import('hls.js')
+      void import('hls.js/light')
         .then(({ default: Hls }) => {
           if (cancelled) return;
           if (!Hls.isSupported()) {
@@ -184,32 +221,18 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
           }
 
           const hls = new Hls({
-            // Cap to the rendition that fits the element's CSS size (ignore the
-            // retina DPR multiplier so a 1080p screen doesn't pull 4K for a loop).
+            // Ambient loops match CSS pixels; theater playback includes device
+            // pixel ratio so high-density displays receive a genuinely sharp
+            // rendition without forcing the highest level on every device.
             capLevelToPlayerSize: true,
-            ignoreDevicePixelRatio: true,
+            ignoreDevicePixelRatio: playbackPriority !== 'theater',
             startLevel: -1,
-            // Assume a fast connection so playback OPENS at a high rendition
-            // instead of ramping up from 360p (the visible "low then high" jump).
-            abrEwmaDefaultEstimate: 8_000_000,
-            maxBufferLength: playbackPriority === 'theater' ? 30 : 8,
-            maxMaxBufferLength: playbackPriority === 'theater' ? 60 : 16,
+            maxBufferLength: playbackPriority === 'theater' ? 16 : 5,
+            maxMaxBufferLength: playbackPriority === 'theater' ? 30 : 10,
           });
           hlsInstance = hls;
           hls.on(Hls.Events.ERROR, (_event, data) => {
             if (data.fatal) fallbackToMp4();
-          });
-          hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            if (cancelled) return;
-            // Highest rendition allowed by the player size (no low-quality ramp).
-            const topLevel = hls.maxAutoLevel >= 0 ? hls.maxAutoLevel : hls.levels.length - 1;
-            if (topLevel < 0) return;
-            hls.startLevel = topLevel;
-            // Background/hero loops pin to the top rendition (never ramp or drop).
-            // Theater starts at the top but keeps adaptivity for long playback.
-            if (playbackPriority !== 'theater') {
-              hls.currentLevel = topLevel;
-            }
           });
           hls.loadSource(hlsSrc);
           hls.attachMedia(video);
@@ -259,7 +282,8 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
       <video
         {...props}
         ref={videoRef}
-        poster={poster}
+        poster={isActivationMatch ? poster : undefined}
+        crossOrigin="anonymous"
         preload={shouldAttachSource ? preload : 'none'}
         autoPlay={shouldPlay}
         muted={muted}

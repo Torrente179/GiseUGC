@@ -1,46 +1,34 @@
 import { useEffect, useRef } from 'react';
-import { ensureAutoRefresh, loadGsap, shouldEnableRichMotion, whenIdle } from '@/lib/motion/gsap-core';
 
 /**
  * A 1.5px brand-teal thread along the very top of the viewport that fills
- * with reading progress. Desktop only, idle-loaded.
+ * with reading progress. Modern browsers use a compositor scroll timeline;
+ * the fallback writes once per scroll frame and is completely idle otherwise.
  */
 const ScrollProgressHairline = () => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!shouldEnableRichMotion()) return;
+    const el = ref.current;
+    if (!el || CSS.supports('animation-timeline: scroll()')) return undefined;
 
-    let cancelled = false;
-    let cleanup: (() => void) | undefined;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      el.style.setProperty('--scroll-progress', String(Math.min(1, window.scrollY / scrollable)));
+    };
+    const onScroll = () => {
+      if (frame === 0) frame = window.requestAnimationFrame(update);
+    };
 
-    const cancelIdle = whenIdle(async () => {
-      const { gsap, ScrollTrigger } = await loadGsap();
-      const el = ref.current;
-      if (cancelled || !el) return;
-
-      ensureAutoRefresh(ScrollTrigger);
-
-      const tween = gsap.fromTo(
-        el,
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          ease: 'none',
-          scrollTrigger: { start: 120, end: 'max', scrub: 0.4 },
-        },
-      );
-
-      cleanup = () => {
-        tween.scrollTrigger?.kill();
-        tween.kill();
-      };
-    });
-
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
     return () => {
-      cancelled = true;
-      cancelIdle();
-      cleanup?.();
+      if (frame !== 0) window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, []);
 

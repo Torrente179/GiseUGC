@@ -1,11 +1,10 @@
 import { Fragment } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '@/lib/locale-context';
 import { Link } from 'react-router-dom';
 import {
   getLegalPath,
-  getLocaleFromPath,
+  getServiceIdsInOrder,
   getServicePath,
-  type ServicePageId,
 } from '@/lib/locale-path';
 
 /* ── External URLs ── */
@@ -16,16 +15,8 @@ const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagra
 const tiktokUrl = import.meta.env.VITE_TIKTOK_URL ?? 'https://www.tiktok.com/@giselasaldarriaga';
 const linkedinUrl = import.meta.env.VITE_LINKEDIN_URL ?? 'https://www.linkedin.com/in/gisela-saldarriaga-molina-0417b8199/';
 
-const servicePageIds: ServicePageId[] = [
-  'bilingual-ugc-creator',
-  'spokesperson-videos',
-  'ugc-ads-tiktok-meta',
-  'ugc-testimonials-reviews',
-  'ugc-product-demo',
-  'ugc-problem-solution',
-  'ugc-lifestyle',
-  'ugc-broll-footage',
-];
+// Service links derive from the page registry (canonical order) — never re-listed here.
+const servicePageIds = getServiceIdsInOrder();
 
 /* ════════════════════════════════════════════════════════════════════
    FOOTER — Light-linen "bold close"
@@ -34,8 +25,7 @@ const servicePageIds: ServicePageId[] = [
    ════════════════════════════════════════════════════════════════════ */
 
 const Footer = () => {
-  const { t } = useTranslation();
-  const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
+  const { t, locale } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   const serviceLinks = servicePageIds.map((serviceId) => ({

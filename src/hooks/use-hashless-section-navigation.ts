@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import type { MouseEvent } from 'react';
-import { getLenis } from '@/lib/motion/smooth-scroll';
 
 let activeScrollFrameId: number | null = null;
 
@@ -47,14 +46,6 @@ const smoothScrollTo = (targetElement: HTMLElement, duration = 900) => {
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     window.scrollTo(0, targetY);
-    return;
-  }
-
-  // When Lenis owns the scroll (desktop), route through it so the eased
-  // anchor travel and the smooth-wheel pipeline never fight each other.
-  const lenis = getLenis();
-  if (lenis) {
-    lenis.scrollTo(targetY, { duration: 1.05 });
     return;
   }
 

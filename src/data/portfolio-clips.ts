@@ -36,7 +36,7 @@ export const r2HlsMaster = (filename: string, rendition: 'main' | 'mobile' | 'pr
   return `${R2_MEDIA_BASE_URL}/videos/hls/${encodeURIComponent(baseName)}/${rendition}/master.m3u8`;
 };
 
-export const servicePosterSrcFromMain = (mainSrc: string, fallbackSrc: string) => {
+const servicePosterOriginalSrcFromMain = (mainSrc: string, fallbackSrc: string) => {
   const filename = mainSrc.split('/').pop();
   if (!filename) return fallbackSrc;
   const decodedFilename = decodeURIComponent(filename);
@@ -45,8 +45,45 @@ export const servicePosterSrcFromMain = (mainSrc: string, fallbackSrc: string) =
   return `/uploads/videos/service-posters/${encodeURIComponent(baseName)}.jpg`;
 };
 
-export const getBestPosterSrc = (clip: ReelClip) =>
-  clip.highQualityPosterSrc ?? servicePosterSrcFromMain(clip.mainSrc, clip.posterSrc);
+export type PosterVariantFormat = 'avif' | 'webp' | 'jpg';
+export type PosterVariantWidth = 180 | 360 | 720 | 1080;
+
+const localPosterVariant = (
+  posterSrc: string,
+  width: PosterVariantWidth,
+  format: PosterVariantFormat,
+) => {
+  const match = posterSrc.match(/\/service-posters\/(.+)\.jpg(?:$|\?)/u);
+  if (!match?.[1]) return posterSrc;
+  let baseName = match[1];
+  try {
+    baseName = decodeURIComponent(baseName);
+  } catch {
+    // Preserve already-readable filenames if a malformed escape sneaks in.
+  }
+  return `/uploads/videos/poster-variants/v1/${encodeURIComponent(baseName)}-${width}.${format}`;
+};
+
+export const servicePosterSrcFromMain = (mainSrc: string, fallbackSrc: string) =>
+  localPosterVariant(servicePosterOriginalSrcFromMain(mainSrc, fallbackSrc), 720, 'webp');
+
+export const getOriginalBestPosterSrc = (clip: ReelClip) =>
+  clip.highQualityPosterSrc ?? servicePosterOriginalSrcFromMain(clip.mainSrc, clip.posterSrc);
+
+export const getPosterVariantSrc = (
+  clip: ReelClip,
+  width: PosterVariantWidth = 720,
+  format: PosterVariantFormat = 'webp',
+) => localPosterVariant(getOriginalBestPosterSrc(clip), width, format);
+
+export const getPosterVariantSrcSet = (
+  clip: ReelClip,
+  format: PosterVariantFormat,
+) => ([180, 360, 720, 1080] as const)
+  .map((width) => `${getPosterVariantSrc(clip, width, format)} ${width}w`)
+  .join(', ');
+
+export const getBestPosterSrc = (clip: ReelClip) => getPosterVariantSrc(clip, 720, 'webp');
 
 // Small locally-hosted 280w webp thumbs used by the Hero mobile 4-tile strip.
 // Derived from the R2 poster URL so data stays single-sourced.

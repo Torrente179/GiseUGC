@@ -1,0 +1,13 @@
+Hoy les quiero hacer una demostración cómo es una conversación real con un voice voice de Calvotea.
+Hola, usted se ha comunicado con la clínica dental del Dr. Araujo. Dime, ¿cómo te llamas?
+Hola, me llamo Gisela.
+Hola Gisela, un placer. ¿En qué puedo ayudarte hoy?
+Puedo ayudarte a agendar o cancelar una cita, consultar tarifas o informarte sobre la dirección de la clínica.
+Ahora, recuerda que atendemos de lunes a viernes, de 9 de la mañana a 6 de la tarde y los sábados de 10 a 2 del mediodía.
+Laura, por favor, dame la dirección de la clínica.
+Claro Gisela, la dirección de la clínica es Canaleja 68 en Barcelona. ¿Hay algo más en lo que pueda ayudarte?
+No Laura, muchísimas gracias.
+Gracias a ti Gisela por contactar con la consulta del Dr. Fernando Araujo.
+Hasta pronto.
+Si vieron, así de fácil es hablar con un VoiceBot de Calvotia.
+Mientras atiende tus pacientes, estás tranquilo en la casa disfrutando con tu familia.

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { AnimatePresence, m, useReducedMotion } from 'framer-motion';
+import { useTranslation } from '@/lib/locale-context';
 import useEmblaCarousel from 'embla-carousel-react';
 import { X } from 'lucide-react';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
-import { blurRevealUp, staggerContainer } from '@/components/motion/variants';
-import { scrollToY, startSmoothScroll, stopSmoothScroll } from '@/lib/motion/smooth-scroll';
+import { scrollToY } from '@/lib/motion/native-scroll';
+import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
+import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 
 interface TestimonialImage {
   id: number;
@@ -82,7 +82,7 @@ const MarqueeRow = ({
               key={`${item.id}-${i}`}
               type="button"
               onClick={() => onClickItem(originalIndex)}
-              className="testimonial-card group relative shrink-0 overflow-hidden rounded-xl md:rounded-2xl border border-border/30 bg-card/80 shadow-sm transition-all duration-300 hover:border-primary/20 hover:shadow-md hover:shadow-primary/[0.04] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-zoom-in"
+              className="testimonial-card group relative shrink-0 overflow-hidden rounded-xl md:rounded-2xl border border-border/30 bg-card/80 shadow-sm transition-[transform,border-color,box-shadow] duration-300 hover:border-primary/20 hover:shadow-md hover:shadow-primary/[0.04] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-zoom-in"
               style={{
                 width: 'clamp(260px, 28vw, 380px)',
               }}
@@ -136,10 +136,27 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
     duration: reduceMotion ? 0 : 24,
   });
   const [selected, setSelected] = useState(startIndex);
+  const [isClosing, setIsClosing] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const closeTimerRef = useRef<number | null>(null);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const requestClose = useCallback(() => {
+    if (reduceMotion) {
+      onClose();
+      return;
+    }
+    setIsClosing((closing) => {
+      if (closing) return closing;
+      closeTimerRef.current = window.setTimeout(onClose, 240);
+      return true;
+    });
+  }, [onClose, reduceMotion]);
+
+  useEffect(() => () => {
+    if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
+  }, []);
 
   // Keep the active-slide highlight in sync with embla.
   useEffect(() => {
@@ -160,7 +177,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
-        onClose();
+        requestClose();
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
         scrollNext();
@@ -186,27 +203,19 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose, scrollNext, scrollPrev]);
-
-  const transition = reduceMotion
-    ? { duration: 0 }
-    : { duration: 0.42, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
+  }, [requestClose, scrollNext, scrollPrev]);
 
   return (
-    <m.div
+    <div
       ref={rootRef}
       role="dialog"
       aria-modal="true"
       aria-label={labels.dialog}
       tabIndex={-1}
-      className="fixed inset-0 z-[10000] flex flex-col bg-black/85 backdrop-blur-xl outline-none"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: reduceMotion ? 0 : 0.28 }}
+      className={`testimonial-lightbox fixed inset-0 z-[10000] flex flex-col bg-black/94 outline-none ${isClosing ? 'is-closing' : ''} ${reduceMotion ? 'reduce-motion' : ''}`}
       onMouseDown={(e) => {
         // Backdrop click closes; clicks bubbling up from cards/buttons don't.
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) requestClose();
       }}
     >
       {/* Top bar: counter + close */}
@@ -218,9 +227,9 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
         </span>
         <button
           type="button"
-          onClick={onClose}
+          onClick={requestClose}
           aria-label={labels.close}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-black/65 text-white/80 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
         >
           <X className="h-5 w-5" />
         </button>
@@ -237,13 +246,8 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
                   key={item.id}
                   className="flex min-w-0 flex-[0_0_90%] items-center justify-center px-2 sm:flex-[0_0_74%] sm:px-3 lg:flex-[0_0_60%]"
                 >
-                  <m.figure
-                    className="relative max-h-full overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl shadow-black/40"
-                    animate={{
-                      scale: isActive ? 1 : 0.9,
-                      opacity: isActive ? 1 : 0.35,
-                    }}
-                    transition={transition}
+                  <figure
+                    className={`testimonial-lightbox-card relative max-h-full overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl shadow-black/40 ${isActive ? 'is-active' : ''}`}
                   >
                     <div className="max-h-[78vh] overflow-y-auto overscroll-contain">
                       <img
@@ -257,7 +261,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
                         draggable={false}
                       />
                     </div>
-                  </m.figure>
+                  </figure>
                 </div>
               );
             })}
@@ -269,7 +273,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
           type="button"
           onClick={scrollPrev}
           aria-label={labels.prev}
-          className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white/85 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:left-6 md:h-12 md:w-12"
+          className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/65 text-white/85 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:left-6 md:h-12 md:w-12"
         >
           <svg className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -279,7 +283,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
           type="button"
           onClick={scrollNext}
           aria-label={labels.next}
-          className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white/85 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:right-6 md:h-12 md:w-12"
+          className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/65 text-white/85 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:right-6 md:h-12 md:w-12"
         >
           <svg className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -297,7 +301,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
               onClick={() => emblaApi?.scrollTo(i)}
               aria-label={`${labels.dialog} ${i + 1}`}
               aria-current={i === selected}
-              className={`h-1.5 shrink-0 rounded-full transition-all duration-300 ${
+              className={`h-1.5 shrink-0 rounded-full transition-[width,background-color] duration-300 ${
                 i === selected ? 'w-6 bg-white' : 'w-1.5 bg-white/30 hover:bg-white/50'
               }`}
             />
@@ -305,22 +309,51 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
         </div>
         <p className="text-xs tracking-wide text-white/40">{labels.hint}</p>
       </div>
-    </m.div>
+    </div>
   );
 };
 
 /* ─── Main Component ─── */
 const Testimonials = () => {
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = usePrefersReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRevealRef = useScrollReveal<HTMLDivElement>();
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [isSectionActive, setIsSectionActive] = useState(false);
 
   const reduceMotion = !!shouldReduceMotion;
   const isOpen = zoomedIndex !== null;
 
-  // Pause the marquee on hover, reduced motion, or while the viewer is open.
-  const effectivePaused = isPaused || reduceMotion || isOpen;
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || typeof IntersectionObserver === 'undefined') {
+      setIsSectionActive(document.visibilityState === 'visible');
+      return undefined;
+    }
+
+    let intersects = false;
+    const sync = () => setIsSectionActive(intersects && document.visibilityState === 'visible');
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        intersects = Boolean(entry?.isIntersecting);
+        sync();
+      },
+      { rootMargin: '320px 0px' },
+    );
+    observer.observe(section);
+    document.addEventListener('visibilitychange', sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', sync);
+    };
+  }, []);
+
+  // Offscreen CSS animations otherwise keep consuming compositor time after
+  // this deferred section first mounts.
+  const effectivePaused =
+    isPaused || reduceMotion || isOpen || !isSectionActive;
 
   // Lock body scroll while the viewer is open. Managed here (not inside the
   // viewer's unmount) so the lock releases the instant the viewer closes —
@@ -348,7 +381,6 @@ const Testimonials = () => {
     body.style.width = '100%';
     body.style.overflow = 'hidden';
     if (scrollbarGap > 0) body.style.paddingRight = `${scrollbarGap}px`;
-    stopSmoothScroll();
     return () => {
       body.style.position = prev.position;
       body.style.top = prev.top;
@@ -358,35 +390,25 @@ const Testimonials = () => {
       body.style.overflow = prev.overflow;
       body.style.paddingRight = prev.paddingRight;
       scrollToY(scrollY, { immediate: true });
-      startSmoothScroll();
     };
   }, [isOpen]);
 
   return (
-    <section id="testimonials" className="studio-section bg-background overflow-hidden">
+    <section ref={sectionRef} id="testimonials" className="studio-section bg-background overflow-hidden">
       <div className="studio-container">
         {/* Header */}
-        <m.div
-          className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8 md:mb-10"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer(0.12, 0.04)}
-        >
+        <div ref={headerRevealRef} className="svc-reveal flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8 md:mb-10">
           <div>
-            <m.p className="section-label text-muted-foreground mb-3" variants={blurRevealUp(14, 0.56)}>
+            <p className="section-label text-muted-foreground mb-3">
               {t('testimonials.sectionSubtitle')}
-            </m.p>
+            </p>
             <h2 className="studio-title">
               <SplitTextReveal text={t('testimonials.sectionTitle')} delay={0.08} />
             </h2>
           </div>
 
           {/* Proof badge */}
-          <m.div
-            className="flex items-center gap-3"
-            variants={blurRevealUp(18, 0.62)}
-          >
+          <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5">
               {[...Array(5)].map((_, i) => {
                 const fillPercent = Math.max(0, Math.min(100, (FIVERR_AGGREGATE_RATING - i) * 100));
@@ -410,25 +432,15 @@ const Testimonials = () => {
               <span className="mx-1.5 text-border/60">·</span>
               {t('testimonials.reviewCount', { count: FIVERR_REVIEW_COUNT })}
             </span>
-          </m.div>
-        </m.div>
+          </div>
+        </div>
 
-        <m.div
-          className="studio-rule mb-6 md:mb-8"
-          initial={{ opacity: 0, scaleX: 0.7 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.62 }}
-        />
+        <div className="studio-rule mb-6 md:mb-8" />
       </div>
 
       {/* Marquee area — full bleed */}
-      <m.div
-        className="relative"
-        initial={{ opacity: 0, y: 22 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.68 }}
+      <div
+        className="testimonials-content-enter relative"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onFocus={() => setIsPaused(true)}
@@ -464,27 +476,25 @@ const Testimonials = () => {
             {t('testimonials.hoverHint')}
           </p>
         </div>
-      </m.div>
+      </div>
 
       {/* Zoom viewer */}
-      <AnimatePresence>
-        {zoomedIndex !== null && (
-          <Lightbox
-            key="testimonial-lightbox"
-            images={TESTIMONIAL_IMAGES}
-            startIndex={zoomedIndex}
-            onClose={() => setZoomedIndex(null)}
-            reduceMotion={reduceMotion}
-            labels={{
-              prev: t('testimonials.ariaPrev'),
-              next: t('testimonials.ariaNext'),
-              close: t('testimonials.ariaClose'),
-              dialog: t('testimonials.ariaDialog'),
-              hint: t('testimonials.swipeHint'),
-            }}
-          />
-        )}
-      </AnimatePresence>
+      {zoomedIndex !== null && (
+        <Lightbox
+          key="testimonial-lightbox"
+          images={TESTIMONIAL_IMAGES}
+          startIndex={zoomedIndex}
+          onClose={() => setZoomedIndex(null)}
+          reduceMotion={reduceMotion}
+          labels={{
+            prev: t('testimonials.ariaPrev'),
+            next: t('testimonials.ariaNext'),
+            close: t('testimonials.ariaClose'),
+            dialog: t('testimonials.ariaDialog'),
+            hint: t('testimonials.swipeHint'),
+          }}
+        />
+      )}
     </section>
   );
 };

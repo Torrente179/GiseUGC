@@ -242,3 +242,74 @@ export const getLegalPageRouteEntries = () => {
     { pageId, locale: 'en' as SiteLocale, path: LEGAL_PATHS[pageId].en },
   ]);
 };
+
+/* ════════════════════════════════════════════════════════════════════
+   PAGE REGISTRY — single source of truth for "what pages exist"
+   ────────────────────────────────────────────────────────────────────
+   Every derived surface (Vite HTML inputs, sitemap.xml, llms.txt, the
+   static boot shells, and in-app nav lists) is generated from or iterates
+   over this registry so the page set can never drift between surfaces.
+   This module stays pure TS (no React, no import.meta) so build tooling
+   — vite.config.ts and the scripts/ generators — can import it directly.
+   ════════════════════════════════════════════════════════════════════ */
+
+export type PageFamily = 'home' | 'service' | 'vertical' | 'resource' | 'legal';
+
+export type PageRegistryEntry = {
+  family: PageFamily;
+  /** Page id within its family. The single home page uses id 'home'. */
+  id: string;
+  /** Canonical editorial order within the family (insertion order of the path maps). */
+  order: number;
+  paths: Record<SiteLocale, string>;
+};
+
+const buildFamilyEntries = (
+  family: PageFamily,
+  paths: Record<string, Record<SiteLocale, string>>,
+): PageRegistryEntry[] =>
+  Object.entries(paths).map(([id, localePaths], order) => ({ family, id, order, paths: localePaths }));
+
+export const PAGE_REGISTRY: PageRegistryEntry[] = [
+  { family: 'home', id: 'home', order: 0, paths: HOME_PATHS },
+  ...buildFamilyEntries('service', SERVICE_PATHS),
+  ...buildFamilyEntries('vertical', VERTICAL_PATHS),
+  ...buildFamilyEntries('resource', RESOURCE_PATHS),
+  ...buildFamilyEntries('legal', LEGAL_PATHS),
+];
+
+export const SITE_LOCALES: readonly SiteLocale[] = ['es', 'en'] as const;
+
+/** Map a canonical locale path to its static HTML entry file, relative to the project root. */
+const entryFileForPath = (localePath: string): string => {
+  const trimmed = localePath.replace(/^\/+|\/+$/g, '');
+  return trimmed === '' ? 'index.html' : `${trimmed}/index.html`;
+};
+
+/** Stable, unique Rollup input key for a page + locale (used for chunk naming only). */
+const entrypointKey = (entry: PageRegistryEntry, locale: SiteLocale): string =>
+  `${entry.family}-${entry.id}-${locale}`;
+
+/**
+ * Vite `rollupOptions.input` map: key → root-relative HTML path, for every page in
+ * both locales. Consumed by vite.config.ts so the 40+ MPA entrypoints are never
+ * hand-listed.
+ */
+export const getAllEntrypointPaths = (): Record<string, string> => {
+  const inputs: Record<string, string> = {};
+  for (const entry of PAGE_REGISTRY) {
+    for (const locale of SITE_LOCALES) {
+      inputs[entrypointKey(entry, locale)] = entryFileForPath(entry.paths[locale]);
+    }
+  }
+  return inputs;
+};
+
+const getFamilyIdsInOrder = (family: PageFamily): string[] =>
+  PAGE_REGISTRY.filter((entry) => entry.family === family).map((entry) => entry.id);
+
+/** Service ids in canonical registry order. Replaces hand-listed arrays in nav/footer. */
+export const getServiceIdsInOrder = (): ServicePageId[] => getFamilyIdsInOrder('service') as ServicePageId[];
+export const getVerticalIdsInOrder = (): VerticalPageId[] => getFamilyIdsInOrder('vertical') as VerticalPageId[];
+export const getResourceIdsInOrder = (): ResourcePageId[] => getFamilyIdsInOrder('resource') as ResourcePageId[];
+export const getLegalIdsInOrder = (): LegalPageId[] => getFamilyIdsInOrder('legal') as LegalPageId[];

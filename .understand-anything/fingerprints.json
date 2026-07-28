@@ -1,0 +1,7549 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "7414edfd7281cee11fe0b50abe49d231e94fcddb",
+  "generatedAt": "2026-06-04T10:20:42.108Z",
+  "files": {
+    ".env.example": {
+      "filePath": ".env.example",
+      "contentHash": "f7b3c99938620da18c4e408f9053da301ccbd741267e9d7df4725f53b30788e6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": true
+    },
+    ".vercel-rebuild-trigger.txt": {
+      "filePath": ".vercel-rebuild-trigger.txt",
+      "contentHash": "8f1be182a47a31e377fd348cee8210f19d670f630383514e822cb917726bab93",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "components.json": {
+      "filePath": "components.json",
+      "contentHash": "29514fc95e437dc002c5ef6edc41352ced461cc43b051da3976c71c13d0ad2e4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "content/video-transcripts/main/ugc-ai-services-review.txt": {
+      "filePath": "content/video-transcripts/main/ugc-ai-services-review.txt",
+      "contentHash": "c30c2cf0d0c415e258cb56f33de38deaf5f99dd8acea0146040f065a5335d7bc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 5,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-brand-spokesperson.txt": {
+      "filePath": "content/video-transcripts/main/ugc-brand-spokesperson.txt",
+      "contentHash": "d25939718e1dc7c84a037a0659d40cab3f4dfcd1961596d575c97fad8468d7a2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-business-promotion.txt": {
+      "filePath": "content/video-transcripts/main/ugc-business-promotion.txt",
+      "contentHash": "a2d6685839dabd67da16a6f5a7a99ab13cb7dc2c63a673d046fc472ceef8549b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-clothing-showcase-1.txt": {
+      "filePath": "content/video-transcripts/main/ugc-clothing-showcase-1.txt",
+      "contentHash": "b65679ed64df2e73deb4e0d874f76c554a6aa9e2403ebbb5b99404aeb9a1f4ef",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-clothing-showcase-2.txt": {
+      "filePath": "content/video-transcripts/main/ugc-clothing-showcase-2.txt",
+      "contentHash": "b65679ed64df2e73deb4e0d874f76c554a6aa9e2403ebbb5b99404aeb9a1f4ef",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-clothing-showcase-3.txt": {
+      "filePath": "content/video-transcripts/main/ugc-clothing-showcase-3.txt",
+      "contentHash": "b65679ed64df2e73deb4e0d874f76c554a6aa9e2403ebbb5b99404aeb9a1f4ef",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-creatine-supplement-review.txt": {
+      "filePath": "content/video-transcripts/main/ugc-creatine-supplement-review.txt",
+      "contentHash": "34a8dabc6db62d6a0001ddc519f6623625fcf8413c1d539696cded039bedaf88",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-lifestyle-review-2.txt": {
+      "filePath": "content/video-transcripts/main/ugc-lifestyle-review-2.txt",
+      "contentHash": "634ecb3b366d327b1dd027e19ad0e80b78784e10728b4155e7d2c9aedf1517cb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-lifestyle-review-3.txt": {
+      "filePath": "content/video-transcripts/main/ugc-lifestyle-review-3.txt",
+      "contentHash": "e6c328a5eb09cf04037ed5f67916dab25dd7a9f821301086e715cc1929f57128",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-lifestyle-review.txt": {
+      "filePath": "content/video-transcripts/main/ugc-lifestyle-review.txt",
+      "contentHash": "a5f2dacc375def3a077d917873476a15eb4080aa3f1ce6132697d66010772289",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-services-presentation.txt": {
+      "filePath": "content/video-transcripts/main/ugc-services-presentation.txt",
+      "contentHash": "655eac7328793f7093fce0800cbe77c818a356a3f57b1c0acd89ee489e36b640",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-voicebot-review.txt": {
+      "filePath": "content/video-transcripts/main/ugc-voicebot-review.txt",
+      "contentHash": "9b57637f7a714d0698ce9872cb0501107604765caa12c40f6224b33df3afc1a3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/main/ugc-voiceover-bots-review.txt": {
+      "filePath": "content/video-transcripts/main/ugc-voiceover-bots-review.txt",
+      "contentHash": "5d5dfe5a15c9128a7884a1df6e34f20b609a75d1517aca9bd2bddfa76cafb61a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/manifest-all-videos.csv": {
+      "filePath": "content/video-transcripts/manifest-all-videos.csv",
+      "contentHash": "bf4c2c2177e122d644fc9461716fbb4a17f125c819f90829fc947cd4c8f1e5cd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 63,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/manifest.csv": {
+      "filePath": "content/video-transcripts/manifest.csv",
+      "contentHash": "42a17b0bf62d49d330d262480481104557a53d44dd9d83189f1625241a9ab19c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 31,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/Adds marketing.txt": {
+      "filePath": "content/video-transcripts/nuevos/Adds marketing.txt",
+      "contentHash": "919a1927ae5cf34da1f23f4126947fba67d20d9965c6bae0e6976271ba4b8975",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/Contenido Tik Tok.txt": {
+      "filePath": "content/video-transcripts/nuevos/Contenido Tik Tok.txt",
+      "contentHash": "09b280885294b8268f4c43ca83c22f2a9c18d9697151bf015ffdddb841df294f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/Croma key plano cerrado.txt": {
+      "filePath": "content/video-transcripts/nuevos/Croma key plano cerrado.txt",
+      "contentHash": "9749ecce4864366e813675f011ab603a39598a63acfbfafe61e1386dd212a820",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 6,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/Croma key sobrepuesto.txt": {
+      "filePath": "content/video-transcripts/nuevos/Croma key sobrepuesto.txt",
+      "contentHash": "72060fc8c756768e23eafe73cec08cd6827d6f93bda49d6436c7be8f71383d87",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 5,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/Croma Key.txt": {
+      "filePath": "content/video-transcripts/nuevos/Croma Key.txt",
+      "contentHash": "09bc4188eb20ee9d67e5e1570d9e15a06fada69d9f92f66f85e9091b71ee8c97",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/DEEDCEA0-6288-4AB4-B5E5-39F8A50822E7.txt": {
+      "filePath": "content/video-transcripts/nuevos/DEEDCEA0-6288-4AB4-B5E5-39F8A50822E7.txt",
+      "contentHash": "0189a5435a62d7df2aa12a961a29798bdb86d18132768f6c1ad9650c365566c1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/Detrás de cámaras.txt": {
+      "filePath": "content/video-transcripts/nuevos/Detrás de cámaras.txt",
+      "contentHash": "bdb9b95e51e99f60f8c23dce67f98b9c4cf804cac6cb861b742e31a877037668",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 6,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/IMG_5793.txt": {
+      "filePath": "content/video-transcripts/nuevos/IMG_5793.txt",
+      "contentHash": "686f2271c35a2c742a42c63cc9c9c12fe875537fd8393508ad61386b1d3855f2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/IMG_8435.txt": {
+      "filePath": "content/video-transcripts/nuevos/IMG_8435.txt",
+      "contentHash": "e6f7b207f4ff962ddcfba50346420c136be227f7e6987c0dcc4f9e6973e3f893",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 5,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/Reporte noticioso USA.txt": {
+      "filePath": "content/video-transcripts/nuevos/Reporte noticioso USA.txt",
+      "contentHash": "8b02312aabfbca26436607914258f98a3589353da0cc87e3b81a1ec9aaf7a6a4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 9,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.02.34.txt": {
+      "filePath": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.02.34.txt",
+      "contentHash": "5f984a6cc89f77e6066e4a742ed0c65ed504b9565a3994fee2d08036e8f612d9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.39.53.txt": {
+      "filePath": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.39.53.txt",
+      "contentHash": "8a6ba163271900cc178b6d15d918d90958cb78dc4ee17879dd68d5497248eae1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 10,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.42.58.txt": {
+      "filePath": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.42.58.txt",
+      "contentHash": "d1def88999744870d3d4705920bde8ab56034c8753554b14c02303682ea0509f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 5,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 14.08.01.txt": {
+      "filePath": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 14.08.01.txt",
+      "contentHash": "95f51e0ddf038002e5ae2a89c9ad6cb9ac3cb196b92464aef052700958680d60",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 8,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 14.09.00.txt": {
+      "filePath": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 14.09.00.txt",
+      "contentHash": "e2626145209384c1c382b11c8a9d65469c1954dd8c0f306bf8f9a8eec612ad7b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 5,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 16.05.21.txt": {
+      "filePath": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 16.05.21.txt",
+      "contentHash": "da629d69e8b9531ba26aeac3bc01427c75fc545893ad988a6480219f44ede818",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 5,
+      "hasStructuralAnalysis": false
+    },
+    "content/video-transcripts/README.md": {
+      "filePath": "content/video-transcripts/README.md",
+      "contentHash": "50d78017958312fad19febc516a6b583aa5c670946b49e0cd965ece4e613775c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "en/index.html": {
+      "filePath": "en/index.html",
+      "contentHash": "ff3d52549ab760313e68da6d6ac1bbbde548f6fee6d72a453659969cfc786dc4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 671,
+      "hasStructuralAnalysis": false
+    },
+    "en/privacy-policy/index.html": {
+      "filePath": "en/privacy-policy/index.html",
+      "contentHash": "c38bb359c0ab2a74fa8207a44de987f4ce7260f3abfd22a11c78276eb88091e3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 309,
+      "hasStructuralAnalysis": false
+    },
+    "en/resources/how-to-hire-ugc-creator/index.html": {
+      "filePath": "en/resources/how-to-hire-ugc-creator/index.html",
+      "contentHash": "ff7c98cd835dc9dc9d9172a74b878b70062b78b1342916f1b9d0761691e31e52",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 104,
+      "hasStructuralAnalysis": false
+    },
+    "en/resources/ugc-ad-formats-guide/index.html": {
+      "filePath": "en/resources/ugc-ad-formats-guide/index.html",
+      "contentHash": "e04c523d15046e67329879b16d6c73ab9decf371eef33a554caa82ea28216520",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 107,
+      "hasStructuralAnalysis": false
+    },
+    "en/resources/ugc-vs-influencer-marketing/index.html": {
+      "filePath": "en/resources/ugc-vs-influencer-marketing/index.html",
+      "contentHash": "8d54af5d2fcd365285b0426665c704918fa1732f7bed48e49c413912ac861c49",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 152,
+      "hasStructuralAnalysis": false
+    },
+    "en/resources/what-is-ugc/index.html": {
+      "filePath": "en/resources/what-is-ugc/index.html",
+      "contentHash": "dc13056086769cf8ea3ed6bc3dcdaa96fbec4198507985daf8e0cfef94a04acd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 104,
+      "hasStructuralAnalysis": false
+    },
+    "en/services/bilingual-ugc-creator/index.html": {
+      "filePath": "en/services/bilingual-ugc-creator/index.html",
+      "contentHash": "ad267d57b4af30c95b3942063bfe59153bd6d6c36dcdbf44c4b1c9be0eaf771c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 358,
+      "hasStructuralAnalysis": false
+    },
+    "en/services/lifestyle-ugc-organic-content/index.html": {
+      "filePath": "en/services/lifestyle-ugc-organic-content/index.html",
+      "contentHash": "fa6c85d2ec2de5b30697f879a2393cba79809012c53e808b68e9a4b9c31e70d3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 272,
+      "hasStructuralAnalysis": false
+    },
+    "en/services/spokesperson-videos/index.html": {
+      "filePath": "en/services/spokesperson-videos/index.html",
+      "contentHash": "a93dd8f9a619dbaa360cebada498da829980fc631bcbc771449656c2f7c9e163",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 358,
+      "hasStructuralAnalysis": false
+    },
+    "en/services/ugc-ads-tiktok-meta/index.html": {
+      "filePath": "en/services/ugc-ads-tiktok-meta/index.html",
+      "contentHash": "b71b4c66d36ccce813cae717863361c9ad07966cc6f87d26d18c76e91d31dd5a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 358,
+      "hasStructuralAnalysis": false
+    },
+    "en/services/ugc-b-roll-footage/index.html": {
+      "filePath": "en/services/ugc-b-roll-footage/index.html",
+      "contentHash": "a3bedaf32161e365a02a95289b7e5979b28c171f93202a2821a10a152a5ceb50",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 272,
+      "hasStructuralAnalysis": false
+    },
+    "en/services/ugc-problem-solution/index.html": {
+      "filePath": "en/services/ugc-problem-solution/index.html",
+      "contentHash": "faebbbf95881319dfa9f9ea80312932c224dd4247c742e10f4b0deeeeee6c321",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 272,
+      "hasStructuralAnalysis": false
+    },
+    "en/services/ugc-product-demo/index.html": {
+      "filePath": "en/services/ugc-product-demo/index.html",
+      "contentHash": "141013b6521f0bdf4805950da58f3d00569179fec812942a88e7eb321f4805af",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 272,
+      "hasStructuralAnalysis": false
+    },
+    "en/services/ugc-testimonials-reviews/index.html": {
+      "filePath": "en/services/ugc-testimonials-reviews/index.html",
+      "contentHash": "4d189e9559d20530be0eb3de4721ed89eea79e1fee6b5391408125ec351ffd20",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 358,
+      "hasStructuralAnalysis": false
+    },
+    "en/terms-and-content-use/index.html": {
+      "filePath": "en/terms-and-content-use/index.html",
+      "contentHash": "2188e728aeb7c079f2ee390419bf47b49dac1af39c2eeb8c17c5d6b09e0622be",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 309,
+      "hasStructuralAnalysis": false
+    },
+    "en/verticals/beauty-ugc-creator/index.html": {
+      "filePath": "en/verticals/beauty-ugc-creator/index.html",
+      "contentHash": "1d334152cc95553831eb0013babd92c257d7e55995e4dbd00d1a382a355c237a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 280,
+      "hasStructuralAnalysis": false
+    },
+    "en/verticals/ecommerce-ugc-creator/index.html": {
+      "filePath": "en/verticals/ecommerce-ugc-creator/index.html",
+      "contentHash": "128e37baac8a09c43d206471d274aac3157440495b5d6b4e41fe17c62189d8ce",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 280,
+      "hasStructuralAnalysis": false
+    },
+    "en/verticals/fashion-ugc-creator/index.html": {
+      "filePath": "en/verticals/fashion-ugc-creator/index.html",
+      "contentHash": "849a2f64ce0117c8356cf4d697ce8a0dd2fdcdd21b434308753fcdeab6d56028",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 280,
+      "hasStructuralAnalysis": false
+    },
+    "en/verticals/lifestyle-wellness-ugc-creator/index.html": {
+      "filePath": "en/verticals/lifestyle-wellness-ugc-creator/index.html",
+      "contentHash": "589f269949ec65cea6287994be94578bf8d69c302242fbead113abef62e9f71a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 280,
+      "hasStructuralAnalysis": false
+    },
+    "en/verticals/tech-saas-ugc-creator/index.html": {
+      "filePath": "en/verticals/tech-saas-ugc-creator/index.html",
+      "contentHash": "ca492d21a2231b575445c9887c9979a92453b69808fa9372a0f538a016731f6a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 280,
+      "hasStructuralAnalysis": false
+    },
+    "eslint.config.js": {
+      "filePath": "eslint.config.js",
+      "contentHash": "5a016705c1d9758fd11687906bc6426983abc607d1462fd7915d5bbc5cec099f",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@eslint/js",
+          "specifiers": [
+            "js"
+          ]
+        },
+        {
+          "source": "globals",
+          "specifiers": [
+            "globals"
+          ]
+        },
+        {
+          "source": "eslint-plugin-react-hooks",
+          "specifiers": [
+            "reactHooks"
+          ]
+        },
+        {
+          "source": "eslint-plugin-react-refresh",
+          "specifiers": [
+            "reactRefresh"
+          ]
+        },
+        {
+          "source": "typescript-eslint",
+          "specifiers": [
+            "tseslint"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": true
+    },
+    "index.html": {
+      "filePath": "index.html",
+      "contentHash": "d2c128b8dfe9fde2262aa201af68f59801a05b3092e0d3f68836e5f341fbe4d3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 700,
+      "hasStructuralAnalysis": false
+    },
+    "package.json": {
+      "filePath": "package.json",
+      "contentHash": "466032156ef7ffa5c7e8bccc54cb66f1a2a6270a42056718185ffc7bfc936d53",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 100,
+      "hasStructuralAnalysis": true
+    },
+    "politica-de-privacidad/index.html": {
+      "filePath": "politica-de-privacidad/index.html",
+      "contentHash": "7292cf64bf0640be016d04b8710993436c67d236a93d8677c176164b4382ac6e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 309,
+      "hasStructuralAnalysis": false
+    },
+    "postcss.config.js": {
+      "filePath": "postcss.config.js",
+      "contentHash": "190c877db466995bf1482f4a16abd06e04a89ede3119341e2a86ff96e1737b27",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": true
+    },
+    "PROJECT_REPORT.md": {
+      "filePath": "PROJECT_REPORT.md",
+      "contentHash": "abafeb6c8d0707c3fe971db58fe1198249d18caaae38583abc0ee3645d394279",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 333,
+      "hasStructuralAnalysis": true
+    },
+    "public/gtm-loader.js": {
+      "filePath": "public/gtm-loader.js",
+      "contentHash": "c0d560962219e2fbd978ec4c6dd1a5528a601c2be97febff06c860d51ae5d4c8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 66,
+      "hasStructuralAnalysis": true
+    },
+    "public/llms-full.txt": {
+      "filePath": "public/llms-full.txt",
+      "contentHash": "1d706d7a218073972a801ea57298b7ee5e5f4263fdebec3bede71907000c1631",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 352,
+      "hasStructuralAnalysis": false
+    },
+    "public/llms.txt": {
+      "filePath": "public/llms.txt",
+      "contentHash": "4675c114e687eda6ff7dab00f808a7140fcbd7c1217ca518ac63c2de940adaf7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 108,
+      "hasStructuralAnalysis": false
+    },
+    "public/locales/en/translation.json": {
+      "filePath": "public/locales/en/translation.json",
+      "contentHash": "149224a3df93cd67663dcfae401b2ce0ae3e710d29e7c2f9160a572da00f33b0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 335,
+      "hasStructuralAnalysis": true
+    },
+    "public/locales/es/translation.json": {
+      "filePath": "public/locales/es/translation.json",
+      "contentHash": "30a7fd4c18db2701d375e574306b649b37d58ef0ae9e99959233a83564f3b326",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 330,
+      "hasStructuralAnalysis": true
+    },
+    "public/robots.txt": {
+      "filePath": "public/robots.txt",
+      "contentHash": "0677fa5562e9bd87cf0ec2e59551683d752c8a68a62bfcd119627eadede996ce",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 44,
+      "hasStructuralAnalysis": false
+    },
+    "public/sitemap.xml": {
+      "filePath": "public/sitemap.xml",
+      "contentHash": "d41054e9a159b6972fa1600d3ae2ac39954b6a6e50da65d8cda387c90a02adcb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 365,
+      "hasStructuralAnalysis": false
+    },
+    "public/uploads/videos/nuevos/manifest.csv": {
+      "filePath": "public/uploads/videos/nuevos/manifest.csv",
+      "contentHash": "86235826f0d4a958de7a65361a2395386ca2f58e05dd5321bece7169ef9ac673",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": false
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "c621151756e35fe2e834f27612f123c47ccc2b1d6304dd5466706f832a188e67",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 146,
+      "hasStructuralAnalysis": true
+    },
+    "recursos/como-contratar-creadora-ugc/index.html": {
+      "filePath": "recursos/como-contratar-creadora-ugc/index.html",
+      "contentHash": "40c99168d48d4387214378595c4712448c545a3b0d44a27ea28eba9c85a571b9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 104,
+      "hasStructuralAnalysis": false
+    },
+    "recursos/formatos-ugc-ads/index.html": {
+      "filePath": "recursos/formatos-ugc-ads/index.html",
+      "contentHash": "a09cd841a081dbc6e173c2970e97a78b090412ab7f493c7fd45dde5da2ffff8d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 107,
+      "hasStructuralAnalysis": false
+    },
+    "recursos/que-es-ugc/index.html": {
+      "filePath": "recursos/que-es-ugc/index.html",
+      "contentHash": "e98806253091e86fb413991333cb7dcfeabf818b5380a7651d2257b1cd319af3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 104,
+      "hasStructuralAnalysis": false
+    },
+    "recursos/ugc-vs-influencer-marketing/index.html": {
+      "filePath": "recursos/ugc-vs-influencer-marketing/index.html",
+      "contentHash": "218d88c1d25c30af0afa5fc016485347168feb5e34b64d6c319dc28a9922fcae",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 152,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/encode-videos.sh": {
+      "filePath": "scripts/encode-videos.sh",
+      "contentHash": "6e116da30271fd799c923cac5141f8a14dcd10c5eb6dfe5a987d0ad516a4c0c3",
+      "functions": [
+        {
+          "name": "usage",
+          "params": [],
+          "exported": false,
+          "lineCount": 32
+        },
+        {
+          "name": "require_binary",
+          "params": [],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "file_size_bytes",
+          "params": [],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "human_size",
+          "params": [],
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "run_cmd",
+          "params": [],
+          "exported": false,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 337,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/enrich-service-entrypoints.mjs": {
+      "filePath": "scripts/enrich-service-entrypoints.mjs",
+      "contentHash": "95d8905206e11e2bec065e9ce9d8c642ab1c60142a05a6e6775f91b052d5c237",
+      "functions": [
+        {
+          "name": "escapeHtml",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "fs"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "path"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 567,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/expand-boot-shells.mjs": {
+      "filePath": "scripts/expand-boot-shells.mjs",
+      "contentHash": "4710b260b014e7179d502b13e1072b92711ddd91384c9406b3db83e8793d961f",
+      "functions": [
+        {
+          "name": "escapeHtml",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "generateBootShellExpansion",
+          "params": [
+            "entry"
+          ],
+          "exported": false,
+          "lineCount": 30
+        },
+        {
+          "name": "generateNoscriptExpansion",
+          "params": [
+            "entry"
+          ],
+          "exported": false,
+          "lineCount": 26
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "fs"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "path"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 762,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/framer-to-lazy-motion.py": {
+      "filePath": "scripts/framer-to-lazy-motion.py",
+      "contentHash": "4d996a2d9cea28a874d83b9e95612c7bd659bd79d367adccb6831d045cc248bd",
+      "functions": [
+        {
+          "name": "rewrite_imports",
+          "params": [
+            "source"
+          ],
+          "returnType": "tuple[str, bool]",
+          "exported": true,
+          "lineCount": 32
+        },
+        {
+          "name": "rewrite_usages",
+          "params": [
+            "source"
+          ],
+          "returnType": "tuple[str, bool]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "process_file",
+          "params": [
+            "path"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "pathlib"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        }
+      ],
+      "exports": [
+        "rewrite_imports",
+        "rewrite_usages",
+        "process_file",
+        "main"
+      ],
+      "totalLines": 110,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/generate-lqip.sh": {
+      "filePath": "scripts/generate-lqip.sh",
+      "contentHash": "55cbbc3a582f16314c7611a26839457241f926248d24865fd784bc58f6c139ec",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 104,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/generate-nuevos-r2-catalog.mjs": {
+      "filePath": "scripts/generate-nuevos-r2-catalog.mjs",
+      "contentHash": "60416579050827e066b209b705b1e8853dacdffa5a6ed598e86903dad002c455",
+      "functions": [
+        {
+          "name": "parseArgs",
+          "params": [
+            "argv"
+          ],
+          "exported": false,
+          "lineCount": 42
+        },
+        {
+          "name": "parseCsvLine",
+          "params": [
+            "line"
+          ],
+          "exported": false,
+          "lineCount": 27
+        },
+        {
+          "name": "toR2VideoUrl",
+          "params": [
+            "folder",
+            "filename"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "stripExtension",
+          "params": [
+            "filename"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "toReadableVideoTitle",
+          "params": [
+            "filename"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "inferVideoCategory",
+          "params": [
+            "filename"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "sanitizeOverrideTitle",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "sanitizeOverrideCategory",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "loadSeoOverrides",
+          "params": [
+            "overridesPath"
+          ],
+          "exported": false,
+          "lineCount": 29
+        },
+        {
+          "name": "escapeSingleQuotes",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "createRequestController",
+          "params": [
+            "timeoutMs"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "checkUrl",
+          "params": [
+            "url",
+            "timeoutMs"
+          ],
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "main",
+          "params": [],
+          "exported": false,
+          "lineCount": 237
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "existsSync",
+            "readFileSync",
+            "writeFileSync"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "path"
+          ]
+        },
+        {
+          "source": "node:process",
+          "specifiers": [
+            "process"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 416,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/generate-poster-thumbs.sh": {
+      "filePath": "scripts/generate-poster-thumbs.sh",
+      "contentHash": "5784bab9d9af0b90349f81babc119831ce87704673e4bacbc529f398833ac698",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/generate-service-posters.sh": {
+      "filePath": "scripts/generate-service-posters.sh",
+      "contentHash": "43e7e4c7d4f79e77eae300fb88c8cd81aa577df7bdcc9aa4d67779c0064e4925",
+      "functions": [
+        {
+          "name": "usage",
+          "params": [],
+          "exported": false,
+          "lineCount": 21
+        },
+        {
+          "name": "require_binary",
+          "params": [],
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "run_cmd",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 148,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/indexnow-ping.sh": {
+      "filePath": "scripts/indexnow-ping.sh",
+      "contentHash": "4ddba158bedcf031077122fae1acea7cb8b882ad76158b87130a9e92c18ca0ca",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 80,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/mobile-regression-check.mjs": {
+      "filePath": "scripts/mobile-regression-check.mjs",
+      "contentHash": "d31b3f362de4fbbfe5044ad9c849b03ab8a37d6da59d15c00f35627519fa63fb",
+      "functions": [
+        {
+          "name": "runStep",
+          "params": [
+            "label",
+            "command",
+            "args"
+          ],
+          "exported": false,
+          "lineCount": 11
+        },
+        {
+          "name": "statusIcon",
+          "params": [
+            "ok"
+          ],
+          "exported": false,
+          "lineCount": 1
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "node:child_process",
+          "specifiers": [
+            "spawnSync"
+          ]
+        },
+        {
+          "source": "node:fs",
+          "specifiers": [
+            "mkdirSync",
+            "writeFileSync"
+          ]
+        },
+        {
+          "source": "node:path",
+          "specifiers": [
+            "resolve"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 82,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/nuevos-seo-overrides.json": {
+      "filePath": "scripts/nuevos-seo-overrides.json",
+      "contentHash": "dced7e72a13a6387ee03e91a1ed0c3c81fc83b139e941b1027fc27f9982b36f0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 67,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/rewrite-analytics.py": {
+      "filePath": "scripts/rewrite-analytics.py",
+      "contentHash": "08e175bff2dacfa441204b0e5c2fbf1a5b71ead127f8ef7c720f7a05ad73806e",
+      "functions": [
+        {
+          "name": "rewrite",
+          "params": [
+            "path"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 16
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "pathlib"
+          ]
+        },
+        {
+          "source": "re",
+          "specifiers": [
+            "re"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        }
+      ],
+      "exports": [
+        "rewrite",
+        "main"
+      ],
+      "totalLines": 79,
+      "hasStructuralAnalysis": true
+    },
+    "servicios/b-roll-footage-ugc/index.html": {
+      "filePath": "servicios/b-roll-footage-ugc/index.html",
+      "contentHash": "bfcdd45d46bf5f633f450d34c85ac81a799eaf3926d0efd49a8a3f4744090328",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 272,
+      "hasStructuralAnalysis": false
+    },
+    "servicios/creadora-ugc-bilingue/index.html": {
+      "filePath": "servicios/creadora-ugc-bilingue/index.html",
+      "contentHash": "71db7cae0bafe3f7b4cf05cad5e27f2039a626588790e54c59804944d3fcf829",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 358,
+      "hasStructuralAnalysis": false
+    },
+    "servicios/demo-producto-ugc/index.html": {
+      "filePath": "servicios/demo-producto-ugc/index.html",
+      "contentHash": "731882598bf6ae6e08b9654a093efa9333aed84f885179b6760f116153832cca",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 274,
+      "hasStructuralAnalysis": false
+    },
+    "servicios/testimoniales-resenas-ugc/index.html": {
+      "filePath": "servicios/testimoniales-resenas-ugc/index.html",
+      "contentHash": "99b22b8408488a0d2df9278bb31968e42c3a083aadcbd12f099749f03042a05a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 358,
+      "hasStructuralAnalysis": false
+    },
+    "servicios/ugc-ads-tiktok-meta/index.html": {
+      "filePath": "servicios/ugc-ads-tiktok-meta/index.html",
+      "contentHash": "0b4b644359d33e009fd10af3a8f48c91925193cf363ac54f6406f866601aeca8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 358,
+      "hasStructuralAnalysis": false
+    },
+    "servicios/ugc-lifestyle/index.html": {
+      "filePath": "servicios/ugc-lifestyle/index.html",
+      "contentHash": "7a96bbad3c1e3cb1e5571c0441c595ca484020b090f05014034499273db64b14",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 272,
+      "hasStructuralAnalysis": false
+    },
+    "servicios/ugc-problema-solucion/index.html": {
+      "filePath": "servicios/ugc-problema-solucion/index.html",
+      "contentHash": "32bcdd7f95041bca01974fc0d1dae72baedf497243de124184e2cae617c5a423",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 272,
+      "hasStructuralAnalysis": false
+    },
+    "servicios/videos-de-portavoz/index.html": {
+      "filePath": "servicios/videos-de-portavoz/index.html",
+      "contentHash": "3118c936dfa444e277f8ad2230826f6fba2d713e6059bf83b6a421a1d11f29e0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 358,
+      "hasStructuralAnalysis": false
+    },
+    "src/App.css": {
+      "filePath": "src/App.css",
+      "contentHash": "a0715e0a09edbd0fbde65816a75e0fa0fc8b314c5260c0768c19bf3aac22621a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 43,
+      "hasStructuralAnalysis": false
+    },
+    "src/App.tsx": {
+      "filePath": "src/App.tsx",
+      "contentHash": "315697ee27de8568cbdd93ad0ea058d001ed8f1e7c31fb2099c01186c8ba12da",
+      "functions": [
+        {
+          "name": "jumpToY",
+          "params": [
+            "y"
+          ],
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "scrollToSection",
+          "params": [
+            "sectionId",
+            "attempts"
+          ],
+          "exported": false,
+          "lineCount": 14
+        },
+        {
+          "name": "AppRoutes",
+          "params": [],
+          "exported": false,
+          "lineCount": 154
+        },
+        {
+          "name": "App",
+          "params": [],
+          "exported": false,
+          "lineCount": 40
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "lazy",
+            "Suspense",
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useLocation",
+            "useNavigationType"
+          ]
+        },
+        {
+          "source": "@vercel/analytics/react",
+          "specifiers": [
+            "Analytics",
+            "track"
+          ]
+        },
+        {
+          "source": "@vercel/speed-insights/react",
+          "specifiers": [
+            "SpeedInsights"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "LazyMotion",
+            "domAnimation"
+          ]
+        },
+        {
+          "source": "@/pages/Index",
+          "specifiers": [
+            "Index"
+          ]
+        },
+        {
+          "source": "@/components/ThemeRuntimeSync",
+          "specifiers": [
+            "ThemeRuntimeSync"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getLocaleFromPath",
+            "getLegalPageRouteEntries",
+            "getResourcePageRouteEntries",
+            "getServicePageRouteEntries",
+            "getVerticalPageRouteEntries",
+            "isHomePath",
+            "normalizePathname"
+          ]
+        },
+        {
+          "source": "@/lib/referral-attribution",
+          "specifiers": [
+            "getChatGptReferralContext"
+          ]
+        },
+        {
+          "source": "@/lib/perf-debug",
+          "specifiers": [
+            "startMobileMediaPressureObserver"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 262,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/Contact.tsx": {
+      "filePath": "src/components/Contact.tsx",
+      "contentHash": "c6efac4cde9dce951cea098adf648ed0d4b5dac772eb22aacdfda2da0b1f16f9",
+      "functions": [
+        {
+          "name": "Contact",
+          "params": [],
+          "exported": false,
+          "lineCount": 192
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useState"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Mail",
+            "MessageSquare",
+            "Send"
+          ]
+        },
+        {
+          "source": "@/components/ui/use-toast",
+          "specifiers": [
+            "useToast"
+          ]
+        },
+        {
+          "source": "react-hook-form",
+          "specifiers": [
+            "useForm"
+          ]
+        },
+        {
+          "source": "@hookform/resolvers/zod",
+          "specifiers": [
+            "zodResolver"
+          ]
+        },
+        {
+          "source": "zod",
+          "specifiers": [
+            "* as z"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 213,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/CreatorAdvantage.tsx": {
+      "filePath": "src/components/CreatorAdvantage.tsx",
+      "contentHash": "20be4c7b61145c1bc8f1de61bbbdf90d2b5e7a6af94b347c3c1633d84a09b4b6",
+      "functions": [
+        {
+          "name": "getLqip",
+          "params": [
+            "url"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "CreatorAdvantage",
+          "params": [],
+          "exported": false,
+          "lineCount": 318
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState",
+            "MouseEvent"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Play"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "@/components/motion/PretextLineReveal",
+          "specifiers": [
+            "PretextLineReveal"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "revealUp",
+            "springHoverTransition",
+            "staggerContainer"
+          ]
+        },
+        {
+          "source": "@/hooks/use-hashless-section-navigation",
+          "specifiers": [
+            "useHashlessSectionNavigation"
+          ]
+        },
+        {
+          "source": "@/lib/contact-dock",
+          "specifiers": [
+            "isMobileViewport",
+            "toggleContactDock"
+          ]
+        },
+        {
+          "source": "@/components/media/LazyVideo",
+          "specifiers": [
+            "LazyVideo"
+          ]
+        },
+        {
+          "source": "@/data/video-lqip",
+          "specifiers": [
+            "VIDEO_LQIP"
+          ]
+        },
+        {
+          "source": "@/data/portfolio-clips",
+          "specifiers": [
+            "LEGACY_REEL_CLIPS",
+            "r2Poster",
+            "r2PreviewVideo"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 388,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/DesktopFiverrRatingSection.tsx": {
+      "filePath": "src/components/DesktopFiverrRatingSection.tsx",
+      "contentHash": "1eb69df905bfe0b48de7b77a71621169cb04ed968df11077c64eef6c042b9f04",
+      "functions": [
+        {
+          "name": "DesktopFiverrRatingSection",
+          "params": [],
+          "exported": false,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/components/FiverrRatingCard",
+          "specifiers": [
+            "FiverrRatingCard"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/FAQ.tsx": {
+      "filePath": "src/components/FAQ.tsx",
+      "contentHash": "73e98015c8cf74dd2e52da4da874f9fa16f4593897750d201518be562a951f7c",
+      "functions": [
+        {
+          "name": "FAQ",
+          "params": [],
+          "exported": false,
+          "lineCount": 75
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m"
+          ]
+        },
+        {
+          "source": "@/components/motion/SplitTextReveal",
+          "specifiers": [
+            "SplitTextReveal"
+          ]
+        },
+        {
+          "source": "@/components/ui/accordion",
+          "specifiers": [
+            "Accordion",
+            "AccordionContent",
+            "AccordionItem",
+            "AccordionTrigger"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "blurRevealUp",
+            "staggerContainer"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getLocaleFromPath"
+          ]
+        },
+        {
+          "source": "@/hooks/use-hashless-section-navigation",
+          "specifiers": [
+            "useHashlessSectionNavigation"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 96,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/FiverrRatingCard.tsx": {
+      "filePath": "src/components/FiverrRatingCard.tsx",
+      "contentHash": "a89732c4edb23674d3e97ca500cb158f3dcb5ac031ed657a77d5d618cedc1c68",
+      "functions": [
+        {
+          "name": "FiverrRatingCard",
+          "params": [
+            "{ className = '' }"
+          ],
+          "exported": false,
+          "lineCount": 97
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "MapPin",
+            "MessageCircle",
+            "Star"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 121,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/FloatingContactDock.tsx": {
+      "filePath": "src/components/FloatingContactDock.tsx",
+      "contentHash": "317b20bc32a1eb15c1e34c9c87e4f338036034e63f46a519aaf5dd89a15fbc44",
+      "functions": [
+        {
+          "name": "ThreadsIcon",
+          "params": [
+            "{ className }"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "FloatingContactDock",
+          "params": [],
+          "exported": false,
+          "lineCount": 324
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-dom",
+          "specifiers": [
+            "createPortal"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ChevronUp",
+            "MessageCircle",
+            "Send",
+            "Instagram",
+            "Linkedin",
+            "Facebook"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m",
+            "AnimatePresence",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "springSnappy"
+          ]
+        },
+        {
+          "source": "@/lib/contact-dock",
+          "specifiers": [
+            "consumePendingContactDockAction",
+            "isMobileViewport",
+            "onContactDockAction"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 364,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/Footer.tsx": {
+      "filePath": "src/components/Footer.tsx",
+      "contentHash": "cb44454c0aa8b2fe5e52347a5e0277fea5d0f48ccf2b74b65ed15573950fbed0",
+      "functions": [
+        {
+          "name": "Footer",
+          "params": [],
+          "exported": false,
+          "lineCount": 100
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "Fragment"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getLegalPath",
+            "getLocaleFromPath",
+            "getServicePath",
+            "ServicePageId"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 138,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/Hero.tsx": {
+      "filePath": "src/components/Hero.tsx",
+      "contentHash": "8808bbf4837f06b36b33ab03d5a2a5301a6138cdfc6463afc9632fe24ae23950",
+      "functions": [
+        {
+          "name": "shuffleWithSeed",
+          "params": [
+            "items",
+            "seed"
+          ],
+          "returnType": "T[]",
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "Hero",
+          "params": [
+            "{ showIntroduction = true }"
+          ],
+          "exported": false,
+          "lineCount": 141
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo",
+            "MouseEvent"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ArrowDownRight"
+          ]
+        },
+        {
+          "source": "@/hooks/use-hashless-section-navigation",
+          "specifiers": [
+            "useHashlessSectionNavigation"
+          ]
+        },
+        {
+          "source": "@/components/motion/PretextLineReveal",
+          "specifiers": [
+            "PretextLineReveal"
+          ]
+        },
+        {
+          "source": "@/components/HeroWallTile",
+          "specifiers": [
+            "HeroWallTile"
+          ]
+        },
+        {
+          "source": "@/lib/contact-dock",
+          "specifiers": [
+            "isMobileViewport",
+            "toggleContactDock"
+          ]
+        },
+        {
+          "source": "@/hooks/use-mobile",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getLocaleFromPath"
+          ]
+        },
+        {
+          "source": "@/data/portfolio-clips",
+          "specifiers": [
+            "LEGACY_REEL_CLIPS",
+            "ReelClip"
+          ]
+        },
+        {
+          "source": "@/data/nuevos-r2-ready",
+          "specifiers": [
+            "NUEVOS_R2_READY_CLIPS"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 187,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/HeroIntroduction.tsx": {
+      "filePath": "src/components/HeroIntroduction.tsx",
+      "contentHash": "592a0461faedc22f9ff66c9d37f9ea8470f8d21bd05e930d4b7ddcabf6c677ab",
+      "functions": [
+        {
+          "name": "HeroIntroduction",
+          "params": [],
+          "exported": false,
+          "lineCount": 30
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "@/components/motion/PretextLineReveal",
+          "specifiers": [
+            "PretextLineReveal"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "blurRevealUp",
+            "staggerContainer"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 38,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/HeroWallTile.tsx": {
+      "filePath": "src/components/HeroWallTile.tsx",
+      "contentHash": "22df924442f3bef4fbb4d9a4d3c2debd639f3e2c0116f4429c71beea2bd68a72",
+      "functions": [
+        {
+          "name": "HeroWallTile",
+          "params": [
+            "{ clip, playVideo }"
+          ],
+          "exported": false,
+          "lineCount": 74
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useRef"
+          ]
+        },
+        {
+          "source": "@/data/portfolio-clips",
+          "specifiers": [
+            "ReelClip"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 86,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/LegalPage.tsx": {
+      "filePath": "src/components/LegalPage.tsx",
+      "contentHash": "679782b84d7c4a61981d9c208d7395b97d222d6f44672be63db067b5d254df16",
+      "functions": [
+        {
+          "name": "buildUrl",
+          "params": [
+            "pathname"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "LegalPage",
+          "params": [
+            "{ pageId, locale }"
+          ],
+          "exported": false,
+          "lineCount": 261
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useMemo"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ArrowUpRight",
+            "Mail"
+          ]
+        },
+        {
+          "source": "@/components/SiteFooter",
+          "specifiers": [
+            "SiteFooter"
+          ]
+        },
+        {
+          "source": "@/components/Navbar",
+          "specifiers": [
+            "Navbar"
+          ]
+        },
+        {
+          "source": "@/components/PageSeo",
+          "specifiers": [
+            "PageSeo"
+          ]
+        },
+        {
+          "source": "@/components/motion/PretextLineReveal",
+          "specifiers": [
+            "PretextLineReveal"
+          ]
+        },
+        {
+          "source": "@/data/legal-pages",
+          "specifiers": [
+            "getLegalPageContent"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getHomePath",
+            "LegalPageId",
+            "SiteLocale"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 305,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/media/AutoplayPreviewVideo.tsx": {
+      "filePath": "src/components/media/AutoplayPreviewVideo.tsx",
+      "contentHash": "f4966acb09ff3b44603793104df7efabd13efc03067494102b89a617012018df",
+      "functions": [
+        {
+          "name": "AutoplayPreviewVideo",
+          "params": [
+            "{\n  src,\n  poster,\n  pauseOffscreen = true,\n  rootMargin = '120px 0px',\n  preload = 'metadata',\n  ...props\n}"
+          ],
+          "exported": false,
+          "lineCount": 89
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useRef",
+            "VideoHTMLAttributes"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 104,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/media/LazyVideo.tsx": {
+      "filePath": "src/components/media/LazyVideo.tsx",
+      "contentHash": "8082087239338ecf6943fd3ff011e153d8d7fcf1c2a3d209a00860e29fcb0b37",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "forwardRef",
+            "useEffect",
+            "useRef",
+            "useState",
+            "FocusEvent",
+            "TouchEvent",
+            "VideoHTMLAttributes",
+            "MouseEvent",
+            "SyntheticEvent"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 232,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/media/TheaterVideo.tsx": {
+      "filePath": "src/components/media/TheaterVideo.tsx",
+      "contentHash": "8bc21b1fe62986151bdd3b94547450066d9fe99bcbabd474ca364f94b65552e5",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "memo",
+            "useCallback",
+            "useEffect",
+            "useRef",
+            "useState",
+            "SyntheticEvent"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Pause",
+            "Play",
+            "Volume2",
+            "VolumeX"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 259,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/MobileContactCtaSection.tsx": {
+      "filePath": "src/components/MobileContactCtaSection.tsx",
+      "contentHash": "0a772d7b869ee5f8a9a03b56be62e2344c4d1c7b49ddd668574b63fb9b28a0a3",
+      "functions": [
+        {
+          "name": "MobileContactCtaSection",
+          "params": [],
+          "exported": false,
+          "lineCount": 17
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "@/lib/contact-dock",
+          "specifiers": [
+            "toggleContactDock"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 23,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/MobileFiverrRatingSection.tsx": {
+      "filePath": "src/components/MobileFiverrRatingSection.tsx",
+      "contentHash": "4633f55335a9330c0f626f9d15de697a5373234bc43eba5c25b04de510db20da",
+      "functions": [
+        {
+          "name": "MobileFiverrRatingSection",
+          "params": [],
+          "exported": false,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/components/FiverrRatingCard",
+          "specifiers": [
+            "FiverrRatingCard"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/motion/FadeInOnMount.tsx": {
+      "filePath": "src/components/motion/FadeInOnMount.tsx",
+      "contentHash": "2171976a68c9c0d9ebf94eefa61a4d9da3c584e5a0daa20b19e865bc05150060",
+      "functions": [
+        {
+          "name": "FadeInOnMount",
+          "params": [
+            "{ children, className }"
+          ],
+          "exported": false,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useState",
+            "ReactNode"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/motion/LiteSplitTextReveal.tsx": {
+      "filePath": "src/components/motion/LiteSplitTextReveal.tsx",
+      "contentHash": "60c725e37fd5fbecfed4e4d22ba33b2428ca9e10d98cd49f06212d98320b7112",
+      "functions": [
+        {
+          "name": "LiteSplitTextReveal",
+          "params": [
+            "{\n  text,\n  className,\n  wordClassName,\n  delay = 0,\n  stagger = 0.06,\n  once = true,\n  threshold = 0.15,\n}"
+          ],
+          "exported": false,
+          "lineCount": 73
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 89,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/motion/PretextLineReveal.tsx": {
+      "filePath": "src/components/motion/PretextLineReveal.tsx",
+      "contentHash": "273bc4d1dedc86ef9bc75e6b258f7720042d68fff1843449d3fb1d444826cd4e",
+      "functions": [
+        {
+          "name": "getPixelValue",
+          "params": [
+            "value"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "getLineHeight",
+          "params": [
+            "style"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "getCanvasFont",
+          "params": [
+            "style"
+          ],
+          "exported": false,
+          "lineCount": 11
+        },
+        {
+          "name": "haveSameLines",
+          "params": [
+            "previous",
+            "next"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "PretextLineReveal",
+          "params": [
+            "{\n  text,\n  className,\n  lineClassName,\n  delay = 0,\n  stagger = 0.08,\n  once = true,\n  threshold = 0.15,\n}"
+          ],
+          "exported": false,
+          "lineCount": 175
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@chenglou/pretext",
+          "specifiers": [
+            "prepareWithSegments",
+            "layoutWithLines"
+          ]
+        },
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useLayoutEffect",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 221,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/motion/SectionReveal.tsx": {
+      "filePath": "src/components/motion/SectionReveal.tsx",
+      "contentHash": "f742565f4a32be045ca6da38bf063becc5dea4c601a3076674827234ae5a5699",
+      "functions": [
+        {
+          "name": "getDirectionalVariants",
+          "params": [
+            "direction",
+            "distance",
+            "duration",
+            "blur"
+          ],
+          "exported": false,
+          "lineCount": 56
+        },
+        {
+          "name": "SectionReveal",
+          "params": [
+            "{\n  children,\n  id,\n  className,\n  direction = 'up',\n  stagger = 0.1,\n  delay = 0.06,\n  amount = 0.25,\n  blur = true,\n  distance = 24,\n  duration = 0.75,\n  as: Tag = 'section',\n}"
+          ],
+          "exported": true,
+          "lineCount": 47
+        },
+        {
+          "name": "SectionRevealItem",
+          "params": [
+            "{\n  children,\n  className,\n  direction = 'up',\n  blur = true,\n  distance = 24,\n  duration = 0.75,\n}"
+          ],
+          "exported": true,
+          "lineCount": 30
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "easeOutExpo"
+          ]
+        }
+      ],
+      "exports": [
+        "SectionReveal",
+        "SectionRevealItem"
+      ],
+      "totalLines": 170,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/motion/SectionSkeleton.tsx": {
+      "filePath": "src/components/motion/SectionSkeleton.tsx",
+      "contentHash": "0679bff0554425935f7a97c78bcb6d143da82140ee07599abca1d900be56ba76",
+      "functions": [
+        {
+          "name": "SectionSkeleton",
+          "params": [
+            "{\n  id,\n  minHeightClass = 'min-h-[240px]',\n  variant = 'default',\n}"
+          ],
+          "exported": false,
+          "lineCount": 73
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 83,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/motion/SplitTextReveal.tsx": {
+      "filePath": "src/components/motion/SplitTextReveal.tsx",
+      "contentHash": "d3d7320a591791ee9705945e143e3ad54dcf75e29e1b64cd15ee194e4cd3db80",
+      "functions": [
+        {
+          "name": "SplitTextReveal",
+          "params": [
+            "{\n  text,\n  className,\n  wordClassName,\n  delay = 0,\n  stagger = 0.06,\n  once = true,\n  amount = 0.15,\n}"
+          ],
+          "exported": false,
+          "lineCount": 63
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "easeOutExpo"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 80,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/motion/variants.ts": {
+      "filePath": "src/components/motion/variants.ts",
+      "contentHash": "bf1d506369c9bc508efad8e370228f51e3ff04564ae87cba7af377ea8463f0d7",
+      "functions": [
+        {
+          "name": "revealUp",
+          "params": [
+            "distance",
+            "duration",
+            "delay"
+          ],
+          "returnType": "Variants",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "fadeIn",
+          "params": [
+            "duration",
+            "delay"
+          ],
+          "returnType": "Variants",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "scaleIn",
+          "params": [
+            "from",
+            "duration",
+            "delay"
+          ],
+          "returnType": "Variants",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "revealFromLeft",
+          "params": [
+            "distance",
+            "duration",
+            "delay"
+          ],
+          "returnType": "Variants",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "revealFromRight",
+          "params": [
+            "distance",
+            "duration",
+            "delay"
+          ],
+          "returnType": "Variants",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "blurIn",
+          "params": [
+            "duration",
+            "delay"
+          ],
+          "returnType": "Variants",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "blurRevealUp",
+          "params": [
+            "distance",
+            "duration",
+            "delay"
+          ],
+          "returnType": "Variants",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "staggerContainer",
+          "params": [
+            "staggerChildren",
+            "delayChildren"
+          ],
+          "returnType": "Variants",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "heroOrchestration",
+          "params": [
+            "delayChildren"
+          ],
+          "returnType": "Variants",
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "Transition",
+            "Variants"
+          ]
+        }
+      ],
+      "exports": [
+        "premiumEase",
+        "easeOutExpo",
+        "easeOutQuart",
+        "easeInOutCubic",
+        "DURATION_MICRO",
+        "DURATION_FAST",
+        "DURATION_MEDIUM",
+        "DURATION_SLOW",
+        "springSmooth",
+        "springSnappy",
+        "springHoverTransition",
+        "revealUp",
+        "fadeIn",
+        "scaleIn",
+        "revealFromLeft",
+        "revealFromRight",
+        "blurIn",
+        "blurRevealUp",
+        "staggerContainer",
+        "heroOrchestration",
+        "hoverLift",
+        "hoverFloat"
+      ],
+      "totalLines": 179,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/Navbar.tsx": {
+      "filePath": "src/components/Navbar.tsx",
+      "contentHash": "7a64ea77fa9640e0abc4430ef8385670bc98abd096d61b964c40878b36b67bd2",
+      "functions": [
+        {
+          "name": "ThreadsIcon",
+          "params": [
+            "{ className }"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "Navbar",
+          "params": [
+            "{ compactMobile = false }"
+          ],
+          "exported": false,
+          "lineCount": 561
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useState",
+            "useEffect",
+            "useCallback",
+            "useRef"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Menu",
+            "X",
+            "ArrowRight",
+            "Send",
+            "Instagram",
+            "Linkedin",
+            "Facebook"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useLocation",
+            "useNavigate",
+            "Link"
+          ]
+        },
+        {
+          "source": "@/components/NavbarControls",
+          "specifiers": [
+            "NavbarControls"
+          ]
+        },
+        {
+          "source": "@/hooks/use-hashless-section-navigation",
+          "specifiers": [
+            "useHashlessSectionNavigation"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "springSnappy"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getHomeSectionHref",
+            "getLocalizedPathForCurrentRoute",
+            "getLocaleFromPath",
+            "isHomePath",
+            "SiteLocale"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 628,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/NavbarControls.tsx": {
+      "filePath": "src/components/NavbarControls.tsx",
+      "contentHash": "1861ef1c46d8bc06fd966eccc650357715105bc10969c190c5878d880349e579",
+      "functions": [
+        {
+          "name": "NavbarControls",
+          "params": [
+            "{ compact = false, currentLocale, onLocaleChange }"
+          ],
+          "exported": false,
+          "lineCount": 69
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "@/components/ThemeToggle",
+          "specifiers": [
+            "ThemeToggle"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "SiteLocale"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 86,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/PageEndStrip.tsx": {
+      "filePath": "src/components/PageEndStrip.tsx",
+      "contentHash": "3b6e3e5f7c91c047eb69f3ceeeffdc8bcd8194cfcb2c4a7cc276b54841ee0ab1",
+      "functions": [
+        {
+          "name": "PageEndStrip",
+          "params": [],
+          "exported": false,
+          "lineCount": 35
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getLegalPath",
+            "getLocaleFromPath"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 46,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/PageSeo.tsx": {
+      "filePath": "src/components/PageSeo.tsx",
+      "contentHash": "a29cac8c602c177e36c199de767dda88298271f5e3242358d1197e0020b47043",
+      "functions": [
+        {
+          "name": "upsertMeta",
+          "params": [
+            "selector",
+            "attribute",
+            "key",
+            "content"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "upsertLink",
+          "params": [
+            "selector",
+            "attributes"
+          ],
+          "exported": false,
+          "lineCount": 11
+        },
+        {
+          "name": "PageSeo",
+          "params": [
+            "{ title, description, canonical, locale, alternates, structuredData }"
+          ],
+          "exported": false,
+          "lineCount": 70
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 114,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/Portfolio.tsx": {
+      "filePath": "src/components/Portfolio.tsx",
+      "contentHash": "71854ddf8d23df69ba35cdcd7333f831ac9818f6f942acea7624a4aa9846f6bc",
+      "functions": [
+        {
+          "name": "getLqip",
+          "params": [
+            "url"
+          ],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "getUtcDayBucket",
+          "params": [],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "shuffleWithSeed",
+          "params": [
+            "items",
+            "seed"
+          ],
+          "returnType": "T[]",
+          "exported": false,
+          "lineCount": 17
+        },
+        {
+          "name": "Portfolio",
+          "params": [],
+          "exported": false,
+          "lineCount": 1178
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useRef",
+            "useState",
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "memo",
+            "startTransition",
+            "TouchEvent",
+            "SyntheticEvent"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ChevronDown",
+            "ChevronLeft",
+            "ChevronRight",
+            "ChevronUp",
+            "Pause",
+            "Play",
+            "Volume2",
+            "VolumeX",
+            "X"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "@/components/motion/SplitTextReveal",
+          "specifiers": [
+            "SplitTextReveal"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "revealUp",
+            "springHoverTransition",
+            "staggerContainer"
+          ]
+        },
+        {
+          "source": "@/hooks/use-mobile",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        },
+        {
+          "source": "@/components/media/LazyVideo",
+          "specifiers": [
+            "LazyVideo"
+          ]
+        },
+        {
+          "source": "@/data/video-lqip",
+          "specifiers": [
+            "VIDEO_LQIP"
+          ]
+        },
+        {
+          "source": "@/data/portfolio-clips",
+          "specifiers": [
+            "LEGACY_REEL_CLIPS",
+            "ReelClip"
+          ]
+        },
+        {
+          "source": "@/data/nuevos-r2-ready",
+          "specifiers": [
+            "NUEVOS_R2_READY_CLIPS"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 1478,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ResourcePage.tsx": {
+      "filePath": "src/components/ResourcePage.tsx",
+      "contentHash": "f0ceb2b67c9cdf40341946f1155e4cef5eebc754d3c5794ba743e98a10d63a0c",
+      "functions": [
+        {
+          "name": "buildUrl",
+          "params": [
+            "pathname"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "useScrollReveal",
+          "params": [],
+          "exported": false,
+          "lineCount": 22
+        },
+        {
+          "name": "RevealSection",
+          "params": [
+            "{\n  children,\n  className = '',\n  id,\n}"
+          ],
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "ResourcePage",
+          "params": [
+            "{ resourceId, locale }"
+          ],
+          "exported": false,
+          "lineCount": 374
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "Suspense",
+            "lazy",
+            "useEffect",
+            "useMemo",
+            "useRef"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "SiteLocale"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getHomePath",
+            "getHomeSectionHref",
+            "getServicePath",
+            "getVerticalPath"
+          ]
+        },
+        {
+          "source": "@/data/resource-pages",
+          "specifiers": [
+            "getResourcePageContent",
+            "getResourcePath",
+            "ResourcePageId"
+          ]
+        },
+        {
+          "source": "@/data/service-pages",
+          "specifiers": [
+            "getServicePageContent"
+          ]
+        },
+        {
+          "source": "@/data/vertical-pages",
+          "specifiers": [
+            "getVerticalPageContent"
+          ]
+        },
+        {
+          "source": "@/components/Navbar",
+          "specifiers": [
+            "Navbar"
+          ]
+        },
+        {
+          "source": "@/components/SiteFooter",
+          "specifiers": [
+            "SiteFooter"
+          ]
+        },
+        {
+          "source": "@/components/PageSeo",
+          "specifiers": [
+            "PageSeo"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 468,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ServiceLandingPage.tsx": {
+      "filePath": "src/components/ServiceLandingPage.tsx",
+      "contentHash": "00a145420c61384bdf9d46f238860cd37fa0315011485cd5b50de7fa13c8ddc0",
+      "functions": [
+        {
+          "name": "buildUrl",
+          "params": [
+            "pathname"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "formatDuration",
+          "params": [
+            "seconds"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "getHighQualityServicePosterSrc",
+          "params": [
+            "mainSrc",
+            "fallbackSrc"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "useScrollReveal",
+          "params": [],
+          "exported": false,
+          "lineCount": 22
+        },
+        {
+          "name": "RevealSection",
+          "params": [
+            "{\n  children,\n  className = '',\n  id,\n}"
+          ],
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "ServiceLandingPage",
+          "params": [
+            "{ serviceId, locale }"
+          ],
+          "exported": false,
+          "lineCount": 737
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "Suspense",
+            "lazy",
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState",
+            "SyntheticEvent"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Play",
+            "ChevronLeft",
+            "ChevronRight",
+            "X"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "ServicePageId",
+            "SiteLocale",
+            "VerticalPageId",
+            "ResourcePageId"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getHomePath",
+            "getHomeSectionHref",
+            "getServicePath",
+            "getVerticalPath",
+            "getResourcePath"
+          ]
+        },
+        {
+          "source": "@/data/service-pages",
+          "specifiers": [
+            "getServicePageContent",
+            "getRelatedServiceSummaries",
+            "getAllServiceIds"
+          ]
+        },
+        {
+          "source": "@/data/vertical-pages",
+          "specifiers": [
+            "getVerticalPageContent"
+          ]
+        },
+        {
+          "source": "@/data/portfolio-clips",
+          "specifiers": [
+            "LEGACY_REEL_CLIPS"
+          ]
+        },
+        {
+          "source": "@/data/nuevos-r2-ready",
+          "specifiers": [
+            "NUEVOS_R2_READY_CLIPS"
+          ]
+        },
+        {
+          "source": "@/components/Navbar",
+          "specifiers": [
+            "Navbar"
+          ]
+        },
+        {
+          "source": "@/components/SiteFooter",
+          "specifiers": [
+            "SiteFooter"
+          ]
+        },
+        {
+          "source": "@/components/PageSeo",
+          "specifiers": [
+            "PageSeo"
+          ]
+        },
+        {
+          "source": "@/components/motion/PretextLineReveal",
+          "specifiers": [
+            "PretextLineReveal"
+          ]
+        },
+        {
+          "source": "@/components/media/TheaterVideo",
+          "specifiers": [
+            "TheaterVideo"
+          ]
+        },
+        {
+          "source": "@/components/media/AutoplayPreviewVideo",
+          "specifiers": [
+            "AutoplayPreviewVideo"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 891,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/Services.tsx": {
+      "filePath": "src/components/Services.tsx",
+      "contentHash": "85ffece2a92353c2689646bf05aff5103e1f8702b7f6de4df51dac1d3d39414f",
+      "functions": [
+        {
+          "name": "Services",
+          "params": [],
+          "exported": false,
+          "lineCount": 152
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Film",
+            "Globe",
+            "Lightbulb",
+            "Megaphone",
+            "Mic",
+            "PlayCircle",
+            "Sparkles",
+            "Star"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "@/components/motion/SplitTextReveal",
+          "specifiers": [
+            "SplitTextReveal"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "revealUp",
+            "springSmooth",
+            "staggerContainer"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getLocaleFromPath",
+            "getServicePath",
+            "ServicePageId"
+          ]
+        },
+        {
+          "source": "@/hooks/use-mobile",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 166,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ServicesMarquee.tsx": {
+      "filePath": "src/components/ServicesMarquee.tsx",
+      "contentHash": "60715bb320cc2f3caf64cbd528610f35c3bd7fddf972a2f26b2298390942d541",
+      "functions": [
+        {
+          "name": "r2PreviewVideo",
+          "params": [
+            "filename"
+          ],
+          "exported": false,
+          "lineCount": 2
+        },
+        {
+          "name": "r2Poster",
+          "params": [
+            "filename"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "findNuevosClipByMainFilename",
+          "params": [
+            "filename"
+          ],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "ServicesMarquee",
+          "params": [
+            "{ sectionId, liteMobile = false }"
+          ],
+          "exported": false,
+          "lineCount": 688
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ChevronLeft",
+            "ChevronRight"
+          ]
+        },
+        {
+          "source": "@/components/media/LazyVideo",
+          "specifiers": [
+            "LazyVideo"
+          ]
+        },
+        {
+          "source": "@/data/nuevos-r2-ready",
+          "specifiers": [
+            "NUEVOS_R2_READY_CLIPS"
+          ]
+        },
+        {
+          "source": "@/lib/perf-debug",
+          "specifiers": [
+            "mark",
+            "measure"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 737,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/SiteFooter.tsx": {
+      "filePath": "src/components/SiteFooter.tsx",
+      "contentHash": "63473dd5fc8912b851c11aac57509c769bfd3b771c8a640a44ffe4587d4e3da6",
+      "functions": [
+        {
+          "name": "SiteFooter",
+          "params": [],
+          "exported": false,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/components/Footer",
+          "specifiers": [
+            "Footer"
+          ]
+        },
+        {
+          "source": "@/components/PageEndStrip",
+          "specifiers": [
+            "PageEndStrip"
+          ]
+        }
+      ],
+      "exports": [
+        "SHOW_SITE_FOOTER"
+      ],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/SocialProof.tsx": {
+      "filePath": "src/components/SocialProof.tsx",
+      "contentHash": "31591f10a6042c1d336a1624ce6dc8110007ade66e1efe1bc2ac0a93cb5cf7ac",
+      "functions": [
+        {
+          "name": "AnimatedCounter",
+          "params": [
+            "{ end, suffix = '', duration = 2000 }"
+          ],
+          "exported": false,
+          "lineCount": 43
+        },
+        {
+          "name": "SocialProof",
+          "params": [],
+          "exported": false,
+          "lineCount": 72
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect",
+            "useState",
+            "useRef"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Briefcase",
+            "Eye",
+            "Star",
+            "Users"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "m",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "blurRevealUp",
+            "springSmooth",
+            "staggerContainer"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 131,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/Testimonials.tsx": {
+      "filePath": "src/components/Testimonials.tsx",
+      "contentHash": "310ef53bf0da3c7b700dc708455e107247898582bae16b958987ce53ba505c77",
+      "functions": [
+        {
+          "name": "MarqueeRow",
+          "params": [
+            "{\n  items,\n  direction = 'left',\n  speed = 60,\n  paused,\n  onClickItem,\n  globalIndexOffset,\n}"
+          ],
+          "exported": false,
+          "lineCount": 57
+        },
+        {
+          "name": "Lightbox",
+          "params": [
+            "{ images, startIndex, onClose, reduceMotion, labels }"
+          ],
+          "exported": false,
+          "lineCount": 181
+        },
+        {
+          "name": "Testimonials",
+          "params": [],
+          "exported": false,
+          "lineCount": 176
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "useTranslation"
+          ]
+        },
+        {
+          "source": "framer-motion",
+          "specifiers": [
+            "AnimatePresence",
+            "m",
+            "useReducedMotion"
+          ]
+        },
+        {
+          "source": "embla-carousel-react",
+          "specifiers": [
+            "useEmblaCarousel"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "X"
+          ]
+        },
+        {
+          "source": "@/components/motion/SplitTextReveal",
+          "specifiers": [
+            "SplitTextReveal"
+          ]
+        },
+        {
+          "source": "@/components/motion/variants",
+          "specifiers": [
+            "blurRevealUp",
+            "staggerContainer"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 490,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ThemeRuntimeSync.tsx": {
+      "filePath": "src/components/ThemeRuntimeSync.tsx",
+      "contentHash": "c1468e4c6cc112c48242efe5404bf3eb0b2f0f64fbde5adf0c544d7918e776d6",
+      "functions": [
+        {
+          "name": "ThemeRuntimeSync",
+          "params": [],
+          "exported": false,
+          "lineCount": 16
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect"
+          ]
+        },
+        {
+          "source": "next-themes",
+          "specifiers": [
+            "useTheme"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ThemeToggle.tsx": {
+      "filePath": "src/components/ThemeToggle.tsx",
+      "contentHash": "b831f8960660d47fc04a464f0971c4e76fe807fe63f749be36b44c743cb13993",
+      "functions": [
+        {
+          "name": "ThemeToggle",
+          "params": [
+            "{ compact = false, variant = 'icon' }"
+          ],
+          "exported": false,
+          "lineCount": 127
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "next-themes",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Moon",
+            "Sun"
+          ]
+        },
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback",
+            "useEffect",
+            "useRef",
+            "useState"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 144,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/accordion.tsx": {
+      "filePath": "src/components/ui/accordion.tsx",
+      "contentHash": "d721f89a3627402b4fcf45b03050a6ec1538499fa4158d1c24d33d64eed6d20d",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-accordion",
+          "specifiers": [
+            "* as AccordionPrimitive"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ChevronDown"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Accordion",
+        "AccordionItem",
+        "AccordionTrigger",
+        "AccordionContent"
+      ],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/alert-dialog.tsx": {
+      "filePath": "src/components/ui/alert-dialog.tsx",
+      "contentHash": "5ab57317c19d0edd8e2d6d9c98992bcefa1e023a4f90072e40364451dc18456f",
+      "functions": [
+        {
+          "name": "AlertDialogHeader",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "AlertDialogFooter",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-alert-dialog",
+          "specifiers": [
+            "* as AlertDialogPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        },
+        {
+          "source": "@/components/ui/button",
+          "specifiers": [
+            "buttonVariants"
+          ]
+        }
+      ],
+      "exports": [
+        "AlertDialog",
+        "AlertDialogPortal",
+        "AlertDialogOverlay",
+        "AlertDialogTrigger",
+        "AlertDialogContent",
+        "AlertDialogHeader",
+        "AlertDialogFooter",
+        "AlertDialogTitle",
+        "AlertDialogDescription",
+        "AlertDialogAction",
+        "AlertDialogCancel"
+      ],
+      "totalLines": 140,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/alert.tsx": {
+      "filePath": "src/components/ui/alert.tsx",
+      "contentHash": "ed78a053a9db783f48d5dfab7398b630f87c17ed2e237b6f30a3eb153675960c",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Alert",
+        "AlertTitle",
+        "AlertDescription"
+      ],
+      "totalLines": 60,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/aspect-ratio.tsx": {
+      "filePath": "src/components/ui/aspect-ratio.tsx",
+      "contentHash": "08b0aa0b05efc573c7d63363c03e83d4b101bfeb54140764e96ddea30659cfcc",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@radix-ui/react-aspect-ratio",
+          "specifiers": [
+            "* as AspectRatioPrimitive"
+          ]
+        }
+      ],
+      "exports": [
+        "AspectRatio"
+      ],
+      "totalLines": 6,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/avatar.tsx": {
+      "filePath": "src/components/ui/avatar.tsx",
+      "contentHash": "fb33bc4865b74d1f0239b1782dbdc4cc2d38690ba6e245e9e3b024c256b14c2b",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-avatar",
+          "specifiers": [
+            "* as AvatarPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Avatar",
+        "AvatarImage",
+        "AvatarFallback"
+      ],
+      "totalLines": 49,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/badge.tsx": {
+      "filePath": "src/components/ui/badge.tsx",
+      "contentHash": "db977d821af56ae3fb7952182d9c0a076a10c75c38bc2d2b000827e720423d32",
+      "functions": [
+        {
+          "name": "Badge",
+          "params": [
+            "{ className, variant, ...props }"
+          ],
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Badge",
+        "badgeVariants"
+      ],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/breadcrumb.tsx": {
+      "filePath": "src/components/ui/breadcrumb.tsx",
+      "contentHash": "abb80a6662087bdb01a70e731bd4e140bc37ae45c4ca39c268e1327cec3aedcf",
+      "functions": [
+        {
+          "name": "BreadcrumbSeparator",
+          "params": [
+            "{\n  children,\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "BreadcrumbEllipsis",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-slot",
+          "specifiers": [
+            "Slot"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ChevronRight",
+            "MoreHorizontal"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Breadcrumb",
+        "BreadcrumbList",
+        "BreadcrumbItem",
+        "BreadcrumbLink",
+        "BreadcrumbPage",
+        "BreadcrumbSeparator",
+        "BreadcrumbEllipsis"
+      ],
+      "totalLines": 116,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/button.tsx": {
+      "filePath": "src/components/ui/button.tsx",
+      "contentHash": "415ccc47cf69a2a87db699cc6da7f1fdcb799a1f40dab3a6220d91ac8da8abbe",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-slot",
+          "specifiers": [
+            "Slot"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Button",
+        "buttonVariants"
+      ],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/calendar.tsx": {
+      "filePath": "src/components/ui/calendar.tsx",
+      "contentHash": "212fea734954d87c7f932a98aa2b5805a75e4501be431e6a09c8e8d209174677",
+      "functions": [
+        {
+          "name": "Calendar",
+          "params": [
+            "{\n  className,\n  classNames,\n  showOutsideDays = true,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 52
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ChevronLeft",
+            "ChevronRight"
+          ]
+        },
+        {
+          "source": "react-day-picker",
+          "specifiers": [
+            "DayPicker"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        },
+        {
+          "source": "@/components/ui/button",
+          "specifiers": [
+            "buttonVariants"
+          ]
+        }
+      ],
+      "exports": [
+        "Calendar"
+      ],
+      "totalLines": 65,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/card.tsx": {
+      "filePath": "src/components/ui/card.tsx",
+      "contentHash": "8bad317eca5b74899d868688a339a16f54995e36810c0fdfe214c057755535e0",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Card",
+        "CardHeader",
+        "CardFooter",
+        "CardTitle",
+        "CardDescription",
+        "CardContent"
+      ],
+      "totalLines": 80,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/carousel.tsx": {
+      "filePath": "src/components/ui/carousel.tsx",
+      "contentHash": "5a4ff73c804e86c873382da80c453f1399006326ef042fb984c24162ec86666e",
+      "functions": [
+        {
+          "name": "useCarousel",
+          "params": [],
+          "exported": false,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "embla-carousel-react",
+          "specifiers": [
+            "useEmblaCarousel",
+            "UseEmblaCarouselType"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ArrowLeft",
+            "ArrowRight"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        },
+        {
+          "source": "@/components/ui/button",
+          "specifiers": [
+            "Button"
+          ]
+        }
+      ],
+      "exports": [
+        "CarouselApi",
+        "Carousel",
+        "CarouselContent",
+        "CarouselItem",
+        "CarouselPrevious",
+        "CarouselNext"
+      ],
+      "totalLines": 261,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/chart.tsx": {
+      "filePath": "src/components/ui/chart.tsx",
+      "contentHash": "f5165c9a1c2a74597731eb620208406bef38a86735c376f2c4c09073f40643c4",
+      "functions": [
+        {
+          "name": "useChart",
+          "params": [],
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "ChartStyle",
+          "params": [
+            "{ id, config }"
+          ],
+          "exported": true,
+          "lineCount": 32
+        },
+        {
+          "name": "getPayloadConfigFromPayload",
+          "params": [
+            "config",
+            "payload",
+            "key"
+          ],
+          "exported": false,
+          "lineCount": 37
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "recharts",
+          "specifiers": [
+            "* as RechartsPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "ChartContainer",
+        "ChartTooltip",
+        "ChartTooltipContent",
+        "ChartLegend",
+        "ChartLegendContent",
+        "ChartStyle"
+      ],
+      "totalLines": 364,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/checkbox.tsx": {
+      "filePath": "src/components/ui/checkbox.tsx",
+      "contentHash": "60a0084cbdfcb96e54c9f6438e9066dfe7ed0a7e421b33985d5eb57975d110a4",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-checkbox",
+          "specifiers": [
+            "* as CheckboxPrimitive"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Check"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Checkbox"
+      ],
+      "totalLines": 29,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/collapsible.tsx": {
+      "filePath": "src/components/ui/collapsible.tsx",
+      "contentHash": "6f5be8ba164c177759bf63cc25ad4d49391f162f6784ba624d72e5d5c0c0dde2",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@radix-ui/react-collapsible",
+          "specifiers": [
+            "* as CollapsiblePrimitive"
+          ]
+        }
+      ],
+      "exports": [
+        "Collapsible",
+        "CollapsibleTrigger",
+        "CollapsibleContent"
+      ],
+      "totalLines": 10,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/command.tsx": {
+      "filePath": "src/components/ui/command.tsx",
+      "contentHash": "d42b4af5129db2eba8b63253a30ccb862a0933ed42addbf277b7a2d398602334",
+      "functions": [
+        {
+          "name": "CommandDialog",
+          "params": [
+            "{ children, ...props }"
+          ],
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "CommandShortcut",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-dialog",
+          "specifiers": [
+            "DialogProps"
+          ]
+        },
+        {
+          "source": "cmdk",
+          "specifiers": [
+            "CommandPrimitive"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Search"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        },
+        {
+          "source": "@/components/ui/dialog",
+          "specifiers": [
+            "Dialog",
+            "DialogContent"
+          ]
+        }
+      ],
+      "exports": [
+        "Command",
+        "CommandDialog",
+        "CommandInput",
+        "CommandList",
+        "CommandEmpty",
+        "CommandGroup",
+        "CommandItem",
+        "CommandShortcut",
+        "CommandSeparator"
+      ],
+      "totalLines": 154,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/context-menu.tsx": {
+      "filePath": "src/components/ui/context-menu.tsx",
+      "contentHash": "83de8ae175e3a154960abf1bc92e1032d13e42b02b4aa4469929fa46cdec42a4",
+      "functions": [
+        {
+          "name": "ContextMenuShortcut",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-context-menu",
+          "specifiers": [
+            "* as ContextMenuPrimitive"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Check",
+            "ChevronRight",
+            "Circle"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "ContextMenu",
+        "ContextMenuTrigger",
+        "ContextMenuContent",
+        "ContextMenuItem",
+        "ContextMenuCheckboxItem",
+        "ContextMenuRadioItem",
+        "ContextMenuLabel",
+        "ContextMenuSeparator",
+        "ContextMenuShortcut",
+        "ContextMenuGroup",
+        "ContextMenuPortal",
+        "ContextMenuSub",
+        "ContextMenuSubContent",
+        "ContextMenuSubTrigger",
+        "ContextMenuRadioGroup"
+      ],
+      "totalLines": 199,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/dialog.tsx": {
+      "filePath": "src/components/ui/dialog.tsx",
+      "contentHash": "27f3faad6d4ef2168889c0ed091db17a8c49ed7e1f5a2b3e83aa6f1725770c21",
+      "functions": [
+        {
+          "name": "DialogHeader",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "DialogFooter",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-dialog",
+          "specifiers": [
+            "* as DialogPrimitive"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "X"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Dialog",
+        "DialogPortal",
+        "DialogOverlay",
+        "DialogClose",
+        "DialogTrigger",
+        "DialogContent",
+        "DialogHeader",
+        "DialogFooter",
+        "DialogTitle",
+        "DialogDescription"
+      ],
+      "totalLines": 121,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/drawer.tsx": {
+      "filePath": "src/components/ui/drawer.tsx",
+      "contentHash": "47ff6248307a4ac09bf7e00181a2a29f9f846691092e04cad03e15d749bc249b",
+      "functions": [
+        {
+          "name": "Drawer",
+          "params": [
+            "{\n  shouldScaleBackground = true,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "DrawerHeader",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "DrawerFooter",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 9
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "vaul",
+          "specifiers": [
+            "DrawerPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Drawer",
+        "DrawerPortal",
+        "DrawerOverlay",
+        "DrawerTrigger",
+        "DrawerClose",
+        "DrawerContent",
+        "DrawerHeader",
+        "DrawerFooter",
+        "DrawerTitle",
+        "DrawerDescription"
+      ],
+      "totalLines": 117,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/dropdown-menu.tsx": {
+      "filePath": "src/components/ui/dropdown-menu.tsx",
+      "contentHash": "042132f5ee2e5297488441fc7bd0e343393e3150be516110a8e3337196515b61",
+      "functions": [
+        {
+          "name": "DropdownMenuShortcut",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-dropdown-menu",
+          "specifiers": [
+            "* as DropdownMenuPrimitive"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Check",
+            "ChevronRight",
+            "Circle"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "DropdownMenu",
+        "DropdownMenuTrigger",
+        "DropdownMenuContent",
+        "DropdownMenuItem",
+        "DropdownMenuCheckboxItem",
+        "DropdownMenuRadioItem",
+        "DropdownMenuLabel",
+        "DropdownMenuSeparator",
+        "DropdownMenuShortcut",
+        "DropdownMenuGroup",
+        "DropdownMenuPortal",
+        "DropdownMenuSub",
+        "DropdownMenuSubContent",
+        "DropdownMenuSubTrigger",
+        "DropdownMenuRadioGroup"
+      ],
+      "totalLines": 199,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/form.tsx": {
+      "filePath": "src/components/ui/form.tsx",
+      "contentHash": "ecd23ee5851218879bdc33e8474c1298ed724fdbafb276e6e3a819b9681abc5b",
+      "functions": [
+        {
+          "name": "FormField",
+          "params": [
+            "{\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "useFormField",
+          "params": [],
+          "exported": true,
+          "lineCount": 22
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-label",
+          "specifiers": [
+            "* as LabelPrimitive"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-slot",
+          "specifiers": [
+            "Slot"
+          ]
+        },
+        {
+          "source": "react-hook-form",
+          "specifiers": [
+            "Controller",
+            "ControllerProps",
+            "FieldPath",
+            "FieldValues",
+            "FormProvider",
+            "useFormContext"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        },
+        {
+          "source": "@/components/ui/label",
+          "specifiers": [
+            "Label"
+          ]
+        }
+      ],
+      "exports": [
+        "useFormField",
+        "Form",
+        "FormItem",
+        "FormLabel",
+        "FormControl",
+        "FormDescription",
+        "FormMessage",
+        "FormField"
+      ],
+      "totalLines": 177,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/hover-card.tsx": {
+      "filePath": "src/components/ui/hover-card.tsx",
+      "contentHash": "f877605d6ca646301df880f38796980bd62594cd3d0089c689e17399fbf0cb14",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-hover-card",
+          "specifiers": [
+            "* as HoverCardPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "HoverCard",
+        "HoverCardTrigger",
+        "HoverCardContent"
+      ],
+      "totalLines": 28,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/input-otp.tsx": {
+      "filePath": "src/components/ui/input-otp.tsx",
+      "contentHash": "b06b6294edee39d817586b3cf4766de1720b06e184624d45d2bfd0f38d2a5e72",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "input-otp",
+          "specifiers": [
+            "OTPInput",
+            "OTPInputContext"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Dot"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "InputOTP",
+        "InputOTPGroup",
+        "InputOTPSlot",
+        "InputOTPSeparator"
+      ],
+      "totalLines": 70,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/input.tsx": {
+      "filePath": "src/components/ui/input.tsx",
+      "contentHash": "b326e2af874b14aa2ac18096ddbec512c6258f3fafc20ba6c8262818d48e6a5b",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Input"
+      ],
+      "totalLines": 23,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/label.tsx": {
+      "filePath": "src/components/ui/label.tsx",
+      "contentHash": "e69cfc27d78c9ef31b248ab8ea4fa54327c1038843f70efb5cd85d54c0bf1e0e",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-label",
+          "specifiers": [
+            "* as LabelPrimitive"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Label"
+      ],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/menubar.tsx": {
+      "filePath": "src/components/ui/menubar.tsx",
+      "contentHash": "dcf6ae1f54565c610fa5c80ed58550fe28e75c236592d21e655da1357ef10e5a",
+      "functions": [
+        {
+          "name": "MenubarShortcut",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-menubar",
+          "specifiers": [
+            "* as MenubarPrimitive"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Check",
+            "ChevronRight",
+            "Circle"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Menubar",
+        "MenubarMenu",
+        "MenubarTrigger",
+        "MenubarContent",
+        "MenubarItem",
+        "MenubarSeparator",
+        "MenubarLabel",
+        "MenubarCheckboxItem",
+        "MenubarRadioGroup",
+        "MenubarRadioItem",
+        "MenubarPortal",
+        "MenubarSubContent",
+        "MenubarSubTrigger",
+        "MenubarGroup",
+        "MenubarSub",
+        "MenubarShortcut"
+      ],
+      "totalLines": 235,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/navigation-menu.tsx": {
+      "filePath": "src/components/ui/navigation-menu.tsx",
+      "contentHash": "c07f503f41162b190bef100ba0ad31a8eaa9c790f3f782ba7df220e26f23b93a",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-navigation-menu",
+          "specifiers": [
+            "* as NavigationMenuPrimitive"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "cva"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ChevronDown"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "navigationMenuTriggerStyle",
+        "NavigationMenu",
+        "NavigationMenuList",
+        "NavigationMenuItem",
+        "NavigationMenuContent",
+        "NavigationMenuTrigger",
+        "NavigationMenuLink",
+        "NavigationMenuIndicator",
+        "NavigationMenuViewport"
+      ],
+      "totalLines": 129,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/pagination.tsx": {
+      "filePath": "src/components/ui/pagination.tsx",
+      "contentHash": "6d66283fc04f3901772f15f3108bda732efc75ce878e0d8ecf8f9fc3b0c63c26",
+      "functions": [
+        {
+          "name": "Pagination",
+          "params": [
+            "{ className, ...props }"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "PaginationLink",
+          "params": [
+            "{\n  className,\n  isActive,\n  size = \"icon\",\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "PaginationPrevious",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "PaginationNext",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "PaginationEllipsis",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 13
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "ChevronLeft",
+            "ChevronRight",
+            "MoreHorizontal"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        },
+        {
+          "source": "@/components/ui/button",
+          "specifiers": [
+            "ButtonProps",
+            "buttonVariants"
+          ]
+        }
+      ],
+      "exports": [
+        "Pagination",
+        "PaginationContent",
+        "PaginationEllipsis",
+        "PaginationItem",
+        "PaginationLink",
+        "PaginationNext",
+        "PaginationPrevious"
+      ],
+      "totalLines": 118,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/popover.tsx": {
+      "filePath": "src/components/ui/popover.tsx",
+      "contentHash": "d86882a36b2b0f92a0031f20814f6b9137b5ca484816776495ffb763fd5b0219",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-popover",
+          "specifiers": [
+            "* as PopoverPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Popover",
+        "PopoverTrigger",
+        "PopoverContent"
+      ],
+      "totalLines": 30,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/progress.tsx": {
+      "filePath": "src/components/ui/progress.tsx",
+      "contentHash": "fd25bcba572b7c28af99c6a61af8a92d74bec9811872883c7fb0f67884182b71",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-progress",
+          "specifiers": [
+            "* as ProgressPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Progress"
+      ],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/radio-group.tsx": {
+      "filePath": "src/components/ui/radio-group.tsx",
+      "contentHash": "74f87531da1fde8d3c07dbd7b380ee6508a70d5c0af1c22e2d2c33d66cc79f10",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-radio-group",
+          "specifiers": [
+            "* as RadioGroupPrimitive"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Circle"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "RadioGroup",
+        "RadioGroupItem"
+      ],
+      "totalLines": 43,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/resizable.tsx": {
+      "filePath": "src/components/ui/resizable.tsx",
+      "contentHash": "be7df63b7584141a34dcf86648e2528bbd56125661ef0f31850bb961a8e6f9a3",
+      "functions": [
+        {
+          "name": "ResizablePanelGroup",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "ResizableHandle",
+          "params": [
+            "{\n  withHandle,\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 21
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "GripVertical"
+          ]
+        },
+        {
+          "source": "react-resizable-panels",
+          "specifiers": [
+            "* as ResizablePrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "ResizablePanelGroup",
+        "ResizablePanel",
+        "ResizableHandle"
+      ],
+      "totalLines": 44,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/scroll-area.tsx": {
+      "filePath": "src/components/ui/scroll-area.tsx",
+      "contentHash": "d7d02600effca55d0dcadce8c09c97ebddda3a19c5fa1d52dc9f6f727b26c6b1",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-scroll-area",
+          "specifiers": [
+            "* as ScrollAreaPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "ScrollArea",
+        "ScrollBar"
+      ],
+      "totalLines": 47,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/select.tsx": {
+      "filePath": "src/components/ui/select.tsx",
+      "contentHash": "779226bcf9db1de4b1337647d517555c0584d5492c932f420e18688bf0c0aab4",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-select",
+          "specifiers": [
+            "* as SelectPrimitive"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Check",
+            "ChevronDown",
+            "ChevronUp"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Select",
+        "SelectGroup",
+        "SelectValue",
+        "SelectTrigger",
+        "SelectContent",
+        "SelectLabel",
+        "SelectItem",
+        "SelectSeparator",
+        "SelectScrollUpButton",
+        "SelectScrollDownButton"
+      ],
+      "totalLines": 159,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/separator.tsx": {
+      "filePath": "src/components/ui/separator.tsx",
+      "contentHash": "c956c4cca4b8442fa9314d6079b9f975e1ee39d5804aaf2966990f6258ac342a",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-separator",
+          "specifiers": [
+            "* as SeparatorPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Separator"
+      ],
+      "totalLines": 30,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/sheet.tsx": {
+      "filePath": "src/components/ui/sheet.tsx",
+      "contentHash": "a4292e4b2ab39bd9c1149523543244453ba931161c78dd2474a31590f131102c",
+      "functions": [
+        {
+          "name": "SheetHeader",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "SheetFooter",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@radix-ui/react-dialog",
+          "specifiers": [
+            "* as SheetPrimitive"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "X"
+          ]
+        },
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Sheet",
+        "SheetClose",
+        "SheetContent",
+        "SheetDescription",
+        "SheetFooter",
+        "SheetHeader",
+        "SheetOverlay",
+        "SheetPortal",
+        "SheetTitle",
+        "SheetTrigger"
+      ],
+      "totalLines": 132,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/sidebar.tsx": {
+      "filePath": "src/components/ui/sidebar.tsx",
+      "contentHash": "6eabbce16735706d4172f546f33a944520419f9750b9a1e4a7e8e7c0b5765ebb",
+      "functions": [
+        {
+          "name": "useSidebar",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-slot",
+          "specifiers": [
+            "Slot"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "VariantProps",
+            "cva"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "PanelLeft"
+          ]
+        },
+        {
+          "source": "@/hooks/use-mobile",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        },
+        {
+          "source": "@/components/ui/button",
+          "specifiers": [
+            "Button"
+          ]
+        },
+        {
+          "source": "@/components/ui/input",
+          "specifiers": [
+            "Input"
+          ]
+        },
+        {
+          "source": "@/components/ui/separator",
+          "specifiers": [
+            "Separator"
+          ]
+        },
+        {
+          "source": "@/components/ui/sheet",
+          "specifiers": [
+            "Sheet",
+            "SheetContent"
+          ]
+        },
+        {
+          "source": "@/components/ui/skeleton",
+          "specifiers": [
+            "Skeleton"
+          ]
+        },
+        {
+          "source": "@/components/ui/tooltip",
+          "specifiers": [
+            "Tooltip",
+            "TooltipContent",
+            "TooltipProvider",
+            "TooltipTrigger"
+          ]
+        }
+      ],
+      "exports": [
+        "Sidebar",
+        "SidebarContent",
+        "SidebarFooter",
+        "SidebarGroup",
+        "SidebarGroupAction",
+        "SidebarGroupContent",
+        "SidebarGroupLabel",
+        "SidebarHeader",
+        "SidebarInput",
+        "SidebarInset",
+        "SidebarMenu",
+        "SidebarMenuAction",
+        "SidebarMenuBadge",
+        "SidebarMenuButton",
+        "SidebarMenuItem",
+        "SidebarMenuSkeleton",
+        "SidebarMenuSub",
+        "SidebarMenuSubButton",
+        "SidebarMenuSubItem",
+        "SidebarProvider",
+        "SidebarRail",
+        "SidebarSeparator",
+        "SidebarTrigger",
+        "useSidebar"
+      ],
+      "totalLines": 762,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/skeleton.tsx": {
+      "filePath": "src/components/ui/skeleton.tsx",
+      "contentHash": "a72a9d8fc1c1999b5411a33391c5e70048863c5865629077280e943ca85689a8",
+      "functions": [
+        {
+          "name": "Skeleton",
+          "params": [
+            "{\n  className,\n  ...props\n}"
+          ],
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Skeleton"
+      ],
+      "totalLines": 16,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/slider.tsx": {
+      "filePath": "src/components/ui/slider.tsx",
+      "contentHash": "61e959d046f72e295d73a822b9afc7cc87ec6d1007905f2572e6117d7b2067b6",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-slider",
+          "specifiers": [
+            "* as SliderPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Slider"
+      ],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/sonner.tsx": {
+      "filePath": "src/components/ui/sonner.tsx",
+      "contentHash": "1e61e7f16c596806b1f825a04b8fd92ce916209ea80428fc29e3107e2f5f9bdd",
+      "functions": [
+        {
+          "name": "Toaster",
+          "params": [
+            "{ ...props }"
+          ],
+          "exported": true,
+          "lineCount": 23
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "next-themes",
+          "specifiers": [
+            "useTheme"
+          ]
+        },
+        {
+          "source": "sonner",
+          "specifiers": [
+            "Sonner"
+          ]
+        }
+      ],
+      "exports": [
+        "Toaster"
+      ],
+      "totalLines": 31,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/switch.tsx": {
+      "filePath": "src/components/ui/switch.tsx",
+      "contentHash": "bd29ce723e952bc7f8fab367320347ca82fbb933f4da9872c7120d6765662ebe",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-switch",
+          "specifiers": [
+            "* as SwitchPrimitives"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Switch"
+      ],
+      "totalLines": 28,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/table.tsx": {
+      "filePath": "src/components/ui/table.tsx",
+      "contentHash": "1da243956282c040db49d5718d2f0093a705fbbdfa3a25f51c1a31a069c45093",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Table",
+        "TableHeader",
+        "TableBody",
+        "TableFooter",
+        "TableHead",
+        "TableRow",
+        "TableCell",
+        "TableCaption"
+      ],
+      "totalLines": 118,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/tabs.tsx": {
+      "filePath": "src/components/ui/tabs.tsx",
+      "contentHash": "d9958fd005db42bcca4f2c12ede63500e74f1a9bd82ddc3a6bf6fcb369706f07",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-tabs",
+          "specifiers": [
+            "* as TabsPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Tabs",
+        "TabsList",
+        "TabsTrigger",
+        "TabsContent"
+      ],
+      "totalLines": 54,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/textarea.tsx": {
+      "filePath": "src/components/ui/textarea.tsx",
+      "contentHash": "e988ed61d99caee435886f508920e5bf3fa04bd196b652aa2b84acae16268f09",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Textarea"
+      ],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/toast.tsx": {
+      "filePath": "src/components/ui/toast.tsx",
+      "contentHash": "9bf6db5aadf58d54006df123290dc632630ee9e182724e0199135998908fa0b1",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-toast",
+          "specifiers": [
+            "* as ToastPrimitives"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "X"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "ToastProps",
+        "ToastActionElement",
+        "ToastProvider",
+        "ToastViewport",
+        "Toast",
+        "ToastTitle",
+        "ToastDescription",
+        "ToastClose",
+        "ToastAction"
+      ],
+      "totalLines": 128,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/toaster.tsx": {
+      "filePath": "src/components/ui/toaster.tsx",
+      "contentHash": "1348f1a1f9820e2f1394b93cecc156a7e22f03636ab9270753985549aae2be74",
+      "functions": [
+        {
+          "name": "Toaster",
+          "params": [],
+          "exported": true,
+          "lineCount": 23
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/hooks/use-toast",
+          "specifiers": [
+            "useToast"
+          ]
+        },
+        {
+          "source": "@/components/ui/toast",
+          "specifiers": [
+            "Toast",
+            "ToastClose",
+            "ToastDescription",
+            "ToastProvider",
+            "ToastTitle",
+            "ToastViewport"
+          ]
+        }
+      ],
+      "exports": [
+        "Toaster"
+      ],
+      "totalLines": 34,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/toggle-group.tsx": {
+      "filePath": "src/components/ui/toggle-group.tsx",
+      "contentHash": "11592e3f7673ef518e2f82b939dc4752fe5ef7953f487f35595931c3d16fc37d",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-toggle-group",
+          "specifiers": [
+            "* as ToggleGroupPrimitive"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "VariantProps"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        },
+        {
+          "source": "@/components/ui/toggle",
+          "specifiers": [
+            "toggleVariants"
+          ]
+        }
+      ],
+      "exports": [
+        "ToggleGroup",
+        "ToggleGroupItem"
+      ],
+      "totalLines": 60,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/toggle.tsx": {
+      "filePath": "src/components/ui/toggle.tsx",
+      "contentHash": "44b2261c0779ea69bc5e14efc6b2756c1469165b2c445cb3c6c52f98d9c23571",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-toggle",
+          "specifiers": [
+            "* as TogglePrimitive"
+          ]
+        },
+        {
+          "source": "class-variance-authority",
+          "specifiers": [
+            "cva",
+            "VariantProps"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Toggle",
+        "toggleVariants"
+      ],
+      "totalLines": 44,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/tooltip.tsx": {
+      "filePath": "src/components/ui/tooltip.tsx",
+      "contentHash": "955e81c757a7cf51e1dc591d663c797b5ef8f0bb5fcc26778ca673e2284686cd",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@radix-ui/react-tooltip",
+          "specifiers": [
+            "* as TooltipPrimitive"
+          ]
+        },
+        {
+          "source": "@/lib/utils",
+          "specifiers": [
+            "cn"
+          ]
+        }
+      ],
+      "exports": [
+        "Tooltip",
+        "TooltipTrigger",
+        "TooltipContent",
+        "TooltipProvider"
+      ],
+      "totalLines": 29,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/ui/use-toast.ts": {
+      "filePath": "src/components/ui/use-toast.ts",
+      "contentHash": "d48c4c490e5101aa42ceed9b8ca49642d66152ba11daf7ee6c29bee0f5172c37",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/hooks/use-toast",
+          "specifiers": [
+            "useToast",
+            "toast"
+          ]
+        }
+      ],
+      "exports": [
+        "useToast",
+        "toast"
+      ],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    "src/components/VerticalLandingPage.tsx": {
+      "filePath": "src/components/VerticalLandingPage.tsx",
+      "contentHash": "86b0debe6ce2cc9ba9d2766bc47c32f604b1d78dd70ccc47f8621f1ecd58f184",
+      "functions": [
+        {
+          "name": "buildUrl",
+          "params": [
+            "pathname"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "formatDuration",
+          "params": [
+            "seconds"
+          ],
+          "exported": false,
+          "lineCount": 1
+        },
+        {
+          "name": "getHighQualityServicePosterSrc",
+          "params": [
+            "mainSrc",
+            "fallbackSrc"
+          ],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "useScrollReveal",
+          "params": [],
+          "exported": false,
+          "lineCount": 22
+        },
+        {
+          "name": "RevealSection",
+          "params": [
+            "{\n  children,\n  className = '',\n  id,\n}"
+          ],
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "VerticalLandingPage",
+          "params": [
+            "{ verticalId, locale }"
+          ],
+          "exported": false,
+          "lineCount": 641
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "Suspense",
+            "lazy",
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useRef",
+            "useState",
+            "SyntheticEvent"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "Link"
+          ]
+        },
+        {
+          "source": "lucide-react",
+          "specifiers": [
+            "Play",
+            "ChevronLeft",
+            "ChevronRight",
+            "X"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "VerticalPageId",
+            "SiteLocale"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getHomePath",
+            "getHomeSectionHref",
+            "getVerticalPath",
+            "getServicePath"
+          ]
+        },
+        {
+          "source": "@/data/vertical-pages",
+          "specifiers": [
+            "getVerticalPageContent"
+          ]
+        },
+        {
+          "source": "@/data/service-pages",
+          "specifiers": [
+            "getServicePageContent",
+            "getRelatedServiceSummaries"
+          ]
+        },
+        {
+          "source": "@/data/portfolio-clips",
+          "specifiers": [
+            "LEGACY_REEL_CLIPS"
+          ]
+        },
+        {
+          "source": "@/data/nuevos-r2-ready",
+          "specifiers": [
+            "NUEVOS_R2_READY_CLIPS"
+          ]
+        },
+        {
+          "source": "@/components/Navbar",
+          "specifiers": [
+            "Navbar"
+          ]
+        },
+        {
+          "source": "@/components/SiteFooter",
+          "specifiers": [
+            "SiteFooter"
+          ]
+        },
+        {
+          "source": "@/components/PageSeo",
+          "specifiers": [
+            "PageSeo"
+          ]
+        },
+        {
+          "source": "@/components/media/TheaterVideo",
+          "specifiers": [
+            "TheaterVideo"
+          ]
+        },
+        {
+          "source": "@/components/media/AutoplayPreviewVideo",
+          "specifiers": [
+            "AutoplayPreviewVideo"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 761,
+      "hasStructuralAnalysis": true
+    },
+    "src/data/legal-pages.ts": {
+      "filePath": "src/data/legal-pages.ts",
+      "contentHash": "3ccfc024a5685cf692364c4a1d81609caab3e38641f1d541b1e0a204b4ead4db",
+      "functions": [
+        {
+          "name": "getLegalPageContent",
+          "params": [
+            "pageId",
+            "locale"
+          ],
+          "returnType": "LegalPageContent",
+          "exported": true,
+          "lineCount": 18
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getLegalPath",
+            "LegalPageId",
+            "SiteLocale"
+          ]
+        }
+      ],
+      "exports": [
+        "getLegalPageContent"
+      ],
+      "totalLines": 593,
+      "hasStructuralAnalysis": true
+    },
+    "src/data/nuevos-r2-ready.ts": {
+      "filePath": "src/data/nuevos-r2-ready.ts",
+      "contentHash": "4fba0aaea0a27d29eaffa2da86a266eb0f64c8a94e5cf646bd261621266366c6",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/data/portfolio-clips",
+          "specifiers": [
+            "ReelClip"
+          ]
+        }
+      ],
+      "exports": [
+        "NUEVOS_R2_READY_CLIPS",
+        "NUEVOS_R2_BLOCK_REPORT"
+      ],
+      "totalLines": 214,
+      "hasStructuralAnalysis": true
+    },
+    "src/data/portfolio-clips.ts": {
+      "filePath": "src/data/portfolio-clips.ts",
+      "contentHash": "c280034c61772a89087af22f036af46ffe7072b947e3af9a15c2e6053adf107e",
+      "functions": [
+        {
+          "name": "r2MainVideo",
+          "params": [
+            "filename"
+          ],
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "r2MobileVideo",
+          "params": [
+            "filename"
+          ],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "r2PreviewVideo",
+          "params": [
+            "filename"
+          ],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "r2Poster",
+          "params": [
+            "filename"
+          ],
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "posterThumbSrc",
+          "params": [
+            "posterSrc"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "R2_MEDIA_BASE_URL",
+        "r2MainVideo",
+        "r2MobileVideo",
+        "r2PreviewVideo",
+        "r2Poster",
+        "posterThumbSrc",
+        "FEATURED_REEL_CLIP_IDS",
+        "LEGACY_REEL_CLIPS"
+      ],
+      "totalLines": 169,
+      "hasStructuralAnalysis": true
+    },
+    "src/data/resource-pages.ts": {
+      "filePath": "src/data/resource-pages.ts",
+      "contentHash": "0cca0d41aac708faf939927e42c58fa588ce30a5cc2f1e4d76e3197a1511e337",
+      "functions": [
+        {
+          "name": "getResourcePageContent",
+          "params": [
+            "resourceId",
+            "locale"
+          ],
+          "returnType": "ResourcePageContent",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "getAllResourceIds",
+          "params": [],
+          "returnType": "ResourcePageId[]",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "ServicePageId",
+            "VerticalPageId",
+            "SiteLocale",
+            "ResourcePageId"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getHomePath",
+            "getResourcePath"
+          ]
+        }
+      ],
+      "exports": [
+        "ResourcePageId",
+        "getResourcePath",
+        "getResourcePageContent",
+        "getAllResourceIds"
+      ],
+      "totalLines": 1031,
+      "hasStructuralAnalysis": true
+    },
+    "src/data/service-pages.ts": {
+      "filePath": "src/data/service-pages.ts",
+      "contentHash": "e60b46ec32034dc40548ffb1a5bf6acfe54dbf377a8ae4d17ec30c59ad3b403a",
+      "functions": [
+        {
+          "name": "getServicePageContent",
+          "params": [
+            "serviceId",
+            "locale"
+          ],
+          "returnType": "ServicePageContent",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "getServicePageRouteEntries",
+          "params": [],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "getAllServiceIds",
+          "params": [],
+          "returnType": "ServicePageId[]",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "getRelatedServiceSummaries",
+          "params": [
+            "serviceIds",
+            "locale"
+          ],
+          "returnType": "RelatedServiceSummary[]",
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "ServicePageId",
+            "SiteLocale"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getHomePath",
+            "getServicePath"
+          ]
+        }
+      ],
+      "exports": [
+        "getServicePageContent",
+        "getServicePageRouteEntries",
+        "getAllServiceIds",
+        "getRelatedServiceSummaries"
+      ],
+      "totalLines": 2143,
+      "hasStructuralAnalysis": true
+    },
+    "src/data/vertical-pages.ts": {
+      "filePath": "src/data/vertical-pages.ts",
+      "contentHash": "f72b186aa60b0a68b51349de37be38004039a4dbfa1f86a035c443f59a790b6b",
+      "functions": [
+        {
+          "name": "getVerticalPageContent",
+          "params": [
+            "verticalId",
+            "locale"
+          ],
+          "returnType": "VerticalPageContent",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "getVerticalPageRouteEntries",
+          "params": [],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "getAllVerticalIds",
+          "params": [],
+          "returnType": "VerticalPageId[]",
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "VerticalPageId",
+            "ServicePageId",
+            "SiteLocale"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getHomePath",
+            "getVerticalPath"
+          ]
+        }
+      ],
+      "exports": [
+        "getVerticalPageContent",
+        "getVerticalPageRouteEntries",
+        "getAllVerticalIds"
+      ],
+      "totalLines": 1366,
+      "hasStructuralAnalysis": true
+    },
+    "src/data/video-lqip.ts": {
+      "filePath": "src/data/video-lqip.ts",
+      "contentHash": "549eeb8f3049969ea88254ac3b02d7055ea7f9fbc831c275428966ec00fceaa5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/use-deferred-mount.tsx": {
+      "filePath": "src/hooks/use-deferred-mount.tsx",
+      "contentHash": "c6412cb59e9f8909cf7eef311a2b585a8e795475701261f1ad2781feb6f353a4",
+      "functions": [
+        {
+          "name": "useDeferredMount",
+          "params": [
+            "{\n  enabled = true,\n  rootMargin = '700px 0px',\n  queueDelayMs = 300,\n  mountId,\n}"
+          ],
+          "returnType": "DeferredMountState",
+          "exported": true,
+          "lineCount": 81
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "startTransition",
+            "useEffect",
+            "useRef",
+            "useState",
+            "RefObject"
+          ]
+        },
+        {
+          "source": "@/lib/perf-debug",
+          "specifiers": [
+            "mark",
+            "measure"
+          ]
+        }
+      ],
+      "exports": [
+        "useDeferredMount"
+      ],
+      "totalLines": 104,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/use-hashless-section-navigation.ts": {
+      "filePath": "src/hooks/use-hashless-section-navigation.ts",
+      "contentHash": "c9ab6d2d25fbf9a787c39b8ae97462b4030936576dc4f286ae3fc6a4993e3b56",
+      "functions": [
+        {
+          "name": "stripHashFromUrl",
+          "params": [],
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "clearUrlHash",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "cancelActiveScroll",
+          "params": [],
+          "exported": false,
+          "lineCount": 5
+        },
+        {
+          "name": "premiumEaseScroll",
+          "params": [
+            "t"
+          ],
+          "returnType": "number",
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "smoothScrollTo",
+          "params": [
+            "targetElement",
+            "duration"
+          ],
+          "exported": false,
+          "lineCount": 35
+        },
+        {
+          "name": "useHashlessSectionNavigation",
+          "params": [],
+          "exported": true,
+          "lineCount": 36
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "useCallback"
+          ]
+        },
+        {
+          "source": "react",
+          "specifiers": [
+            "MouseEvent"
+          ]
+        }
+      ],
+      "exports": [
+        "clearUrlHash",
+        "useHashlessSectionNavigation"
+      ],
+      "totalLines": 111,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/use-mobile.tsx": {
+      "filePath": "src/hooks/use-mobile.tsx",
+      "contentHash": "e6cdff8655ccf50f45cad529c6658089ac641e7f16a9de4428cc5bbc2ba03606",
+      "functions": [
+        {
+          "name": "getIsMobile",
+          "params": [],
+          "exported": false,
+          "lineCount": 2
+        },
+        {
+          "name": "useIsMobile",
+          "params": [],
+          "exported": true,
+          "lineCount": 15
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        }
+      ],
+      "exports": [
+        "useIsMobile"
+      ],
+      "totalLines": 23,
+      "hasStructuralAnalysis": true
+    },
+    "src/hooks/use-toast.ts": {
+      "filePath": "src/hooks/use-toast.ts",
+      "contentHash": "5aab0623ee24bddf9420c259a23a06996292e38ea70eccbac2715516f6d01a0b",
+      "functions": [
+        {
+          "name": "genId",
+          "params": [],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "addToRemoveQueue",
+          "params": [
+            "toastId"
+          ],
+          "exported": false,
+          "lineCount": 15
+        },
+        {
+          "name": "reducer",
+          "params": [
+            "state",
+            "action"
+          ],
+          "returnType": "State",
+          "exported": true,
+          "lineCount": 54
+        },
+        {
+          "name": "dispatch",
+          "params": [
+            "action"
+          ],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "toast",
+          "params": [
+            "{ ...props }"
+          ],
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "useToast",
+          "params": [],
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "* as React"
+          ]
+        },
+        {
+          "source": "@/components/ui/toast",
+          "specifiers": [
+            "ToastActionElement",
+            "ToastProps"
+          ]
+        }
+      ],
+      "exports": [
+        "reducer",
+        "useToast",
+        "toast"
+      ],
+      "totalLines": 192,
+      "hasStructuralAnalysis": true
+    },
+    "src/i18n.ts": {
+      "filePath": "src/i18n.ts",
+      "contentHash": "0289bfac0362c60cd26b9ad69f4e034a098c76b114f94dbfc10337536b1f50e1",
+      "functions": [
+        {
+          "name": "syncDocumentLanguage",
+          "params": [
+            "lng"
+          ],
+          "exported": false,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "i18next",
+          "specifiers": [
+            "i18n"
+          ]
+        },
+        {
+          "source": "react-i18next",
+          "specifiers": [
+            "initReactI18next"
+          ]
+        },
+        {
+          "source": "i18next-browser-languagedetector",
+          "specifiers": [
+            "LanguageDetector"
+          ]
+        },
+        {
+          "source": "@/locales/en/translation.json",
+          "specifiers": [
+            "enTranslation"
+          ]
+        },
+        {
+          "source": "@/locales/es/translation.json",
+          "specifiers": [
+            "esTranslation"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "src/index.css": {
+      "filePath": "src/index.css",
+      "contentHash": "05577bc0853e82c4e2a3cbfc0d58edeb88121fc214eb1a012582d8695219e35e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 3355,
+      "hasStructuralAnalysis": false
+    },
+    "src/lib/contact-dock.ts": {
+      "filePath": "src/lib/contact-dock.ts",
+      "contentHash": "e537165bb76d65569320cb070d3afd719021ee358078341d8cf36c38eee8d00b",
+      "functions": [
+        {
+          "name": "dispatchContactDockAction",
+          "params": [
+            "action"
+          ],
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "openContactDock",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "toggleContactDock",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "onContactDockAction",
+          "params": [
+            "callback"
+          ],
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "consumePendingContactDockAction",
+          "params": [],
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "isMobileViewport",
+          "params": [],
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "openContactDock",
+        "toggleContactDock",
+        "onContactDockAction",
+        "consumePendingContactDockAction",
+        "isMobileViewport"
+      ],
+      "totalLines": 59,
+      "hasStructuralAnalysis": true
+    },
+    "src/lib/locale-path.ts": {
+      "filePath": "src/lib/locale-path.ts",
+      "contentHash": "da3ffc74ee6ef1f0e7bb5649053addf2660c57fd3defa6b63d0b1fcc644e7175",
+      "functions": [
+        {
+          "name": "normalizeHash",
+          "params": [
+            "hash"
+          ],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "normalizePathname",
+          "params": [
+            "pathname"
+          ],
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "getLocaleFromPath",
+          "params": [
+            "pathname"
+          ],
+          "returnType": "SiteLocale",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "isHomePath",
+          "params": [
+            "pathname"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "getHomePath",
+          "params": [
+            "locale",
+            "hash"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getCanonicalLocaleHref",
+          "params": [
+            "locale",
+            "hash"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getHomeSectionHref",
+          "params": [
+            "locale",
+            "sectionId"
+          ],
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getServicePath",
+          "params": [
+            "serviceId",
+            "locale"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getVerticalPath",
+          "params": [
+            "verticalId",
+            "locale"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getResourcePath",
+          "params": [
+            "resourceId",
+            "locale"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getLegalPath",
+          "params": [
+            "pageId",
+            "locale"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getPageIdFromPath",
+          "params": [
+            "pathname",
+            "paths"
+          ],
+          "returnType": "TPageId | null",
+          "exported": false,
+          "lineCount": 15
+        },
+        {
+          "name": "getServicePageIdFromPath",
+          "params": [
+            "pathname"
+          ],
+          "returnType": "ServicePageId | null",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "getVerticalPageIdFromPath",
+          "params": [
+            "pathname"
+          ],
+          "returnType": "VerticalPageId | null",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "getResourcePageIdFromPath",
+          "params": [
+            "pathname"
+          ],
+          "returnType": "ResourcePageId | null",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "getLegalPageIdFromPath",
+          "params": [
+            "pathname"
+          ],
+          "returnType": "LegalPageId | null",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "getLocalizedPathForCurrentRoute",
+          "params": [
+            "pathname",
+            "targetLocale",
+            "hash"
+          ],
+          "returnType": "string",
+          "exported": true,
+          "lineCount": 27
+        },
+        {
+          "name": "getAllServicePaths",
+          "params": [],
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getAllVerticalPaths",
+          "params": [],
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getAllResourcePaths",
+          "params": [],
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getAllLegalPaths",
+          "params": [],
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "getServicePageRouteEntries",
+          "params": [],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "getVerticalPageRouteEntries",
+          "params": [],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "getResourcePageRouteEntries",
+          "params": [],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "getLegalPageRouteEntries",
+          "params": [],
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "normalizePathname",
+        "getLocaleFromPath",
+        "isHomePath",
+        "getHomePath",
+        "getCanonicalLocaleHref",
+        "getHomeSectionHref",
+        "getServicePath",
+        "getVerticalPath",
+        "getResourcePath",
+        "getLegalPath",
+        "getServicePageIdFromPath",
+        "getVerticalPageIdFromPath",
+        "getResourcePageIdFromPath",
+        "getLegalPageIdFromPath",
+        "getLocalizedPathForCurrentRoute",
+        "getAllServicePaths",
+        "getAllVerticalPaths",
+        "getAllResourcePaths",
+        "getAllLegalPaths",
+        "getServicePageRouteEntries",
+        "getVerticalPageRouteEntries",
+        "getResourcePageRouteEntries",
+        "getLegalPageRouteEntries"
+      ],
+      "totalLines": 245,
+      "hasStructuralAnalysis": true
+    },
+    "src/lib/perf-debug.ts": {
+      "filePath": "src/lib/perf-debug.ts",
+      "contentHash": "5e6711f9bf967c1d219bd20c4d7ea9075e083f1adb7b5c42b7842322ce97d736",
+      "functions": [
+        {
+          "name": "mark",
+          "params": [
+            "name"
+          ],
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "measure",
+          "params": [
+            "startMark",
+            "endMark",
+            "label"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "startLongTaskObserver",
+          "params": [],
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "shouldEnableMobilePerfDebug",
+          "params": [],
+          "exported": false,
+          "lineCount": 12
+        },
+        {
+          "name": "isMobileViewport",
+          "params": [],
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "getBufferedSeconds",
+          "params": [
+            "video"
+          ],
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "getHeapUsedMb",
+          "params": [],
+          "exported": false,
+          "lineCount": 6
+        },
+        {
+          "name": "logMobileMediaPressureSnapshot",
+          "params": [],
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "startMobileMediaPressureObserver",
+          "params": [],
+          "exported": true,
+          "lineCount": 31
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "mark",
+        "measure",
+        "startLongTaskObserver",
+        "logMobileMediaPressureSnapshot",
+        "startMobileMediaPressureObserver"
+      ],
+      "totalLines": 147,
+      "hasStructuralAnalysis": true
+    },
+    "src/lib/referral-attribution.ts": {
+      "filePath": "src/lib/referral-attribution.ts",
+      "contentHash": "5037873a28ea5d5cbe30dcb3682b70033a936a527a5c0bd28c248389ef35bc94",
+      "functions": [
+        {
+          "name": "parseHostname",
+          "params": [
+            "value"
+          ],
+          "returnType": "string | null",
+          "exported": false,
+          "lineCount": 9
+        },
+        {
+          "name": "isChatGptHost",
+          "params": [
+            "hostname"
+          ],
+          "returnType": "boolean",
+          "exported": false,
+          "lineCount": 4
+        },
+        {
+          "name": "getChatGptReferralContext",
+          "params": [
+            "locationHref",
+            "documentReferrer"
+          ],
+          "returnType": "ChatGptReferralContext | null",
+          "exported": true,
+          "lineCount": 35
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "getChatGptReferralContext"
+      ],
+      "totalLines": 63,
+      "hasStructuralAnalysis": true
+    },
+    "src/lib/utils.ts": {
+      "filePath": "src/lib/utils.ts",
+      "contentHash": "7c8c3dfc0cdd370d44932828eb067ef771c8fe7996693221d5d4b90af6d54f2d",
+      "functions": [
+        {
+          "name": "cn",
+          "params": [
+            "...inputs"
+          ],
+          "exported": true,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "clsx",
+          "specifiers": [
+            "clsx",
+            "ClassValue"
+          ]
+        },
+        {
+          "source": "tailwind-merge",
+          "specifiers": [
+            "twMerge"
+          ]
+        }
+      ],
+      "exports": [
+        "cn"
+      ],
+      "totalLines": 7,
+      "hasStructuralAnalysis": true
+    },
+    "src/locales/en/translation.json": {
+      "filePath": "src/locales/en/translation.json",
+      "contentHash": "7823a8ee9720b952a9ebf7fe4f23b13504b41e4a7c245f7d08ba383478ed63cb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 360,
+      "hasStructuralAnalysis": true
+    },
+    "src/locales/es/translation.json": {
+      "filePath": "src/locales/es/translation.json",
+      "contentHash": "603778a5e374eed8f2778461e24da79521c2c9f044a3bf44470b0cb1664b91d3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 360,
+      "hasStructuralAnalysis": true
+    },
+    "src/main.tsx": {
+      "filePath": "src/main.tsx",
+      "contentHash": "9b21e54143bdd57337da4db02586696f4cb62f3c4c81e62323dddb7081d5d6f4",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-dom/client",
+          "specifiers": [
+            "createRoot"
+          ]
+        },
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "BrowserRouter"
+          ]
+        },
+        {
+          "source": "next-themes",
+          "specifiers": [
+            "ThemeProvider"
+          ]
+        },
+        {
+          "source": "./App.tsx",
+          "specifiers": [
+            "App"
+          ]
+        },
+        {
+          "source": "./index.css",
+          "specifiers": []
+        },
+        {
+          "source": "./i18n",
+          "specifiers": []
+        }
+      ],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/Index.tsx": {
+      "filePath": "src/pages/Index.tsx",
+      "contentHash": "c10f82fd6a95a50e735f57be1743277d8ff9dcb829f9c901eb2945eae3f6bb6b",
+      "functions": [
+        {
+          "name": "DeferredSection",
+          "params": [
+            "{\n  enabled,\n  mountId,\n  rootMargin = '700px 0px',\n  queueDelayMs = 300,\n  skeleton,\n  children,\n}"
+          ],
+          "exported": false,
+          "lineCount": 30
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react",
+          "specifiers": [
+            "lazy",
+            "memo",
+            "Suspense",
+            "useEffect",
+            "ReactNode"
+          ]
+        },
+        {
+          "source": "@/components/Navbar",
+          "specifiers": [
+            "Navbar"
+          ]
+        },
+        {
+          "source": "@/components/Hero",
+          "specifiers": [
+            "Hero"
+          ]
+        },
+        {
+          "source": "@/components/CreatorAdvantage",
+          "specifiers": [
+            "CreatorAdvantageSection"
+          ]
+        },
+        {
+          "source": "@/hooks/use-mobile",
+          "specifiers": [
+            "useIsMobile"
+          ]
+        },
+        {
+          "source": "@/hooks/use-hashless-section-navigation",
+          "specifiers": [
+            "clearUrlHash"
+          ]
+        },
+        {
+          "source": "@/components/motion/SectionSkeleton",
+          "specifiers": [
+            "SectionSkeleton"
+          ]
+        },
+        {
+          "source": "@/components/motion/FadeInOnMount",
+          "specifiers": [
+            "FadeInOnMount"
+          ]
+        },
+        {
+          "source": "@/hooks/use-deferred-mount",
+          "specifiers": [
+            "useDeferredMount"
+          ]
+        },
+        {
+          "source": "@/lib/perf-debug",
+          "specifiers": [
+            "mark",
+            "measure",
+            "startLongTaskObserver"
+          ]
+        },
+        {
+          "source": "@/components/PageSeo",
+          "specifiers": [
+            "PageSeo"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getHomePath",
+            "SiteLocale"
+          ]
+        },
+        {
+          "source": "@/components/SiteFooter",
+          "specifiers": [
+            "SiteFooter"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 219,
+      "hasStructuralAnalysis": true
+    },
+    "src/pages/NotFound.tsx": {
+      "filePath": "src/pages/NotFound.tsx",
+      "contentHash": "970e450ddb024bb3b8934844dc4cd1c57d22e2bd75b27c40f0900d9f5cee0591",
+      "functions": [
+        {
+          "name": "NotFound",
+          "params": [],
+          "exported": false,
+          "lineCount": 32
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "react-router-dom",
+          "specifiers": [
+            "useLocation",
+            "Link"
+          ]
+        },
+        {
+          "source": "react",
+          "specifiers": [
+            "useEffect"
+          ]
+        },
+        {
+          "source": "@/lib/locale-path",
+          "specifiers": [
+            "getHomePath",
+            "getLocaleFromPath"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 39,
+      "hasStructuralAnalysis": true
+    },
+    "src/vite-env.d.ts": {
+      "filePath": "src/vite-env.d.ts",
+      "contentHash": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "tailwind.config.ts": {
+      "filePath": "tailwind.config.ts",
+      "contentHash": "7c5549c4434a5d42197f4779f8cb46c122a6d950485d077ab2bc48b185b23853",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "tailwindcss",
+          "specifiers": [
+            "Config"
+          ]
+        },
+        {
+          "source": "tailwindcss-animate",
+          "specifiers": [
+            "tailwindcssAnimate"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 152,
+      "hasStructuralAnalysis": true
+    },
+    "terminos-y-uso-de-contenido/index.html": {
+      "filePath": "terminos-y-uso-de-contenido/index.html",
+      "contentHash": "88556f0037a549f1636cbe82c3535761560b7712cf7aa08adc73a050dff32659",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 309,
+      "hasStructuralAnalysis": false
+    },
+    "tsconfig.app.json": {
+      "filePath": "tsconfig.app.json",
+      "contentHash": "3d44641a0151484d5adb5c764a4766a8e31076d2fd557dbe8c6e1c87863058f7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 31,
+      "hasStructuralAnalysis": true
+    },
+    "tsconfig.json": {
+      "filePath": "tsconfig.json",
+      "contentHash": "1914430cf76f7e28628f4a14b7b09e256f5ac5263e816c63691b08cf083994a8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "tsconfig.node.json": {
+      "filePath": "tsconfig.node.json",
+      "contentHash": "a96b9ba5e40d95b92adf56431fdf9cbe25b5c2557621f0666615bff6889dfc50",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 23,
+      "hasStructuralAnalysis": true
+    },
+    "UGC_MODERNIZATION_INSTRUCTIONS.md": {
+      "filePath": "UGC_MODERNIZATION_INSTRUCTIONS.md",
+      "contentHash": "ef4d2beb57159fa85c435258e080d786ed7a777b5a827deecd61685661c60b7d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 67,
+      "hasStructuralAnalysis": true
+    },
+    "vercel.json": {
+      "filePath": "vercel.json",
+      "contentHash": "247d568db552d563d21fc4512e860549f1584504219bfd47affccd24d3e527b3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 136,
+      "hasStructuralAnalysis": true
+    },
+    "verticales/ugc-beauty/index.html": {
+      "filePath": "verticales/ugc-beauty/index.html",
+      "contentHash": "3c32e024fa694870e99a5f9b8f3252517002a3d7c3122992122b64f762adce91",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 279,
+      "hasStructuralAnalysis": false
+    },
+    "verticales/ugc-ecommerce/index.html": {
+      "filePath": "verticales/ugc-ecommerce/index.html",
+      "contentHash": "bb36412f7137651b6412e6ce236ac6ed2cb720c5f6de3906f47023507952f56a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 280,
+      "hasStructuralAnalysis": false
+    },
+    "verticales/ugc-lifestyle-bienestar/index.html": {
+      "filePath": "verticales/ugc-lifestyle-bienestar/index.html",
+      "contentHash": "281f1c68621055b555cecc94d758ff4a28f32ff3a8f7f310ce261013e0d76043",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 280,
+      "hasStructuralAnalysis": false
+    },
+    "verticales/ugc-moda/index.html": {
+      "filePath": "verticales/ugc-moda/index.html",
+      "contentHash": "ceadaf39e22d69d5128044323ad58109c0f4794c28772e901e971987a69317b0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 280,
+      "hasStructuralAnalysis": false
+    },
+    "verticales/ugc-tech-saas/index.html": {
+      "filePath": "verticales/ugc-tech-saas/index.html",
+      "contentHash": "5ab85b0333612f739e052c6efd99d42d412444900426b0ff61072fa01785dfe3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 280,
+      "hasStructuralAnalysis": false
+    },
+    "vite.config.ts": {
+      "filePath": "vite.config.ts",
+      "contentHash": "3106f1b4749fe31a70fb9b36f72c81295b76384f6a5909f49ad5d7df52913037",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "vite",
+          "specifiers": [
+            "defineConfig"
+          ]
+        },
+        {
+          "source": "@vitejs/plugin-react-swc",
+          "specifiers": [
+            "react"
+          ]
+        },
+        {
+          "source": "path",
+          "specifiers": [
+            "path"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 122,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

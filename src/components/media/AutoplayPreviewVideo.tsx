@@ -8,7 +8,7 @@ type AutoplayPreviewVideoProps = Omit<
 > & {
   src: string;
   hlsSrc?: string;
-  poster: string;
+  poster?: string;
   pauseOffscreen?: boolean;
   rootMargin?: string;
   unloadWhenOffscreen?: boolean;
@@ -16,6 +16,7 @@ type AutoplayPreviewVideoProps = Omit<
   requestPlaybackSlot?: boolean;
   loadStrategy?: 'immediate' | 'visible';
   forcePause?: boolean;
+  activationQuery?: string;
 };
 
 const AutoplayPreviewVideo = ({
@@ -29,6 +30,7 @@ const AutoplayPreviewVideo = ({
   requestPlaybackSlot = true,
   loadStrategy = 'visible',
   forcePause = false,
+  activationQuery,
   preload = 'metadata',
   ...props
 }: AutoplayPreviewVideoProps) => {
@@ -50,6 +52,7 @@ const AutoplayPreviewVideo = ({
       requestPlaybackSlot={requestPlaybackSlot}
       loadStrategy={loadStrategy}
       forcePause={forcePause}
+      activationQuery={activationQuery}
     />
   );
 };

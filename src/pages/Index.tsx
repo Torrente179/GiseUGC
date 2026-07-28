@@ -3,6 +3,9 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import ManifestoChapter from '@/components/chapters/ManifestoChapter';
 import CreatorAdvantageSection from '@/components/CreatorAdvantage';
+import ServicesSection from '@/components/Services';
+import FAQSection from '@/components/FAQ';
+import FloatingContactDockSection from '@/components/FloatingContactDock';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { clearUrlHash } from '@/hooks/use-hashless-section-navigation';
 import SectionSkeleton from '@/components/motion/SectionSkeleton';
@@ -15,12 +18,9 @@ import ScrollProgressHairline from '@/components/motion/ScrollProgressHairline';
 import { getHomePath, type SiteLocale } from '@/lib/locale-path';
 import SiteFooter from '@/components/SiteFooter';
 
-const ServicesSection = lazy(() => import('@/components/Services'));
 const PortfolioSection = lazy(() => import('@/components/Portfolio'));
 const TestimonialsSection = lazy(() => import('@/components/Testimonials'));
-const FAQSection = lazy(() => import('@/components/FAQ'));
 const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
-const FloatingContactDockSection = lazy(() => import('@/components/FloatingContactDock'));
 
 type DeferredSectionProps = {
   enabled: boolean;
@@ -116,69 +116,65 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
       <Navbar />
       <ScrollProgressHairline />
 
-      {/* Chapter 1 — Reel Constellation */}
-      <Hero />
+      <main>
+        {/* Chapter 1 — Reel Constellation */}
+        <Hero />
 
-      {/* Chapter 2 — Manifesto (statement + proof numerals) */}
-      <ManifestoChapter />
+        {/* Chapter 2 — Manifesto (statement + proof numerals) */}
+        <ManifestoChapter />
 
-      {/* Chapter 3 — Gallery (free-scroll reel rail). Deferred on both
-          breakpoints — no pin anymore, so boot stays lean. */}
-      <DeferredSection
-        enabled
-        mountId="portfolio"
-        rootMargin={isMobile ? '1100px 0px' : '950px 0px'}
-        queueDelayMs={80}
-        skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[760px]" variant="cards" />}
-      >
-        <PortfolioSection />
-      </DeferredSection>
+        {/* Chapter 3 — Gallery (free-scroll reel rail). Deferred on both
+            breakpoints — no pin anymore, so boot stays lean. */}
+        <DeferredSection
+          enabled
+          mountId="portfolio"
+          rootMargin={isMobile ? '320px 0px' : '520px 0px'}
+          queueDelayMs={80}
+          skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[760px]" variant="cards" />}
+        >
+          <PortfolioSection />
+        </DeferredSection>
 
-      {/* Chapter 4 — Services (index redesign lands in session 2) */}
-      <ErrorBoundary section="services" silent>
-        <Suspense fallback={<SectionSkeleton id="services" minHeightClass="min-h-[520px]" variant="cards" />}>
+        {/* Chapter 4 — Services (index redesign lands in session 2) */}
+        <ErrorBoundary section="services" silent>
           <ServicesSection />
-        </Suspense>
-      </ErrorBoundary>
+        </ErrorBoundary>
 
-      {/* Chapter 5 — Method */}
-      <CreatorAdvantageSection />
+        {/* Chapter 5 — Method */}
+        <CreatorAdvantageSection />
 
-      {/* Chapter 6 — Proof */}
-      <DeferredSection
-        enabled
-        mountId="testimonials"
-        rootMargin="850px 0px"
-        queueDelayMs={100}
-        skeleton={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}
-      >
-        <TestimonialsSection />
-      </DeferredSection>
+        {/* Chapter 6 — Proof */}
+        <DeferredSection
+          enabled
+          mountId="testimonials"
+          rootMargin="850px 0px"
+          queueDelayMs={100}
+          skeleton={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}
+        >
+          <TestimonialsSection />
+        </DeferredSection>
 
-      {/* Chapter 7 — FAQ */}
-      <ErrorBoundary section="faq" silent>
-        <Suspense fallback={<SectionSkeleton id="faq" minHeightClass="min-h-[480px]" />}>
+        {/* Chapter 7 — FAQ */}
+        <ErrorBoundary section="faq" silent>
           <FAQSection />
-        </Suspense>
-      </ErrorBoundary>
+        </ErrorBoundary>
 
-      {/* Toolkit marquee → finale (full Finale chapter lands in session 2) */}
-      <DeferredSection
-        enabled
-        mountId="services-marquee"
-        rootMargin="1250px 0px"
-        queueDelayMs={120}
-        skeleton={<SectionSkeleton minHeightClass="min-h-[520px]" variant="cards" />}
-      >
-        <ServicesMarqueeSection sectionId={isMobile ? 'services-marquee' : undefined} />
-      </DeferredSection>
+        {/* Toolkit marquee → finale (full Finale chapter lands in session 2) */}
+        <DeferredSection
+          enabled
+          mountId="services-marquee"
+          rootMargin="1250px 0px"
+          queueDelayMs={120}
+          skeleton={<SectionSkeleton minHeightClass="min-h-[520px]" variant="cards" />}
+        >
+          <ServicesMarqueeSection sectionId={isMobile ? 'services-marquee' : undefined} />
+        </DeferredSection>
+      </main>
 
       <SiteFooter />
 
       <ErrorBoundary section="floating-contact-dock" silent>
-        <Suspense fallback={null}>
-          <FloatingContactDockSection />
-        </Suspense>
+        <FloatingContactDockSection />
       </ErrorBoundary>
     </div>
   );

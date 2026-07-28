@@ -1,0 +1,1881 @@
+{
+  "name": "gisela-ugc",
+  "description": "Bilingual React/Vite portfolio and UGC service website for Gisela Saldarriaga.",
+  "languages": [
+    "config",
+    "css",
+    "csv",
+    "html",
+    "javascript",
+    "json",
+    "markdown",
+    "python",
+    "shell",
+    "txt",
+    "typescript",
+    "xml"
+  ],
+  "frameworks": [
+    "React",
+    "Vite",
+    "TypeScript",
+    "Tailwind CSS",
+    "Radix UI",
+    "shadcn/ui",
+    "Framer Motion",
+    "i18next",
+    "Vercel"
+  ],
+  "scriptCompleted": true,
+  "files": [
+    {
+      "path": ".env.example",
+      "language": "config",
+      "sizeLines": 18,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".vercel-rebuild-trigger.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "components.json",
+      "language": "json",
+      "sizeLines": 19,
+      "fileCategory": "config"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-ai-services-review.txt",
+      "language": "txt",
+      "sizeLines": 4,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-brand-spokesperson.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-business-promotion.txt",
+      "language": "txt",
+      "sizeLines": 6,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-clothing-showcase-1.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-clothing-showcase-2.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-clothing-showcase-3.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-creatine-supplement-review.txt",
+      "language": "txt",
+      "sizeLines": 7,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-lifestyle-review-2.txt",
+      "language": "txt",
+      "sizeLines": 7,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-lifestyle-review-3.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-lifestyle-review.txt",
+      "language": "txt",
+      "sizeLines": 15,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-services-presentation.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-voicebot-review.txt",
+      "language": "txt",
+      "sizeLines": 7,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/main/ugc-voiceover-bots-review.txt",
+      "language": "txt",
+      "sizeLines": 7,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/manifest-all-videos.csv",
+      "language": "csv",
+      "sizeLines": 62,
+      "fileCategory": "data"
+    },
+    {
+      "path": "content/video-transcripts/manifest.csv",
+      "language": "csv",
+      "sizeLines": 30,
+      "fileCategory": "data"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/Adds marketing.txt",
+      "language": "txt",
+      "sizeLines": 6,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/Contenido Tik Tok.txt",
+      "language": "txt",
+      "sizeLines": 18,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/Croma key plano cerrado.txt",
+      "language": "txt",
+      "sizeLines": 5,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/Croma key sobrepuesto.txt",
+      "language": "txt",
+      "sizeLines": 4,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/Croma Key.txt",
+      "language": "txt",
+      "sizeLines": 3,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/DEEDCEA0-6288-4AB4-B5E5-39F8A50822E7.txt",
+      "language": "txt",
+      "sizeLines": 10,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/Detrás de cámaras.txt",
+      "language": "txt",
+      "sizeLines": 5,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/IMG_5793.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/IMG_8435.txt",
+      "language": "txt",
+      "sizeLines": 4,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/Reporte noticioso USA.txt",
+      "language": "txt",
+      "sizeLines": 8,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.02.34.txt",
+      "language": "txt",
+      "sizeLines": 13,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.39.53.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.42.58.txt",
+      "language": "txt",
+      "sizeLines": 4,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 14.08.01.txt",
+      "language": "txt",
+      "sizeLines": 7,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 14.09.00.txt",
+      "language": "txt",
+      "sizeLines": 4,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 16.05.21.txt",
+      "language": "txt",
+      "sizeLines": 4,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "content/video-transcripts/README.md",
+      "language": "markdown",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "en/index.html",
+      "language": "html",
+      "sizeLines": 670,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/privacy-policy/index.html",
+      "language": "html",
+      "sizeLines": 308,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/resources/how-to-hire-ugc-creator/index.html",
+      "language": "html",
+      "sizeLines": 103,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/resources/ugc-ad-formats-guide/index.html",
+      "language": "html",
+      "sizeLines": 106,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/resources/ugc-vs-influencer-marketing/index.html",
+      "language": "html",
+      "sizeLines": 151,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/resources/what-is-ugc/index.html",
+      "language": "html",
+      "sizeLines": 103,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/services/bilingual-ugc-creator/index.html",
+      "language": "html",
+      "sizeLines": 357,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/services/lifestyle-ugc-organic-content/index.html",
+      "language": "html",
+      "sizeLines": 271,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/services/spokesperson-videos/index.html",
+      "language": "html",
+      "sizeLines": 357,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/services/ugc-ads-tiktok-meta/index.html",
+      "language": "html",
+      "sizeLines": 357,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/services/ugc-b-roll-footage/index.html",
+      "language": "html",
+      "sizeLines": 271,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/services/ugc-problem-solution/index.html",
+      "language": "html",
+      "sizeLines": 271,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/services/ugc-product-demo/index.html",
+      "language": "html",
+      "sizeLines": 271,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/services/ugc-testimonials-reviews/index.html",
+      "language": "html",
+      "sizeLines": 357,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/terms-and-content-use/index.html",
+      "language": "html",
+      "sizeLines": 308,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/verticals/beauty-ugc-creator/index.html",
+      "language": "html",
+      "sizeLines": 279,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/verticals/ecommerce-ugc-creator/index.html",
+      "language": "html",
+      "sizeLines": 279,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/verticals/fashion-ugc-creator/index.html",
+      "language": "html",
+      "sizeLines": 279,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/verticals/lifestyle-wellness-ugc-creator/index.html",
+      "language": "html",
+      "sizeLines": 279,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "en/verticals/tech-saas-ugc-creator/index.html",
+      "language": "html",
+      "sizeLines": 279,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "eslint.config.js",
+      "language": "javascript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "index.html",
+      "language": "html",
+      "sizeLines": 699,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "sizeLines": 99,
+      "fileCategory": "config"
+    },
+    {
+      "path": "politica-de-privacidad/index.html",
+      "language": "html",
+      "sizeLines": 308,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "postcss.config.js",
+      "language": "javascript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "PROJECT_REPORT.md",
+      "language": "markdown",
+      "sizeLines": 332,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "public/gtm-loader.js",
+      "language": "javascript",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "public/llms-full.txt",
+      "language": "txt",
+      "sizeLines": 351,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "public/llms.txt",
+      "language": "txt",
+      "sizeLines": 107,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "public/locales/en/translation.json",
+      "language": "json",
+      "sizeLines": 334,
+      "fileCategory": "config"
+    },
+    {
+      "path": "public/locales/es/translation.json",
+      "language": "json",
+      "sizeLines": 329,
+      "fileCategory": "config"
+    },
+    {
+      "path": "public/robots.txt",
+      "language": "txt",
+      "sizeLines": 43,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "public/sitemap.xml",
+      "language": "xml",
+      "sizeLines": 364,
+      "fileCategory": "config"
+    },
+    {
+      "path": "public/uploads/videos/nuevos/manifest.csv",
+      "language": "csv",
+      "sizeLines": 17,
+      "fileCategory": "data"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 145,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "recursos/como-contratar-creadora-ugc/index.html",
+      "language": "html",
+      "sizeLines": 103,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "recursos/formatos-ugc-ads/index.html",
+      "language": "html",
+      "sizeLines": 106,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "recursos/que-es-ugc/index.html",
+      "language": "html",
+      "sizeLines": 103,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "recursos/ugc-vs-influencer-marketing/index.html",
+      "language": "html",
+      "sizeLines": 151,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "scripts/encode-videos.sh",
+      "language": "shell",
+      "sizeLines": 336,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/enrich-service-entrypoints.mjs",
+      "language": "javascript",
+      "sizeLines": 566,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/expand-boot-shells.mjs",
+      "language": "javascript",
+      "sizeLines": 761,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/framer-to-lazy-motion.py",
+      "language": "python",
+      "sizeLines": 109,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-lqip.sh",
+      "language": "shell",
+      "sizeLines": 103,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/generate-nuevos-r2-catalog.mjs",
+      "language": "javascript",
+      "sizeLines": 415,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate-poster-thumbs.sh",
+      "language": "shell",
+      "sizeLines": 31,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/generate-service-posters.sh",
+      "language": "shell",
+      "sizeLines": 147,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/indexnow-ping.sh",
+      "language": "shell",
+      "sizeLines": 79,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/mobile-regression-check.mjs",
+      "language": "javascript",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/nuevos-seo-overrides.json",
+      "language": "json",
+      "sizeLines": 66,
+      "fileCategory": "config"
+    },
+    {
+      "path": "scripts/rewrite-analytics.py",
+      "language": "python",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "servicios/b-roll-footage-ugc/index.html",
+      "language": "html",
+      "sizeLines": 271,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "servicios/creadora-ugc-bilingue/index.html",
+      "language": "html",
+      "sizeLines": 357,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "servicios/demo-producto-ugc/index.html",
+      "language": "html",
+      "sizeLines": 273,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "servicios/testimoniales-resenas-ugc/index.html",
+      "language": "html",
+      "sizeLines": 357,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "servicios/ugc-ads-tiktok-meta/index.html",
+      "language": "html",
+      "sizeLines": 357,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "servicios/ugc-lifestyle/index.html",
+      "language": "html",
+      "sizeLines": 271,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "servicios/ugc-problema-solucion/index.html",
+      "language": "html",
+      "sizeLines": 271,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "servicios/videos-de-portavoz/index.html",
+      "language": "html",
+      "sizeLines": 357,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/App.css",
+      "language": "css",
+      "sizeLines": 42,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/App.tsx",
+      "language": "typescript",
+      "sizeLines": 261,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Contact.tsx",
+      "language": "typescript",
+      "sizeLines": 212,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/CreatorAdvantage.tsx",
+      "language": "typescript",
+      "sizeLines": 387,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/DesktopFiverrRatingSection.tsx",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/FAQ.tsx",
+      "language": "typescript",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/FiverrRatingCard.tsx",
+      "language": "typescript",
+      "sizeLines": 120,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/FloatingContactDock.tsx",
+      "language": "typescript",
+      "sizeLines": 363,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Footer.tsx",
+      "language": "typescript",
+      "sizeLines": 137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Hero.tsx",
+      "language": "typescript",
+      "sizeLines": 186,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/HeroIntroduction.tsx",
+      "language": "typescript",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/HeroWallTile.tsx",
+      "language": "typescript",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/LegalPage.tsx",
+      "language": "typescript",
+      "sizeLines": 304,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/media/AutoplayPreviewVideo.tsx",
+      "language": "typescript",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/media/LazyVideo.tsx",
+      "language": "typescript",
+      "sizeLines": 231,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/media/TheaterVideo.tsx",
+      "language": "typescript",
+      "sizeLines": 258,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/MobileContactCtaSection.tsx",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/MobileFiverrRatingSection.tsx",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/motion/FadeInOnMount.tsx",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/motion/LiteSplitTextReveal.tsx",
+      "language": "typescript",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/motion/PretextLineReveal.tsx",
+      "language": "typescript",
+      "sizeLines": 220,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/motion/SectionReveal.tsx",
+      "language": "typescript",
+      "sizeLines": 169,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/motion/SectionSkeleton.tsx",
+      "language": "typescript",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/motion/SplitTextReveal.tsx",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/motion/variants.ts",
+      "language": "typescript",
+      "sizeLines": 178,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Navbar.tsx",
+      "language": "typescript",
+      "sizeLines": 627,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/NavbarControls.tsx",
+      "language": "typescript",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/PageEndStrip.tsx",
+      "language": "typescript",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/PageSeo.tsx",
+      "language": "typescript",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Portfolio.tsx",
+      "language": "typescript",
+      "sizeLines": 1477,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ResourcePage.tsx",
+      "language": "typescript",
+      "sizeLines": 467,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ServiceLandingPage.tsx",
+      "language": "typescript",
+      "sizeLines": 890,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Services.tsx",
+      "language": "typescript",
+      "sizeLines": 165,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ServicesMarquee.tsx",
+      "language": "typescript",
+      "sizeLines": 736,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/SiteFooter.tsx",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/SocialProof.tsx",
+      "language": "typescript",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Testimonials.tsx",
+      "language": "typescript",
+      "sizeLines": 489,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ThemeRuntimeSync.tsx",
+      "language": "typescript",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ThemeToggle.tsx",
+      "language": "typescript",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/accordion.tsx",
+      "language": "typescript",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/alert-dialog.tsx",
+      "language": "typescript",
+      "sizeLines": 139,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/alert.tsx",
+      "language": "typescript",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/aspect-ratio.tsx",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/avatar.tsx",
+      "language": "typescript",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/badge.tsx",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/breadcrumb.tsx",
+      "language": "typescript",
+      "sizeLines": 115,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/button.tsx",
+      "language": "typescript",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/calendar.tsx",
+      "language": "typescript",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/card.tsx",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/carousel.tsx",
+      "language": "typescript",
+      "sizeLines": 260,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/chart.tsx",
+      "language": "typescript",
+      "sizeLines": 363,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/checkbox.tsx",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/collapsible.tsx",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/command.tsx",
+      "language": "typescript",
+      "sizeLines": 153,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/context-menu.tsx",
+      "language": "typescript",
+      "sizeLines": 198,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/dialog.tsx",
+      "language": "typescript",
+      "sizeLines": 120,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/drawer.tsx",
+      "language": "typescript",
+      "sizeLines": 116,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/dropdown-menu.tsx",
+      "language": "typescript",
+      "sizeLines": 198,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/form.tsx",
+      "language": "typescript",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/hover-card.tsx",
+      "language": "typescript",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/input-otp.tsx",
+      "language": "typescript",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/input.tsx",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/label.tsx",
+      "language": "typescript",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/menubar.tsx",
+      "language": "typescript",
+      "sizeLines": 234,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/navigation-menu.tsx",
+      "language": "typescript",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/pagination.tsx",
+      "language": "typescript",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/popover.tsx",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/progress.tsx",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/radio-group.tsx",
+      "language": "typescript",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/resizable.tsx",
+      "language": "typescript",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/scroll-area.tsx",
+      "language": "typescript",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/select.tsx",
+      "language": "typescript",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/separator.tsx",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/sheet.tsx",
+      "language": "typescript",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/sidebar.tsx",
+      "language": "typescript",
+      "sizeLines": 761,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/skeleton.tsx",
+      "language": "typescript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/slider.tsx",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/sonner.tsx",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/switch.tsx",
+      "language": "typescript",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/table.tsx",
+      "language": "typescript",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/tabs.tsx",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/textarea.tsx",
+      "language": "typescript",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/toast.tsx",
+      "language": "typescript",
+      "sizeLines": 127,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/toaster.tsx",
+      "language": "typescript",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/toggle-group.tsx",
+      "language": "typescript",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/toggle.tsx",
+      "language": "typescript",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/tooltip.tsx",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/use-toast.ts",
+      "language": "typescript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/VerticalLandingPage.tsx",
+      "language": "typescript",
+      "sizeLines": 760,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/legal-pages.ts",
+      "language": "typescript",
+      "sizeLines": 592,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/nuevos-r2-ready.ts",
+      "language": "typescript",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/portfolio-clips.ts",
+      "language": "typescript",
+      "sizeLines": 168,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/resource-pages.ts",
+      "language": "typescript",
+      "sizeLines": 1030,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/service-pages.ts",
+      "language": "typescript",
+      "sizeLines": 2142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/vertical-pages.ts",
+      "language": "typescript",
+      "sizeLines": 1365,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/video-lqip.ts",
+      "language": "typescript",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/use-deferred-mount.tsx",
+      "language": "typescript",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/use-hashless-section-navigation.ts",
+      "language": "typescript",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/use-mobile.tsx",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/use-toast.ts",
+      "language": "typescript",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n.ts",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/index.css",
+      "language": "css",
+      "sizeLines": 3354,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/lib/contact-dock.ts",
+      "language": "typescript",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/locale-path.ts",
+      "language": "typescript",
+      "sizeLines": 244,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/perf-debug.ts",
+      "language": "typescript",
+      "sizeLines": 146,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/referral-attribution.ts",
+      "language": "typescript",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/utils.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/locales/en/translation.json",
+      "language": "json",
+      "sizeLines": 359,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/locales/es/translation.json",
+      "language": "json",
+      "sizeLines": 359,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/main.tsx",
+      "language": "typescript",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/Index.tsx",
+      "language": "typescript",
+      "sizeLines": 218,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/NotFound.tsx",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "language": "typescript",
+      "sizeLines": 151,
+      "fileCategory": "code"
+    },
+    {
+      "path": "terminos-y-uso-de-contenido/index.html",
+      "language": "html",
+      "sizeLines": 308,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "tsconfig.app.json",
+      "language": "json",
+      "sizeLines": 30,
+      "fileCategory": "config"
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "json",
+      "sizeLines": 19,
+      "fileCategory": "config"
+    },
+    {
+      "path": "tsconfig.node.json",
+      "language": "json",
+      "sizeLines": 22,
+      "fileCategory": "config"
+    },
+    {
+      "path": "UGC_MODERNIZATION_INSTRUCTIONS.md",
+      "language": "markdown",
+      "sizeLines": 66,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "vercel.json",
+      "language": "json",
+      "sizeLines": 135,
+      "fileCategory": "config"
+    },
+    {
+      "path": "verticales/ugc-beauty/index.html",
+      "language": "html",
+      "sizeLines": 278,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "verticales/ugc-ecommerce/index.html",
+      "language": "html",
+      "sizeLines": 279,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "verticales/ugc-lifestyle-bienestar/index.html",
+      "language": "html",
+      "sizeLines": 279,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "verticales/ugc-moda/index.html",
+      "language": "html",
+      "sizeLines": 279,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "verticales/ugc-tech-saas/index.html",
+      "language": "html",
+      "sizeLines": 279,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "vite.config.ts",
+      "language": "typescript",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 220,
+  "filteredByIgnore": 118,
+  "estimatedComplexity": "large",
+  "stats": {
+    "filesScanned": 220,
+    "byCategory": {
+      "config": 13,
+      "docs": 37,
+      "data": 3,
+      "markup": 42,
+      "code": 120,
+      "script": 5
+    },
+    "byLanguage": {
+      "config": 1,
+      "txt": 33,
+      "json": 11,
+      "csv": 3,
+      "markdown": 4,
+      "html": 40,
+      "javascript": 7,
+      "xml": 1,
+      "shell": 5,
+      "python": 2,
+      "css": 2,
+      "typescript": 111
+    }
+  },
+  "importMap": {
+    ".env.example": [],
+    ".vercel-rebuild-trigger.txt": [],
+    "components.json": [],
+    "content/video-transcripts/main/ugc-ai-services-review.txt": [],
+    "content/video-transcripts/main/ugc-brand-spokesperson.txt": [],
+    "content/video-transcripts/main/ugc-business-promotion.txt": [],
+    "content/video-transcripts/main/ugc-clothing-showcase-1.txt": [],
+    "content/video-transcripts/main/ugc-clothing-showcase-2.txt": [],
+    "content/video-transcripts/main/ugc-clothing-showcase-3.txt": [],
+    "content/video-transcripts/main/ugc-creatine-supplement-review.txt": [],
+    "content/video-transcripts/main/ugc-lifestyle-review-2.txt": [],
+    "content/video-transcripts/main/ugc-lifestyle-review-3.txt": [],
+    "content/video-transcripts/main/ugc-lifestyle-review.txt": [],
+    "content/video-transcripts/main/ugc-services-presentation.txt": [],
+    "content/video-transcripts/main/ugc-voicebot-review.txt": [],
+    "content/video-transcripts/main/ugc-voiceover-bots-review.txt": [],
+    "content/video-transcripts/manifest-all-videos.csv": [],
+    "content/video-transcripts/manifest.csv": [],
+    "content/video-transcripts/nuevos/Adds marketing.txt": [],
+    "content/video-transcripts/nuevos/Contenido Tik Tok.txt": [],
+    "content/video-transcripts/nuevos/Croma key plano cerrado.txt": [],
+    "content/video-transcripts/nuevos/Croma key sobrepuesto.txt": [],
+    "content/video-transcripts/nuevos/Croma Key.txt": [],
+    "content/video-transcripts/nuevos/DEEDCEA0-6288-4AB4-B5E5-39F8A50822E7.txt": [],
+    "content/video-transcripts/nuevos/Detrás de cámaras.txt": [],
+    "content/video-transcripts/nuevos/IMG_5793.txt": [],
+    "content/video-transcripts/nuevos/IMG_8435.txt": [],
+    "content/video-transcripts/nuevos/Reporte noticioso USA.txt": [],
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.02.34.txt": [],
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.39.53.txt": [],
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-13 at 00.42.58.txt": [],
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 14.08.01.txt": [],
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 14.09.00.txt": [],
+    "content/video-transcripts/nuevos/WhatsApp Video 2026-02-19 at 16.05.21.txt": [],
+    "content/video-transcripts/README.md": [],
+    "en/index.html": [],
+    "en/privacy-policy/index.html": [],
+    "en/resources/how-to-hire-ugc-creator/index.html": [],
+    "en/resources/ugc-ad-formats-guide/index.html": [],
+    "en/resources/ugc-vs-influencer-marketing/index.html": [],
+    "en/resources/what-is-ugc/index.html": [],
+    "en/services/bilingual-ugc-creator/index.html": [],
+    "en/services/lifestyle-ugc-organic-content/index.html": [],
+    "en/services/spokesperson-videos/index.html": [],
+    "en/services/ugc-ads-tiktok-meta/index.html": [],
+    "en/services/ugc-b-roll-footage/index.html": [],
+    "en/services/ugc-problem-solution/index.html": [],
+    "en/services/ugc-product-demo/index.html": [],
+    "en/services/ugc-testimonials-reviews/index.html": [],
+    "en/terms-and-content-use/index.html": [],
+    "en/verticals/beauty-ugc-creator/index.html": [],
+    "en/verticals/ecommerce-ugc-creator/index.html": [],
+    "en/verticals/fashion-ugc-creator/index.html": [],
+    "en/verticals/lifestyle-wellness-ugc-creator/index.html": [],
+    "en/verticals/tech-saas-ugc-creator/index.html": [],
+    "eslint.config.js": [],
+    "index.html": [],
+    "package.json": [],
+    "politica-de-privacidad/index.html": [],
+    "postcss.config.js": [],
+    "PROJECT_REPORT.md": [],
+    "public/gtm-loader.js": [],
+    "public/llms-full.txt": [],
+    "public/llms.txt": [],
+    "public/locales/en/translation.json": [],
+    "public/locales/es/translation.json": [],
+    "public/robots.txt": [],
+    "public/sitemap.xml": [],
+    "public/uploads/videos/nuevos/manifest.csv": [],
+    "README.md": [],
+    "recursos/como-contratar-creadora-ugc/index.html": [],
+    "recursos/formatos-ugc-ads/index.html": [],
+    "recursos/que-es-ugc/index.html": [],
+    "recursos/ugc-vs-influencer-marketing/index.html": [],
+    "scripts/encode-videos.sh": [],
+    "scripts/enrich-service-entrypoints.mjs": [],
+    "scripts/expand-boot-shells.mjs": [],
+    "scripts/framer-to-lazy-motion.py": [],
+    "scripts/generate-lqip.sh": [],
+    "scripts/generate-nuevos-r2-catalog.mjs": [],
+    "scripts/generate-poster-thumbs.sh": [],
+    "scripts/generate-service-posters.sh": [],
+    "scripts/indexnow-ping.sh": [],
+    "scripts/mobile-regression-check.mjs": [],
+    "scripts/nuevos-seo-overrides.json": [],
+    "scripts/rewrite-analytics.py": [],
+    "servicios/b-roll-footage-ugc/index.html": [],
+    "servicios/creadora-ugc-bilingue/index.html": [],
+    "servicios/demo-producto-ugc/index.html": [],
+    "servicios/testimoniales-resenas-ugc/index.html": [],
+    "servicios/ugc-ads-tiktok-meta/index.html": [],
+    "servicios/ugc-lifestyle/index.html": [],
+    "servicios/ugc-problema-solucion/index.html": [],
+    "servicios/videos-de-portavoz/index.html": [],
+    "src/App.css": [],
+    "src/App.tsx": [
+      "src/components/ThemeRuntimeSync.tsx",
+      "src/lib/locale-path.ts",
+      "src/lib/perf-debug.ts",
+      "src/lib/referral-attribution.ts",
+      "src/pages/Index.tsx"
+    ],
+    "src/components/Contact.tsx": [
+      "src/components/ui/use-toast.ts"
+    ],
+    "src/components/CreatorAdvantage.tsx": [
+      "src/components/media/LazyVideo.tsx",
+      "src/components/motion/PretextLineReveal.tsx",
+      "src/components/motion/variants.ts",
+      "src/data/portfolio-clips.ts",
+      "src/data/video-lqip.ts",
+      "src/hooks/use-hashless-section-navigation.ts",
+      "src/lib/contact-dock.ts"
+    ],
+    "src/components/DesktopFiverrRatingSection.tsx": [
+      "src/components/FiverrRatingCard.tsx"
+    ],
+    "src/components/FAQ.tsx": [
+      "src/components/motion/SplitTextReveal.tsx",
+      "src/components/motion/variants.ts",
+      "src/components/ui/accordion.tsx",
+      "src/hooks/use-hashless-section-navigation.ts",
+      "src/lib/locale-path.ts"
+    ],
+    "src/components/FiverrRatingCard.tsx": [],
+    "src/components/FloatingContactDock.tsx": [
+      "src/components/motion/variants.ts",
+      "src/lib/contact-dock.ts"
+    ],
+    "src/components/Footer.tsx": [
+      "src/lib/locale-path.ts"
+    ],
+    "src/components/Hero.tsx": [
+      "src/components/HeroWallTile.tsx",
+      "src/components/motion/PretextLineReveal.tsx",
+      "src/data/nuevos-r2-ready.ts",
+      "src/data/portfolio-clips.ts",
+      "src/hooks/use-hashless-section-navigation.ts",
+      "src/hooks/use-mobile.tsx",
+      "src/lib/contact-dock.ts",
+      "src/lib/locale-path.ts"
+    ],
+    "src/components/HeroIntroduction.tsx": [
+      "src/components/motion/PretextLineReveal.tsx",
+      "src/components/motion/variants.ts"
+    ],
+    "src/components/HeroWallTile.tsx": [
+      "src/data/portfolio-clips.ts"
+    ],
+    "src/components/LegalPage.tsx": [
+      "src/components/motion/PretextLineReveal.tsx",
+      "src/components/Navbar.tsx",
+      "src/components/PageSeo.tsx",
+      "src/components/SiteFooter.tsx",
+      "src/data/legal-pages.ts",
+      "src/lib/locale-path.ts"
+    ],
+    "src/components/media/AutoplayPreviewVideo.tsx": [],
+    "src/components/media/LazyVideo.tsx": [],
+    "src/components/media/TheaterVideo.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/MobileContactCtaSection.tsx": [
+      "src/lib/contact-dock.ts"
+    ],
+    "src/components/MobileFiverrRatingSection.tsx": [
+      "src/components/FiverrRatingCard.tsx"
+    ],
+    "src/components/motion/FadeInOnMount.tsx": [],
+    "src/components/motion/LiteSplitTextReveal.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/motion/PretextLineReveal.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/motion/SectionReveal.tsx": [
+      "src/components/motion/variants.ts"
+    ],
+    "src/components/motion/SectionSkeleton.tsx": [],
+    "src/components/motion/SplitTextReveal.tsx": [
+      "src/components/motion/variants.ts",
+      "src/lib/utils.ts"
+    ],
+    "src/components/motion/variants.ts": [],
+    "src/components/Navbar.tsx": [
+      "src/components/motion/variants.ts",
+      "src/components/NavbarControls.tsx",
+      "src/hooks/use-hashless-section-navigation.ts",
+      "src/lib/locale-path.ts",
+      "src/lib/utils.ts"
+    ],
+    "src/components/NavbarControls.tsx": [
+      "src/components/ThemeToggle.tsx",
+      "src/lib/locale-path.ts",
+      "src/lib/utils.ts"
+    ],
+    "src/components/PageEndStrip.tsx": [
+      "src/lib/locale-path.ts",
+      "src/lib/utils.ts"
+    ],
+    "src/components/PageSeo.tsx": [],
+    "src/components/Portfolio.tsx": [
+      "src/components/media/LazyVideo.tsx",
+      "src/components/motion/SplitTextReveal.tsx",
+      "src/components/motion/variants.ts",
+      "src/data/nuevos-r2-ready.ts",
+      "src/data/portfolio-clips.ts",
+      "src/data/video-lqip.ts",
+      "src/hooks/use-mobile.tsx"
+    ],
+    "src/components/ResourcePage.tsx": [
+      "src/components/Navbar.tsx",
+      "src/components/PageSeo.tsx",
+      "src/components/SiteFooter.tsx",
+      "src/data/resource-pages.ts",
+      "src/data/service-pages.ts",
+      "src/data/vertical-pages.ts",
+      "src/lib/locale-path.ts"
+    ],
+    "src/components/ServiceLandingPage.tsx": [
+      "src/components/media/AutoplayPreviewVideo.tsx",
+      "src/components/media/TheaterVideo.tsx",
+      "src/components/motion/PretextLineReveal.tsx",
+      "src/components/Navbar.tsx",
+      "src/components/PageSeo.tsx",
+      "src/components/SiteFooter.tsx",
+      "src/data/nuevos-r2-ready.ts",
+      "src/data/portfolio-clips.ts",
+      "src/data/service-pages.ts",
+      "src/data/vertical-pages.ts",
+      "src/lib/locale-path.ts"
+    ],
+    "src/components/Services.tsx": [
+      "src/components/motion/SplitTextReveal.tsx",
+      "src/components/motion/variants.ts",
+      "src/hooks/use-mobile.tsx",
+      "src/lib/locale-path.ts"
+    ],
+    "src/components/ServicesMarquee.tsx": [
+      "src/components/media/LazyVideo.tsx",
+      "src/data/nuevos-r2-ready.ts",
+      "src/lib/perf-debug.ts"
+    ],
+    "src/components/SiteFooter.tsx": [
+      "src/components/Footer.tsx",
+      "src/components/PageEndStrip.tsx"
+    ],
+    "src/components/SocialProof.tsx": [
+      "src/components/motion/variants.ts"
+    ],
+    "src/components/Testimonials.tsx": [
+      "src/components/motion/SplitTextReveal.tsx",
+      "src/components/motion/variants.ts"
+    ],
+    "src/components/ThemeRuntimeSync.tsx": [],
+    "src/components/ThemeToggle.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/accordion.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/alert-dialog.tsx": [
+      "src/components/ui/button.tsx",
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/alert.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/aspect-ratio.tsx": [],
+    "src/components/ui/avatar.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/badge.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/breadcrumb.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/button.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/calendar.tsx": [
+      "src/components/ui/button.tsx",
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/card.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/carousel.tsx": [
+      "src/components/ui/button.tsx",
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/chart.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/checkbox.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/collapsible.tsx": [],
+    "src/components/ui/command.tsx": [
+      "src/components/ui/dialog.tsx",
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/context-menu.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/dialog.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/drawer.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/dropdown-menu.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/form.tsx": [
+      "src/components/ui/label.tsx",
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/hover-card.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/input-otp.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/input.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/label.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/menubar.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/navigation-menu.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/pagination.tsx": [
+      "src/components/ui/button.tsx",
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/popover.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/progress.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/radio-group.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/resizable.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/scroll-area.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/select.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/separator.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/sheet.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/sidebar.tsx": [
+      "src/components/ui/button.tsx",
+      "src/components/ui/input.tsx",
+      "src/components/ui/separator.tsx",
+      "src/components/ui/sheet.tsx",
+      "src/components/ui/skeleton.tsx",
+      "src/components/ui/tooltip.tsx",
+      "src/hooks/use-mobile.tsx",
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/skeleton.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/slider.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/sonner.tsx": [],
+    "src/components/ui/switch.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/table.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/tabs.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/textarea.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/toast.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/toaster.tsx": [
+      "src/components/ui/toast.tsx",
+      "src/hooks/use-toast.ts"
+    ],
+    "src/components/ui/toggle-group.tsx": [
+      "src/components/ui/toggle.tsx",
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/toggle.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/tooltip.tsx": [
+      "src/lib/utils.ts"
+    ],
+    "src/components/ui/use-toast.ts": [
+      "src/hooks/use-toast.ts"
+    ],
+    "src/components/VerticalLandingPage.tsx": [
+      "src/components/media/AutoplayPreviewVideo.tsx",
+      "src/components/media/TheaterVideo.tsx",
+      "src/components/Navbar.tsx",
+      "src/components/PageSeo.tsx",
+      "src/components/SiteFooter.tsx",
+      "src/data/nuevos-r2-ready.ts",
+      "src/data/portfolio-clips.ts",
+      "src/data/service-pages.ts",
+      "src/data/vertical-pages.ts",
+      "src/lib/locale-path.ts"
+    ],
+    "src/data/legal-pages.ts": [
+      "src/lib/locale-path.ts"
+    ],
+    "src/data/nuevos-r2-ready.ts": [
+      "src/data/portfolio-clips.ts"
+    ],
+    "src/data/portfolio-clips.ts": [],
+    "src/data/resource-pages.ts": [
+      "src/lib/locale-path.ts"
+    ],
+    "src/data/service-pages.ts": [
+      "src/lib/locale-path.ts"
+    ],
+    "src/data/vertical-pages.ts": [
+      "src/lib/locale-path.ts"
+    ],
+    "src/data/video-lqip.ts": [],
+    "src/hooks/use-deferred-mount.tsx": [
+      "src/lib/perf-debug.ts"
+    ],
+    "src/hooks/use-hashless-section-navigation.ts": [],
+    "src/hooks/use-mobile.tsx": [],
+    "src/hooks/use-toast.ts": [
+      "src/components/ui/toast.tsx"
+    ],
+    "src/i18n.ts": [
+      "src/locales/en/translation.json",
+      "src/locales/es/translation.json"
+    ],
+    "src/index.css": [],
+    "src/lib/contact-dock.ts": [],
+    "src/lib/locale-path.ts": [],
+    "src/lib/perf-debug.ts": [],
+    "src/lib/referral-attribution.ts": [],
+    "src/lib/utils.ts": [],
+    "src/locales/en/translation.json": [],
+    "src/locales/es/translation.json": [],
+    "src/main.tsx": [
+      "src/App.tsx",
+      "src/i18n.ts",
+      "src/index.css"
+    ],
+    "src/pages/Index.tsx": [
+      "src/components/CreatorAdvantage.tsx",
+      "src/components/Hero.tsx",
+      "src/components/motion/FadeInOnMount.tsx",
+      "src/components/motion/SectionSkeleton.tsx",
+      "src/components/Navbar.tsx",
+      "src/components/PageSeo.tsx",
+      "src/components/SiteFooter.tsx",
+      "src/hooks/use-deferred-mount.tsx",
+      "src/hooks/use-hashless-section-navigation.ts",
+      "src/hooks/use-mobile.tsx",
+      "src/lib/locale-path.ts",
+      "src/lib/perf-debug.ts"
+    ],
+    "src/pages/NotFound.tsx": [
+      "src/lib/locale-path.ts"
+    ],
+    "src/vite-env.d.ts": [],
+    "tailwind.config.ts": [],
+    "terminos-y-uso-de-contenido/index.html": [],
+    "tsconfig.app.json": [],
+    "tsconfig.json": [],
+    "tsconfig.node.json": [],
+    "UGC_MODERNIZATION_INSTRUCTIONS.md": [],
+    "vercel.json": [],
+    "verticales/ugc-beauty/index.html": [],
+    "verticales/ugc-ecommerce/index.html": [],
+    "verticales/ugc-lifestyle-bienestar/index.html": [],
+    "verticales/ugc-moda/index.html": [],
+    "verticales/ugc-tech-saas/index.html": [],
+    "vite.config.ts": []
+  }
+}

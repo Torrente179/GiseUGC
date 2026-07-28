@@ -4,7 +4,6 @@ import { ArrowUpRight, Mail } from 'lucide-react';
 import SiteFooter from '@/components/SiteFooter';
 import Navbar from '@/components/Navbar';
 import PageSeo from '@/components/PageSeo';
-import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { getLegalPageContent } from '@/data/legal-pages';
 import { getHomePath, type LegalPageId, type SiteLocale } from '@/lib/locale-path';
 
@@ -127,8 +126,8 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
             <div className="grid gap-8 lg:grid-cols-[minmax(0,0.64fr)_minmax(320px,0.36fr)] lg:gap-10">
               <div className="space-y-6">
                 <p className="section-label text-muted-foreground">{page.eyebrow}</p>
-                <h1 className="type-marketing-display max-w-[26ch] text-[1.75rem] font-semibold leading-[1.14] tracking-tight-marketing md:text-[2rem] lg:text-[2.25rem]">
-                  <PretextLineReveal text={page.title} delay={0} stagger={0.1} className="block" />
+                <h1 className="route-title-accent type-marketing-display max-w-[26ch] text-[1.75rem] font-semibold leading-[1.14] tracking-tight-marketing md:text-[2rem] lg:text-[2.25rem]">
+                  {page.title}
                 </h1>
                 <p className="max-w-3xl text-base font-light leading-[1.9] text-foreground/78 md:text-[1.04rem]">
                   {page.intro}

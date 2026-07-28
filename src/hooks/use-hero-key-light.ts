@@ -1,20 +1,16 @@
 import { useEffect, type RefObject } from 'react';
-import { shouldEnableRichMotion, whenIdle } from '@/lib/motion/gsap-core';
+import { shouldEnableRichMotion, whenIdle } from '@/lib/motion/runtime';
 
 /**
  * "Key light" — one practical light source for the title-sequence hero.
  *
  * The pointer *is* the lamp. This hook publishes a single normalised light
- * position as two inherited custom properties on the element it is given:
+ * position as a compositor transform on the light layer itself. Moving the
+ * already-rasterized gradient avoids repainting a viewport-sized gradient on
+ * every pointer frame.
  *
- *   --key-nx, --key-ny   ∈ roughly [-1, 1], 0 = centre of the viewport
- *
- * Everything downstream derives from that one pair, so the paper and the film
- * frames are raked by the same light rather than carrying separate effects.
- *
- * Deliberately GSAP-free: interpolating two unitless numbers needs one rAF and
- * a lerp, not a tween engine, and it keeps the hero's first interaction off the
- * gsap chunk entirely.
+ * Interpolating two unitless numbers needs one settling rAF and a lerp, so the
+ * first interaction never coordinates with a global animation runtime.
  *
  * Budget rules:
  * - idle-loaded, so it never competes with the entrance animations
@@ -28,8 +24,8 @@ import { shouldEnableRichMotion, whenIdle } from '@/lib/motion/gsap-core';
 
 /** Stop the loop once the remaining travel is sub-pixel in effect. */
 const SETTLE_EPSILON = 0.0008;
-/** Per-frame approach rate — low enough that the light lags the cursor. */
-const LERP = 0.055;
+/** Time constant keeps the same feel at 60 Hz, 90 Hz, and 120 Hz. */
+const FOLLOW_TIME_CONSTANT_MS = 290;
 
 export const useHeroKeyLight = (targetRef: RefObject<HTMLElement>, enabled = true) => {
   useEffect(() => {
@@ -48,28 +44,50 @@ export const useHeroKeyLight = (targetRef: RefObject<HTMLElement>, enabled = tru
       let targetY = 0;
       let raf = 0;
       let inView = true;
+      let previousTimestamp: number | null = null;
 
       const canRun = () => inView && !document.hidden;
-
-      const frame = () => {
+      const stop = () => {
+        if (raf !== 0) cancelAnimationFrame(raf);
         raf = 0;
-        if (!canRun()) return;
+        previousTimestamp = null;
+        target.style.willChange = 'auto';
+      };
 
-        currentX += (targetX - currentX) * LERP;
-        currentY += (targetY - currentY) * LERP;
-        target.style.setProperty('--key-nx', currentX.toFixed(4));
-        target.style.setProperty('--key-ny', currentY.toFixed(4));
+      const frame = (timestamp: number) => {
+        raf = 0;
+        if (!canRun()) {
+          target.style.willChange = 'auto';
+          return;
+        }
+
+        const deltaMs =
+          previousTimestamp === null
+            ? 1000 / 60
+            : Math.min(Math.max(timestamp - previousTimestamp, 0), 50);
+        previousTimestamp = timestamp;
+        const follow = 1 - Math.exp(-deltaMs / FOLLOW_TIME_CONSTANT_MS);
+
+        currentX += (targetX - currentX) * follow;
+        currentY += (targetY - currentY) * follow;
+        target.style.transform = `translate3d(${(currentX * 26.25).toFixed(3)}%, ${(currentY * 24.7).toFixed(3)}%, 0)`;
 
         if (
           Math.abs(targetX - currentX) > SETTLE_EPSILON ||
           Math.abs(targetY - currentY) > SETTLE_EPSILON
         ) {
           raf = requestAnimationFrame(frame);
+        } else {
+          target.style.willChange = 'auto';
         }
       };
 
       const kick = () => {
-        if (raf === 0 && canRun()) raf = requestAnimationFrame(frame);
+        if (raf === 0 && canRun()) {
+          target.style.willChange = 'transform';
+          previousTimestamp = null;
+          raf = requestAnimationFrame(frame);
+        }
       };
 
       const onPointerMove = (event: PointerEvent) => {
@@ -82,22 +100,26 @@ export const useHeroKeyLight = (targetRef: RefObject<HTMLElement>, enabled = tru
       const io = new IntersectionObserver(
         ([entry]) => {
           inView = entry.isIntersecting;
-          kick();
+          if (inView) kick();
+          else stop();
         },
         { rootMargin: '120px 0px' },
       );
       io.observe(target);
 
-      const onVisibility = () => kick();
+      const onVisibility = () => {
+        if (document.hidden) stop();
+        else kick();
+      };
       document.addEventListener('visibilitychange', onVisibility);
 
       cleanup = () => {
-        if (raf !== 0) cancelAnimationFrame(raf);
+        stop();
         window.removeEventListener('pointermove', onPointerMove);
         document.removeEventListener('visibilitychange', onVisibility);
         io.disconnect();
-        target.style.removeProperty('--key-nx');
-        target.style.removeProperty('--key-ny');
+        target.style.removeProperty('transform');
+        target.style.removeProperty('will-change');
       };
     });
 

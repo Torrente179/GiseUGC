@@ -1,23 +1,24 @@
-import { lazy, Suspense, useEffect, useMemo, useRef } from 'react';
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentType,
+} from 'react';
 import { useLocation, useNavigationType } from 'react-router-dom';
-import { Analytics, track } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
-import { useTranslation } from 'react-i18next';
-import { LazyMotion, domAnimation } from 'framer-motion';
-import Index from '@/pages/Index';
 import ThemeRuntimeSync from '@/components/ThemeRuntimeSync';
-import MobileAppShell from '@/components/mobile/MobileAppShell';
 import { useIsMobile } from '@/hooks/use-mobile';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { MediaSessionProvider } from '@/components/media/MediaSessionProvider';
 
-// Lazy route-level pages. These only render for off-home URLs so we avoid
-// paying for them on the most common (homepage) entry.
-const NotFound = lazy(() => import('@/pages/NotFound'));
-const ServiceLandingPage = lazy(() => import('@/components/ServiceLandingPage'));
-const VerticalLandingPage = lazy(() => import('@/components/VerticalLandingPage'));
-const ResourcePage = lazy(() => import('@/components/ResourcePage'));
-const LegalPage = lazy(() => import('@/components/LegalPage'));
 import {
+  type LegalPageId,
+  type ResourcePageId,
+  type ServicePageId,
+  type SiteLocale,
+  type VerticalPageId,
   getLocaleFromPath,
   getLegalPageRouteEntries,
   getResourcePageRouteEntries,
@@ -28,8 +29,9 @@ import {
 } from '@/lib/locale-path';
 import { getChatGptReferralContext } from '@/lib/referral-attribution';
 import { startMobileMediaPressureObserver } from '@/lib/perf-debug';
-import { initSmoothScroll, scrollToY } from '@/lib/motion/smooth-scroll';
-import { whenIdle } from '@/lib/motion/gsap-core';
+import { scrollToY } from '@/lib/motion/native-scroll';
+
+const MobileAppShell = lazy(() => import('@/components/mobile/MobileAppShell'));
 
 // Persist scroll positions across SPA navigations, keyed by React Router location.key
 const scrollPositions = new Map<string, number>();
@@ -37,13 +39,130 @@ let hasTrackedChatGptLanding = false;
 
 // Track the latest scroll Y in real time so we can save it before leaving a page
 let latestScrollY = 0;
-window.addEventListener('scroll', () => { latestScrollY = window.scrollY; }, { passive: true });
+if (typeof window !== 'undefined') {
+  window.addEventListener('scroll', () => { latestScrollY = window.scrollY; }, { passive: true });
+}
+
+const DeferredEditorialFonts = () => {
+  useEffect(() => {
+    let cancelled = false;
+    let started = false;
+    const load = () => {
+      if (started || cancelled) return;
+      started = true;
+
+      if (typeof FontFace === 'undefined') {
+        const stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = '/fonts/editorial-fonts.css';
+        stylesheet.dataset.editorialFonts = 'true';
+        document.head.appendChild(stylesheet);
+        return;
+      }
+
+      const faces = [
+        new FontFace(
+          'Cormorant Garamond',
+          "url('/fonts/cormorant-garamond-latin-var.woff2') format('woff2')",
+          { style: 'normal', weight: '300 700', display: 'swap' },
+        ),
+        new FontFace(
+          'Cormorant Garamond',
+          "url('/fonts/cormorant-garamond-latin-italic-var.woff2') format('woff2')",
+          { style: 'italic', weight: '300 700', display: 'swap' },
+        ),
+      ];
+      void Promise.all(faces.map((face) => face.load())).then((loadedFaces) => {
+        if (cancelled) return;
+        loadedFaces.forEach((face) => document.fonts.add(face));
+      });
+    };
+
+    const intentEvents: Array<keyof WindowEventMap> = [
+      'pointermove',
+      'pointerdown',
+      'touchstart',
+      'keydown',
+    ];
+    intentEvents.forEach((eventName) => {
+      window.addEventListener(eventName, load, { once: true, passive: true });
+    });
+    const fallbackTimer = window.setTimeout(load, 8000);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(fallbackTimer);
+      intentEvents.forEach((eventName) => window.removeEventListener(eventName, load));
+    };
+  }, []);
+
+  return null;
+};
+
+const ClientInsights = () => {
+  const [insights, setInsights] = useState<{
+    Analytics: ComponentType;
+    SpeedInsights: ComponentType;
+  } | null>(null);
+
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') return;
+
+    let cancelled = false;
+    const enable = () => {
+      void Promise.all([
+        import('@vercel/analytics/react'),
+        import('@vercel/speed-insights/react'),
+      ]).then(([analyticsModule, speedInsightsModule]) => {
+        if (cancelled) return;
+        setInsights({
+          Analytics: analyticsModule.Analytics,
+          SpeedInsights: speedInsightsModule.SpeedInsights,
+        });
+      });
+    };
+    const intentEvents: Array<keyof WindowEventMap> = [
+      'pointerdown',
+      'touchstart',
+      'keydown',
+      'scroll',
+    ];
+    intentEvents.forEach((eventName) => {
+      window.addEventListener(eventName, enable, { once: true, passive: true });
+    });
+    const fallbackTimer = window.setTimeout(enable, 30_000);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(fallbackTimer);
+      intentEvents.forEach((eventName) => window.removeEventListener(eventName, enable));
+    };
+  }, []);
+
+  if (!insights) return null;
+  const { Analytics, SpeedInsights } = insights;
+  return (
+    <>
+      <Analytics />
+      <SpeedInsights />
+    </>
+  );
+};
 
 // All route entries — computed once at module level
 const serviceRouteEntries = getServicePageRouteEntries();
 const verticalRouteEntries = getVerticalPageRouteEntries();
 const resourceRouteEntries = getResourcePageRouteEntries();
 const legalRouteEntries = getLegalPageRouteEntries();
+
+export type AppRouteComponents = {
+  Index?: ComponentType<{ locale: SiteLocale }>;
+  NotFound?: ComponentType;
+  ServiceLandingPage?: ComponentType<{ serviceId: ServicePageId; locale: SiteLocale }>;
+  VerticalLandingPage?: ComponentType<{ verticalId: VerticalPageId; locale: SiteLocale }>;
+  ResourcePage?: ComponentType<{ resourceId: ResourcePageId; locale: SiteLocale }>;
+  LegalPage?: ComponentType<{ pageId: LegalPageId; locale: SiteLocale }>;
+};
 
 // Scroll to a Y position immediately (non-animated jump)
 const jumpToY = (y: number) => {
@@ -67,10 +186,9 @@ const scrollToSection = (sectionId: string, attempts = 0) => {
   }
 };
 
-const AppRoutes = () => {
+const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents }) => {
   const location = useLocation();
   const navigationType = useNavigationType();
-  const { i18n } = useTranslation();
   const prevLocationKeyRef = useRef<string | null>(null);
   const onHome = isHomePath(location.pathname);
   const locale = getLocaleFromPath(location.pathname);
@@ -102,14 +220,16 @@ const AppRoutes = () => {
   }, [location.pathname, onHome]);
 
   const isKnownRoute = onHome || currentServiceEntry !== null || currentVerticalEntry !== null || currentResourceEntry !== null || currentLegalEntry !== null;
+  const {
+    Index,
+    NotFound,
+    ServiceLandingPage,
+    VerticalLandingPage,
+    ResourcePage,
+    LegalPage,
+  } = routeComponents;
 
   useEffect(() => {
-    // Keep locale in sync with the current path
-    const locale = getLocaleFromPath(location.pathname);
-    if (i18n.resolvedLanguage !== locale) {
-      void i18n.changeLanguage(locale);
-    }
-
     // Save the scroll position of the page we're leaving before updating the ref
     if (prevLocationKeyRef.current !== null && prevLocationKeyRef.current !== location.key) {
       scrollPositions.set(prevLocationKeyRef.current, latestScrollY);
@@ -134,14 +254,14 @@ const AppRoutes = () => {
       // Normal forward navigation — start at the top
       jumpToY(0);
     }
-  }, [i18n, location, navigationType]);
+  }, [location, navigationType]);
 
   return (
     <>
       {/* Unmount home off-route so hidden video-heavy sections release media resources.
           Keyed by locale so the route cross-fade fires on navigation/locale change,
           not on in-page section scrolling. */}
-      {onHome ? (
+      {onHome && Index ? (
         <div key={`home-${locale}`} className="page-enter">
           <Index locale={locale} />
         </div>
@@ -150,63 +270,62 @@ const AppRoutes = () => {
       {/*
         Service pages mount on first visit and unmount when navigating away.
         A new key per pathname ensures a fresh instance for each service URL.
-        The wrapper carries a CSS fade-in so the page appears smoothly.
+        The wrapper remains immediately paintable; each page owns its finer
+        compositor-only entrance choreography.
       */}
-      <Suspense fallback={null}>
-        {currentServiceEntry && (
+      {currentServiceEntry && ServiceLandingPage && (
           <div key={location.pathname} className="page-enter">
             <ServiceLandingPage
               serviceId={currentServiceEntry.serviceId}
               locale={currentServiceEntry.locale}
             />
           </div>
-        )}
+      )}
 
-        {currentVerticalEntry && (
+      {currentVerticalEntry && VerticalLandingPage && (
           <div key={location.pathname} className="page-enter">
             <VerticalLandingPage
               verticalId={currentVerticalEntry.verticalId}
               locale={currentVerticalEntry.locale}
             />
           </div>
-        )}
+      )}
 
-        {currentResourceEntry && (
+      {currentResourceEntry && ResourcePage && (
           <div key={location.pathname} className="page-enter">
             <ResourcePage
               resourceId={currentResourceEntry.resourceId}
               locale={currentResourceEntry.locale}
             />
           </div>
-        )}
+      )}
 
-        {currentLegalEntry && (
+      {currentLegalEntry && LegalPage && (
           <div key={location.pathname} className="page-enter">
             <LegalPage
               pageId={currentLegalEntry.pageId}
               locale={currentLegalEntry.locale}
             />
           </div>
-        )}
+      )}
 
-        {!isKnownRoute && <NotFound />}
-      </Suspense>
+      {!isKnownRoute && NotFound && <NotFound />}
 
       {/* App-like mobile chrome: bottom tab bar + contact/menu sheets, site-wide */}
-      {isMobile && <MobileAppShell />}
+      {isMobile ? (
+        <Suspense fallback={null}>
+          <MobileAppShell />
+        </Suspense>
+      ) : null}
     </>
   );
 };
 
-const App = () => {
+const App = ({ routeComponents = {} }: { routeComponents?: AppRouteComponents }) => {
   useEffect(() => {
     const stopMobileMediaObserver = startMobileMediaPressureObserver();
     return () => stopMobileMediaObserver?.();
   }, []);
-
-  // Site-wide smooth scrolling (desktop only; the facade guards viewport,
-  // pointer type and reduced motion). Idle-deferred to stay off the LCP path.
-  useEffect(() => whenIdle(() => { void initSmoothScroll(); }), []);
 
   useEffect(() => {
     if (hasTrackedChatGptLanding) return;
@@ -219,7 +338,7 @@ const App = () => {
     const sendChatGptLandingEvent = () => {
       const va = (window as Window & { va?: (...args: unknown[]) => void }).va;
       if (typeof va === 'function') {
-        track('ChatGPT Referral Landing', referral);
+        va('event', 'ChatGPT Referral Landing', referral);
         hasTrackedChatGptLanding = true;
         return;
       }
@@ -234,14 +353,14 @@ const App = () => {
   }, []);
 
   return (
-    <LazyMotion features={domAnimation} strict>
+    <MediaSessionProvider>
       <ThemeRuntimeSync />
+      <DeferredEditorialFonts />
       <ErrorBoundary section="app">
-        <AppRoutes />
+        <AppRoutes routeComponents={routeComponents} />
       </ErrorBoundary>
-      <Analytics />
-      <SpeedInsights />
-    </LazyMotion>
+      <ClientInsights />
+    </MediaSessionProvider>
   );
 };
 

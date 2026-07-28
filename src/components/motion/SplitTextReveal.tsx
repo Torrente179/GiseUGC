@@ -1,6 +1,4 @@
-import { m, useReducedMotion } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import { easeOutExpo } from '@/components/motion/variants';
+import PretextLineReveal from '@/components/motion/PretextLineReveal';
 
 interface SplitTextRevealProps {
   text: string;
@@ -21,58 +19,17 @@ const SplitTextReveal = ({
   once = true,
   amount = 0.15,
 }: SplitTextRevealProps) => {
-  const shouldReduceMotion = useReducedMotion();
   const content = typeof text === 'string' ? text : String(text ?? '');
-  const words = content.split(/\s+/).filter(Boolean);
-  const descenderSafeMaskClassName = 'inline-block overflow-hidden align-bottom pb-[0.14em] -mb-[0.14em]';
-
-  if (shouldReduceMotion || words.length === 0) {
-    return <span className={cn('inline-block pb-[0.14em] -mb-[0.14em]', className)}>{content}</span>;
-  }
-
   return (
-    <m.span
-      key={content}
-      className={cn('inline-block', className)}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, amount }}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            staggerChildren: stagger,
-            delayChildren: delay,
-          },
-        },
-      }}
-    >
-      {words.map((word, index) => (
-        <span key={`${word}-${index}`} className={descenderSafeMaskClassName}>
-          <m.span
-            className={cn('inline-block', wordClassName)}
-            style={{ willChange: 'transform, opacity' }}
-            variants={{
-              hidden: {
-                y: '108%',
-                opacity: 0,
-              },
-              visible: {
-                y: '0%',
-                opacity: 1,
-                transition: {
-                  duration: 0.68,
-                  ease: easeOutExpo,
-                },
-              },
-            }}
-          >
-            {word}
-            {index < words.length - 1 ? '\u00A0' : ''}
-          </m.span>
-        </span>
-      ))}
-    </m.span>
+    <PretextLineReveal
+      text={content}
+      className={className}
+      lineClassName={wordClassName}
+      delay={delay}
+      stagger={stagger}
+      once={once}
+      threshold={amount}
+    />
   );
 };
 

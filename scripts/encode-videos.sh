@@ -16,11 +16,11 @@ Usage:
   bash scripts/encode-videos.sh [options] [file1.mp4 file2.mov ...]
 
 Options:
-  --input-dir DIR          Input directory containing .mp4/.mov files (default: public/uploads/videos)
+  --input-dir DIR          Input directory containing .mp4/.mov files (default: media-sources/legacy)
   --output-dir DIR         Output directory (default: tmp/video-encodes)
   --preview-seconds N      Preview clip duration (default: 4)
   --preview-target-kb N    Preview size target in KB (default: 700)
-  --preview-width N        Max preview width in px (default: 480)
+  --preview-width N        Max preview width in px (default: 720)
   --mobile-target-mb N     Mobile full size target in MB (default: 5)
   --mobile-width N         Max mobile full width in px (default: 720)
   --audio-bitrate-k N      Audio bitrate in kbps for mobile full (default: 96)
@@ -75,7 +75,7 @@ run_cmd() {
   "$@"
 }
 
-INPUT_DIR="public/uploads/videos"
+INPUT_DIR="media-sources/legacy"
 OUTPUT_DIR="tmp/video-encodes"
 # Previews feed only small/decorative surfaces (hero-wall tiles, marquee cards,
 # blurred backdrops). 720p is sharp on those and starts fast; the prominent
@@ -83,10 +83,6 @@ OUTPUT_DIR="tmp/video-encodes"
 PREVIEW_SECONDS=6
 PREVIEW_TARGET_KB=700
 PREVIEW_WIDTH=720
-PREVIEW_CRF=22
-# Cap preview bitrate so high-motion clips don't balloon a small card loop.
-PREVIEW_MAXRATE_K=2500
-PREVIEW_BUFSIZE_K=5000
 MOBILE_TARGET_MB=5
 MOBILE_WIDTH=720
 MOBILE_CRF=22
@@ -210,7 +206,7 @@ else
   while IFS= read -r source_file; do
     SOURCES+=("$source_file")
   done < <(
-    find "$INPUT_DIR" "$INPUT_DIR/nuevos" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) \
+    find "$INPUT_DIR" "media-sources/nuevos" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) \
       ! -iname '*-preview.mp4' ! -iname '*-mobile.mp4' 2>/dev/null | sort
   )
 fi
@@ -253,7 +249,10 @@ for source_path in "${SOURCES[@]}"; do
   echo ""
   echo "Source: $source_path"
   echo "  Duration: ${duration}s"
-  echo "  Preview: ${PREVIEW_WIDTH}px CRF ${PREVIEW_CRF}, ${PREVIEW_SECONDS}s loop, no audio"
+  preview_bitrate_k=$((PREVIEW_TARGET_KB * 8 / PREVIEW_SECONDS))
+  preview_maxrate_k=$((preview_bitrate_k * 5 / 4))
+  preview_bufsize_k=$((preview_bitrate_k * 2))
+  echo "  Preview: ${PREVIEW_WIDTH}px, ~${PREVIEW_TARGET_KB}KB target, ${PREVIEW_SECONDS}s loop, no audio"
   echo "  Mobile : ${MOBILE_WIDTH}px CRF ${MOBILE_CRF} (+ ${AUDIO_BITRATE_K}k audio)"
 
   if [[ "$MOBILE_ONLY" -eq 1 ]]; then
@@ -266,8 +265,8 @@ for source_path in "${SOURCES[@]}"; do
       -map 0:v:0 -an \
       -vf "$preview_filter" \
       -c:v libx264 -preset slow -profile:v high \
-      -crf "$PREVIEW_CRF" -maxrate "${PREVIEW_MAXRATE_K}k" -bufsize "${PREVIEW_BUFSIZE_K}k" \
-      -x264-params "keyint=60:min-keyint=60:scenecut=0" \
+      -b:v "${preview_bitrate_k}k" -maxrate "${preview_maxrate_k}k" -bufsize "${preview_bufsize_k}k" \
+      -x264-params "keyint=30:min-keyint=30:scenecut=0" \
       -movflags +faststart \
       "$preview_path"
   fi

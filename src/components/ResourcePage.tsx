@@ -1,17 +1,15 @@
-import { Suspense, lazy, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import type { SiteLocale } from '@/lib/locale-path';
-import { getHomePath, getHomeSectionHref, getServicePath, getVerticalPath } from '@/lib/locale-path';
-import { getResourcePageContent, getResourcePath, type ResourcePageId } from '@/data/resource-pages';
-import { getServicePageContent } from '@/data/service-pages';
-import { getVerticalPageContent } from '@/data/vertical-pages';
+import type { ResourcePageId, SiteLocale } from '@/lib/locale-path';
+import { getHomePath, getHomeSectionHref, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
+import type { ResourceLandingRouteData } from '@/data/landing-route-types';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
 import { RevealSection } from '@/components/motion/RevealSection';
-
-const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
-const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
+import FloatingContactDock from '@/components/FloatingContactDock';
+import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
+import '@/styles/templates.css';
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
@@ -20,6 +18,7 @@ const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
 type ResourcePageProps = {
   resourceId: ResourcePageId;
   locale: SiteLocale;
+  routeData: ResourceLandingRouteData;
 };
 
 const localeLabels = {
@@ -50,30 +49,19 @@ const localeLabels = {
    RESOURCE PAGE — Editorial article layout
    ════════════════════════════════════════════════════════════════════ */
 
-const ResourcePage = ({ resourceId, locale }: ResourcePageProps) => {
-  const page = getResourcePageContent(resourceId, locale);
+const serializeRouteData = (routeData: ResourceLandingRouteData) =>
+  JSON.stringify(routeData).replace(/</g, '\\u003c');
+
+const ResourcePage = ({
+  resourceId,
+  locale,
+  routeData,
+}: ResourcePageProps) => {
+  const { page, relatedServices, relatedVerticals } = routeData;
   const labels = localeLabels[locale];
 
   const canonical = buildUrl(page.path);
   const homeCanonical = buildUrl(getHomePath(locale));
-
-  const relatedServices = useMemo(
-    () =>
-      page.relatedServiceIds.map((serviceId) => ({
-        id: serviceId,
-        content: getServicePageContent(serviceId, locale),
-      })),
-    [page.relatedServiceIds, locale],
-  );
-
-  const relatedVerticals = useMemo(
-    () =>
-      page.relatedVerticalIds.map((verticalId) => ({
-        id: verticalId,
-        content: getVerticalPageContent(verticalId, locale),
-      })),
-    [page.relatedVerticalIds, locale],
-  );
 
   /* ── Schema.org ── */
   const schema = useMemo(() => {
@@ -153,6 +141,11 @@ const ResourcePage = ({ resourceId, locale }: ResourcePageProps) => {
           xDefault: buildUrl(getResourcePath(resourceId, 'es')),
         }}
         structuredData={schema}
+      />
+      <script
+        id="route-data"
+        type="application/json"
+        dangerouslySetInnerHTML={{ __html: serializeRouteData(routeData) }}
       />
 
       <div className="min-h-screen bg-background">
@@ -341,20 +334,20 @@ const ResourcePage = ({ resourceId, locale }: ResourcePageProps) => {
               <div className="st-container py-12 md:py-16">
                 <p className="st-eyebrow mb-6">{labels.relatedServices}</p>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {relatedServices.map(({ id, content }) => (
+                  {relatedServices.map((service) => (
                     <Link
-                      key={id}
-                      to={getServicePath(id, locale)}
+                      key={service.id}
+                      to={getServicePath(service.id, locale)}
                       className="group rounded-xl border border-foreground/5 bg-foreground/[0.02] p-5 transition-colors hover:border-foreground/10 hover:bg-foreground/[0.04]"
                     >
-                      <p className="text-xs font-medium uppercase tracking-wider text-foreground/40 mb-2">
-                        {content.heroEyebrow}
+                      <p className="text-xs font-medium uppercase tracking-wider text-foreground/60 mb-2">
+                        {service.heroEyebrow}
                       </p>
                       <p className="text-sm font-semibold text-foreground/90 group-hover:text-foreground transition-colors">
-                        {content.navLabel}
+                        {service.navLabel}
                       </p>
                       <p className="mt-1.5 text-xs leading-relaxed text-foreground/50 line-clamp-2">
-                        {content.metaDescription}
+                        {service.metaDescription}
                       </p>
                     </Link>
                   ))}
@@ -369,20 +362,20 @@ const ResourcePage = ({ resourceId, locale }: ResourcePageProps) => {
               <div className="st-container py-12 md:py-16">
                 <p className="st-eyebrow mb-6">{labels.relatedVerticals}</p>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {relatedVerticals.map(({ id, content }) => (
+                  {relatedVerticals.map((vertical) => (
                     <Link
-                      key={id}
-                      to={getVerticalPath(id, locale)}
+                      key={vertical.id}
+                      to={getVerticalPath(vertical.id, locale)}
                       className="group rounded-xl border border-foreground/5 bg-foreground/[0.02] p-5 transition-colors hover:border-foreground/10 hover:bg-foreground/[0.04]"
                     >
-                      <p className="text-xs font-medium uppercase tracking-wider text-foreground/40 mb-2">
-                        {content.heroEyebrow}
+                      <p className="text-xs font-medium uppercase tracking-wider text-foreground/60 mb-2">
+                        {vertical.heroEyebrow}
                       </p>
                       <p className="text-sm font-semibold text-foreground/90 group-hover:text-foreground transition-colors">
-                        {content.navLabel}
+                        {vertical.navLabel}
                       </p>
                       <p className="mt-1.5 text-xs leading-relaxed text-foreground/50 line-clamp-2">
-                        {content.metaDescription}
+                        {vertical.metaDescription}
                       </p>
                     </Link>
                   ))}
@@ -411,15 +404,11 @@ const ResourcePage = ({ resourceId, locale }: ResourcePageProps) => {
           </RevealSection>
 
           {/* ── SERVICES MARQUEE ── */}
-          <Suspense fallback={null}>
-            <ServicesMarqueeSection liteMobile />
-          </Suspense>
+          <DeferredServicesMarquee liteMobile />
         </main>
 
         <SiteFooter />
-        <Suspense fallback={null}>
-          <FloatingContactDock />
-        </Suspense>
+        <FloatingContactDock />
       </div>
     </>
   );

@@ -122,7 +122,7 @@ const ThemeToggle = ({ compact = false, variant = 'icon' }: ThemeToggleProps) =>
     >
       <Sun
         className={cn(
-          'absolute transition-all duration-300',
+          'absolute transition-[color,opacity,transform] duration-300',
           iconSizeClass,
           isSegment ? 'text-foreground/75' : 'text-primary',
           isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 rotate-90 scale-50',
@@ -130,7 +130,7 @@ const ThemeToggle = ({ compact = false, variant = 'icon' }: ThemeToggleProps) =>
       />
       <Moon
         className={cn(
-          'absolute transition-all duration-300',
+          'absolute transition-[color,opacity,transform] duration-300',
           iconSizeClass,
           isSegment ? 'text-foreground/75' : 'text-primary',
           isDark ? 'opacity-0 -rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100',

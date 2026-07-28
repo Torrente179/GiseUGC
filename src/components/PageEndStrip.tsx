@@ -1,14 +1,13 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '@/lib/locale-context';
 import { Link } from 'react-router-dom';
-import { getLegalPath, getLocaleFromPath } from '@/lib/locale-path';
+import { getLegalPath } from '@/lib/locale-path';
 import { cn } from '@/lib/utils';
 
 const pillClass =
   'inline-flex h-8 min-h-0 items-center justify-center rounded-full px-3 text-[10px] font-sans font-medium tracking-[0.08em] text-muted-foreground shadow-none transition-colors hover:bg-foreground/[0.06] hover:text-foreground/90';
 
 const PageEndStrip = () => {
-  const { t } = useTranslation();
-  const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
+  const { t, locale } = useTranslation();
 
   const legalLinks = [
     { href: getLegalPath('privacy-policy', locale), label: t('footer.privacyPolicy') },
@@ -18,8 +17,8 @@ const PageEndStrip = () => {
   return (
     <footer className="page-end-strip border-t border-border/20 bg-background" role="contentinfo">
       <div className="studio-container flex flex-col gap-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:gap-6 md:py-9">
-        <p className="font-sans text-[10px] font-medium tracking-[0.04em] text-muted-foreground/65">
-          GiselaSaldarriaga.com <span className="text-muted-foreground/40">·</span> {new Date().getFullYear()}
+        <p className="font-sans text-[10px] font-medium tracking-[0.04em] text-muted-foreground">
+          GiselaSaldarriaga.com <span className="text-muted-foreground/70">·</span> {new Date().getFullYear()}
         </p>
 
         <nav

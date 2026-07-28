@@ -1,5 +1,4 @@
-import { useTranslation } from 'react-i18next';
-import { m, useReducedMotion } from 'framer-motion';
+import { useTranslation } from '@/lib/locale-context';
 import ThemeToggle from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
 import type { SiteLocale } from '@/lib/locale-path';
@@ -14,7 +13,6 @@ type NavbarControlsProps = {
 
 const NavbarControls = ({ compact = false, currentLocale, onLocaleChange }: NavbarControlsProps) => {
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
 
   const segmentClass = cn(
     'relative z-10 inline-flex items-center justify-center rounded-full font-sans font-medium uppercase transition-colors duration-200',
@@ -33,6 +31,14 @@ const NavbarControls = ({ compact = false, currentLocale, onLocaleChange }: Navb
       aria-label={t('languageSwitcher.changeLanguage', { defaultValue: 'Language and theme' })}
     >
       <div className="relative flex items-center">
+        <span
+          className={cn(
+            'pointer-events-none absolute inset-y-0 left-0 w-1/2 rounded-full bg-foreground/[0.07] transition-transform duration-300 dark:bg-white/[0.09]',
+            currentLocale === 'en' && 'translate-x-full',
+          )}
+          style={{ transitionTimingFunction: 'var(--ease-premium)' }}
+          aria-hidden="true"
+        />
         {LOCALES.map((locale) => {
           const isActive = currentLocale === locale;
 
@@ -54,18 +60,6 @@ const NavbarControls = ({ compact = false, currentLocale, onLocaleChange }: Navb
               }
               aria-pressed={isActive}
             >
-              {isActive && (
-                <m.span
-                  layoutId="navbar-locale-pill"
-                  className="absolute inset-0 rounded-full bg-foreground/[0.07] dark:bg-white/[0.09]"
-                  transition={
-                    shouldReduceMotion
-                      ? { duration: 0 }
-                      : { type: 'spring', stiffness: 420, damping: 34 }
-                  }
-                  aria-hidden="true"
-                />
-              )}
               <span className="relative">{locale}</span>
             </button>
           );

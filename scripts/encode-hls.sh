@@ -31,7 +31,7 @@ Usage:
   bash scripts/encode-hls.sh [options] [file1.mp4 file2.mov ...]
 
 Options:
-  --input-dir DIR     Input directory (default: public/uploads/videos)
+  --input-dir DIR     Input directory (default: media-sources/legacy)
   --output-dir DIR    Output directory (default: tmp/video-hls)
   --overwrite         Overwrite existing outputs
   --dry-run           Print ffmpeg commands without running them
@@ -51,7 +51,9 @@ H264_PRESET="${H264_PRESET:-slow}"
 AUDIO_KBPS="${AUDIO_KBPS:-128}"
 
 # Resolution ladder (horizontal pixels). Each tier is gated by the source width
-# so we never upscale. For vertical phone video the "width" is the short side.
+# so we never upscale. High-resolution masters retain 1440p/2160p delivery;
+# smaller sources stop at their native width. For vertical phone video the
+# "width" is the short side (2160 means a native 2160×3840 portrait master).
 declare -a MAIN_LADDER=(360 540 720 1080 1440 2160)
 declare -a CODECS=(av1 hevc h264)
 
@@ -170,17 +172,17 @@ encode_variant() {
     av1)
       # SVT-AV1 only allows a max-bitrate cap in CRF mode, so use plain
       # target-bitrate VBR (no -maxrate/-bufsize) for the ladder tiers.
-      vcodec=(-c:v libsvtav1 -preset "$AV1_PRESET" -g 60 -svtav1-params "scd=0" -pix_fmt yuv420p)
+      vcodec=(-c:v libsvtav1 -preset "$AV1_PRESET" -g 30 -svtav1-params "scd=0" -pix_fmt yuv420p)
       rate=(-b:v "${video_kbps}k")
       ;;
     hevc)
       vcodec=(-c:v libx265 -preset "$HEVC_PRESET" -tag:v hvc1 \
-        -x265-params "keyint=60:min-keyint=60:scenecut=0" -pix_fmt yuv420p)
+        -x265-params "keyint=30:min-keyint=30:scenecut=0" -pix_fmt yuv420p)
       rate=(-b:v "${video_kbps}k" -maxrate "${maxrate}k" -bufsize "${bufsize}k")
       ;;
     h264)
       vcodec=(-c:v libx264 -preset "$H264_PRESET" -profile:v high \
-        -x264-params "keyint=60:min-keyint=60:scenecut=0" -pix_fmt yuv420p)
+        -x264-params "keyint=30:min-keyint=30:scenecut=0" -pix_fmt yuv420p)
       rate=(-b:v "${video_kbps}k" -maxrate "${maxrate}k" -bufsize "${bufsize}k")
       ;;
   esac
@@ -192,7 +194,7 @@ encode_variant() {
     "${vcodec[@]}" \
     "${rate[@]}" \
     -c:a aac -b:a "${AUDIO_KBPS}k" -ac 2 -ar 48000 \
-    -hls_time 2 \
+    -hls_time 1 \
     -hls_playlist_type vod \
     -hls_segment_type fmp4 \
     -hls_fmp4_init_filename init.mp4 \
@@ -201,8 +203,10 @@ encode_variant() {
 }
 
 write_master_playlist() {
-  local rendition_dir="$1" source_width="$2" source_height="$3"
-  local master_path="$rendition_dir/master.m3u8"
+  local rendition_dir="$1" source_width="$2" source_height="$3" selected_codec="${4:-}"
+  local master_suffix=""
+  [[ -n "$selected_codec" ]] && master_suffix="-${selected_codec}"
+  local master_path="$rendition_dir/master${master_suffix}.m3u8"
 
   {
     echo '#EXTM3U'
@@ -210,6 +214,7 @@ write_master_playlist() {
     for width in "${MAIN_LADDER[@]}"; do
       (( width > source_width )) && continue
       for codec in "${CODECS[@]}"; do
+        [[ -n "$selected_codec" && "$codec" != "$selected_codec" ]] && continue
         local variant_playlist="$rendition_dir/${width}p/${codec}/index.m3u8"
         [[ -f "$variant_playlist" ]] || continue
         local kbps height avg peak cs
@@ -228,7 +233,7 @@ write_master_playlist() {
 }
 
 # ── Args ─────────────────────────────────────────────────────────────────────
-INPUT_DIR="public/uploads/videos"
+INPUT_DIR="media-sources/legacy"
 OUTPUT_DIR="tmp/video-hls"
 OVERWRITE=0
 DRY_RUN=0
@@ -271,7 +276,7 @@ else
   while IFS= read -r source_file; do
     SOURCES+=("$source_file")
   done < <(
-    find "$INPUT_DIR" "$INPUT_DIR/nuevos" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) \
+    find "$INPUT_DIR" "media-sources/nuevos" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) \
       ! -iname '*-preview.mp4' ! -iname '*-mobile.mp4' 2>/dev/null | sort
   )
 fi
@@ -290,8 +295,15 @@ fi
 for source_path in "${SOURCES[@]}"; do
   filename="$(basename "$source_path")"
   base_name="${filename%.*}"
-  source_width="$(probe_field "$source_path" width)"
-  source_height="$(probe_field "$source_path" height)"
+  encoded_width="$(probe_field "$source_path" width)"
+  encoded_height="$(probe_field "$source_path" height)"
+  rotation="$(ffprobe -v error -select_streams v:0 -show_entries stream_tags=rotate:stream_side_data=rotation -of default=nw=1:nk=1 "$source_path" | tail -n 1 || true)"
+  source_width="$encoded_width"
+  source_height="$encoded_height"
+  if [[ "$rotation" == "90" || "$rotation" == "-90" || "$rotation" == "270" || "$rotation" == "-270" ]]; then
+    source_width="$encoded_height"
+    source_height="$encoded_width"
+  fi
   base_dir="$OUTPUT_DIR/$base_name"
   rendition_dir="$base_dir/main"
 
@@ -310,6 +322,9 @@ for source_path in "${SOURCES[@]}"; do
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
     write_master_playlist "$rendition_dir" "$source_width" "$source_height"
+    for codec in "${CODECS[@]}"; do
+      write_master_playlist "$rendition_dir" "$source_width" "$source_height" "$codec"
+    done
     bytes="$(find "$base_dir" -type f -exec stat -f%z {} \; 2>/dev/null | awk '{s+=$1} END {print s+0}')"
     printf '%s,%s,%s,%s\n' "$source_path" "$base_dir" "$rendition_dir/master.m3u8" "$bytes" >> "$manifest_path"
     echo "  Output size: $(human_size "$bytes")"

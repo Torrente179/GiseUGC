@@ -6,7 +6,7 @@ usage() {
 Generate high-quality static poster images for service-page video surfaces.
 
 Defaults:
-- inputs: public/uploads/videos + public/uploads/videos/nuevos
+- inputs: media-sources/legacy + media-sources/nuevos
 - output: public/uploads/videos/service-posters
 - frame time: 1.2s
 - output: high-quality JPEG
@@ -100,7 +100,7 @@ else
   while IFS= read -r -d '' source_file; do
     SOURCES+=("$source_file")
   done < <(
-    find "public/uploads/videos" "public/uploads/videos/nuevos" -maxdepth 1 -type f \
+    find "media-sources/legacy" "media-sources/nuevos" -maxdepth 1 -type f \
       \( -iname '*.mp4' -o -iname '*.mov' \) \
       ! -iname '*-preview.mp4' \
       ! -iname '*-mobile.mp4' \

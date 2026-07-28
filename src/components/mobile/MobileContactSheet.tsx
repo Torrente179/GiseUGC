@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '@/lib/locale-context';
 import { ArrowUpRight } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
 import { CONTACT_CHANNELS, CHANNEL_LOGO_SRC } from '@/lib/contact-channels';

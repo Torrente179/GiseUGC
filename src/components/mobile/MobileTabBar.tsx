@@ -1,7 +1,6 @@
 import { type MouseEvent } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '@/lib/locale-context';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { m, useReducedMotion } from 'framer-motion';
 import { Home, Film, LayoutGrid, MessageCircle } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useActiveSection } from '@/hooks/use-active-section';
@@ -34,7 +33,6 @@ const MobileTabBar = ({ contactOpen, onContact, hidden = false }: MobileTabBarPr
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const shouldReduceMotion = useReducedMotion();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
 
   const onHome = isHomePath(location.pathname);
@@ -63,6 +61,13 @@ const MobileTabBar = ({ contactOpen, onContact, hidden = false }: MobileTabBarPr
       aria-hidden={hidden}
     >
       <div className="mtabbar-inner">
+        <span
+          className="mtab-pill mtab-pill--shared"
+          style={{ '--mtab-index': SECTION_TABS.findIndex(({ id }) => id === activeTab) >= 0
+            ? SECTION_TABS.findIndex(({ id }) => id === activeTab)
+            : 3 } as React.CSSProperties}
+          aria-hidden="true"
+        />
         {SECTION_TABS.map(({ id, labelKey, Icon }) => {
           const isActive = activeTab === id;
           return (
@@ -73,9 +78,6 @@ const MobileTabBar = ({ contactOpen, onContact, hidden = false }: MobileTabBarPr
               className={`mtab${isActive ? ' is-active' : ''}`}
               aria-current={isActive ? 'page' : undefined}
             >
-              {isActive && !shouldReduceMotion && (
-                <m.span layoutId="mtab-active" className="mtab-pill" transition={{ type: 'spring', stiffness: 420, damping: 32 }} />
-              )}
               <Icon className="mtab-icon" strokeWidth={2} aria-hidden="true" />
               <span className="mtab-label">{t(labelKey)}</span>
             </a>
@@ -89,9 +91,6 @@ const MobileTabBar = ({ contactOpen, onContact, hidden = false }: MobileTabBarPr
           aria-haspopup="dialog"
           aria-expanded={contactOpen}
         >
-          {activeTab === 'contact' && !shouldReduceMotion && (
-            <m.span layoutId="mtab-active" className="mtab-pill" transition={{ type: 'spring', stiffness: 420, damping: 32 }} />
-          )}
           <MessageCircle className="mtab-icon" strokeWidth={2} aria-hidden="true" />
           <span className="mtab-label">{t('navbar.contact')}</span>
         </button>

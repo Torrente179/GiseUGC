@@ -1,0 +1,29 @@
+[
+  {
+    "path": "/*",
+    "resourceSizes": [
+      { "resourceType": "script", "budget": 150 },
+      { "resourceType": "stylesheet", "budget": 20 },
+      { "resourceType": "media", "budget": 0 },
+      { "resourceType": "total", "budget": 900 }
+    ]
+  },
+  {
+    "path": "/",
+    "resourceSizes": [
+      { "resourceType": "script", "budget": 150 },
+      { "resourceType": "stylesheet", "budget": 20 },
+      { "resourceType": "media", "budget": 0 },
+      { "resourceType": "total", "budget": 800 }
+    ]
+  },
+  {
+    "path": "/en/",
+    "resourceSizes": [
+      { "resourceType": "script", "budget": 150 },
+      { "resourceType": "stylesheet", "budget": 20 },
+      { "resourceType": "media", "budget": 0 },
+      { "resourceType": "total", "budget": 800 }
+    ]
+  }
+]

@@ -2,6 +2,7 @@ import {
   memo,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type SyntheticEvent,
@@ -9,212 +10,324 @@ import {
 import { Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AdaptiveVideo from '@/components/media/AdaptiveVideo';
+import { useMediaSession } from '@/components/media/MediaSessionProvider';
+import type { PlaybackCandidate } from '@/lib/media-assets';
 
 export interface TheaterVideoProps {
-  sources: string[];
-  hlsSources?: (string | undefined)[];
+  candidates: PlaybackCandidate[];
   poster: string;
   enableStartupFallback?: boolean;
   startupFallbackMs?: number;
   className?: string;
 }
 
-const DEFAULT_STARTUP_FALLBACK_MS = 400;
+const DEFAULT_STARTUP_FALLBACK_MS = 800;
+const HANDOFF_FADE_MS = 260;
 
+const safePlay = async (video: HTMLVideoElement, preferAudio: boolean) => {
+  video.defaultPlaybackRate = 1;
+  video.playbackRate = 1;
+  video.muted = !preferAudio;
+
+  try {
+    await video.play();
+    return;
+  } catch {
+    video.muted = true;
+    await video.play().catch(() => undefined);
+  }
+};
+
+const teardown = (video: HTMLVideoElement | null) => {
+  if (!video) return;
+  video.pause();
+  video.removeAttribute('src');
+  video.load();
+};
+
+/**
+ * Quality-first theater player.
+ *
+ * A fast-start 720p MP4 supplies the first frame (and audio when autoplay
+ * policy permits) while the full adaptive master buffers in parallel. Once
+ * the master is ready, playback is time-synchronised and crossfaded in one
+ * short compositor-only transition. The bridge is then unloaded.
+ */
 const TheaterVideo = memo(
   ({
-    sources,
-    hlsSources = [],
+    candidates,
     poster,
-    enableStartupFallback = false,
+    enableStartupFallback = true,
     startupFallbackMs = DEFAULT_STARTUP_FALLBACK_MS,
     className,
   }: TheaterVideoProps) => {
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const startupTimeoutRef = useRef<number | null>(null);
-    const playSessionRef = useRef(0);
+    const acquireTheater = useMediaSession()?.acquireTheater;
+    const primaryRef = useRef<HTMLVideoElement>(null);
+    const bridgeRef = useRef<HTMLVideoElement>(null);
+    const fallbackTimerRef = useRef<number | null>(null);
+    const handoffTimerRef = useRef<number | null>(null);
+    const syncAttemptedRef = useRef(false);
+
+    const primaryCandidates = useMemo(
+      () => candidates.filter((candidate) => candidate.quality !== 'startup'),
+      [candidates],
+    );
+    const [activePrimaryIndex, setActivePrimaryIndex] = useState(0);
+    const [primaryVisible, setPrimaryVisible] = useState(false);
+    const [bridgeReleased, setBridgeReleased] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
-    const [activeSourceIndex, setActiveSourceIndex] = useState(0);
-    const sourceKey = sources.join('|');
-    const hlsSourceKey = hlsSources.filter(Boolean).join('|');
-    const activeSource = sources[activeSourceIndex] ?? sources[0] ?? '';
-    const activeHlsSource = hlsSources[activeSourceIndex] ?? hlsSources[0];
 
-    const clearStartupTimeout = useCallback(() => {
-      if (startupTimeoutRef.current !== null) {
-        window.clearTimeout(startupTimeoutRef.current);
-        startupTimeoutRef.current = null;
+    const activePrimary =
+      primaryCandidates[activePrimaryIndex] ?? primaryCandidates[0] ?? candidates[0];
+    const bridgeCandidate = useMemo(() => {
+      if (!enableStartupFallback || !activePrimary) return undefined;
+      return (
+        candidates.find(
+          (candidate) =>
+            candidate.quality === 'startup' && candidate.mp4 !== activePrimary.mp4,
+        ) ??
+        candidates.find(
+          (candidate) =>
+            candidate.quality === 'mobile' && candidate.mp4 !== activePrimary.mp4,
+        )
+      );
+    }, [activePrimary, candidates, enableStartupFallback]);
+
+    const candidateKey = candidates
+      .map(({ id, mp4, hls }) => `${id}:${mp4}|${hls ?? ''}`)
+      .join('::');
+
+    const clearTimers = useCallback(() => {
+      if (fallbackTimerRef.current !== null) {
+        window.clearTimeout(fallbackTimerRef.current);
+        fallbackTimerRef.current = null;
+      }
+      if (handoffTimerRef.current !== null) {
+        window.clearTimeout(handoffTimerRef.current);
+        handoffTimerRef.current = null;
       }
     }, []);
 
-    const promoteFallbackSource = useCallback(() => {
-      setActiveSourceIndex((previousIndex) => {
-        if (previousIndex + 1 >= sources.length) return previousIndex;
-        return previousIndex + 1;
-      });
-    }, [sources.length]);
+    const promoteFallback = useCallback(() => {
+      setActivePrimaryIndex((index) =>
+        index + 1 < primaryCandidates.length ? index + 1 : index,
+      );
+    }, [primaryCandidates.length]);
 
-    const teardownVideo = useCallback((video: HTMLVideoElement | null) => {
-      if (!video) return;
-      video.pause();
-      video.removeAttribute('src');
-      video.load();
+    const schedulePrimaryRecovery = useCallback(() => {
+      if (fallbackTimerRef.current !== null) return;
+      fallbackTimerRef.current = window.setTimeout(() => {
+        fallbackTimerRef.current = null;
+        const primary = primaryRef.current;
+        if (!primary || primary.readyState < 2) promoteFallback();
+      }, 1200);
+    }, [promoteFallback]);
+
+    const releaseBridge = useCallback(() => {
+      const bridge = bridgeRef.current;
+      if (bridge) {
+        bridge.pause();
+        bridge.removeAttribute('src');
+        bridge.load();
+      }
+      setBridgeReleased(true);
     }, []);
 
-    const attemptPlay = useCallback((sessionId?: number) => {
-      const expectedSessionId = sessionId ?? playSessionRef.current;
-      const video = videoRef.current;
-      if (!video) return;
+    const completeHandoff = useCallback(() => {
+      const primary = primaryRef.current;
+      const bridge = bridgeRef.current;
+      if (!primary || primaryVisible) return;
 
-      video.defaultPlaybackRate = 1;
-      video.playbackRate = 1;
+      const nextMuted = bridge?.muted ?? false;
+      primary.muted = nextMuted;
+      setIsMuted(nextMuted);
+      if (bridge) bridge.muted = true;
 
-      const run = async () => {
+      setPrimaryVisible(true);
+      setIsPlaying(!primary.paused);
+      handoffTimerRef.current = window.setTimeout(releaseBridge, HANDOFF_FADE_MS + 40);
+    }, [primaryVisible, releaseBridge]);
+
+    const synchronizePrimary = useCallback(() => {
+      const primary = primaryRef.current;
+      const bridge = bridgeRef.current;
+      if (!primary || primaryVisible) return;
+
+      if (
+        bridge &&
+        !bridgeReleased &&
+        bridge.readyState >= 2 &&
+        Number.isFinite(bridge.currentTime) &&
+        Math.abs(primary.currentTime - bridge.currentTime) > 0.2 &&
+        !syncAttemptedRef.current
+      ) {
+        syncAttemptedRef.current = true;
         try {
-          await video.play();
-          if (playSessionRef.current !== expectedSessionId) return;
-          setIsMuted(video.muted);
+          primary.currentTime = bridge.currentTime;
+          return;
         } catch {
-          if (playSessionRef.current !== expectedSessionId) return;
-          if (!video.muted) {
-            video.muted = true;
-            setIsMuted(true);
-          }
-          try {
-            await video.play();
-            if (playSessionRef.current !== expectedSessionId) return;
-            setIsMuted(video.muted);
-          } catch {
-            if (playSessionRef.current !== expectedSessionId) return;
-            promoteFallbackSource();
-          }
+          // Some streams are not seekable until their first media segment.
         }
-      };
+      }
 
-      void run();
-    }, [promoteFallbackSource]);
+      completeHandoff();
+    }, [bridgeReleased, completeHandoff, primaryVisible]);
 
-    const scheduleStartupFallback = useCallback((sessionId: number) => {
-      clearStartupTimeout();
-      if (!enableStartupFallback) return;
-      if (activeSourceIndex + 1 >= sources.length) return;
-      startupTimeoutRef.current = window.setTimeout(() => {
-        if (playSessionRef.current !== sessionId) return;
-        const video = videoRef.current;
-        if (!video || !video.paused || video.readyState >= 2) return;
-        promoteFallbackSource();
-      }, startupFallbackMs);
-    }, [
-      activeSourceIndex,
-      clearStartupTimeout,
-      enableStartupFallback,
-      promoteFallbackSource,
-      sources.length,
-      startupFallbackMs,
-    ]);
-
-    const handlePlay = () => {
-      clearStartupTimeout();
-      setIsPlaying(true);
-    };
-    const handlePause = () => setIsPlaying(false);
-    const handleWaiting = () => setIsPlaying(false);
-    const handlePlaying = () => {
-      clearStartupTimeout();
-      setIsPlaying(true);
-      const video = videoRef.current;
-      if (video) setIsMuted(video.muted);
-    };
-
-    const handleCanPlayThrough = useCallback(() => {
-      clearStartupTimeout();
-    }, [clearStartupTimeout]);
-
-    const handleError = useCallback(() => {
-      clearStartupTimeout();
-      promoteFallbackSource();
-    }, [clearStartupTimeout, promoteFallbackSource]);
+    const activeVideo = useCallback(
+      () =>
+        primaryVisible || bridgeReleased || !bridgeCandidate
+          ? primaryRef.current
+          : bridgeRef.current,
+      [bridgeCandidate, bridgeReleased, primaryVisible],
+    );
 
     const togglePlayback = useCallback(() => {
-      const video = videoRef.current;
+      const video = activeVideo();
       if (!video) return;
-      video.defaultPlaybackRate = 1;
-      video.playbackRate = 1;
       if (video.paused) {
-        video.muted = false;
-        setIsMuted(false);
-        attemptPlay(playSessionRef.current);
+        void safePlay(video, !isMuted).then(() => setIsPlaying(!video.paused));
       } else {
         video.pause();
+        setIsPlaying(false);
       }
-    }, [attemptPlay]);
+    }, [activeVideo, isMuted]);
 
     const toggleMute = useCallback(() => {
-      const video = videoRef.current;
+      const video = activeVideo();
       if (!video) return;
       const nextMuted = !video.muted;
       video.muted = nextMuted;
       setIsMuted(nextMuted);
-      if (!nextMuted) {
-        attemptPlay(playSessionRef.current);
-      }
-    }, [attemptPlay]);
 
-    const handleTimeUpdate = useCallback(
-      (event: SyntheticEvent<HTMLVideoElement>) => {
-        const video = event.currentTarget;
-        if (!video.paused && !isPlaying) setIsPlaying(true);
+      const primary = primaryRef.current;
+      const bridge = bridgeRef.current;
+      if (primary && primary !== video) primary.muted = nextMuted;
+      if (bridge && bridge !== video) bridge.muted = nextMuted;
+      if (!nextMuted && video.paused) {
+        void safePlay(video, true).then(() => setIsPlaying(!video.paused));
+      }
+    }, [activeVideo]);
+
+    useEffect(() => acquireTheater?.(), [acquireTheater]);
+
+    useEffect(() => {
+      clearTimers();
+      setActivePrimaryIndex(0);
+      setPrimaryVisible(false);
+      setBridgeReleased(false);
+      setIsPlaying(false);
+      setIsMuted(false);
+      syncAttemptedRef.current = false;
+    }, [candidateKey, clearTimers]);
+
+    useEffect(() => {
+      const bridge = bridgeRef.current;
+      if (!bridge || !bridgeCandidate || bridgeReleased) return;
+
+      void safePlay(bridge, true).then(() => {
+        setIsMuted(bridge.muted);
+        setIsPlaying(!bridge.paused);
+      });
+
+      return () => {
+        bridge.pause();
+      };
+    }, [bridgeCandidate, bridgeReleased]);
+
+    useEffect(() => {
+      clearTimers();
+      syncAttemptedRef.current = false;
+      const primary = primaryRef.current;
+      if (!primary || !activePrimary) return;
+
+      // The master starts muted behind the bridge so browser autoplay policy
+      // never delays high-quality buffering. Audio transfers at handoff.
+      primary.muted = Boolean(bridgeCandidate && !bridgeReleased);
+      void safePlay(primary, !bridgeCandidate || bridgeReleased);
+
+      if (
+        enableStartupFallback &&
+        !bridgeCandidate &&
+        activePrimaryIndex + 1 < primaryCandidates.length
+      ) {
+        fallbackTimerRef.current = window.setTimeout(() => {
+          if (primary.readyState < 2) promoteFallback();
+        }, startupFallbackMs);
+      }
+
+      return clearTimers;
+    }, [
+      activePrimary,
+      activePrimaryIndex,
+      bridgeCandidate,
+      bridgeReleased,
+      clearTimers,
+      enableStartupFallback,
+      primaryCandidates.length,
+      promoteFallback,
+      startupFallbackMs,
+    ]);
+
+    useEffect(
+      () => () => {
+        clearTimers();
+        teardown(primaryRef.current);
+        teardown(bridgeRef.current);
       },
-      [isPlaying],
+      [clearTimers],
     );
 
-    useEffect(() => {
-      setActiveSourceIndex(0);
-    }, [hlsSourceKey, sourceKey]);
-
-    useEffect(() => {
-      const video = videoRef.current;
-      if (!video || !activeSource) return;
-      const sessionId = playSessionRef.current + 1;
-      playSessionRef.current = sessionId;
-
-      setIsPlaying(false);
-      video.muted = false;
-      setIsMuted(false);
-      video.load();
-      scheduleStartupFallback(sessionId);
-      attemptPlay(sessionId);
-
-      return () => {
-        clearStartupTimeout();
-        if (playSessionRef.current === sessionId) {
-          playSessionRef.current += 1;
-        }
-        video.pause();
-      };
-    }, [activeSource, attemptPlay, clearStartupTimeout, scheduleStartupFallback]);
-
-    useEffect(() => {
-      const video = videoRef.current;
-      return () => {
-        clearStartupTimeout();
-        playSessionRef.current += 1;
-        teardownVideo(video);
-      };
-    }, [clearStartupTimeout, teardownVideo]);
+    if (!activePrimary) {
+      return (
+        <div className={cn('relative aspect-[9/16] overflow-hidden bg-black', className)}>
+          <img src={poster} alt="" className="h-full w-full object-cover" />
+        </div>
+      );
+    }
 
     return (
-      <div className={cn('relative overflow-hidden bg-black', className)}>
+      <div className={cn('relative aspect-[9/16] overflow-hidden bg-black', className)}>
+        {bridgeCandidate && !bridgeReleased && (
+          <video
+            ref={bridgeRef}
+            className={cn(
+              'absolute inset-0 h-full w-full object-cover transition-opacity ease-out',
+              primaryVisible ? 'opacity-0' : 'opacity-100',
+            )}
+            style={{ transitionDuration: `${HANDOFF_FADE_MS}ms` }}
+            src={bridgeCandidate.mp4}
+            poster={poster}
+            preload="auto"
+            playsInline
+            loop
+            crossOrigin="anonymous"
+            onPlay={() => {
+              if (!primaryVisible) setIsPlaying(true);
+            }}
+            onPause={() => {
+              if (!primaryVisible) setIsPlaying(false);
+            }}
+            onVolumeChange={(event) => {
+              if (!primaryVisible) setIsMuted(event.currentTarget.muted);
+            }}
+            onError={releaseBridge}
+          />
+        )}
+
         <AdaptiveVideo
-          ref={videoRef}
-          className="w-full aspect-[9/16] object-cover"
-          src={activeSource}
-          hlsSrc={activeHlsSource}
+          ref={primaryRef}
+          className={cn(
+            'absolute inset-0 h-full w-full object-cover transition-opacity ease-out',
+            primaryVisible || !bridgeCandidate ? 'opacity-100' : 'opacity-0',
+          )}
+          style={{ transitionDuration: `${HANDOFF_FADE_MS}ms` }}
+          src={activePrimary.mp4}
+          hlsSrc={activePrimary.hls}
           poster={poster}
-          preload="metadata"
+          preload="auto"
           autoPlay
-          muted={false}
+          muted={Boolean(bridgeCandidate && !primaryVisible)}
           playsInline
           loop={false}
           loadStrategy="immediate"
@@ -225,35 +338,46 @@ const TheaterVideo = memo(
           onLoadedMetadata={(event) => {
             event.currentTarget.defaultPlaybackRate = 1;
             event.currentTarget.playbackRate = 1;
-            setIsMuted(event.currentTarget.muted);
           }}
-          onPlay={handlePlay}
-          onPause={handlePause}
-          onWaiting={handleWaiting}
-          onPlaying={handlePlaying}
-          onCanPlayThrough={handleCanPlayThrough}
-          onError={handleError}
-          onTimeUpdate={handleTimeUpdate}
+          onCanPlay={synchronizePrimary}
+          onPlaying={synchronizePrimary}
+          onSeeked={completeHandoff}
+          onPlay={() => {
+            if (primaryVisible || !bridgeCandidate) setIsPlaying(true);
+          }}
+          onPause={() => {
+            if (primaryVisible || !bridgeCandidate) setIsPlaying(false);
+          }}
+          onWaiting={() => {
+            if (primaryVisible || !bridgeCandidate) setIsPlaying(false);
+          }}
+          onVolumeChange={(event: SyntheticEvent<HTMLVideoElement>) => {
+            if (primaryVisible || !bridgeCandidate) {
+              setIsMuted(event.currentTarget.muted);
+            }
+          }}
+          onError={schedulePrimaryRecovery}
         />
+
         <button
           type="button"
-          className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
-            isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          className={`absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-300 ${
+            isPlaying ? 'pointer-events-none opacity-0' : 'opacity-100'
           }`}
           onClick={togglePlayback}
           aria-label={isPlaying ? 'Pause' : 'Play'}
         >
-          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/45 bg-black/40 backdrop-blur-sm shadow-[0_10px_24px_-16px_rgba(0,0,0,0.88)]">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/55 bg-black/55 shadow-[0_10px_24px_-16px_rgba(0,0,0,0.88)]">
             {isPlaying ? (
-              <Pause className="h-5 w-5 text-white/90" fill="currentColor" />
+              <Pause className="h-5 w-5 text-white/95" fill="currentColor" />
             ) : (
-              <Play className="ml-0.5 h-5 w-5 text-white/90" fill="currentColor" />
+              <Play className="ml-0.5 h-5 w-5 text-white/95" fill="currentColor" />
             )}
           </span>
         </button>
         <button
           type="button"
-          className="absolute left-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/40 bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/55"
+          className="absolute left-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-white/55 bg-black/60 text-white transition-colors hover:bg-black/75"
           onClick={toggleMute}
           aria-label={isMuted ? 'Unmute video' : 'Mute video'}
         >

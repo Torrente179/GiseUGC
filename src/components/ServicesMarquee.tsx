@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useTranslation } from '@/lib/locale-context';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import LazyVideo from '@/components/media/LazyVideo';
+import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
+import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
+import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
 import { mark, measure } from '@/lib/perf-debug';
 
 interface ServiceVideoCard {
@@ -17,6 +19,57 @@ interface ServicesMarqueeProps {
     liteMobile?: boolean;
 }
 
+const posterVariantBase = (posterSrc: string) => {
+    const filename = posterSrc.split('/').pop();
+    if (!filename) return null;
+    try {
+        return decodeURIComponent(filename).replace(/-poster\.jpg$/u, '');
+    } catch {
+        return filename.replace(/-poster\.jpg$/u, '');
+    }
+};
+
+const LocalServicePoster = ({
+    poster,
+    className,
+}: {
+    poster: string;
+    className: string;
+}) => {
+    const baseName = posterVariantBase(poster);
+    if (!baseName) {
+        return <img src={poster} alt="" loading="lazy" decoding="async" className={className} />;
+    }
+
+    const source = (width: 180 | 360 | 720 | 1080, format: 'avif' | 'webp' | 'jpg') =>
+        `/uploads/videos/poster-variants/v1/${encodeURIComponent(baseName)}-${width}.${format}`;
+    const sourceSet = (format: 'avif' | 'webp' | 'jpg') =>
+        ([180, 360, 720, 1080] as const)
+            .map((width) => `${source(width, format)} ${width}w`)
+            .join(', ');
+
+    return (
+        <picture className="contents">
+            <source type="image/avif" srcSet={sourceSet('avif')} sizes="240px" />
+            <source type="image/webp" srcSet={sourceSet('webp')} sizes="240px" />
+            <img
+                src={source(360, 'jpg')}
+                srcSet={sourceSet('jpg')}
+                sizes="240px"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className={className}
+                onError={(event) => {
+                    event.currentTarget.onerror = null;
+                    event.currentTarget.removeAttribute('srcset');
+                    event.currentTarget.src = poster;
+                }}
+            />
+        </picture>
+    );
+};
+
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
 const r2PreviewVideo = (filename: string) =>
     `${R2_MEDIA_BASE_URL}/videos/previews/${filename.replace(/\.mp4$/, '-preview.mp4')}`;
@@ -29,6 +82,11 @@ const MAX_FRAME_DELTA_MS = 64;
 const TOUCH_AXIS_LOCK_THRESHOLD_PX = 6;
 const TOUCH_GESTURE_SLOP_PX = 4;
 const HORIZONTAL_AXIS_BIAS = 1.15;
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+const marqueeClipByPreview = new Map(
+    [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS]
+        .map((clip) => [clip.previewSrc, clip] as const),
+);
 
 const findNuevosClipByMainFilename = (filename: string) =>
     NUEVOS_R2_READY_CLIPS.find((clip) => {
@@ -47,11 +105,8 @@ const nuevosVoicebotCierraVentasClip = findNuevosClipByMainFilename('WhatsApp Vi
 const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps) => {
     const { t } = useTranslation();
     const [expandedCard, setExpandedCard] = useState<number | null>(null);
-    const [isMobileViewport, setIsMobileViewport] = useState(() => {
-        if (typeof window === 'undefined') return false;
-        return window.innerWidth < MOBILE_BREAKPOINT_PX;
-    });
-    const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+    const [intentCard, setIntentCard] = useState<number | null>(null);
+    const [isMobileViewport, setIsMobileViewport] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
     const isPausedRef = useRef(false);
@@ -71,6 +126,7 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
     const viewportWidthRef = useRef(0);
     const touchSessionCounterRef = useRef(0);
     const activeTouchSessionRef = useRef<number | null>(null);
+    const wakeAnimationRef = useRef<() => void>(() => {});
 
     const serviceVideoCards: ServiceVideoCard[] = [
         {
@@ -152,7 +208,7 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
         ? serviceVideoCards
         : [...serviceVideoCards, ...serviceVideoCards, ...serviceVideoCards];
 
-    useEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         if (typeof window === 'undefined') return;
         const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX - 1}px)`);
         const update = () => setIsMobileViewport(mq.matches);
@@ -165,67 +221,11 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
         return () => mq.removeListener(update);
     }, []);
 
-    const playLoopingVideo = useCallback((video: HTMLVideoElement | null) => {
-        if (!video) return;
-        const hasAttachedSource = Boolean(video.currentSrc || video.src || video.querySelector('source')?.src);
-        if (!hasAttachedSource) {
-            video.pause();
-            return;
-        }
-        video.defaultPlaybackRate = 1;
-        video.playbackRate = 1;
-        const playPromise = video.play();
-        if (playPromise) {
-            playPromise.catch(() => undefined);
-        }
-    }, []);
-
     const handleCardClick = (index: number) => {
         // Ignore click if user was dragging
         if (hasDraggedRef.current) return;
 
-        setExpandedCard((currentExpanded) => {
-            const nextExpanded = currentExpanded === index ? null : index;
-            if (nextExpanded !== null) {
-                playLoopingVideo(videoRefs.current[nextExpanded]);
-            }
-            return nextExpanded;
-        });
-    };
-
-    useEffect(() => {
-        if (isLiteMobileMode) return;
-        if (expandedCard !== null) return;
-        videoRefs.current.forEach((video) => {
-            playLoopingVideo(video);
-        });
-    }, [expandedCard, isLiteMobileMode, playLoopingVideo]);
-
-    useEffect(() => {
-        if (isLiteMobileMode) return;
-        if (expandedCard === null) return;
-        videoRefs.current.forEach((video, index) => {
-            if (!video) return;
-            if (index === expandedCard) {
-                playLoopingVideo(video);
-                return;
-            }
-            video.pause();
-        });
-    }, [expandedCard, isLiteMobileMode, playLoopingVideo]);
-
-    const assignVideoRef = (index: number, element: HTMLVideoElement | null) => {
-        if (isLiteMobileMode) return;
-        videoRefs.current[index] = element;
-        if (!element) {
-            return;
-        }
-        const shouldPause = expandedCard !== null && expandedCard !== index;
-        if (shouldPause) {
-            element.pause();
-            return;
-        }
-        playLoopingVideo(element);
+        setExpandedCard((currentExpanded) => currentExpanded === index ? null : index);
     };
 
     // Sync pause state with expanded card
@@ -234,6 +234,7 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
         if (expandedCard !== null) {
             releaseVelocityRef.current = 0;
         }
+        wakeAnimationRef.current();
     }, [expandedCard]);
 
     // Click outside cards to dismiss expanded card and resume scrolling
@@ -360,7 +361,16 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
         };
 
         const syncAnimationLoop = () => {
-            const shouldRun = isSectionVisibleRef.current && isDocumentVisibleRef.current;
+            const hasPendingMotion =
+                !isPausedRef.current ||
+                isDraggingRef.current ||
+                Math.abs(releaseVelocityRef.current) > 8 ||
+                Math.abs(targetOffsetRef.current - renderedOffsetRef.current) > 0.1;
+            const shouldRun =
+                isSectionVisibleRef.current &&
+                isDocumentVisibleRef.current &&
+                hasPendingMotion;
+            track.style.willChange = shouldRun ? 'transform' : 'auto';
             if (!shouldRun) {
                 stopAnimationLoop();
                 return;
@@ -369,6 +379,7 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
                 animationFrameId = requestAnimationFrame(animate);
             }
         };
+        wakeAnimationRef.current = syncAnimationLoop;
 
         const animate = (timestamp: number) => {
             animationFrameId = null;
@@ -566,8 +577,10 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
         window.addEventListener('touchcancel', handleTouchEnd);
 
         return () => {
+            wakeAnimationRef.current = () => {};
             clearTimeout(initTimeout);
             stopAnimationLoop();
+            track.style.willChange = 'auto';
             if (resizeRafId !== null) {
                 window.cancelAnimationFrame(resizeRafId);
             }
@@ -606,27 +619,36 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
 
                 <div className="px-4">
                     <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
-                        {serviceVideoCards.map((card, index) => (
-                            <article
-                                key={`${card.titleKey}-lite-${index}`}
-                                className="shrink-0 w-[190px] snap-start"
-                            >
-                                <div className="relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card">
-                                    <img
-                                        src={card.poster}
-                                        alt=""
-                                        aria-hidden="true"
-                                        loading="lazy"
-                                        decoding="async"
-                                        className="h-full w-full object-cover"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-50" />
-                                </div>
-                                <h3 className="section-label text-foreground/80 mt-4 text-center px-2">
-                                    {t(card.titleKey)}
-                                </h3>
-                            </article>
-                        ))}
+                        {serviceVideoCards.map((card, index) => {
+                            const clip = marqueeClipByPreview.get(card.videoSrc);
+                            return (
+                                <article
+                                    key={`${card.titleKey}-lite-${index}`}
+                                    className="shrink-0 w-[190px] snap-start"
+                                >
+                                    <div className="relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card">
+                                        {clip ? (
+                                            <ResponsivePosterImage
+                                                clip={clip}
+                                                alt=""
+                                                sizes="190px"
+                                                loading="lazy"
+                                                className="h-full w-full object-cover"
+                                            />
+                                        ) : (
+                                            <LocalServicePoster
+                                                poster={card.poster}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        )}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-50" />
+                                    </div>
+                                    <h3 className="section-label text-foreground/80 mt-4 text-center px-2">
+                                        {t(card.titleKey)}
+                                    </h3>
+                                </article>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
@@ -680,40 +702,56 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
                     <div
                         ref={trackRef}
                         className="flex w-max gap-6 lg:gap-8 px-4 md:px-20"
-                        style={{ willChange: 'transform' }}
                     >
                         {marqueeCards.map((card, index) => {
                             const isExpanded = expandedCard === index;
-                            const middleSetStart = serviceVideoCards.length;
-                            const isPriorityWarmCard =
-                                index >= middleSetStart - 2 &&
-                                index <= middleSetStart + 8;
+                            const isActivePreview = (expandedCard ?? intentCard) === index;
+                            const clip = marqueeClipByPreview.get(card.videoSrc);
                             return (
                                 <div
                                     key={`${card.titleKey}-${index}`}
                                     data-carousel-card
                                     className="relative shrink-0 w-[200px] sm:w-[220px] lg:w-[240px] flex flex-col items-center cursor-pointer"
                                     onClick={() => handleCardClick(index)}
+                                    onPointerEnter={() => setIntentCard(index)}
+                                    onPointerLeave={() => setIntentCard((current) => current === index ? null : current)}
+                                    onFocus={() => setIntentCard(index)}
+                                    onBlur={() => setIntentCard((current) => current === index ? null : current)}
+                                    tabIndex={0}
+                                    role="button"
+                                    aria-expanded={isExpanded}
+                                    aria-label={t(card.titleKey)}
+                                    onKeyDown={(event) => {
+                                        if (event.key !== 'Enter' && event.key !== ' ') return;
+                                        event.preventDefault();
+                                        handleCardClick(index);
+                                    }}
                                 >
                                     {/* Compact Vertical Frame */}
-                                    <div className={`relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card transition-all duration-500 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:border-primary/25 ${isExpanded ? '-translate-y-2' : ''}`}>
-                                        <LazyVideo
-                                            ref={(el) => {
-                                                assignVideoRef(index, el);
-                                            }}
-                                            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                                            src={card.videoSrc}
-                                            poster={card.poster}
-                                            autoPlay
-                                            muted
-                                            loop
-                                            playsInline
-                                            pauseOffscreen
-                                            forcePause={expandedCard !== null && expandedCard !== index}
-                                            loadWhenVisible
-                                            preload={isPriorityWarmCard ? 'metadata' : 'none'}
-                                            rootMargin={isPriorityWarmCard ? '520px 0px' : '120px 0px'}
-                                        />
+                                    <div className={`relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card transition-[transform,border-color,box-shadow] duration-500 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:border-primary/25 ${isExpanded ? '-translate-y-2' : ''}`}>
+                                        {isActivePreview ? (
+                                            <AutoplayPreviewVideo
+                                                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                                                src={card.videoSrc}
+                                                poster={card.poster}
+                                                preload="none"
+                                                playbackPriority="preview"
+                                                rootMargin="0px"
+                                            />
+                                        ) : clip ? (
+                                            <ResponsivePosterImage
+                                                clip={clip}
+                                                alt=""
+                                                sizes="(max-width: 639px) 200px, (max-width: 1023px) 220px, 240px"
+                                                loading="lazy"
+                                                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                                            />
+                                        ) : (
+                                            <LocalServicePoster
+                                                poster={card.poster}
+                                                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                                            />
+                                        )}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-50" />
                                     </div>
 
@@ -722,7 +760,7 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
                                             {t(card.titleKey)}
                                         </h3>
 
-                                        <div className={`overflow-hidden transition-all duration-500 ease-out ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                        <div className={`overflow-hidden transition-[max-height,opacity] duration-500 ease-out ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
                                             <p className="strategic-body text-sm text-muted-foreground pt-1">
                                                 {t(card.descriptionKey)}
                                             </p>

@@ -1,23 +1,21 @@
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { useTranslation } from '@/lib/locale-context';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
-import { m } from 'framer-motion';
-import { revealUp, staggerContainer } from '@/components/motion/variants';
-import { getLocaleFromPath, getServicePath, type ServicePageId } from '@/lib/locale-path';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { LEGACY_REEL_CLIPS, getBestPosterSrc } from '@/data/portfolio-clips';
-
-const MotionLink = m.create(Link);
+import { getServicePath, type ServicePageId } from '@/lib/locale-path';
+import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
+import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
+import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 
 /**
  * Chapter 03 — Servicios. An editorial index: numbered serif rows instead of
  * an icon-card grid. Hovering a row (desktop) tilts in a reel preview.
  */
 const Services = () => {
-  const { t } = useTranslation();
-  const isMobile = useIsMobile();
-  const locale = typeof window === 'undefined' ? 'es' : getLocaleFromPath(window.location.pathname);
+  const { t, locale } = useTranslation();
   const isEs = locale === 'es';
+  const [activePreviewIndex, setActivePreviewIndex] = useState<number | null>(null);
+  const revealRef = useScrollReveal<HTMLDivElement>();
 
   const rows: Array<{
     pageId: ServicePageId;
@@ -37,68 +35,54 @@ const Services = () => {
   return (
     <section id="services" className="studio-section bg-background pt-16 md:pt-20">
       <div className="studio-container">
-        <m.div
-          className="mb-10 md:mb-14 flex flex-row items-end justify-between gap-6"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer(0.12, 0.04)}
-        >
+        <div ref={revealRef} className="svc-reveal mb-10 md:mb-14 flex flex-row items-end justify-between gap-6">
           <div>
-            <m.span className="dc-chapter-label" variants={revealUp(12, 0.45)}>
+            <span className="dc-chapter-label">
               {isEs ? 'Capítulo 03 — servicios' : 'Chapter 03 — services'}
-            </m.span>
-            <m.h2
-              className="mt-3 font-serif text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight-serif leading-[1]"
-              variants={revealUp(16, 0.55)}
-            >
+            </span>
+            <h2 className="mt-3 font-serif text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight-serif leading-[1]">
               {isEs ? 'Lo que ' : 'What I '}
               <span className="italic text-primary">{isEs ? 'produzco' : 'produce'}</span>
-            </m.h2>
+            </h2>
           </div>
-          <m.p
-            className="dc-index-meta hidden max-w-[16rem] !text-muted-foreground/70 md:block"
-            variants={revealUp(16, 0.6)}
-          >
+          <p className="dc-index-meta hidden max-w-[16rem] !text-muted-foreground/70 md:block">
             {isEs ? '8 formatos · cada uno con su página' : '8 formats · each with its own page'}
-          </m.p>
-        </m.div>
+          </p>
+        </div>
 
-        <m.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={staggerContainer(0.05, 0.02)}
-          className="border-t border-border/70"
-        >
+        <div className="border-t border-border/70">
           {rows.map((row, index) => (
-            <MotionLink
+            <Link
               key={row.pageId}
               to={getServicePath(row.pageId, locale)}
               className="dc-index-row group"
-              variants={revealUp(16, 0.45)}
+              onPointerEnter={() => setActivePreviewIndex(index)}
+              onPointerLeave={() => setActivePreviewIndex((active) => active === index ? null : active)}
+              onFocus={() => setActivePreviewIndex(index)}
+              onBlur={() => setActivePreviewIndex((active) => active === index ? null : active)}
             >
               <span className="dc-index-num">{String(index + 1).padStart(2, '0')}</span>
               <span className="dc-index-title">{t(row.titleKey)}</span>
-              {!isMobile && row.metaKey && (
-                <span className="dc-index-meta max-w-[15rem]">{t(row.metaKey)}</span>
+              {row.metaKey && (
+                <span className="dc-index-meta hidden max-w-[15rem] md:block">{t(row.metaKey)}</span>
               )}
-              {!isMobile && (
-                <span className="dc-index-preview" aria-hidden="true">
-                  <img
-                    src={getBestPosterSrc(LEGACY_REEL_CLIPS[index % LEGACY_REEL_CLIPS.length])}
+              <span className="dc-index-preview hidden md:block" aria-hidden="true">
+                {activePreviewIndex === index ? (
+                  <ResponsivePosterImage
+                    clip={LEGACY_REEL_CLIPS[index % LEGACY_REEL_CLIPS.length]}
                     alt=""
                     loading="lazy"
                     decoding="async"
+                    sizes="77px"
                   />
-                </span>
-              )}
+                ) : null}
+              </span>
               <span className="dc-index-arrow" aria-hidden="true">
                 <ArrowUpRight className="h-4 w-4" />
               </span>
-            </MotionLink>
+            </Link>
           ))}
-        </m.div>
+        </div>
       </div>
     </section>
   );

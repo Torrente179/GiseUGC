@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { m, useReducedMotion } from 'framer-motion';
+import { useTranslation } from '@/lib/locale-context';
 import {
   Menu,
   X,
@@ -14,7 +13,6 @@ import {
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import NavbarControls from '@/components/NavbarControls';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
-import { springSnappy } from '@/components/motion/variants';
 import {
   getHomeSectionHref,
   getLocalizedPathForCurrentRoute,
@@ -66,7 +64,6 @@ type NavbarProps = {
 const Navbar = ({ compactMobile = false }: NavbarProps) => {
   const location = useLocation();
   const { t } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuDragOffset, setMobileMenuDragOffset] = useState(0);
@@ -384,12 +381,12 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
   return (
     <>
       <div
-        className={`fixed inset-0 z-[100] md:hidden transition-all duration-500 ${
+        className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-500 ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
         <div
-          className={`absolute inset-0 bg-background/96 backdrop-blur-md transition-opacity duration-500 ${
+          className={`absolute inset-0 bg-background transition-opacity duration-500 ${
             mobileMenuOpen ? 'opacity-100' : 'opacity-0'
           }`}
           style={mobileMenuOpen ? { opacity: mobileMenuBackdropOpacity } : undefined}
@@ -397,7 +394,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
         />
 
         <div
-          className="relative h-full flex flex-col pt-24 px-6 [touch-action:pan-x] will-change-transform"
+          className="relative h-full flex flex-col pt-24 px-6 [touch-action:pan-x]"
           style={{
             transform: `translate3d(0, ${mobileMenuDragOffset}px, 0) scale(${mobileMenuPanelScale})`,
             opacity: mobileMenuPanelOpacity,
@@ -443,7 +440,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                     {t(link.key)}
                   </span>
                 </div>
-                <ArrowRight className="w-5 h-5 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-[opacity,transform] duration-[250ms]" />
+                <ArrowRight className="w-5 h-5 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-[opacity,transform] duration-300" />
               </a>
             ))}
           </nav>
@@ -468,7 +465,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                     href={platform.href}
                     aria-label={t(platform.ariaKey)}
                     onClick={closeMobileMenu}
-                    className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/75 px-2 py-2.5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_16px_28px_-20px_hsl(var(--foreground)/0.9)]"
+                    className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/75 px-2 py-2.5 text-center transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_16px_28px_-20px_hsl(var(--foreground)/0.9)]"
                   >
                     <span
                       className={`absolute inset-x-2 top-0 h-0.5 rounded-full bg-gradient-to-r ${platform.glowClass} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
@@ -493,17 +490,14 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
         </div>
       </div>
 
-      <m.nav
+      <nav
         className={cn(
-          'fixed top-0 left-0 w-full z-[110] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300',
+          'site-nav-enter fixed top-0 left-0 w-full z-[110] transition-[background-color,border-color,box-shadow] duration-300',
           isScrolled
-            ? 'border-b border-border/40 bg-background/80 backdrop-blur-xl shadow-[0_14px_36px_-30px_hsl(var(--foreground)/0.5)]'
-            : 'border-b border-border/15 bg-background/40 backdrop-blur-md',
+            ? 'border-b border-border/40 bg-background/95 shadow-[0_14px_36px_-30px_hsl(var(--foreground)/0.5)]'
+            : 'border-b border-border/15 bg-background/75',
           onHomePage && !isScrolled && 'title-sequence-nav',
         )}
-        initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
       >
         {!isScrolled && (
           <div
@@ -580,7 +574,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
 
             <div className="hidden md:flex items-center gap-2">
               <NavbarControls currentLocale={currentLocale} onLocaleChange={changeLanguage} />
-              <m.a
+              <a
                 href={homeSectionHref('contact')}
                 onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
                   if (onHomePage) {
@@ -591,13 +585,10 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                   }
                 }}
                 className="btn-primary-nordic btn-primary-nordic--sm"
-                whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-                transition={springSnappy}
               >
                 {hireMeCtaLabel}
                 <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              </m.a>
+              </a>
             </div>
 
             <div className={cn('md:hidden flex items-center', compactMobile ? 'gap-1' : 'gap-2')}>
@@ -619,14 +610,14 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                 <div className={cn('relative', compactMobile ? 'w-[18px] h-[18px]' : 'w-6 h-6')}>
                   <Menu
                     className={cn(
-                      'absolute inset-0 transition-all duration-300',
+                      'absolute inset-0 transition-[opacity,transform] duration-300',
                       compactMobile ? 'w-[18px] h-[18px]' : 'w-6 h-6',
                       mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100',
                     )}
                   />
                   <X
                     className={cn(
-                      'absolute inset-0 transition-all duration-300',
+                      'absolute inset-0 transition-[opacity,transform] duration-300',
                       compactMobile ? 'w-[18px] h-[18px]' : 'w-6 h-6',
                       mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50',
                     )}
@@ -636,7 +627,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
             </div>
           </div>
         </div>
-      </m.nav>
+      </nav>
     </>
   );
 };

@@ -1,22 +1,26 @@
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState, type SyntheticEvent } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type SyntheticEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { Play, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import type { ServicePageId, SiteLocale, VerticalPageId, ResourcePageId } from '@/lib/locale-path';
+import { Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import type { ServicePageId, SiteLocale, ResourcePageId } from '@/lib/locale-path';
 import { getHomePath, getHomeSectionHref, getServicePath, getVerticalPath, getResourcePath } from '@/lib/locale-path';
-import { getServicePageContent, getRelatedServiceSummaries, getAllServiceIds } from '@/data/service-pages';
-import { getVerticalPageContent } from '@/data/vertical-pages';
-import { getBestPosterSrc, LEGACY_REEL_CLIPS, servicePosterSrcFromMain } from '@/data/portfolio-clips';
+import type { ServiceLandingRouteData } from '@/data/landing-route-types';
+import { getPosterVariantSrc, LEGACY_REEL_CLIPS, servicePosterSrcFromMain } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { RevealSection } from '@/components/motion/RevealSection';
-import TheaterVideo from '@/components/media/TheaterVideo';
+import MediaTheater from '@/components/media/MediaTheater';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
+import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
+import { createClipPlaybackCandidates } from '@/lib/media-assets';
+import { useMediaIntent } from '@/hooks/use-media-intent';
+import FloatingContactDock from '@/components/FloatingContactDock';
+import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
+import '@/styles/templates.css';
 
-const FloatingContactDock = lazy(() => import('@/components/FloatingContactDock'));
-const ServicesMarqueeSection = lazy(() => import('@/components/ServicesMarquee'));
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
@@ -25,20 +29,11 @@ const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
 const clipMap = new Map([...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS].map((clip) => [clip.id, clip]));
 const formatDuration = (seconds?: number) => (seconds ? `${Math.round(seconds)}s` : null);
 const getHighQualityServicePosterSrc = servicePosterSrcFromMain;
-const isQuickTimeSource = (src?: string) => Boolean(src && /\.mov(?:$|\?)/iu.test(src));
-
-/* ── Internal linking maps ── */
-const SERVICE_TO_VERTICALS: Record<ServicePageId, VerticalPageId[]> = {
-  'bilingual-ugc-creator': ['beauty-ugc', 'fashion-ugc', 'tech-saas-ugc', 'ecommerce-ugc', 'lifestyle-wellness-ugc'],
-  'spokesperson-videos': ['tech-saas-ugc', 'ecommerce-ugc', 'lifestyle-wellness-ugc'],
-  'ugc-ads-tiktok-meta': ['beauty-ugc', 'fashion-ugc', 'ecommerce-ugc', 'lifestyle-wellness-ugc'],
-  'ugc-testimonials-reviews': ['beauty-ugc', 'lifestyle-wellness-ugc', 'ecommerce-ugc'],
-  'ugc-product-demo': ['beauty-ugc', 'tech-saas-ugc', 'ecommerce-ugc'],
-  'ugc-problem-solution': ['tech-saas-ugc', 'ecommerce-ugc', 'lifestyle-wellness-ugc'],
-  'ugc-lifestyle': ['beauty-ugc', 'fashion-ugc', 'lifestyle-wellness-ugc'],
-  'ugc-broll-footage': ['beauty-ugc', 'fashion-ugc', 'ecommerce-ugc', 'lifestyle-wellness-ugc'],
+const armProofRailSnap = (event: SyntheticEvent<HTMLDivElement>) => {
+  event.currentTarget.dataset.snapReady = 'true';
 };
 
+/* ── Internal linking maps ── */
 const RESOURCE_LINKS: Record<SiteLocale, { id: ResourcePageId; label: string }[]> = {
   es: [
     { id: 'what-is-ugc', label: 'Que es el UGC' },
@@ -57,6 +52,7 @@ const RESOURCE_LINKS: Record<SiteLocale, { id: ResourcePageId; label: string }[]
 type ServiceLandingPageProps = {
   serviceId: ServicePageId;
   locale: SiteLocale;
+  routeData: ServiceLandingRouteData;
 };
 
 const localeLabels = {
@@ -103,18 +99,24 @@ const localeLabels = {
    Desktop: A24 × Apple editorial layout
    ════════════════════════════════════════════════════════════════════ */
 
-const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
-  const page = getServicePageContent(serviceId, locale);
+const serializeRouteData = (routeData: ServiceLandingRouteData) =>
+  JSON.stringify(routeData).replace(/</g, '\\u003c');
+
+const ServiceLandingPage = ({
+  serviceId,
+  locale,
+  routeData,
+}: ServiceLandingPageProps) => {
+  const {
+    page,
+    relatedPages,
+    allOtherServices,
+    relevantVerticals,
+  } = routeData;
   const labels = localeLabels[locale];
-  const relatedPages = getRelatedServiceSummaries(page.relatedServiceIds, locale);
-  const allOtherServiceIds = useMemo(
-    () => getAllServiceIds().filter((id) => id !== serviceId),
-    [serviceId],
-  );
 
   const canonical = buildUrl(page.path);
   const homeCanonical = buildUrl(getHomePath(locale));
-  const relevantVerticals = SERVICE_TO_VERTICALS[serviceId];
   const resourceLinks = RESOURCE_LINKS[locale];
 
   const proofExamples = useMemo(
@@ -128,16 +130,14 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
 
   /* ── Theater state ── */
   const [activeProofIndex, setActiveProofIndex] = useState<number | null>(null);
-  const [isMobileViewport, setIsMobileViewport] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia('(max-width: 767px)').matches;
-  });
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
 
   const activeProofItem = useMemo(
     () => (activeProofIndex === null ? null : proofExamples[activeProofIndex] ?? null),
     [activeProofIndex, proofExamples],
   );
   const isProofTheaterOpen = activeProofItem !== null;
+  const mediaIntent = useMediaIntent();
 
   const openProofClip = useCallback(
     (index: number) => {
@@ -158,30 +158,13 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
     [proofExamples.length],
   );
 
-  const theaterSources = useMemo(() => {
-    const clip = activeProofItem?.clip;
-    if (!clip) return [];
-    const preferred = isQuickTimeSource(clip.mainSrc)
-      ? [clip.mobileSrc, clip.mainSrc, clip.previewSrc]
-      : isMobileViewport
-        ? [clip.mobileSrc, clip.mainSrc, clip.previewSrc]
-        : [clip.mainSrc, clip.mobileSrc, clip.previewSrc];
-    return preferred.filter((s, i, a): s is string => !!s && a.indexOf(s) === i);
-  }, [activeProofItem, isMobileViewport]);
-
-  const theaterHlsSources = useMemo(() => {
-    const clip = activeProofItem?.clip;
-    if (!clip) return [];
-    const preferred = isQuickTimeSource(clip.mainSrc)
-      ? [clip.mobileHlsSrc, clip.hlsSrc, clip.previewHlsSrc]
-      : isMobileViewport
-        ? [clip.mobileHlsSrc, clip.hlsSrc, clip.previewHlsSrc]
-        : [clip.hlsSrc, clip.mobileHlsSrc, clip.previewHlsSrc];
-    return preferred.filter((s, i, a): s is string => !!s && a.indexOf(s) === i);
-  }, [activeProofItem, isMobileViewport]);
+  const theaterCandidates = useMemo(
+    () => createClipPlaybackCandidates(activeProofItem?.clip, isMobileViewport),
+    [activeProofItem, isMobileViewport],
+  );
 
   /* ── Viewport listener ── */
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (typeof window === 'undefined') return;
     const mq = window.matchMedia('(max-width: 767px)');
     const update = () => setIsMobileViewport(mq.matches);
@@ -199,60 +182,6 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
       setActiveProofIndex(null);
     }
   }, [activeProofIndex, proofExamples.length]);
-
-  /* ── Keyboard nav ── */
-  useEffect(() => {
-    if (!isProofTheaterOpen) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); closeProofTheater(); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); navigateProofTheater(1); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); navigateProofTheater(-1); }
-    };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [closeProofTheater, isProofTheaterOpen, navigateProofTheater]);
-
-  /* ── Body scroll lock ── */
-  useEffect(() => {
-    if (!isProofTheaterOpen) return;
-    const scrollY = window.scrollY;
-    const html = document.documentElement;
-    const prev = {
-      position: document.body.style.position,
-      top: document.body.style.top,
-      left: document.body.style.left,
-      right: document.body.style.right,
-      width: document.body.style.width,
-      overflow: document.body.style.overflow,
-      overscrollBehavior: document.body.style.overscrollBehavior,
-    };
-    const prevHtml = { overflow: html.style.overflow, overscrollBehavior: html.style.overscrollBehavior, scrollBehavior: html.style.scrollBehavior };
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
-    document.body.style.overflow = 'hidden';
-    document.body.style.overscrollBehavior = 'none';
-    html.style.overflow = 'hidden';
-    html.style.overscrollBehavior = 'none';
-    html.dataset.theater = 'open';
-    return () => {
-      delete html.dataset.theater;
-      document.body.style.position = prev.position;
-      document.body.style.top = prev.top;
-      document.body.style.left = prev.left;
-      document.body.style.right = prev.right;
-      document.body.style.width = prev.width;
-      document.body.style.overflow = prev.overflow;
-      document.body.style.overscrollBehavior = prev.overscrollBehavior;
-      html.style.overflow = prevHtml.overflow;
-      html.style.overscrollBehavior = prevHtml.overscrollBehavior;
-      html.style.scrollBehavior = 'auto';
-      window.scrollTo(0, scrollY);
-      html.style.scrollBehavior = prevHtml.scrollBehavior;
-    };
-  }, [isProofTheaterOpen]);
 
   /* ── Schema.org (preserved) ── */
   const schema = useMemo(() => {
@@ -342,18 +271,23 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
         }}
         structuredData={schema}
       />
+      <script
+        id="route-data"
+        type="application/json"
+        dangerouslySetInnerHTML={{ __html: serializeRouteData(routeData) }}
+      />
 
       <div className="min-h-screen bg-background">
         <Navbar compactMobile />
 
         <main>
-          {isMobileViewport ? (
-            <>
-              {/* ╔══════════════════════════════════════════════════════════╗
-                  ║  MOBILE — App-like experience (< 768px)                ║
-                  ║  Completely independent from desktop layout             ║
-                  ╚══════════════════════════════════════════════════════════╝ */}
-              <div>
+          {/* Both route shells stay mounted so hydration never replaces the
+              complete page at the mobile breakpoint. CSS exposes exactly one
+              layout; hidden videos remain source-free through IO + scheduler. */}
+          <div className="viewport-layout viewport-layout--mobile">
+            {/* ╔══════════════════════════════════════════════════════════╗
+                ║  MOBILE — App-like experience (< 768px)                ║
+                ╚══════════════════════════════════════════════════════════╝ */}
 
             {/* ── M1: APP HERO — Full-viewport video poster ── */}
             <section className="stm-hero">
@@ -364,17 +298,29 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   onClick={() => openProofClip(0)}
                   aria-label={`${labels.openSample}: ${leadProof.example.title}`}
                 >
-                  <AutoplayPreviewVideo
-                    src={leadProof.clip.previewSrc}
-                    hlsSrc={leadProof.clip.hlsSrc ?? leadProof.clip.previewHlsSrc}
-                    poster={getBestPosterSrc(leadProof.clip)}
-                    className="stm-hero-poster-img"
-                    aria-hidden="true"
-                    preload="metadata"
-                    playbackPriority="hero"
-                    rootMargin="220px 0px"
-                    forcePause={isProofTheaterOpen}
-                  />
+                  {mediaIntent && !isProofTheaterOpen ? (
+                    <AutoplayPreviewVideo
+                      src={leadProof.clip.previewSrc}
+                      poster={getPosterVariantSrc(leadProof.clip, 720, 'avif')}
+                      className="stm-hero-poster-img"
+                      aria-hidden="true"
+                      preload="metadata"
+                      playbackPriority="hero"
+                      rootMargin="220px 0px"
+                      activationQuery="(max-width: 767px)"
+                    />
+                  ) : (
+                    <ResponsivePosterImage
+                      clip={leadProof.clip}
+                      className="stm-hero-poster-img"
+                      alt=""
+                      sizes="100vw"
+                      loading="eager"
+                      decoding="sync"
+                      fetchpriority="high"
+                      media="(max-width: 767px)"
+                    />
+                  )}
                   <div className="stm-hero-poster-overlay" />
                 </button>
               ) : (
@@ -384,8 +330,8 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               {/* Overlaid content at bottom */}
               <div className="stm-hero-bottom">
                 <p className="st-eyebrow st-eyebrow--light mb-2">{page.heroEyebrow}</p>
-                <h1 className="stm-hero-title">
-                  <PretextLineReveal text={page.heroTitle} delay={0} stagger={0.1} className="block" />
+                <h1 className="stm-hero-title stm-hero-title--reveal">
+                  {page.heroTitle}
                 </h1>
                 <p className="stm-hero-hook">{page.heroSummary}</p>
               </div>
@@ -405,28 +351,33 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <section className="stm-reel">
                 <p className="st-eyebrow px-5 mb-4">{labels.theWork}</p>
                 <h2 className="sr-only">{page.featuredTitle}</h2>
-                <div className="stm-reel-track scrollbar-hide">
+                <div
+                  className="stm-reel-track scrollbar-hide"
+                  onPointerDown={armProofRailSnap}
+                  onFocusCapture={armProofRailSnap}
+                  onWheel={armProofRailSnap}
+                >
                   {proofExamples.map(({ example, clip }, index) => {
                     const duration = formatDuration(clip.durationSeconds);
-                    const posterSrc = getHighQualityServicePosterSrc(clip.mainSrc, clip.posterSrc);
                     return (
                       <button
                         key={example.clipId}
                         type="button"
                         onClick={() => openProofClip(index)}
-                        aria-label={`${labels.openSample}: ${example.title}`}
                         className="stm-reel-card"
                       >
-                        <div className="stm-reel-card-media">
-                          <AutoplayPreviewVideo
-                            src={clip.previewSrc}
-                            hlsSrc={clip.previewHlsSrc}
-                            poster={posterSrc}
+                        <span className="sr-only">{labels.openSample}</span>
+                        <div
+                          className="stm-reel-card-media"
+                          style={{ aspectRatio: '9 / 14' }}
+                        >
+                          <ResponsivePosterImage
+                            clip={clip}
                             className="stm-reel-card-img"
-                            aria-hidden="true"
-                            playbackPriority="preview"
-                            rootMargin="180px 0px"
-                            forcePause={isProofTheaterOpen}
+                            alt=""
+                            sizes="70vw"
+                            loading="lazy"
+                            media="(max-width: 767px)"
                           />
                           <div className="stm-reel-card-gradient" />
                           <div className="stm-reel-card-bottom">
@@ -534,14 +485,15 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                   <>
                     <p className="stm-explore-sublabel">{locale === 'es' ? 'Por industria' : 'By industry'}</p>
                     <div className="stm-explore-pills">
-                      {relevantVerticals.map((verticalId) => {
-                        const verticalPage = getVerticalPageContent(verticalId, locale);
-                        return (
-                          <Link key={verticalId} to={getVerticalPath(verticalId, locale)} className="stm-explore-pill">
-                            {verticalPage.navLabel}
-                          </Link>
-                        );
-                      })}
+                      {relevantVerticals.map((vertical) => (
+                        <Link
+                          key={vertical.id}
+                          to={getVerticalPath(vertical.id, locale)}
+                          className="stm-explore-pill"
+                        >
+                          {vertical.navLabel}
+                        </Link>
+                      ))}
                     </div>
                   </>
                 )}
@@ -559,19 +511,20 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
             )}
 
             {/* ── M4: ALL SERVICES — Full list, app-like ── */}
-            {allOtherServiceIds.length > 0 && (
+            {allOtherServices.length > 0 && (
               <section className="stm-related">
                 <p className="st-eyebrow px-5 mb-3">{labels.alsoOffered}</p>
                 <div className="stm-all-services">
-                  {allOtherServiceIds.map((otherId) => {
-                    const otherPage = getServicePageContent(otherId, locale);
-                    return (
-                      <Link key={otherId} to={getServicePath(otherId, locale)} className="stm-service-row">
-                        <span className="stm-service-label">{otherPage.navLabel}</span>
-                        <span className="stm-service-arrow">→</span>
-                      </Link>
-                    );
-                  })}
+                  {allOtherServices.map((service) => (
+                    <Link
+                      key={service.id}
+                      to={getServicePath(service.id, locale)}
+                      className="stm-service-row"
+                    >
+                      <span className="stm-service-label">{service.navLabel}</span>
+                      <span className="stm-service-arrow">→</span>
+                    </Link>
+                  ))}
                 </div>
               </section>
             )}
@@ -582,7 +535,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg stm-cta-btn">
                 {labels.startProject}
               </a>
-              <p className="mt-4 text-xs text-foreground/40">{locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026'}</p>
+              <p className="mt-4 text-xs text-foreground/70">{locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026'}</p>
             </section>
 
             {/* ── STICKY WHATSAPP BAR ── */}
@@ -592,33 +545,26 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </a>
             </div>
 
-              {/* ── M6: TOOLKIT MARQUEE — Final block before footer ── */}
-              <Suspense fallback={null}>
-                <ServicesMarqueeSection liteMobile />
-              </Suspense>
-              </div>
-            </>
-          ) : (
-            <>
-              {/* ╔══════════════════════════════════════════════════════════╗
-                  ║  DESKTOP — Screen Test editorial layout (≥ 768px)       ║
-                  ╚══════════════════════════════════════════════════════════╝ */}
-              <div>
+          </div>
+
+          <div className="viewport-layout viewport-layout--desktop">
+            {/* ╔══════════════════════════════════════════════════════════╗
+                ║  DESKTOP — Screen Test editorial layout (≥ 768px)       ║
+                ╚══════════════════════════════════════════════════════════╝ */}
 
             {/* ── D1: CINEMATIC HERO — featured clip as key-art on the right ── */}
             <section className="svc-cine-hero">
               {leadProof && (
                 <div className="svc-cine-hero-bg" aria-hidden="true">
-                  <AutoplayPreviewVideo
-                    src={leadProof.clip.previewSrc}
-                    hlsSrc={leadProof.clip.previewHlsSrc}
-                    poster={getBestPosterSrc(leadProof.clip)}
+                  <ResponsivePosterImage
+                    clip={leadProof.clip}
                     className="svc-cine-hero-bg-video"
-                    aria-hidden="true"
-                    preload="metadata"
-                    playbackPriority="ambient"
-                    rootMargin="260px 0px"
-                    forcePause={isProofTheaterOpen}
+                    alt=""
+                    sizes="60vw"
+                    loading="eager"
+                    decoding="sync"
+                    fetchpriority="high"
+                    media="(min-width: 768px)"
                   />
                 </div>
               )}
@@ -626,17 +572,29 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               {leadProof && (
                 <div className="svc-cine-hero-media" aria-hidden="true">
                   <span className="svc-cine-hero-media-clip">
-                    <AutoplayPreviewVideo
-                      src={leadProof.clip.mobileSrc}
-                      hlsSrc={leadProof.clip.mobileHlsSrc ?? leadProof.clip.hlsSrc}
-                      poster={getBestPosterSrc(leadProof.clip)}
-                      className="svc-cine-hero-media-video"
-                      aria-hidden="true"
-                      preload="metadata"
-                      playbackPriority="hero"
-                      rootMargin="260px 0px"
-                      forcePause={isProofTheaterOpen}
-                    />
+                    {mediaIntent && !isProofTheaterOpen ? (
+                      <AutoplayPreviewVideo
+                        src={leadProof.clip.previewSrc}
+                        poster={getPosterVariantSrc(leadProof.clip, 1080, 'avif')}
+                        className="svc-cine-hero-media-video"
+                        aria-hidden="true"
+                        preload="metadata"
+                        playbackPriority="hero"
+                        rootMargin="260px 0px"
+                        activationQuery="(min-width: 768px)"
+                      />
+                    ) : (
+                      <ResponsivePosterImage
+                        clip={leadProof.clip}
+                        className="svc-cine-hero-media-video"
+                        alt=""
+                        sizes="60vw"
+                        loading="eager"
+                        decoding="sync"
+                        fetchpriority="high"
+                        media="(min-width: 768px)"
+                      />
+                    )}
                   </span>
                   <span className="svc-cine-hero-media-shade" aria-hidden="true" />
                 </div>
@@ -705,17 +663,17 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                         onMouseLeave={() => setHoveredDemoIndex((cur) => (cur === index ? null : cur))}
                         onFocus={() => setHoveredDemoIndex(index)}
                         onBlur={() => setHoveredDemoIndex((cur) => (cur === index ? null : cur))}
-                        aria-label={`${labels.openSample}: ${example.title}`}
                       >
+                        <span className="sr-only">{labels.openSample}</span>
                         <div className="svc-cine-card-media">
-                          <img
-                            src={posterSrc}
+                          <ResponsivePosterImage
+                            clip={clip}
                             className="svc-cine-card-poster"
                             alt=""
-                            aria-hidden="true"
                             decoding="async"
                             loading="lazy"
-                            onError={handlePosterError(clip.posterSrc)}
+                            sizes="(min-width: 768px) 28vw, 1px"
+                            media="(min-width: 768px)"
                           />
                           {isHovered && (
                             <AutoplayPreviewVideo
@@ -842,15 +800,16 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
                       <div className="st-explore-col">
                         <p className="st-explore-label">{locale === 'es' ? 'Por industria' : 'By industry'}</p>
                         <div className="st-explore-links">
-                          {relevantVerticals.map((verticalId) => {
-                            const verticalPage = getVerticalPageContent(verticalId, locale);
-                            return (
-                              <Link key={verticalId} to={getVerticalPath(verticalId, locale)} className="st-related-row group">
-                                <span className="st-related-title">{verticalPage.navLabel}</span>
-                                <span className="st-related-arrow">→</span>
-                              </Link>
-                            );
-                          })}
+                          {relevantVerticals.map((vertical) => (
+                            <Link
+                              key={vertical.id}
+                              to={getVerticalPath(vertical.id, locale)}
+                              className="st-related-row group"
+                            >
+                              <span className="st-related-title">{vertical.navLabel}</span>
+                              <span className="st-related-arrow">→</span>
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     )}
@@ -875,7 +834,7 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               <div className="st-container st-close-inner">
                 <p className="st-close-text">{page.ctaText}</p>
                 <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg">{labels.startProject}</a>
-                <p className="mt-6 text-xs text-foreground/40">{locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026'}</p>
+                <p className="mt-6 text-xs text-foreground/70">{locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026'}</p>
                 {relatedPages.length > 0 && (
                   <div className="st-related">
                     <p className="st-eyebrow mb-5">{labels.alsoOffered}</p>
@@ -894,51 +853,30 @@ const ServiceLandingPage = ({ serviceId, locale }: ServiceLandingPageProps) => {
               </div>
             </RevealSection>
 
-              {/* ── D7: TOOLKIT MARQUEE — Final block before footer ── */}
-              <Suspense fallback={null}>
-                <ServicesMarqueeSection liteMobile />
-              </Suspense>
-              </div>
-            </>
-          )}
+          </div>
+
+          {/* Shared by both responsive shells to avoid duplicate animated DOM. */}
+          <DeferredServicesMarquee liteMobile />
         </main>
 
-        {/* ── Theater overlay (shared) ── */}
         {activeProofItem && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4" onClick={closeProofTheater}>
-            <div className="absolute inset-0 backdrop-blur-[6px] md:backdrop-blur-[10px]" style={{ backgroundColor: 'hsl(var(--theater-backdrop) / 0.74)' }} />
-            <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)' }} />
-            <div className="relative w-full max-w-[430px]">
-              <button type="button" className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigateProofTheater(-1); }} aria-label={labels.previewPrev}><ChevronLeft className="h-4 w-4 md:h-5 md:w-5" /></button>
-              <button type="button" className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigateProofTheater(1); }} aria-label={labels.previewNext}><ChevronRight className="h-4 w-4 md:h-5 md:w-5" /></button>
-              <div className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]" onClick={(e) => e.stopPropagation()}>
-                <button type="button" className="theater-control absolute right-3 top-3 z-30 h-9 w-9" onClick={(e) => { e.preventDefault(); e.stopPropagation(); closeProofTheater(); }} aria-label={labels.previewClose}><X className="h-4 w-4" /></button>
-                <div className="relative">
-                  <TheaterVideo
-                    sources={theaterSources}
-                    hlsSources={theaterHlsSources}
-                    poster={getHighQualityServicePosterSrc(activeProofItem.clip.mainSrc, activeProofItem.clip.posterSrc)}
-                    enableStartupFallback={isMobileViewport}
-                    startupFallbackMs={isMobileViewport ? 300 : 420}
-                  />
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
-                    <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <p className="theater-meta-chip inline-flex max-w-[78%] items-center rounded-full px-2.5 py-1">{page.navLabel}</p>
-                        {formatDuration(activeProofItem.clip.durationSeconds) && <p className="theater-meta-chip inline-flex items-center rounded-full px-2.5 py-1">{formatDuration(activeProofItem.clip.durationSeconds)}</p>}
-                      </div>
-                      <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">{activeProofItem.example.title}</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <MediaTheater
+            candidates={theaterCandidates}
+            poster={getHighQualityServicePosterSrc(activeProofItem.clip.mainSrc, activeProofItem.clip.posterSrc)}
+            category={page.navLabel}
+            title={activeProofItem.example.title}
+            duration={formatDuration(activeProofItem.clip.durationSeconds)}
+            closeLabel={labels.previewClose}
+            previousLabel={labels.previewPrev}
+            nextLabel={labels.previewNext}
+            onClose={closeProofTheater}
+            onPrevious={() => navigateProofTheater(-1)}
+            onNext={() => navigateProofTheater(1)}
+          />
         )}
 
         <SiteFooter />
-        <Suspense fallback={null}><FloatingContactDock /></Suspense>
+        <FloatingContactDock />
       </div>
     </>
   );

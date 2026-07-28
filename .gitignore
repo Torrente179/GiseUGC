@@ -34,9 +34,10 @@ tmp/video-hls/
 tmp/logs/
 tmp/r2-upload/
 
-# Keep only the manifest for nuevos in git (no raw/encoded binaries)
-public/uploads/videos/nuevos/*
-!public/uploads/videos/nuevos/manifest.csv
+# Source masters live outside public/ so Vite/Vercel never copy them into a
+# deploy. Keep only the catalog manifest for nuevos in git.
+media-sources/nuevos/*
+!media-sources/nuevos/manifest.csv
 
 # Local architecture handoff doc
 ARCHITECTURE.md

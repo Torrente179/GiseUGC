@@ -410,28 +410,20 @@
         ]
       }
     </script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://media.giselasaldarriaga.com" crossorigin />
-    <link rel="dns-prefetch" href="//media.giselasaldarriaga.com" />
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..700&family=DM+Sans:wght@300..700&display=swap"
+      href="/fonts/dm-sans-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..700&family=DM+Sans:wght@300..700&display=swap"
-      media="print"
-      onload="this.media='all'"
+      rel="preload"
+      href="/fonts/cormorant-garamond-hero.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300..700&family=DM+Sans:wght@300..700&display=swap"
-      />
-    </noscript>
     <style>
       /* ─── Boot surface ───
          While the JS bundle loads: a plain surface in the destination
@@ -470,7 +462,7 @@
         animation: boot-appear 0.6s ease 0.35s forwards;
       }
       .boot-mark {
-        font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+        font-family: "Cormorant Hero", "Cormorant Garamond", Georgia, "Times New Roman", serif;
         font-weight: 700;
         font-size: clamp(1.7rem, 3vw, 2.25rem);
         letter-spacing: -0.04em;
@@ -626,6 +618,6 @@
         </article>
       </noscript>
     </div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/entry-home.tsx"></script>
   </body>
 </html>

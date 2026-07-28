@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import MobileTabBar from '@/components/mobile/MobileTabBar';
-import MobileContactSheet from '@/components/mobile/MobileContactSheet';
 import {
   consumePendingContactDockAction,
   isMobileViewport,
   onContactDockAction,
 } from '@/lib/contact-dock';
+
+const MobileContactSheet = lazy(() => import('@/components/mobile/MobileContactSheet'));
 
 /**
  * The mobile app shell: a persistent bottom tab bar + the contact bottom sheet,
@@ -32,7 +33,11 @@ const MobileAppShell = () => {
   return (
     <>
       <MobileTabBar contactOpen={contactOpen} onContact={() => setContactOpen(true)} hidden={contactOpen} />
-      <MobileContactSheet open={contactOpen} onOpenChange={setContactOpen} />
+      {contactOpen ? (
+        <Suspense fallback={null}>
+          <MobileContactSheet open onOpenChange={setContactOpen} />
+        </Suspense>
+      ) : null}
     </>
   );
 };

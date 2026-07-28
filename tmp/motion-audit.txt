@@ -1,0 +1,214 @@
+src/App.css:11:  will-change: filter;
+src/App.css:15:  filter: drop-shadow(0 0 2em #646cffaa);
+src/App.css:18:  filter: drop-shadow(0 0 2em #61dafbaa);
+src/App.css:32:    animation: logo-spin infinite 20s linear;
+src/components/media/AdaptiveVideo.tsx:248:      const frame = window.requestAnimationFrame(play);
+src/hooks/use-hero-key-light.ts:75:          raf = requestAnimationFrame(frame);
+src/hooks/use-hero-key-light.ts:82:          raf = requestAnimationFrame(frame);
+src/components/media/LazyVideo.tsx:233:          filter: 'blur(12px)',
+src/components/FiverrRatingCard.tsx:27:    <div className={`rounded-2xl border border-border/70 bg-card/80 backdrop-blur-sm p-4 md:p-5 ${className}`}>
+src/components/motion/PretextLineReveal.tsx:15: * A layout-stable text reveal.
+src/components/ResourcePage.tsx:49:   RESOURCE PAGE — Editorial article layout
+src/components/motion/variants.ts:119:    filter: 'blur(5px)',
+src/components/motion/variants.ts:123:    filter: 'blur(0px)',
+src/components/motion/variants.ts:125:    transitionEnd: { filter: 'none' },
+src/components/motion/variants.ts:134:    filter: 'blur(4px)',
+src/components/motion/variants.ts:139:    filter: 'blur(0px)',
+src/components/motion/variants.ts:141:    transitionEnd: { filter: 'none' },
+src/components/motion/variants.ts:169:  whileHover: { y: -6, scale: 1.015 },
+src/components/motion/variants.ts:175:  whileHover: { y: -3, scale: 1.02 },
+src/components/HeroIntroduction.tsx:16:          whileInView={shouldReduceMotion ? undefined : 'visible'}
+src/components/motion/SectionReveal.tsx:37:  const blurHidden = blur ? { filter: 'blur(4px)' } : {};
+src/components/motion/SectionReveal.tsx:38:  const blurVisible = blur ? { filter: 'blur(0px)' } : {};
+src/components/motion/SectionReveal.tsx:39:  const transitionEnd: { filter?: string } = blur ? { filter: 'none' } : {};
+src/components/motion/SectionReveal.tsx:119:      whileInView="visible"
+src/lib/perf-debug.ts:125:  const intervalId = window.setInterval(runSnapshot, MOBILE_MEDIA_LOG_INTERVAL_MS);
+src/components/VerticalLandingPage.tsx:464:                  ║  DESKTOP — Screen Test editorial layout (>= 768px)      ║
+src/hooks/use-hashless-section-navigation.ts:65:      activeScrollFrameId = requestAnimationFrame(step);
+src/hooks/use-hashless-section-navigation.ts:72:  activeScrollFrameId = requestAnimationFrame(step);
+src/components/motion/ScrollProgressHairline.tsx:22:      if (frame === 0) frame = window.requestAnimationFrame(update);
+src/components/FAQ.tsx:35:            whileInView="visible"
+src/components/FAQ.tsx:64:            whileInView="visible"
+src/components/motion/SplitTextReveal.tsx:38:      whileInView="visible"
+src/components/ThemeToggle.tsx:125:          'absolute transition-all duration-300',
+src/components/ThemeToggle.tsx:133:          'absolute transition-all duration-300',
+src/components/ServicesMarquee.tsx:275:            resizeRafId = window.requestAnimationFrame(() => {
+src/components/ServicesMarquee.tsx:311:                animationFrameId = requestAnimationFrame(animate);
+src/components/ServicesMarquee.tsx:650:                                    <div className={`relative aspect-[9/14] w-full overflow-hidden rounded-2xl border border-border/60 shadow-lg bg-card transition-all duration-500 ease-out hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:border-primary/25 ${isExpanded ? '-translate-y-2' : ''}`}>
+src/components/ServicesMarquee.tsx:678:                                        <div className={`overflow-hidden transition-all duration-500 ease-out ${isExpanded ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+src/components/Services.tsx:43:          whileInView="visible"
+src/components/Services.tsx:69:          whileInView="visible"
+src/components/LegalPage.tsx:136:                <div className="rounded-[1.5rem] border border-border/70 bg-card/70 px-5 py-4 shadow-[0_24px_48px_-40px_hsl(var(--foreground)/0.55)] backdrop-blur-sm">
+src/components/Portfolio.tsx:157:      if (raf === 0) raf = requestAnimationFrame(updateCounter);
+src/components/Portfolio.tsx:263:    theaterDragFrameRef.current = window.requestAnimationFrame(() => {
+src/components/Portfolio.tsx:472:    const frameId = window.requestAnimationFrame(() => {
+src/components/Portfolio.tsx:629:      frameId = window.requestAnimationFrame(updateActiveCard);
+src/components/Portfolio.tsx:721:      whileInView="visible"
+src/components/Portfolio.tsx:779:        whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.02 }}
+src/components/Portfolio.tsx:840:          whileInView={{ opacity: 1, scaleX: 1 }}
+src/components/Portfolio.tsx:848:          whileInView="visible"
+src/components/SocialProof.tsx:32:              requestAnimationFrame(animate);
+src/components/SocialProof.tsx:36:          requestAnimationFrame(animate);
+src/components/SocialProof.tsx:92:      whileInView="visible"
+src/components/SocialProof.tsx:104:                whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.03 }}
+src/components/Navbar.tsx:387:        className={`fixed inset-0 z-[100] md:hidden transition-all duration-500 ${
+src/components/Navbar.tsx:400:          className="relative h-full flex flex-col pt-24 px-6 [touch-action:pan-x] will-change-transform"
+src/components/Navbar.tsx:471:                    className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/75 px-2 py-2.5 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_16px_28px_-20px_hsl(var(--foreground)/0.9)]"
+src/components/Navbar.tsx:498:          'fixed top-0 left-0 w-full z-[110] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300',
+src/components/Navbar.tsx:500:            ? 'border-b border-border/40 bg-background/80 backdrop-blur-xl shadow-[0_14px_36px_-30px_hsl(var(--foreground)/0.5)]'
+src/components/Navbar.tsx:501:            : 'border-b border-border/15 bg-background/40 backdrop-blur-md',
+src/components/Navbar.tsx:594:                whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
+src/components/Navbar.tsx:622:                      'absolute inset-0 transition-all duration-300',
+src/components/Navbar.tsx:629:                      'absolute inset-0 transition-all duration-300',
+src/hooks/use-active-section.ts:33:      if (raf === 0) raf = requestAnimationFrame(compute);
+src/components/Testimonials.tsx:85:              className="testimonial-card group relative shrink-0 overflow-hidden rounded-xl md:rounded-2xl border border-border/30 bg-card/80 shadow-sm transition-all duration-300 hover:border-primary/20 hover:shadow-md hover:shadow-primary/[0.04] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-zoom-in"
+src/components/Testimonials.tsx:223:          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+src/components/Testimonials.tsx:272:          className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white/85 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:left-6 md:h-12 md:w-12"
+src/components/Testimonials.tsx:282:          className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white/85 backdrop-blur-sm transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:right-6 md:h-12 md:w-12"
+src/components/Testimonials.tsx:300:              className={`h-1.5 shrink-0 rounded-full transition-all duration-300 ${
+src/components/Testimonials.tsx:372:          whileInView="visible"
+src/components/Testimonials.tsx:419:          whileInView={{ opacity: 1, scaleX: 1 }}
+src/components/Testimonials.tsx:429:        whileInView={{ opacity: 1, y: 0 }}
+src/components/chapters/ManifestoChapter.tsx:36:            if (progress < 1) requestAnimationFrame(animate);
+src/components/chapters/ManifestoChapter.tsx:38:          requestAnimationFrame(animate);
+src/components/chapters/ManifestoChapter.tsx:71:        whileInView="visible"
+src/components/chapters/ManifestoChapter.tsx:102:          whileInView="visible"
+src/App.tsx:161:      // Two rAF hops let the browser finish route layout before restoring scroll,
+src/App.tsx:164:      requestAnimationFrame(() => {
+src/App.tsx:165:        requestAnimationFrame(() => {
+src/App.tsx:172:      requestAnimationFrame(() => scrollToSection(location.hash.slice(1)));
+src/components/CreatorAdvantage.tsx:131:    const id = window.setInterval(
+src/components/CreatorAdvantage.tsx:161:      <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 backdrop-blur-sm">
+src/components/CreatorAdvantage.tsx:165:      <div className="absolute right-3 top-3 z-10 rounded-full bg-black/50 px-2.5 py-1 backdrop-blur-sm">
+src/components/CreatorAdvantage.tsx:222:          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/60 bg-white/56 px-3 py-2 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.45)] backdrop-blur-md dark:border-white/10 dark:bg-slate-950/38 sm:px-4">
+src/components/CreatorAdvantage.tsx:282:                <div className="pointer-events-none absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/65 bg-white/68 text-foreground/78 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.4)] backdrop-blur-sm dark:border-white/12 dark:bg-slate-950/42">
+src/components/CreatorAdvantage.tsx:291:          <div className="rounded-[1.35rem] border border-white/60 bg-white/58 p-3.5 shadow-[0_18px_40px_-30px_rgba(0,0,0,0.5)] backdrop-blur-md dark:border-white/10 dark:bg-slate-950/38 sm:p-4">
+src/components/CreatorAdvantage.tsx:303:                    className={`h-2.5 rounded-full transition-all duration-300 ${
+src/components/CreatorAdvantage.tsx:319:                  className={`rounded-full border border-foreground/8 bg-white/44 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/68 backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-foreground/72 ${
+src/components/CreatorAdvantage.tsx:340:          whileInView="visible"
+src/components/CreatorAdvantage.tsx:379:              whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.02 }}
+src/components/CreatorAdvantage.tsx:390:            whileHover={shouldReduceMotion ? undefined : { y: -6, scale: 1.012 }}
+src/components/FloatingContactDock.tsx:102:    // only read `getBoundingClientRect` (still a layout read, but cheaper and
+src/components/FloatingContactDock.tsx:104:    // Cache hit path skips `offsetHeight` (layout read) — only validates on
+src/components/FloatingContactDock.tsx:149:      rafId = window.requestAnimationFrame(evaluateDockState);
+src/components/FloatingContactDock.tsx:303:          className={`mb-2.5 rounded-[1.3rem] border border-white/45 bg-card/95 p-2.5 shadow-[0_20px_38px_-22px_hsl(var(--foreground)/0.85)] flex flex-col items-end gap-2 transition-all duration-300 ${
+src/components/FloatingContactDock.tsx:312:              className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/45 ${platform.toneClass} ${platform.hoverToneClass} shadow-[0_12px_24px_-18px_hsl(var(--foreground)/0.9)] transition-all duration-300 hover:-translate-y-0.5`}
+src/components/FloatingContactDock.tsx:326:          className="group relative inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/60 bg-card/95 text-foreground shadow-[0_24px_46px_-22px_hsl(var(--foreground)/0.95),0_0_0_1px_hsl(var(--primary)/0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/55 hover:text-primary"
+src/components/FloatingContactDock.tsx:330:            className="pointer-events-none absolute -inset-1 rounded-full bg-primary/18 blur-md opacity-70 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100"
+src/components/FloatingContactDock.tsx:333:            className={`absolute h-[22px] w-[22px] transition-all duration-300 ${
+src/components/FloatingContactDock.tsx:338:            className={`absolute h-[22px] w-[22px] transition-all duration-300 ${
+src/components/FloatingContactDock.tsx:365:            whileHover={shouldReduceMotion ? undefined : { scale: 1.15, y: -2 }}
+src/components/ui/input-otp.tsx:42:        "relative flex h-10 w-10 items-center justify-center border-y border-r border-input text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
+src/components/ServiceLandingPage.tsx:94:   Desktop: A24 × Apple editorial layout
+src/components/ServiceLandingPage.tsx:325:                  ║  Completely independent from desktop layout             ║
+src/components/ServiceLandingPage.tsx:573:                  ║  DESKTOP — Screen Test editorial layout (≥ 768px)       ║
+src/components/ui/progress.tsx:19:      className="h-full w-full flex-1 bg-primary transition-all"
+src/components/ui/toast.tsx:26:  "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full ring-4 ring-primary/50 shadow-lg shadow-primary/40", // Increased glow intensity
+src/components/ui/accordion.tsx:29:        "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+src/components/ui/sidebar.tsx:301:        "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex",
+src/components/ui/tabs.tsx:30:      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+src/index.css:354:    @apply backdrop-blur-[12px] border border-border/60 shadow-sm;
+src/index.css:364:    @apply backdrop-blur-md border border-border/80;
+src/index.css:374:    backdrop-filter: blur(8px);
+src/index.css:398:    backdrop-filter: blur(6px);
+src/index.css:412:      backdrop-filter: blur(6px);
+src/index.css:417:      backdrop-filter: blur(4px);
+src/index.css:467:    @apply rounded-[1.75rem] border border-border/80 bg-card/80 backdrop-blur-sm shadow-[0_28px_60px_-48px_hsl(var(--foreground)/0.6)];
+src/index.css:470:  .transition-all-custom {
+src/index.css:606:    animation: title-sequence-fade 700ms var(--ease-out-expo) 80ms both;
+src/index.css:629:    animation: title-sequence-name 1000ms var(--ease-out-expo) 100ms both;
+src/index.css:721:    animation: title-sequence-frame-in 900ms var(--ease-out-expo) var(--frame-delay) both;
+src/index.css:786:    filter: saturate(0.9) contrast(1.025) sepia(0.035);
+src/index.css:825:    animation: title-sequence-fade 550ms ease-out calc(var(--frame-delay) + 240ms) both;
+src/index.css:844:    animation: title-sequence-fade 700ms var(--ease-out-expo) 580ms both;
+src/index.css:979:      animation: none;
+src/index.css:994:    @apply rounded-[1.25rem] border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)];
+src/index.css:998:    @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/20 px-4 py-2 text-[10px] font-bold uppercase tracking-prestige text-white/90 backdrop-blur-md cursor-default;
+src/index.css:1079:    animation: hero-wall-up 45s linear infinite;
+src/index.css:1080:    will-change: transform;
+src/index.css:1141:    filter: blur(26px) saturate(1.08) brightness(0.58);
+src/index.css:1143:    animation: hero-bg-drift 36s ease-in-out infinite;
+src/index.css:1197:    will-change: transform, filter;
+src/index.css:1259:    will-change: transform;
+src/index.css:1280:    filter: brightness(0.5) saturate(0.72);
+src/index.css:1284:    filter: brightness(0.4) saturate(0.7);
+src/index.css:1288:    filter: brightness(0.5) saturate(0.72);
+src/index.css:1317:    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+src/index.css:1335:    animation: hero-story-fill var(--advance, 4200ms) linear forwards;
+src/index.css:1345:    .hero-stage-bg-video { animation: none; }
+src/index.css:1354:    backdrop-filter: blur(16px) saturate(1.08);
+src/index.css:1355:    -webkit-backdrop-filter: blur(16px) saturate(1.08);
+src/index.css:1374:    /* No backdrop-filter on mobile GPUs — gradients only */
+src/index.css:1379:      filter: blur(30px) saturate(0.85) brightness(0.42);
+src/index.css:1410:    animation: hero-line-rise 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.12s forwards;
+src/index.css:1411:    will-change: transform;
+src/index.css:1424:    animation: hero-cascade-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+src/index.css:1436:    animation: hero-rule-draw 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
+src/index.css:1490:    will-change: transform;
+src/index.css:1499:    will-change: transform;
+src/index.css:1516:    .dc-wall-track { animation: dc-wall-drift 34s linear infinite; }
+src/index.css:1527:    .dc-wall-track { animation: none !important; }
+src/index.css:1540:       clips the backdrop-filter (otherwise the blur leaks across the whole
+src/index.css:1543:    -webkit-backdrop-filter: blur(22px) saturate(1.05);
+src/index.css:1544:    backdrop-filter: blur(22px) saturate(1.05);
+src/index.css:1568:      -webkit-backdrop-filter: blur(16px) saturate(1.05);
+src/index.css:1569:      backdrop-filter: blur(16px) saturate(1.05);
+src/index.css:1587:  /* Fallback where backdrop-filter is unsupported: lean on a stronger tint
+src/index.css:1589:  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+src/index.css:1705:    filter: brightness(1.06);
+src/index.css:1755:    backdrop-filter: blur(4px);
+src/index.css:2047:    backdrop-filter: blur(8px);
+src/index.css:2104:    -webkit-backdrop-filter: blur(16px);
+src/index.css:2105:    backdrop-filter: blur(16px);
+src/index.css:2108:  /* Solid fallback where backdrop-filter is unsupported (older engines) */
+src/index.css:2109:  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+src/index.css:2288:      animation: scroll-progress-fill linear both;
+src/index.css:2304:    .hero-wall-col-anim { animation: none; }
+src/index.css:2308:      animation: none;
+src/index.css:2319:    filter: blur(100px);
+src/index.css:2321:    will-change: transform;
+src/index.css:2333:    animation: hero-orb-drift-1 14s ease-in-out infinite;
+src/index.css:2344:    animation: hero-orb-drift-2 18s ease-in-out infinite;
+src/index.css:2361:      animation: none;
+src/index.css:2366:    @apply rounded-[1.35rem] border border-border/90 bg-card backdrop-blur-sm elegant-shadow;
+src/index.css:2371:    @apply rounded-2xl border border-border/90 bg-card backdrop-blur-sm elegant-shadow;
+src/index.css:2387:    @apply rounded-full border border-border/25 bg-background/45 backdrop-blur-md;
+src/index.css:2540:    animation: stagger-in 0.3s ease forwards;
+src/index.css:2661:    animation: services-marquee 56s linear infinite;
+src/index.css:2662:    will-change: transform;
+src/index.css:2667:    animation: corner-drift 20s ease-in-out infinite;
+src/index.css:2668:    will-change: transform;
+src/index.css:2678:      animation: none;
+src/index.css:2685:      animation: hero-float-soft 7.5s ease-in-out infinite;
+src/index.css:2689:      animation: hero-float-soft-reverse 8.2s ease-in-out infinite;
+src/index.css:2705:    will-change: transform, opacity;
+src/index.css:2713:    will-change: auto;
+src/index.css:2766:      animation: none;
+src/index.css:2788:    animation: skeleton-shimmer 1.8s ease-in-out infinite;
+src/index.css:2853:    animation: cta-shimmer 4.1s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+src/index.css:2870:    animation: dock-breathe 4.6s ease-in-out infinite;
+src/index.css:2876:      animation: none;
+src/index.css:2880:      animation: none;
+src/index.css:2888:    will-change: opacity;
+src/index.css:2893:    will-change: auto;
+src/index.css:2907:    animation: fade-in-mount 0.45s var(--ease-out-expo) both;
+src/index.css:2917:      animation: none;
+src/index.css:2925:    animation: fade-in-mount 0.2s var(--ease-out-expo) both;
+src/index.css:2930:      animation: none;
+src/index.css:2937:    animation: accordion-content-reveal 0.3s var(--ease-out-expo) 0.08s both;
+src/index.css:2947:      animation: none;
+src/index.css:2963:    animation: testimonial-marquee linear infinite;
+src/index.css:2964:    will-change: transform;
+src/index.css:2984:      animation: none;
+src/index.css:3033:    backdrop-filter: blur(6px);
+src/index.css:3040:    backdrop-filter: none;
+src/index.css:3104:    filter: blur(80px);
+src/index.css:3301:    backdrop-filter: blur(12px);
+src/index.css:3428:      backdrop-filter: blur(8px);
+src/index.css:3516:    filter: blur(20px);
+src/index.css:3660:    backdrop-filter: blur(14px);
+src/index.css:4247:    filter: blur(46px) saturate(0.55) brightness(0.5);
+src/index.css:4446:    backdrop-filter: blur(6px);
+src/index.css:4607:     Independent layout for < 768px. Not a responsive
+src/index.css:4672:    -webkit-backdrop-filter: blur(18px) saturate(0.85);
+src/index.css:4673:    backdrop-filter: blur(18px) saturate(0.85);

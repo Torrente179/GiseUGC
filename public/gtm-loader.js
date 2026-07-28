@@ -1,6 +1,6 @@
 /*!
  * Analytics bootstrap — defers GTM + gtag until first user interaction
- * or an idle window (3.5s after load). Reduces main-thread blocking
+ * or a quiet post-load window. Reduces main-thread blocking
  * and improves LCP/TBT on cold visits.
  */
 (function () {
@@ -46,9 +46,9 @@
 
   function schedule() {
     if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(function () { setTimeout(load, 3500); }, { timeout: 6000 });
+      window.requestIdleCallback(function () { setTimeout(load, 30000); }, { timeout: 32000 });
     } else {
-      setTimeout(load, 4500);
+      setTimeout(load, 30000);
     }
   }
 
