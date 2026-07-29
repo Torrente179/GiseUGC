@@ -229,7 +229,11 @@ async function main() {
   const candidates = rows
     .map((cells, index) => {
       const sourcePath = cells[0] ?? '';
-      const sourceFilename = path.basename(sourcePath);
+      // macOS hands back decomposed (NFD) filenames, but git stores them
+      // precomposed and Linux/Vercel match bytes exactly — an NFD URL 404s on
+      // the deployed site while resolving fine locally. Normalize once here so
+      // every derived URL is precomposed.
+      const sourceFilename = path.basename(sourcePath).normalize('NFC');
       if (!sourceFilename) return null;
       const baseName = stripExtension(sourceFilename);
       const override =

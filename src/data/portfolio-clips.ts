@@ -36,13 +36,21 @@ export const r2HlsMaster = (filename: string, rendition: 'main' | 'mobile' | 'pr
   return `${R2_MEDIA_BASE_URL}/videos/hls/${encodeURIComponent(baseName)}/${rendition}/master.m3u8`;
 };
 
+/**
+ * Locally-hosted files are matched byte-for-byte by the CDN. macOS produces
+ * decomposed (NFD) filenames while git and the deploy carry the precomposed
+ * (NFC) form, so an NFD path resolves in local development and 404s on the
+ * deployed site. Every `/uploads/...` URL is precomposed before it is encoded.
+ */
+export const toDeployedAssetName = (baseName: string) => baseName.normalize('NFC');
+
 const servicePosterOriginalSrcFromMain = (mainSrc: string, fallbackSrc: string) => {
   const filename = mainSrc.split('/').pop();
   if (!filename) return fallbackSrc;
   const decodedFilename = decodeURIComponent(filename);
   const baseName = decodedFilename.replace(/\.[^.]+$/u, '');
   if (!baseName) return fallbackSrc;
-  return `/uploads/videos/service-posters/${encodeURIComponent(baseName)}.jpg`;
+  return `/uploads/videos/service-posters/${encodeURIComponent(toDeployedAssetName(baseName))}.jpg`;
 };
 
 export type PosterVariantFormat = 'avif' | 'webp' | 'jpg';
@@ -61,7 +69,7 @@ const localPosterVariant = (
   } catch {
     // Preserve already-readable filenames if a malformed escape sneaks in.
   }
-  return `/uploads/videos/poster-variants/v1/${encodeURIComponent(baseName)}-${width}.${format}`;
+  return `/uploads/videos/poster-variants/v1/${encodeURIComponent(toDeployedAssetName(baseName))}-${width}.${format}`;
 };
 
 export const servicePosterSrcFromMain = (mainSrc: string, fallbackSrc: string) =>

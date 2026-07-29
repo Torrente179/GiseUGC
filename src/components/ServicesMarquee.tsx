@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
-import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
+import { LEGACY_REEL_CLIPS, toDeployedAssetName } from '@/data/portfolio-clips';
 import { mark, measure } from '@/lib/perf-debug';
 
 interface ServiceVideoCard {
@@ -42,7 +42,7 @@ const LocalServicePoster = ({
     }
 
     const source = (width: 180 | 360 | 720 | 1080, format: 'avif' | 'webp' | 'jpg') =>
-        `/uploads/videos/poster-variants/v1/${encodeURIComponent(baseName)}-${width}.${format}`;
+        `/uploads/videos/poster-variants/v1/${encodeURIComponent(toDeployedAssetName(baseName))}-${width}.${format}`;
     const sourceSet = (format: 'avif' | 'webp' | 'jpg') =>
         ([180, 360, 720, 1080] as const)
             .map((width) => `${source(width, format)} ${width}w`)

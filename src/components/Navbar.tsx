@@ -10,7 +10,7 @@ import {
   Linkedin,
   Facebook,
 } from 'lucide-react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import NavbarControls from '@/components/NavbarControls';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import {
@@ -20,6 +20,7 @@ import {
   isHomePath,
   type SiteLocale,
 } from '@/lib/locale-path';
+import { navigateToRoute } from '@/lib/route-navigation';
 import { cn } from '@/lib/utils';
 
 const SCROLL_THRESHOLD = 18;
@@ -365,13 +366,13 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
     },
   ];
 
-  const navigate = useNavigate();
-
   const changeLanguage = (lng: SiteLocale) => {
     if (currentLocale === lng) return;
 
     const targetPath = getLocalizedPathForCurrentRoute(location.pathname, lng, window.location.hash);
-    navigate(targetPath);
+    // The other locale is a separate prerendered document. Pushing it
+    // client-side would keep this document's embedded route data and metadata.
+    navigateToRoute(targetPath);
   };
 
   const hireMeCtaLabel = t('navbar.hireMeCta', {
@@ -419,10 +420,9 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                     handleHashLinkClick(event, closeMobileMenu);
                     return;
                   }
-
-                  event.preventDefault();
+                  // Off home the runtime turns this anchor into a document
+                  // navigation; only the menu state is ours to settle.
                   closeMobileMenu();
-                  navigate(link.href);
                 }}
                 className={`group flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 transition-[opacity,transform] duration-500 ${
                   mobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'
@@ -523,8 +523,8 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                 <button
                   type="button"
                   onClick={() => {
-                    if (window.history.length > 1) navigate(-1);
-                    else navigate(homeSectionHref('home'));
+                    if (window.history.length > 1) window.history.back();
+                    else navigateToRoute(homeSectionHref('home'));
                   }}
                   className={cn('btn-icon-pill md:hidden', compactMobile ? 'h-9 w-9' : 'h-10 w-10')}
                   aria-label={t('navbar.back', { defaultValue: currentLocale === 'es' ? 'Volver' : 'Back' })}
@@ -542,9 +542,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                   if (onHomePage) {
                     handleHashLinkClick(event, closeMobileMenu);
                   } else {
-                    event.preventDefault();
                     closeMobileMenu();
-                    navigate(homeSectionHref('home'));
                   }
                 }}
               >
@@ -558,12 +556,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                   key={link.key}
                   href={link.href}
                   onClick={(event) => {
-                    if (onHomePage) {
-                      handleHashLinkClick(event);
-                    } else {
-                      event.preventDefault();
-                      navigate(link.href);
-                    }
+                    if (onHomePage) handleHashLinkClick(event);
                   }}
                   className="section-label text-foreground/90 transition-colors hover:text-primary nav-link-underline"
                 >
@@ -577,12 +570,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
               <a
                 href={homeSectionHref('contact')}
                 onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
-                  if (onHomePage) {
-                    handleHashLinkClick(event);
-                  } else {
-                    event.preventDefault();
-                    navigate(homeSectionHref('contact'));
-                  }
+                  if (onHomePage) handleHashLinkClick(event);
                 }}
                 className="btn-primary-nordic btn-primary-nordic--sm"
               >

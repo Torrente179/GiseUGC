@@ -1,6 +1,6 @@
 import { type MouseEvent } from 'react';
 import { useTranslation } from '@/lib/locale-context';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Home, Film, LayoutGrid, MessageCircle } from 'lucide-react';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useActiveSection } from '@/hooks/use-active-section';
@@ -32,7 +32,6 @@ type MobileTabBarProps = {
 const MobileTabBar = ({ contactOpen, onContact, hidden = false }: MobileTabBarProps) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const navigate = useNavigate();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
 
   const onHome = isHomePath(location.pathname);
@@ -45,13 +44,11 @@ const MobileTabBar = ({ contactOpen, onContact, hidden = false }: MobileTabBarPr
       ? ((spiedSection as TabId) ?? 'home')
       : 'services'; // off-home, treat as the services/work area
 
-  const handleSectionClick = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
-    if (onHome) {
-      handleHashLinkClick(event);
-      return;
-    }
-    event.preventDefault();
-    navigate(getHomeSectionHref(locale, id));
+  // Off-home tabs point at another prerendered document, so the runtime's
+  // anchor interception owns the navigation. Pushing the route client-side as
+  // well only renders a blank frame before the document load lands.
+  const handleSectionClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (onHome) handleHashLinkClick(event);
   };
 
   return (
@@ -74,7 +71,7 @@ const MobileTabBar = ({ contactOpen, onContact, hidden = false }: MobileTabBarPr
             <a
               key={id}
               href={onHome ? `#${id}` : getHomeSectionHref(locale, id)}
-              onClick={(event) => handleSectionClick(event, id)}
+              onClick={handleSectionClick}
               className={`mtab${isActive ? ' is-active' : ''}`}
               aria-current={isActive ? 'page' : undefined}
             >

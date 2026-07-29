@@ -4,13 +4,36 @@
 **Implemented:** 2026-07-27  
 **Scope:** Homepage hero and its top-of-page navbar integration only
 
+## 2026-07-29 Performance Integration
+
+The visual direction below remains current, but its media implementation was
+upgraded as part of the site-wide performance overhaul:
+
+- The center frame is a fixed lead clip (`id: 1007`) and the two flanking clips
+  rotate daily from the full reel catalog.
+- All three frames paint responsive AVIF/WebP/JPEG posters immediately.
+- Only the center frame may mount a video decoder, and only after genuine
+  pointer, touch, keyboard, or scroll intent.
+- Reduced-motion users always keep the complete static composition.
+- The lead poster is discovered and preloaded from prerendered HTML; video is
+  never an LCP dependency.
+- The key light moves an already-rasterized layer with a compositor transform.
+  Its time-normalized lerp feels consistent at 60, 90, and 120 Hz, stops when
+  settled, and pauses offscreen or in a hidden tab.
+- No Three.js/WebGL atmosphere or global animation ticker is used.
+
+See
+[`2026-07-29-performance-motion-media-architecture-overhaul.md`](./2026-07-29-performance-motion-media-architecture-overhaul.md)
+for the complete runtime and validation record.
+
 ## Final Result
 
 The former “Muro de trabajo” homepage opening was replaced with an authored editorial title sequence:
 
 - `CHAPTER 00` appears above a large, solid-black `GISELA` wordmark.
 - Three slightly misaligned 9:16 film frames overlap the lower portion of the title.
-- All three frames use real stills from the same existing Gisela creator take.
+- All three frames use real Gisela portfolio stills; the center take is fixed
+  and the flanking takes rotate daily.
 - The frames retain subtle tape, film-edge, sprocket, grain, and timecode details.
 - The bottom metadata reads exactly `MEDELLÍN · ES / EN · UGC`.
 - Scrolling continues directly into the existing homepage content.
@@ -33,13 +56,16 @@ The production residue is deliberately analog rather than dashboard-like: irregu
 
 ## Content and Assets
 
-The implementation uses three local WebP stills:
+The original approved mockup used three local WebP stills:
 
 - `public/uploads/gisela-title-sequence-01.webp`
 - `public/uploads/gisela-title-sequence-02.webp`
 - `public/uploads/gisela-title-sequence-03.webp`
 
-Each image is 720 × 1280 and represents a different moment from the same product-review take. No AI-generated or external imagery was introduced.
+The current implementation draws from the real portfolio catalog and its
+versioned responsive poster variants. The center take remains stable while the
+flanking takes re-deal at the UTC day boundary. No AI-generated or external
+imagery was introduced.
 
 The frame metadata is defined in `src/components/Hero.tsx`:
 
@@ -60,9 +86,13 @@ The frame metadata is defined in `src/components/Hero.tsx`:
 5. A localized screen-reader-only description:
    - Spanish: `Tres fotogramas de Gisela creando una reseña UGC de producto.`
    - English: `Three frames of Gisela creating a UGC product review.`
-6. The fixed editorial metadata line.
+6. The key-light layer.
+7. The fixed editorial metadata line.
 
-The still images use explicit intrinsic dimensions, eager loading, and asynchronous decoding. They have empty alternative text because the localized `<figcaption>` describes the sequence as one visual composition.
+The responsive pictures use intrinsic dimensions and codec-aware source sets.
+The center image is eager, synchronously decoded, and high priority; flanking
+images are lazy and low priority. Images remain decorative because the
+localized `<figcaption>` describes the sequence as one composition.
 
 ## Desktop Composition
 
@@ -81,7 +111,12 @@ The still images use explicit intrinsic dimensions, eager loading, and asynchron
 
 Mobile is a purpose-built composition rather than a scaled desktop screenshot:
 
-- The stage uses `100svh` with a 35.5rem minimum to handle dynamic browser chrome.
+- The stage uses `calc(100svh - var(--app-dock-clearance))` with a 35.5rem
+  minimum, to handle dynamic browser chrome **and** the fixed bottom app dock.
+  Corrected on 2026-07-30: at a full `100svh` the stage ran under the 74px dock,
+  hiding the metadata line completely and clipping the film frames. The stage is
+  the positioning context for every hero element, so it has to end where the
+  dock begins.
 - `env(safe-area-inset-top)` and `env(safe-area-inset-bottom)` protect the chapter and metadata.
 - The title uses a dedicated size and position below the chapter.
 - The three frames form a centered 116vw collage so the outer frames can crop naturally at the screen edges.
@@ -185,7 +220,9 @@ Before changing the hero again:
 2. Keep `GISELA` complete and inside the viewport at 320px and 390px.
 3. Do not reintroduce blue marks or pencil/crosshatch title texture without explicit approval.
 4. Keep the film frames sourced from real project media.
-5. Verify safe areas, `svh`, reduced motion, and the mobile bottom dock.
+5. Verify safe areas, `svh`, reduced motion, and the mobile bottom dock. The
+   dock is fixed and 74px tall: measure that no hero element extends past
+   `100svh - var(--app-dock-clearance)`, rather than assuming `svh` accounts for
+   it.
 6. Check that the title stays behind the film frames without becoming unreadably obscured.
 7. Do not add funnel behavior or redesign unrelated homepage sections as part of a hero adjustment.
-

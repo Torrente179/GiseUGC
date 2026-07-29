@@ -103,6 +103,12 @@
     --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
 
+    /* Height the fixed mobile app dock (.mtabbar) takes out of the viewport.
+       Anything that sizes itself to the full viewport on mobile has to subtract
+       this or it lays out underneath the bar. Zero above the mobile breakpoint,
+       where the dock is display:none. */
+    --app-dock-clearance: 0px;
+
     /* Nordic Atelier palette inspired by the provided reference image */
     --coastal-teal: 193 64% 34%;
     /* Deepened for WCAG contrast on linen while retaining the coastal hue. */
@@ -1050,8 +1056,12 @@
   }
 
   @media (max-width: 767px) {
+    /* The stage is the positioning context for the chapter, title, frames and
+       metadata, so it has to end where the fixed app dock begins. Sized to the
+       full 100svh the metadata line landed completely behind the dock and the
+       film frames were clipped by it. */
     .title-sequence-hero__stage {
-      min-height: max(35.5rem, 100svh);
+      min-height: max(35.5rem, calc(100svh - var(--app-dock-clearance)));
     }
 
     .title-sequence-hero__chapter {
@@ -1724,8 +1734,9 @@
 
   /* Keep the footer / last content above the fixed bar */
   @media (max-width: 767px) {
-    body { padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px)); }
-    .hero-mobile-foot { padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px) + 0.25rem); }
+    :root { --app-dock-clearance: calc(4.25rem + env(safe-area-inset-bottom, 0px)); }
+    body { padding-bottom: var(--app-dock-clearance); }
+    .hero-mobile-foot { padding-bottom: calc(var(--app-dock-clearance) + 0.25rem); }
   }
 
   /* ── Bottom sheets (vaul) ── */

@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect, useMemo, startTransition, type TouchEvent } from 'react';
+import { useRef, useState, useCallback, useEffect, useMemo, type TouchEvent } from 'react';
 import { useTranslation } from '@/lib/locale-context';
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Play, X } from 'lucide-react';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
@@ -300,19 +300,23 @@ const Portfolio = () => {
       clearTheaterCloseTimer();
       scheduleInteractionPrewarm(clip);
       theaterSwipeStartRef.current = null;
+      // Reset the entrance bookkeeping in the same urgent pass that mounts the
+      // theater. It used to run inside startTransition, which let React commit
+      // isTheaterVisible=false *after* the open effect's rAF had already set it
+      // true — leaving the card stuck at opacity 0 behind a dimmed backdrop
+      // whenever the main thread was busy enough to defer the transition past a
+      // frame.
+      setTheaterDismissDirection(1);
+      setIsTheaterDismissing(false);
+      setIsTheaterDragging(false);
+      setIsTheaterVisible(false);
+      setTheaterDragY(0);
+      theaterPendingDragYRef.current = 0;
       // Critical: mount TheaterVideo immediately so video src is assigned ASAP
       setActiveReelPreview(clip);
       setActiveReelIndex(index);
-      // Cosmetic state: defer so animation bookkeeping doesn't block video mount
-      startTransition(() => {
-        setTheaterDismissDirection(1);
-        setIsTheaterDismissing(false);
-        setIsTheaterDragging(false);
-        setIsTheaterVisible(false);
-        queueTheaterDrag(0);
-      });
     },
-    [clearTheaterCloseTimer, queueTheaterDrag, scheduleInteractionPrewarm],
+    [clearTheaterCloseTimer, scheduleInteractionPrewarm],
   );
 
   const navigateReelPreview = useCallback(
