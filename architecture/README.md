@@ -10,7 +10,24 @@ Generated from:
 
 Generated at: `2026-06-04T10:20:41.624Z`
 
+## Current-status notice
+
+The detailed component and source indexes are a generated pre-overhaul
+snapshot. They remain useful for historical intent, but they include files and
+dependencies removed by the July 2026 performance work.
+
+For the live architecture, read these first:
+
+- [Performance, Motion, and Media Architecture Overhaul](../changes/2026-07-29-performance-motion-media-architecture-overhaul.md)
+- [00 Forensic Summary](00-forensic-summary.md)
+- [01 Runtime And Routing](01-runtime-routing.md)
+- [04 Media Video Pipeline](04-media-video-pipeline.md)
+- [06 State Events Performance](06-state-events-performance.md)
+- [07 Styling Motion UI](07-styling-motion-ui.md)
+- [08 Build Deployment](08-build-deployment.md)
+
 ## Start Here
+- [July 2026 Overhaul — current source of truth](../changes/2026-07-29-performance-motion-media-architecture-overhaul.md)
 - [00 Forensic Summary](00-forensic-summary.md)
 - [01 Runtime And Routing](01-runtime-routing.md)
 - [02 Homepage Composition](02-homepage-composition.md)
@@ -25,6 +42,10 @@ Generated at: `2026-06-04T10:20:41.624Z`
 - [Source Index](source/README.md)
 
 ## Scan Totals
+
+These totals describe the June 2026 generated snapshot, not the current file
+inventory.
+
 - Files analyzed: 220
 - Internal import edges: 191
 - Graph nodes: 448

@@ -1,5 +1,11 @@
 # Components Index
 
+> Historical generated snapshot (2026-06-04). This index intentionally
+> preserves the pre-overhaul graph and includes components removed in July
+> 2026. Do not use it as a current inventory. Start with the
+> [July 2026 architecture record](../../changes/2026-07-29-performance-motion-media-architecture-overhaul.md)
+> and inspect `src/components/` directly for the live component set.
+
 Every React component file under `src/components/` has a generated forensic page here. The pages include source path, dependencies, reverse dependencies, exports, local functions, coupling notes, and maintenance checkpoints.
 
 ## Summary Table

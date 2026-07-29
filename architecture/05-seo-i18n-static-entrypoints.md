@@ -1,7 +1,9 @@
 # SEO I18N Static Entrypoints
 
-## SEO Runtime
+## SEO Build and Runtime
+
 `PageSeo` updates:
+
 - document title
 - description and robots
 - Open Graph tags
@@ -10,22 +12,39 @@
 - Spanish, English, and x-default hreflang links
 - optional route-specific JSON-LD script
 
-The cleanup removes only the dynamic structured data script so route schema does not leak across client-side navigations.
+The same route content is now present in prerendered HTML. Runtime updates remain
+useful for development and same-document state, but crawlers do not need to
+execute React to discover the page body or route metadata.
+
+Structured data is moved to the end of `<body>` during prerendering so the
+preload scanner reaches visual markup and critical assets earlier without
+reducing schema discoverability.
 
 ## Page Schema
 Service and vertical factories produce WebPage, BreadcrumbList, Service, FAQPage, and VideoObject nodes. Resource pages produce WebPage, BreadcrumbList, Article, and FAQPage. Legal pages produce WebPage and BreadcrumbList.
 
 ## i18n
-`src/i18n.ts` uses `i18next-browser-languagedetector`, but path detection is constrained by React Router and `locale-path`. The fallback language is Spanish.
+
+`src/lib/locale-context.tsx` selects bundled JSON dictionaries from the path.
+There is no browser language detector, i18next runtime, or translation request.
+Spanish is the default route family; English is under `/en/`.
 
 ## Static Entry Shells
-Vite builds multiple HTML inputs for each localized SEO route. This improves direct route addressability and gives crawlers a concrete HTML shell per service, vertical, resource, legal page, and language.
+
+Vite builds one input for every localized SEO route. The input list is derived
+from `getAllEntrypointPaths()` in `src/lib/locale-path.ts`.
+`scripts/prerender.mjs` turns each shell into a complete HTML page and embeds
+the typed route data required by its route-family hydrator.
 
 ## Alignment Rule
+
 When adding or renaming a route, update all of these together:
+
 - `src/lib/locale-path.ts`
 - the matching data module
-- `vite.config.ts` Rollup input
 - static HTML shell folder/file
 - `public/sitemap.xml`
-- any enrich/boot-shell script data if the route needs static metadata enrichment
+- any entrypoint enrichment data used by the route
+
+Do not hand-add the route to `vite.config.ts`; the registry generates the
+Rollup inputs.

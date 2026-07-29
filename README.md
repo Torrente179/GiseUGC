@@ -1,14 +1,14 @@
 # Gisela Saldarriaga — UGC Studio Site
 
-Bilingual (Spanish / English) marketing and portfolio site for **Gisela Saldarriaga**, a UGC (user-generated content) creator. It showcases reel work and a set of service / vertical / resource landing pages aimed at converting prospective brand clients. Single-page app, statically built, video-heavy.
+Bilingual (Spanish / English) marketing and portfolio site for **Gisela Saldarriaga**, a UGC (user-generated content) creator. It showcases reel work and a set of service / vertical / resource landing pages aimed at converting prospective brand clients. It is a prerendered, multi-entry React application with a quality-first adaptive media layer.
 
 ## Stack
 
-- **React 18 + TypeScript + Vite 6** (SWC) — multi-page build (one HTML entry per route).
-- **Tailwind CSS + shadcn/ui** (Radix primitives) for UI.
-- **react-i18next** for the `es` / `en` split (strings bundled, no runtime backend).
-- **Motion:** framer-motion, GSAP, Lenis (smooth scroll), three.js (hero atmosphere).
-- **Video:** `hls.js` with an HLS → MP4 fallback cascade; media served from **Cloudflare R2** (`media.giselasaldarriaga.com`).
+- **React 18 + TypeScript + Vite 6** (SWC) — route-specific client entrypoints plus build-time SSR/prerendering and hydration.
+- **Tailwind CSS** with a deliberately small local UI primitive surface.
+- **Path-owned locale provider** for the `es` / `en` split; strings are bundled and no runtime detector/backend is needed.
+- **Motion:** native scrolling, CSS compositor animations, IntersectionObserver, and short-lived requestAnimationFrame loops.
+- **Video:** exclusive ambient-decoder scheduling, responsive posters, exact-copy startup bridges, and lazy `hls.js/light` with native-HLS/MP4 fallback. Media is served from **Cloudflare R2** (`media.giselasaldarriaga.com`).
 - **Hosting:** Vercel. Analytics via `@vercel/analytics` + `@vercel/speed-insights`.
 
 ## Getting started
@@ -30,22 +30,30 @@ Node 20+ recommended (CI runs on Node 20).
 | `npm run typecheck` | `tsc --noEmit` over the app + tests. |
 | `npm run lint` | ESLint (flat config). |
 | `npm test` / `npm run test:watch` | Vitest unit/integration suite. |
+| `npm run lighthouse:matrix` | Run the controlled mobile and desktop route matrix. |
 | `npm run video:catalog` | Regenerate `src/data/nuevos-r2-ready.ts` from the R2 video manifest. |
 | `npm run service:entrypoints` | Enrich per-service HTML entry points. |
-| `npm run video:encode` / `video:hls` | FFmpeg encode + HLS ladder generation (see `scripts/`). |
+| `npm run fonts:subsets` | Generate the self-hosted WOFF2 font subsets. |
+| `npm run video:responsive-posters` | Generate versioned AVIF/WebP/JPEG poster source sets. |
+| `npm run video:startups` | Generate exact-copy fast-start theater bridges. |
+| `npm run video:encode` / `video:hls` | Generate progressive fallbacks and the multi-codec CMAF ladder. |
 
 ### Build pipeline note
 
-`npm run build` triggers a `prebuild` hook: `video:catalog` + `service:entrypoints`. These regenerate data/HTML from the R2 media manifest, so a production build needs those inputs present. Vercel runs the full build on deploy; **CI deliberately skips the build** (it can't reach the media manifest) and runs typecheck + tests + lint instead.
+`npm run build` first regenerates the media catalog and normalizes route, font, and client entrypoints. Vite then creates the client build and an SSR bundle; `scripts/prerender.mjs` renders all 40 registered routes, injects route markup, and extracts/inlines only above-the-fold critical CSS. The browser hydrates that markup instead of replacing a loading shell.
 
 ## Architecture (quick map)
 
-- `src/App.tsx` — boots providers and a **custom static router**: it matches the current pathname against precomputed route entries from `src/lib/locale-path.ts` (rather than `<Routes>`/`<Route>`), then lazy-loads the matching page. Wrapped in a top-level `ErrorBoundary`.
-- `src/pages/Index.tsx` — the home page; composes sections, most wrapped in `DeferredSection` (IntersectionObserver-based lazy mount) and per-section error boundaries.
-- `src/components/` — UI, plus `media/` (video players), `motion/`, `three/`.
+- `src/client-runtime.tsx` — shared client bootstrap, route-specific hydration, and full-document navigation between registered static entries.
+- `src/entry-server.tsx` + `scripts/prerender.mjs` — server render and post-build prerender/critical-CSS pipeline.
+- `src/App.tsx` — shared providers, route matching, native scroll restoration, deferred insights, and global media-session ownership.
+- `src/pages/Index.tsx` — the home page; composes sections and wraps media-heavy sections in `DeferredSection` (IntersectionObserver-based lazy mount) plus per-section error boundaries.
+- `src/components/media/` + `src/lib/media-*` — adaptive playback, typed candidates, responsive posters, exclusive decoder scheduling, and quality-first theater startup.
+- `src/components/motion/` + `src/lib/motion/` — lightweight reveals and native/compositor-first motion; there is no site-wide animation ticker.
 - `src/data/` — content is **data-driven**: `service-pages.ts`, `vertical-pages.ts`, `resource-pages.ts`, `legal-pages.ts`, and the reel catalog (`portfolio-clips.ts` + generated `nuevos-r2-ready.ts`).
-- `src/lib/locale-path.ts` — the single source of truth for routes and `es`/`en` path mapping.
-- `scripts/` — media encoding, HLS, R2 upload, catalog generation, boot-shell expansion for AI crawlers, IndexNow.
+- `src/lib/locale-path.ts` — the single source of truth for routes, `es`/`en` path mapping, and static HTML inputs.
+- `src/styles/` — route-template CSS and the small critical template subset.
+- `scripts/` — prerendering, fonts, media encoding, HLS, R2 upload, poster/startup generation, catalog generation, and IndexNow.
 
 Localization: Spanish lives at `/…`, English at `/en/…`. Locale is derived from the URL path.
 
@@ -68,4 +76,4 @@ Push to `main` → Vercel builds and deploys production. Security headers (CSP, 
 
 ## Docs
 
-`ARCHITECTURE.md` is an older deep-dive and may lag the current home layout. Day-to-day design/decision history lives in the `changes/` log directory. The current homepage opening is documented in [`changes/2026-07-27-editorial-title-sequence-hero.md`](changes/2026-07-27-editorial-title-sequence-hero.md).
+Start with [`changes/2026-07-29-performance-motion-media-architecture-overhaul.md`](changes/2026-07-29-performance-motion-media-architecture-overhaul.md) for the current delivery, motion, and media architecture. The forensic map lives in [`architecture/README.md`](architecture/README.md); its generated component/source indexes are a historical scan unless a page explicitly says otherwise. The current homepage opening is documented in [`changes/2026-07-27-editorial-title-sequence-hero.md`](changes/2026-07-27-editorial-title-sequence-hero.md).

@@ -1,5 +1,11 @@
 # Source Index
 
+> Historical generated snapshot (2026-06-04). This index includes source files
+> removed or replaced by the July 2026 prerender, locale, media, and motion
+> overhaul. Start with the
+> [current architecture record](../../changes/2026-07-29-performance-motion-media-architecture-overhaul.md)
+> and use `rg --files src` for the live inventory.
+
 This index covers non-component source files under `src/`: roots, pages, data modules, hooks, utilities, styles, and type declarations.
 
 ## Summary Table

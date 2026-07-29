@@ -6,6 +6,11 @@ This folder is organized by subsystem instead of by date.
 
 - `architecture/`
   - Start here for the current site map, section order, and project-level working rules.
+- **Current performance/media/motion architecture:**
+  - `2026-07-29-performance-motion-media-architecture-overhaul.md`
+  - This is the source of truth for prerendering, hydration, fonts, CSS delivery,
+    media scheduling, theater startup, HLS quality, motion budgets, validation,
+    and remaining Lighthouse gates.
 - `ui/`
   - Hero, navbar, footer, contact flows, FAQ, rating cards, motion polish, and visual evolution.
   - **Current live hero:** `../2026-07-27-editorial-title-sequence-hero.md` — “CHAPTER 00” editorial opening with a solid `GISELA` title, three real film-strip stills, exact Medellín metadata, and a dedicated mobile app-quality composition. Earlier “Muro de trabajo,” wide contact-sheet, pencil-texture, and blue-mark experiments are historical rather than current.
@@ -49,3 +54,13 @@ For any homepage hero or top-of-page navbar change, read:
 - [`2026-07-27-editorial-title-sequence-hero.md`](./2026-07-27-editorial-title-sequence-hero.md)
 
 It records the approved composition, real source assets, responsive behavior, accessibility requirements, superseded experiments, validation, and regression guardrails.
+
+## Current Performance Source of Truth
+
+Before changing route delivery, media playback, posters, video encoding, global
+motion, scrolling, fonts, or critical CSS, read:
+
+- [`2026-07-29-performance-motion-media-architecture-overhaul.md`](./2026-07-29-performance-motion-media-architecture-overhaul.md)
+
+It includes the measured baseline, root causes, quality invariants, implemented
+architecture, controlled validation results, and explicit follow-up work.

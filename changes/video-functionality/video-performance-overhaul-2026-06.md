@@ -1,7 +1,14 @@
 # Video Performance Overhaul — Session Record (2026-06)
 
+> Historical pipeline record. Several items described below as proposed or
+> outstanding were implemented or superseded by the July architecture
+> overhaul. Use
+> [`../2026-07-29-performance-motion-media-architecture-overhaul.md`](../2026-07-29-performance-motion-media-architecture-overhaul.md)
+> for the current runtime, one-decoder policy, exact-copy startup bridge,
+> 1-second CMAF ladder, poster variants, measurements, and remaining gates.
+
 Full record of the performance + quality work on the video pipeline: what shipped,
-what's configured at the edge, the root-cause findings, current state, and the
+what’s configured at the edge, the root-cause findings, current state, and the
 outstanding/proposed work that was discussed but **not** yet implemented.
 
 Companion docs:

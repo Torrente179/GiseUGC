@@ -1,9 +1,17 @@
 # Homepage UX, Conversion, and Motion
 
-## Summary
-This is the current homepage-facing UI note. It consolidates the review-card system, FAQ launch, CTA routing, theme behavior, marquee smoothness, testimonial screenshot integration, and the later motion-polish passes that shaped the current landing page.
+> Historical evolution log. Its dated entries remain useful, but the opening
+> “current” inventory predates the July 2026 dependency and component cleanup.
+> Use
+> [`../2026-07-29-performance-motion-media-architecture-overhaul.md`](../2026-07-29-performance-motion-media-architecture-overhaul.md)
+> for the current motion/runtime architecture and
+> [`../2026-07-27-editorial-title-sequence-hero.md`](../2026-07-27-editorial-title-sequence-hero.md)
+> for the current hero direction.
 
-## Current runtime touchpoints
+## Summary
+This is the chronological homepage-facing UI note. It consolidates the review-card system, FAQ launch, CTA routing, theme behavior, marquee smoothness, testimonial screenshot integration, and the motion-polish passes that led to the current landing page.
+
+## Runtime touchpoints at the time of the logged changes
 - `src/App.tsx`
 - `src/pages/Index.tsx`
 - `src/components/Hero.tsx`
