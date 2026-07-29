@@ -150,8 +150,11 @@ misalignment.
 
 ### 5. Decoder scheduling and theater ownership
 
-- `src/lib/media-playback-scheduler.ts` grants one ambient playback slot by
-  priority: theater, hero, preview, ambient, background.
+- `src/lib/media-playback-scheduler.ts` grants ambient playback slots by
+  priority: theater, hero, preview, ambient, background. The highest class
+  present takes the slots and everything below it stays unloaded. Each class has
+  a capacity — one for every class except the hero, which takes three (see
+  "Hero plays all three frames" below).
 - `src/hooks/use-media-playback-slot.ts` registers component demand with that
   scheduler.
 - `src/components/media/MediaSessionProvider.tsx` publishes theater ownership.
@@ -160,8 +163,8 @@ misalignment.
   card or the desktop card with real pointer/focus intent mounts a preview.
 - The scheduler also stops playback when the document is hidden and re-evaluates
   on viewport or connection changes.
-- There are zero full-length or HLS requests before user intent and no more than
-  one granted ambient decoder.
+- There are zero full-length or HLS requests before user intent, and no more
+  than one granted ambient decoder outside the hero composition.
 
 ### 6. Quality-first theater startup
 
@@ -265,7 +268,7 @@ field Core Web Vitals.
 | Cold fast-4G tap-to-first-frame | 324 ms |
 | Warm tap-to-first-frame | 36 ms |
 | Pre-intent full/HLS requests | 0 |
-| Active ambient preview decoders | 1 maximum |
+| Active ambient preview decoders | 1 maximum (3 for the hero composition since 2026-07-30) |
 | Motion trace | No long tasks over 50 ms; p95 frame interval 9.7 ms |
 
 The universal controlled 100 performance target remains a release gate, not a
@@ -456,13 +459,60 @@ satisfying hero guardrail 6.
 `1.2deg`, right `6.2deg`). Straightening them was tried twice before and rolled
 back — see the hero document's superseded-iterations list.
 
+### 5. Hero plays all three frames
+
+Requested on 2026-07-30. The overhaul had the title sequence mount one decoder
+on the centre frame with the two flanking frames held as posters. In practice a
+single moving frame between two stills reads as the other two having failed to
+load — especially now that the centre frame is the one that had been 404ing.
+
+Two things enforced the single frame and both had to change:
+
+- `src/components/Hero.tsx` gated playback on the lead frame index. All three
+  frames now play.
+- `src/lib/media-playback-scheduler.ts` granted exactly one slot globally, so
+  mounting three videos would have left two of them permanently without a
+  source. Slots are now a per-class capacity.
+
+The scheduler's grant rule is now: a theater takes exclusive ownership;
+otherwise the highest priority class present takes the slots up to its capacity
+and every lower class stays unloaded. Capacity is one for every class except
+`hero`, which is three. A lower class can never borrow the hero's extra
+capacity, so the card-wall decode pressure this scheduler exists to prevent is
+unchanged away from the hero.
+
+What did **not** change:
+
+- Nothing is fetched before intent. All three frames still wait for pointer,
+  touch, keyboard, or scroll, so the "0 initial media transfer" budget and the
+  poster-driven LCP both hold.
+- Reduced-motion visitors still get the complete static composition.
+- No encoding, no re-encoding, and no media assets were touched. The frames use
+  the existing compact `previewSrc` MP4s and attach no HLS.
+
+Cost: the preview clips run about 0.8–2 MB each, so an engaged visitor now
+fetches roughly 2.5–6 MB for the hero instead of about 1–2 MB, and runs three
+decoders instead of one. To keep that off metered and slow links, the
+previously-unused `getConnectionProfile()` helper is now wired in: when
+`saveData` is set or `effectiveType` is `slow-2g`, `2g`, or `3g`, hero capacity
+drops to one and the other two frames keep their already-painted posters.
+
+`src/lib/media-playback-scheduler.test.ts` covers the grant algorithm — hero
+capacity, the cap, single-slot card previews, no cross-class borrowing, theater
+preemption, release on `visibilitychange`, slot reclamation on unregister, and
+the metered-connection clamp.
+
+Still owed, because it needs the deployed build: re-run the Lighthouse matrix
+and record a decode/frame trace for the three-decoder hero, per operational
+rule 10.
+
 ### Validation
 
 | Check | Result |
 | --- | --- |
 | `npm run typecheck` | Passed |
 | `npm run lint` | 0 errors; 6 pre-existing Fast Refresh warnings |
-| `npm test` | 53/53 passed |
+| `npm test` | 61/61 passed (8 new scheduler tests) |
 | `npm run build` | Passed; 40 routes prerendered |
 | NFD sequences in `src/` and `dist/` | 0 |
 | Catalog R2 readiness | 16/16 |

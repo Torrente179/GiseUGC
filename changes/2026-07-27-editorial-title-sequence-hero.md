@@ -12,8 +12,12 @@ upgraded as part of the site-wide performance overhaul:
 - The center frame is a fixed lead clip (`id: 1007`) and the two flanking clips
   rotate daily from the full reel catalog.
 - All three frames paint responsive AVIF/WebP/JPEG posters immediately.
-- Only the center frame may mount a video decoder, and only after genuine
-  pointer, touch, keyboard, or scroll intent.
+- **All three frames play** (changed 2026-07-30 at the user's request; the
+  original overhaul played only the center frame). Playback still starts only
+  after genuine pointer, touch, keyboard, or scroll intent, so nothing is
+  fetched before engagement. The playback scheduler allows the hero three
+  decoders and drops to one on a metered or slow connection, where the other two
+  frames keep their posters.
 - Reduced-motion users always keep the complete static composition.
 - The lead poster is discovered and preloaded from prerendered HTML; video is
   never an LCP dependency.

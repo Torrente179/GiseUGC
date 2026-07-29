@@ -87,11 +87,13 @@ const Hero = () => {
             const clip = dailyClips[index];
             if (!clip) return null;
             const poster = getBestPosterSrc(clip);
-            // Keep one lead decoder on every device. The flanking frames stay
-            // visually rich as posters without competing for bandwidth,
-            // decode time, or GPU compositing.
-            const playsVideo =
-              motionIntent && !reduceMotion && index === LEAD_FRAME_INDEX;
+            // All three frames run: the title sequence reads as one composition,
+            // and a single moving frame between two stills looks like the other
+            // two failed. Still gated on intent so nothing is fetched before the
+            // visitor engages and video is never an LCP dependency. The
+            // scheduler holds the hero to three decoders and drops to one on a
+            // metered or slow connection.
+            const playsVideo = motionIntent && !reduceMotion;
 
             return (
               <div

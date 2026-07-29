@@ -16,6 +16,23 @@ const priorityWeight: Record<MediaPlaybackPriority, number> = {
   background: 20,
 };
 
+/**
+ * How many decoders a priority class may hold at once.
+ *
+ * Everything except the hero is deliberately single-slot: a wall of ambient
+ * card previews was one of the causes of the mobile decode pressure this
+ * scheduler exists to prevent. The hero is the exception because its three
+ * film frames are one authored composition rather than a list — showing one
+ * frame moving beside two stills reads as a loading failure.
+ */
+const priorityCapacity: Record<MediaPlaybackPriority, number> = {
+  theater: 1,
+  hero: 3,
+  preview: 1,
+  ambient: 1,
+  background: 1,
+};
+
 const entries = new Map<number, SchedulerEntry>();
 let nextEntryId = 1;
 let listenersAttached = false;
@@ -49,9 +66,25 @@ const reconcile = () => {
       return a.createdAt - b.createdAt;
     });
 
+  // A theater always wins outright and never shares a decoder with ambient
+  // playback. Otherwise the highest priority class present takes the slots and
+  // everything below it stays unloaded — so a hero group cannot be diluted by
+  // card previews, and card previews cannot borrow the hero's extra capacity.
   const theaterEntry = activeEntries.find((entry) => entry.priority === 'theater');
-  const selectedEntry = isHidden ? undefined : theaterEntry ?? activeEntries[0];
-  const grantedIds = new Set(selectedEntry ? [selectedEntry.id] : []);
+  const topPriority = theaterEntry?.priority ?? activeEntries[0]?.priority;
+
+  let capacity = topPriority ? priorityCapacity[topPriority] : 0;
+  if (capacity > 1 && getConnectionProfile().slow) {
+    // Metered or slow links get one decoder regardless of class; the remaining
+    // frames keep their posters, which are already painted.
+    capacity = 1;
+  }
+
+  const selected = isHidden || !topPriority
+    ? []
+    : activeEntries.filter((entry) => entry.priority === topPriority).slice(0, capacity);
+
+  const grantedIds = new Set(selected.map((entry) => entry.id));
   entries.forEach((entry) => {
     entry.setGranted(entry.active && grantedIds.has(entry.id));
   });
