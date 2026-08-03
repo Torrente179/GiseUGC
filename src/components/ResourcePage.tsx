@@ -29,7 +29,7 @@ const localeLabels = {
     relatedServices: 'Servicios relacionados',
     relatedVerticals: 'Verticales relacionadas',
     startProject: 'Empezar proyecto',
-    lastUpdated: 'Última actualización: 24 mar 2026',
+    lastUpdated: 'Última actualización: 29 jul 2026',
     readMore: 'Leer más',
   },
   en: {
@@ -39,7 +39,7 @@ const localeLabels = {
     relatedServices: 'Related services',
     relatedVerticals: 'Related verticals',
     startProject: 'Start a project',
-    lastUpdated: 'Last updated: Mar 24, 2026',
+    lastUpdated: 'Last updated: Jul 29, 2026',
     readMore: 'Read more',
   },
 } as const;
@@ -48,6 +48,14 @@ const localeLabels = {
 /* ════════════════════════════════════════════════════════════════════
    RESOURCE PAGE — Editorial article layout
    ════════════════════════════════════════════════════════════════════ */
+
+/* Article dates. Kept beside the visible "last updated" label above so the
+   two can never drift: a schema date that contradicts the date on the page is
+   a trust signal you cannot cash. Update both together, and only on a real
+   revision — never on a build. Current values match the last content commit
+   to the resource entrypoints (git: 2026-07-29). */
+const RESOURCE_DATE_PUBLISHED = '2026-03-24';
+const RESOURCE_DATE_MODIFIED = '2026-07-29';
 
 const serializeRouteData = (routeData: ResourceLandingRouteData) =>
   JSON.stringify(routeData).replace(/</g, '\\u003c');
@@ -80,7 +88,7 @@ const ResourcePage = ({
           url: canonical,
           name: page.metaTitle,
           description: page.metaDescription,
-          dateModified: '2026-03-24',
+          dateModified: RESOURCE_DATE_MODIFIED,
           inLanguage: locale,
           isPartOf: { '@id': `${homeCanonical}#website` },
           breadcrumb: { '@id': `${canonical}#breadcrumb` },
@@ -97,8 +105,8 @@ const ResourcePage = ({
           headline: page.heroTitle,
           description: page.metaDescription,
           url: canonical,
-          datePublished: '2026-03-24',
-          dateModified: '2026-03-24',
+          datePublished: RESOURCE_DATE_PUBLISHED,
+          dateModified: RESOURCE_DATE_MODIFIED,
           inLanguage: locale,
           author: {
             '@type': 'Person',

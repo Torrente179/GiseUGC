@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "npm run video:catalog && npm run service:entrypoints && npm run fonts:entrypoints && npm run client:entrypoints",
+    "prebuild": "npm run video:catalog && npm run service:entrypoints && npm run resource:entrypoints && npm run fonts:entrypoints && npm run client:entrypoints",
     "build": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "prebuild:dev": "npm run video:catalog && npm run service:entrypoints",
     "build:dev": "vite build --mode development",
@@ -19,6 +19,7 @@
     "check:mobile-regression": "node scripts/mobile-regression-check.mjs",
     "preview": "vite preview",
     "service:entrypoints": "node scripts/enrich-service-entrypoints.mjs",
+    "resource:entrypoints": "node scripts/sync-resource-entrypoint-meta.mjs",
     "fonts:entrypoints": "node scripts/normalize-entrypoint-fonts.mjs",
     "client:entrypoints": "node scripts/normalize-client-entrypoints.mjs",
     "fonts:subsets": "bash scripts/generate-font-subsets.sh",

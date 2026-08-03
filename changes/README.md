@@ -20,6 +20,10 @@ This folder is organized by subsystem instead of by date.
   - Portfolio theater, reel catalog, R2 gating, transcript-driven naming, and the encoding pipeline.
 - `seo/`
   - Canonicals, metadata, schema, crawlability, and language-routing behavior.
+  - **Current schema delivery:** `seo/seo-ssr-structured-data-and-metadata-parity.md` —
+    route JSON-LD renders server-side via `PageSeo`, resource `<head>` metadata is
+    generated from `src/data/resource-pages.ts` in prebuild. Read this before
+    touching `PageSeo`, resource shells, or homepage JSON-LD.
 - `deployment/`
   - Hosting, caching, security hardening, and runtime instrumentation.
 
