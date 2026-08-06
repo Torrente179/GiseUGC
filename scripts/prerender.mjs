@@ -158,13 +158,11 @@ for (const htmlPath of htmlFiles) {
     .querySelector('link[rel="preload"][href="/fonts/cormorant-garamond-hero.woff2"]')
     ?.setAttribute('fetchpriority', 'high');
 
-  // Put the daily lead still in the preload scanner's first headful of bytes.
+  // Put the hero still in the preload scanner's first headful of bytes.
   // Its srcset is already prerendered, so this accelerates the actual visual
   // candidate without fetching a duplicate or guessing a viewport size.
   if (route === '/' || route === '/en/') {
-    const leadPicture = dom.window.document.querySelector(
-      '.title-sequence-frame:nth-of-type(2) picture',
-    );
+    const leadPicture = dom.window.document.querySelector('.gallery-hero__media picture');
     const leadAvif = [...(leadPicture?.querySelectorAll('source[type="image/avif"]') ?? [])]
       .find((source) => !source.hasAttribute('media'));
     const leadImage = leadPicture?.querySelector('img');

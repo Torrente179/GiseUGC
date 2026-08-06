@@ -1,149 +1,73 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
-import { useDailyRotation } from '@/hooks/use-daily-rotation';
-import { useHeroKeyLight } from '@/hooks/use-hero-key-light';
-import { LEGACY_REEL_CLIPS, getBestPosterSrc, type ReelClip } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
+import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useTranslation } from '@/lib/locale-context';
 
-/** Full catalog — the three frames draw from it and re-deal every 24h. */
-const ALL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS];
-const HERO_LEAD_CLIP_ID = 1007;
-const HERO_LEAD_CLIP = ALL_CLIPS.find(({ id }) => id === HERO_LEAD_CLIP_ID) ?? ALL_CLIPS[0];
-const ROTATING_FLANK_CLIPS = ALL_CLIPS.filter(({ id }) => id !== HERO_LEAD_CLIP.id);
-
-/** Film furniture stays fixed while the clip behind it rotates — the markings
- *  are set dressing, not metadata about the take. */
-const FRAME_MARKINGS = [
-  { timecode: '00:00:00:20', frame: 'A / 01' },
-  { timecode: '00:00:08:05', frame: 'A / 02' },
-  { timecode: '00:00:31:17', frame: 'A / 03' },
-];
-
-/** Centre frame is the one that plays when we only get to play one. */
-const LEAD_FRAME_INDEX = 1;
+const HERO_CLIP_ID = 1015;
+const HERO_CLIP = NUEVOS_R2_READY_CLIPS.find(({ id }) => id === HERO_CLIP_ID)
+  ?? NUEVOS_R2_READY_CLIPS[0];
 
 const Hero = () => {
   const { locale } = useTranslation();
-  const sequenceDescription = locale === 'es'
-    ? 'Tres fotogramas de Gisela creando una reseña UGC de producto.'
-    : 'Three frames of Gisela creating a UGC product review.';
+  const { handleHashLinkClick } = useHashlessSectionNavigation();
 
-  const stageRef = useRef<HTMLDivElement>(null);
-  const keyLightRef = useRef<HTMLDivElement>(null);
-
-  const [reduceMotion, setReduceMotion] = useState(false);
-  const [motionIntent, setMotionIntent] = useState(false);
-  useEffect(() => {
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => setReduceMotion(query.matches);
-    sync();
-    query.addEventListener('change', sync);
-    return () => query.removeEventListener('change', sync);
-  }, []);
-
-  useEffect(() => {
-    if (reduceMotion || motionIntent) return undefined;
-
-    const activateMotion = () => setMotionIntent(true);
-    const events: (keyof WindowEventMap)[] = [
-      'pointermove',
-      'pointerdown',
-      'touchstart',
-      'scroll',
-      'keydown',
-    ];
-    events.forEach((eventName) => {
-      window.addEventListener(eventName, activateMotion, { passive: true, once: true });
-    });
-
-    return () => {
-      events.forEach((eventName) => window.removeEventListener(eventName, activateMotion));
-    };
-  }, [motionIntent, reduceMotion]);
-
-  useHeroKeyLight(keyLightRef, motionIntent);
-
-  // Three clips, re-dealt on the UTC day boundary.
-  const dailyFlanks = useDailyRotation(ROTATING_FLANK_CLIPS, 2);
-  const dailyClips = [dailyFlanks[0], HERO_LEAD_CLIP, dailyFlanks[1]];
+  const imageDescription = locale === 'es'
+    ? 'Gisela Saldarriaga presentando una pieza UGC frente a cámara.'
+    : 'Gisela Saldarriaga presenting a UGC piece on camera.';
+  const selectedWorkAriaLabel = locale === 'es'
+    ? 'Ir al trabajo seleccionado'
+    : 'Go to selected work';
+  const metadataAriaLabel = locale === 'es'
+    ? 'Medellín, español e inglés, índice 001'
+    : 'Medellin, Spanish and English, index 001';
 
   return (
-    <section id="home" className="title-sequence-hero relative w-full overflow-hidden">
-      <div ref={stageRef} className="title-sequence-hero__stage">
-        <p className="title-sequence-hero__chapter" aria-hidden="true">
-          Chapter 00
-        </p>
+    <section
+      id="home"
+      className="gallery-hero relative w-full overflow-hidden"
+      aria-labelledby="gallery-hero-name"
+    >
+      <div className="gallery-hero__stage">
+        <div className="gallery-hero__metadata" role="group" aria-label={metadataAriaLabel}>
+          <span aria-hidden="true">MED / ES + EN</span>
+          <span aria-hidden="true">001</span>
+        </div>
 
-        <h1 className="title-sequence-hero__name">
-          Gisela
+        <h1 id="gallery-hero-name" className="gallery-hero__name">
+          GISELA
         </h1>
 
-        <figure className="title-sequence-hero__frames">
-          <figcaption className="sr-only">{sequenceDescription}</figcaption>
-
-          {FRAME_MARKINGS.map((markings, index) => {
-            const clip = dailyClips[index];
-            if (!clip) return null;
-            const poster = getBestPosterSrc(clip);
-            // All three frames run: the title sequence reads as one composition,
-            // and a single moving frame between two stills looks like the other
-            // two failed. Still gated on intent so nothing is fetched before the
-            // visitor engages and video is never an LCP dependency. The
-            // scheduler holds the hero to three decoders and drops to one on a
-            // metered or slow connection.
-            const playsVideo = motionIntent && !reduceMotion;
-
-            return (
-              <div
-                key={clip.id}
-                className="title-sequence-frame"
-                style={{ '--frame-delay': `${160 + index * 110}ms` } as CSSProperties}
-                aria-hidden="true"
-              >
-                <span className="title-sequence-frame__tape" />
-                <div className="title-sequence-frame__film">
-                  <div className="title-sequence-frame__sprockets" />
-                  <div className="title-sequence-frame__image">
-                    {playsVideo ? (
-                      <AutoplayPreviewVideo
-                        src={clip.previewSrc}
-                        poster={poster}
-                        preload="none"
-                        requestPlaybackSlot
-                        playbackPriority="hero"
-                        rootMargin="0px"
-                      />
-                    ) : (
-                      <ResponsivePosterImage
-                        clip={clip}
-                        alt=""
-                        loading={index === LEAD_FRAME_INDEX ? 'eager' : 'lazy'}
-                        decoding={index === LEAD_FRAME_INDEX ? 'sync' : 'async'}
-                        sizes="(max-width: 767px) 200px, (max-width: 1279px) 28vw, 24vw"
-                        fetchpriority={index === LEAD_FRAME_INDEX ? 'high' : 'low'}
-                      />
-                    )}
-                  </div>
-                  <div className="title-sequence-frame__markings">
-                    <span>{markings.frame}</span>
-                    <span>{markings.timecode}</span>
-                  </div>
-                </div>
+        <figure className="gallery-hero__media">
+          <figcaption className="sr-only">{imageDescription}</figcaption>
+          <div className="gallery-hero__film" aria-hidden="true">
+            <div className="gallery-hero__mat">
+              <div className="gallery-hero__still">
+                <ResponsivePosterImage
+                  clip={HERO_CLIP}
+                  alt=""
+                  loading="eager"
+                  decoding="sync"
+                  sizes="(max-width: 767px) 44vw, (max-width: 1023px) 30vw, 25vw"
+                  fetchpriority="high"
+                  rootMargin="0px"
+                />
               </div>
-            );
-          })}
+            </div>
+          </div>
         </figure>
 
-        {/* One light source, lerped toward the pointer by use-hero-key-light.
-            Rakes the paper and the film frames; the wordmark keeps its solid
-            fill. */}
-        <div ref={keyLightRef} className="title-sequence-hero__keylight" aria-hidden="true" />
-
-        <p className="title-sequence-hero__metadata">
-          Medellín <span aria-hidden="true">·</span> ES / EN <span aria-hidden="true">·</span> UGC
-        </p>
+        <div className="gallery-hero__index">
+          <span className="gallery-hero__rule" aria-hidden="true" />
+          <a
+            href="#portfolio"
+            className="gallery-hero__selected-work"
+            aria-label={selectedWorkAriaLabel}
+            onClick={handleHashLinkClick}
+          >
+            <span>Selected work</span>
+            <span aria-hidden="true">↘</span>
+          </a>
+        </div>
       </div>
     </section>
   );

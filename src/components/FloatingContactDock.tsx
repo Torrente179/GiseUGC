@@ -33,6 +33,7 @@ const FloatingContactDock = () => {
   const isMobile = useIsMobile();
   const shouldReduceMotion = usePrefersReducedMotion();
   const [isDesktopDockGhosted, setIsDesktopDockGhosted] = useState(false);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
   const [hasEntrance, setHasEntrance] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -46,6 +47,21 @@ const FloatingContactDock = () => {
     const timeoutId = window.setTimeout(() => setHasEntrance(true), delay);
     return () => window.clearTimeout(timeoutId);
   }, [shouldReduceMotion]);
+
+  useEffect(() => {
+    const hero = document.getElementById('home');
+    if (!hero) {
+      setIsHeroVisible(false);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsHeroVisible(entry.intersectionRatio > 0.08),
+      { threshold: 0.08 }
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const desktopMediaQuery = window.matchMedia('(min-width: 768px)');
@@ -253,7 +269,9 @@ const FloatingContactDock = () => {
       {/* Desktop: horizontal row */}
       <div
         className={`hidden md:flex dock-breathe items-center gap-3 rounded-full border border-white/40 bg-card/95 px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform] duration-500 ${
-          isDesktopDockGhosted
+          isHeroVisible
+            ? 'opacity-0 scale-[0.94] translate-y-2 pointer-events-none'
+            : isDesktopDockGhosted
             ? 'opacity-10 scale-[0.94] translate-y-2 pointer-events-none'
             : 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
         }`}
