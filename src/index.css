@@ -1788,7 +1788,6 @@
 
   .btn-primary-nordic {
     @apply inline-flex items-center justify-center gap-2 rounded-full bg-primary font-sans text-[13px] font-semibold normal-case tracking-[0.02em] text-primary-foreground no-underline;
-    background-color: hsl(193 70% 31%);
     min-height: 2.5rem;
     padding: 0.5rem 1.25rem;
     line-height: 1.2;
