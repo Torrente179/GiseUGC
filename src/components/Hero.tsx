@@ -1,32 +1,23 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
-import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import {
   getPosterVariantSrc,
   LEGACY_REEL_CLIPS,
-  type ReelClip,
 } from '@/data/portfolio-clips';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useMediaIntent } from '@/hooks/use-media-intent';
 import { useTranslation } from '@/lib/locale-context';
 
-const HERO_CLIP_ID = 1015;
-const HERO_CLIP = NUEVOS_R2_READY_CLIPS.find(({ id }) => id === HERO_CLIP_ID)
-  ?? NUEVOS_R2_READY_CLIPS[0];
-
-const HERO_INTRO_CLIP_IDS = [5, 1006, 1001] as const;
-const HERO_INTRO_CLIPS = HERO_INTRO_CLIP_IDS
-  .map((id) => (
-    LEGACY_REEL_CLIPS.find((clip) => clip.id === id)
-    ?? NUEVOS_R2_READY_CLIPS.find((clip) => clip.id === id)
-  ))
-  .filter((clip): clip is ReelClip => Boolean(clip));
+const HERO_REEL_CLIPS = LEGACY_REEL_CLIPS;
+const HERO_INTRO_CLIP_COUNT = 3;
+const HERO_INTRO_CLIPS = HERO_REEL_CLIPS.slice(0, HERO_INTRO_CLIP_COUNT);
 
 const HERO_INTRO_STORAGE_KEY = 'gisela:portrait-phone-intro';
 const HERO_INTRO_VERSION = 'phone-contact-strip-v1';
 const HERO_INTRO_LOAD_TIMEOUT_MS = 2600;
 const HERO_INTRO_PLAY_TIMEOUT_MS = 2500;
+const HERO_REEL_INTERVAL_MS = 3500;
 
 type HeroIntroState = 'idle' | 'loading' | 'playing' | 'complete';
 
@@ -36,7 +27,10 @@ const Hero = () => {
   const { locale, t } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const mediaIntent = useMediaIntent();
+  const heroRef = useRef<HTMLElement>(null);
   const [introState, setIntroState] = useState<HeroIntroState>('idle');
+  const [isHeroActive, setIsHeroActive] = useState(true);
+  const [reelIndex, setReelIndex] = useState(0);
   const loadedIntroClipIds = useRef(new Set<number>());
   const ownsIntroRun = useRef(false);
 
@@ -57,7 +51,7 @@ const Hero = () => {
   }, []);
 
   useEffect(() => {
-    if (HERO_INTRO_CLIPS.length !== HERO_INTRO_CLIP_IDS.length) return undefined;
+    if (HERO_INTRO_CLIPS.length !== HERO_INTRO_CLIP_COUNT) return undefined;
 
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (motionQuery.matches) return undefined;
@@ -97,6 +91,45 @@ const Hero = () => {
   }, [completeIntro]);
 
   useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero || typeof IntersectionObserver === 'undefined') {
+      setIsHeroActive(document.visibilityState === 'visible');
+      return undefined;
+    }
+
+    let intersects = true;
+    const sync = () => {
+      setIsHeroActive(intersects && document.visibilityState === 'visible');
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        intersects = Boolean(entry?.isIntersecting);
+        sync();
+      },
+      { rootMargin: '120px 0px' },
+    );
+
+    observer.observe(hero);
+    document.addEventListener('visibilitychange', sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', sync);
+    };
+  }, []);
+
+  useEffect(() => {
+    const introIsActive = introState === 'loading' || introState === 'playing';
+    if (!mediaIntent || !isHeroActive || introIsActive || HERO_REEL_CLIPS.length < 2) {
+      return undefined;
+    }
+
+    const interval = window.setInterval(() => {
+      setReelIndex((currentIndex) => (currentIndex + 1) % HERO_REEL_CLIPS.length);
+    }, HERO_REEL_INTERVAL_MS);
+    return () => window.clearInterval(interval);
+  }, [introState, isHeroActive, mediaIntent]);
+
+  useEffect(() => {
     if (introState !== 'loading' && introState !== 'playing') return undefined;
 
     const timeout = window.setTimeout(
@@ -122,9 +155,13 @@ const Hero = () => {
   const phoneAriaLabel = locale === 'es'
     ? 'Ver el portafolio de videos UGC de Gisela'
     : "View Gisela's UGC video portfolio";
+  const activeReelClip = HERO_REEL_CLIPS[reelIndex] ?? HERO_REEL_CLIPS[0];
+  const formattedReelIndex = String(reelIndex + 1).padStart(2, '0');
+  const formattedReelTotal = String(HERO_REEL_CLIPS.length).padStart(2, '0');
 
   return (
     <section
+      ref={heroRef}
       id="home"
       className="portrait-hero"
       aria-labelledby="portrait-hero-title"
@@ -213,7 +250,7 @@ const Hero = () => {
 
               <span className="portrait-hero__phone-screen" aria-hidden="true">
                 <ResponsivePosterImage
-                  clip={HERO_CLIP}
+                  clip={activeReelClip}
                   alt=""
                   className="portrait-hero__phone-poster"
                   loading="eager"
@@ -225,10 +262,11 @@ const Hero = () => {
 
                 {mediaIntent && introState !== 'loading' && introState !== 'playing' && (
                   <AutoplayPreviewVideo
+                    key={activeReelClip.id}
                     className="portrait-hero__phone-video"
-                    src={HERO_CLIP.mobileSrc}
-                    hlsSrc={HERO_CLIP.mobileHlsSrc ?? HERO_CLIP.hlsSrc}
-                    poster={getPosterVariantSrc(HERO_CLIP, 720, 'avif')}
+                    src={activeReelClip.mobileSrc}
+                    hlsSrc={activeReelClip.mobileHlsSrc ?? activeReelClip.hlsSrc}
+                    poster={getPosterVariantSrc(activeReelClip, 720, 'avif')}
                     preload="metadata"
                     playbackPriority="hero"
                     loadStrategy="immediate"
@@ -260,12 +298,13 @@ const Hero = () => {
                   </span>
                 )}
 
-                <span className="portrait-hero__phone-speaker" aria-hidden="true" />
+                <span className="portrait-hero__phone-island" aria-hidden="true" />
+                <span className="portrait-hero__phone-home" aria-hidden="true" />
               </span>
             </a>
             <p className="portrait-hero__phone-caption" aria-hidden="true">
               <span>Selected reel</span>
-              <span>01</span>
+              <span>{formattedReelIndex} / {formattedReelTotal}</span>
             </p>
           </div>
         </div>
