@@ -34,6 +34,8 @@ const criticalTemplateStyles = sourceTemplateCriticalStyles
   .trim();
 const criticalFontFaces =
   "@font-face{font-family:'Cormorant Hero';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/cormorant-garamond-hero.woff2') format('woff2')}@font-face{font-family:'DM Sans';font-style:normal;font-weight:300 700;font-display:swap;src:url('/fonts/dm-sans-latin-var.woff2') format('woff2')}";
+const criticalPortraitFontFace =
+  "@font-face{font-family:'Cormorant Portrait';font-style:italic;font-weight:300 700;font-display:swap;src:url('/fonts/cormorant-garamond-latin-italic-var.woff2') format('woff2')}";
 const darkTokenMatch = sourceStyles.match(/\.dark\s*\{([^}]+)\}/u);
 if (!darkTokenMatch?.[1]) {
   throw new Error('Unable to extract the critical dark-theme token block');
@@ -157,40 +159,79 @@ for (const htmlPath of htmlFiles) {
   dom.window.document
     .querySelector('link[rel="preload"][href="/fonts/cormorant-garamond-hero.woff2"]')
     ?.setAttribute('fetchpriority', 'high');
+  if (
+    (route === '/' || route === '/en/') &&
+    bodyFontPreload &&
+    !dom.window.document.querySelector(
+      'link[rel="preload"][href="/fonts/cormorant-garamond-latin-italic-var.woff2"]',
+    )
+  ) {
+    const portraitFontPreload = dom.window.document.createElement('link');
+    portraitFontPreload.rel = 'preload';
+    portraitFontPreload.href = '/fonts/cormorant-garamond-latin-italic-var.woff2';
+    portraitFontPreload.as = 'font';
+    portraitFontPreload.type = 'font/woff2';
+    portraitFontPreload.crossOrigin = 'anonymous';
+    portraitFontPreload.setAttribute('fetchpriority', 'high');
+    bodyFontPreload.insertAdjacentElement('afterend', portraitFontPreload);
+  }
+  dom.window.document
+    .querySelector('link[rel="preload"][href="/fonts/cormorant-garamond-latin-italic-var.woff2"]')
+    ?.setAttribute('fetchpriority', 'high');
 
-  // Put the hero still in the preload scanner's first headful of bytes.
-  // Its srcset is already prerendered, so this accelerates the actual visual
-  // candidate without fetching a duplicate or guessing a viewport size.
+  // Put each responsive hero crop in the preload scanner's first headful of
+  // bytes. Mutually exclusive media queries ensure the browser fetches only
+  // the same WebP candidate the picture element will display.
+  const heroImagePreloads = [];
   if (route === '/' || route === '/en/') {
-    const leadPicture = dom.window.document.querySelector('.gallery-hero__media picture');
-    const leadAvif = [...(leadPicture?.querySelectorAll('source[type="image/avif"]') ?? [])]
-      .find((source) => !source.hasAttribute('media'));
+    const leadPicture = dom.window.document.querySelector('picture[data-hero-lead]');
+    const leadSources = [...(leadPicture?.querySelectorAll('source[type="image/webp"]') ?? [])];
     const leadImage = leadPicture?.querySelector('img');
-    if (leadAvif && leadImage) {
-      const avifSrcset = leadAvif.getAttribute('srcset') ?? '';
-      const firstAvifSrc = avifSrcset.split(',')[0]?.trim().split(/\s+/u)[0];
-      const preload = dom.window.document.createElement('link');
-      preload.rel = 'preload';
-      preload.as = 'image';
-      preload.type = 'image/avif';
-      preload.href = firstAvifSrc ?? leadImage.getAttribute('src') ?? '';
-      preload.setAttribute('imagesrcset', avifSrcset);
-      preload.setAttribute('imagesizes', leadImage.getAttribute('sizes') ?? '100vw');
-      preload.setAttribute('fetchpriority', 'high');
-      const viewportMeta = dom.window.document.head.querySelector('meta[name="viewport"]');
-      viewportMeta?.insertAdjacentElement('afterend', preload);
+    for (const leadSource of leadSources) {
+      if (!leadImage) break;
+      const imageSrcset = leadSource.getAttribute('srcset') ?? '';
+      const firstImageSrc = imageSrcset.split(',')[0]?.trim().split(/\s+/u)[0];
+      heroImagePreloads.push({
+        href: firstImageSrc ?? leadImage.getAttribute('src') ?? '',
+        media: leadSource.getAttribute('media')
+          ?? '(min-width: 768px) and (max-width: 1023px)',
+        srcset: imageSrcset,
+        sizes: leadImage.getAttribute('sizes') ?? '100vw',
+      });
     }
   }
 
   const inlined = await beasties.process(dom.serialize());
+  let withHeroPreloads = inlined;
+  if (heroImagePreloads.length) {
+    const inlinedDom = new JSDOM(inlined);
+    let insertionPoint = inlinedDom.window.document.head.querySelector('meta[name="viewport"]');
+    for (const preloadSpec of heroImagePreloads) {
+      const preload = inlinedDom.window.document.createElement('link');
+      preload.rel = 'preload';
+      preload.setAttribute('as', 'image');
+      preload.type = 'image/webp';
+      preload.href = preloadSpec.href;
+      preload.media = preloadSpec.media;
+      preload.setAttribute('imagesrcset', preloadSpec.srcset);
+      preload.setAttribute('imagesizes', preloadSpec.sizes);
+      preload.setAttribute('fetchpriority', 'high');
+      insertionPoint?.insertAdjacentElement('afterend', preload);
+      insertionPoint = preload;
+    }
+    withHeroPreloads = inlinedDom.serialize();
+  }
   const routeCriticalStyles =
     routeModule === 'src/components/ServiceLandingPage.tsx' ||
     routeModule === 'src/components/VerticalLandingPage.tsx'
       ? `<style data-critical-template>${criticalTemplateStyles}</style>`
       : '';
-  const withCriticalTheme = inlined.replace(
+  const routeCriticalFontFaces = route === '/' || route === '/en/'
+    ? `${criticalFontFaces}${criticalPortraitFontFace}`
+    : criticalFontFaces;
+  const withCriticalTheme = withHeroPreloads.replace(
     '</head>',
-    `<style data-critical-fonts>${criticalFontFaces}</style>${routeCriticalStyles}<style data-critical-theme>${criticalDarkTokens}</style></head>`,
+    `<style data-critical-fonts>${routeCriticalFontFaces}</style>${routeCriticalStyles}<style data-critical-theme>${criticalDarkTokens}</style></head>`,
   );
   await fs.writeFile(htmlPath, withCriticalTheme);
 }

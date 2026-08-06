@@ -22,23 +22,17 @@ const standardFontHints = `    <link
       type="font/woff2"
       crossorigin
     />`;
-const homeFontHints = `    <link
+const homeFontHints = standardFontHints;
+const homeEditorialFontHints = `    <link
       rel="preload"
-      href="/fonts/dm-sans-latin-var.woff2"
+      href="/fonts/cormorant-garamond-hero.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/cormorant-garamond-hero.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />`;
-const homeHeroFontHint = `    <link
-      rel="preload"
-      href="/fonts/cormorant-garamond-hero.woff2"
+      href="/fonts/cormorant-garamond-latin-italic-var.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -68,7 +62,7 @@ for (const htmlPath of collectHtmlFiles(rootDir)) {
   if (isHomeEntrypoint && !normalized.includes('/fonts/cormorant-garamond-hero.woff2')) {
     normalized = normalized.replace(
       /(<link\s+rel="preload"\s+href="\/fonts\/dm-sans-latin-var\.woff2"[\s\S]*?\/>)/u,
-      `$1\n${homeHeroFontHint}`,
+      `$1\n${homeEditorialFontHints}`,
     );
   }
   if (normalized === source) continue;
