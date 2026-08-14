@@ -1,6 +1,7 @@
 import { useRef, useState, useCallback, useEffect, useMemo, type TouchEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from '@/lib/locale-context';
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Play, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, X } from 'lucide-react';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { scrollToY } from '@/lib/motion/native-scroll';
@@ -23,14 +24,15 @@ type TheaterSwipeGesture = {
 };
 
 const THEATER_CLOSE_DURATION_MS = 320;
-const THEATER_SWIPE_DISTANCE_THRESHOLD = 110;
-const THEATER_SWIPE_VELOCITY_THRESHOLD = 0.45;
-const THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD = 72;
-const THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD = 0.35;
+// One gesture model on every breakpoint: drag sideways to walk the reels,
+// drag up or down to throw the viewer away.
+const THEATER_NAV_SWIPE_DISTANCE_THRESHOLD = 64;
+const THEATER_NAV_SWIPE_VELOCITY_THRESHOLD = 0.32;
+const THEATER_DISMISS_SWIPE_DISTANCE_THRESHOLD = 96;
+const THEATER_DISMISS_SWIPE_VELOCITY_THRESHOLD = 0.4;
+const THEATER_AXIS_LOCK_SLOP_PX = 6;
 const THEATER_MAX_DRAG_DISTANCE = 260;
 const REEL_CARD_TAP_SLOP_PX = 10;
-const THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD = 72;
-const THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD = 0.35;
 const THEATER_QUALITY_FALLBACK_MS = 2500;
 const DAY_MS = 86_400_000;
 const getUtcDayBucket = () => Math.floor(Date.now() / DAY_MS);
@@ -63,7 +65,7 @@ const Portfolio = () => {
   const [activeReelIndex, setActiveReelIndex] = useState<number | null>(null);
   const [activeMobileReelIndex, setActiveMobileReelIndex] = useState(0);
   const isTheaterOpen = activeReelPreview !== null;
-  const [theaterDragY, setTheaterDragY] = useState(0);
+  const [theaterDrag, setTheaterDrag] = useState({ x: 0, y: 0 });
   const [isTheaterDragging, setIsTheaterDragging] = useState(false);
   const [isTheaterVisible, setIsTheaterVisible] = useState(false);
   const [isTheaterDismissing, setIsTheaterDismissing] = useState(false);
@@ -80,18 +82,13 @@ const Portfolio = () => {
   const reelCardTouchStartRef = useRef<{ x: number; y: number } | null>(null);
   const reelCardDidDragRef = useRef(false);
   const theaterSwipeStartRef = useRef<TheaterSwipeGesture | null>(null);
-  const mobileSwipeNavigatedRef = useRef(false);
   const theaterCloseTimerRef = useRef<number | null>(null);
   const theaterDragFrameRef = useRef<number | null>(null);
-  const theaterPendingDragYRef = useRef(0);
+  const theaterPendingDragRef = useRef({ x: 0, y: 0 });
   const interactionPrewarmTimerRef = useRef<number | null>(null);
   const showcaseReelClips = useMemo(
     () => shuffleWithSeed(ALL_REEL_CLIPS, utcDayBucket),
     [utcDayBucket],
-  );
-  const allReelIndexById = useMemo(
-    () => new Map(ALL_REEL_CLIPS.map((clip, index) => [clip.id, index])),
-    [],
   );
   const getReelTitle = useCallback(
     (clip: ReelClip) => (clip.titleKey ? t(clip.titleKey) : clip.title ?? `Clip ${clip.id}`),
@@ -252,13 +249,14 @@ const Portfolio = () => {
     [isMobile],
   );
 
-  const queueTheaterDrag = useCallback((dragY: number) => {
-    const clampedDrag = Math.max(-THEATER_MAX_DRAG_DISTANCE, Math.min(THEATER_MAX_DRAG_DISTANCE, dragY));
-    theaterPendingDragYRef.current = clampedDrag;
+  const queueTheaterDrag = useCallback((dragX: number, dragY: number) => {
+    const clamp = (value: number) =>
+      Math.max(-THEATER_MAX_DRAG_DISTANCE, Math.min(THEATER_MAX_DRAG_DISTANCE, value));
+    theaterPendingDragRef.current = { x: clamp(dragX), y: clamp(dragY) };
 
     if (theaterDragFrameRef.current !== null) return;
     theaterDragFrameRef.current = window.requestAnimationFrame(() => {
-      setTheaterDragY(theaterPendingDragYRef.current);
+      setTheaterDrag(theaterPendingDragRef.current);
       theaterDragFrameRef.current = null;
     });
   }, []);
@@ -271,7 +269,7 @@ const Portfolio = () => {
     setIsTheaterVisible(false);
     setIsTheaterDragging(false);
     setTheaterDismissDirection(1);
-    setTheaterDragY(0);
+    setTheaterDrag({ x: 0, y: 0 });
   }, [clearTheaterCloseTimer]);
 
   const dismissReelPreview = useCallback(
@@ -283,7 +281,7 @@ const Portfolio = () => {
       setTheaterDismissDirection(direction);
       setIsTheaterDismissing(true);
       setIsTheaterVisible(false);
-      queueTheaterDrag(0);
+      queueTheaterDrag(0, 0);
       theaterCloseTimerRef.current = window.setTimeout(finalizeTheaterClose, THEATER_CLOSE_DURATION_MS);
     },
     [
@@ -310,8 +308,8 @@ const Portfolio = () => {
       setIsTheaterDismissing(false);
       setIsTheaterDragging(false);
       setIsTheaterVisible(false);
-      setTheaterDragY(0);
-      theaterPendingDragYRef.current = 0;
+      setTheaterDrag({ x: 0, y: 0 });
+      theaterPendingDragRef.current = { x: 0, y: 0 };
       // Critical: mount TheaterVideo immediately so video src is assigned ASAP
       setActiveReelPreview(clip);
       setActiveReelIndex(index);
@@ -319,16 +317,19 @@ const Portfolio = () => {
     [clearTheaterCloseTimer, scheduleInteractionPrewarm],
   );
 
+  // Walks the order the visitor is actually looking at (the daily shuffle the
+  // rail renders), not the canonical data order.
   const navigateReelPreview = useCallback(
     (direction: 1 | -1) => {
-      if (activeReelIndex === null) return;
-      const nextIndex = (activeReelIndex + direction + ALL_REEL_CLIPS.length) % ALL_REEL_CLIPS.length;
-      const nextClip = ALL_REEL_CLIPS[nextIndex];
+      if (activeReelIndex === null || showcaseReelClips.length === 0) return;
+      const nextIndex =
+        (activeReelIndex + direction + showcaseReelClips.length) % showcaseReelClips.length;
+      const nextClip = showcaseReelClips[nextIndex];
       if (!nextClip) return;
       setActiveReelIndex(nextIndex);
       setActiveReelPreview(nextClip);
     },
-    [activeReelIndex],
+    [activeReelIndex, showcaseReelClips],
   );
 
   const handleTheaterTouchStart = useCallback(
@@ -343,12 +344,16 @@ const Portfolio = () => {
         timestamp: performance.now(),
         axis: 'pending',
       };
-      mobileSwipeNavigatedRef.current = false;
       setIsTheaterDragging(true);
     },
     [isTheaterDismissing],
   );
 
+  // Horizontal drag walks the reels, vertical drag throws the viewer away.
+  // The card tracks the finger on the locked axis so the release is never a
+  // surprise. `touch-action: none` on the stage stops the browser competing
+  // for the gesture — React registers touchmove passively, so preventDefault()
+  // here would do nothing.
   const handleTheaterTouchMove = useCallback(
     (event: TouchEvent<HTMLDivElement>) => {
       const swipeStart = theaterSwipeStartRef.current;
@@ -360,30 +365,25 @@ const Portfolio = () => {
       const deltaY = touch.clientY - swipeStart.y;
 
       if (swipeStart.axis === 'pending') {
-        if (Math.abs(deltaX) < 6 && Math.abs(deltaY) < 6) return;
-        swipeStart.axis = Math.abs(deltaY) >= Math.abs(deltaX) ? 'vertical' : 'horizontal';
-      }
-
-      if (swipeStart.axis === 'vertical') {
-        event.preventDefault();
-        if (isMobile) {
-          if (!mobileSwipeNavigatedRef.current && Math.abs(deltaY) >= 52) {
-            mobileSwipeNavigatedRef.current = true;
-            queueTheaterDrag(0);
-            navigateReelPreview(deltaY < 0 ? 1 : -1);
-          }
+        if (
+          Math.abs(deltaX) < THEATER_AXIS_LOCK_SLOP_PX &&
+          Math.abs(deltaY) < THEATER_AXIS_LOCK_SLOP_PX
+        ) {
           return;
         }
-        const resistance = 0.92 - Math.min(Math.abs(deltaY) / 900, 0.28);
-        queueTheaterDrag(deltaY * resistance);
-        return;
+        swipeStart.axis = Math.abs(deltaY) > Math.abs(deltaX) ? 'vertical' : 'horizontal';
       }
 
-      if (swipeStart.axis === 'horizontal') {
-        event.preventDefault();
+      const delta = swipeStart.axis === 'vertical' ? deltaY : deltaX;
+      const resistance = 0.92 - Math.min(Math.abs(delta) / 900, 0.28);
+
+      if (swipeStart.axis === 'vertical') {
+        queueTheaterDrag(0, deltaY * resistance);
+        return;
       }
+      queueTheaterDrag(deltaX * resistance, 0);
     },
-    [isMobile, isTheaterDismissing, navigateReelPreview, queueTheaterDrag],
+    [isTheaterDismissing, queueTheaterDrag],
   );
 
   const handleTheaterTouchEnd = useCallback(
@@ -392,16 +392,11 @@ const Portfolio = () => {
       theaterSwipeStartRef.current = null;
       setIsTheaterDragging(false);
 
-      if (mobileSwipeNavigatedRef.current) {
-        mobileSwipeNavigatedRef.current = false;
-        queueTheaterDrag(0);
-        return;
-      }
       if (!swipeStart) return;
 
       const touch = event.changedTouches[0];
       if (!touch) {
-        queueTheaterDrag(0);
+        queueTheaterDrag(0, 0);
         return;
       }
 
@@ -410,58 +405,38 @@ const Portfolio = () => {
       const elapsed = Math.max(1, performance.now() - swipeStart.timestamp);
       const velocityX = deltaX / elapsed;
       const velocityY = deltaY / elapsed;
-      const isHorizontalSwipe =
-        swipeStart.axis === 'horizontal' || Math.abs(deltaX) > Math.abs(deltaY) * 1.1;
-      const isVerticalSwipe =
-        swipeStart.axis === 'vertical' || Math.abs(deltaY) > Math.abs(deltaX) * 1.1;
+      const axis =
+        swipeStart.axis !== 'pending'
+          ? swipeStart.axis
+          : Math.abs(deltaY) > Math.abs(deltaX)
+            ? 'vertical'
+            : 'horizontal';
 
-      const crossedHorizontalThreshold =
-        Math.abs(deltaX) >= THEATER_HORIZONTAL_SWIPE_DISTANCE_THRESHOLD ||
-        Math.abs(velocityX) >= THEATER_HORIZONTAL_SWIPE_VELOCITY_THRESHOLD;
-      const crossedVerticalDismissThreshold =
-        Math.abs(deltaY) >= THEATER_SWIPE_DISTANCE_THRESHOLD ||
-        Math.abs(velocityY) >= THEATER_SWIPE_VELOCITY_THRESHOLD;
-      const crossedVerticalNavigateThreshold =
-        Math.abs(deltaY) >= THEATER_VERTICAL_NAV_SWIPE_DISTANCE_THRESHOLD ||
-        Math.abs(velocityY) >= THEATER_VERTICAL_NAV_SWIPE_VELOCITY_THRESHOLD;
-
-      if (isMobile) {
-        if (isVerticalSwipe && crossedVerticalNavigateThreshold) {
-          queueTheaterDrag(0);
-          navigateReelPreview(deltaY < 0 ? 1 : -1);
-          return;
-        }
-
-        if (isHorizontalSwipe && crossedHorizontalThreshold) {
-          dismissReelPreview(deltaX < 0 ? 1 : -1);
-          return;
-        }
-
-        queueTheaterDrag(0);
+      if (axis === 'horizontal') {
+        const crossed =
+          Math.abs(deltaX) >= THEATER_NAV_SWIPE_DISTANCE_THRESHOLD ||
+          Math.abs(velocityX) >= THEATER_NAV_SWIPE_VELOCITY_THRESHOLD;
+        queueTheaterDrag(0, 0);
+        if (crossed) navigateReelPreview(deltaX < 0 ? 1 : -1);
         return;
       }
 
-      if (isHorizontalSwipe && crossedHorizontalThreshold) {
-        queueTheaterDrag(0);
-        navigateReelPreview(deltaX < 0 ? 1 : -1);
-        return;
-      }
-
-      if (isVerticalSwipe && crossedVerticalDismissThreshold) {
+      const crossed =
+        Math.abs(deltaY) >= THEATER_DISMISS_SWIPE_DISTANCE_THRESHOLD ||
+        Math.abs(velocityY) >= THEATER_DISMISS_SWIPE_VELOCITY_THRESHOLD;
+      if (crossed) {
         dismissReelPreview(deltaY < 0 ? -1 : 1);
         return;
       }
-
-      queueTheaterDrag(0);
+      queueTheaterDrag(0, 0);
     },
-    [dismissReelPreview, isMobile, navigateReelPreview, queueTheaterDrag],
+    [dismissReelPreview, navigateReelPreview, queueTheaterDrag],
   );
 
   const resetTheaterSwipe = useCallback(() => {
     theaterSwipeStartRef.current = null;
-    mobileSwipeNavigatedRef.current = false;
     setIsTheaterDragging(false);
-    queueTheaterDrag(0);
+    queueTheaterDrag(0, 0);
   }, [queueTheaterDrag]);
 
   useEffect(() => {
@@ -670,16 +645,15 @@ const Portfolio = () => {
   }, []);
 
   const handleReelCardClick = useCallback(
-    (clip: ReelClip) => {
+    (clip: ReelClip, index: number) => {
       if (reelCardDidDragRef.current) {
         reelCardDidDragRef.current = false;
         return;
       }
-      const reelIndex = allReelIndexById.get(clip.id) ?? 0;
       scheduleInteractionPrewarm(clip);
-      openReelPreview(clip, reelIndex);
+      openReelPreview(clip, index);
     },
-    [allReelIndexById, openReelPreview, scheduleInteractionPrewarm],
+    [openReelPreview, scheduleInteractionPrewarm],
   );
 
   useEffect(() => {
@@ -687,17 +661,22 @@ const Portfolio = () => {
     setInteractionPrewarmClip(null);
   }, [isMobile]);
 
-  const theaterDragDistance = Math.abs(theaterDragY);
-  const theaterDragProgress = Math.min(theaterDragDistance / THEATER_MAX_DRAG_DISTANCE, 1);
+  // Only the dismiss axis fades the backdrop — a sideways drag is navigation,
+  // so the room it happens in should stay lit.
+  const theaterDismissProgress = Math.min(
+    Math.abs(theaterDrag.y) / THEATER_MAX_DRAG_DISTANCE,
+    1,
+  );
+  const theaterNavProgress = Math.min(Math.abs(theaterDrag.x) / THEATER_MAX_DRAG_DISTANCE, 1);
   const theaterOverlayOpacity =
-    (isTheaterVisible && !isTheaterDismissing ? 1 : 0) * (1 - theaterDragProgress * 0.5);
-  const theaterCardScale = 1 - theaterDragProgress * 0.04;
-  const theaterCardRotation = theaterDragY * 0.0045;
+    (isTheaterVisible && !isTheaterDismissing ? 1 : 0) * (1 - theaterDismissProgress * 0.5);
+  const theaterCardScale = 1 - theaterDismissProgress * 0.04 - theaterNavProgress * 0.02;
+  const theaterCardRotation = theaterDrag.y * 0.0045 + theaterDrag.x * 0.016;
 
   const theaterCardTransform = isTheaterDismissing
     ? `translate3d(0, ${theaterDismissDirection * 112}vh, 0) scale(0.94) rotate(${theaterDismissDirection * 1.25}deg)`
     : isTheaterVisible
-      ? `translate3d(0, ${theaterDragY}px, 0) scale(${theaterCardScale}) rotate(${theaterCardRotation}deg)`
+      ? `translate3d(${theaterDrag.x}px, ${theaterDrag.y}px, 0) scale(${theaterCardScale}) rotate(${theaterCardRotation}deg)`
       : 'translate3d(0, 18px, 0) scale(0.985)';
 
   const theaterCardTransition = isTheaterDragging
@@ -710,6 +689,10 @@ const Portfolio = () => {
     () => createClipPlaybackCandidates(activeReelPreview, false),
     [activeReelPreview],
   );
+
+  // Null during SSR/prerender, where the theater is never open anyway — so the
+  // server and hydration trees stay identical.
+  const theaterPortalTarget = typeof document === 'undefined' ? null : document.body;
 
   // ── Shared chapter header (mobile rail + desktop pinned gallery) ──
   const galleryHeader = (
@@ -766,7 +749,7 @@ const Portfolio = () => {
         onTouchMove={handleReelCardTouchMove}
         onTouchEnd={handleReelCardTouchEnd}
         onTouchCancel={handleReelCardTouchEnd}
-        onClick={() => handleReelCardClick(clip)}
+        onClick={() => handleReelCardClick(clip, index)}
         aria-label={getReelTitle(clip)}
       >
         {shouldRenderPreview ? (
@@ -894,132 +877,144 @@ const Portfolio = () => {
         </div>
       )}
 
-      {activeReelPreview && (
-        <div
-          className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4"
-          onClick={() => dismissReelPreview()}
-        >
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundColor: 'hsl(var(--theater-backdrop) / 0.86)',
-              opacity: theaterOverlayOpacity,
-              transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 280ms ease',
-            }}
-          />
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              opacity: theaterOverlayOpacity,
-              transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 320ms ease',
-              background:
-                'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)',
-            }}
-          />
-          <div
-            className="relative w-full max-w-[430px]"
-            onTouchStart={handleTheaterTouchStart}
-            onTouchMove={handleTheaterTouchMove}
-            onTouchEnd={handleTheaterTouchEnd}
-            onTouchCancel={resetTheaterSwipe}
-          >
-            {isMobile ? (
-              <>
-                <button
-                  type="button"
-                  className="theater-control absolute left-1/2 top-0 z-[220] h-9 w-9 -translate-x-1/2 -translate-y-[118%]"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    navigateReelPreview(1);
-                  }}
-                  aria-label={t('portfolio.reelPreviewNext')}
-                >
-                  <ChevronUp className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  className="theater-control absolute bottom-0 left-1/2 z-[220] h-9 w-9 -translate-x-1/2 translate-y-[118%]"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    navigateReelPreview(-1);
-                  }}
-                  aria-label={t('portfolio.reelPreviewPrev')}
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    navigateReelPreview(-1);
-                  }}
-                  aria-label={t('portfolio.reelPreviewPrev')}
-                >
-                  <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
-                </button>
-                <button
-                  type="button"
-                  className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    navigateReelPreview(1);
-                  }}
-                  aria-label={t('portfolio.reelPreviewNext')}
-                >
-                  <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
-                </button>
-              </>
-            )}
+      {/* The theater is portaled to <body> on purpose: this section carries
+          `content-visibility: auto`, which makes it a containing block for
+          fixed descendants — rendered in place, `fixed inset-0` would anchor
+          to the section box and the card would land wherever that box happens
+          to sit, not centred in the viewport. */}
+      {theaterPortalTarget && activeReelPreview
+        ? createPortal(
             <div
-              className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]"
-              onClick={(event) => event.stopPropagation()}
-              style={{
-                transform: theaterCardTransform,
-                opacity: isTheaterDismissing ? 0 : isTheaterVisible ? 1 : 0,
-                transition: theaterCardTransition,
-              }}
+              className="dc-theater-overlay fixed inset-0 z-[200] flex items-center justify-center"
+              onClick={() => dismissReelPreview()}
             >
-              <button
-                type="button"
-                className="theater-control absolute right-3 top-3 z-30 h-9 w-9"
-                onClick={() => dismissReelPreview()}
-                aria-label={t('portfolio.reelPreviewClose')}
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundColor: 'hsl(var(--theater-backdrop) / 0.86)',
+                  opacity: theaterOverlayOpacity,
+                  transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 280ms ease',
+                }}
+              />
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  opacity: theaterOverlayOpacity,
+                  transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 320ms ease',
+                  background:
+                    'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)',
+                }}
+              />
+              <div
+                className="dc-theater-stage"
+                onTouchStart={handleTheaterTouchStart}
+                onTouchMove={handleTheaterTouchMove}
+                onTouchEnd={handleTheaterTouchEnd}
+                onTouchCancel={resetTheaterSwipe}
               >
-                <X className="h-4 w-4" />
-              </button>
+                {/* Desktop keeps its arrows outside the frame; mobile puts them on
+                    the card itself, where nothing can slide under the navbar. */}
+                {!isMobile && (
+                  <>
+                    <button
+                      type="button"
+                      className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        navigateReelPreview(-1);
+                      }}
+                      aria-label={t('portfolio.reelPreviewPrev')}
+                    >
+                      <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        navigateReelPreview(1);
+                      }}
+                      aria-label={t('portfolio.reelPreviewNext')}
+                    >
+                      <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
+                    </button>
+                  </>
+                )}
+                <div
+                  className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]"
+                  onClick={(event) => event.stopPropagation()}
+                  style={{
+                    transform: theaterCardTransform,
+                    opacity: isTheaterDismissing ? 0 : isTheaterVisible ? 1 : 0,
+                    transition: theaterCardTransition,
+                  }}
+                >
+                  <button
+                    type="button"
+                    className="theater-control absolute right-3 top-3 z-40 h-10 w-10"
+                    onClick={() => dismissReelPreview()}
+                    aria-label={t('portfolio.reelPreviewClose')}
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
 
-              <div className="relative">
-                <TheaterVideo
-                  candidates={theaterCandidates}
-                  poster={getBestPosterSrc(activeReelPreview)}
-                  enableStartupFallback
-                  startupFallbackMs={THEATER_QUALITY_FALLBACK_MS}
-                />
+                  {isMobile && (
+                    <>
+                      <button
+                        type="button"
+                        className="theater-control absolute left-2 top-1/2 z-40 h-10 w-10 -translate-y-1/2 opacity-75"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          navigateReelPreview(-1);
+                        }}
+                        aria-label={t('portfolio.reelPreviewPrev')}
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        className="theater-control absolute right-2 top-1/2 z-40 h-10 w-10 -translate-y-1/2 opacity-75"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          navigateReelPreview(1);
+                        }}
+                        aria-label={t('portfolio.reelPreviewNext')}
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                    </>
+                  )}
 
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
-                  <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
-                    <p className="theater-meta-chip inline-flex max-w-[78%] items-center rounded-full px-2.5 py-1">
-                      {t(`portfolio.categories.${activeReelPreview.category}`)}
-                    </p>
-                    <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">
-                      {getReelTitle(activeReelPreview)}
-                    </h4>
+                  <div className="relative">
+                    <TheaterVideo
+                      candidates={theaterCandidates}
+                      poster={getBestPosterSrc(activeReelPreview)}
+                      enableStartupFallback
+                      startupFallbackMs={THEATER_QUALITY_FALLBACK_MS}
+                    />
+
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
+                      <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
+                      <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
+                        <p className="theater-meta-chip inline-flex max-w-[78%] items-center rounded-full px-2.5 py-1">
+                          {t(`portfolio.categories.${activeReelPreview.category}`)}
+                        </p>
+                        <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">
+                          {getReelTitle(activeReelPreview)}
+                        </h4>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </div>,
+            theaterPortalTarget,
+          )
+        : null}
     </section>
   );
 };

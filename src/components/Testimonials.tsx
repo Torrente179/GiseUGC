@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type TouchEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from '@/lib/locale-context';
 import useEmblaCarousel from 'embla-carousel-react';
 import { X } from 'lucide-react';
@@ -34,6 +35,38 @@ const TESTIMONIAL_IMAGES: TestimonialImage[] = [
 
 const FIVERR_AGGREGATE_RATING = 4.8;
 const FIVERR_REVIEW_COUNT = 173;
+
+// Same gesture model as the portfolio theater: embla owns left/right for
+// navigation, a vertical throw dismisses.
+const LIGHTBOX_DISMISS_DISTANCE_THRESHOLD = 96;
+const LIGHTBOX_DISMISS_VELOCITY_THRESHOLD = 0.4;
+const LIGHTBOX_AXIS_LOCK_SLOP_PX = 8;
+const LIGHTBOX_MAX_DRAG_DISTANCE = 240;
+const LIGHTBOX_CLOSE_DURATION_MS = 240;
+
+type LightboxSwipeGesture = {
+  x: number;
+  y: number;
+  timestamp: number;
+  axis: 'pending' | 'vertical' | 'horizontal';
+  canDismissUp: boolean;
+  canDismissDown: boolean;
+};
+
+/* The tall screenshots live in their own `overflow-y-auto` box. Whether a
+   vertical drag scrolls that box or dismisses the viewer is decided once, at
+   touch-start, from where the box already sits — never handed over mid-gesture. */
+const findVerticalScroller = (start: EventTarget | null, root: HTMLElement | null) => {
+  let node = start instanceof HTMLElement ? start : null;
+  while (node && node !== root) {
+    if (node.scrollHeight - node.clientHeight > 1) {
+      const overflowY = window.getComputedStyle(node).overflowY;
+      if (overflowY === 'auto' || overflowY === 'scroll') return node;
+    }
+    node = node.parentElement;
+  }
+  return null;
+};
 
 // Split into two rows for the marquee
 const ROW_1 = TESTIMONIAL_IMAGES.slice(0, 7);
@@ -137,26 +170,145 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
   });
   const [selected, setSelected] = useState(startIndex);
   const [isClosing, setIsClosing] = useState(false);
+  const [dragY, setDragY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [flingDirection, setFlingDirection] = useState<1 | -1 | 0>(0);
   const rootRef = useRef<HTMLDivElement>(null);
   const closeTimerRef = useRef<number | null>(null);
+  const isClosingRef = useRef(false);
+  const swipeRef = useRef<LightboxSwipeGesture | null>(null);
+  const dragFrameRef = useRef<number | null>(null);
+  const pendingDragRef = useRef(0);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
-  const requestClose = useCallback(() => {
-    if (reduceMotion) {
-      onClose();
-      return;
-    }
-    setIsClosing((closing) => {
-      if (closing) return closing;
-      closeTimerRef.current = window.setTimeout(onClose, 240);
-      return true;
+
+  const queueDrag = useCallback((next: number) => {
+    pendingDragRef.current = Math.max(
+      -LIGHTBOX_MAX_DRAG_DISTANCE,
+      Math.min(LIGHTBOX_MAX_DRAG_DISTANCE, next),
+    );
+    if (dragFrameRef.current !== null) return;
+    dragFrameRef.current = window.requestAnimationFrame(() => {
+      setDragY(pendingDragRef.current);
+      dragFrameRef.current = null;
     });
-  }, [onClose, reduceMotion]);
+  }, []);
+
+  // Guarded with a ref rather than by inspecting state inside a setState
+  // updater: updaters must stay pure, and StrictMode double-invokes them.
+  const requestClose = useCallback(
+    (fling: 1 | -1 | 0 = 0) => {
+      if (isClosingRef.current) return;
+      isClosingRef.current = true;
+      if (reduceMotion) {
+        onClose();
+        return;
+      }
+      setFlingDirection(fling);
+      setIsDragging(false);
+      setIsClosing(true);
+      closeTimerRef.current = window.setTimeout(onClose, LIGHTBOX_CLOSE_DURATION_MS);
+    },
+    [onClose, reduceMotion],
+  );
 
   useEffect(() => () => {
     if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
+    if (dragFrameRef.current !== null) window.cancelAnimationFrame(dragFrameRef.current);
   }, []);
+
+  const handleTouchStart = useCallback((event: TouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    if (!touch) return;
+    const scroller = findVerticalScroller(event.target, rootRef.current);
+    const atTop = !scroller || scroller.scrollTop <= 0;
+    const atBottom =
+      !scroller || scroller.scrollTop >= scroller.scrollHeight - scroller.clientHeight - 1;
+
+    swipeRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      timestamp: performance.now(),
+      axis: 'pending',
+      canDismissDown: atTop,
+      canDismissUp: atBottom,
+    };
+  }, []);
+
+  const handleTouchMove = useCallback(
+    (event: TouchEvent<HTMLDivElement>) => {
+      const swipe = swipeRef.current;
+      const touch = event.touches[0];
+      if (!swipe || !touch || isClosing) return;
+
+      const deltaX = touch.clientX - swipe.x;
+      const deltaY = touch.clientY - swipe.y;
+
+      if (swipe.axis === 'pending') {
+        if (
+          Math.abs(deltaX) < LIGHTBOX_AXIS_LOCK_SLOP_PX &&
+          Math.abs(deltaY) < LIGHTBOX_AXIS_LOCK_SLOP_PX
+        ) {
+          return;
+        }
+        // Sideways belongs to embla; it is already driving the slide.
+        swipe.axis = Math.abs(deltaY) > Math.abs(deltaX) ? 'vertical' : 'horizontal';
+      }
+      if (swipe.axis === 'horizontal') return;
+      if (deltaY > 0 ? !swipe.canDismissDown : !swipe.canDismissUp) return;
+
+      setIsDragging(true);
+      const resistance = 0.9 - Math.min(Math.abs(deltaY) / 900, 0.28);
+      queueDrag(deltaY * resistance);
+    },
+    [isClosing, queueDrag],
+  );
+
+  const handleTouchEnd = useCallback(
+    (event: TouchEvent<HTMLDivElement>) => {
+      const swipe = swipeRef.current;
+      swipeRef.current = null;
+      setIsDragging(false);
+      if (!swipe || swipe.axis !== 'vertical') return;
+
+      const touch = event.changedTouches[0];
+      if (!touch) {
+        queueDrag(0);
+        return;
+      }
+      const deltaY = touch.clientY - swipe.y;
+      const velocityY = deltaY / Math.max(1, performance.now() - swipe.timestamp);
+      const allowed = deltaY > 0 ? swipe.canDismissDown : swipe.canDismissUp;
+      const crossed =
+        Math.abs(deltaY) >= LIGHTBOX_DISMISS_DISTANCE_THRESHOLD ||
+        Math.abs(velocityY) >= LIGHTBOX_DISMISS_VELOCITY_THRESHOLD;
+
+      if (allowed && crossed) {
+        requestClose(deltaY < 0 ? -1 : 1);
+        return;
+      }
+      queueDrag(0);
+    },
+    [queueDrag, requestClose],
+  );
+
+  const handleTouchCancel = useCallback(() => {
+    swipeRef.current = null;
+    setIsDragging(false);
+    queueDrag(0);
+  }, [queueDrag]);
+
+  const dragProgress = Math.min(Math.abs(dragY) / LIGHTBOX_MAX_DRAG_DISTANCE, 1);
+  const sheetTransform =
+    isClosing && flingDirection !== 0
+      ? `translate3d(0, ${flingDirection * 100}vh, 0) scale(0.94)`
+      : `translate3d(0, ${dragY}px, 0) scale(${1 - dragProgress * 0.05})`;
+  const sheetTransition = isDragging
+    ? 'transform 0ms linear'
+    : isClosing
+      ? `transform ${LIGHTBOX_CLOSE_DURATION_MS}ms cubic-bezier(0.3, 0.72, 0.08, 1)`
+      : 'transform 340ms cubic-bezier(0.24, 0.92, 0.38, 1)';
 
   // Keep the active-slide highlight in sync with embla.
   useEffect(() => {
@@ -212,102 +364,126 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
       aria-modal="true"
       aria-label={labels.dialog}
       tabIndex={-1}
-      className={`testimonial-lightbox fixed inset-0 z-[10000] flex flex-col bg-black/94 outline-none ${isClosing ? 'is-closing' : ''} ${reduceMotion ? 'reduce-motion' : ''}`}
-      onMouseDown={(e) => {
-        // Backdrop click closes; clicks bubbling up from cards/buttons don't.
-        if (e.target === e.currentTarget) requestClose();
-      }}
+      className={`testimonial-lightbox fixed inset-0 z-[10000] outline-none ${isClosing ? 'is-closing' : ''} ${reduceMotion ? 'reduce-motion' : ''}`}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchCancel}
     >
-      {/* Top bar: counter + close */}
-      <div className="flex shrink-0 items-center justify-between px-4 py-4 md:px-8 md:py-5">
-        <span className="text-sm font-medium tabular-nums text-white/55 tracking-wide">
-          {selected + 1}
-          <span className="mx-1.5 text-white/25">/</span>
-          {images.length}
-        </span>
-        <button
-          type="button"
-          onClick={requestClose}
-          aria-label={labels.close}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-black/65 text-white/80 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-        >
-          <X className="h-5 w-5" />
-        </button>
-      </div>
+      <div
+        className="absolute inset-0 bg-black/94"
+        style={{
+          opacity: 1 - dragProgress * 0.45,
+          transition: isDragging ? 'opacity 80ms linear' : 'opacity 280ms ease',
+        }}
+      />
+      <div
+        className="relative flex h-full flex-col"
+        onMouseDown={(e) => {
+          // Anything that isn't a card or a control is backdrop. The sheet
+          // covers the viewer edge to edge, so an identity check against
+          // currentTarget would never match.
+          const target = e.target as HTMLElement | null;
+          if (!target?.closest('button, figure')) requestClose();
+        }}
+        style={{
+          transform: sheetTransform,
+          transition: reduceMotion ? undefined : sheetTransition,
+          paddingTop: 'env(safe-area-inset-top, 0px)',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        }}
+      >
+        {/* Top bar: counter + close */}
+        <div className="flex shrink-0 items-center justify-between px-4 py-4 md:px-8 md:py-5">
+          <span className="text-sm font-medium tabular-nums text-white/55 tracking-wide">
+            {selected + 1}
+            <span className="mx-1.5 text-white/25">/</span>
+            {images.length}
+          </span>
+          <button
+            type="button"
+            onClick={() => requestClose()}
+            aria-label={labels.close}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-black/65 text-white/80 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
 
-      {/* Carousel */}
-      <div className="relative flex min-h-0 flex-1 items-center">
-        <div className="h-full w-full overflow-hidden" ref={emblaRef}>
-          <div className="flex h-full touch-pan-y">
-            {images.map((item, i) => {
-              const isActive = i === selected;
-              return (
-                <div
-                  key={item.id}
-                  className="flex min-w-0 flex-[0_0_90%] items-center justify-center px-2 sm:flex-[0_0_74%] sm:px-3 lg:flex-[0_0_60%]"
-                >
-                  <figure
-                    className={`testimonial-lightbox-card relative max-h-full overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl shadow-black/40 ${isActive ? 'is-active' : ''}`}
+        {/* Carousel */}
+        <div className="relative flex min-h-0 flex-1 items-center">
+          <div className="h-full w-full overflow-hidden" ref={emblaRef}>
+            <div className="flex h-full touch-pan-y">
+              {images.map((item, i) => {
+                const isActive = i === selected;
+                return (
+                  <div
+                    key={item.id}
+                    className="flex min-w-0 flex-[0_0_90%] items-center justify-center px-2 sm:flex-[0_0_74%] sm:px-3 lg:flex-[0_0_60%]"
                   >
-                    <div className="max-h-[78vh] overflow-y-auto overscroll-contain">
-                      <img
-                        src={item.src}
-                        alt={item.alt}
-                        width={item.width}
-                        height={item.height}
-                        className="block h-auto w-full select-none object-contain"
-                        loading="eager"
-                        decoding="async"
-                        draggable={false}
-                      />
-                    </div>
-                  </figure>
-                </div>
-              );
-            })}
+                    <figure
+                      className={`testimonial-lightbox-card relative max-h-full overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl shadow-black/40 ${isActive ? 'is-active' : ''}`}
+                    >
+                      <div className="max-h-[78vh] overflow-y-auto overscroll-contain">
+                        <img
+                          src={item.src}
+                          alt={item.alt}
+                          width={item.width}
+                          height={item.height}
+                          className="block h-auto w-full select-none object-contain"
+                          loading="eager"
+                          decoding="async"
+                          draggable={false}
+                        />
+                      </div>
+                    </figure>
+                  </div>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Arrows */}
+          <button
+            type="button"
+            onClick={scrollPrev}
+            aria-label={labels.prev}
+            className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/65 text-white/85 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:left-6 md:h-12 md:w-12"
+          >
+            <svg className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={scrollNext}
+            aria-label={labels.next}
+            className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/65 text-white/85 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:right-6 md:h-12 md:w-12"
+          >
+            <svg className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
         </div>
 
-        {/* Arrows */}
-        <button
-          type="button"
-          onClick={scrollPrev}
-          aria-label={labels.prev}
-          className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/65 text-white/85 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:left-6 md:h-12 md:w-12"
-        >
-          <svg className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          onClick={scrollNext}
-          aria-label={labels.next}
-          className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/65 text-white/85 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:right-6 md:h-12 md:w-12"
-        >
-          <svg className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
-        </button>
-      </div>
-
-      {/* Bottom: dot strip + hint */}
-      <div className="flex shrink-0 flex-col items-center gap-3 px-4 py-5 md:py-6">
-        <div className="flex max-w-full items-center gap-1.5 overflow-x-auto">
-          {images.map((item, i) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => emblaApi?.scrollTo(i)}
-              aria-label={`${labels.dialog} ${i + 1}`}
-              aria-current={i === selected}
-              className={`h-1.5 shrink-0 rounded-full transition-[width,background-color] duration-300 ${
-                i === selected ? 'w-6 bg-white' : 'w-1.5 bg-white/30 hover:bg-white/50'
-              }`}
-            />
-          ))}
+        {/* Bottom: dot strip + hint */}
+        <div className="flex shrink-0 flex-col items-center gap-3 px-4 py-5 md:py-6">
+          <div className="flex max-w-full items-center gap-1.5 overflow-x-auto">
+            {images.map((item, i) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => emblaApi?.scrollTo(i)}
+                aria-label={`${labels.dialog} ${i + 1}`}
+                aria-current={i === selected}
+                className={`h-1.5 shrink-0 rounded-full transition-[width,background-color] duration-300 ${
+                  i === selected ? 'w-6 bg-white' : 'w-1.5 bg-white/30 hover:bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+          <p className="text-xs tracking-wide text-white/40">{labels.hint}</p>
         </div>
-        <p className="text-xs tracking-wide text-white/40">{labels.hint}</p>
       </div>
     </div>
   );
@@ -325,6 +501,9 @@ const Testimonials = () => {
 
   const reduceMotion = !!shouldReduceMotion;
   const isOpen = zoomedIndex !== null;
+  // Null during SSR/prerender, where the viewer is never open anyway — so the
+  // server and hydration trees stay identical.
+  const lightboxPortalTarget = typeof document === 'undefined' ? null : document.body;
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -478,23 +657,30 @@ const Testimonials = () => {
         </div>
       </div>
 
-      {/* Zoom viewer */}
-      {zoomedIndex !== null && (
-        <Lightbox
-          key="testimonial-lightbox"
-          images={TESTIMONIAL_IMAGES}
-          startIndex={zoomedIndex}
-          onClose={() => setZoomedIndex(null)}
-          reduceMotion={reduceMotion}
-          labels={{
-            prev: t('testimonials.ariaPrev'),
-            next: t('testimonials.ariaNext'),
-            close: t('testimonials.ariaClose'),
-            dialog: t('testimonials.ariaDialog'),
-            hint: t('testimonials.swipeHint'),
-          }}
-        />
-      )}
+      {/* Zoom viewer — portaled to <body>. This section is `.studio-section`,
+          which carries `content-visibility: auto`; that makes it a containing
+          block for fixed descendants, so rendered in place the viewer anchored
+          to the section box (and was paint-clipped by its overflow-hidden)
+          instead of filling the viewport. */}
+      {lightboxPortalTarget && zoomedIndex !== null
+        ? createPortal(
+            <Lightbox
+              key="testimonial-lightbox"
+              images={TESTIMONIAL_IMAGES}
+              startIndex={zoomedIndex}
+              onClose={() => setZoomedIndex(null)}
+              reduceMotion={reduceMotion}
+              labels={{
+                prev: t('testimonials.ariaPrev'),
+                next: t('testimonials.ariaNext'),
+                close: t('testimonials.ariaClose'),
+                dialog: t('testimonials.ariaDialog'),
+                hint: t('testimonials.swipeHint'),
+              }}
+            />,
+            lightboxPortalTarget,
+          )
+        : null}
     </section>
   );
 };

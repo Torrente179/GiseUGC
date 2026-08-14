@@ -563,6 +563,51 @@
     text-shadow: 0 1px 14px rgba(0, 0, 0, 0.62);
   }
 
+  /* ── Theater / lightbox geometry ──
+     Both viewers are portaled to <body>. They have to be: `.studio-section`
+     carries `content-visibility: auto`, which makes the section a containing
+     block for `position: fixed` descendants, so an in-section overlay anchors
+     to the section box (and gets paint-clipped to it) instead of filling the
+     viewport. The portal fixes the anchor; the rules below keep the card
+     inside the visible viewport — safe areas included — at every height, so
+     its top never lands under the fixed navbar. */
+  .dc-theater-overlay {
+    --dc-theater-gutter-x: 0.75rem;
+    --dc-theater-gutter-y: 0.75rem;
+    --dc-theater-reserved-block: calc(
+      env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) +
+        var(--dc-theater-gutter-y) * 2 + 4px
+    );
+    padding-top: calc(env(safe-area-inset-top, 0px) + var(--dc-theater-gutter-y));
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--dc-theater-gutter-y));
+    padding-left: calc(env(safe-area-inset-left, 0px) + var(--dc-theater-gutter-x));
+    padding-right: calc(env(safe-area-inset-right, 0px) + var(--dc-theater-gutter-x));
+  }
+
+  @media (min-width: 768px) {
+    .dc-theater-overlay {
+      /* Room for the prev/next arrows that sit outside the card on desktop. */
+      --dc-theater-gutter-x: 4.75rem;
+      --dc-theater-gutter-y: 1.5rem;
+    }
+  }
+
+  .dc-theater-stage {
+    position: relative;
+    width: 100%;
+    /* The card is a 9:16 reel, so capping its width caps its derived height. */
+    max-width: min(430px, calc((100vh - var(--dc-theater-reserved-block)) * 0.5625));
+    /* Own every touch gesture: React registers touchmove passively, so
+       preventDefault() inside the handler is a no-op. */
+    touch-action: none;
+  }
+
+  @supports (height: 100dvh) {
+    .dc-theater-stage {
+      max-width: min(430px, calc((100dvh - var(--dc-theater-reserved-block)) * 0.5625));
+    }
+  }
+
   @media (max-width: 767px) {
     .theater-control {
       backdrop-filter: blur(6px);
