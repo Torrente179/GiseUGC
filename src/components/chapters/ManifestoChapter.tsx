@@ -75,10 +75,6 @@ const ManifestoChapter = () => {
     <section className="relative bg-background">
       <div ref={revealRef} className="svc-reveal container mx-auto px-6 py-24 md:px-12 md:py-36">
         {/* ── Statement ── */}
-        <span className="dc-chapter-label mb-8 md:mb-12">
-          {isEs ? 'Capítulo 01 — manifiesto' : 'Chapter 01 — manifesto'}
-        </span>
-
         <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-20">
           <h2 className="dc-statement max-w-[18ch]">
             <PretextLineReveal text={t('hero.introduction.title')} delay={0.05} stagger={0.09} className="block" />

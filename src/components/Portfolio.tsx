@@ -698,10 +698,7 @@ const Portfolio = () => {
   const galleryHeader = (
     <div className="portfolio-content-enter mb-8 md:mb-10 flex flex-row items-end justify-between gap-6">
       <div>
-        <span className="dc-chapter-label">
-          {isEs ? 'Capítulo 02 — el trabajo' : 'Chapter 02 — the work'}
-        </span>
-        <h2 className="mt-3 font-serif text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight-serif leading-[1]">
+        <h2 className="font-serif text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight-serif leading-[1]">
           <SplitTextReveal text={isEs ? 'Reels que' : 'Reels that'} delay={0.06} />{' '}
           <span className="italic text-primary">
             <SplitTextReveal text={isEs ? 'venden' : 'sell'} delay={0.2} />

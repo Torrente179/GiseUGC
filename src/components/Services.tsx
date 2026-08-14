@@ -37,10 +37,7 @@ const Services = () => {
       <div className="studio-container">
         <div ref={revealRef} className="svc-reveal mb-10 md:mb-14 flex flex-row items-end justify-between gap-6">
           <div>
-            <span className="dc-chapter-label">
-              {isEs ? 'Capítulo 03 — servicios' : 'Chapter 03 — services'}
-            </span>
-            <h2 className="mt-3 font-serif text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight-serif leading-[1]">
+            <h2 className="font-serif text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight-serif leading-[1]">
               {isEs ? 'Lo que ' : 'What I '}
               <span className="italic text-primary">{isEs ? 'produzco' : 'produce'}</span>
             </h2>
