@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import type { ResourcePageId, SiteLocale } from '@/lib/locale-path';
-import { getHomePath, getHomeSectionHref, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
+import { getHomePath, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
 import type { ResourceLandingRouteData } from '@/data/landing-route-types';
+import { getAllResourceIds, getResourcePageContent } from '@/data/resource-pages';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
@@ -26,23 +27,41 @@ const localeLabels = {
     home: 'Inicio',
     resources: 'Recursos',
     faq: 'Preguntas frecuentes',
+    faqKicker: 'Preguntas',
     relatedServices: 'Servicios relacionados',
-    relatedVerticals: 'Verticales relacionadas',
+    relatedVerticals: 'Por industria',
+    otherGuides: 'Otras guías',
+    inThisArticle: 'En este artículo',
+    atAGlance: 'De un vistazo',
     startProject: 'Empezar proyecto',
     lastUpdated: 'Última actualización: 29 jul 2026',
-    readMore: 'Leer más',
   },
   en: {
     home: 'Home',
     resources: 'Resources',
     faq: 'Frequently asked questions',
+    faqKicker: 'Questions',
     relatedServices: 'Related services',
-    relatedVerticals: 'Related verticals',
+    relatedVerticals: 'By industry',
+    otherGuides: 'Other guides',
+    inThisArticle: 'In this article',
+    atAGlance: 'At a glance',
     startProject: 'Start a project',
     lastUpdated: 'Last updated: Jul 29, 2026',
-    readMore: 'Read more',
   },
 } as const;
+
+const sectionId = (title: string) =>
+  title
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 72);
+
+const tocLabel = (title: string) => title.replace(/^\d+\.\s*/, '');
+const hasOwnNumber = (title: string) => /^\d+\.\s*/.test(title);
 
 
 /* ════════════════════════════════════════════════════════════════════
@@ -67,6 +86,13 @@ const ResourcePage = ({
 }: ResourcePageProps) => {
   const { page, relatedServices, relatedVerticals } = routeData;
   const labels = localeLabels[locale];
+  const otherGuides = useMemo(
+    () =>
+      getAllResourceIds()
+        .filter((id) => id !== resourceId)
+        .map((id) => ({ id, label: getResourcePageContent(id, locale).navLabel })),
+    [locale, resourceId],
+  );
 
   const canonical = buildUrl(page.path);
   const homeCanonical = buildUrl(getHomePath(locale));
@@ -159,259 +185,202 @@ const ResourcePage = ({
       <div className="min-h-screen bg-background">
         <Navbar compactMobile />
 
-        <main>
-          {/* ── HERO ── */}
-          <RevealSection className="st-hero">
-            <div className="st-container pt-28 pb-16 md:pt-36 md:pb-20 lg:pt-40 lg:pb-24">
-              {/* Breadcrumb */}
-              <nav className="st-breadcrumb mb-6" aria-label="Breadcrumb">
-                <ol className="flex items-center gap-1.5 text-xs text-foreground/50">
-                  <li>
-                    <Link to={getHomePath(locale)} className="hover:text-foreground/70 transition-colors">
-                      {labels.home}
-                    </Link>
-                  </li>
-                  <li aria-hidden="true">/</li>
-                  <li>
-                    <span className="text-foreground/40">{labels.resources}</span>
-                  </li>
-                  <li aria-hidden="true">/</li>
-                  <li>
-                    <span className="text-foreground/70">{page.breadcrumbLabel}</span>
-                  </li>
-                </ol>
+        <main className="rsc-page">
+          <RevealSection className="rsc-hero">
+            <div className="st-container">
+              <nav className="st-breadcrumb" aria-label="Breadcrumb">
+                <Link to={getHomePath(locale)}>{labels.home}</Link>
+                <span aria-hidden="true">/</span>
+                <span>{labels.resources}</span>
+                <span aria-hidden="true">/</span>
+                <span>{page.breadcrumbLabel}</span>
               </nav>
-
-              <p className="st-eyebrow mb-3">{page.heroEyebrow}</p>
-              <h1 className="type-marketing-display text-[1.75rem] font-semibold tracking-tight-marketing md:text-[2rem] lg:text-[2.25rem] lg:leading-[1.14] max-w-3xl">
-                {page.heroTitle}
-              </h1>
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-foreground/70 md:text-lg">
-                {page.heroSummary}
-              </p>
-
+              <p className="st-eyebrow">{page.heroEyebrow}</p>
+              <h1 className="rsc-hero-title font-serif">{page.heroTitle}</h1>
+              <p className="rsc-hero-lead">{page.heroSummary}</p>
               {page.heroPoints.length > 0 && (
-                <ul className="mt-6 flex flex-col gap-2 text-sm text-foreground/60 md:flex-row md:gap-6">
-                  {page.heroPoints.map((point) => (
-                    <li key={point} className="flex items-center gap-2">
-                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-foreground/30" aria-hidden="true" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <div className="rsc-rule" aria-hidden="true" />
+                  <ul className="rsc-points">
+                    {page.heroPoints.map((point, index) => (
+                      <li key={point}>
+                        <span className="rsc-points-num">{String(index + 1).padStart(2, '0')}</span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
               )}
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="st-cta-primary"
-                >
-                  {page.primaryCtaLabel}
-                </a>
-                <Link to={page.secondaryCtaHref} className="st-cta-secondary">
-                  {page.secondaryCtaLabel}
-                </Link>
-              </div>
             </div>
           </RevealSection>
 
-          {/* ── CONTENT SECTIONS ── */}
-          {page.sections.map((section, sectionIndex) => (
-            <RevealSection key={section.title} className="st-section">
-              <div className="st-container py-12 md:py-16 lg:py-20">
-                <h2 className="text-2xl font-semibold leading-snug tracking-tight text-foreground md:text-3xl max-w-2xl">
-                  {section.title}
-                </h2>
-                <div className="mt-5 max-w-2xl space-y-4">
-                  {section.body.map((paragraph, pIndex) => (
-                    <p
-                      key={pIndex}
-                      className="text-base leading-relaxed text-foreground/70"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
+          <RevealSection className="rsc-article">
+            <div className={`st-container rsc-article-grid${page.sections.length > 3 ? ' rsc-article-grid--toc' : ''}`}>
+              {page.sections.length > 3 && (
+                <aside className="rsc-toc" aria-label={labels.inThisArticle}>
+                  <p className="st-eyebrow">{labels.inThisArticle}</p>
+                  <ol>
+                    {page.sections.map((section, index) => (
+                      <li key={section.title}>
+                        <a href={`#${sectionId(section.title)}`}>
+                          <span>{String(index + 1).padStart(2, '0')}</span>
+                          {tocLabel(section.title)}
+                        </a>
+                      </li>
+                    ))}
+                    {page.comparisonTable && (
+                      <li>
+                        <a href={`#${sectionId(labels.atAGlance)}`}>
+                          <span>{String(page.sections.length + 1).padStart(2, '0')}</span>
+                          {labels.atAGlance}
+                        </a>
+                      </li>
+                    )}
+                    {page.faqs.length > 0 && (
+                      <li>
+                        <a href="#faq">
+                          <span>
+                            {String(page.sections.length + (page.comparisonTable ? 2 : 1)).padStart(2, '0')}
+                          </span>
+                          {labels.faq}
+                        </a>
+                      </li>
+                    )}
+                  </ol>
+                </aside>
+              )}
 
-                {/* Render comparison table after the last section if it exists */}
-                {sectionIndex === page.sections.length - 1 && page.comparisonTable && (
-                  <div className="mt-12 overflow-x-auto">
-                    <table className="w-full min-w-[600px] border-collapse text-sm">
-                      <thead>
-                        <tr>
-                          {page.comparisonTable.headers.map((header) => (
-                            <th
-                              key={header}
-                              className="border-b border-foreground/10 px-4 py-3 text-left font-semibold text-foreground/90"
-                            >
-                              {header}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {page.comparisonTable.rows.map((row, rowIndex) => (
-                          <tr
-                            key={rowIndex}
-                            className={rowIndex % 2 === 0 ? 'bg-foreground/[0.02]' : ''}
-                          >
-                            {row.map((cell, cellIndex) => (
-                              <td
-                                key={cellIndex}
-                                className={`border-b border-foreground/5 px-4 py-3 text-foreground/70 ${cellIndex === 0 ? 'font-medium text-foreground/90' : ''}`}
-                              >
-                                {cell}
-                              </td>
+              <article>
+                {page.sections.map((section, index) => (
+                  <section key={section.title} className="rsc-chapter" id={sectionId(section.title)}>
+                    {!hasOwnNumber(section.title) && (
+                      <span className="rsc-chapter-num" aria-hidden="true">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                    )}
+                    <h2 className="rsc-chapter-title font-serif">{section.title}</h2>
+                    {section.body.map((paragraph) => (
+                      <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                    ))}
+                  </section>
+                ))}
+
+                {page.comparisonTable && (
+                  <section className="rsc-chapter" id={sectionId(labels.atAGlance)}>
+                    <span className="rsc-chapter-num" aria-hidden="true">
+                      {String(page.sections.length + 1).padStart(2, '0')}
+                    </span>
+                    <h2 className="rsc-chapter-title font-serif">{labels.atAGlance}</h2>
+                    <div className="rsc-table-wrap">
+                      <table className="rsc-table">
+                        <caption className="sr-only">{labels.atAGlance}</caption>
+                        <thead>
+                          <tr>
+                            {page.comparisonTable.headers.map((header) => (
+                              <th key={header} scope="col">{header}</th>
                             ))}
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {page.comparisonTable.rows.map((row) => (
+                            <tr key={row[0]}>
+                              {row.map((cell, cellIndex) =>
+                                cellIndex === 0 ? (
+                                  <th key={`${row[0]}-${cellIndex}`} scope="row" className="is-key">
+                                    {cell}
+                                  </th>
+                                ) : (
+                                  <td key={`${row[0]}-${cellIndex}`}>{cell}</td>
+                                ),
+                              )}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                )}
+              </article>
+            </div>
+          </RevealSection>
+
+          {page.faqs.length > 0 && (
+            <RevealSection className="rsc-block" id="faq">
+              <div className="st-container">
+                <div className="rsc-faq-layout">
+                  <div>
+                    <p className="st-eyebrow">{labels.faqKicker}</p>
+                    <h2 className="rsc-block-title font-serif">{labels.faq}</h2>
+                  </div>
+                  <div className="svc-faq-list">
+                    {page.faqs.map((faq, index) => (
+                      <details key={faq.question} className="svc-faq-item" {...(index === 0 ? { open: true } : {})}>
+                        <summary>
+                          <span>{faq.question}</span>
+                          <span className="svc-faq-mark" aria-hidden="true" />
+                        </summary>
+                        <p>{faq.answer}</p>
+                      </details>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </RevealSection>
+          )}
+
+          {(relatedServices.length > 0 || relatedVerticals.length > 0) && (
+            <RevealSection className="rsc-block">
+              <div className="st-container rsc-related">
+                {relatedServices.length > 0 && (
+                  <div>
+                    <p className="st-eyebrow">{labels.relatedServices}</p>
+                    {relatedServices.map((service) => (
+                      <Link key={service.id} to={getServicePath(service.id, locale)} className="st-related-row group">
+                        <span className="st-related-title">{service.navLabel}</span>
+                        <span className="st-related-arrow">→</span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                {relatedVerticals.length > 0 && (
+                  <div>
+                    <p className="st-eyebrow">{labels.relatedVerticals}</p>
+                    {relatedVerticals.map((vertical) => (
+                      <Link key={vertical.id} to={getVerticalPath(vertical.id, locale)} className="st-related-row group">
+                        <span className="st-related-title">{vertical.navLabel}</span>
+                        <span className="st-related-arrow">→</span>
+                      </Link>
+                    ))}
                   </div>
                 )}
               </div>
             </RevealSection>
-          ))}
-
-          {/* ── COMPARISON TABLE (standalone, if no sections rendered it inline) ── */}
-          {page.sections.length === 0 && page.comparisonTable && (
-            <RevealSection className="st-section">
-              <div className="st-container py-12 md:py-16">
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-[600px] border-collapse text-sm">
-                    <thead>
-                      <tr>
-                        {page.comparisonTable.headers.map((header) => (
-                          <th
-                            key={header}
-                            className="border-b border-foreground/10 px-4 py-3 text-left font-semibold text-foreground/90"
-                          >
-                            {header}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {page.comparisonTable.rows.map((row, rowIndex) => (
-                        <tr
-                          key={rowIndex}
-                          className={rowIndex % 2 === 0 ? 'bg-foreground/[0.02]' : ''}
-                        >
-                          {row.map((cell, cellIndex) => (
-                            <td
-                              key={cellIndex}
-                              className={`border-b border-foreground/5 px-4 py-3 text-foreground/70 ${cellIndex === 0 ? 'font-medium text-foreground/90' : ''}`}
-                            >
-                              {cell}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </RevealSection>
           )}
 
-          {/* ── FAQ SECTION ── */}
-          {page.faqs.length > 0 && (
-            <RevealSection className="st-section" id="faq">
-              <div className="st-container py-12 md:py-16 lg:py-20">
-                <p className="st-eyebrow mb-8">{labels.faq}</p>
-                <div className="st-faq">
-                  {page.faqs.map((faq, index) => (
-                    <details
-                      key={faq.question}
-                      className={`st-faq-item ${index > 0 ? 'st-faq-item--bordered' : ''}`}
-                    >
-                      <summary className="st-faq-question">{faq.question}</summary>
-                      <p className="st-faq-answer">{faq.answer}</p>
-                    </details>
-                  ))}
-                </div>
+          <RevealSection className="svc-inner-close">
+            <div className="st-container svc-inner-close-grid">
+              <div>
+                <h2 className="svc-inner-close-title font-serif">{page.ctaTitle}</h2>
+                <p className="svc-inner-close-text">{page.ctaText}</p>
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg">
+                  {page.primaryCtaLabel}
+                </a>
+                <p className="svc-inner-updated">{labels.lastUpdated}</p>
               </div>
-            </RevealSection>
-          )}
-
-          {/* ── RELATED SERVICES ── */}
-          {relatedServices.length > 0 && (
-            <RevealSection className="st-section">
-              <div className="st-container py-12 md:py-16">
-                <p className="st-eyebrow mb-6">{labels.relatedServices}</p>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {relatedServices.map((service) => (
-                    <Link
-                      key={service.id}
-                      to={getServicePath(service.id, locale)}
-                      className="group rounded-xl border border-foreground/5 bg-foreground/[0.02] p-5 transition-colors hover:border-foreground/10 hover:bg-foreground/[0.04]"
-                    >
-                      <p className="text-xs font-medium uppercase tracking-wider text-foreground/60 mb-2">
-                        {service.heroEyebrow}
-                      </p>
-                      <p className="text-sm font-semibold text-foreground/90 group-hover:text-foreground transition-colors">
-                        {service.navLabel}
-                      </p>
-                      <p className="mt-1.5 text-xs leading-relaxed text-foreground/50 line-clamp-2">
-                        {service.metaDescription}
-                      </p>
+              {otherGuides.length > 0 && (
+                <div>
+                  <p className="st-eyebrow mb-5">{labels.otherGuides}</p>
+                  {otherGuides.map((guide) => (
+                    <Link key={guide.id} to={getResourcePath(guide.id, locale)} className="st-related-row group">
+                      <span className="st-related-title">{guide.label}</span>
+                      <span className="st-related-arrow">→</span>
                     </Link>
                   ))}
                 </div>
-              </div>
-            </RevealSection>
-          )}
-
-          {/* ── RELATED VERTICALS ── */}
-          {relatedVerticals.length > 0 && (
-            <RevealSection className="st-section">
-              <div className="st-container py-12 md:py-16">
-                <p className="st-eyebrow mb-6">{labels.relatedVerticals}</p>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {relatedVerticals.map((vertical) => (
-                    <Link
-                      key={vertical.id}
-                      to={getVerticalPath(vertical.id, locale)}
-                      className="group rounded-xl border border-foreground/5 bg-foreground/[0.02] p-5 transition-colors hover:border-foreground/10 hover:bg-foreground/[0.04]"
-                    >
-                      <p className="text-xs font-medium uppercase tracking-wider text-foreground/60 mb-2">
-                        {vertical.heroEyebrow}
-                      </p>
-                      <p className="text-sm font-semibold text-foreground/90 group-hover:text-foreground transition-colors">
-                        {vertical.navLabel}
-                      </p>
-                      <p className="mt-1.5 text-xs leading-relaxed text-foreground/50 line-clamp-2">
-                        {vertical.metaDescription}
-                      </p>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </RevealSection>
-          )}
-
-          {/* ── CTA CLOSE ── */}
-          <RevealSection className="st-close">
-            <div className="st-container st-close-inner py-16 md:py-24 text-center">
-              <h2 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-                {page.ctaTitle}
-              </h2>
-              <p className="st-close-text mt-4 max-w-lg mx-auto">{page.ctaText}</p>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="st-cta-primary st-cta-primary--lg mt-8 inline-block"
-              >
-                {labels.startProject}
-              </a>
-              <p className="mt-6 text-xs text-foreground/40">{labels.lastUpdated}</p>
+              )}
             </div>
           </RevealSection>
 
-          {/* ── SERVICES MARQUEE ── */}
           <DeferredServicesMarquee liteMobile />
         </main>
 

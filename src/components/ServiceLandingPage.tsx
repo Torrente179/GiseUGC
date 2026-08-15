@@ -36,10 +36,10 @@ const armProofRailSnap = (event: SyntheticEvent<HTMLDivElement>) => {
 /* ── Internal linking maps ── */
 const RESOURCE_LINKS: Record<SiteLocale, { id: ResourcePageId; label: string }[]> = {
   es: [
-    { id: 'what-is-ugc', label: 'Que es el UGC' },
-    { id: 'how-to-hire-ugc-creator', label: 'Como contratar una creadora UGC' },
+    { id: 'what-is-ugc', label: 'Qué es UGC' },
+    { id: 'how-to-hire-ugc-creator', label: 'Cómo contratar una creadora UGC' },
     { id: 'ugc-vs-influencer-marketing', label: 'UGC vs influencer marketing' },
-    { id: 'ugc-ad-formats-guide', label: 'Formatos de UGC ads' },
+    { id: 'ugc-ad-formats-guide', label: 'Formatos de UGC para ads' },
   ],
   en: [
     { id: 'what-is-ugc', label: 'What is UGC' },
@@ -70,6 +70,8 @@ const localeLabels = {
     moreServices: 'Más servicios',
     byIndustry: 'Por industria',
     resources: 'Recursos',
+    explore: 'Seguir explorando',
+    exploreKicker: 'Explorar',
     previewClose: 'Cerrar vista previa',
     previewPrev: 'Clip anterior',
     previewNext: 'Siguiente clip',
@@ -88,6 +90,8 @@ const localeLabels = {
     moreServices: 'More services',
     byIndustry: 'By industry',
     resources: 'Resources',
+    explore: 'Keep exploring',
+    exploreKicker: 'Explore',
     previewClose: 'Close preview',
     previewPrev: 'Previous clip',
     previewNext: 'Next clip',
@@ -107,6 +111,116 @@ type ServicePageInnerProps = {
   whatsappUrl: string;
   reveal: boolean;
   anchors: boolean;
+  variant: 'mobile' | 'desktop';
+};
+
+type ServiceExploreProps = {
+  variant: 'mobile' | 'desktop';
+  labels: (typeof localeLabels)[SiteLocale];
+  locale: SiteLocale;
+  relevantVerticals: ServiceLandingRouteData['relevantVerticals'];
+  resourceLinks: { id: ResourcePageId; label: string }[];
+  allOtherServices: ServiceLandingRouteData['allOtherServices'];
+};
+
+const ServiceExplore = ({
+  variant,
+  labels,
+  locale,
+  relevantVerticals,
+  resourceLinks,
+  allOtherServices,
+}: ServiceExploreProps) => {
+  const columns = [
+    relevantVerticals.length > 0 && {
+      key: 'industry',
+      label: labels.byIndustry,
+      items: relevantVerticals.map((vertical) => ({
+        key: vertical.id,
+        href: getVerticalPath(vertical.id, locale),
+        title: vertical.navLabel,
+      })),
+    },
+    resourceLinks.length > 0 && {
+      key: 'resources',
+      label: labels.resources,
+      items: resourceLinks.map((resource) => ({
+        key: resource.id,
+        href: getResourcePath(resource.id, locale),
+        title: resource.label,
+      })),
+    },
+    allOtherServices.length > 0 && {
+      key: 'services',
+      label: labels.moreServices,
+      items: allOtherServices.map((service) => ({
+        key: service.id,
+        href: getServicePath(service.id, locale),
+        title: service.navLabel,
+      })),
+    },
+  ].filter((column): column is Exclude<typeof column, false> => Boolean(column));
+
+  if (columns.length === 0) return null;
+
+  if (variant === 'mobile') {
+    return (
+      <nav className="stm-explore" aria-label={labels.explore}>
+        <h2 className="stm-explore-title">{labels.explore}</h2>
+        {columns.map((column) => {
+          const asRail = column.key !== 'services';
+          return (
+            <div key={column.key} className="stm-explore-block">
+              <p className="stm-explore-sublabel">{column.label}</p>
+              {asRail ? (
+                <div className="stm-explore-rail scrollbar-hide">
+                  {column.items.map((item) => (
+                    <Link key={item.key} to={item.href} className="stm-explore-chip">
+                      {item.title}
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="stm-explore-group">
+                  {column.items.map((item) => (
+                    <Link key={item.key} to={item.href} className="stm-explore-row">
+                      <span>{item.title}</span>
+                      <span aria-hidden="true">→</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </nav>
+    );
+  }
+
+  return (
+    <nav className="svc-explore" aria-label={labels.explore}>
+      <div className="svc-explore-head">
+        <p className="st-eyebrow svc-inner-kicker">{labels.exploreKicker}</p>
+        <h2 className="svc-inner-heading font-serif">{labels.explore}</h2>
+      </div>
+      <div className="svc-explore-grid">
+        {columns.map((column, index) => (
+          <div key={column.key} className="svc-explore-col">
+            <p className="svc-explore-index">
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              {column.label}
+            </p>
+            {column.items.map((item) => (
+              <Link key={item.key} to={item.href} className="st-related-row group">
+                <span className="st-related-title">{item.title}</span>
+                <span className="st-related-arrow">→</span>
+              </Link>
+            ))}
+          </div>
+        ))}
+      </div>
+    </nav>
+  );
 };
 
 const ServicePageInner = ({
@@ -120,9 +234,12 @@ const ServicePageInner = ({
   whatsappUrl,
   reveal,
   anchors,
+  variant,
 }: ServicePageInnerProps) => {
   const Shell = reveal ? RevealSection : 'section';
   const updated = locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026';
+  const hasExplore =
+    relevantVerticals.length > 0 || resourceLinks.length > 0 || allOtherServices.length > 0;
 
   return (
     <div className="svc-inner">
@@ -229,42 +346,34 @@ const ServicePageInner = ({
               ))}
             </div>
           </div>
-          {(relevantVerticals.length > 0 || resourceLinks.length > 0 || allOtherServices.length > 0) && (
-            <div className="svc-explore">
-              {relevantVerticals.length > 0 && (
-                <p className="svc-explore-line">
-                  <span className="svc-explore-label">{labels.byIndustry}</span>
-                  {relevantVerticals.map((vertical) => (
-                    <Link key={vertical.id} to={getVerticalPath(vertical.id, locale)}>
-                      {vertical.navLabel}
-                    </Link>
-                  ))}
-                </p>
-              )}
-              {resourceLinks.length > 0 && (
-                <p className="svc-explore-line">
-                  <span className="svc-explore-label">{labels.resources}</span>
-                  {resourceLinks.map((resource) => (
-                    <Link key={resource.id} to={getResourcePath(resource.id, locale)}>
-                      {resource.label}
-                    </Link>
-                  ))}
-                </p>
-              )}
-              {allOtherServices.length > 0 && (
-                <p className="svc-explore-line">
-                  <span className="svc-explore-label">{labels.moreServices}</span>
-                  {allOtherServices.map((service) => (
-                    <Link key={service.id} to={getServicePath(service.id, locale)}>
-                      {service.navLabel}
-                    </Link>
-                  ))}
-                </p>
-              )}
-            </div>
-          )}
         </div>
       </Shell>
+
+      {hasExplore && variant === 'mobile' && (
+        <ServiceExplore
+          variant="mobile"
+          labels={labels}
+          locale={locale}
+          relevantVerticals={relevantVerticals}
+          resourceLinks={resourceLinks}
+          allOtherServices={allOtherServices}
+        />
+      )}
+
+      {hasExplore && variant === 'desktop' && (
+        <Shell className="svc-inner-block">
+          <div className="st-container">
+            <ServiceExplore
+              variant="desktop"
+              labels={labels}
+              locale={locale}
+              relevantVerticals={relevantVerticals}
+              resourceLinks={resourceLinks}
+              allOtherServices={allOtherServices}
+            />
+          </div>
+        </Shell>
+      )}
 
       <Shell className="svc-inner-close">
         <div className="st-container svc-inner-close-grid">
@@ -611,6 +720,7 @@ const ServiceLandingPage = ({
               whatsappUrl={whatsappUrl}
               reveal={false}
               anchors={false}
+              variant="mobile"
             />
 
             {/* ── STICKY WHATSAPP BAR ── */}
@@ -794,6 +904,7 @@ const ServiceLandingPage = ({
               whatsappUrl={whatsappUrl}
               reveal
               anchors
+              variant="desktop"
             />
 
           </div>
