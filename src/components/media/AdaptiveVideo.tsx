@@ -48,6 +48,68 @@ const attachFallbackSource = (video: HTMLVideoElement, src: string) => {
   video.load();
 };
 
+type HlsLevelLike = { width?: number };
+type HlsQualityControls = {
+  levels?: HlsLevelLike[];
+  startLevel: number;
+  autoLevelCapping: number;
+};
+
+// The theater card is capped at 430 CSS px, so 1080p already exceeds what any
+// phone can resolve. It is the floor rather than the ceiling: a 2× device would
+// otherwise be sized down to the 720p rung and the reel would look soft.
+const THEATER_TARGET_WIDTH = 1080;
+const THEATER_FALLBACK_PLAYER_WIDTH = 430;
+
+export const selectTheaterLevel = (
+  levels: HlsLevelLike[],
+  playerWidth: number,
+  pixelRatio: number,
+) => {
+  const widths = levels.map((level) => level.width ?? 0);
+  const maxWidth = Math.max(...widths, 0);
+  const targetWidth = Math.min(
+    maxWidth,
+    Math.max(THEATER_TARGET_WIDTH, Math.round(playerWidth * pixelRatio)),
+  );
+
+  // `levels` arrives sorted by ascending bitrate and already filtered to codecs
+  // this browser decodes, so the last rung inside the target is the cap and the
+  // first rung at that resolution is its most efficient codec.
+  const capIndex = widths.reduce(
+    (best, width, index) => (width <= targetWidth ? index : best),
+    0,
+  );
+  const startIndex = widths.indexOf(widths[capIndex]);
+
+  return { capIndex, startIndex: startIndex === -1 ? capIndex : startIndex };
+};
+
+/**
+ * Opening the theater is a deliberate, full-attention act, so it plays the
+ * sharpest rung the device can resolve from the very first frame. Left on its
+ * own hls.js starts from `abrEwmaDefaultEstimate` (500 kbps), which lands on the
+ * 360p rung of every ladder and then ramps — the visible "starts sharp, drops
+ * soft" handoff this exists to prevent.
+ */
+const applyTheaterQuality = (hls: HlsQualityControls, video: HTMLVideoElement) => {
+  const levels = hls.levels ?? [];
+  if (levels.length < 2) return;
+
+  const playerWidth =
+    video.clientWidth ||
+    video.getBoundingClientRect().width ||
+    THEATER_FALLBACK_PLAYER_WIDTH;
+  const { capIndex, startIndex } = selectTheaterLevel(
+    levels,
+    playerWidth,
+    window.devicePixelRatio || 1,
+  );
+
+  hls.autoLevelCapping = capIndex;
+  hls.startLevel = startIndex;
+};
+
 const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
   (
     {
@@ -220,20 +282,33 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
             return;
           }
 
+          const isTheater = playbackPriority === 'theater';
           const hls = new Hls({
-            // Ambient loops match CSS pixels; theater playback includes device
-            // pixel ratio so high-density displays receive a genuinely sharp
-            // rendition without forcing the highest level on every device.
-            capLevelToPlayerSize: true,
-            ignoreDevicePixelRatio: playbackPriority !== 'theater',
+            // Ambient loops match CSS pixels. The theater picks its own level
+            // band once the manifest is parsed, so hls.js must not also size it
+            // down to the player box.
+            capLevelToPlayerSize: !isTheater,
+            ignoreDevicePixelRatio: true,
             startLevel: -1,
-            maxBufferLength: playbackPriority === 'theater' ? 16 : 5,
-            maxMaxBufferLength: playbackPriority === 'theater' ? 30 : 10,
+            // A theater start is deferred until the level band is applied, so
+            // the first fragment requested is already the full rendition.
+            autoStartLoad: !isTheater,
+            // The default 500 kbps seed makes ABR treat every connection as
+            // barely-2G on the first fragment and immediately step back down.
+            abrEwmaDefaultEstimate: isTheater ? 4_000_000 : 5e5,
+            maxBufferLength: isTheater ? 16 : 5,
+            maxMaxBufferLength: isTheater ? 30 : 10,
           });
           hlsInstance = hls;
           hls.on(Hls.Events.ERROR, (_event, data) => {
             if (data.fatal) fallbackToMp4();
           });
+          if (isTheater) {
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+              applyTheaterQuality(hls, video);
+              hls.startLoad();
+            });
+          }
           hls.loadSource(hlsSrc);
           hls.attachMedia(video);
         })

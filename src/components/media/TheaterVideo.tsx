@@ -24,6 +24,14 @@ export interface TheaterVideoProps {
 const DEFAULT_STARTUP_FALLBACK_MS = 800;
 const HANDOFF_FADE_MS = 260;
 
+// The bridge is a full-resolution slice of the same clip, so crossfading into a
+// still-ramping adaptive level reads as the reel losing quality. Safari and iOS
+// play the master natively, where the start level is the player's to choose and
+// not ours, so the wait is what keeps the downgrade off screen there. It stays
+// shorter than the bridge loop — holding longer would trade a soft frame for a
+// visible restart.
+const HANDOFF_QUALITY_WAIT_MS = 1200;
+
 const safePlay = async (video: HTMLVideoElement, preferAudio: boolean) => {
   video.defaultPlaybackRate = 1;
   video.playbackRate = 1;
@@ -66,7 +74,10 @@ const TheaterVideo = memo(
     const bridgeRef = useRef<HTMLVideoElement>(null);
     const fallbackTimerRef = useRef<number | null>(null);
     const handoffTimerRef = useRef<number | null>(null);
+    const qualityTimerRef = useRef<number | null>(null);
+    const qualityWaivedRef = useRef(false);
     const syncAttemptedRef = useRef(false);
+    const synchronizeRef = useRef<() => void>(() => undefined);
 
     const primaryCandidates = useMemo(
       () => candidates.filter((candidate) => candidate.quality !== 'startup'),
@@ -107,6 +118,19 @@ const TheaterVideo = memo(
         window.clearTimeout(handoffTimerRef.current);
         handoffTimerRef.current = null;
       }
+      if (qualityTimerRef.current !== null) {
+        window.clearTimeout(qualityTimerRef.current);
+        qualityTimerRef.current = null;
+      }
+    }, []);
+
+    const waitForPrimaryQuality = useCallback(() => {
+      if (qualityTimerRef.current !== null) return;
+      qualityTimerRef.current = window.setTimeout(() => {
+        qualityTimerRef.current = null;
+        qualityWaivedRef.current = true;
+        synchronizeRef.current();
+      }, HANDOFF_QUALITY_WAIT_MS);
     }, []);
 
     const promoteFallback = useCallback(() => {
@@ -154,6 +178,21 @@ const TheaterVideo = memo(
       const bridge = bridgeRef.current;
       if (!primary || primaryVisible) return;
 
+      // Hold the sharp bridge frame until the master has climbed to at least the
+      // bridge's own resolution. Re-entered from `timeupdate`, so an adaptive
+      // level switch mid-wait promotes as soon as it lands.
+      if (
+        bridge &&
+        !bridgeReleased &&
+        !qualityWaivedRef.current &&
+        primary.videoWidth > 0 &&
+        bridge.videoWidth > 0 &&
+        primary.videoWidth < bridge.videoWidth
+      ) {
+        waitForPrimaryQuality();
+        return;
+      }
+
       if (
         bridge &&
         !bridgeReleased &&
@@ -172,7 +211,11 @@ const TheaterVideo = memo(
       }
 
       completeHandoff();
-    }, [bridgeReleased, completeHandoff, primaryVisible]);
+    }, [bridgeReleased, completeHandoff, primaryVisible, waitForPrimaryQuality]);
+
+    useEffect(() => {
+      synchronizeRef.current = synchronizePrimary;
+    }, [synchronizePrimary]);
 
     const activeVideo = useCallback(
       () =>
@@ -219,6 +262,7 @@ const TheaterVideo = memo(
       setIsPlaying(false);
       setIsMuted(false);
       syncAttemptedRef.current = false;
+      qualityWaivedRef.current = false;
     }, [candidateKey, clearTimers]);
 
     useEffect(() => {
@@ -341,6 +385,9 @@ const TheaterVideo = memo(
           }}
           onCanPlay={synchronizePrimary}
           onPlaying={synchronizePrimary}
+          onTimeUpdate={() => {
+            if (!primaryVisible) synchronizePrimary();
+          }}
           onSeeked={completeHandoff}
           onPlay={() => {
             if (primaryVisible || !bridgeCandidate) setIsPlaying(true);
