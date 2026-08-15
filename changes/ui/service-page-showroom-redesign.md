@@ -582,3 +582,36 @@ No heading changes, no metadata changes, no schema changes. CSS-only.
 
 ### Verification
 1. `npm run build`
+
+## 2026-08-14 service inner continuation (hero untouched)
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+- `src/styles/templates.css`
+
+### What changed
+1. Left the cinematic hero and demo rail (`svc-cine-hero`, `stm-hero`, `stm-reel`) untouched.
+2. Replaced the leftover inner (essay + spec card, watermark process numbers, fit cards, accordion dump on mobile) with one continuation in homepage language: manifesto statement + market strip, catalog offer rows (always visible), call-sheet process, fit columns, FAQ split, dark close that bookends the hero.
+3. Mobile no longer hides the sale inside nested accordions; it uses the same inner, stacked.
+4. Copy, routes, schema, and heading sources stay on existing service-page fields.
+
+### Verification
+1. `npx tsc -p tsconfig.app.json --noEmit`
+2. `npx eslint src/components/ServiceLandingPage.tsx`
+3. Hydrated visual check at 1440 and 390 on `/servicios/creadora-ugc-bilingue/`
+
+## 2026-08-15 inner rolled out to every service page
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+- `src/styles/templates.css`
+- `src/data/service-pages.ts`
+
+### What changed
+1. The shared inner is the layout for all 8 service pages in both locales. Copy, H1, FAQ, related services, and verticals stay unique per page from `service-pages.ts`.
+2. SEO: deliverables stay in the HTML (no accordion), process is an `ol`, fit column titles are `h3`, FAQ stays in `details` plus existing FAQPage JSON-LD, and every other service is linked from the explore line.
+3. Fixed the English lifestyle page CTA, which still had Spanish close copy.
+
+### Verification
+1. `npx tsc -p tsconfig.app.json --noEmit`
+2. `npx eslint src/components/ServiceLandingPage.tsx`

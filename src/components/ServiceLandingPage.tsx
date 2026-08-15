@@ -64,11 +64,12 @@ const localeLabels = {
     theWork: 'El trabajo',
     whatYouGet: 'Lo que recibes',
     isThisForYou: '¿Es para ti?',
-    yes: 'Sí, si',
-    no: 'No, si',
     howItWorks: 'Así funciona',
     faq: 'Preguntas',
     alsoOffered: 'También ofrezco',
+    moreServices: 'Más servicios',
+    byIndustry: 'Por industria',
+    resources: 'Recursos',
     previewClose: 'Cerrar vista previa',
     previewPrev: 'Clip anterior',
     previewNext: 'Siguiente clip',
@@ -81,17 +82,220 @@ const localeLabels = {
     theWork: 'The work',
     whatYouGet: 'What you get',
     isThisForYou: 'Is this for you?',
-    yes: 'Yes, if',
-    no: 'Not ideal if',
     howItWorks: 'How it works',
     faq: 'Questions',
     alsoOffered: 'Also offered',
+    moreServices: 'More services',
+    byIndustry: 'By industry',
+    resources: 'Resources',
     previewClose: 'Close preview',
     previewPrev: 'Previous clip',
     previewNext: 'Next clip',
   },
 } as const;
 
+const stripStepIndex = (title: string) => title.replace(/^\d+[.)]\s*/, '');
+
+type ServicePageInnerProps = {
+  page: ServiceLandingRouteData['page'];
+  labels: (typeof localeLabels)[SiteLocale];
+  locale: SiteLocale;
+  relevantVerticals: ServiceLandingRouteData['relevantVerticals'];
+  resourceLinks: { id: ResourcePageId; label: string }[];
+  relatedPages: ServiceLandingRouteData['relatedPages'];
+  allOtherServices: ServiceLandingRouteData['allOtherServices'];
+  whatsappUrl: string;
+  reveal: boolean;
+  anchors: boolean;
+};
+
+const ServicePageInner = ({
+  page,
+  labels,
+  locale,
+  relevantVerticals,
+  resourceLinks,
+  relatedPages,
+  allOtherServices,
+  whatsappUrl,
+  reveal,
+  anchors,
+}: ServicePageInnerProps) => {
+  const Shell = reveal ? RevealSection : 'section';
+  const updated = locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026';
+
+  return (
+    <div className="svc-inner">
+      <Shell className="svc-inner-block svc-inner-block--open">
+        <div className="st-container">
+          <div className="svc-inner-statement">
+            <h2 className="svc-inner-display font-serif">{page.sectionIntroTitle}</h2>
+            <p className="svc-inner-lead">{page.sectionIntroText}</p>
+          </div>
+          <div className="svc-inner-rule" aria-hidden="true" />
+          <p className="st-eyebrow svc-inner-kicker">{page.marketTitle}</p>
+          <ul className="svc-inner-markets">
+            {page.marketItems.map((item, index) => (
+              <li key={item}>
+                <span className="svc-inner-markets-num">{String(index + 1).padStart(2, '0')}</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Shell>
+
+      <Shell className="svc-inner-block">
+        <div className="st-container">
+          <p className="st-eyebrow svc-inner-kicker">{labels.whatYouGet}</p>
+          <h2 className="svc-inner-heading font-serif">{page.deliverablesTitle}</h2>
+          <div className="svc-offer">
+            {page.deliverables.map((item, index) => (
+              <article key={item.title} className="svc-offer-row">
+                <span className="svc-offer-num">{String(index + 1).padStart(2, '0')}</span>
+                <h3 className="svc-offer-title font-serif">{item.title}</h3>
+                <p className="svc-offer-desc">{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </Shell>
+
+      <Shell className="svc-inner-block">
+        <div className="st-container">
+          <div className="svc-process-layout">
+            <div className="svc-process-head">
+              <p className="st-eyebrow svc-inner-kicker">{labels.howItWorks}</p>
+              <h2 className="svc-inner-heading font-serif">{page.processTitle}</h2>
+            </div>
+            <ol className="svc-process-list">
+              {page.processSteps.map((step, index) => (
+                <li key={step.title} className="svc-process-step">
+                  <span className="svc-process-num" aria-hidden="true">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <div>
+                    <h3 className="svc-process-title font-serif">{stripStepIndex(step.title)}</h3>
+                    <p className="svc-process-desc">{step.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </Shell>
+
+      <Shell className="svc-inner-block">
+        <div className="st-container">
+          <p className="st-eyebrow svc-inner-kicker">{labels.isThisForYou}</p>
+          <h2 className="sr-only">{page.bestFitTitle}</h2>
+          <div className="svc-fit-grid">
+            <div className="svc-fit-col">
+              <h3 className="svc-fit-label">{page.bestFitTitle}</h3>
+              <ul>
+                {page.bestFitItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="svc-fit-col svc-fit-col--no">
+              <h3 className="svc-fit-label">{page.notFitTitle}</h3>
+              <ul>
+                {page.notFitItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </Shell>
+
+      <Shell className="svc-inner-block" id={anchors ? 'faq' : undefined}>
+        <div className="st-container">
+          <div className="svc-faq-layout">
+            <div className="svc-faq-head">
+              <p className="st-eyebrow svc-inner-kicker">{labels.faq}</p>
+              <h2 className="svc-inner-heading font-serif">{page.faqTitle}</h2>
+            </div>
+            <div className="svc-faq-list">
+              {page.faqs.map((faq, index) => (
+                <details key={faq.question} className="svc-faq-item" {...(index === 0 ? { open: true } : {})}>
+                  <summary>
+                    <span>{faq.question}</span>
+                    <span className="svc-faq-mark" aria-hidden="true" />
+                  </summary>
+                  <p>{faq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+          {(relevantVerticals.length > 0 || resourceLinks.length > 0 || allOtherServices.length > 0) && (
+            <div className="svc-explore">
+              {relevantVerticals.length > 0 && (
+                <p className="svc-explore-line">
+                  <span className="svc-explore-label">{labels.byIndustry}</span>
+                  {relevantVerticals.map((vertical) => (
+                    <Link key={vertical.id} to={getVerticalPath(vertical.id, locale)}>
+                      {vertical.navLabel}
+                    </Link>
+                  ))}
+                </p>
+              )}
+              {resourceLinks.length > 0 && (
+                <p className="svc-explore-line">
+                  <span className="svc-explore-label">{labels.resources}</span>
+                  {resourceLinks.map((resource) => (
+                    <Link key={resource.id} to={getResourcePath(resource.id, locale)}>
+                      {resource.label}
+                    </Link>
+                  ))}
+                </p>
+              )}
+              {allOtherServices.length > 0 && (
+                <p className="svc-explore-line">
+                  <span className="svc-explore-label">{labels.moreServices}</span>
+                  {allOtherServices.map((service) => (
+                    <Link key={service.id} to={getServicePath(service.id, locale)}>
+                      {service.navLabel}
+                    </Link>
+                  ))}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      </Shell>
+
+      <Shell className="svc-inner-close">
+        <div className="st-container svc-inner-close-grid">
+          <div>
+            <h2 className="svc-inner-close-title font-serif">{page.ctaTitle}</h2>
+            <p className="svc-inner-close-text">{page.ctaText}</p>
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg">
+              {labels.startProject}
+            </a>
+            <p className="svc-inner-updated">{updated}</p>
+          </div>
+          {relatedPages.length > 0 && (
+            <div>
+              <p className="st-eyebrow mb-5">{labels.alsoOffered}</p>
+              {page.relatedServiceIds.map((relatedId, index) => {
+                const rel = relatedPages[index];
+                if (!rel) return null;
+                return (
+                  <Link key={relatedId} to={getServicePath(relatedId, locale)} className="st-related-row group">
+                    <span className="st-related-title">{rel.title}</span>
+                    <span className="st-related-arrow">→</span>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </Shell>
+    </div>
+  );
+};
 
 /* ════════════════════════════════════════════════════════════════════
    SCREEN TEST — Service Landing Page
@@ -110,8 +314,8 @@ const ServiceLandingPage = ({
   const {
     page,
     relatedPages,
-    allOtherServices,
     relevantVerticals,
+    allOtherServices,
   } = routeData;
   const labels = localeLabels[locale];
 
@@ -395,148 +599,19 @@ const ServiceLandingPage = ({
               </section>
             )}
 
-            {/* ── M3: COMPACT INFO ACCORDION ── */}
-            <section className="stm-info">
-              {/* What you get */}
-              <details className="stm-accordion">
-                <summary className="stm-accordion-trigger">
-                  <span>{labels.whatYouGet}</span>
-                  <span className="stm-accordion-icon" aria-hidden="true" />
-                </summary>
-                <div className="stm-accordion-body">
-                  <h2 className="sr-only">{page.deliverablesTitle}</h2>
-                  {page.deliverables.map((item) => (
-                    <div key={item.title} className="stm-spec-item">
-                      <h3 className="stm-spec-name">{item.title}</h3>
-                      <p className="stm-spec-desc">{item.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </details>
-
-              {/* How it works */}
-              <details className="stm-accordion">
-                <summary className="stm-accordion-trigger">
-                  <span>{labels.howItWorks}</span>
-                  <span className="stm-accordion-icon" aria-hidden="true" />
-                </summary>
-                <div className="stm-accordion-body">
-                  <h2 className="sr-only">{page.processTitle}</h2>
-                  {page.processSteps.map((step, i) => (
-                    <div key={step.title} className="stm-step">
-                      <span className="stm-step-num">{i + 1}</span>
-                      <div>
-                        <h3 className="stm-step-name">{step.title}</h3>
-                        <p className="stm-spec-desc">{step.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </details>
-
-              {/* Is this for you */}
-              <details className="stm-accordion">
-                <summary className="stm-accordion-trigger">
-                  <span>{labels.isThisForYou}</span>
-                  <span className="stm-accordion-icon" aria-hidden="true" />
-                </summary>
-                <div className="stm-accordion-body">
-                  <p className="stm-fit-heading stm-fit-heading--yes">{labels.yes}</p>
-                  {page.bestFitItems.map((item) => (
-                    <p key={item} className="stm-fit-item stm-fit-item--yes">{item}</p>
-                  ))}
-                  <p className="stm-fit-heading stm-fit-heading--no">{labels.no}</p>
-                  {page.notFitItems.map((item) => (
-                    <p key={item} className="stm-fit-item stm-fit-item--no">{item}</p>
-                  ))}
-                </div>
-              </details>
-
-              {/* FAQ */}
-              <details className="stm-accordion">
-                <summary className="stm-accordion-trigger">
-                  <span>{labels.faq}</span>
-                  <span className="stm-accordion-icon" aria-hidden="true" />
-                </summary>
-                <div className="stm-accordion-body">
-                  <h2 className="sr-only">{page.faqTitle}</h2>
-                  {page.faqs.map((faq) => (
-                    <details key={faq.question} className="stm-faq-item">
-                      <summary className="stm-faq-q">{faq.question}</summary>
-                      <p className="stm-faq-a">{faq.answer}</p>
-                    </details>
-                  ))}
-                </div>
-              </details>
-
-              {/* Intro pull-quote */}
-              <div className="stm-quote-block">
-                <p className="stm-quote">{page.sectionIntroText}</p>
-              </div>
-            </section>
-
-            {/* ── M3b+c: EXPLORE — Industries + Resources combined ── */}
-            {(relevantVerticals.length > 0 || resourceLinks.length > 0) && (
-              <section className="stm-explore">
-                <p className="st-eyebrow px-5 mb-1">{locale === 'es' ? 'Explorar' : 'Explore'}</p>
-                <p className="stm-explore-title">{locale === 'es' ? 'Verticales y recursos' : 'Verticals & resources'}</p>
-
-                {relevantVerticals.length > 0 && (
-                  <>
-                    <p className="stm-explore-sublabel">{locale === 'es' ? 'Por industria' : 'By industry'}</p>
-                    <div className="stm-explore-pills">
-                      {relevantVerticals.map((vertical) => (
-                        <Link
-                          key={vertical.id}
-                          to={getVerticalPath(vertical.id, locale)}
-                          className="stm-explore-pill"
-                        >
-                          {vertical.navLabel}
-                        </Link>
-                      ))}
-                    </div>
-                  </>
-                )}
-
-                <p className="stm-explore-sublabel">{locale === 'es' ? 'Recursos' : 'Resources'}</p>
-                <div className="stm-all-services">
-                  {resourceLinks.map((resource) => (
-                    <Link key={resource.id} to={getResourcePath(resource.id, locale)} className="stm-service-row">
-                      <span className="stm-service-label">{resource.label}</span>
-                      <span className="stm-service-arrow">→</span>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* ── M4: ALL SERVICES — Full list, app-like ── */}
-            {allOtherServices.length > 0 && (
-              <section className="stm-related">
-                <p className="st-eyebrow px-5 mb-3">{labels.alsoOffered}</p>
-                <div className="stm-all-services">
-                  {allOtherServices.map((service) => (
-                    <Link
-                      key={service.id}
-                      to={getServicePath(service.id, locale)}
-                      className="stm-service-row"
-                    >
-                      <span className="stm-service-label">{service.navLabel}</span>
-                      <span className="stm-service-arrow">→</span>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* ── M5: MOBILE CTA — Above footer ── */}
-            <section className="stm-cta">
-              <p className="stm-cta-text">{page.ctaText}</p>
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg stm-cta-btn">
-                {labels.startProject}
-              </a>
-              <p className="mt-4 text-xs text-foreground/70">{locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026'}</p>
-            </section>
+            {/* ── INNER — statement, offer, process, fit, FAQ, close ── */}
+            <ServicePageInner
+              page={page}
+              labels={labels}
+              locale={locale}
+              relevantVerticals={relevantVerticals}
+              resourceLinks={resourceLinks}
+              relatedPages={relatedPages}
+              allOtherServices={allOtherServices}
+              whatsappUrl={whatsappUrl}
+              reveal={false}
+              anchors={false}
+            />
 
             {/* ── STICKY WHATSAPP BAR ── */}
             <div className="stm-sticky-bar">
@@ -707,151 +782,19 @@ const ServiceLandingPage = ({
               )}
             </section>
 
-            {/* ── D3: THE BRIEF ── */}
-            <RevealSection className="st-section st-section--tight st-section--warm">
-              <div className="st-container">
-                <div className="st-brief-grid">
-                  <div className="st-brief-statement">
-                    <p className="st-pullquote">{page.sectionIntroText}</p>
-                    <div className="st-market-strip">
-                      {page.marketItems.map((item, i) => (
-                        <span key={item}>{i > 0 && <span className="st-middot" aria-hidden="true">·</span>}{item}</span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="st-spec-sheet">
-                    <p className="st-eyebrow mb-6">{labels.whatYouGet}</p>
-                    <h2 className="sr-only">{page.deliverablesTitle}</h2>
-                    <div className="st-spec-list">
-                      {page.deliverables.map((item) => (
-                        <div key={item.title} className="st-spec-row">
-                          <h3 className="st-spec-title">{item.title}</h3>
-                          <p className="st-spec-desc">{item.description}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </RevealSection>
-
-            {/* ── D4: THE PROCESS ── */}
-            <RevealSection className="st-section st-section--warm">
-              <div className="st-container">
-                <p className="st-eyebrow mb-4">{labels.howItWorks}</p>
-                <h2 className="st-section-title mb-14">{page.processTitle}</h2>
-                <div className="st-process-row">
-                  {page.processSteps.map((step, index) => (
-                    <article key={step.title} className="st-process-block">
-                      <div className="st-process-accent" aria-hidden="true" />
-                      <span className="st-process-num">{String(index + 1).padStart(2, '0')}</span>
-                      <h3 className="st-process-step-title">{step.title}</h3>
-                      <p className="st-process-step-desc">{step.description}</p>
-                    </article>
-                  ))}
-                </div>
-              </div>
-            </RevealSection>
-
-            {/* ── D5: THE FILTER ── */}
-            <RevealSection className="st-section st-section--wide">
-              <div className="st-container">
-                <p className="st-eyebrow mb-4">{labels.isThisForYou}</p>
-                <h2 className="st-section-title mb-14">{page.navLabel}</h2>
-                <div className="st-fit-grid">
-                  <div className="st-fit-yes">
-                    <p className="st-fit-label st-fit-label--yes">{labels.yes}</p>
-                    <ul className="st-fit-list">
-                      {page.bestFitItems.map((item) => (
-                        <li key={item} className="st-fit-item"><span className="st-fit-dash st-fit-dash--teal" aria-hidden="true">—</span><span>{item}</span></li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="st-fit-no">
-                    <p className="st-fit-label st-fit-label--no">{labels.no}</p>
-                    <ul className="st-fit-list">
-                      {page.notFitItems.map((item) => (
-                        <li key={item} className="st-fit-item st-fit-item--muted"><span className="st-fit-dash" aria-hidden="true">—</span><span>{item}</span></li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-                <div className="st-faq" id="faq">
-                  <p className="st-eyebrow mb-8">{labels.faq}</p>
-                  <h2 className="sr-only">{page.faqTitle}</h2>
-                  {page.faqs.map((faq, index) => (
-                    <details key={faq.question} className={`st-faq-item ${index > 0 ? 'st-faq-item--bordered' : ''}`}>
-                      <summary className="st-faq-question">{faq.question}</summary>
-                      <p className="st-faq-answer">{faq.answer}</p>
-                    </details>
-                  ))}
-                </div>
-              </div>
-            </RevealSection>
-
-            {/* ── D5b+c: EXPLORE — Industries + Resources combined ── */}
-            {(relevantVerticals.length > 0 || resourceLinks.length > 0) && (
-              <RevealSection className="st-section st-section--warm">
-                <div className="st-container">
-                  <p className="st-eyebrow mb-4">{locale === 'es' ? 'Explorar' : 'Explore'}</p>
-                  <h2 className="st-section-title mb-10">{locale === 'es' ? 'Contexto y verticales relacionadas' : 'Related context and verticals'}</h2>
-                  <div className="st-explore-grid">
-                    {relevantVerticals.length > 0 && (
-                      <div className="st-explore-col">
-                        <p className="st-explore-label">{locale === 'es' ? 'Por industria' : 'By industry'}</p>
-                        <div className="st-explore-links">
-                          {relevantVerticals.map((vertical) => (
-                            <Link
-                              key={vertical.id}
-                              to={getVerticalPath(vertical.id, locale)}
-                              className="st-related-row group"
-                            >
-                              <span className="st-related-title">{vertical.navLabel}</span>
-                              <span className="st-related-arrow">→</span>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    <div className="st-explore-col">
-                      <p className="st-explore-label">{locale === 'es' ? 'Recursos' : 'Resources'}</p>
-                      <div className="st-explore-links">
-                        {resourceLinks.map((resource) => (
-                          <Link key={resource.id} to={getResourcePath(resource.id, locale)} className="st-related-row group">
-                            <span className="st-related-title">{resource.label}</span>
-                            <span className="st-related-arrow">→</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </RevealSection>
-            )}
-
-            {/* ── D6: THE CLOSE ── */}
-            <RevealSection className="st-close">
-              <div className="st-container st-close-inner">
-                <p className="st-close-text">{page.ctaText}</p>
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg">{labels.startProject}</a>
-                <p className="mt-6 text-xs text-foreground/70">{locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026'}</p>
-                {relatedPages.length > 0 && (
-                  <div className="st-related">
-                    <p className="st-eyebrow mb-5">{labels.alsoOffered}</p>
-                    {page.relatedServiceIds.map((relatedId, index) => {
-                      const rel = relatedPages[index];
-                      if (!rel) return null;
-                      return (
-                        <Link key={relatedId} to={getServicePath(relatedId, locale)} className="st-related-row group">
-                          <span className="st-related-title">{rel.title}</span>
-                          <span className="st-related-arrow">→</span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </RevealSection>
+            {/* ── INNER — statement, offer, process, fit, FAQ, close ── */}
+            <ServicePageInner
+              page={page}
+              labels={labels}
+              locale={locale}
+              relevantVerticals={relevantVerticals}
+              resourceLinks={resourceLinks}
+              relatedPages={relatedPages}
+              allOtherServices={allOtherServices}
+              whatsappUrl={whatsappUrl}
+              reveal
+              anchors
+            />
 
           </div>
 

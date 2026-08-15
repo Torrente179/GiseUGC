@@ -1842,10 +1842,10 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
             'Yes. I produce organic UGC content for brands in the US, Spain, Australia, and New Zealand. Everything is coordinated remotely and product shipping is straightforward.',
         },
       ],
-      ctaTitle: 'Si tu marca necesita contenido orgánico que se sienta real, hablemos',
+      ctaTitle: 'If your brand needs organic content that feels real, let’s talk',
       ctaText:
-        'Cuéntame qué producto quieres mostrar, qué tono busca tu marca y para qué plataforma lo necesitas. Te propongo escenas y formatos que funcionen.',
-      relatedTitle: 'Servicios relacionados',
+        'Tell me which product you want to show, the tone your brand needs, and which platform it is for. I will propose scenes and formats that work.',
+      relatedTitle: 'Related services',
       relatedServiceIds: ['ugc-testimonials-reviews', 'ugc-broll-footage'],
     },
   },
