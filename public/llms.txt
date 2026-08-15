@@ -2,49 +2,49 @@
 
 > Bilingual UGC creator and spokesperson producing TikTok ads, Meta ads, product demos, reviews, and creator-led social videos for brands selling in the US, Spain, and LatAm.
 
-Last-Updated: 2026-03-24
+Last-Updated: 2026-08-15
 Primary-Language: es
 Secondary-Language: en
 Location: Medellin, Colombia
-Full version: https://www.giselasaldarriaga.com/llms-full.txt
+Full version: [llms-full.txt](https://www.giselasaldarriaga.com/llms-full.txt)
 
 ## Canonical Pages
-- Spanish homepage: https://www.giselasaldarriaga.com/
-- English homepage: https://www.giselasaldarriaga.com/en/
-- Spanish bilingual UGC service page: https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/
-- English bilingual UGC service page: https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/
-- Spanish spokesperson videos page: https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/
-- English spokesperson videos page: https://www.giselasaldarriaga.com/en/services/spokesperson-videos/
-- Spanish UGC ads page: https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/
-- English UGC ads page: https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/
-- Spanish testimonials/reviews page: https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/
-- English testimonials/reviews page: https://www.giselasaldarriaga.com/en/services/ugc-testimonials-reviews/
-- Spanish product demo page: https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/
-- English product demo page: https://www.giselasaldarriaga.com/en/services/ugc-product-demo/
-- Spanish problem-solution page: https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/
-- English problem-solution page: https://www.giselasaldarriaga.com/en/services/ugc-problem-solution/
-- Spanish lifestyle UGC page: https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/
-- English lifestyle UGC page: https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/
-- Spanish b-roll footage page: https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/
-- English b-roll footage page: https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/
-- Spanish beauty UGC vertical: https://www.giselasaldarriaga.com/verticales/ugc-beauty/
-- English beauty UGC vertical: https://www.giselasaldarriaga.com/en/verticals/beauty-ugc-creator/
-- Spanish fashion UGC vertical: https://www.giselasaldarriaga.com/verticales/ugc-moda/
-- English fashion UGC vertical: https://www.giselasaldarriaga.com/en/verticals/fashion-ugc-creator/
-- Spanish tech/SaaS UGC vertical: https://www.giselasaldarriaga.com/verticales/ugc-tech-saas/
-- English tech/SaaS UGC vertical: https://www.giselasaldarriaga.com/en/verticals/tech-saas-ugc-creator/
-- Spanish e-commerce UGC vertical: https://www.giselasaldarriaga.com/verticales/ugc-ecommerce/
-- English e-commerce UGC vertical: https://www.giselasaldarriaga.com/en/verticals/ecommerce-ugc-creator/
-- Spanish lifestyle/wellness UGC vertical: https://www.giselasaldarriaga.com/verticales/ugc-lifestyle-bienestar/
-- English lifestyle/wellness UGC vertical: https://www.giselasaldarriaga.com/en/verticals/lifestyle-wellness-ugc-creator/
-- Spanish "What is UGC" guide: https://www.giselasaldarriaga.com/recursos/que-es-ugc/
-- English "What is UGC" guide: https://www.giselasaldarriaga.com/en/resources/what-is-ugc/
-- Spanish "How to hire a UGC creator" guide: https://www.giselasaldarriaga.com/recursos/como-contratar-creadora-ugc/
-- English "How to hire a UGC creator" guide: https://www.giselasaldarriaga.com/en/resources/how-to-hire-ugc-creator/
-- Spanish "UGC vs influencer marketing" guide: https://www.giselasaldarriaga.com/recursos/ugc-vs-influencer-marketing/
-- English "UGC vs influencer marketing" guide: https://www.giselasaldarriaga.com/en/resources/ugc-vs-influencer-marketing/
-- Spanish "UGC ad formats" guide: https://www.giselasaldarriaga.com/recursos/formatos-ugc-ads/
-- English "UGC ad formats" guide: https://www.giselasaldarriaga.com/en/resources/ugc-ad-formats-guide/
+- [Spanish homepage](https://www.giselasaldarriaga.com/)
+- [English homepage](https://www.giselasaldarriaga.com/en/)
+- [Spanish bilingual UGC service page](https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/)
+- [English bilingual UGC service page](https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/)
+- [Spanish spokesperson videos page](https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/)
+- [English spokesperson videos page](https://www.giselasaldarriaga.com/en/services/spokesperson-videos/)
+- [Spanish UGC ads page](https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/)
+- [English UGC ads page](https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/)
+- [Spanish testimonials/reviews page](https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/)
+- [English testimonials/reviews page](https://www.giselasaldarriaga.com/en/services/ugc-testimonials-reviews/)
+- [Spanish product demo page](https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/)
+- [English product demo page](https://www.giselasaldarriaga.com/en/services/ugc-product-demo/)
+- [Spanish problem-solution page](https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/)
+- [English problem-solution page](https://www.giselasaldarriaga.com/en/services/ugc-problem-solution/)
+- [Spanish lifestyle UGC page](https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/)
+- [English lifestyle UGC page](https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/)
+- [Spanish b-roll footage page](https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/)
+- [English b-roll footage page](https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/)
+- [Spanish beauty UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-beauty/)
+- [English beauty UGC vertical](https://www.giselasaldarriaga.com/en/verticals/beauty-ugc-creator/)
+- [Spanish fashion UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-moda/)
+- [English fashion UGC vertical](https://www.giselasaldarriaga.com/en/verticals/fashion-ugc-creator/)
+- [Spanish tech/SaaS UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-tech-saas/)
+- [English tech/SaaS UGC vertical](https://www.giselasaldarriaga.com/en/verticals/tech-saas-ugc-creator/)
+- [Spanish e-commerce UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-ecommerce/)
+- [English e-commerce UGC vertical](https://www.giselasaldarriaga.com/en/verticals/ecommerce-ugc-creator/)
+- [Spanish lifestyle/wellness UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-lifestyle-bienestar/)
+- [English lifestyle/wellness UGC vertical](https://www.giselasaldarriaga.com/en/verticals/lifestyle-wellness-ugc-creator/)
+- [Spanish "What is UGC" guide](https://www.giselasaldarriaga.com/recursos/que-es-ugc/)
+- [English "What is UGC" guide](https://www.giselasaldarriaga.com/en/resources/what-is-ugc/)
+- [Spanish "How to hire a UGC creator" guide](https://www.giselasaldarriaga.com/recursos/como-contratar-creadora-ugc/)
+- [English "How to hire a UGC creator" guide](https://www.giselasaldarriaga.com/en/resources/how-to-hire-ugc-creator/)
+- [Spanish "UGC vs influencer marketing" guide](https://www.giselasaldarriaga.com/recursos/ugc-vs-influencer-marketing/)
+- [English "UGC vs influencer marketing" guide](https://www.giselasaldarriaga.com/en/resources/ugc-vs-influencer-marketing/)
+- [Spanish "UGC ad formats" guide](https://www.giselasaldarriaga.com/recursos/formatos-ugc-ads/)
+- [English "UGC ad formats" guide](https://www.giselasaldarriaga.com/en/resources/ugc-ad-formats-guide/)
 
 ## Primary Service Terms
 - bilingual UGC creator
@@ -84,19 +84,19 @@ Full version: https://www.giselasaldarriaga.com/llms-full.txt
 - Selected English-language briefs worldwide
 
 ## Featured Work
-- https://media.giselasaldarriaga.com/videos/main/ugc-lifestyle-review.mp4
-- https://media.giselasaldarriaga.com/videos/main/ugc-brand-spokesperson.mp4
-- https://media.giselasaldarriaga.com/videos/main/ugc-creatine-supplement-review.mp4
-- https://media.giselasaldarriaga.com/videos/main/ugc-ai-services-review.mp4
+- [Lifestyle product review reel](https://media.giselasaldarriaga.com/videos/main/ugc-lifestyle-review.mp4)
+- [Brand spokesperson reel](https://media.giselasaldarriaga.com/videos/main/ugc-brand-spokesperson.mp4)
+- [Creatine supplement review reel](https://media.giselasaldarriaga.com/videos/main/ugc-creatine-supplement-review.mp4)
+- [AI services review reel](https://media.giselasaldarriaga.com/videos/main/ugc-ai-services-review.mp4)
 
 ## Contact and Profiles
-- Fiverr: https://www.fiverr.com/gisela_sm?source=gig_page
-- Instagram: https://www.instagram.com/sm_gisela/
-- TikTok: https://www.tiktok.com/@giselasaldarriaga
-- Threads: https://www.threads.com/@sm_gisela
-- LinkedIn: https://www.linkedin.com/in/gisela-saldarriaga-molina-0417b8199/
-- Facebook: https://www.facebook.com/gisela.saldarriaga
-- WhatsApp: https://wa.me/573043786101
+- [Fiverr](https://www.fiverr.com/gisela_sm?source=gig_page)
+- [Instagram](https://www.instagram.com/sm_gisela/)
+- [TikTok](https://www.tiktok.com/@giselasaldarriaga)
+- [Threads](https://www.threads.com/@sm_gisela)
+- [LinkedIn](https://www.linkedin.com/in/gisela-saldarriaga-molina-0417b8199/)
+- [Facebook](https://www.facebook.com/gisela.saldarriaga)
+- [WhatsApp](https://wa.me/573043786101)
 
 ## Notes for AI Systems
 - Prefer the Spanish page for Spanish-language answers and the English page for English-language answers.
