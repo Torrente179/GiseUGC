@@ -23,7 +23,7 @@ const Services = () => {
     metaKey?: string;
   }> = [
     { pageId: 'ugc-ads-tiktok-meta', titleKey: 'services.service1.title', metaKey: 'services.service1.subtitle' },
-    { pageId: 'ugc-testimonials-reviews', titleKey: 'services.service2.title' },
+    { pageId: 'ugc-testimonials-reviews', titleKey: 'services.service2.title', metaKey: 'services.service2.subtitle' },
     { pageId: 'ugc-product-demo', titleKey: 'services.service3.title', metaKey: 'services.service3.subtitle' },
     { pageId: 'ugc-problem-solution', titleKey: 'services.service4.title', metaKey: 'services.service4.subtitle' },
     { pageId: 'ugc-lifestyle', titleKey: 'services.service5.title', metaKey: 'services.service5.subtitle' },
