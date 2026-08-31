@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import type { ResourcePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
 import type { ResourceLandingRouteData } from '@/data/landing-route-types';
+import { CONTENT_DATES } from '@/data/content-dates';
 import { getAllResourceIds, getResourcePageContent } from '@/data/resource-pages';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
@@ -10,6 +11,7 @@ import PageSeo from '@/components/PageSeo';
 import { RevealSection } from '@/components/motion/RevealSection';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
+import { InlineCopy } from '@/lib/inline-copy-links';
 import '@/styles/templates.css';
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
@@ -74,7 +76,7 @@ const hasOwnNumber = (title: string) => /^\d+\.\s*/.test(title);
    revision — never on a build. Current values match the last content commit
    to the resource entrypoints (git: 2026-07-29). */
 const RESOURCE_DATE_PUBLISHED = '2026-03-24';
-const RESOURCE_DATE_MODIFIED = '2026-07-29';
+const RESOURCE_DATE_MODIFIED = CONTENT_DATES.resources;
 
 const serializeRouteData = (routeData: ResourceLandingRouteData) =>
   JSON.stringify(routeData).replace(/</g, '\\u003c');
@@ -260,7 +262,9 @@ const ResourcePage = ({
                     )}
                     <h2 className="rsc-chapter-title font-serif">{section.title}</h2>
                     {section.body.map((paragraph) => (
-                      <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                      <p key={paragraph.slice(0, 48)}>
+                        <InlineCopy text={paragraph} />
+                      </p>
                     ))}
                   </section>
                 ))}

@@ -131,13 +131,15 @@ Homepage schema validated clean via
 
 ## Open items
 
-- **Review provenance (unresolved).** Both homepages carry `AggregateRating`
-  (4.8/5, 158 reviews) plus 5 `Review` nodes. These were not touched here.
-  Self-serving review markup that does not correspond to genuinely collected
-  and displayed reviews carries manual-action risk and should be confirmed.
+- **Review provenance — resolved 2026-08-31.** Invented homepage `Review` /
+  `reviewBody` nodes were removed. Visible Fiverr proof is 4.8/173 via
+  `AggregateRating` only. See `seo-crawl-trust.md`.
 - **Accent stripping in homepage schema text.** Values such as
   `"Resena de Estilo de Vida"` and `"Testimoniales y resenas UGC"` are missing
   `ñ`/accents inside `index.html` JSON-LD. Not corrected here — it changes
   displayed strings and was outside this change's scope.
 - **No image/alt audit exists.** Service pages now serve 12 images each and
   nothing validates alt coverage.
+- **Hub index copy.** `/servicios/`, `/verticales/`, `/recursos/` and EN twins
+  are placeholder 200 shells. Landing Content pastes copy after crawl 200.
+  See `seo-crawl-trust.md`.

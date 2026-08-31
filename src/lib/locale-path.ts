@@ -20,6 +20,7 @@ export type ResourcePageId =
   | 'ugc-vs-influencer-marketing'
   | 'ugc-ad-formats-guide';
 export type LegalPageId = 'privacy-policy' | 'terms-content-use';
+export type HubPageId = 'services' | 'verticals' | 'resources';
 
 const HOME_PATHS: Record<SiteLocale, string> = {
   es: '/',
@@ -114,6 +115,21 @@ const LEGAL_PATHS: Record<LegalPageId, Record<SiteLocale, string>> = {
   },
 };
 
+const HUB_PATHS: Record<HubPageId, Record<SiteLocale, string>> = {
+  services: {
+    es: '/servicios/',
+    en: '/en/services/',
+  },
+  verticals: {
+    es: '/verticales/',
+    en: '/en/verticals/',
+  },
+  resources: {
+    es: '/recursos/',
+    en: '/en/resources/',
+  },
+};
+
 const normalizeHash = (hash = '') => {
   if (!hash) return '';
   return hash.startsWith('#') ? hash : `#${hash}`;
@@ -149,6 +165,7 @@ export const getServicePath = (serviceId: ServicePageId, locale: SiteLocale): st
 export const getVerticalPath = (verticalId: VerticalPageId, locale: SiteLocale): string => VERTICAL_PATHS[verticalId][locale];
 export const getResourcePath = (resourceId: ResourcePageId, locale: SiteLocale): string => RESOURCE_PATHS[resourceId][locale];
 export const getLegalPath = (pageId: LegalPageId, locale: SiteLocale): string => LEGAL_PATHS[pageId][locale];
+export const getHubPath = (hubId: HubPageId, locale: SiteLocale): string => HUB_PATHS[hubId][locale];
 
 const getPageIdFromPath = <TPageId extends string>(
   pathname: string,
@@ -178,11 +195,19 @@ export const getResourcePageIdFromPath = (pathname: string): ResourcePageId | nu
 export const getLegalPageIdFromPath = (pathname: string): LegalPageId | null =>
   getPageIdFromPath(pathname, LEGAL_PATHS);
 
+export const getHubPageIdFromPath = (pathname: string): HubPageId | null =>
+  getPageIdFromPath(pathname, HUB_PATHS);
+
 export const getLocalizedPathForCurrentRoute = (
   pathname: string,
   targetLocale: SiteLocale,
   hash = '',
 ): string => {
+  const hubId = getHubPageIdFromPath(pathname);
+  if (hubId) {
+    return `${getHubPath(hubId, targetLocale)}${normalizeHash(hash)}`;
+  }
+
   const serviceId = getServicePageIdFromPath(pathname);
   if (serviceId) {
     return `${getServicePath(serviceId, targetLocale)}${normalizeHash(hash)}`;
@@ -210,6 +235,7 @@ export const getAllServicePaths = () => SERVICE_PATHS;
 export const getAllVerticalPaths = () => VERTICAL_PATHS;
 export const getAllResourcePaths = () => RESOURCE_PATHS;
 export const getAllLegalPaths = () => LEGAL_PATHS;
+export const getAllHubPaths = () => HUB_PATHS;
 
 export const getServicePageRouteEntries = () => {
   const serviceIds = Object.keys(SERVICE_PATHS) as ServicePageId[];
@@ -243,6 +269,14 @@ export const getLegalPageRouteEntries = () => {
   ]);
 };
 
+export const getHubPageRouteEntries = () => {
+  const hubIds = Object.keys(HUB_PATHS) as HubPageId[];
+  return hubIds.flatMap((hubId) => [
+    { hubId, locale: 'es' as SiteLocale, path: HUB_PATHS[hubId].es },
+    { hubId, locale: 'en' as SiteLocale, path: HUB_PATHS[hubId].en },
+  ]);
+};
+
 /* ════════════════════════════════════════════════════════════════════
    PAGE REGISTRY — single source of truth for "what pages exist"
    ────────────────────────────────────────────────────────────────────
@@ -253,7 +287,7 @@ export const getLegalPageRouteEntries = () => {
    — vite.config.ts and the scripts/ generators — can import it directly.
    ════════════════════════════════════════════════════════════════════ */
 
-export type PageFamily = 'home' | 'service' | 'vertical' | 'resource' | 'legal';
+export type PageFamily = 'home' | 'hub' | 'service' | 'vertical' | 'resource' | 'legal';
 
 export type PageRegistryEntry = {
   family: PageFamily;
@@ -272,8 +306,11 @@ const buildFamilyEntries = (
 
 export const PAGE_REGISTRY: PageRegistryEntry[] = [
   { family: 'home', id: 'home', order: 0, paths: HOME_PATHS },
+  { family: 'hub', id: 'services', order: 0, paths: HUB_PATHS.services },
   ...buildFamilyEntries('service', SERVICE_PATHS),
+  { family: 'hub', id: 'verticals', order: 1, paths: HUB_PATHS.verticals },
   ...buildFamilyEntries('vertical', VERTICAL_PATHS),
+  { family: 'hub', id: 'resources', order: 2, paths: HUB_PATHS.resources },
   ...buildFamilyEntries('resource', RESOURCE_PATHS),
   ...buildFamilyEntries('legal', LEGAL_PATHS),
 ];
@@ -313,3 +350,4 @@ export const getServiceIdsInOrder = (): ServicePageId[] => getFamilyIdsInOrder('
 export const getVerticalIdsInOrder = (): VerticalPageId[] => getFamilyIdsInOrder('vertical') as VerticalPageId[];
 export const getResourceIdsInOrder = (): ResourcePageId[] => getFamilyIdsInOrder('resource') as ResourcePageId[];
 export const getLegalIdsInOrder = (): LegalPageId[] => getFamilyIdsInOrder('legal') as LegalPageId[];
+export const getHubIdsInOrder = (): HubPageId[] => getFamilyIdsInOrder('hub') as HubPageId[];

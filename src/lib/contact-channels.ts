@@ -5,10 +5,14 @@
  * component lives in ContactChannelGlyph.tsx to keep this a pure data module.)
  */
 
+export const FIVERR_PROFILE_URL = 'https://www.fiverr.com/gisela_sm';
+
+const withoutQuery = (url: string) => url.replace(/\?.*$/u, '');
+
 export const CONTACT_URLS = {
   whatsapp: import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101',
   telegram: import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101',
-  fiverr: import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page',
+  fiverr: withoutQuery(import.meta.env.VITE_FIVERR_URL || FIVERR_PROFILE_URL),
   instagram: import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/sm_gisela/',
   tiktok: import.meta.env.VITE_TIKTOK_URL ?? 'https://www.tiktok.com/@giselasaldarriaga',
   threads: import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.com/@sm_gisela',

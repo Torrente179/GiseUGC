@@ -2,27 +2,34 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from '@/lib/locale-context';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
+import { formatProofValue, SITE_PROOF } from '@/data/site-proof';
 
 /**
  * Chapter 2 — Manifesto. The studio statement and the proof numerals as one
  * editorial scene (absorbs the old HeroIntroduction + SocialProof sections).
+ *
+ * Numerals render at their final value in the first HTML snapshot so
+ * prerender / Googlebot never see 0 marcas / 0% satisfacción. The count-up
+ * only overwrites the DOM after the figure is in view.
  */
 
 interface CounterProps {
   end: number;
   suffix?: string;
+  decimals?: number;
   duration?: number;
 }
 
-const AnimatedCounter = ({ end, suffix = '', duration = 1800 }: CounterProps) => {
+const AnimatedCounter = ({ end, suffix = '', decimals = 0, duration = 1800 }: CounterProps) => {
   const ref = useRef<HTMLSpanElement>(null);
   const hasAnimatedRef = useRef(false);
+  const display = formatProofValue(end, suffix, decimals);
 
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      node.textContent = `${end.toLocaleString()}${suffix}`;
+      node.textContent = display;
       return undefined;
     }
 
@@ -36,7 +43,7 @@ const AnimatedCounter = ({ end, suffix = '', duration = 1800 }: CounterProps) =>
             const elapsed = timestamp - startTime;
             const progress = Math.min(elapsed / duration, 1);
             const easeOut = 1 - Math.pow(1 - progress, 3);
-            node.textContent = `${Math.floor(easeOut * end).toLocaleString()}${suffix}`;
+            node.textContent = formatProofValue(easeOut * end, suffix, decimals);
             if (progress < 1) animationFrame = requestAnimationFrame(animate);
           };
           animationFrame = requestAnimationFrame(animate);
@@ -50,25 +57,30 @@ const AnimatedCounter = ({ end, suffix = '', duration = 1800 }: CounterProps) =>
       observer.disconnect();
       if (animationFrame !== 0) cancelAnimationFrame(animationFrame);
     };
-  }, [duration, end, suffix]);
+  }, [decimals, display, duration, end, suffix]);
 
   return (
     <span ref={ref} className="tabular-nums">
-      0{suffix}
+      {display}
     </span>
   );
 };
 
 const ManifestoChapter = () => {
-  const { t, locale } = useTranslation();
-  const isEs = locale === 'es';
+  const { t } = useTranslation();
   const revealRef = useScrollReveal<HTMLDivElement>();
 
-  const stats = [
-    { value: 50, suffix: '+', labelKey: 'socialProof.brands' },
-    { value: 2, suffix: 'M+', labelKey: 'socialProof.views' },
-    { value: 100, suffix: '%', labelKey: 'socialProof.satisfaction' },
-    { value: 500, suffix: '+', labelKey: 'socialProof.contentPieces' },
+  const stats: Array<{
+    labelKey: string;
+    value?: number;
+    suffix?: string;
+    decimals?: number;
+    display?: string;
+  }> = [
+    { value: SITE_PROOF.brandCampaigns, suffix: '+', labelKey: 'socialProof.brands' },
+    { value: SITE_PROOF.fiverrReviewCount, labelKey: 'socialProof.reviews' },
+    { value: SITE_PROOF.fiverrRating, decimals: 1, labelKey: 'socialProof.rating' },
+    { display: SITE_PROOF.languages, labelKey: 'socialProof.languages' },
   ];
 
   return (
@@ -94,7 +106,15 @@ const ManifestoChapter = () => {
           {stats.map((stat) => (
             <div key={stat.labelKey}>
               <div className="dc-numeral">
-                <AnimatedCounter end={stat.value} suffix={stat.suffix} />
+                {stat.display ? (
+                  <span className="tabular-nums">{stat.display}</span>
+                ) : (
+                  <AnimatedCounter
+                    end={stat.value ?? 0}
+                    suffix={stat.suffix}
+                    decimals={stat.decimals}
+                  />
+                )}
               </div>
               <div className="mt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground md:text-[11px]">
                 {t(stat.labelKey)}

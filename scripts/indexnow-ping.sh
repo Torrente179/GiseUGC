@@ -11,7 +11,11 @@ HOST="www.giselasaldarriaga.com"
 
 # Resolve IndexNow key
 if [[ -z "${INDEXNOW_KEY:-}" ]]; then
-  KEY_FILE=$(find public -maxdepth 1 -name '*.txt' ! -name 'robots.txt' ! -name 'llms.txt' -print -quit 2>/dev/null || true)
+  KEY_FILE=$(find public -maxdepth 1 -name '*.txt' \
+    ! -name 'robots.txt' \
+    ! -name 'llms.txt' \
+    ! -name 'llms-full.txt' \
+    -print -quit 2>/dev/null || true)
   if [[ -n "$KEY_FILE" ]]; then
     INDEXNOW_KEY=$(basename "$KEY_FILE" .txt)
   else
@@ -24,6 +28,8 @@ fi
 URLS=(
   "$SITE/"
   "$SITE/en/"
+  "$SITE/servicios/"
+  "$SITE/en/services/"
   "$SITE/servicios/creadora-ugc-bilingue/"
   "$SITE/servicios/videos-de-portavoz/"
   "$SITE/servicios/ugc-ads-tiktok-meta/"
@@ -40,6 +46,8 @@ URLS=(
   "$SITE/en/services/ugc-problem-solution/"
   "$SITE/en/services/lifestyle-ugc-organic-content/"
   "$SITE/en/services/ugc-b-roll-footage/"
+  "$SITE/verticales/"
+  "$SITE/en/verticals/"
   "$SITE/verticales/ugc-beauty/"
   "$SITE/verticales/ugc-moda/"
   "$SITE/verticales/ugc-tech-saas/"
@@ -50,6 +58,16 @@ URLS=(
   "$SITE/en/verticals/tech-saas-ugc-creator/"
   "$SITE/en/verticals/ecommerce-ugc-creator/"
   "$SITE/en/verticals/lifestyle-wellness-ugc-creator/"
+  "$SITE/recursos/"
+  "$SITE/en/resources/"
+  "$SITE/recursos/que-es-ugc/"
+  "$SITE/recursos/como-contratar-creadora-ugc/"
+  "$SITE/recursos/ugc-vs-influencer-marketing/"
+  "$SITE/recursos/formatos-ugc-ads/"
+  "$SITE/en/resources/what-is-ugc/"
+  "$SITE/en/resources/how-to-hire-ugc-creator/"
+  "$SITE/en/resources/ugc-vs-influencer-marketing/"
+  "$SITE/en/resources/ugc-ad-formats-guide/"
 )
 
 # Build JSON array of URLs

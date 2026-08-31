@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import PageSeo from '@/components/PageSeo';
 import { getLegalPageContent } from '@/data/legal-pages';
 import { getHomePath, type LegalPageId, type SiteLocale } from '@/lib/locale-path';
+import { CONTENT_DATES } from '@/data/content-dates';
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
@@ -55,7 +56,7 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
           url: canonical,
           name: page.metaTitle,
           description: page.metaDescription,
-          dateModified: '2026-03-22',
+          dateModified: CONTENT_DATES.legal,
           inLanguage: locale,
           isPartOf: { '@id': `${buildUrl(getHomePath(locale))}#website` },
           breadcrumb: { '@id': `${canonical}#breadcrumb` },

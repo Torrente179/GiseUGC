@@ -2357,6 +2357,19 @@
     color: hsl(var(--foreground) / 0.7);
   }
 
+  .svc-inner-lead a {
+    color: hsl(var(--foreground));
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--primary) / 0.45);
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+  }
+
+  .svc-inner-lead a:hover {
+    text-decoration-color: hsl(var(--primary));
+  }
+
   .svc-inner-statement {
     display: grid;
     gap: 1.5rem;
@@ -3024,6 +3037,19 @@
     font-size: 1.02rem;
     line-height: 1.75;
     color: hsl(var(--foreground) / 0.7);
+  }
+
+  .rsc-chapter a {
+    color: hsl(var(--foreground));
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--primary) / 0.45);
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+  }
+
+  .rsc-chapter a:hover {
+    text-decoration-color: hsl(var(--primary));
   }
 
   .rsc-chapter p:last-child {
