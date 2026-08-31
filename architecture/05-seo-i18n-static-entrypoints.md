@@ -43,7 +43,7 @@ When adding or renaming a route, update all of these together:
 - `src/lib/locale-path.ts`
 - the matching data module
 - static HTML shell folder/file
-- `public/sitemap.xml`
+- `public/sitemap.xml` (generated from `PAGE_REGISTRY` + `CONTENT_DATES` during `vite build`)
 - any entrypoint enrichment data used by the route
 
 Do not hand-add the route to `vite.config.ts`; the registry generates the

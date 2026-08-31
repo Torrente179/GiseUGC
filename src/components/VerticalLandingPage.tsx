@@ -17,7 +17,7 @@ import { createClipPlaybackCandidates } from '@/lib/media-assets';
 import { useMediaIntent } from '@/hooks/use-media-intent';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
-import { CONTENT_DATES } from '@/data/content-dates';
+import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
 import '@/styles/templates.css';
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
@@ -87,6 +87,7 @@ const VerticalLandingPage = ({
 }: VerticalLandingPageProps) => {
   const { page, relatedPages, relatedServices } = routeData;
   const labels = localeLabels[locale];
+  const updated = formatLastUpdatedLabel(CONTENT_DATES.verticals, locale);
 
   const canonical = buildUrl(page.path);
   const homeCanonical = buildUrl(getHomePath(locale));
@@ -432,7 +433,7 @@ const VerticalLandingPage = ({
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg stm-cta-btn">
                 {labels.startProject}
               </a>
-              <p className="mt-4 text-xs text-foreground/70">{locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026'}</p>
+              <p className="mt-4 text-xs text-foreground/70">{updated}</p>
             </section>
 
             <div className="stm-sticky-bar">
@@ -635,7 +636,7 @@ const VerticalLandingPage = ({
               <div className="st-container st-close-inner">
                 <p className="st-close-text">{page.ctaText}</p>
                 <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg">{labels.startProject}</a>
-                <p className="mt-6 text-xs text-foreground/70">{locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026'}</p>
+                <p className="mt-6 text-xs text-foreground/70">{updated}</p>
                 {relatedPages.length > 0 && (
                   <div className="st-related">
                     <p className="st-eyebrow mb-5">{labels.relatedServices}</p>

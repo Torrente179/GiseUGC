@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import type { ResourcePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
 import type { ResourceLandingRouteData } from '@/data/landing-route-types';
-import { CONTENT_DATES } from '@/data/content-dates';
+import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
 import { getAllResourceIds, getResourcePageContent } from '@/data/resource-pages';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
@@ -36,7 +36,6 @@ const localeLabels = {
     inThisArticle: 'En este artículo',
     atAGlance: 'De un vistazo',
     startProject: 'Empezar proyecto',
-    lastUpdated: 'Última actualización: 29 jul 2026',
   },
   en: {
     home: 'Home',
@@ -49,7 +48,6 @@ const localeLabels = {
     inThisArticle: 'In this article',
     atAGlance: 'At a glance',
     startProject: 'Start a project',
-    lastUpdated: 'Last updated: Jul 29, 2026',
   },
 } as const;
 
@@ -70,11 +68,9 @@ const hasOwnNumber = (title: string) => /^\d+\.\s*/.test(title);
    RESOURCE PAGE — Editorial article layout
    ════════════════════════════════════════════════════════════════════ */
 
-/* Article dates. Kept beside the visible "last updated" label above so the
-   two can never drift: a schema date that contradicts the date on the page is
-   a trust signal you cannot cash. Update both together, and only on a real
-   revision — never on a build. Current values match the last content commit
-   to the resource entrypoints (git: 2026-07-29). */
+/* Article dates. Visible "last updated" and JSON-LD dateModified both read
+   CONTENT_DATES.resources so they cannot drift. datePublished is the original
+   resource-page launch. Never stamp either from build time. */
 const RESOURCE_DATE_PUBLISHED = '2026-03-24';
 const RESOURCE_DATE_MODIFIED = CONTENT_DATES.resources;
 
@@ -87,7 +83,10 @@ const ResourcePage = ({
   routeData,
 }: ResourcePageProps) => {
   const { page, relatedServices, relatedVerticals } = routeData;
-  const labels = localeLabels[locale];
+  const labels = {
+    ...localeLabels[locale],
+    lastUpdated: formatLastUpdatedLabel(CONTENT_DATES.resources, locale),
+  };
   const otherGuides = useMemo(
     () =>
       getAllResourceIds()

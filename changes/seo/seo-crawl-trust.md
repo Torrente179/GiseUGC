@@ -21,7 +21,9 @@ Single source: `src/data/site-proof.ts`
 
 `ManifestoChapter` emits those values in the first HTML snapshot (no animated zeros for Googlebot). Homepage JSON-LD keeps `AggregateRating` 4.8/173 with `worstRating: "1"` and **does not** invent `Review` / `reviewBody` nodes.
 
-Dates: `src/data/content-dates.ts`. Sitemap lastmod, JSON-LD `dateModified`, and llms `Last-Updated` read from here. Hub shells use `CONTENT_DATES.hubs` (`2026-08-31`).
+Dates: `src/data/content-dates.ts`. Sitemap lastmod, JSON-LD `dateModified`, visible "last updated" labels, and llms `Last-Updated` read from here. Hub shells use `CONTENT_DATES.hubs` (`2026-08-31`). Service and resource families are `2026-08-31` after the GEO-copy pass on bilingüe / how-to-hire.
+
+`public/sitemap.xml` is generated from `PAGE_REGISTRY` + `CONTENT_DATES` (`src/lib/sitemap.ts`). Vite writes that file during `vite build` (the same `/sitemap.xml` static path production serves). Do not invent URLs; do not serve the sitemap through React.
 
 ## Fiverr canonical
 
