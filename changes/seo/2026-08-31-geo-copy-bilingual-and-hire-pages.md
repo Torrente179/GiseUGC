@@ -2,7 +2,7 @@
 
 **Status:** Current  
 **Shipped:** 2026-08-31  
-**Stacked on:** crawl-trust branch `cursor/seo-crawl-trust-7421` (PR #4). This pass does not rewrite homepage counters, JSON-LD, `llms.txt`, `llms-full.txt`, sitemap, robots, analytics, or hub routes (`/servicios/`, `/verticales/`, `/recursos/` and EN twins).
+**Stacked on:** crawl-trust branch `cursor/seo-crawl-trust-7421` (PR #4, including `FIVERR_PROFILE_URL`). This pass does not rewrite homepage counters, JSON-LD, `llms.txt`, `llms-full.txt`, sitemap, robots, analytics, or hub routes (`/servicios/`, `/verticales/`, `/recursos/` and EN twins). Hub copy is a later pass.
 
 ## What shipped
 

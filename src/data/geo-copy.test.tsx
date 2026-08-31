@@ -11,11 +11,11 @@ import {
   buildServiceLandingRouteData,
 } from './landing-route-data.server';
 import { SITE_PROOF } from './site-proof';
+import { FIVERR_PROFILE_URL } from '@/lib/contact-channels';
 import { getServicePath } from '@/lib/locale-path';
 import { inlineCopyHrefs, visibleInlineCopy } from '@/lib/inline-copy-links';
 
-const FIVERR_PROFILE = 'https://www.fiverr.com/gisela_sm';
-const FIVERR_HREF = `href="${FIVERR_PROFILE}"`;
+const FIVERR_HREF = `href="${FIVERR_PROFILE_URL}"`;
 
 const FACT_ES =
   'Gisela Saldarriaga es creadora UGC bilingüe. Produce desde Medellín anuncios para TikTok y Meta, demos, reseñas y videos de portavoz en español e inglés para marcas en el mercado hispano de Estados Unidos, España y LatAm. Trabaja en Fiverr como gisela_sm: 4.8/5 en 173 reseñas verificadas. Lleva 28+ campañas de marca. El contenido se entrega a la marca; no lo publica en sus redes salvo un acuerdo de ambassador.';
@@ -41,7 +41,7 @@ describe('GEO copy on bilingual service pages', () => {
   it('ES page ships the fact block after markets, with a query-free Fiverr link and 65-word English FAQ', () => {
     const page = getServicePageContent('bilingual-ugc-creator', 'es');
     expect(visibleInlineCopy(page.geoFact ?? '')).toBe(FACT_ES);
-    expect(inlineCopyHrefs(page.geoFact ?? '')).toEqual([FIVERR_PROFILE]);
+    expect(inlineCopyHrefs(page.geoFact ?? '')).toEqual([FIVERR_PROFILE_URL]);
     expect(page.faqs.find((faq) => faq.question === '¿Cómo trabajas el inglés?')?.answer).toBe(
       'En inglés trabajo con guion y un tope de 65 palabras por video para que suene natural.',
     );
@@ -75,7 +75,7 @@ describe('GEO copy on bilingual service pages', () => {
   it('EN page ships the fact block after markets, with a query-free Fiverr link and 65-word English FAQ', () => {
     const page = getServicePageContent('bilingual-ugc-creator', 'en');
     expect(visibleInlineCopy(page.geoFact ?? '')).toBe(FACT_EN);
-    expect(inlineCopyHrefs(page.geoFact ?? '')).toEqual([FIVERR_PROFILE]);
+    expect(inlineCopyHrefs(page.geoFact ?? '')).toEqual([FIVERR_PROFILE_URL]);
     expect(page.faqs.find((faq) => faq.question === 'How do you work in English?')?.answer).toBe(
       'For English I work from a script, with a 65-word cap per video so it stays natural.',
     );
@@ -113,7 +113,7 @@ describe('GEO copy on how-to-hire resource pages', () => {
     const profileCopy = profile?.body.join('\n') ?? '';
 
     expect(visibleInlineCopy(findCopy)).toContain('gisela_sm (4.8/5, 173 reseñas)');
-    expect(inlineCopyHrefs(findCopy)).toEqual([FIVERR_PROFILE]);
+    expect(inlineCopyHrefs(findCopy)).toEqual([FIVERR_PROFILE_URL]);
     expect(visibleInlineCopy(profileCopy)).toContain(FACT_ES);
     expect(profileCopy).toContain(`[Creadora UGC bilingüe](${getServicePath('bilingual-ugc-creator', 'es')})`);
     expect(page.sections.at(-1)?.title).toBe('Un perfil que puedes evaluar ahora');
@@ -150,7 +150,7 @@ describe('GEO copy on how-to-hire resource pages', () => {
     const profileCopy = profile?.body.join('\n') ?? '';
 
     expect(visibleInlineCopy(findCopy)).toContain('gisela_sm (4.8/5, 173 reviews)');
-    expect(inlineCopyHrefs(findCopy)).toEqual([FIVERR_PROFILE]);
+    expect(inlineCopyHrefs(findCopy)).toEqual([FIVERR_PROFILE_URL]);
     expect(visibleInlineCopy(profileCopy)).toContain(FACT_EN);
     expect(profileCopy).toContain(`[Bilingual UGC creator](${getServicePath('bilingual-ugc-creator', 'en')})`);
     expect(page.sections.at(-1)?.title).toBe('A profile you can evaluate now');
