@@ -273,7 +273,7 @@
       "profileTitle": "Spokesperson Professional Presenter Voiceover Expert UGC Creator",
       "country": "Medellín, Colombia",
       "language": "Español, English",
-      "reviewsTitle": "173 Reseñas",
+      "reviewsTitle": "{{count}} Reseñas",
       "ratingBreakdown": "Desglose de calificación",
       "metricCommunication": "Nivel de comunicación",
       "metricQuality": "Calidad de entrega",
@@ -285,9 +285,9 @@
   },
   "socialProof": {
     "brands": "Marcas",
-    "views": "Vistas Generadas",
-    "satisfaction": "Satisfacción",
-    "contentPieces": "Piezas de Contenido"
+    "reviews": "Reseñas en Fiverr",
+    "rating": "Calificación Fiverr",
+    "languages": "Idiomas"
   },
   "faq": {
     "sectionSubtitle": "Preguntas Frecuentes",

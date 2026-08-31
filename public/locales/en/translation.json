@@ -247,7 +247,7 @@
       "profileTitle": "Spokesperson Professional Presenter Voiceover Expert UGC Creator",
       "country": "Medellin, Colombia",
       "language": "Spanish, English",
-      "reviewsTitle": "173 Reviews",
+      "reviewsTitle": "{{count}} Reviews",
       "ratingBreakdown": "Rating breakdown",
       "metricCommunication": "Seller communication level",
       "metricQuality": "Quality of delivery",
@@ -259,9 +259,9 @@
   },
   "socialProof": {
     "brands": "Brands",
-    "views": "Views Generated",
-    "satisfaction": "Satisfaction",
-    "contentPieces": "Content Pieces"
+    "reviews": "Fiverr reviews",
+    "rating": "Fiverr rating",
+    "languages": "Languages"
   },
   "faq": {
     "sectionSubtitle": "Frequently Asked Questions",

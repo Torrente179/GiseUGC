@@ -1,22 +1,17 @@
 import { useTranslation } from '@/lib/locale-context';
 import { MapPin, MessageCircle, Star } from 'lucide-react';
+import { FIVERR_RATING_DISTRIBUTION, SITE_PROOF } from '@/data/site-proof';
 
 interface FiverrRatingCardProps {
   className?: string;
 }
 
-const fiverrRatingDistribution = [
-  { stars: 5, count: 158 },
-  { stars: 4, count: 9 },
-  { stars: 3, count: 3 },
-  { stars: 2, count: 0 },
-  { stars: 1, count: 3 },
-];
+const fiverrRatingDistribution = FIVERR_RATING_DISTRIBUTION;
 
 const fiverrRatingBreakdown = [
-  { labelKey: 'footer.fiverr.metricCommunication', value: '4.8' },
-  { labelKey: 'footer.fiverr.metricQuality', value: '4.8' },
-  { labelKey: 'footer.fiverr.metricValue', value: '4.8' },
+  { labelKey: 'footer.fiverr.metricCommunication', value: SITE_PROOF.fiverrRating.toFixed(1) },
+  { labelKey: 'footer.fiverr.metricQuality', value: SITE_PROOF.fiverrRating.toFixed(1) },
+  { labelKey: 'footer.fiverr.metricValue', value: SITE_PROOF.fiverrRating.toFixed(1) },
 ];
 
 const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
@@ -45,8 +40,8 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
 
           <div className="mt-1.5 flex items-center gap-2.5">
             <Star className="h-4 w-4 fill-current text-accent dark:text-accent/80" />
-            <span className="text-xl font-semibold leading-none text-primary">4.8</span>
-            <span className="text-xl text-accent/85 dark:text-accent/75 leading-none">(173)</span>
+            <span className="text-xl font-semibold leading-none text-primary">{SITE_PROOF.fiverrRating.toFixed(1)}</span>
+            <span className="text-xl text-accent/85 dark:text-accent/75 leading-none">({SITE_PROOF.fiverrReviewCount})</span>
           </div>
 
           <p className="text-sm md:text-[15px] leading-[1.45] text-foreground/82 mt-2.5">
@@ -70,7 +65,7 @@ const FiverrRatingCard = ({ className = '' }: FiverrRatingCardProps) => {
 
       <div className="grid gap-4 md:grid-cols-[minmax(0,0.52fr)_minmax(0,0.48fr)]">
         <div>
-          <p className="text-sm font-semibold text-primary mb-2">{t('footer.fiverr.reviewsTitle')}</p>
+          <p className="text-sm font-semibold text-primary mb-2">{t('footer.fiverr.reviewsTitle', { count: SITE_PROOF.fiverrReviewCount })}</p>
           <div className="space-y-2">
             {fiverrRatingDistribution.map((item) => {
               const width = `${Math.round((item.count / maxRatingCount) * 100)}%`;

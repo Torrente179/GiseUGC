@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import type { ResourcePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
 import type { ResourceLandingRouteData } from '@/data/landing-route-types';
+import { CONTENT_DATES } from '@/data/content-dates';
 import { getAllResourceIds, getResourcePageContent } from '@/data/resource-pages';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
@@ -74,7 +75,7 @@ const hasOwnNumber = (title: string) => /^\d+\.\s*/.test(title);
    revision — never on a build. Current values match the last content commit
    to the resource entrypoints (git: 2026-07-29). */
 const RESOURCE_DATE_PUBLISHED = '2026-03-24';
-const RESOURCE_DATE_MODIFIED = '2026-07-29';
+const RESOURCE_DATE_MODIFIED = CONTENT_DATES.resources;
 
 const serializeRouteData = (routeData: ResourceLandingRouteData) =>
   JSON.stringify(routeData).replace(/</g, '\\u003c');

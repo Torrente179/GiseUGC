@@ -7,6 +7,7 @@ import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { scrollToY } from '@/lib/motion/native-scroll';
 import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
+import { SITE_PROOF } from '@/data/site-proof';
 
 interface TestimonialImage {
   id: number;
@@ -33,8 +34,8 @@ const TESTIMONIAL_IMAGES: TestimonialImage[] = [
   { id: 14, src: '/uploads/videos/testimonials/drive-download-20260304T151957Z-1-001/IMG_8680.PNG', alt: 'Client testimonial – screenshot 14', width: 1284, height: 1054 },
 ];
 
-const FIVERR_AGGREGATE_RATING = 4.8;
-const FIVERR_REVIEW_COUNT = 173;
+const FIVERR_AGGREGATE_RATING = SITE_PROOF.fiverrRating;
+const FIVERR_REVIEW_COUNT = SITE_PROOF.fiverrReviewCount;
 
 // Same gesture model as the portfolio theater: embla owns left/right for
 // navigation, a vertical throw dismisses.
