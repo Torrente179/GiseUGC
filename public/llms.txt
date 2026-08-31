@@ -2,7 +2,7 @@
 
 > Bilingual UGC creator and spokesperson producing TikTok ads, Meta ads, product demos, reviews, and creator-led social videos for brands selling in the US, Spain, and LatAm.
 
-Last-Updated: 2026-08-15
+Last-Updated: 2026-08-31
 Primary-Language: es
 Secondary-Language: en
 Location: Medellin, Colombia
@@ -11,6 +11,12 @@ Full version: [llms-full.txt](https://www.giselasaldarriaga.com/llms-full.txt)
 ## Canonical Pages
 - [Spanish homepage](https://www.giselasaldarriaga.com/)
 - [English homepage](https://www.giselasaldarriaga.com/en/)
+- [Spanish services hub](https://www.giselasaldarriaga.com/servicios/)
+- [English services hub](https://www.giselasaldarriaga.com/en/services/)
+- [Spanish verticals hub](https://www.giselasaldarriaga.com/verticales/)
+- [English verticals hub](https://www.giselasaldarriaga.com/en/verticals/)
+- [Spanish resources hub](https://www.giselasaldarriaga.com/recursos/)
+- [English resources hub](https://www.giselasaldarriaga.com/en/resources/)
 - [Spanish bilingual UGC service page](https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/)
 - [English bilingual UGC service page](https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/)
 - [Spanish spokesperson videos page](https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/)
@@ -65,7 +71,8 @@ Full version: [llms-full.txt](https://www.giselasaldarriaga.com/llms-full.txt)
 
 ## Key Proof
 - 28+ active brand campaigns across fashion, beauty, tech, and lifestyle
-- 173 reviews on Fiverr with a 4.8/5 star rating
+- 173 reviews on Fiverr with a 4.8/5 star rating (gisela_sm)
+- Content is produced for the brand, not published on Gisela's socials unless a brand-ambassador brief is agreed
 - Remote production from Medellin for clients in the US, Spain, and Latin America
 - Spanish and English delivery available for creator-led ads, demos, and spokesperson briefs
 
@@ -90,7 +97,7 @@ Full version: [llms-full.txt](https://www.giselasaldarriaga.com/llms-full.txt)
 - [AI services review reel](https://media.giselasaldarriaga.com/videos/main/ugc-ai-services-review.mp4)
 
 ## Contact and Profiles
-- [Fiverr](https://www.fiverr.com/gisela_sm?source=gig_page)
+- [Fiverr](https://www.fiverr.com/gisela_sm)
 - [Instagram](https://www.instagram.com/sm_gisela/)
 - [TikTok](https://www.tiktok.com/@giselasaldarriaga)
 - [Threads](https://www.threads.com/@sm_gisela)

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <script defer src="/gtm-loader.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gisela Saldarriaga</title>
+    <meta name="description" content="Gisela Saldarriaga" />
+    <meta name="author" content="Gisela Saldarriaga" />
+    <meta name="theme-color" content="#fffefe" />
+    <script>
+      (function () {
+        const root = document.documentElement;
+        const storageKey = 'theme';
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        let storedTheme = null;
+
+        try {
+          storedTheme = localStorage.getItem(storageKey);
+        } catch (_) {}
+
+        const activeTheme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : systemTheme;
+        const shouldUseDark = activeTheme === 'dark';
+
+        root.classList.toggle('dark', shouldUseDark);
+        root.style.colorScheme = activeTheme;
+        if (themeColorMeta) {
+          themeColorMeta.setAttribute('content', shouldUseDark ? '#0f121a' : '#fffefe');
+        }
+      })();
+    </script>
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://www.giselasaldarriaga.com/servicios/" />
+    <link rel="alternate" href="https://www.giselasaldarriaga.com/servicios/" hreflang="es" />
+    <link rel="alternate" href="https://www.giselasaldarriaga.com/en/services/" hreflang="en" />
+    <link rel="alternate" href="https://www.giselasaldarriaga.com/servicios/" hreflang="x-default" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.giselasaldarriaga.com/servicios/" />
+    <meta property="og:title" content="Gisela Saldarriaga" />
+    <meta property="og:description" content="Gisela Saldarriaga" />
+    <meta property="og:image" content="https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg?v=20260219" />
+    <meta property="og:site_name" content="Gisela Saldarriaga" />
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://www.giselasaldarriaga.com/servicios/" />
+    <meta name="twitter:title" content="Gisela Saldarriaga" />
+    <meta name="twitter:description" content="Gisela Saldarriaga" />
+    <meta name="twitter:image" content="https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg?v=20260219" />
+    <link
+      rel="preload"
+      href="/fonts/dm-sans-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+  </head>
+  <body>
+    <div id="root">
+      <section>
+        <nav aria-label="Breadcrumb">
+          <a href="/">Inicio</a>
+          <span>/</span>
+          <span>Servicios</span>
+        </nav>
+        <nav aria-label="Servicios">
+          <ul>
+            <li><a href="/servicios/creadora-ugc-bilingue/">creadora-ugc-bilingue</a></li>
+            <li><a href="/servicios/videos-de-portavoz/">videos-de-portavoz</a></li>
+            <li><a href="/servicios/ugc-ads-tiktok-meta/">ugc-ads-tiktok-meta</a></li>
+            <li><a href="/servicios/testimoniales-resenas-ugc/">testimoniales-resenas-ugc</a></li>
+            <li><a href="/servicios/demo-producto-ugc/">demo-producto-ugc</a></li>
+            <li><a href="/servicios/ugc-problema-solucion/">ugc-problema-solucion</a></li>
+            <li><a href="/servicios/ugc-lifestyle/">ugc-lifestyle</a></li>
+            <li><a href="/servicios/b-roll-footage-ugc/">b-roll-footage-ugc</a></li>
+          </ul>
+        </nav>
+        <p><a href="/#contact">Contáctame</a></p>
+      </section>
+    </div>
+    <script type="module" src="/src/entry-hub.tsx"></script>
+  </body>
+</html>

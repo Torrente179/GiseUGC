@@ -18,12 +18,14 @@ import {
   type ResourcePageId,
   type ServicePageId,
   type SiteLocale,
+  type HubPageId,
   type VerticalPageId,
   getLocaleFromPath,
   getLegalPageRouteEntries,
   getResourcePageRouteEntries,
   getServicePageRouteEntries,
   getVerticalPageRouteEntries,
+  getHubPageRouteEntries,
   isHomePath,
   normalizePathname,
 } from '@/lib/locale-path';
@@ -154,6 +156,7 @@ const serviceRouteEntries = getServicePageRouteEntries();
 const verticalRouteEntries = getVerticalPageRouteEntries();
 const resourceRouteEntries = getResourcePageRouteEntries();
 const legalRouteEntries = getLegalPageRouteEntries();
+const hubRouteEntries = getHubPageRouteEntries();
 
 export type AppRouteComponents = {
   Index?: ComponentType<{ locale: SiteLocale }>;
@@ -162,6 +165,7 @@ export type AppRouteComponents = {
   VerticalLandingPage?: ComponentType<{ verticalId: VerticalPageId; locale: SiteLocale }>;
   ResourcePage?: ComponentType<{ resourceId: ResourcePageId; locale: SiteLocale }>;
   LegalPage?: ComponentType<{ pageId: LegalPageId; locale: SiteLocale }>;
+  HubIndexPage?: ComponentType<{ hubId: HubPageId; locale: SiteLocale }>;
 };
 
 // Scroll to a Y position immediately (non-animated jump)
@@ -219,7 +223,13 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
     return legalRouteEntries.find((entry) => normalizePathname(entry.path) === normalized) ?? null;
   }, [location.pathname, onHome]);
 
-  const isKnownRoute = onHome || currentServiceEntry !== null || currentVerticalEntry !== null || currentResourceEntry !== null || currentLegalEntry !== null;
+  const currentHubEntry = useMemo(() => {
+    if (onHome) return null;
+    const normalized = normalizePathname(location.pathname);
+    return hubRouteEntries.find((entry) => normalizePathname(entry.path) === normalized) ?? null;
+  }, [location.pathname, onHome]);
+
+  const isKnownRoute = onHome || currentServiceEntry !== null || currentVerticalEntry !== null || currentResourceEntry !== null || currentLegalEntry !== null || currentHubEntry !== null;
   const {
     Index,
     NotFound,
@@ -227,6 +237,7 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
     VerticalLandingPage,
     ResourcePage,
     LegalPage,
+    HubIndexPage,
   } = routeComponents;
 
   useEffect(() => {
@@ -305,6 +316,15 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
             <LegalPage
               pageId={currentLegalEntry.pageId}
               locale={currentLegalEntry.locale}
+            />
+          </div>
+      )}
+
+      {currentHubEntry && HubIndexPage && (
+          <div key={location.pathname} className="page-enter">
+            <HubIndexPage
+              hubId={currentHubEntry.hubId}
+              locale={currentHubEntry.locale}
             />
           </div>
       )}

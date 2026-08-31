@@ -4,9 +4,13 @@
 
 `package.json` defines:
 
-- `prebuild`: catalog generation plus service, font, and client-entrypoint
-  normalization
-- `build`: client Vite build, SSR Vite build, then 40-route prerender
+- `prebuild`: catalog generation plus service, hub, font, client-entrypoint,
+  and sitemap generation
+- `build`: client Vite build, SSR Vite build, then prerender of every
+  registered route (homepages, hubs, service/vertical/resource/legal landings)
+- `hub:entrypoints`: write the six empty hub `index.html` shells
+- `sitemap:generate`: rewrite `public/sitemap.xml` from the page registry with
+  git-backed lastmods
 - `build:dev`: development-mode client build after the prebuild tasks
 - `lighthouse:mobile`, `lighthouse:desktop`, `lighthouse:matrix`: controlled
   route matrices and budgets

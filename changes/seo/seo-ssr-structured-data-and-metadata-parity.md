@@ -131,13 +131,18 @@ Homepage schema validated clean via
 
 ## Open items
 
-- **Review provenance (unresolved).** Both homepages carry `AggregateRating`
-  (4.8/5, 158 reviews) plus 5 `Review` nodes. These were not touched here.
-  Self-serving review markup that does not correspond to genuinely collected
-  and displayed reviews carries manual-action risk and should be confirmed.
+- **Visible Fiverr copy (Landing Content).** Both homepages still carry `AggregateRating` (4.8/5, 173 reviews) plus 5 `Review` nodes. This crawl-trust pass kept that graph and stripped `?source=gig_page` from `sameAs`. It did not add new visible Fiverr body copy. Landing Content owns the locked 4.8/173 sentences on bilingüe, cómo-contratar, and related surfaces.
 - **Accent stripping in homepage schema text.** Values such as
   `"Resena de Estilo de Vida"` and `"Testimoniales y resenas UGC"` are missing
   `ñ`/accents inside `index.html` JSON-LD. Not corrected here — it changes
   displayed strings and was outside this change's scope.
 - **No image/alt audit exists.** Service pages now serve 12 images each and
   nothing validates alt coverage.
+
+## 2026-08-31 schema and llms parity
+
+1. Person nodes now include `alternateName` `Gisela.UGC` on Person only (homepage JSON-LD and resource Article author). Logo/entity alias, not a second Organization or a keyword.
+2. Fiverr `sameAs` and profile hrefs use `https://www.fiverr.com/gisela_sm` with no gig-page query string.
+3. `public/llms.txt` and `public/llms-full.txt` share Last-Updated 2026-08-31, the same Fiverr canonical, 28+ campaigns, and 4.8/173. The full file is no longer frozen on 2026-03-24.
+4. Hub indexes emit WebPage + BreadcrumbList only. They do not carry AggregateRating or Fiverr review nodes.
+

@@ -5,7 +5,7 @@
 Production does not boot from one universal page module:
 
 1. Each HTML route imports a route-family entry (`entry-home`, `entry-service`,
-   `entry-vertical`, `entry-resource`, or `entry-legal`).
+   `entry-vertical`, `entry-resource`, `entry-legal`, or `entry-hub`).
 2. The entry reads embedded route data when the template needs it.
 3. `bootstrapApp()` in `src/client-runtime.tsx` installs `BrowserRouter`,
    `LocaleProvider`, and `ThemeProvider`.
@@ -22,6 +22,7 @@ Production does not boot from one universal page module:
 - `getVerticalPageRouteEntries()`
 - `getResourcePageRouteEntries()`
 - `getLegalPageRouteEntries()`
+- `getHubPageRouteEntries()`
 
 On each location change it normalizes the pathname and searches these arrays. The matching route entry supplies both the page id and locale into the relevant page factory.
 
@@ -51,6 +52,9 @@ language detector or network translation backend.
 
 The folders under `en/`, `servicios/`, `verticales/`, `recursos/`,
 `politica-de-privacidad/`, and `terminos-y-uso-de-contenido/` are static Vite
-inputs. `vite.config.ts` derives its Rollup input map from
-`getAllEntrypointPaths()` rather than maintaining a second hand-written list.
-The prerender step turns those shells into complete route documents.
+inputs, including the six hub indexes (`/servicios/`, `/en/services/`,
+`/verticales/`, `/en/verticals/`, `/recursos/`, `/en/resources/`). Hub indexes
+are exact path matches and do not consume child landings. `vite.config.ts`
+derives its Rollup input map from `getAllEntrypointPaths()` rather than
+maintaining a second hand-written list. The prerender step turns those shells
+into complete route documents.

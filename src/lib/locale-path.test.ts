@@ -8,10 +8,14 @@ import {
   getVerticalPageRouteEntries,
   getResourcePageRouteEntries,
   getLegalPageRouteEntries,
+  getHubPageRouteEntries,
   getServicePageIdFromPath,
   getVerticalPageIdFromPath,
   getResourcePageIdFromPath,
   getLegalPageIdFromPath,
+  getHubPageIdFromPath,
+  getHubPath,
+  getAllEntrypointPaths,
   type SiteLocale,
 } from './locale-path';
 
@@ -65,6 +69,7 @@ const allRouteEntries = [
   ...getVerticalPageRouteEntries(),
   ...getResourcePageRouteEntries(),
   ...getLegalPageRouteEntries(),
+  ...getHubPageRouteEntries(),
 ];
 
 describe('route entries', () => {
@@ -96,6 +101,16 @@ describe('route entries', () => {
     }
   });
 
+  it('every hub route entry resolves back to its id and is not a child landing', () => {
+    for (const entry of getHubPageRouteEntries()) {
+      expect(getHubPageIdFromPath(entry.path)).toBe(entry.hubId);
+      expect(getLocaleFromPath(entry.path)).toBe(entry.locale);
+      expect(getServicePageIdFromPath(entry.path)).toBeNull();
+      expect(getVerticalPageIdFromPath(entry.path)).toBeNull();
+      expect(getResourcePageIdFromPath(entry.path)).toBeNull();
+    }
+  });
+
   it('has no colliding normalized paths across all locales/sections', () => {
     const normalized = allRouteEntries.map((e) => normalizePathname(e.path));
     expect(new Set(normalized).size).toBe(normalized.length);
@@ -113,8 +128,31 @@ describe('getLocalizedPathForCurrentRoute', () => {
     }
   });
 
+  it('round-trips hub indexes to the paired locale', () => {
+    for (const entry of getHubPageRouteEntries()) {
+      const target: SiteLocale = entry.locale === 'es' ? 'en' : 'es';
+      const counterpart = getLocalizedPathForCurrentRoute(entry.path, target);
+      expect(getHubPageIdFromPath(counterpart)).toBe(entry.hubId);
+      expect(normalizePathname(counterpart)).toBe(normalizePathname(getHubPath(entry.hubId, target)));
+    }
+  });
+
   it('falls back to the home path for an unknown route', () => {
     expect(normalizePathname(getLocalizedPathForCurrentRoute('/nope', 'en'))).toBe('/en');
     expect(normalizePathname(getLocalizedPathForCurrentRoute('/nope', 'es'))).toBe('/');
+  });
+});
+
+describe('hub entrypoints', () => {
+  it('registers six hub HTML inputs and does not treat them as home', () => {
+    const inputs = getAllEntrypointPaths();
+    expect(inputs['hub-services-es']).toBe('servicios/index.html');
+    expect(inputs['hub-services-en']).toBe('en/services/index.html');
+    expect(inputs['hub-verticals-es']).toBe('verticales/index.html');
+    expect(inputs['hub-verticals-en']).toBe('en/verticals/index.html');
+    expect(inputs['hub-resources-es']).toBe('recursos/index.html');
+    expect(inputs['hub-resources-en']).toBe('en/resources/index.html');
+    expect(isHomePath('/servicios/')).toBe(false);
+    expect(isHomePath('/en/services/')).toBe(false);
   });
 });

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "npm run video:catalog && npm run service:entrypoints && npm run resource:entrypoints && npm run fonts:entrypoints && npm run client:entrypoints",
+    "prebuild": "npm run video:catalog && npm run service:entrypoints && npm run resource:entrypoints && npm run hub:entrypoints && npm run fonts:entrypoints && npm run client:entrypoints && npm run sitemap:generate",
     "build": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "prebuild:dev": "npm run video:catalog && npm run service:entrypoints",
     "build:dev": "vite build --mode development",
@@ -22,6 +22,8 @@
     "resource:entrypoints": "node scripts/sync-resource-entrypoint-meta.mjs",
     "fonts:entrypoints": "node scripts/normalize-entrypoint-fonts.mjs",
     "client:entrypoints": "node scripts/normalize-client-entrypoints.mjs",
+    "hub:entrypoints": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/generate-hub-entrypoints.ts",
+    "sitemap:generate": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/generate-sitemap.ts",
     "fonts:subsets": "bash scripts/generate-font-subsets.sh",
     "video:encode": "bash scripts/encode-videos.sh",
     "video:encode:dry": "bash scripts/encode-videos.sh --dry-run",

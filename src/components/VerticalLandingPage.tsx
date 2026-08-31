@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useState, type Synthe
 import { Link } from 'react-router-dom';
 import { Play } from 'lucide-react';
 import type { VerticalPageId, SiteLocale } from '@/lib/locale-path';
-import { getHomePath, getHomeSectionHref, getVerticalPath, getServicePath } from '@/lib/locale-path';
+import { getHomePath, getHubPath, getVerticalPath, getServicePath } from '@/lib/locale-path';
 import type { VerticalLandingRouteData } from '@/data/landing-route-types';
 import { getPosterVariantSrc, LEGACY_REEL_CLIPS, servicePosterSrcFromMain } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
@@ -158,7 +158,7 @@ const VerticalLandingPage = ({
   const schema = useMemo(() => {
     const breadcrumbItems = [
       { '@type': 'ListItem', position: 1, name: labels.home, item: homeCanonical },
-      { '@type': 'ListItem', position: 2, name: labels.verticals, item: homeCanonical },
+      { '@type': 'ListItem', position: 2, name: labels.verticals, item: buildUrl(getHubPath('verticals', locale)) },
       { '@type': 'ListItem', position: 3, name: page.breadcrumbLabel, item: canonical },
     ];
     const videoObjects = proofExamples.map(({ example, clip }) => ({
@@ -276,7 +276,7 @@ const VerticalLandingPage = ({
               <nav className="sr-only" aria-label="Breadcrumb">
                 <Link to={getHomePath(locale)}>{labels.home}</Link>
                 <span>/</span>
-                <span>{labels.verticals}</span>
+                <Link to={getHubPath('verticals', locale)}>{labels.verticals}</Link>
                 <span>/</span>
                 <span>{page.breadcrumbLabel}</span>
               </nav>
@@ -453,7 +453,7 @@ const VerticalLandingPage = ({
                 <nav className="st-breadcrumb" aria-label="Breadcrumb">
                   <Link to={getHomePath(locale)}>{labels.home}</Link>
                   <span aria-hidden="true">/</span>
-                  <span>{labels.verticals}</span>
+                  <Link to={getHubPath('verticals', locale)}>{labels.verticals}</Link>
                   <span aria-hidden="true">/</span>
                   <span>{page.breadcrumbLabel}</span>
                 </nav>

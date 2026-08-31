@@ -82,8 +82,10 @@ for (const htmlPath of htmlFiles) {
   root.innerHTML = markup;
   root.dataset.prerendered = 'true';
 
-  const routeModule = route.includes('/servicios/') || route.includes('/services/')
-    ? 'src/components/ServiceLandingPage.tsx'
+  const routeModule = ['/servicios/', '/en/services/', '/verticales/', '/en/verticals/', '/recursos/', '/en/resources/'].includes(route)
+    ? 'src/components/HubIndexPage.tsx'
+    : route.includes('/servicios/') || route.includes('/services/')
+      ? 'src/components/ServiceLandingPage.tsx'
     : route.includes('/verticales/') || route.includes('/verticals/')
       ? 'src/components/VerticalLandingPage.tsx'
       : route.includes('/recursos/') || route.includes('/resources/')

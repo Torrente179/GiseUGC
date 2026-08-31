@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { Link } from 'react-router-dom';
 import { Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { ServicePageId, SiteLocale, ResourcePageId } from '@/lib/locale-path';
-import { getHomePath, getHomeSectionHref, getServicePath, getVerticalPath, getResourcePath } from '@/lib/locale-path';
+import { getHomePath, getHubPath, getServicePath, getVerticalPath, getResourcePath } from '@/lib/locale-path';
 import type { ServiceLandingRouteData } from '@/data/landing-route-types';
 import { getPosterVariantSrc, LEGACY_REEL_CLIPS, servicePosterSrcFromMain } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
@@ -500,7 +500,7 @@ const ServiceLandingPage = ({
   const schema = useMemo(() => {
     const breadcrumbItems = [
       { '@type': 'ListItem', position: 1, name: labels.home, item: homeCanonical },
-      { '@type': 'ListItem', position: 2, name: labels.services, item: homeCanonical },
+      { '@type': 'ListItem', position: 2, name: labels.services, item: buildUrl(getHubPath('services', locale)) },
       { '@type': 'ListItem', position: 3, name: page.breadcrumbLabel, item: canonical },
     ];
     const videoObjects = proofExamples.map(({ example, clip }) => ({
@@ -653,7 +653,7 @@ const ServiceLandingPage = ({
               <nav className="sr-only" aria-label="Breadcrumb">
                 <Link to={getHomePath(locale)}>{labels.home}</Link>
                 <span>/</span>
-                <Link to={getHomeSectionHref(locale, 'services')}>{labels.services}</Link>
+                <Link to={getHubPath('services', locale)}>{labels.services}</Link>
                 <span>/</span>
                 <span>{page.breadcrumbLabel}</span>
               </nav>
@@ -789,7 +789,7 @@ const ServiceLandingPage = ({
                   <nav className="st-breadcrumb svc-cine-hero-breadcrumb" aria-label="Breadcrumb">
                     <Link to={getHomePath(locale)}>{labels.home}</Link>
                     <span aria-hidden="true">/</span>
-                    <Link to={getHomeSectionHref(locale, 'services')}>{labels.services}</Link>
+                    <Link to={getHubPath('services', locale)}>{labels.services}</Link>
                     <span aria-hidden="true">/</span>
                     <span>{page.breadcrumbLabel}</span>
                   </nav>

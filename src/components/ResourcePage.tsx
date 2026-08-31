@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import type { ResourcePageId, SiteLocale } from '@/lib/locale-path';
-import { getHomePath, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
+import { getHomePath, getHubPath, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
 import type { ResourceLandingRouteData } from '@/data/landing-route-types';
 import { getAllResourceIds, getResourcePageContent } from '@/data/resource-pages';
 import Navbar from '@/components/Navbar';
@@ -101,7 +101,7 @@ const ResourcePage = ({
   const schema = useMemo(() => {
     const breadcrumbItems = [
       { '@type': 'ListItem', position: 1, name: labels.home, item: homeCanonical },
-      { '@type': 'ListItem', position: 2, name: labels.resources, item: homeCanonical },
+      { '@type': 'ListItem', position: 2, name: labels.resources, item: buildUrl(getHubPath('resources', locale)) },
       { '@type': 'ListItem', position: 3, name: page.breadcrumbLabel, item: canonical },
     ];
 
@@ -139,6 +139,7 @@ const ResourcePage = ({
             '@id': `${SITE_URL}/#person`,
             name: 'Gisela Saldarriaga',
             url: SITE_URL,
+            alternateName: 'Gisela.UGC',
             jobTitle: locale === 'es' ? 'Creadora UGC profesional' : 'Professional UGC Creator',
           },
           publisher: {
@@ -191,7 +192,7 @@ const ResourcePage = ({
               <nav className="st-breadcrumb" aria-label="Breadcrumb">
                 <Link to={getHomePath(locale)}>{labels.home}</Link>
                 <span aria-hidden="true">/</span>
-                <span>{labels.resources}</span>
+                <Link to={getHubPath('resources', locale)}>{labels.resources}</Link>
                 <span aria-hidden="true">/</span>
                 <span>{page.breadcrumbLabel}</span>
               </nav>

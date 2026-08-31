@@ -8,10 +8,10 @@ const LOCALES: SiteLocale[] = ['es', 'en'];
 type NavbarControlsProps = {
   compact?: boolean;
   currentLocale: SiteLocale;
-  onLocaleChange: (locale: SiteLocale) => void;
+  localeHrefs: Record<SiteLocale, string>;
 };
 
-const NavbarControls = ({ compact = false, currentLocale, onLocaleChange }: NavbarControlsProps) => {
+const NavbarControls = ({ compact = false, currentLocale, localeHrefs }: NavbarControlsProps) => {
   const { t } = useTranslation();
 
   const segmentClass = cn(
@@ -43,25 +43,25 @@ const NavbarControls = ({ compact = false, currentLocale, onLocaleChange }: Navb
           const isActive = currentLocale === locale;
 
           return (
-            <button
+            <a
               key={locale}
-              type="button"
-              onClick={() => onLocaleChange(locale)}
+              href={localeHrefs[locale]}
               className={cn(
                 segmentClass,
                 isActive
                   ? 'text-foreground'
                   : 'text-muted-foreground hover:text-foreground/90',
               )}
+              hrefLang={locale}
               aria-label={
                 locale === 'es'
                   ? `${t('languageSwitcher.changeLanguage', { defaultValue: 'Change language' })} a Español`
                   : `${t('languageSwitcher.changeLanguage', { defaultValue: 'Change language' })} to English`
               }
-              aria-pressed={isActive}
+              aria-current={isActive ? 'page' : undefined}
             >
               <span className="relative">{locale}</span>
-            </button>
+            </a>
           );
         })}
       </div>

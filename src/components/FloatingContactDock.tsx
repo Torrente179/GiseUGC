@@ -9,10 +9,11 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '@/lib/locale-context';
 import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
+import { CONTACT_URLS } from '@/lib/contact-channels';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101';
-const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
+const fiverrUrl = CONTACT_URLS.fiverr;
 const fiverrLogoSrc = '/uploads/fiverr-logo-56.webp';
 const whatsappLogoSrc = '/uploads/whatsapp.png';
 const tiktokLogoSrc = '/uploads/TikTok-Icon-Logo.wine.svg';

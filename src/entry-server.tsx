@@ -10,6 +10,7 @@ import ServiceLandingPage from '@/components/ServiceLandingPage';
 import VerticalLandingPage from '@/components/VerticalLandingPage';
 import ResourcePage from '@/components/ResourcePage';
 import LegalPage from '@/components/LegalPage';
+import HubIndexPage from '@/components/HubIndexPage';
 import {
   buildResourceLandingRouteData,
   buildServiceLandingRouteData,
@@ -71,6 +72,7 @@ const routeComponents: AppRouteComponents = {
   VerticalLandingPage: ServerVerticalLandingPage,
   ResourcePage: ServerResourcePage,
   LegalPage,
+  HubIndexPage,
 };
 
 export const render = (url: string): Promise<string> =>

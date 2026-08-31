@@ -21,13 +21,14 @@ import {
   type SiteLocale,
 } from '@/lib/locale-path';
 import { navigateToRoute } from '@/lib/route-navigation';
+import { CONTACT_URLS } from '@/lib/contact-channels';
 import { cn } from '@/lib/utils';
 
 const SCROLL_THRESHOLD = 18;
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101';
-const fiverrUrl = import.meta.env.VITE_FIVERR_URL ?? 'https://www.fiverr.com/gisela_sm?source=gig_page';
+const fiverrUrl = CONTACT_URLS.fiverr;
 const fiverrLogoSrc = '/uploads/fiverr-logo-56.webp';
 const whatsappLogoSrc = '/uploads/whatsapp.png';
 const tiktokLogoSrc = '/uploads/TikTok-Icon-Logo.wine.svg';
@@ -366,13 +367,9 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
     },
   ];
 
-  const changeLanguage = (lng: SiteLocale) => {
-    if (currentLocale === lng) return;
-
-    const targetPath = getLocalizedPathForCurrentRoute(location.pathname, lng, window.location.hash);
-    // The other locale is a separate prerendered document. Pushing it
-    // client-side would keep this document's embedded route data and metadata.
-    navigateToRoute(targetPath);
+  const localeHrefs: Record<SiteLocale, string> = {
+    es: getLocalizedPathForCurrentRoute(location.pathname, 'es'),
+    en: getLocalizedPathForCurrentRoute(location.pathname, 'en'),
   };
 
   const hireMeCtaLabel = t('navbar.hireMeCta', {
@@ -566,7 +563,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
             </div>
 
             <div className="hidden md:flex items-center gap-2">
-              <NavbarControls currentLocale={currentLocale} onLocaleChange={changeLanguage} />
+              <NavbarControls currentLocale={currentLocale} localeHrefs={localeHrefs} />
               <a
                 href={homeSectionHref('contact')}
                 onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -583,7 +580,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
               <NavbarControls
                 compact={compactMobile}
                 currentLocale={currentLocale}
-                onLocaleChange={changeLanguage}
+                localeHrefs={localeHrefs}
               />
               <button
                 onPointerDown={handleMobileMenuButtonPointerDown}

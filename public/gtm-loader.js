@@ -1,37 +1,45 @@
 /*!
- * Analytics bootstrap — defers GTM + gtag until first user interaction
- * or a quiet post-load window. Reduces main-thread blocking
- * and improves LCP/TBT on cold visits.
+ * Analytics bootstrap — gtag page_view fires on load so bounce sessions
+ * are counted. The GTM container stays deferred until first interaction
+ * or a quiet post-load window, keeping the July 2026 LCP path intact.
  */
 (function () {
-  var loaded = false;
+  var gtagLoaded = false;
+  var gtmLoaded = false;
   var GTM_ID = 'GTM-TX2WCCLT';
   var GA_ID = 'G-3W6XVBLWXH';
 
   window.dataLayer = window.dataLayer || [];
 
-  function load() {
-    if (loaded) return;
-    loaded = true;
+  function gtag() { window.dataLayer.push(arguments); }
+  window.gtag = window.gtag || gtag;
 
-    // GTM bootstrap event
-    window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-
-    var gtmScript = document.createElement('script');
-    gtmScript.async = true;
-    gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
-    document.head.appendChild(gtmScript);
+  function loadGtag() {
+    if (gtagLoaded) return;
+    gtagLoaded = true;
 
     var gaScript = document.createElement('script');
     gaScript.async = true;
     gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
     document.head.appendChild(gaScript);
 
-    function gtag() { window.dataLayer.push(arguments); }
-    window.gtag = window.gtag || gtag;
     gtag('js', new Date());
     gtag('config', GA_ID);
   }
+
+  function loadGtm() {
+    if (gtmLoaded) return;
+    gtmLoaded = true;
+
+    window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+
+    var gtmScript = document.createElement('script');
+    gtmScript.async = true;
+    gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
+    document.head.appendChild(gtmScript);
+  }
+
+  loadGtag();
 
   var kicked = false;
   function kick() {
@@ -41,14 +49,14 @@
     document.removeEventListener('scroll', kick, { passive: true });
     document.removeEventListener('mousemove', kick);
     document.removeEventListener('keydown', kick);
-    load();
+    loadGtm();
   }
 
-  function schedule() {
+  function scheduleGtm() {
     if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(function () { setTimeout(load, 30000); }, { timeout: 32000 });
+      window.requestIdleCallback(function () { setTimeout(loadGtm, 30000); }, { timeout: 32000 });
     } else {
-      setTimeout(load, 30000);
+      setTimeout(loadGtm, 30000);
     }
   }
 
@@ -58,8 +66,8 @@
   document.addEventListener('keydown', kick);
 
   if (document.readyState === 'complete') {
-    schedule();
+    scheduleGtm();
   } else {
-    window.addEventListener('load', schedule, { once: true });
+    window.addEventListener('load', scheduleGtm, { once: true });
   }
 })();

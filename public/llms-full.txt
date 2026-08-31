@@ -2,7 +2,7 @@
 
 > Bilingual UGC creator and spokesperson producing TikTok ads, Meta ads, product demos, reviews, and creator-led social videos for brands selling in the US, Spain, and LatAm.
 
-Last-Updated: 2026-03-24
+Last-Updated: 2026-08-31
 Primary-Language: es
 Secondary-Language: en
 Location: Medellin, Colombia
@@ -244,7 +244,8 @@ Educational content that explains UGC concepts and helps brands make informed de
 ## Proof Points
 
 - 28+ active brand campaigns across fashion, beauty, tech, and lifestyle
-- 173 reviews on Fiverr with a 4.8/5 star rating
+- 173 reviews on Fiverr with a 4.8/5 star rating (gisela_sm)
+- Content is produced for the brand, not published on Gisela's socials unless a brand-ambassador brief is agreed
 - Remote production from Medellin for clients in the US, Spain, and Latin America
 - Spanish and English delivery available for creator-led ads, demos, and spokesperson briefs
 - 9+ years of experience in journalism and media, applied to scriptwriting and on-camera delivery
@@ -276,6 +277,14 @@ Pricing varies by service type, number of deliverables, language versions, and p
 ### Homepages
 - [Spanish homepage](https://www.giselasaldarriaga.com/)
 - [English homepage](https://www.giselasaldarriaga.com/en/)
+
+### Hub indexes
+- [Spanish services hub](https://www.giselasaldarriaga.com/servicios/)
+- [English services hub](https://www.giselasaldarriaga.com/en/services/)
+- [Spanish verticals hub](https://www.giselasaldarriaga.com/verticales/)
+- [English verticals hub](https://www.giselasaldarriaga.com/en/verticals/)
+- [Spanish resources hub](https://www.giselasaldarriaga.com/recursos/)
+- [English resources hub](https://www.giselasaldarriaga.com/en/resources/)
 
 ### Service Pages
 - [Spanish bilingual UGC service page](https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/)
@@ -329,7 +338,7 @@ Pricing varies by service type, number of deliverables, language versions, and p
 
 ## Contact and Profiles
 
-- [Fiverr](https://www.fiverr.com/gisela_sm?source=gig_page)
+- [Fiverr](https://www.fiverr.com/gisela_sm)
 - [Instagram](https://www.instagram.com/sm_gisela/)
 - [TikTok](https://www.tiktok.com/@giselasaldarriaga)
 - [Threads](https://www.threads.com/@sm_gisela)

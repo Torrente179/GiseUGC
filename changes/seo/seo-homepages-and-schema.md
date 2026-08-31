@@ -90,3 +90,39 @@ This is the current SEO note. It consolidates the AEO/GEO audit, FAQ and crawler
    - `/servicios/creadora-ugc-bilingue/`
    - `/en/services/bilingual-ugc-creator/`
 3. The remaining four service URLs returned `200 OK` with the expected title, description, and canonical tags in local preview.
+
+## 2026-08-31 crawl-trust harden
+
+Landing Content owns hub headlines, hub body, and visible Fiverr paragraphs. This pass only makes the crawl graph honest.
+
+### Runtime touchpoints in this pass
+- `src/components/chapters/ManifestoChapter.tsx`
+- `src/components/NavbarControls.tsx`
+- `src/components/Navbar.tsx`
+- `src/lib/contact-channels.ts`
+- `src/lib/locale-path.ts`
+- `src/components/HubIndexPage.tsx`
+- `src/entry-hub.tsx`
+- `index.html`
+- `en/index.html`
+- `public/gtm-loader.js`
+- `public/sitemap.xml`
+- `public/llms.txt`
+- `public/llms-full.txt`
+- `scripts/prerender.mjs`
+- `scripts/generate-hub-entrypoints.ts`
+- `scripts/generate-sitemap.ts`
+
+### What changed
+1. Homepage manifesto numerals no longer prerender `0+ marcas` / `0M+ vistas` / `0% satisfacción`. The only baked figure is the locked **28+ campañas**. Views and satisfaction were not in the locked proof set, so they are not invented in static HTML.
+2. Fiverr canonical URL is `https://www.fiverr.com/gisela_sm` everywhere that was still carrying `?source=gig_page` (schema `sameAs`, hrefs, llms).
+3. Person schema now has `alternateName` `Gisela.UGC` on Person only. It is not a second entity, Organization name, or public keyword.
+4. Six hub indexes exist as empty-but-valid static entrypoints: `/servicios/`, `/verticales/`, `/recursos/`, `/en/services/`, `/en/verticals/`, `/en/resources/`. Each has canonical, hreflang es↔en with x-default on the ES hub, child links, and a CTA to `/#contact` or `/en/#contact`. No hub marketing titles, H1s, or Fiverr paragraphs.
+5. `public/sitemap.xml` is generated from the page registry with git-backed `lastmod` dates and includes the six hubs.
+6. The homepage language switcher is a real `<a href>` pair so crawlers can follow `/en/` and `/` from the body.
+7. `gtm-loader.js` fires `gtag('config')` (page_view) on load. The GTM container stays deferred until interaction or the idle window, which keeps the July 2026 LCP split.
+8. `llms.txt` and `llms-full.txt` Last-Updated values are aligned to 2026-08-31, Fiverr tracking query strings are gone, and hub URLs are listed. Proof stays 28+ campaigns and Fiverr 4.8/173.
+
+### What this pass did not write
+Landing Content will place visible Fiverr 4.8/173 copy on bilingüe, cómo-contratar, and related surfaces. Homepage and child landings keep existing `AggregateRating` 4.8/173 in schema and do not gain new Fiverr marketing paragraphs here.
+

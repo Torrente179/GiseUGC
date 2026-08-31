@@ -26,6 +26,16 @@ const getClientEntry = (relativePath) => {
     return '/src/entry-home.tsx';
   }
   if (
+    relativePath === 'servicios/index.html' ||
+    relativePath === 'en/services/index.html' ||
+    relativePath === 'verticales/index.html' ||
+    relativePath === 'en/verticals/index.html' ||
+    relativePath === 'recursos/index.html' ||
+    relativePath === 'en/resources/index.html'
+  ) {
+    return '/src/entry-hub.tsx';
+  }
+  if (
     relativePath.startsWith('servicios/') ||
     relativePath.startsWith('en/services/')
   ) {

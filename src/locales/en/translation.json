@@ -285,6 +285,7 @@
   },
   "socialProof": {
     "brands": "Brands",
+    "campaigns": "Campaigns",
     "views": "Views Generated",
     "satisfaction": "Satisfaction",
     "contentPieces": "Content Pieces"
