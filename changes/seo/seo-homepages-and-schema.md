@@ -121,7 +121,7 @@ Landing Content owns hub headlines, hub body, and visible Fiverr paragraphs. Thi
 5. `public/sitemap.xml` is generated from the page registry with git-backed `lastmod` dates and includes the six hubs.
 6. The homepage language switcher is a real `<a href>` pair so crawlers can follow `/en/` and `/` from the body.
 7. `gtm-loader.js` fires `gtag('config')` (page_view) on load. The GTM container stays deferred until interaction or the idle window, which keeps the July 2026 LCP split.
-8. `llms.txt` and `llms-full.txt` Last-Updated values are aligned to 2026-08-31, Fiverr tracking query strings are gone, and hub URLs are listed. Proof stays 28+ campaigns and Fiverr 4.8/173.
+8. `llms.txt` and `llms-full.txt` Last-Updated values are aligned to 2026-08-31, Fiverr tracking query strings are gone, and hub URLs are listed. Both files open with the locked EN quotable: bilingual UGC from Medellín for US Hispanic / Spain / LatAm, Fiverr gisela_sm 4.8/5 on 173 reviews, 28+ campaigns, content for the brand not her socials.
 
 ### What this pass did not write
 Landing Content will place visible Fiverr 4.8/173 copy on bilingüe, cómo-contratar, and related surfaces. Homepage and child landings keep existing `AggregateRating` 4.8/173 in schema and do not gain new Fiverr marketing paragraphs here.

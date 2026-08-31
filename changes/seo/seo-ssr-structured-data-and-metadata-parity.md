@@ -143,6 +143,6 @@ Homepage schema validated clean via
 
 1. Person nodes now include `alternateName` `Gisela.UGC` on Person only (homepage JSON-LD and resource Article author). Logo/entity alias, not a second Organization or a keyword.
 2. Fiverr `sameAs` and profile hrefs use `https://www.fiverr.com/gisela_sm` with no gig-page query string.
-3. `public/llms.txt` and `public/llms-full.txt` share Last-Updated 2026-08-31, the same Fiverr canonical, 28+ campaigns, and 4.8/173. The full file is no longer frozen on 2026-03-24.
+3. `public/llms.txt` and `public/llms-full.txt` share Last-Updated 2026-08-31 and the locked EN quotable (Medellín production, US Hispanic / Spain / LatAm, Fiverr gisela_sm 4.8/5 on 173 reviews, 28+ campaigns, content for the brand). The full file is no longer frozen on 2026-03-24.
 4. Hub indexes emit WebPage + BreadcrumbList only. They do not carry AggregateRating or Fiverr review nodes.
 
