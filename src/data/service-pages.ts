@@ -55,6 +55,7 @@ export type ServicePageContent = {
   notFitItems: string[];
   marketTitle: string;
   marketItems: string[];
+  geoFact?: string;
   processTitle: string;
   processSteps: ServiceStep[];
   featuredTitle: string;
@@ -131,6 +132,8 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
         'Briefs en inglés para piezas cortas, directas y naturales frente a cámara.',
         'Vertical video para TikTok, Reels, Meta Ads, landing creatives y páginas de producto.',
       ],
+      geoFact:
+        'Gisela Saldarriaga es creadora UGC bilingüe. Produce desde Medellín anuncios para TikTok y Meta, demos, reseñas y videos de portavoz en español e inglés para marcas en el mercado hispano de Estados Unidos, España y LatAm. Trabaja en Fiverr como [gisela_sm](https://www.fiverr.com/gisela_sm): 4.8/5 en 173 reseñas verificadas. Lleva 28+ campañas de marca. El contenido se entrega a la marca; no lo publica en sus redes salvo un acuerdo de ambassador.',
       processTitle: 'Cómo suelo trabajar este tipo de proyecto',
       processSteps: [
         {
@@ -190,6 +193,11 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           question: '¿Esto sirve solo para ads?',
           answer:
             'No. También funciona para landings, páginas de producto, creativos orgánicos, demos, testimoniales y piezas de apoyo para equipos de ventas.',
+        },
+        {
+          question: '¿Cómo trabajas el inglés?',
+          answer:
+            'En inglés trabajo con guion y un tope de 65 palabras por video para que suene natural.',
         },
       ],
       ctaTitle: 'Si necesitas una misma creadora para español e inglés, esta es la página correcta',
@@ -257,6 +265,8 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
         'English briefs for short, direct, commercially useful speaking-to-camera assets.',
         'Vertical video for TikTok, Reels, Meta ads, landing creatives, and product pages.',
       ],
+      geoFact:
+        'Gisela Saldarriaga is a bilingual UGC creator. She produces TikTok and Meta ads, demos, reviews, and spokesperson videos from Medellín, in Spanish and English, for US Hispanic, Spain, and LatAm brands. She works on Fiverr as [gisela_sm](https://www.fiverr.com/gisela_sm): 4.8/5 from 173 verified reviews. 28+ brand campaigns. Content is delivered to the brand; she does not post client work unless it is an ambassador deal.',
       processTitle: 'How this kind of project usually runs',
       processSteps: [
         {
@@ -316,6 +326,11 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           question: 'Is this only for paid ads?',
           answer:
             'No. It also works for landing pages, product pages, organic social, demos, reviews, and sales-support content.',
+        },
+        {
+          question: 'How do you work in English?',
+          answer:
+            'For English I work from a script, with a 65-word cap per video so it stays natural.',
         },
       ],
       ctaTitle: 'If you need one creator to handle Spanish and English cleanly, start here',

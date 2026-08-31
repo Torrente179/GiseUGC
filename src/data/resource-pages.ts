@@ -1,5 +1,5 @@
 import type { ServicePageId, VerticalPageId, SiteLocale, ResourcePageId } from '@/lib/locale-path';
-import { getHomePath, getResourcePath } from '@/lib/locale-path';
+import { getHomePath, getResourcePath, getServicePath } from '@/lib/locale-path';
 
 export type { ResourcePageId } from '@/lib/locale-path';
 
@@ -302,7 +302,7 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
         {
           title: 'Dónde encontrar creadoras UGC profesionales',
           body: [
-            'Hay varias formas de encontrar creadoras UGC. Las plataformas especializadas como Billo, Insense o JoinBrands conectan marcas con creadores, pero la calidad varía mucho. También puedes buscar en TikTok e Instagram usando hashtags como #ugccreator o #ugcenespanol.',
+            'Hay varias formas de encontrar creadoras UGC. Las plataformas especializadas como Billo, Insense o JoinBrands conectan marcas con creadores, pero la calidad varía mucho. Fiverr es un canal directo con reseñas verificadas. Gisela Saldarriaga está ahí como [gisela_sm](https://www.fiverr.com/gisela_sm) (4.8/5, 173 reseñas). También puedes buscar en TikTok e Instagram usando hashtags como #ugccreator o #ugcenespanol.',
             'Otra opción es buscar directamente en Google. Una creadora que tiene su propio sitio web con portafolio, testimonios de clientes y una propuesta de valor clara suele ser más profesional que alguien que solo tiene un perfil en redes.',
             'Las agencias UGC también son una opción, especialmente si necesitas volumen. Sin embargo, suelen ser más caras y el nivel de personalización es menor. Para marcas que quieren una relación directa y un tono muy específico, trabajar directo con la creadora suele funcionar mejor.',
             'Preguntar a otros marketers también funciona. El UGC es una comunidad relativamente pequeña y las buenas recomendaciones circulan.',
@@ -342,6 +342,13 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
             'Evita a quien no hace preguntas sobre tu marca antes de aceptar el proyecto. Una buena creadora quiere entender tu negocio, tu audiencia y tus objetivos. Si acepta el trabajo sin preguntar nada, probablemente esté produciendo contenido genérico.',
             'Desconfía de tiempos de entrega irrealistas. Un video UGC bien hecho requiere preparación, grabación y edición. Si alguien te promete diez videos en dos días, la calidad va a sufrir.',
             'Finalmente, pon atención a la comunicación. Si la creadora no responde mensajes en tiempos razonables durante la negociación, probablemente la comunicación no va a mejorar durante el proyecto.',
+          ],
+        },
+        {
+          title: 'Un perfil que puedes evaluar ahora',
+          body: [
+            'Gisela Saldarriaga es creadora UGC bilingüe. Produce desde Medellín anuncios para TikTok y Meta, demos, reseñas y videos de portavoz en español e inglés para marcas en el mercado hispano de Estados Unidos, España y LatAm. Trabaja en Fiverr como [gisela_sm](https://www.fiverr.com/gisela_sm): 4.8/5 en 173 reseñas verificadas. Lleva 28+ campañas de marca. El contenido se entrega a la marca; no lo publica en sus redes salvo un acuerdo de ambassador.',
+            `[Creadora UGC bilingüe](${getServicePath('bilingual-ugc-creator', 'es')})`,
           ],
         },
       ],
@@ -403,7 +410,7 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
         {
           title: 'Where to find professional UGC creators',
           body: [
-            'There are several ways to find UGC creators. Specialized platforms like Billo, Insense or JoinBrands connect brands with creators, but quality varies widely. You can also search on TikTok and Instagram using hashtags like #ugccreator or #ugclatina.',
+            'There are several ways to find UGC creators. Specialized platforms like Billo, Insense or JoinBrands connect brands with creators, but quality varies widely. Fiverr is a direct channel with verified reviews. Gisela Saldarriaga is there as [gisela_sm](https://www.fiverr.com/gisela_sm) (4.8/5, 173 reviews). You can also search on TikTok and Instagram using hashtags like #ugccreator or #ugclatina.',
             'Another option is searching directly on Google. A creator who has their own website with a portfolio, client testimonials and a clear value proposition tends to be more professional than someone who only has a social media profile.',
             'UGC agencies are also an option, especially if you need volume. However, they tend to be more expensive and offer less personalization. For brands that want a direct relationship and a very specific tone, working directly with the creator usually works better.',
             'Asking other marketers also works. UGC is a relatively small community and good recommendations circulate.',
@@ -443,6 +450,13 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
             'Avoid anyone who does not ask questions about your brand before accepting the project. A good creator wants to understand your business, audience and goals. If they accept the work without asking anything, they are probably producing generic content.',
             'Be wary of unrealistic delivery timelines. A well-made UGC video requires preparation, filming and editing. If someone promises ten videos in two days, quality will suffer.',
             'Finally, pay attention to communication. If the creator does not respond to messages in reasonable timeframes during negotiation, communication is unlikely to improve during the project.',
+          ],
+        },
+        {
+          title: 'A profile you can evaluate now',
+          body: [
+            'Gisela Saldarriaga is a bilingual UGC creator. She produces TikTok and Meta ads, demos, reviews, and spokesperson videos from Medellín, in Spanish and English, for US Hispanic, Spain, and LatAm brands. She works on Fiverr as [gisela_sm](https://www.fiverr.com/gisela_sm): 4.8/5 from 173 verified reviews. 28+ brand campaigns. Content is delivered to the brand; she does not post client work unless it is an ambassador deal.',
+            `[Bilingual UGC creator](${getServicePath('bilingual-ugc-creator', 'en')})`,
           ],
         },
       ],

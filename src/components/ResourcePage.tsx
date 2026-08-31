@@ -11,6 +11,7 @@ import PageSeo from '@/components/PageSeo';
 import { RevealSection } from '@/components/motion/RevealSection';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
+import { InlineCopy } from '@/lib/inline-copy-links';
 import '@/styles/templates.css';
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
@@ -261,7 +262,9 @@ const ResourcePage = ({
                     )}
                     <h2 className="rsc-chapter-title font-serif">{section.title}</h2>
                     {section.body.map((paragraph) => (
-                      <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                      <p key={paragraph.slice(0, 48)}>
+                        <InlineCopy text={paragraph} />
+                      </p>
                     ))}
                   </section>
                 ))}

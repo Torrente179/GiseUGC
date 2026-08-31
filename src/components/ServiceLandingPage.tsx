@@ -15,6 +15,7 @@ import MediaTheater from '@/components/media/MediaTheater';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
 import { createClipPlaybackCandidates } from '@/lib/media-assets';
+import { InlineCopy } from '@/lib/inline-copy-links';
 import { useMediaIntent } from '@/hooks/use-media-intent';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
@@ -260,6 +261,14 @@ const ServicePageInner = ({
               </li>
             ))}
           </ul>
+          {page.geoFact ? (
+            <>
+              <div className="svc-inner-rule" aria-hidden="true" />
+              <p className="svc-inner-lead">
+                <InlineCopy text={page.geoFact} />
+              </p>
+            </>
+          ) : null}
         </div>
       </Shell>
 
