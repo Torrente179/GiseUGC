@@ -62,6 +62,6 @@ Minimum wiring so that copy is visible HTML (not comments) and `gisela_sm` is a 
 
 ## How to verify
 
-1. `npx vitest run src/data/geo-copy.test.ts src/lib/inline-copy-links.test.ts`
-2. Dev server (not a production rebuild): `/servicios/creadora-ugc-bilingue/` and `/recursos/como-contratar-creadora-ugc/` plus EN twins
-3. Confirm `gisela_sm` href is exactly `https://www.fiverr.com/gisela_sm`
+1. `npx vitest run src/data/geo-copy.test.tsx src/lib/inline-copy-links.test.ts` — SSR-renders the four pages from source (the same tree `scripts/prerender.mjs` uses) and asserts the fact block, query-free Fiverr href, 65-word FAQ, and hire-guide inserts.
+2. Do **not** expect the committed boot-shell HTML to already contain this copy. Those shells are last prerendered snapshots; Vercel’s `vite build` + prerender will bake the new paragraphs on deploy. This pass does not run a production rebuild.
+3. After deploy, a no-JS fetch of the four URLs should show the fact block and `href="https://www.fiverr.com/gisela_sm"`.
