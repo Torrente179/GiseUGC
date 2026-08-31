@@ -11,6 +11,7 @@ import {
   buildServiceLandingRouteData,
 } from './landing-route-data.server';
 import { SITE_PROOF } from './site-proof';
+import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
 import { FIVERR_PROFILE_URL } from '@/lib/contact-channels';
 import { getServicePath } from '@/lib/locale-path';
 import { inlineCopyHrefs, visibleInlineCopy } from '@/lib/inline-copy-links';
@@ -70,6 +71,8 @@ describe('GEO copy on bilingual service pages', () => {
     assertCrawlableFiverrLink(html);
     expect(html).toContain('¿Cómo trabajas el inglés?');
     expect(html).toContain('un tope de 65 palabras por video');
+    expect(html).not.toMatch(/24 mar 2026|Mar 24, 2026/u);
+    expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.services, 'es'));
   });
 
   it('EN page ships the fact block after markets, with a query-free Fiverr link and 65-word English FAQ', () => {
@@ -101,6 +104,8 @@ describe('GEO copy on bilingual service pages', () => {
     assertCrawlableFiverrLink(html);
     expect(html).toContain('How do you work in English?');
     expect(html).toContain('65-word cap per video');
+    expect(html).not.toMatch(/24 mar 2026|Mar 24, 2026/u);
+    expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.services, 'en'));
   });
 });
 
@@ -137,6 +142,7 @@ describe('GEO copy on how-to-hire resource pages', () => {
     expect(profileAt).toBeGreaterThan(fiverrAt);
     expect(ctaAt).toBeGreaterThan(profileAt);
     expect(html).toContain('(4.8/5, 173 reseñas)');
+    expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.resources, 'es'));
     expect(html).toContain('Gisela Saldarriaga es creadora UGC bilingüe');
     expect(html).toContain(`href="${getServicePath('bilingual-ugc-creator', 'es')}"`);
     assertCrawlableFiverrLink(html);
@@ -174,6 +180,7 @@ describe('GEO copy on how-to-hire resource pages', () => {
     expect(profileAt).toBeGreaterThan(fiverrAt);
     expect(ctaAt).toBeGreaterThan(profileAt);
     expect(html).toContain('(4.8/5, 173 reviews)');
+    expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.resources, 'en'));
     expect(html).toContain(`href="${getServicePath('bilingual-ugc-creator', 'en')}"`);
     assertCrawlableFiverrLink(html);
   });

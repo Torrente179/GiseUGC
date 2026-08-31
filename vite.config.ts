@@ -1,7 +1,18 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { getAllEntrypointPaths } from "./src/lib/locale-path";
+import { writeSitemapFile } from "./src/lib/sitemap";
+
+const giselaSitemap = (): Plugin => ({
+  name: "gisela-sitemap",
+  apply: "build",
+  buildStart() {
+    // Same path production serves: public/sitemap.xml copied to dist/sitemap.xml.
+    // Throw here so a broken generator fails the Vercel build instead of HTTP 500.
+    writeSitemapFile();
+  },
+});
 
 // Every static HTML entrypoint (40+ across both locales) is derived from the
 // page registry in src/lib/locale-path.ts — never hand-listed here — so the
@@ -25,6 +36,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
+    giselaSitemap(),
   ].filter(Boolean),
   build: {
     manifest: true,

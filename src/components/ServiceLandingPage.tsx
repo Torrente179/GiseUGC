@@ -19,7 +19,7 @@ import { InlineCopy } from '@/lib/inline-copy-links';
 import { useMediaIntent } from '@/hooks/use-media-intent';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
-import { CONTENT_DATES } from '@/data/content-dates';
+import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
 import '@/styles/templates.css';
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
@@ -239,7 +239,7 @@ const ServicePageInner = ({
   variant,
 }: ServicePageInnerProps) => {
   const Shell = reveal ? RevealSection : 'section';
-  const updated = locale === 'es' ? 'Última actualización: 24 mar 2026' : 'Last updated: Mar 24, 2026';
+  const updated = formatLastUpdatedLabel(CONTENT_DATES.services, locale);
   const hasExplore =
     relevantVerticals.length > 0 || resourceLinks.length > 0 || allOtherServices.length > 0;
 

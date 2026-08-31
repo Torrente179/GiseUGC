@@ -20,42 +20,6 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.giselasaldarriaga.com/politica-de-privacidad/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/privacy-policy/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
-    <lastmod>2026-03-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.35</priority>
-  </url>
-  <url>
-    <loc>https://www.giselasaldarriaga.com/en/privacy-policy/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/privacy-policy/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
-    <lastmod>2026-03-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.35</priority>
-  </url>
-  <url>
-    <loc>https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/terms-and-content-use/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
-    <lastmod>2026-03-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.35</priority>
-  </url>
-  <url>
-    <loc>https://www.giselasaldarriaga.com/en/terms-and-content-use/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/terms-and-content-use/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
-    <lastmod>2026-03-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.35</priority>
-  </url>
-  <url>
     <loc>https://www.giselasaldarriaga.com/servicios/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/" />
@@ -78,7 +42,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -87,7 +51,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -96,126 +60,126 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/spokesperson-videos/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/en/services/spokesperson-videos/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/spokesperson-videos/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.82</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.82</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-testimonials-reviews/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/en/services/ugc-testimonials-reviews/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-testimonials-reviews/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-product-demo/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/en/services/ugc-product-demo/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-product-demo/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-problem-solution/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/en/services/ugc-problem-solution/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-problem-solution/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/" />
-    <lastmod>2026-08-15</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/verticales/</loc>
@@ -348,7 +312,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/recursos/que-es-ugc/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/resources/what-is-ugc/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/recursos/que-es-ugc/" />
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
@@ -357,7 +321,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/recursos/que-es-ugc/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/resources/what-is-ugc/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/recursos/que-es-ugc/" />
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
@@ -366,7 +330,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/recursos/como-contratar-creadora-ugc/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/resources/how-to-hire-ugc-creator/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/recursos/como-contratar-creadora-ugc/" />
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
@@ -375,7 +339,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/recursos/como-contratar-creadora-ugc/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/resources/how-to-hire-ugc-creator/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/recursos/como-contratar-creadora-ugc/" />
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
@@ -384,7 +348,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/recursos/ugc-vs-influencer-marketing/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/resources/ugc-vs-influencer-marketing/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/recursos/ugc-vs-influencer-marketing/" />
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
@@ -393,7 +357,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/recursos/ugc-vs-influencer-marketing/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/resources/ugc-vs-influencer-marketing/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/recursos/ugc-vs-influencer-marketing/" />
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
@@ -402,7 +366,7 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/recursos/formatos-ugc-ads/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/resources/ugc-ad-formats-guide/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/recursos/formatos-ugc-ads/" />
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
@@ -411,8 +375,44 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/recursos/formatos-ugc-ads/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/resources/ugc-ad-formats-guide/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/recursos/formatos-ugc-ads/" />
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/politica-de-privacidad/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/privacy-policy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.35</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/privacy-policy/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/privacy-policy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/politica-de-privacidad/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.35</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/terms-and-content-use/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.35</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/terms-and-content-use/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/terms-and-content-use/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/terminos-y-uso-de-contenido/" />
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.35</priority>
   </url>
 </urlset>
