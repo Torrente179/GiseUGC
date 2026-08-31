@@ -25,6 +25,18 @@ const getClientEntry = (relativePath) => {
   if (relativePath === 'index.html' || relativePath === 'en/index.html') {
     return '/src/entry-home.tsx';
   }
+  // Hub indexes must win over the family prefix match, or /servicios/
+  // would hydrate ServiceLandingPage and render NotFound.
+  if (
+    relativePath === 'servicios/index.html' ||
+    relativePath === 'en/services/index.html' ||
+    relativePath === 'verticales/index.html' ||
+    relativePath === 'en/verticals/index.html' ||
+    relativePath === 'recursos/index.html' ||
+    relativePath === 'en/resources/index.html'
+  ) {
+    return '/src/entry-hub.tsx';
+  }
   if (
     relativePath.startsWith('servicios/') ||
     relativePath.startsWith('en/services/')

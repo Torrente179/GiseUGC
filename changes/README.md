@@ -20,6 +20,10 @@ This folder is organized by subsystem instead of by date.
   - Portfolio theater, reel catalog, R2 gating, transcript-driven naming, and the encoding pipeline.
 - `seo/`
   - Canonicals, metadata, schema, crawlability, and language-routing behavior.
+  - **Current crawl-trust / hub indexes:** `seo/seo-crawl-trust.md` —
+    honest homepage proof (28+/173/4.8/ES+EN), CONTENT_DATES, Fiverr canonical
+    without `?source=gig_page`, Person `alternateName`, and the six empty hub
+    200 shells. Read this before touching those surfaces.
   - **Current schema delivery:** `seo/seo-ssr-structured-data-and-metadata-parity.md` —
     route JSON-LD renders server-side via `PageSeo`, resource `<head>` metadata is
     generated from `src/data/resource-pages.ts` in prebuild. Read this before

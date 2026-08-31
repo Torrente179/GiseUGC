@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script defer src="/gtm-loader.js"></script>
+<meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gisela Saldarriaga</title>
+    <meta name="description" content="Gisela Saldarriaga" />
+    <meta name="author" content="Gisela Saldarriaga" />
+    <meta name="theme-color" content="#fffefe" />
+    <script>
+      (function () {
+        const root = document.documentElement;
+        const storageKey = 'theme';
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        let storedTheme = null;
+        try { storedTheme = localStorage.getItem(storageKey); } catch (_) {}
+        const activeTheme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : systemTheme;
+        const shouldUseDark = activeTheme === 'dark';
+        root.classList.toggle('dark', shouldUseDark);
+        root.style.colorScheme = activeTheme;
+        if (themeColorMeta) { themeColorMeta.setAttribute('content', shouldUseDark ? '#0f121a' : '#fffefe'); }
+      })();
+    </script>
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://www.giselasaldarriaga.com/en/verticals/" />
+    <link rel="alternate" href="https://www.giselasaldarriaga.com/verticales/" hreflang="es" />
+    <link rel="alternate" href="https://www.giselasaldarriaga.com/en/verticals/" hreflang="en" />
+    <link rel="alternate" href="https://www.giselasaldarriaga.com/verticales/" hreflang="x-default" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.giselasaldarriaga.com/en/verticals/" />
+    <meta property="og:title" content="Gisela Saldarriaga" />
+    <meta property="og:description" content="Gisela Saldarriaga" />
+    <meta property="og:image" content="https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg?v=20260219" />
+    <meta property="og:site_name" content="Gisela Saldarriaga" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="es_CO" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://www.giselasaldarriaga.com/en/verticals/" />
+    <meta name="twitter:title" content="Gisela Saldarriaga" />
+    <meta name="twitter:description" content="Gisela Saldarriaga" />
+    <meta name="twitter:image" content="https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg?v=20260219" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://www.giselasaldarriaga.com/en/verticals/#webpage","url":"https://www.giselasaldarriaga.com/en/verticals/","name":"Gisela Saldarriaga","dateModified":"2026-08-31","inLanguage":"en","isPartOf":{"@id":"https://www.giselasaldarriaga.com/en/#website"},"breadcrumb":{"@id":"https://www.giselasaldarriaga.com/en/verticals/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://www.giselasaldarriaga.com/en/verticals/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.giselasaldarriaga.com/en/"},{"@type":"ListItem","position":2,"name":"Gisela Saldarriaga","item":"https://www.giselasaldarriaga.com/en/verticals/"}]}]}</script>
+    <link
+      rel="preload"
+      href="/fonts/dm-sans-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+  </head>
+  <body>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TX2WCCLT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <div id="root">
+      <main>
+        <nav aria-label="Links">
+          <ul>
+            <li><a href="/en/verticals/beauty-ugc-creator/">Beauty UGC</a></li>
+            <li><a href="/en/verticals/fashion-ugc-creator/">Fashion UGC</a></li>
+            <li><a href="/en/verticals/tech-saas-ugc-creator/">Tech and SaaS UGC</a></li>
+            <li><a href="/en/verticals/ecommerce-ugc-creator/">Ecommerce UGC</a></li>
+            <li><a href="/en/verticals/lifestyle-wellness-ugc-creator/">Lifestyle and wellness UGC</a></li>
+          </ul>
+        </nav>
+        <p><a href="/en/#contact">Contact</a></p>
+        <p><a href="/en/">Home</a> · <a href="/verticales/">Español</a></p>
+      </main>
+    </div>
+    <script type="module" src="/src/entry-hub.tsx"></script>
+  </body>
+</html>

@@ -56,6 +56,24 @@
     <priority>0.35</priority>
   </url>
   <url>
+    <loc>https://www.giselasaldarriaga.com/servicios/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/" />
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/services/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/servicios/" />
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/" />
@@ -200,6 +218,24 @@
     <priority>0.80</priority>
   </url>
   <url>
+    <loc>https://www.giselasaldarriaga.com/verticales/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/verticales/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/verticals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/verticales/" />
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/verticals/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/verticales/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/verticals/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/verticales/" />
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://www.giselasaldarriaga.com/verticales/ugc-beauty/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/verticales/ugc-beauty/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/verticals/beauty-ugc-creator/" />
@@ -288,6 +324,24 @@
     <lastmod>2026-07-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/recursos/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/recursos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/resources/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/recursos/" />
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.giselasaldarriaga.com/en/resources/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.giselasaldarriaga.com/recursos/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.giselasaldarriaga.com/en/resources/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.giselasaldarriaga.com/recursos/" />
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.giselasaldarriaga.com/recursos/que-es-ugc/</loc>

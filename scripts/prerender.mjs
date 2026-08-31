@@ -82,13 +82,18 @@ for (const htmlPath of htmlFiles) {
   root.innerHTML = markup;
   root.dataset.prerendered = 'true';
 
-  const routeModule = route.includes('/servicios/') || route.includes('/services/')
-    ? 'src/components/ServiceLandingPage.tsx'
-    : route.includes('/verticales/') || route.includes('/verticals/')
-      ? 'src/components/VerticalLandingPage.tsx'
-      : route.includes('/recursos/') || route.includes('/resources/')
-        ? 'src/components/ResourcePage.tsx'
-        : null;
+  const isHubRoute = /^(?:\/servicios|\/verticales|\/recursos|\/en\/services|\/en\/verticals|\/en\/resources)\/$/u.test(
+    route,
+  );
+  const routeModule = isHubRoute
+    ? null
+    : route.includes('/servicios/') || route.includes('/services/')
+      ? 'src/components/ServiceLandingPage.tsx'
+      : route.includes('/verticales/') || route.includes('/verticals/')
+        ? 'src/components/VerticalLandingPage.tsx'
+        : route.includes('/recursos/') || route.includes('/resources/')
+          ? 'src/components/ResourcePage.tsx'
+          : null;
   const routeCssFiles = routeModule
     ? [...new Set(collectManifestCss(routeModule))]
     : [];
