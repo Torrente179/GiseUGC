@@ -2,11 +2,11 @@
 
 **Status:** Current for crawl-trust / hub indexes
 **Implemented:** 2026-08-31
-**Scope:** Homepage proof HTML vs schema vs llms, sitemap lastmod, Review JSON-LD removal, Fiverr `sameAs` canonical, Person `alternateName`, empty hub index routes
+**Scope:** Homepage proof HTML vs schema vs llms, sitemap lastmod, Review JSON-LD removal, Fiverr `sameAs` canonical, Person `alternateName`, hub index 200s
 
 ## Why this file exists
 
-Juan Pablo requires documentation in `changes/`. This pass is a crawl-trust slice, not another homepage-schema rewrite. Read this before changing homepage counters, `CONTENT_DATES`, Fiverr profile URLs, Person schema, or `/servicios/` `/verticales/` `/recursos/` (and EN twins).
+Juan Pablo requires documentation in `changes/`. This pass is a crawl-trust slice, not another homepage-schema rewrite. Read this before changing homepage counters, `CONTENT_DATES`, Fiverr profile URLs, or Person schema. Hub index *copy* now lives in `2026-09-01-hire-intent-hub-copy.md`; this file still owns the 200-route, hreflang, sitemap, and hydrator rules for `/servicios/` `/verticales/` `/recursos/` (and EN twins).
 
 Related current schema delivery still lives in `seo-ssr-structured-data-and-metadata-parity.md`. That file's old "Review provenance" open item is resolved here.
 
@@ -21,7 +21,7 @@ Single source: `src/data/site-proof.ts`
 
 `ManifestoChapter` emits those values in the first HTML snapshot (no animated zeros for Googlebot). Homepage JSON-LD keeps `AggregateRating` 4.8/173 with `worstRating: "1"` and **does not** invent `Review` / `reviewBody` nodes.
 
-Dates: `src/data/content-dates.ts`. Sitemap lastmod, JSON-LD `dateModified`, visible "last updated" labels, and llms `Last-Updated` read from here. Hub shells use `CONTENT_DATES.hubs` (`2026-08-31`). Service and resource families are `2026-08-31` after the GEO-copy pass on bilingüe / how-to-hire.
+Dates: `src/data/content-dates.ts`. Sitemap lastmod, JSON-LD `dateModified`, visible "last updated" labels, and llms `Last-Updated` read from here. Hub shells use `CONTENT_DATES.hubs` (`2026-09-01` after hire-intent copy). Service and resource families are `2026-08-31` after the GEO-copy pass on bilingüe / how-to-hire.
 
 `public/sitemap.xml` is generated from `PAGE_REGISTRY` + `CONTENT_DATES` (`src/lib/sitemap.ts`). Vite writes that file during `vite build` (the same `/sitemap.xml` static path production serves). Do not invent URLs; do not serve the sitemap through React.
 
@@ -37,7 +37,7 @@ Profile URL is `https://www.fiverr.com/gisela_sm` with no `?source=gig_page`.
 
 `"alternateName": "Gisela.UGC"` is on the homepage **Person** node only (`index.html`, `en/index.html`). It is not a keyword, not a second Organization, and not on ProfessionalService.
 
-## Hub index routes (placeholder 200 HTML)
+## Hub index routes
 
 These six URLs must be `text/html` 200, never Vercel `text/plain` 404:
 
@@ -50,16 +50,17 @@ Rules:
 - Hreflang es↔en; **x-default is the ES hub**.
 - Both URLs in `public/sitemap.xml`, immediately before that family's children.
 - Contact CTAs to `/#contact` and `/en/#contact`.
-- Child links only (existing `navLabel`s from `src/data/hub-child-links.ts`).
-- No hub titles, no H1, no body copy, no Fiverr 4.8 paragraphs.
-- Landing Content pastes copy after the 200 exists. Do not add hub marketing copy here.
-- Do not retarget bilingüe (`/servicios/creadora-ugc-bilingue/`) or cómo-contratar (`/recursos/como-contratar-creadora-ugc/`) breadcrumbs onto these empty hubs.
+- Child links only to existing money-page routes (`src/data/hub-pages.ts`).
+- Hire-intent title, meta, H1, and body now live on these routes — see
+  `2026-09-01-hire-intent-hub-copy.md`. Do not invent new URLs.
+- Fiverr 4.8/173 proof is services-hub only.
+- Do not retarget bilingüe (`/servicios/creadora-ugc-bilingue/`) or cómo-contratar (`/recursos/como-contratar-creadora-ugc/`) breadcrumbs onto these hubs.
 
 Routing trap: `scripts/normalize-client-entrypoints.mjs` must map the **exact** hub `index.html` files to `src/entry-hub.tsx` *before* the `servicios/*` → `entry-service.tsx` prefix match. Otherwise the hub hydrates `ServiceLandingPage` and React 404s.
 
 Hubs are registered in `PAGE_REGISTRY` (`family: 'hub'`) so Vite emits the MPA inputs. `App.tsx` and `src/entry-server.tsx` mount `HubPage`.
 
-Empty shells can be regenerated with `node scripts/sync-hub-entrypoints.mjs`. **Do not** add that script to `prebuild` — Landing Content will edit the HTML by hand.
+Hub shells can be regenerated with `node scripts/sync-hub-entrypoints.mjs`. Copy in that script must match `src/data/hub-pages.ts`. **Do not** add that script to `prebuild`.
 
 ## IndexNow
 

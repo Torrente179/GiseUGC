@@ -140,6 +140,6 @@ Homepage schema validated clean via
   displayed strings and was outside this change's scope.
 - **No image/alt audit exists.** Service pages now serve 12 images each and
   nothing validates alt coverage.
-- **Hub index copy.** `/servicios/`, `/verticales/`, `/recursos/` and EN twins
-  are placeholder 200 shells. Landing Content pastes copy after crawl 200.
-  See `seo-crawl-trust.md`.
+- **Hub index copy — resolved 2026-09-01.** `/servicios/`, `/verticales/`,
+  `/recursos/` and EN twins now carry hire-intent title/H1/body. See
+  `2026-09-01-hire-intent-hub-copy.md`.

@@ -4,8 +4,8 @@
 
 Production does not boot from one universal page module:
 
-1. Each HTML route imports a route-family entry (`entry-home`, `entry-service`,
-   `entry-vertical`, `entry-resource`, or `entry-legal`).
+1. Each HTML route imports a route-family entry (`entry-home`, `entry-hub`,
+   `entry-service`, `entry-vertical`, `entry-resource`, or `entry-legal`).
 2. The entry reads embedded route data when the template needs it.
 3. `bootstrapApp()` in `src/client-runtime.tsx` installs `BrowserRouter`,
    `LocaleProvider`, and `ThemeProvider`.
@@ -18,12 +18,13 @@ Production does not boot from one universal page module:
 
 `src/App.tsx` computes route entries once at module load:
 
+- `getHubPageRouteEntries()`
 - `getServicePageRouteEntries()`
 - `getVerticalPageRouteEntries()`
 - `getResourcePageRouteEntries()`
 - `getLegalPageRouteEntries()`
 
-On each location change it normalizes the pathname and searches these arrays. The matching route entry supplies both the page id and locale into the relevant page factory.
+On each location change it normalizes the pathname and searches these arrays. The matching route entry supplies both the page id and locale into the relevant page factory. Hub indexes (`/servicios/`, `/verticales/`, `/recursos/` and EN twins) mount `HubPage` from `src/entry-hub.tsx`; they must not hydrate through the service/vertical/resource prefix match.
 
 ## Document Navigation Policy
 

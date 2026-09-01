@@ -4,7 +4,7 @@
  * llms Last-Updated should read from here so those surfaces cannot drift.
  *
  * home      — this crawl-trust pass (proof, schema, llms)
- * hubs      — empty-but-valid /servicios|verticales|recursos index shells
+ * hubs      — hire-intent /servicios|verticales|recursos index copy
  * services  — GEO copy on bilingual UGC + service inner template (2026-08-31)
  * verticals — last vertical entry HTML / template commit
  * resources — GEO copy on how-to-hire + resource template (2026-08-31)
@@ -12,7 +12,7 @@
  */
 export const CONTENT_DATES = {
   home: '2026-08-31',
-  hubs: '2026-08-31',
+  hubs: '2026-09-01',
   services: '2026-08-31',
   verticals: '2026-07-29',
   resources: '2026-08-31',

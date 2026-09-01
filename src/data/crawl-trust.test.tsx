@@ -175,6 +175,8 @@ describe('Fiverr URLs stay on the canonical profile', () => {
       'src/components/FloatingContactDock.tsx',
       'index.html',
       'en/index.html',
+      'servicios/index.html',
+      'en/services/index.html',
       'public/llms.txt',
       'public/llms-full.txt',
     ];
@@ -215,7 +217,7 @@ const renderHub = (path: string, hubId: (typeof HUB_ENTRYPOINTS)[number]['hubId'
     </StaticRouter>,
   );
 
-describe('hub index routes are empty-but-valid 200 shells', () => {
+describe('hub index routes stay registered 200 documents with hire-intent copy', () => {
   it('sitemap lists both locales for each hub before that family\'s children', () => {
     const xml = read('public/sitemap.xml');
     expect(xml.indexOf('/servicios/</loc>')).toBeGreaterThan(-1);
@@ -225,7 +227,7 @@ describe('hub index routes are empty-but-valid 200 shells', () => {
     expect(xml.indexOf('/recursos/</loc>')).toBeLessThan(xml.indexOf('/recursos/que-es-ugc/'));
   });
 
-  it('static shells hydrate via entry-hub, pair hreflang, and only list children + contact', () => {
+  it('static shells hydrate via entry-hub, pair hreflang, and keep contact CTAs', () => {
     for (const hub of HUB_ENTRYPOINTS) {
       const html = read(hub.file);
       expect(html).toContain('/src/entry-hub.tsx');
@@ -236,8 +238,7 @@ describe('hub index routes are empty-but-valid 200 shells', () => {
       expect(html).toContain('hreflang="en"');
       expect(html).toMatch(/hreflang="x-default"/u);
       expect(html).toContain(hub.contact);
-      expect(html.toLowerCase()).not.toContain('<h1');
-      expect(html).not.toContain('4.8');
+      expect(html.toLowerCase()).toContain('<h1');
       expect(html).not.toContain('AggregateRating');
       expect(html).not.toContain('FiverrRating');
       expect(html).not.toContain('reviewBody');
@@ -274,29 +275,28 @@ describe('hub index routes are empty-but-valid 200 shells', () => {
         expect(html).toContain(child.label);
       }
       expect(html).toContain(entry.locale === 'es' ? '/#contact' : '/en/#contact');
-      expect(html.toLowerCase()).not.toContain('<h1');
-      expect(html).not.toContain('4.8');
+      expect(html.toLowerCase()).toContain('<h1');
       expect(html).not.toContain('reviewBody');
     }
   });
 
-  it('hub child labels stay locked to money-page navLabels', () => {
+  it('every existing money page is linked from its hub and hubs invent no extra URLs', () => {
     for (const locale of ['es', 'en'] as SiteLocale[]) {
+      const serviceHrefs = new Set(getHubChildLinks('services', locale).map((item) => item.href));
+      const verticalHrefs = new Set(getHubChildLinks('verticals', locale).map((item) => item.href));
+      const resourceHrefs = new Set(getHubChildLinks('resources', locale).map((item) => item.href));
       for (const id of getServiceIdsInOrder()) {
-        const page = getServicePageContent(id, locale);
-        const link = getHubChildLinks('services', locale).find((item) => item.href === page.path);
-        expect(link?.label).toBe(page.navLabel);
+        expect(serviceHrefs.has(getServicePageContent(id, locale).path)).toBe(true);
       }
       for (const id of getVerticalIdsInOrder()) {
-        const page = getVerticalPageContent(id, locale);
-        const link = getHubChildLinks('verticals', locale).find((item) => item.href === page.path);
-        expect(link?.label).toBe(page.navLabel);
+        expect(verticalHrefs.has(getVerticalPageContent(id, locale).path)).toBe(true);
       }
       for (const id of getResourceIdsInOrder()) {
-        const page = getResourcePageContent(id, locale);
-        const link = getHubChildLinks('resources', locale).find((item) => item.href === page.path);
-        expect(link?.label).toBe(page.navLabel);
+        expect(resourceHrefs.has(getResourcePageContent(id, locale).path)).toBe(true);
       }
+      expect(serviceHrefs.size).toBe(getServiceIdsInOrder().length);
+      expect(verticalHrefs.size).toBe(getVerticalIdsInOrder().length);
+      expect(resourceHrefs.size).toBe(getResourceIdsInOrder().length);
     }
   });
 
@@ -314,7 +314,7 @@ describe('hub index routes are empty-but-valid 200 shells', () => {
     expect(read('en/resources/how-to-hire-ugc-creator/index.html')).toContain('Aug 31, 2026');
   });
 
-  it('does not retarget bilingüe or cómo-contratar breadcrumbs onto empty hubs', () => {
+  it('does not retarget bilingüe or cómo-contratar breadcrumbs onto hub indexes', () => {
     expect(read('src/components/ServiceLandingPage.tsx')).toContain("getHomeSectionHref(locale, 'services')");
     expect(read('src/components/ServiceLandingPage.tsx')).not.toContain('getHubPath');
     expect(read('src/components/ResourcePage.tsx')).not.toContain('getHubPath');

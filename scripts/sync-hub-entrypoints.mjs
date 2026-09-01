@@ -1,6 +1,8 @@
 /**
- * Writes the six empty-but-valid hub index shells.
- * Child hrefs/labels must match src/data/hub-child-links.ts.
+ * Writes the six hire-intent hub index shells.
+ * Copy must stay in lockstep with src/data/hub-pages.ts (enforced in tests).
+ * PageSeo only updates <title>/meta in a useEffect, so crawlers read these
+ * committed head tags — not the React tree — until prerender replaces #root.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -9,6 +11,10 @@ import { fileURLToPath } from 'node:url';
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://www.giselasaldarriaga.com';
 const ENTITY = 'Gisela Saldarriaga';
+const datesSource = fs.readFileSync(path.join(rootDir, 'src/data/content-dates.ts'), 'utf8');
+const DATE_MODIFIED = datesSource.match(/hubs: '(\d{4}-\d{2}-\d{2})'/u)?.[1];
+if (!DATE_MODIFIED) throw new Error('Unable to read CONTENT_DATES.hubs');
+const FIVERR = 'https://www.fiverr.com/gisela_sm';
 
 const hubs = [
   {
@@ -17,20 +23,33 @@ const hubs = [
     path: '/servicios/',
     alternate: '/en/services/',
     home: '/',
-    contact: '/#contact',
-    contactLabel: 'Contacto',
     homeLabel: 'Inicio',
     alternateLabel: 'English',
     linksLabel: 'Enlaces',
+    breadcrumbLabel: 'Servicios',
+    metaTitle: 'Contrata creadora UGC bilingüe ES+EN | Gisela Saldarriaga',
+    metaDescription:
+      'Contrata a Gisela Saldarriaga: ads UGC, demos y portavoz en español e inglés. Producción en Medellín para US hispano, España, LatAm y briefs en inglés.',
+    heroTitle: 'Contrata a Gisela Saldarriaga como tu creadora UGC bilingüe',
+    lead:
+      'Si tu marca necesita una creadora UGC bilingüe, no una agencia: ads, demos, reseñas y videos de portavoz en español e inglés, entregados a ti. Produzco desde Medellín para equipos en el mercado hispano de Estados Unidos, España y LatAm, y para briefs en inglés. El contenido es de la marca. No lo publico en mis redes, salvo un acuerdo de ambassador.',
+    childrenTitle: 'Qué puedes contratar',
+    contactLabel: 'Contáctame',
+    contact: '/#contact',
+    proof: `Llevo 28+ campañas de marca en beauty, moda, tech y lifestyle. Gisela Saldarriaga trabaja en Fiverr como [gisela_sm](${FIVERR}): 4.8/5 en 173 reseñas verificadas.`,
+    secondary: [
+      ['/verticales/', 'UGC por industria'],
+      ['/recursos/', 'Guías para contratar'],
+    ],
     children: [
-      ['/servicios/creadora-ugc-bilingue/', 'Creadora UGC bilingüe'],
-      ['/servicios/videos-de-portavoz/', 'Videos de portavoz'],
-      ['/servicios/ugc-ads-tiktok-meta/', 'UGC Ads para TikTok y Meta'],
-      ['/servicios/testimoniales-resenas-ugc/', 'Testimoniales y reseñas UGC'],
-      ['/servicios/demo-producto-ugc/', 'Demos de producto UGC'],
-      ['/servicios/ugc-problema-solucion/', 'UGC problema-solución'],
-      ['/servicios/ugc-lifestyle/', 'UGC lifestyle'],
-      ['/servicios/b-roll-footage-ugc/', 'B-roll UGC'],
+      ['/servicios/creadora-ugc-bilingue/', 'Creadora UGC bilingüe', 'Una misma cara en español e inglés, sin partir el lote entre dos perfiles.'],
+      ['/servicios/ugc-ads-tiktok-meta/', 'UGC Ads para TikTok y Meta', 'Creativos para pauta: hooks, beneficio y CTA listos para testear, no un video hero.'],
+      ['/servicios/videos-de-portavoz/', 'Videos de portavoz', 'Cara y voz a cámara cuando la oferta necesita explicarse, no solo verse.'],
+      ['/servicios/testimoniales-resenas-ugc/', 'Testimoniales y reseñas UGC', 'Social proof en video para ads, páginas de producto y retargeting.'],
+      ['/servicios/demo-producto-ugc/', 'Demo de producto UGC', 'How-to y demos para que el producto se entienda rápido y se compre con menos dudas.'],
+      ['/servicios/ugc-problema-solucion/', 'UGC problema-solución', 'El formato que arranca en el dolor y aterriza el producto como solución.'],
+      ['/servicios/ugc-lifestyle/', 'UGC lifestyle', 'Piezas que se sienten nativas en el feed de tu marca, no en un set.'],
+      ['/servicios/b-roll-footage-ugc/', 'B-roll y footage UGC', 'Tomas de producto y escenas sin voiceover para que tu equipo edite.'],
     ],
   },
   {
@@ -39,20 +58,33 @@ const hubs = [
     path: '/en/services/',
     alternate: '/servicios/',
     home: '/en/',
-    contact: '/en/#contact',
-    contactLabel: 'Contact',
     homeLabel: 'Home',
     alternateLabel: 'Español',
     linksLabel: 'Links',
+    breadcrumbLabel: 'Services',
+    metaTitle: 'Hire a bilingual UGC creator, ES+EN | Gisela Saldarriaga',
+    metaDescription:
+      'Hire Gisela Saldarriaga for bilingual UGC ads, demos, and spokesperson videos. Produced in Medellín for US Hispanic, Spain, LatAm, and English briefs.',
+    heroTitle: 'Hire Gisela Saldarriaga as your bilingual UGC creator',
+    lead:
+      'If you need a named bilingual UGC creator, not an agency: ads, demos, reviews, and spokesperson videos in Spanish and English, delivered to your brand. I produce from Medellín for teams selling to US Hispanic audiences, Spain, and LatAm, plus English briefs. The content belongs to the brand. I don’t post client work on my socials unless we agree on an ambassador deal.',
+    childrenTitle: 'What you can hire',
+    contactLabel: 'Contact me',
+    contact: '/en/#contact',
+    proof: `I’ve run 28+ brand campaigns in beauty, fashion, tech, and lifestyle. Gisela Saldarriaga works on Fiverr as [gisela_sm](${FIVERR}): 4.8/5 from 173 verified reviews.`,
+    secondary: [
+      ['/en/verticals/', 'UGC by industry'],
+      ['/en/resources/', 'Guides to hire'],
+    ],
     children: [
-      ['/en/services/bilingual-ugc-creator/', 'Bilingual UGC creator'],
-      ['/en/services/spokesperson-videos/', 'Spokesperson videos'],
-      ['/en/services/ugc-ads-tiktok-meta/', 'UGC ads for TikTok and Meta'],
-      ['/en/services/ugc-testimonials-reviews/', 'UGC testimonials and reviews'],
-      ['/en/services/ugc-product-demo/', 'UGC product demos'],
-      ['/en/services/ugc-problem-solution/', 'Problem-solution UGC'],
-      ['/en/services/lifestyle-ugc-organic-content/', 'Lifestyle UGC'],
-      ['/en/services/ugc-b-roll-footage/', 'UGC b-roll'],
+      ['/en/services/bilingual-ugc-creator/', 'Bilingual UGC creator', 'One face in Spanish and English, without splitting the batch across two profiles.'],
+      ['/en/services/ugc-ads-tiktok-meta/', 'UGC Ads for TikTok and Meta', 'Paid creatives: hooks, benefit, and CTA ready to test, not a hero video.'],
+      ['/en/services/spokesperson-videos/', 'Spokesperson videos', 'Face and voice on camera when the offer needs to be explained, not just seen.'],
+      ['/en/services/ugc-testimonials-reviews/', 'UGC testimonials and reviews', 'Video social proof for ads, product pages, and retargeting.'],
+      ['/en/services/ugc-product-demo/', 'UGC product demo', 'How-tos and demos so the product is understood quickly and bought with fewer doubts.'],
+      ['/en/services/ugc-problem-solution/', 'Problem-solution UGC', 'The format that starts in the pain and lands the product as the solution.'],
+      ['/en/services/lifestyle-ugc-organic-content/', 'Lifestyle UGC', 'Pieces that feel native in your brand’s feed, not on a set.'],
+      ['/en/services/ugc-b-roll-footage/', 'UGC b-roll and footage', 'Product shots and scenes without voiceover so your team can edit.'],
     ],
   },
   {
@@ -61,17 +93,29 @@ const hubs = [
     path: '/verticales/',
     alternate: '/en/verticals/',
     home: '/',
-    contact: '/#contact',
-    contactLabel: 'Contacto',
     homeLabel: 'Inicio',
     alternateLabel: 'English',
     linksLabel: 'Enlaces',
+    breadcrumbLabel: 'Verticales',
+    metaTitle: 'Contrata UGC de beauty y ecommerce | Gisela Saldarriaga',
+    metaDescription:
+      'Contrata a Gisela Saldarriaga para UGC de beauty, ecommerce, moda, tech y bienestar. Creadora bilingüe en Medellín para marcas en US hispano, España y LatAm.',
+    heroTitle: 'Contrata UGC por industria: beauty, ecommerce, moda, tech y bienestar',
+    lead:
+      'Si tu marca necesita una creadora UGC bilingüe por industria, no una agencia, empieza aquí. Produzco desde Medellín para equipos de beauty, ecommerce, moda, tech/SaaS y bienestar que venden en el mercado hispano de Estados Unidos, España, LatAm, o con un brief en inglés. El contenido se entrega a la marca.',
+    childrenTitle: 'Por industria',
+    contactLabel: 'Contáctame',
+    contact: '/#contact',
+    secondary: [
+      ['/servicios/', 'Qué puedes contratar'],
+      ['/recursos/', 'Guías para contratar'],
+    ],
     children: [
       ['/verticales/ugc-beauty/', 'UGC para beauty'],
+      ['/verticales/ugc-ecommerce/', 'UGC para ecommerce'],
       ['/verticales/ugc-moda/', 'UGC para moda'],
       ['/verticales/ugc-tech-saas/', 'UGC para tech y SaaS'],
-      ['/verticales/ugc-ecommerce/', 'UGC para ecommerce'],
-      ['/verticales/ugc-lifestyle-bienestar/', 'UGC lifestyle y bienestar'],
+      ['/verticales/ugc-lifestyle-bienestar/', 'UGC para lifestyle y bienestar'],
     ],
   },
   {
@@ -80,16 +124,28 @@ const hubs = [
     path: '/en/verticals/',
     alternate: '/verticales/',
     home: '/en/',
-    contact: '/en/#contact',
-    contactLabel: 'Contact',
     homeLabel: 'Home',
     alternateLabel: 'Español',
     linksLabel: 'Links',
+    breadcrumbLabel: 'Verticals',
+    metaTitle: 'Hire beauty and ecommerce UGC creator | Gisela Saldarriaga',
+    metaDescription:
+      'Hire Gisela Saldarriaga for beauty, ecommerce, fashion, tech, and wellness UGC. Bilingual creator in Medellín for US Hispanic, Spain, LatAm, and English briefs.',
+    heroTitle: 'Hire a UGC creator by industry: beauty, ecommerce, fashion, tech, wellness',
+    lead:
+      'If your brand needs a bilingual UGC creator by industry, not an agency, start here. I produce from Medellín for beauty, ecommerce, fashion, tech/SaaS, and wellness teams selling to US Hispanic audiences, Spain, LatAm, or with an English brief. The content is delivered to the brand.',
+    childrenTitle: 'By industry',
+    contactLabel: 'Contact me',
+    contact: '/en/#contact',
+    secondary: [
+      ['/en/services/', 'What you can hire'],
+      ['/en/resources/', 'Guides to hire'],
+    ],
     children: [
       ['/en/verticals/beauty-ugc-creator/', 'Beauty UGC'],
+      ['/en/verticals/ecommerce-ugc-creator/', 'Ecommerce UGC'],
       ['/en/verticals/fashion-ugc-creator/', 'Fashion UGC'],
       ['/en/verticals/tech-saas-ugc-creator/', 'Tech and SaaS UGC'],
-      ['/en/verticals/ecommerce-ugc-creator/', 'Ecommerce UGC'],
       ['/en/verticals/lifestyle-wellness-ugc-creator/', 'Lifestyle and wellness UGC'],
     ],
   },
@@ -99,16 +155,28 @@ const hubs = [
     path: '/recursos/',
     alternate: '/en/resources/',
     home: '/',
-    contact: '/#contact',
-    contactLabel: 'Contacto',
     homeLabel: 'Inicio',
     alternateLabel: 'English',
     linksLabel: 'Enlaces',
+    breadcrumbLabel: 'Recursos',
+    metaTitle: 'Cómo contratar creadora UGC bilingüe | Gisela Saldarriaga',
+    metaDescription:
+      'Guías para contratar una creadora UGC bilingüe: brief, formatos de ads y UGC vs influencer. Para marcas en US hispano, España y LatAm que van a producir.',
+    heroTitle: 'Cómo contratar una creadora UGC bilingüe: guías para marcas',
+    lead:
+      'Guías para contratar una creadora UGC bilingüe: brief, formatos de ads y UGC vs influencer. Para marcas en US hispano, España y LatAm que van a producir.',
+    childrenTitle: 'Guías para marcas',
+    contactLabel: 'Contáctame',
+    contact: '/#contact',
+    secondary: [
+      ['/servicios/', 'Qué puedes contratar'],
+      ['/verticales/', 'UGC por industria'],
+    ],
     children: [
-      ['/recursos/que-es-ugc/', 'Qué es UGC'],
       ['/recursos/como-contratar-creadora-ugc/', 'Cómo contratar creadora UGC'],
-      ['/recursos/ugc-vs-influencer-marketing/', 'UGC vs influencer marketing'],
       ['/recursos/formatos-ugc-ads/', 'Formatos de UGC para ads'],
+      ['/recursos/ugc-vs-influencer-marketing/', 'UGC vs influencer marketing'],
+      ['/recursos/que-es-ugc/', 'Qué es UGC'],
     ],
   },
   {
@@ -117,16 +185,28 @@ const hubs = [
     path: '/en/resources/',
     alternate: '/recursos/',
     home: '/en/',
-    contact: '/en/#contact',
-    contactLabel: 'Contact',
     homeLabel: 'Home',
     alternateLabel: 'Español',
     linksLabel: 'Links',
+    breadcrumbLabel: 'Resources',
+    metaTitle: 'How to hire a bilingual UGC creator | Gisela Saldarriaga',
+    metaDescription:
+      'Guides to hire a bilingual UGC creator: brief, ad formats, and UGC vs influencer. For US Hispanic, Spain, and LatAm brands ready to produce, not an agency.',
+    heroTitle: 'How to hire a bilingual UGC creator: guides for brand teams',
+    lead:
+      'Guides to hire a bilingual UGC creator: brief, ad formats, and UGC vs influencer. For US Hispanic, Spain, and LatAm brands ready to produce, not an agency.',
+    childrenTitle: 'Guides for brand teams',
+    contactLabel: 'Contact me',
+    contact: '/en/#contact',
+    secondary: [
+      ['/en/services/', 'What you can hire'],
+      ['/en/verticals/', 'UGC by industry'],
+    ],
     children: [
-      ['/en/resources/what-is-ugc/', 'What is UGC'],
       ['/en/resources/how-to-hire-ugc-creator/', 'How to hire a UGC creator'],
-      ['/en/resources/ugc-vs-influencer-marketing/', 'UGC vs influencer marketing'],
       ['/en/resources/ugc-ad-formats-guide/', 'UGC ad formats guide'],
+      ['/en/resources/ugc-vs-influencer-marketing/', 'UGC vs influencer marketing'],
+      ['/en/resources/what-is-ugc/', 'What is UGC'],
     ],
   },
 ];
@@ -138,17 +218,29 @@ const escapeHtml = (value) =>
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;');
 
+const renderChildren = (hub) =>
+  hub.children
+    .map(([href, title, blurb]) => {
+      const blurbHtml = blurb ? `\n                <p>${escapeHtml(blurb)}</p>` : '';
+      return `            <li>
+              <a href="${escapeHtml(href)}">${escapeHtml(title)}</a>${blurbHtml}
+            </li>`;
+    })
+    .join('\n');
+
+const renderSecondary = (hub) =>
+  hub.secondary
+    .map(([href, label], index) => `${index > 0 ? ' · ' : ''}<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>`)
+    .join('');
+
 const renderHub = (hub) => {
   const canonical = `${SITE}${hub.path}`;
   const esUrl = `${SITE}${hub.locale === 'es' ? hub.path : hub.alternate}`;
   const enUrl = `${SITE}${hub.locale === 'en' ? hub.path : hub.alternate}`;
   const homeUrl = `${SITE}${hub.home}`;
-  const childItems = hub.children
-    .map(
-      ([href, label]) =>
-        `            <li><a href="${escapeHtml(href)}">${escapeHtml(label)}</a></li>`,
-    )
-    .join('\n');
+  const proofHtml = hub.proof
+    ? `\n        <p>${escapeHtml(hub.proof).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')}</p>`
+    : '';
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -156,8 +248,9 @@ const renderHub = (hub) => {
         '@type': 'WebPage',
         '@id': `${canonical}#webpage`,
         url: canonical,
-        name: ENTITY,
-        dateModified: '2026-08-31',
+        name: hub.metaTitle,
+        description: hub.metaDescription,
+        dateModified: DATE_MODIFIED,
         inLanguage: hub.locale,
         isPartOf: { '@id': `${homeUrl}#website` },
         breadcrumb: { '@id': `${canonical}#breadcrumb` },
@@ -167,7 +260,7 @@ const renderHub = (hub) => {
         '@id': `${canonical}#breadcrumb`,
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: hub.homeLabel, item: homeUrl },
-          { '@type': 'ListItem', position: 2, name: ENTITY, item: canonical },
+          { '@type': 'ListItem', position: 2, name: hub.breadcrumbLabel, item: canonical },
         ],
       },
     ],
@@ -179,8 +272,8 @@ const renderHub = (hub) => {
     <script defer src="/gtm-loader.js"></script>
 <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${ENTITY}</title>
-    <meta name="description" content="${ENTITY}" />
+    <title>${escapeHtml(hub.metaTitle)}</title>
+    <meta name="description" content="${escapeHtml(hub.metaDescription)}" />
     <meta name="author" content="${ENTITY}" />
     <meta name="theme-color" content="#fffefe" />
     <script>
@@ -209,16 +302,16 @@ const renderHub = (hub) => {
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${canonical}" />
-    <meta property="og:title" content="${ENTITY}" />
-    <meta property="og:description" content="${ENTITY}" />
+    <meta property="og:title" content="${escapeHtml(hub.metaTitle)}" />
+    <meta property="og:description" content="${escapeHtml(hub.metaDescription)}" />
     <meta property="og:image" content="${SITE}/og-image-es-en-20260219.jpg?v=20260219" />
     <meta property="og:site_name" content="${ENTITY}" />
     <meta property="og:locale" content="${hub.locale === 'es' ? 'es_CO' : 'en_US'}" />
     <meta property="og:locale:alternate" content="${hub.locale === 'es' ? 'en_US' : 'es_CO'}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${canonical}" />
-    <meta name="twitter:title" content="${ENTITY}" />
-    <meta name="twitter:description" content="${ENTITY}" />
+    <meta name="twitter:title" content="${escapeHtml(hub.metaTitle)}" />
+    <meta name="twitter:description" content="${escapeHtml(hub.metaDescription)}" />
     <meta name="twitter:image" content="${SITE}/og-image-es-en-20260219.jpg?v=20260219" />
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
     <link
@@ -233,12 +326,18 @@ const renderHub = (hub) => {
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TX2WCCLT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="root">
       <main>
-        <nav aria-label="${escapeHtml(hub.linksLabel)}">
+        <h1>${escapeHtml(hub.heroTitle)}</h1>
+        <p>${escapeHtml(hub.lead)}</p>
+        <section>
+          <h2>${escapeHtml(hub.childrenTitle)}</h2>
+          <nav aria-label="${escapeHtml(hub.linksLabel)}">
           <ul>
-${childItems}
+${renderChildren(hub)}
           </ul>
-        </nav>
+          </nav>
+        </section>${proofHtml}
         <p><a href="${escapeHtml(hub.contact)}">${escapeHtml(hub.contactLabel)}</a></p>
+        <p>${renderSecondary(hub)}</p>
         <p><a href="${escapeHtml(hub.home)}">${escapeHtml(hub.homeLabel)}</a> · <a href="${escapeHtml(hub.alternate)}">${escapeHtml(hub.alternateLabel)}</a></p>
       </main>
     </div>

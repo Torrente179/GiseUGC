@@ -2,17 +2,16 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import PageSeo from '@/components/PageSeo';
 import { CONTENT_DATES } from '@/data/content-dates';
-import { getHubChildLinks } from '@/data/hub-child-links';
+import { getHubPageContent } from '@/data/hub-pages';
+import { InlineCopy } from '@/lib/inline-copy-links';
 import {
   getHomePath,
-  getHomeSectionHref,
   getHubPath,
   type HubPageId,
   type SiteLocale,
 } from '@/lib/locale-path';
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
-const SITE_ENTITY_NAME = 'Gisela Saldarriaga';
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
 
 type HubPageProps = {
@@ -23,13 +22,11 @@ type HubPageProps = {
 const chrome = {
   es: {
     home: 'Inicio',
-    contact: 'Contacto',
     alternate: 'English',
     links: 'Enlaces',
   },
   en: {
     home: 'Home',
-    contact: 'Contact',
     alternate: 'Español',
     links: 'Links',
   },
@@ -37,15 +34,12 @@ const chrome = {
 
 const HubPage = ({ hubId, locale }: HubPageProps) => {
   const labels = chrome[locale];
-  const path = getHubPath(hubId, locale);
-  const alternatePath = getHubPath(hubId, locale === 'es' ? 'en' : 'es');
-  const canonical = buildUrl(path);
+  const page = getHubPageContent(hubId, locale);
+  const canonical = buildUrl(page.path);
   const esUrl = buildUrl(getHubPath(hubId, 'es'));
   const enUrl = buildUrl(getHubPath(hubId, 'en'));
   const homePath = getHomePath(locale);
   const homeCanonical = buildUrl(homePath);
-  const contactHref = getHomeSectionHref(locale, 'contact');
-  const children = getHubChildLinks(hubId, locale);
 
   const schema = useMemo(
     () => ({
@@ -55,7 +49,8 @@ const HubPage = ({ hubId, locale }: HubPageProps) => {
           '@type': 'WebPage',
           '@id': `${canonical}#webpage`,
           url: canonical,
-          name: SITE_ENTITY_NAME,
+          name: page.metaTitle,
+          description: page.metaDescription,
           dateModified: CONTENT_DATES.hubs,
           inLanguage: locale,
           isPartOf: { '@id': `${homeCanonical}#website` },
@@ -74,21 +69,29 @@ const HubPage = ({ hubId, locale }: HubPageProps) => {
             {
               '@type': 'ListItem',
               position: 2,
-              name: SITE_ENTITY_NAME,
+              name: page.breadcrumbLabel,
               item: canonical,
             },
           ],
         },
       ],
     }),
-    [canonical, homeCanonical, labels.home, locale],
+    [
+      canonical,
+      homeCanonical,
+      labels.home,
+      locale,
+      page.breadcrumbLabel,
+      page.metaDescription,
+      page.metaTitle,
+    ],
   );
 
   return (
     <div className="min-h-screen bg-background">
       <PageSeo
-        title={SITE_ENTITY_NAME}
-        description={SITE_ENTITY_NAME}
+        title={page.metaTitle}
+        description={page.metaDescription}
         canonical={canonical}
         locale={locale}
         alternates={{
@@ -100,22 +103,57 @@ const HubPage = ({ hubId, locale }: HubPageProps) => {
       />
 
       <main className="studio-container py-16 md:py-20">
-        <nav aria-label={labels.links}>
-          <ul className="flex flex-col gap-3 font-sans text-sm text-foreground">
-            {children.map((child) => (
-              <li key={child.href}>
-                <Link to={child.href} className="underline-offset-4 hover:underline">
-                  {child.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <h1 className="route-title-accent type-marketing-display max-w-[28ch] text-[1.75rem] font-semibold leading-[1.14] tracking-tight-marketing md:text-[2rem] lg:text-[2.25rem]">
+          {page.heroTitle}
+        </h1>
+        <p className="mt-6 max-w-3xl text-base font-light leading-[1.9] text-foreground/78 md:text-[1.04rem]">
+          {page.lead}
+        </p>
+
+        <section className="mt-12">
+          <h2 className="section-label text-muted-foreground">{page.childrenTitle}</h2>
+          <nav aria-label={labels.links} className="mt-6">
+            <ul className="flex flex-col gap-5">
+              {page.children.map((child) => (
+                <li key={child.href}>
+                  <Link
+                    to={child.href}
+                    className="font-sans text-sm font-semibold text-foreground underline-offset-4 hover:underline"
+                  >
+                    {child.title}
+                  </Link>
+                  {child.blurb ? (
+                    <p className="mt-1 max-w-2xl font-sans text-sm font-light leading-[1.7] text-foreground/70">
+                      {child.blurb}
+                    </p>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </section>
+
+        {page.proof ? (
+          <p className="mt-10 max-w-3xl font-sans text-sm font-light leading-[1.8] text-foreground/78 [&_a]:underline [&_a]:underline-offset-4">
+            <InlineCopy text={page.proof} />
+          </p>
+        ) : null}
 
         <p className="mt-10 font-sans text-sm">
-          <a href={contactHref} className="underline-offset-4 hover:underline">
-            {labels.contact}
+          <a href={page.primaryCtaHref} className="font-semibold underline-offset-4 hover:underline">
+            {page.primaryCtaLabel}
           </a>
+        </p>
+
+        <p className="mt-4 font-sans text-sm text-muted-foreground">
+          {page.secondaryLinks.map((link, index) => (
+            <span key={link.href}>
+              {index > 0 ? ' · ' : null}
+              <Link to={link.href} className="underline-offset-4 hover:underline">
+                {link.label}
+              </Link>
+            </span>
+          ))}
         </p>
 
         <p className="mt-4 font-sans text-sm text-muted-foreground">
@@ -123,7 +161,7 @@ const HubPage = ({ hubId, locale }: HubPageProps) => {
             {labels.home}
           </Link>
           {' · '}
-          <Link to={alternatePath} className="underline-offset-4 hover:underline">
+          <Link to={page.alternatePath} className="underline-offset-4 hover:underline">
             {labels.alternate}
           </Link>
         </p>
