@@ -35,3 +35,18 @@ Added the same content sections inside the existing `<noscript><article>` block,
 3. Content matches `src/data/service-pages.ts` runtime data exactly
 4. Boot shell styles are inline and self-contained
 5. React hydration replaces boot shell content on load (no visual regression)
+
+## 2026-09-01 inner argument order
+
+Boot shells now follow the locked inner argument so non-JS HTML is not the old essay pile:
+
+1. Ficha H2 (`sectionIntroTitle`) + spec rows remapped from intro / deliverable titles / market items / fit lists
+2. GEO fact on bilingüe only (query-free Fiverr href, 4.8/173, 28+, 65-word English FAQ in the bilingual FAQ block)
+3. Recibes (`deliverablesTitle` + `deliverables`)
+4. Cómo corre (`processTitle` + `processSteps`)
+5. Encaja (best fit / not fit)
+6. Preguntas on bilingüe boot shells (full FAQ answers, including the 65-word English cap)
+
+`node scripts/expand-boot-shells.mjs` replaces existing `.boot-expanded` and `SERVICE-EXPANDED-NOSCRIPT` blocks. Production first HTML is still the prerendered React tree in `#root`.
+
+`npm run prebuild` runs `service:entrypoints` (FAQ schema enrich) **then** `service:boot-shells` so enrich cannot strip `.boot-ficha` / `.boot-expanded` CSS. Enrich also keeps the bilingüe 65-word FAQ in the boot JSON-LD and stamps `dateModified` to `2026-08-31` (`CONTENT_DATES.services`).

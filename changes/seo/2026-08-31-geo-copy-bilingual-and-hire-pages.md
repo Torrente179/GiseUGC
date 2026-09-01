@@ -17,7 +17,7 @@ Routes:
 
 Inserts:
 
-1. After “Qué resuelve este servicio” / “What this service solves” (including the markets list), before “Qué puedes pedir” / “What you can request”: the canonical ES/EN fact block, with `gisela_sm` linked to the Fiverr profile.
+1. After “Qué resuelve este servicio” / “What this service solves” (Ficha H2 + remapped markets/ficha rows), before “Qué puedes pedir” / “What you can request” (Recibes): the canonical ES/EN fact block, with `gisela_sm` linked to the Fiverr profile. 4.8/173 stays on bilingüe only.
 2. One extra FAQ only:
    - ES: ¿Cómo trabajas el inglés? → guion + tope de 65 palabras por video.
    - EN: How do you work in English? → script + 65-word cap per video.
@@ -62,6 +62,6 @@ Minimum wiring so that copy is visible HTML (not comments) and `gisela_sm` is a 
 
 ## How to verify
 
-1. `npx vitest run src/data/geo-copy.test.tsx src/lib/inline-copy-links.test.ts` — SSR-renders the four pages from source (the same tree `scripts/prerender.mjs` uses) and asserts the fact block, query-free Fiverr href, 65-word FAQ, and hire-guide inserts.
-2. Do **not** expect the committed boot-shell HTML to already contain this copy. Those shells are last prerendered snapshots; Vercel’s `vite build` + prerender will bake the new paragraphs on deploy. This pass does not run a production rebuild.
+1. `npx vitest run src/data/geo-copy.test.tsx src/lib/inline-copy-links.test.ts src/data/service-inner-argument.test.tsx` — SSR-renders the four pages from source (the same tree `scripts/prerender.mjs` uses) and asserts the fact block, query-free Fiverr href, 65-word FAQ, hire-guide inserts, and the remapped inner argument.
+2. Boot shells are updated by `scripts/expand-boot-shells.mjs` so `#root` before prerender also contains Ficha + GEO + Recibes. Vercel’s `vite build` + prerender bakes the React tree on deploy.
 3. After deploy, a no-JS fetch of the four URLs should show the fact block and `href="https://www.fiverr.com/gisela_sm"`.

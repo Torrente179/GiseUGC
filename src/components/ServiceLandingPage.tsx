@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { Link } from 'react-router-dom';
 import { Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { ServicePageId, SiteLocale, ResourcePageId } from '@/lib/locale-path';
-import { getHomePath, getHomeSectionHref, getServicePath, getVerticalPath, getResourcePath } from '@/lib/locale-path';
+import { getHomePath, getHomeSectionHref, getServicePath } from '@/lib/locale-path';
 import type { ServiceLandingRouteData } from '@/data/landing-route-types';
 import { getPosterVariantSrc, LEGACY_REEL_CLIPS, servicePosterSrcFromMain } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
@@ -10,16 +10,16 @@ import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
-import { RevealSection } from '@/components/motion/RevealSection';
 import MediaTheater from '@/components/media/MediaTheater';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
 import { createClipPlaybackCandidates } from '@/lib/media-assets';
-import { InlineCopy } from '@/lib/inline-copy-links';
 import { useMediaIntent } from '@/hooks/use-media-intent';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
-import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
+import ServicePageInner from '@/components/ServicePageInner';
+import { CONTENT_DATES } from '@/data/content-dates';
+import { innerSectionSchema } from '@/lib/service-inner-argument';
 import '@/styles/templates.css';
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
@@ -99,322 +99,6 @@ const localeLabels = {
     previewNext: 'Next clip',
   },
 } as const;
-
-const stripStepIndex = (title: string) => title.replace(/^\d+[.)]\s*/, '');
-
-type ServicePageInnerProps = {
-  page: ServiceLandingRouteData['page'];
-  labels: (typeof localeLabels)[SiteLocale];
-  locale: SiteLocale;
-  relevantVerticals: ServiceLandingRouteData['relevantVerticals'];
-  resourceLinks: { id: ResourcePageId; label: string }[];
-  relatedPages: ServiceLandingRouteData['relatedPages'];
-  allOtherServices: ServiceLandingRouteData['allOtherServices'];
-  whatsappUrl: string;
-  reveal: boolean;
-  anchors: boolean;
-  variant: 'mobile' | 'desktop';
-};
-
-type ServiceExploreProps = {
-  variant: 'mobile' | 'desktop';
-  labels: (typeof localeLabels)[SiteLocale];
-  locale: SiteLocale;
-  relevantVerticals: ServiceLandingRouteData['relevantVerticals'];
-  resourceLinks: { id: ResourcePageId; label: string }[];
-  allOtherServices: ServiceLandingRouteData['allOtherServices'];
-};
-
-const ServiceExplore = ({
-  variant,
-  labels,
-  locale,
-  relevantVerticals,
-  resourceLinks,
-  allOtherServices,
-}: ServiceExploreProps) => {
-  const columns = [
-    relevantVerticals.length > 0 && {
-      key: 'industry',
-      label: labels.byIndustry,
-      items: relevantVerticals.map((vertical) => ({
-        key: vertical.id,
-        href: getVerticalPath(vertical.id, locale),
-        title: vertical.navLabel,
-      })),
-    },
-    resourceLinks.length > 0 && {
-      key: 'resources',
-      label: labels.resources,
-      items: resourceLinks.map((resource) => ({
-        key: resource.id,
-        href: getResourcePath(resource.id, locale),
-        title: resource.label,
-      })),
-    },
-    allOtherServices.length > 0 && {
-      key: 'services',
-      label: labels.moreServices,
-      items: allOtherServices.map((service) => ({
-        key: service.id,
-        href: getServicePath(service.id, locale),
-        title: service.navLabel,
-      })),
-    },
-  ].filter((column): column is Exclude<typeof column, false> => Boolean(column));
-
-  if (columns.length === 0) return null;
-
-  if (variant === 'mobile') {
-    return (
-      <nav className="stm-explore" aria-label={labels.explore}>
-        <h2 className="stm-explore-title">{labels.explore}</h2>
-        {columns.map((column) => {
-          const asRail = column.key !== 'services';
-          return (
-            <div key={column.key} className="stm-explore-block">
-              <p className="stm-explore-sublabel">{column.label}</p>
-              {asRail ? (
-                <div className="stm-explore-rail scrollbar-hide">
-                  {column.items.map((item) => (
-                    <Link key={item.key} to={item.href} className="stm-explore-chip">
-                      {item.title}
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <div className="stm-explore-group">
-                  {column.items.map((item) => (
-                    <Link key={item.key} to={item.href} className="stm-explore-row">
-                      <span>{item.title}</span>
-                      <span aria-hidden="true">→</span>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </nav>
-    );
-  }
-
-  return (
-    <nav className="svc-explore" aria-label={labels.explore}>
-      <div className="svc-explore-head">
-        <p className="st-eyebrow svc-inner-kicker">{labels.exploreKicker}</p>
-        <h2 className="svc-inner-heading font-serif">{labels.explore}</h2>
-      </div>
-      <div className="svc-explore-grid">
-        {columns.map((column, index) => (
-          <div key={column.key} className="svc-explore-col">
-            <p className="svc-explore-index">
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              {column.label}
-            </p>
-            {column.items.map((item) => (
-              <Link key={item.key} to={item.href} className="st-related-row group">
-                <span className="st-related-title">{item.title}</span>
-                <span className="st-related-arrow">→</span>
-              </Link>
-            ))}
-          </div>
-        ))}
-      </div>
-    </nav>
-  );
-};
-
-const ServicePageInner = ({
-  page,
-  labels,
-  locale,
-  relevantVerticals,
-  resourceLinks,
-  relatedPages,
-  allOtherServices,
-  whatsappUrl,
-  reveal,
-  anchors,
-  variant,
-}: ServicePageInnerProps) => {
-  const Shell = reveal ? RevealSection : 'section';
-  const updated = formatLastUpdatedLabel(CONTENT_DATES.services, locale);
-  const hasExplore =
-    relevantVerticals.length > 0 || resourceLinks.length > 0 || allOtherServices.length > 0;
-
-  return (
-    <div className="svc-inner">
-      <Shell className="svc-inner-block svc-inner-block--open">
-        <div className="st-container">
-          <div className="svc-inner-statement">
-            <h2 className="svc-inner-display font-serif">{page.sectionIntroTitle}</h2>
-            <p className="svc-inner-lead">{page.sectionIntroText}</p>
-          </div>
-          <div className="svc-inner-rule" aria-hidden="true" />
-          <p className="st-eyebrow svc-inner-kicker">{page.marketTitle}</p>
-          <ul className="svc-inner-markets">
-            {page.marketItems.map((item, index) => (
-              <li key={item}>
-                <span className="svc-inner-markets-num">{String(index + 1).padStart(2, '0')}</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          {page.geoFact ? (
-            <>
-              <div className="svc-inner-rule" aria-hidden="true" />
-              <p className="svc-inner-lead">
-                <InlineCopy text={page.geoFact} />
-              </p>
-            </>
-          ) : null}
-        </div>
-      </Shell>
-
-      <Shell className="svc-inner-block">
-        <div className="st-container">
-          <p className="st-eyebrow svc-inner-kicker">{labels.whatYouGet}</p>
-          <h2 className="svc-inner-heading font-serif">{page.deliverablesTitle}</h2>
-          <div className="svc-offer">
-            {page.deliverables.map((item, index) => (
-              <article key={item.title} className="svc-offer-row">
-                <span className="svc-offer-num">{String(index + 1).padStart(2, '0')}</span>
-                <h3 className="svc-offer-title font-serif">{item.title}</h3>
-                <p className="svc-offer-desc">{item.description}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </Shell>
-
-      <Shell className="svc-inner-block">
-        <div className="st-container">
-          <div className="svc-process-layout">
-            <div className="svc-process-head">
-              <p className="st-eyebrow svc-inner-kicker">{labels.howItWorks}</p>
-              <h2 className="svc-inner-heading font-serif">{page.processTitle}</h2>
-            </div>
-            <ol className="svc-process-list">
-              {page.processSteps.map((step, index) => (
-                <li key={step.title} className="svc-process-step">
-                  <span className="svc-process-num" aria-hidden="true">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <div>
-                    <h3 className="svc-process-title font-serif">{stripStepIndex(step.title)}</h3>
-                    <p className="svc-process-desc">{step.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </Shell>
-
-      <Shell className="svc-inner-block">
-        <div className="st-container">
-          <p className="st-eyebrow svc-inner-kicker">{labels.isThisForYou}</p>
-          <h2 className="sr-only">{page.bestFitTitle}</h2>
-          <div className="svc-fit-grid">
-            <div className="svc-fit-col">
-              <h3 className="svc-fit-label">{page.bestFitTitle}</h3>
-              <ul>
-                {page.bestFitItems.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="svc-fit-col svc-fit-col--no">
-              <h3 className="svc-fit-label">{page.notFitTitle}</h3>
-              <ul>
-                {page.notFitItems.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </Shell>
-
-      <Shell className="svc-inner-block" id={anchors ? 'faq' : undefined}>
-        <div className="st-container">
-          <div className="svc-faq-layout">
-            <div className="svc-faq-head">
-              <p className="st-eyebrow svc-inner-kicker">{labels.faq}</p>
-              <h2 className="svc-inner-heading font-serif">{page.faqTitle}</h2>
-            </div>
-            <div className="svc-faq-list">
-              {page.faqs.map((faq, index) => (
-                <details key={faq.question} className="svc-faq-item" {...(index === 0 ? { open: true } : {})}>
-                  <summary>
-                    <span>{faq.question}</span>
-                    <span className="svc-faq-mark" aria-hidden="true" />
-                  </summary>
-                  <p>{faq.answer}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </div>
-      </Shell>
-
-      {hasExplore && variant === 'mobile' && (
-        <ServiceExplore
-          variant="mobile"
-          labels={labels}
-          locale={locale}
-          relevantVerticals={relevantVerticals}
-          resourceLinks={resourceLinks}
-          allOtherServices={allOtherServices}
-        />
-      )}
-
-      {hasExplore && variant === 'desktop' && (
-        <Shell className="svc-inner-block">
-          <div className="st-container">
-            <ServiceExplore
-              variant="desktop"
-              labels={labels}
-              locale={locale}
-              relevantVerticals={relevantVerticals}
-              resourceLinks={resourceLinks}
-              allOtherServices={allOtherServices}
-            />
-          </div>
-        </Shell>
-      )}
-
-      <Shell className="svc-inner-close">
-        <div className="st-container svc-inner-close-grid">
-          <div>
-            <h2 className="svc-inner-close-title font-serif">{page.ctaTitle}</h2>
-            <p className="svc-inner-close-text">{page.ctaText}</p>
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg">
-              {labels.startProject}
-            </a>
-            <p className="svc-inner-updated">{updated}</p>
-          </div>
-          {relatedPages.length > 0 && (
-            <div>
-              <p className="st-eyebrow mb-5">{labels.alsoOffered}</p>
-              {page.relatedServiceIds.map((relatedId, index) => {
-                const rel = relatedPages[index];
-                if (!rel) return null;
-                return (
-                  <Link key={relatedId} to={getServicePath(relatedId, locale)} className="st-related-row group">
-                    <span className="st-related-title">{rel.title}</span>
-                    <span className="st-related-arrow">→</span>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </Shell>
-    </div>
-  );
-};
 
 /* ════════════════════════════════════════════════════════════════════
    SCREEN TEST — Service Landing Page
@@ -528,7 +212,7 @@ const ServiceLandingPage = ({
     return {
       '@context': 'https://schema.org',
       '@graph': [
-        { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: page.metaTitle, description: page.metaDescription, dateModified: CONTENT_DATES.services, inLanguage: locale, isPartOf: { '@id': `${homeCanonical}#website` }, breadcrumb: { '@id': `${canonical}#breadcrumb` }, mainEntity: { '@id': `${canonical}#service` } },
+        { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: page.metaTitle, description: page.metaDescription, dateModified: CONTENT_DATES.services, inLanguage: locale, isPartOf: { '@id': `${homeCanonical}#website` }, breadcrumb: { '@id': `${canonical}#breadcrumb` }, mainEntity: { '@id': `${canonical}#service` }, hasPart: innerSectionSchema(canonical, locale) },
         { '@type': 'BreadcrumbList', '@id': `${canonical}#breadcrumb`, itemListElement: breadcrumbItems },
         { '@type': 'Service', '@id': `${canonical}#service`, name: page.navLabel, serviceType: page.navLabel, description: page.metaDescription, url: canonical, provider: { '@type': 'ProfessionalService', '@id': `${SITE_URL}/#business`, name: 'Gisela Saldarriaga UGC Studio', url: `${SITE_URL}/`, telephone: '+57-304-378-6101', availableLanguage: ['es', 'en'] }, areaServed: [{ '@type': 'Country', name: 'United States' }, { '@type': 'Country', name: 'Spain' }, { '@type': 'Place', name: 'Latin America' }], availableLanguage: ['es', 'en'], audience: { '@type': 'Audience', audienceType: locale === 'es' ? 'Marcas globales' : 'Global brands' } },
         { '@type': 'FAQPage', '@id': `${canonical}#faq`, inLanguage: locale, mainEntity: page.faqs.map((faq) => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: faq.answer } })) },
@@ -727,16 +411,13 @@ const ServiceLandingPage = ({
               resourceLinks={resourceLinks}
               relatedPages={relatedPages}
               allOtherServices={allOtherServices}
-              whatsappUrl={whatsappUrl}
               reveal={false}
-              anchors={false}
               variant="mobile"
             />
 
-            {/* ── STICKY WHATSAPP BAR ── */}
             <div className="stm-sticky-bar">
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="stm-sticky-btn">
-                {labels.startProject}
+              <a href={page.primaryCtaHref} className="stm-sticky-btn">
+                {page.primaryCtaLabel}
               </a>
             </div>
 
@@ -804,9 +485,9 @@ const ServiceLandingPage = ({
                     <span>{page.breadcrumbLabel}</span>
                   </nav>
                   <p className="st-eyebrow st-eyebrow--light">{page.heroEyebrow}</p>
-                  <h1 className="svc-cine-hero-title">
+                  <p className="svc-cine-hero-title">
                     <PretextLineReveal text={page.heroTitle} delay={0} stagger={0.1} className="block" />
-                  </h1>
+                  </p>
                   <p className="svc-cine-hero-hook">{page.heroSummary}</p>
                   <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary">{labels.startProject}</a>
                 </div>
@@ -911,9 +592,7 @@ const ServiceLandingPage = ({
               resourceLinks={resourceLinks}
               relatedPages={relatedPages}
               allOtherServices={allOtherServices}
-              whatsappUrl={whatsappUrl}
               reveal
-              anchors
               variant="desktop"
             />
 

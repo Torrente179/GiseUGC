@@ -610,8 +610,45 @@ No heading changes, no metadata changes, no schema changes. CSS-only.
 ### What changed
 1. The shared inner is the layout for all 8 service pages in both locales. Copy, H1, FAQ, related services, and verticals stay unique per page from `service-pages.ts`.
 2. SEO: deliverables stay in the HTML (no accordion), process is an `ol`, fit column titles are `h3`, FAQ stays in `details` plus existing FAQPage JSON-LD, and every other service is linked from the explore line.
-3. Fixed the English lifestyle page CTA, which still had Spanish close copy.
-
 ### Verification
 1. `npx tsc -p tsconfig.app.json --noEmit`
 2. `npx eslint src/components/ServiceLandingPage.tsx`
+
+## 2026-09-01 inner argument (ficha → empezar) + app mobile
+
+Juan Pablo locked the inner body below the unchanged hero. The overlapping intro / markets / types / process essays are one argument on every service.
+
+### Runtime touchpoints
+- `src/components/ServiceLandingPage.tsx`
+- `src/components/ServicePageInner.tsx`
+- `src/lib/service-inner-argument.ts`
+- `src/styles/templates.css`
+- `src/data/service-inner-argument.test.tsx`
+- `scripts/expand-boot-shells.mjs`
+
+### What changed
+1. Same skeleton on all eight services (ES+EN): **Ficha → Recibes → Cómo corre → Encaja → Preguntas → Empezar**.
+2. Ficha remaps existing `sectionIntroText`, deliverable titles, `marketItems`, `bestFitItems`, and `notFitItems`. No new service was invented. GEO fact stays in Ficha after the spec rows on bilingüe.
+3. Desktop: left spine, spec table, 2-col formatos, 4-step process row, two-col fit, FAQ accordion, dark close. Existing type/color tokens only. Hero untouched.
+4. Mobile is an app layout, not a squashed desktop: sticky chips, stacked ficha cards, full-width formato tiles, vertical stepper, stacked Sí/No panels, large-tap FAQ cards, fixed bottom CTA (48px) offset above the existing tab bar.
+5. “Seguir explorando” is no longer its own sitemap section. Those internal links live inside Empezar. CTA label/href use `primaryCtaLabel` / `primaryCtaHref` (`/#contact` and `/en/#contact`).
+6. Copy, FAQ answers, and GEO stay in the SSR HTML (`details` keeps answers in the DOM). Heading outline is one hire-intent H1 in the mobile hero; the desktop visual title is the same copy as a `<p>` so the document does not ship a second H1.
+7. Language switch in the navbar is a real `<a href>` to the path-owned twin (`/` vs `/en/…`), not a JS-only button.
+
+### Verification
+1. `npx vitest run src/data/service-inner-argument.test.tsx src/data/geo-copy.test.tsx src/data/crawl-trust.test.tsx`
+2. `npx tsc -p tsconfig.app.json --noEmit`
+3. Browser check at desktop and 390 on `/servicios/creadora-ugc-bilingue/` and an EN twin.
+
+## 2026-09-01 Gise SEO lock (first HTML)
+
+Non-negotiable crawl constraints folded into this inner-argument pass:
+
+- Inner copy (Ficha / Recibes / Cómo / Encaja / Preguntas / Empezar) lives in SSR, prerender `#root`, and boot-shell `.boot-expanded` — not comments, not `useEffect`, not behind a click that removes it from the DOM.
+- Routes, hubs, and locale paths are unchanged. `hreflang` es + en + x-default stays on the ES URL.
+- One H1 per service page (hire-intent, URL language). Inner beats start at H2.
+- Per-page title / description / canonical / OG stay. Public brand is Gisela Saldarriaga / Gisela.UGC.
+- GEO + 4.8/173 + query-free Fiverr href stay on bilingüe (and the `/servicios/` hub twin), not pasted onto every service. English FAQ keeps script + 65-word cap.
+- Visible last-updated follows `CONTENT_DATES.services` (31 ago 2026 / Aug 31, 2026).
+- `prebuild` runs `enrich-service-entrypoints` then `expand-boot-shells` so FAQ schema updates cannot strip `.boot-ficha` CSS.
+- Navbar language switch is real hrefs. CTA hrefs remain `/#contact` and `/en/#contact`.

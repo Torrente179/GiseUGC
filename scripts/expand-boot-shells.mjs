@@ -576,6 +576,173 @@ const serviceBootData = [
 // HTML generation helpers
 // ---------------------------------------------------------------------------
 
+const FIVERR = 'https://www.fiverr.com/gisela_sm';
+
+const MARKET_BY_FILE = {
+  'servicios/creadora-ugc-bilingue/index.html': [
+    'Estados Unidos hispano, España y Latinoamérica.',
+    'Briefs en inglés para piezas cortas, directas y naturales frente a cámara.',
+    'Vertical video para TikTok, Reels, Meta Ads, landing creatives y páginas de producto.',
+  ],
+  'en/services/bilingual-ugc-creator/index.html': [
+    'Spanish-speaking audiences in the US, Spain, and Latin America.',
+    'English briefs for short, direct, commercially useful speaking-to-camera assets.',
+    'Vertical video for TikTok, Reels, Meta ads, landing creatives, and product pages.',
+  ],
+  'servicios/videos-de-portavoz/index.html': [
+    'Más claridad cuando la oferta es nueva o necesita contexto.',
+    'Mejor retención cuando el mensaje tiene estructura en vez de apoyarse solo en edición.',
+    'Un activo reutilizable para homepages, landings, ads y outreach.',
+  ],
+  'en/services/spokesperson-videos/index.html': [
+    'More clarity when the offer is new or needs context.',
+    'Better retention when the message has structure instead of relying only on editing.',
+    'A reusable asset for homepages, landing pages, ads, and outreach.',
+  ],
+  'servicios/ugc-ads-tiktok-meta/index.html': [
+    'Material útil para probar distintos hooks y entradas.',
+    'Explicación visual suficiente para vender sin depender solo del copy del anuncio.',
+    'Assets que también pueden vivir en product pages o landing sections de performance.',
+  ],
+  'en/services/ugc-ads-tiktok-meta/index.html': [
+    'Useful material for testing different hooks and opening angles.',
+    'Enough visual explanation to sell without relying only on ad copy.',
+    'Assets that can also live on product pages or performance landing sections.',
+  ],
+  'servicios/testimoniales-resenas-ugc/index.html': [
+    'Marcas en Estados Unidos, España y Latinoamérica que venden en ecommerce o DTC.',
+    'Video testimonial para Meta Ads, TikTok Ads y campañas de retargeting.',
+    'Assets de apoyo para páginas de producto, landings de conversión y email marketing.',
+  ],
+  'en/services/ugc-testimonials-reviews/index.html': [
+    'Brands in the US, Spain, and Latin America selling through ecommerce or DTC.',
+    'Video testimonials for Meta Ads, TikTok Ads, and retargeting campaigns.',
+    'Support assets for product pages, conversion landing pages, and email marketing.',
+  ],
+  'servicios/demo-producto-ugc/index.html': [
+    'Campañas de consideración y mid-funnel donde el usuario ya sabe que existe el producto pero necesita entenderlo.',
+    'Páginas de producto y landings donde un video demostración aclara dudas y baja la tasa de rebote.',
+    'Ads educativos para TikTok y Meta que enseñan mientras venden.',
+  ],
+  'en/services/ugc-product-demo/index.html': [
+    'Consideration and mid-funnel campaigns where the user knows the product exists but needs to understand it.',
+    'Product pages and landing pages where a demo video clears doubts and lowers bounce rate.',
+    'Educational ads for TikTok and Meta that teach while they sell.',
+  ],
+  'servicios/ugc-problema-solucion/index.html': [
+    'Campañas de conversión y retargeting en Meta Ads y TikTok Ads.',
+    'Audiencias frías que necesitan identificarse con el dolor antes de considerar el producto.',
+    'Lotes de creativos para testeo donde cada pieza tiene una hipótesis clara de dolor y solución.',
+  ],
+  'en/services/ugc-problem-solution/index.html': [
+    'Conversion and retargeting campaigns on Meta Ads and TikTok Ads.',
+    'Cold audiences that need to feel the pain before considering the product.',
+    'Creative testing batches where each piece has a clear pain-and-solution hypothesis.',
+  ],
+  'servicios/ugc-lifestyle/index.html': [
+    'Marcas de Estados Unidos, España, Latinoamérica, Australia y Nueva Zelanda.',
+    'Contenido orgánico para redes en español e inglés.',
+    'Video vertical para Instagram Reels, TikTok orgánico y feeds de marca.',
+  ],
+  'en/services/lifestyle-ugc-organic-content/index.html': [
+    'Brands in the US, Spain, Latin America, Australia, and New Zealand.',
+    'Organic social content in Spanish and English.',
+    'Vertical video for Instagram Reels, organic TikTok, and brand feeds.',
+  ],
+  'servicios/b-roll-footage-ugc/index.html': [
+    'Marcas en Estados Unidos, España, Latinoamérica y Oceanía que editan internamente.',
+    'B-roll para ads, orgánico, landings, emails y presentaciones de producto.',
+    'Complemento frecuente para servicios de UGC lifestyle, ads o testimoniales.',
+  ],
+  'en/services/ugc-b-roll-footage/index.html': [
+    'Brands in the US, Spain, Latin America, and Oceania that edit in-house.',
+    'B-roll for ads, organic posts, landing pages, emails, and product presentations.',
+    'A common add-on to lifestyle UGC, ad, or testimonial projects.',
+  ],
+};
+
+const GEO_BY_FILE = {
+  'servicios/creadora-ugc-bilingue/index.html':
+    `Gisela Saldarriaga es creadora UGC bilingüe. Produce desde Medellín anuncios para TikTok y Meta, demos, reseñas y videos de portavoz en español e inglés para marcas en el mercado hispano de Estados Unidos, España y LatAm. Trabaja en Fiverr como [gisela_sm](${FIVERR}): 4.8/5 en 173 reseñas verificadas. Lleva 28+ campañas de marca. El contenido se entrega a la marca; no lo publica en sus redes salvo un acuerdo de ambassador.`,
+  'en/services/bilingual-ugc-creator/index.html':
+    `Gisela Saldarriaga is a bilingual UGC creator. She produces TikTok and Meta ads, demos, reviews, and spokesperson videos from Medellín, in Spanish and English, for US Hispanic, Spain, and LatAm brands. She works on Fiverr as [gisela_sm](${FIVERR}): 4.8/5 from 173 verified reviews. 28+ brand campaigns. Content is delivered to the brand; she does not post client work unless it is an ambassador deal.`,
+};
+
+const FAQ_BY_FILE = {
+  'servicios/creadora-ugc-bilingue/index.html': [
+    {
+      question: '¿Trabajas tanto en español como en inglés?',
+      answer:
+        'Sí. El español es mi idioma nativo y también trabajo en inglés para piezas breves y comerciales. Cuando el proyecto es en inglés, prefiero partir de un guion o una estructura clara para mantener naturalidad y precisión.',
+    },
+    {
+      question: '¿Puedes grabar una misma pieza en dos idiomas?',
+      answer:
+        'Sí. Es una de las razones por las que esta página existe. Puedo producir versiones paralelas para campañas que necesitan consistencia de mensaje entre mercados.',
+    },
+    {
+      question: '¿Qué tipo de marcas encajan mejor aquí?',
+      answer:
+        'Cualquier marca que necesite una creadora con presencia natural frente a cámara y criterio comercial. He trabajado con marcas de muchas industrias.',
+    },
+    {
+      question: '¿Esto sirve solo para ads?',
+      answer:
+        'No. También funciona para landings, páginas de producto, creativos orgánicos, demos, testimoniales y piezas de apoyo para equipos de ventas.',
+    },
+    {
+      question: '¿Cómo trabajas el inglés?',
+      answer: 'En inglés trabajo con guion y un tope de 65 palabras por video para que suene natural.',
+    },
+  ],
+  'en/services/bilingual-ugc-creator/index.html': [
+    {
+      question: 'Do you work in both Spanish and English?',
+      answer:
+        'Yes. Spanish is my native language, and I also work in English for short commercial pieces. For English projects, I prefer to start from a script or a clear structure to keep the delivery natural and precise.',
+    },
+    {
+      question: 'Can you record the same concept in two languages?',
+      answer:
+        'Yes. I can produce paired Spanish and English versions for campaigns that need one consistent message across markets.',
+    },
+    {
+      question: 'Which brands are usually the best fit?',
+      answer:
+        "Any brand that needs a creator with natural on-camera presence and clear commercial instincts. I've worked across many industries.",
+    },
+    {
+      question: 'Is this only for paid ads?',
+      answer:
+        'No. It also works for landing pages, product pages, organic social, demos, reviews, and sales-support content.',
+    },
+    {
+      question: 'How do you work in English?',
+      answer: 'For English I work from a script, with a 65-word cap per video so it stays natural.',
+    },
+  ],
+};
+
+const FICHA_LABELS = {
+  es: { what: 'Qué es', ask: 'Qué pides', languages: 'Idiomas', fits: 'Sirve si', not: 'No sirve si' },
+  en: { what: 'What it is', ask: 'What you ask for', languages: 'Languages', fits: 'Fits if', not: 'Does not fit if' },
+};
+
+const htmlFromInlineCopy = (text) => {
+  const parts = [];
+  let last = 0;
+  const re = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let match = re.exec(text);
+  while (match) {
+    if (match.index > last) parts.push(escapeHtml(text.slice(last, match.index)));
+    parts.push(`<a href="${escapeHtml(match[2])}">${escapeHtml(match[1])}</a>`);
+    last = match.index + match[0].length;
+    match = re.exec(text);
+  }
+  if (last < text.length) parts.push(escapeHtml(text.slice(last)));
+  return parts.join('');
+};
+
 const escapeHtml = (value) =>
   value
     .replaceAll('&', '&amp;')
@@ -584,56 +751,136 @@ const escapeHtml = (value) =>
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
 
-/**
- * Generates boot shell HTML for the expanded content sections.
- * This HTML goes inside <div id="root"> and will be replaced by React on hydration.
- */
+const buildFichaRows = (entry) => {
+  const labels = FICHA_LABELS[entry.locale];
+  const marketItems = MARKET_BY_FILE[entry.file] ?? [];
+  return [
+    { label: labels.what, value: entry.sectionIntroText },
+    { label: labels.ask, value: entry.deliverables.map((item) => item.title).join(', ') },
+    { label: labels.languages, value: marketItems.join(' ') },
+    { label: labels.fits, value: entry.bestFitItems.join(' ') },
+    { label: labels.not, value: entry.notFitItems.join(' ') },
+  ];
+};
+
+const fitHeading = (locale) => (locale === 'es' ? '¿Es para ti?' : 'Is this for you?');
+const faqHeadingFallback = (locale) => (locale === 'es' ? 'Preguntas' : 'Questions');
+
 function generateBootShellExpansion(entry) {
-  const { sectionIntroTitle, sectionIntroText, deliverablesTitle, deliverables, bestFitTitle, bestFitItems, notFitTitle, notFitItems, processTitle, processSteps } = entry;
+  const {
+    sectionIntroTitle,
+    deliverablesTitle,
+    deliverables,
+    bestFitTitle,
+    bestFitItems,
+    notFitTitle,
+    notFitItems,
+    processTitle,
+    processSteps,
+  } = entry;
+  const fichaRows = buildFichaRows(entry);
+  const geoFact = GEO_BY_FILE[entry.file];
+  const faqs = FAQ_BY_FILE[entry.file] ?? [];
 
   return `
         <section class="boot-expanded" aria-label="${escapeHtml(entry.locale === 'es' ? 'Detalles del servicio' : 'Service details')}">
           <h2 class="boot-section-heading">${escapeHtml(sectionIntroTitle)}</h2>
-          <p class="boot-section-text">${escapeHtml(sectionIntroText)}</p>
+          <dl class="boot-ficha">
+            ${fichaRows
+              .map(
+                (row) => `<dt>${escapeHtml(row.label)}</dt>
+            <dd>${escapeHtml(row.value)}</dd>`,
+              )
+              .join('\n            ')}
+          </dl>
+          ${geoFact ? `<p class="boot-section-text">${htmlFromInlineCopy(geoFact)}</p>` : ''}
 
-          <h3 class="boot-subsection-heading">${escapeHtml(deliverablesTitle)}</h3>
+          <h2 class="boot-section-heading">${escapeHtml(deliverablesTitle)}</h2>
           <dl class="boot-dl">
-            ${deliverables.map((d) => `<dt>${escapeHtml(d.title)}</dt>
-            <dd>${escapeHtml(d.description)}</dd>`).join('\n            ')}
+            ${deliverables
+              .map(
+                (d) => `<dt>${escapeHtml(d.title)}</dt>
+            <dd>${escapeHtml(d.description)}</dd>`,
+              )
+              .join('\n            ')}
           </dl>
 
+          <h2 class="boot-section-heading">${escapeHtml(processTitle)}</h2>
+          <ol class="boot-process">
+            ${processSteps
+              .map((s) => `<li><strong>${escapeHtml(s.title)}</strong> ${escapeHtml(s.description)}</li>`)
+              .join('\n            ')}
+          </ol>
+
+          <h2 class="boot-section-heading">${escapeHtml(fitHeading(entry.locale))}</h2>
           <h3 class="boot-subsection-heading">${escapeHtml(bestFitTitle)}</h3>
           <ul class="boot-fit-list">
             ${bestFitItems.map((item) => `<li>${escapeHtml(item)}</li>`).join('\n            ')}
           </ul>
-
           <h3 class="boot-subsection-heading">${escapeHtml(notFitTitle)}</h3>
           <ul class="boot-fit-list">
             ${notFitItems.map((item) => `<li>${escapeHtml(item)}</li>`).join('\n            ')}
           </ul>
-
-          <h3 class="boot-subsection-heading">${escapeHtml(processTitle)}</h3>
-          <ol class="boot-process">
-            ${processSteps.map((s) => `<li><strong>${escapeHtml(s.title)}</strong> ${escapeHtml(s.description)}</li>`).join('\n            ')}
-          </ol>
+          ${
+            faqs.length > 0
+              ? `<h2 class="boot-section-heading">${escapeHtml(faqHeadingFallback(entry.locale))}</h2>
+          <dl class="boot-dl">
+            ${faqs
+              .map(
+                (faq) => `<dt>${escapeHtml(faq.question)}</dt>
+            <dd>${escapeHtml(faq.answer)}</dd>`,
+              )
+              .join('\n            ')}
+          </dl>`
+              : ''
+          }
         </section>`;
 }
 
-/**
- * Generates noscript expansion content (goes inside the existing <noscript><article>).
- */
 function generateNoscriptExpansion(entry) {
-  const { sectionIntroTitle, sectionIntroText, deliverablesTitle, deliverables, bestFitTitle, bestFitItems, notFitTitle, notFitItems, processTitle, processSteps } = entry;
+  const {
+    sectionIntroTitle,
+    deliverablesTitle,
+    deliverables,
+    bestFitTitle,
+    bestFitItems,
+    notFitTitle,
+    notFitItems,
+    processTitle,
+    processSteps,
+  } = entry;
+  const fichaRows = buildFichaRows(entry);
+  const geoFact = GEO_BY_FILE[entry.file];
+  const faqs = FAQ_BY_FILE[entry.file] ?? [];
 
   return `
           <!-- SERVICE-EXPANDED-NOSCRIPT -->
-          <h3>${escapeHtml(sectionIntroTitle)}</h3>
-          <p>${escapeHtml(sectionIntroText)}</p>
-          <h3>${escapeHtml(deliverablesTitle)}</h3>
+          <h2>${escapeHtml(sectionIntroTitle)}</h2>
           <dl>
-            ${deliverables.map((d) => `<dt>${escapeHtml(d.title)}</dt>
-            <dd>${escapeHtml(d.description)}</dd>`).join('\n            ')}
+            ${fichaRows
+              .map(
+                (row) => `<dt>${escapeHtml(row.label)}</dt>
+            <dd>${escapeHtml(row.value)}</dd>`,
+              )
+              .join('\n            ')}
           </dl>
+          ${geoFact ? `<p>${htmlFromInlineCopy(geoFact)}</p>` : ''}
+          <h2>${escapeHtml(deliverablesTitle)}</h2>
+          <dl>
+            ${deliverables
+              .map(
+                (d) => `<dt>${escapeHtml(d.title)}</dt>
+            <dd>${escapeHtml(d.description)}</dd>`,
+              )
+              .join('\n            ')}
+          </dl>
+          <h2>${escapeHtml(processTitle)}</h2>
+          <ol>
+            ${processSteps
+              .map((s) => `<li><strong>${escapeHtml(s.title)}</strong> ${escapeHtml(s.description)}</li>`)
+              .join('\n            ')}
+          </ol>
+          <h2>${escapeHtml(fitHeading(entry.locale))}</h2>
           <h3>${escapeHtml(bestFitTitle)}</h3>
           <ul>
             ${bestFitItems.map((item) => `<li>${escapeHtml(item)}</li>`).join('\n            ')}
@@ -642,10 +889,19 @@ function generateNoscriptExpansion(entry) {
           <ul>
             ${notFitItems.map((item) => `<li>${escapeHtml(item)}</li>`).join('\n            ')}
           </ul>
-          <h3>${escapeHtml(processTitle)}</h3>
-          <ol>
-            ${processSteps.map((s) => `<li><strong>${escapeHtml(s.title)}</strong> ${escapeHtml(s.description)}</li>`).join('\n            ')}
-          </ol>
+          ${
+            faqs.length > 0
+              ? `<h2>${escapeHtml(faqHeadingFallback(entry.locale))}</h2>
+          <dl>
+            ${faqs
+              .map(
+                (faq) => `<dt>${escapeHtml(faq.question)}</dt>
+            <dd>${escapeHtml(faq.answer)}</dd>`,
+              )
+              .join('\n            ')}
+          </dl>`
+              : ''
+          }
           <!-- /SERVICE-EXPANDED-NOSCRIPT -->`;
 }
 
@@ -679,8 +935,22 @@ const bootExpandedStyles = `      .boot-expanded {
         color: #9f9366;
         margin: 24px 0 12px;
       }
-      .boot-dl {
+      .boot-ficha {
         margin: 0 0 20px;
+      }
+      .boot-ficha dt {
+        font-family: 'DM Sans', system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #9f9366;
+        margin-top: 16px;
+      }
+      .boot-ficha dd {
+        margin: 6px 0 0;
+        line-height: 1.8;
+        color: rgba(47,42,36,0.78);
       }
       .boot-dl dt {
         font-weight: 600;
@@ -731,23 +1001,50 @@ for (const entry of serviceBootData) {
       /\s*@media \(max-width: 1023px\) \{/,
       `\n${bootExpandedStyles}\n      @media (max-width: 1023px) {`,
     );
+  } else if (!source.includes('.boot-ficha {')) {
+    source = source.replace(
+      '      .boot-dl {',
+      `      .boot-ficha {
+        margin: 0 0 20px;
+      }
+      .boot-ficha dt {
+        font-family: 'DM Sans', system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #9f9366;
+        margin-top: 16px;
+      }
+      .boot-ficha dd {
+        margin: 6px 0 0;
+        line-height: 1.8;
+        color: rgba(47,42,36,0.78);
+      }
+      .boot-dl {`,
+    );
   }
 
-  // 2. Inject boot shell expansion (between boot-shell </section> and <noscript>)
   const bootExpansionHtml = generateBootShellExpansion(entry);
-
-  if (!source.includes('class="boot-expanded"')) {
-    // Insert the expanded section between </section> and <noscript> inside <div id="root">
+  if (source.includes('class="boot-expanded"')) {
+    source = source.replace(
+      /<section class="boot-expanded"[\s\S]*?<\/section>(?=\s*<\/section>\s*<noscript>)/u,
+      bootExpansionHtml.trim(),
+    );
+  } else {
     source = source.replace(
       /( {6}<\/section>\n {6}<noscript>)/,
       `${bootExpansionHtml}\n      </section>\n      <noscript>`,
     );
   }
 
-  // 3. Inject noscript expansion (before the FAQ noscript block)
   const noscriptExpansionHtml = generateNoscriptExpansion(entry);
-
-  if (!source.includes('SERVICE-EXPANDED-NOSCRIPT')) {
+  if (source.includes('SERVICE-EXPANDED-NOSCRIPT')) {
+    source = source.replace(
+      /<!-- SERVICE-EXPANDED-NOSCRIPT -->[\s\S]*?<!-- \/SERVICE-EXPANDED-NOSCRIPT -->/u,
+      noscriptExpansionHtml.trim(),
+    );
+  } else {
     source = source.replace(
       /(\s*<!-- SERVICE-FAQ-NOSCRIPT -->)/,
       `${noscriptExpansionHtml}\n$1`,

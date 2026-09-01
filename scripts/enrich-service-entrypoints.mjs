@@ -18,7 +18,7 @@ const serviceFaqs = [
       {
         question: '¿Puedes grabar una misma pieza en dos idiomas?',
         answer:
-          'Sí. Puedo producir versiones paralelas para campañas que necesitan consistencia de mensaje entre mercados sin dividir la producción entre dos creadoras.',
+          'Sí. Es una de las razones por las que esta página existe. Puedo producir versiones paralelas para campañas que necesitan consistencia de mensaje entre mercados.',
       },
       {
         question: '¿Qué tipo de marcas encajan mejor aquí?',
@@ -29,6 +29,11 @@ const serviceFaqs = [
         question: '¿Esto sirve solo para ads?',
         answer:
           'No. También funciona para landings, páginas de producto, creativos orgánicos, demos, testimoniales y piezas de apoyo para equipos de ventas.',
+      },
+      {
+        question: '¿Cómo trabajas el inglés?',
+        answer:
+          'En inglés trabajo con guion y un tope de 65 palabras por video para que suene natural.',
       },
     ],
   },
@@ -46,7 +51,7 @@ const serviceFaqs = [
       {
         question: 'Can you record the same concept in two languages?',
         answer:
-          'Yes. I can produce paired Spanish and English versions for campaigns that need one consistent message across markets.',
+          'Yes. That is one of the main use cases for this page. I can produce paired Spanish and English versions for campaigns that need one consistent message across markets.',
       },
       {
         question: 'Which brands are usually the best fit?',
@@ -57,6 +62,11 @@ const serviceFaqs = [
         question: 'Is this only for paid ads?',
         answer:
           'No. It also works for landing pages, product pages, organic social, demos, reviews, and sales-support content.',
+      },
+      {
+        question: 'How do you work in English?',
+        answer:
+          'For English I work from a script, with a 65-word cap per video so it stays natural.',
       },
     ],
   },
@@ -501,6 +511,7 @@ for (const entry of serviceFaqs) {
 
   for (const item of graph) {
     if (item['@type'] === 'WebPage') {
+      item.dateModified = '2026-08-31';
       item.isPartOf = { '@id': 'https://www.giselasaldarriaga.com/#website' };
       item.breadcrumb = { '@id': `${entry.canonical}#breadcrumb` };
       item.mainEntity = { '@id': `${entry.canonical}#service` };
@@ -554,10 +565,8 @@ for (const entry of serviceFaqs) {
   );
 
   updated = updated.replace(
-    /\s*\.boot-noscript h2,\s*\n\s*\.boot-noscript h3 \{[\s\S]*?\n\s*@media \(max-width: 1023px\) \{/,
-    `
-${bootNoScriptStyles}
-      @media (max-width: 1023px) {`,
+    /      \.boot-noscript h2,\s*\n\s*\.boot-noscript h3 \{[\s\S]*?\.boot-noscript dd \{[\s\S]*?\n      \}/,
+    bootNoScriptStyles,
   );
 
   fs.writeFileSync(absolutePath, updated);
