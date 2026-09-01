@@ -212,30 +212,45 @@ const Hero = () => {
 
         <div className="portrait-hero__layout">
           <div className="portrait-hero__copy">
-            <p className="portrait-hero__eyebrow">
-              <span>Medellín</span>
-              <span aria-hidden="true">/</span>
-              <span>ES + EN</span>
+            {/* Her name signs the work; the offer is what carries the frame. */}
+            <p className="portrait-hero__signature">
+              <span className="portrait-hero__name">Gisela Saldarriaga</span>
+              <span className="portrait-hero__signature-rule" aria-hidden="true" />
+              <span className="portrait-hero__signature-meta">{t('hero.signatureMeta')}</span>
             </p>
 
             <h1 id="portrait-hero-title" className="portrait-hero__title">
-              <span className="portrait-hero__given-name">Gisela</span>
-              {' '}
-              <span className="portrait-hero__surname">Saldarriaga</span>
+              {t('hero.offerTitle')}
             </h1>
 
-            <p className="portrait-hero__subtitle">{t('hero.subtitle')}</p>
-            <span className="portrait-hero__rule" aria-hidden="true" />
-            <p className="portrait-hero__description">{t('hero.description')}</p>
+            <p className="portrait-hero__description">{t('hero.offerLead')}</p>
 
-            <a
-              href="#portfolio"
-              className="portrait-hero__cta"
-              onClick={handleHashLinkClick}
-            >
-              <span>{t('hero.buttonPortfolio')}</span>
-              <span className="portrait-hero__cta-mark" aria-hidden="true">↘</span>
-            </a>
+            <div className="portrait-hero__actions">
+              <a
+                href="#portfolio"
+                className="portrait-hero__cta"
+                onClick={handleHashLinkClick}
+              >
+                <span>{t('hero.buttonPortfolio')}</span>
+                <svg
+                  className="portrait-hero__cta-mark"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path d="M7 7 17 17" />
+                  <path d="M17 11v6h-6" />
+                </svg>
+              </a>
+              <span className="portrait-hero__actions-note">
+                {t('hero.reelNote', { count: HERO_REEL_CLIPS.length })}
+              </span>
+            </div>
           </div>
 
           <div className="portrait-hero__phone-wrap">
@@ -245,9 +260,6 @@ const Hero = () => {
               aria-label={phoneAriaLabel}
               onClick={handleHashLinkClick}
             >
-              <span className="portrait-hero__phone-button portrait-hero__phone-button--volume" aria-hidden="true" />
-              <span className="portrait-hero__phone-button portrait-hero__phone-button--power" aria-hidden="true" />
-
               <span className="portrait-hero__phone-screen" aria-hidden="true">
                 <ResponsivePosterImage
                   clip={activeReelClip}
@@ -298,14 +310,27 @@ const Hero = () => {
                   </span>
                 )}
 
-                <span className="portrait-hero__phone-island" aria-hidden="true" />
-                <span className="portrait-hero__phone-home" aria-hidden="true" />
+                <span className="portrait-hero__phone-shade" aria-hidden="true" />
+
+                {/* The counter rides inside the card: below it, it lands on the
+                    planted wall behind her and stops being readable. */}
+                <span className="portrait-hero__phone-caption" aria-hidden="true">
+                  <span className="portrait-hero__phone-caption-label">
+                    <svg
+                      className="portrait-hero__phone-caption-mark"
+                      viewBox="0 0 12 14"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path d="M11.2 6.13 1.6.29A1 1 0 0 0 .1 1.15v11.7a1 1 0 0 0 1.5.86l9.6-5.84a1 1 0 0 0 0-1.74Z" />
+                    </svg>
+                    <span>{t('hero.reelLabel')}</span>
+                  </span>
+                  <span>{formattedReelIndex} / {formattedReelTotal}</span>
+                </span>
               </span>
             </a>
-            <p className="portrait-hero__phone-caption" aria-hidden="true">
-              <span>Selected reel</span>
-              <span>{formattedReelIndex} / {formattedReelTotal}</span>
-            </p>
           </div>
         </div>
       </div>
