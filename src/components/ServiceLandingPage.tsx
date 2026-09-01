@@ -460,7 +460,7 @@ const ServiceLandingPage = ({
     [activeProofIndex, proofExamples],
   );
   const isProofTheaterOpen = activeProofItem !== null;
-  const mediaIntent = useMediaIntent();
+  const mediaIntent = useMediaIntent({ autoStart: true });
 
   const openProofClip = useCallback(
     (index: number) => {
