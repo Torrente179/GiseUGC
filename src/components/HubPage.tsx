@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PageSeo from '@/components/PageSeo';
 import { CONTENT_DATES } from '@/data/content-dates';
 import { getHubPageContent } from '@/data/hub-pages';
+import { FIVERR_AGGREGATE_RATING } from '@/data/site-proof';
 import { InlineCopy } from '@/lib/inline-copy-links';
 import {
   getHomePath,
@@ -74,6 +75,17 @@ const HubPage = ({ hubId, locale }: HubPageProps) => {
             },
           ],
         },
+        ...(page.proof
+          ? [
+              {
+                '@type': 'ProfessionalService',
+                '@id': `${SITE_URL}/#business`,
+                name: 'Gisela Saldarriaga UGC Studio',
+                url: `${SITE_URL}/`,
+                aggregateRating: FIVERR_AGGREGATE_RATING,
+              },
+            ]
+          : []),
       ],
     }),
     [
@@ -84,6 +96,7 @@ const HubPage = ({ hubId, locale }: HubPageProps) => {
       page.breadcrumbLabel,
       page.metaDescription,
       page.metaTitle,
+      page.proof,
     ],
   );
 

@@ -2324,6 +2324,8 @@
 
   .svc-inner-kicker {
     margin: 0 0 0.9rem;
+    /* Tracked 10px caps. Accent khaki on cream is ~2.8:1; ink at 0.84 is AA. */
+    color: hsl(var(--foreground) / 0.84);
   }
 
   .svc-inner-display {
@@ -2786,12 +2788,18 @@
     --svc-hero-ink: 0 0% 7%;
     background: hsl(var(--svc-hero-ink));
     color: hsl(var(--pure-linen));
-    padding: 3.5rem 0 6.75rem;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    overflow-x: clip;
+    padding: 3.5rem 1.25rem 6.75rem;
   }
 
   @media (min-width: 768px) {
     .svc-inner-close {
-      padding: 6rem 0 5rem;
+      padding: 6rem 2.25rem 5rem;
     }
   }
 
@@ -2831,7 +2839,7 @@
   }
 
   .svc-inner-close .st-eyebrow {
-    color: hsl(var(--pure-linen) / 0.38);
+    color: hsl(var(--pure-linen) / 0.72);
   }
 
   .svc-inner-close .st-related-row {
@@ -2872,13 +2880,16 @@
     margin: 0 auto;
     padding: 0 3rem;
     align-items: start;
+    overflow-x: clip;
   }
 
   .svc-spine {
     position: sticky;
     top: 6.25rem;
+    z-index: 2;
     padding: 8rem 0 4rem;
     border-left: 1px solid hsl(var(--foreground) / 0.12);
+    background: hsl(var(--background));
   }
 
   .svc-spine-list {
@@ -2899,7 +2910,7 @@
     font-size: 0.78rem;
     font-weight: 500;
     letter-spacing: -0.01em;
-    color: hsl(var(--foreground) / 0.42);
+    color: hsl(var(--foreground) / 0.74);
     text-decoration: none;
   }
 
@@ -2910,7 +2921,17 @@
 
   .svc-spine-num {
     font-variant-numeric: tabular-nums;
-    color: hsl(var(--foreground) / 0.32);
+    color: hsl(var(--foreground) / 0.62);
+  }
+
+  .svc-spine-link.is-active .svc-spine-num {
+    color: hsl(var(--foreground) / 0.78);
+  }
+
+  .svc-walk-main {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: clip;
   }
 
   .svc-walk-main .st-container {
@@ -2946,7 +2967,7 @@
     font-weight: 600;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: hsl(var(--foreground) / 0.4);
+    color: hsl(var(--foreground) / 0.82);
     padding-top: 0.15rem;
   }
 
@@ -3046,7 +3067,7 @@
      ═══════════════════════════════════════════════════ */
   .stm-walk {
     background: hsl(var(--foreground) / 0.045);
-    padding-bottom: 4.75rem;
+    padding-bottom: 6.5rem;
   }
 
   .stm-chips {
@@ -3145,7 +3166,7 @@
     font-weight: 650;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: hsl(var(--foreground) / 0.42);
+    color: hsl(var(--foreground) / 0.82);
   }
 
   .stm-ficha-value,
@@ -3289,7 +3310,7 @@
   }
 
   .stm-beat--close {
-    padding-bottom: 1.5rem;
+    padding-bottom: 2rem;
   }
 
   .stm-close {
@@ -3297,11 +3318,12 @@
     border-radius: 1.15rem;
     background: hsl(var(--foreground));
     color: hsl(var(--background));
+    overflow-x: clip;
   }
 
   .stm-close .svc-inner-kicker,
   .stm-close .st-eyebrow {
-    color: hsl(var(--background) / 0.45);
+    color: hsl(var(--background) / 0.72);
   }
 
   .stm-close-title {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseInlineCopy, visibleInlineCopy } from './inline-copy-links';
+import { parseInlineCopy, serializeRouteDataJson, visibleInlineCopy } from './inline-copy-links';
 
 describe('parseInlineCopy', () => {
   it('returns the original sentence when there are no links', () => {
@@ -26,5 +26,18 @@ describe('parseInlineCopy', () => {
     expect(segments).toEqual([
       { type: 'link', label: 'Creadora UGC bilingüe', href: '/servicios/creadora-ugc-bilingue/' },
     ]);
+  });
+});
+
+describe('serializeRouteDataJson', () => {
+  it('does not emit Fiverr markdown in the JSON crawlers read', () => {
+    const json = serializeRouteDataJson({
+      geoFact:
+        'Trabaja en Fiverr como [gisela_sm](https://www.fiverr.com/gisela_sm): 4.8/5 en 173 reseñas verificadas.',
+    });
+    expect(json).not.toContain('[gisela_sm](');
+    expect(json).toContain('"label":"gisela_sm"');
+    expect(json).toContain('"href":"https://www.fiverr.com/gisela_sm"');
+    expect(json).not.toContain('?');
   });
 });

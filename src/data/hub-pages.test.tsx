@@ -135,6 +135,22 @@ describe('hire-intent hub copy', () => {
       expect(webpage?.description).toBe(page.metaDescription);
       expect(webpage?.dateModified).toBe(CONTENT_DATES.hubs);
       expect(webpage?.name).not.toBe('Gisela Saldarriaga');
+      const rating = graph['@graph'].find((node) => {
+        const typed = node['@type'];
+        return typed === 'ProfessionalService' || typed === 'Service';
+      });
+      if (entry.hubId === 'services') {
+        expect(rating?.aggregateRating).toEqual({
+          '@type': 'AggregateRating',
+          ratingValue: String(SITE_PROOF.fiverrRating),
+          reviewCount: String(SITE_PROOF.fiverrReviewCount),
+          bestRating: '5',
+          worstRating: '1',
+        });
+      } else {
+        expect(rating).toBeUndefined();
+        expect(JSON.stringify(graph)).not.toContain('AggregateRating');
+      }
     }
   });
 

@@ -20,6 +20,8 @@ import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
 import ServicePageInner from '@/components/ServicePageInner';
 import { CONTENT_DATES } from '@/data/content-dates';
 import { innerSectionSchema } from '@/lib/service-inner-argument';
+import { serializeRouteDataJson } from '@/lib/inline-copy-links';
+import { FIVERR_AGGREGATE_RATING } from '@/data/site-proof';
 import '@/styles/templates.css';
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
@@ -106,8 +108,7 @@ const localeLabels = {
    Desktop: A24 × Apple editorial layout
    ════════════════════════════════════════════════════════════════════ */
 
-const serializeRouteData = (routeData: ServiceLandingRouteData) =>
-  JSON.stringify(routeData).replace(/</g, '\\u003c');
+const serializeRouteData = serializeRouteDataJson;
 
 const ServiceLandingPage = ({
   serviceId,
@@ -214,12 +215,12 @@ const ServiceLandingPage = ({
       '@graph': [
         { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: page.metaTitle, description: page.metaDescription, dateModified: CONTENT_DATES.services, inLanguage: locale, isPartOf: { '@id': `${homeCanonical}#website` }, breadcrumb: { '@id': `${canonical}#breadcrumb` }, mainEntity: { '@id': `${canonical}#service` }, hasPart: innerSectionSchema(canonical, locale) },
         { '@type': 'BreadcrumbList', '@id': `${canonical}#breadcrumb`, itemListElement: breadcrumbItems },
-        { '@type': 'Service', '@id': `${canonical}#service`, name: page.navLabel, serviceType: page.navLabel, description: page.metaDescription, url: canonical, provider: { '@type': 'ProfessionalService', '@id': `${SITE_URL}/#business`, name: 'Gisela Saldarriaga UGC Studio', url: `${SITE_URL}/`, telephone: '+57-304-378-6101', availableLanguage: ['es', 'en'] }, areaServed: [{ '@type': 'Country', name: 'United States' }, { '@type': 'Country', name: 'Spain' }, { '@type': 'Place', name: 'Latin America' }], availableLanguage: ['es', 'en'], audience: { '@type': 'Audience', audienceType: locale === 'es' ? 'Marcas globales' : 'Global brands' } },
+        { '@type': 'Service', '@id': `${canonical}#service`, name: page.navLabel, serviceType: page.navLabel, description: page.metaDescription, url: canonical, provider: { '@type': 'ProfessionalService', '@id': `${SITE_URL}/#business`, name: 'Gisela Saldarriaga UGC Studio', url: `${SITE_URL}/`, telephone: '+57-304-378-6101', availableLanguage: ['es', 'en'] }, areaServed: [{ '@type': 'Country', name: 'United States' }, { '@type': 'Country', name: 'Spain' }, { '@type': 'Place', name: 'Latin America' }], availableLanguage: ['es', 'en'], audience: { '@type': 'Audience', audienceType: locale === 'es' ? 'Marcas globales' : 'Global brands' }, ...(page.geoFact ? { aggregateRating: FIVERR_AGGREGATE_RATING } : {}) },
         { '@type': 'FAQPage', '@id': `${canonical}#faq`, inLanguage: locale, mainEntity: page.faqs.map((faq) => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: faq.answer } })) },
         ...videoObjects,
       ],
     };
-  }, [canonical, homeCanonical, labels.home, labels.services, locale, page.breadcrumbLabel, page.faqs, page.metaDescription, page.metaTitle, page.navLabel, proofExamples]);
+  }, [canonical, homeCanonical, labels.home, labels.services, locale, page.breadcrumbLabel, page.faqs, page.geoFact, page.metaDescription, page.metaTitle, page.navLabel, proofExamples]);
 
   const leadProof = proofExamples[0] ?? null;
   const handlePosterError = useCallback(

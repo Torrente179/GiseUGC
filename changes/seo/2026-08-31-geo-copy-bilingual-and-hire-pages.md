@@ -52,6 +52,12 @@ Minimum wiring so that copy is visible HTML (not comments) and `gisela_sm` is a 
 - `src/lib/inline-copy-links.tsx` — shared parser; internal paths use `<Link>`, `https://` uses `<a>`
 - `src/styles/templates.css` — underline treatment for those in-body links
 
+## Follow-up (2026-09-01)
+
+First HTML must not contain the authoring substring `[gisela_sm](`. Visible React already ran `InlineCopy`; the leak was `#route-data` JSON. `serializeRouteDataJson` now stores parsed `{type,label,href}` segments. `geo-copy.test.tsx` asserts the **raw** SSR document (scripts included).
+
+`AggregateRating` 4.8/173 (no `Review`) is on the bilingüe Service node and on `/servicios/` + `/en/services/` only. See `seo-crawl-trust.md`.
+
 ## What this did not touch
 
 - Homepage manifesto counters / `AnimatedCounter` / `src/data/site-proof.ts`

@@ -18,6 +18,7 @@ import { useMediaIntent } from '@/hooks/use-media-intent';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
 import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
+import { serializeRouteDataJson } from '@/lib/inline-copy-links';
 import '@/styles/templates.css';
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
@@ -77,8 +78,7 @@ const localeLabels = {
 } as const;
 
 
-const serializeRouteData = (routeData: VerticalLandingRouteData) =>
-  JSON.stringify(routeData).replace(/</g, '\\u003c');
+const serializeRouteData = serializeRouteDataJson;
 
 const VerticalLandingPage = ({
   verticalId,

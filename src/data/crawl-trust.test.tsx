@@ -239,7 +239,13 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
       expect(html).toMatch(/hreflang="x-default"/u);
       expect(html).toContain(hub.contact);
       expect(html.toLowerCase()).toContain('<h1');
-      expect(html).not.toContain('AggregateRating');
+      if (hub.hubId === 'services') {
+        expect(html).toContain('AggregateRating');
+        expect(html).toContain('"ratingValue":"4.8"');
+        expect(html).toContain('"reviewCount":"173"');
+      } else {
+        expect(html).not.toContain('AggregateRating');
+      }
       expect(html).not.toContain('FiverrRating');
       expect(html).not.toContain('reviewBody');
 
@@ -277,6 +283,11 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
       expect(html).toContain(entry.locale === 'es' ? '/#contact' : '/en/#contact');
       expect(html.toLowerCase()).toContain('<h1');
       expect(html).not.toContain('reviewBody');
+      if (entry.hubId === 'services') {
+        expect(html).toContain('AggregateRating');
+      } else {
+        expect(html).not.toContain('AggregateRating');
+      }
     }
   });
 

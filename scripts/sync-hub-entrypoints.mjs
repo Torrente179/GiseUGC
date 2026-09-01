@@ -15,6 +15,13 @@ const datesSource = fs.readFileSync(path.join(rootDir, 'src/data/content-dates.t
 const DATE_MODIFIED = datesSource.match(/hubs: '(\d{4}-\d{2}-\d{2})'/u)?.[1];
 if (!DATE_MODIFIED) throw new Error('Unable to read CONTENT_DATES.hubs');
 const FIVERR = 'https://www.fiverr.com/gisela_sm';
+const FIVERR_AGGREGATE_RATING = {
+  '@type': 'AggregateRating',
+  ratingValue: '4.8',
+  reviewCount: '173',
+  bestRating: '5',
+  worstRating: '1',
+};
 
 const hubs = [
   {
@@ -263,6 +270,17 @@ const renderHub = (hub) => {
           { '@type': 'ListItem', position: 2, name: hub.breadcrumbLabel, item: canonical },
         ],
       },
+      ...(hub.proof
+        ? [
+            {
+              '@type': 'ProfessionalService',
+              '@id': `${SITE}/#business`,
+              name: 'Gisela Saldarriaga UGC Studio',
+              url: `${SITE}/`,
+              aggregateRating: FIVERR_AGGREGATE_RATING,
+            },
+          ]
+        : []),
     ],
   };
 

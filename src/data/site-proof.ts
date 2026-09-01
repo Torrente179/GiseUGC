@@ -16,6 +16,15 @@ export const SITE_PROOF = {
   languages: 'ES+EN',
 } as const;
 
+/** Marketplace aggregate only. Never attach Review / reviewBody. */
+export const FIVERR_AGGREGATE_RATING = {
+  '@type': 'AggregateRating' as const,
+  ratingValue: String(SITE_PROOF.fiverrRating),
+  reviewCount: String(SITE_PROOF.fiverrReviewCount),
+  bestRating: '5',
+  worstRating: '1',
+};
+
 export const FIVERR_RATING_DISTRIBUTION = [
   { stars: 5, count: 158 },
   { stars: 4, count: 9 },

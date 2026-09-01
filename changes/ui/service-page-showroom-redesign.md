@@ -652,3 +652,12 @@ Non-negotiable crawl constraints folded into this inner-argument pass:
 - Visible last-updated follows `CONTENT_DATES.services` (31 ago 2026 / Aug 31, 2026).
 - `prebuild` runs `enrich-service-entrypoints` then `expand-boot-shells` so FAQ schema updates cannot strip `.boot-ficha` CSS.
 - Navbar language switch is real hrefs. CTA hrefs remain `/#contact` and `/en/#contact`.
+
+## 2026-09-01 Empezar clip + light-theme labels
+
+Do not revert the inner argument. Do not change URLs, H1, or hero. Do not restore display serif on inner H2s.
+
+1. Empezar black band stays in the content column to the right of the sticky spine (`overflow-x: clip` on `.svc-walk` / `.svc-walk-main`, horizontal padding on `.svc-inner-close`). No full-bleed under the spine in light or `.dark`.
+2. Mobile: extra space under the in-page close CTA so it clears the fixed Pedir creativos bar.
+3. Light theme: kickers, ficha row labels, and inactive spine links use near-ink opacities (AA on cream). Active spine stays full foreground.
+4. SEO follow-up in the same ship: `#route-data` has no `[gisela_sm](` markdown; `AggregateRating` 4.8/173 on bilingüe + `/servicios/` ES+EN only.

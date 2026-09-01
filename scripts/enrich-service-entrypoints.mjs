@@ -3,6 +3,19 @@ import path from 'node:path';
 
 const rootDir = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 
+const FIVERR_AGGREGATE_RATING = {
+  '@type': 'AggregateRating',
+  ratingValue: '4.8',
+  reviewCount: '173',
+  bestRating: '5',
+  worstRating: '1',
+};
+
+const GEO_PROOF_FILES = new Set([
+  'servicios/creadora-ugc-bilingue/index.html',
+  'en/services/bilingual-ugc-creator/index.html',
+]);
+
 const serviceFaqs = [
   {
     file: 'servicios/creadora-ugc-bilingue/index.html',
@@ -519,6 +532,14 @@ for (const entry of serviceFaqs) {
 
     if (item['@type'] === 'BreadcrumbList' && Array.isArray(item.itemListElement) && item.itemListElement[1]) {
       item.itemListElement[1].item = homeUrl;
+    }
+
+    if (item['@type'] === 'Service') {
+      if (GEO_PROOF_FILES.has(entry.file)) {
+        item.aggregateRating = FIVERR_AGGREGATE_RATING;
+      } else {
+        delete item.aggregateRating;
+      }
     }
   }
 

@@ -101,8 +101,8 @@ describe('service inner argument stays crawlable', () => {
   );
 
   it('keeps 4.8/173 GEO proof on bilingüe only, with a query-free Fiverr href', () => {
-    const { html: es } = renderService('bilingual-ugc-creator', 'es');
-    const { html: en } = renderService('bilingual-ugc-creator', 'en');
+    const { html: es, raw: esRaw } = renderService('bilingual-ugc-creator', 'es');
+    const { html: en, raw: enRaw } = renderService('bilingual-ugc-creator', 'en');
     expect(es).toContain('Gisela Saldarriaga es creadora UGC bilingüe');
     expect(es).toContain('4.8/5 en 173 reseñas verificadas');
     expect(es).toContain('28+ campañas de marca');
@@ -112,10 +112,16 @@ describe('service inner argument stays crawlable', () => {
     expect(en).toContain('Gisela Saldarriaga is a bilingual UGC creator');
     expect(en).toContain('4.8/5 from 173 verified reviews');
     expect(en).toContain('65-word cap per video');
+    expect(esRaw).not.toContain('[gisela_sm](');
+    expect(enRaw).not.toContain('[gisela_sm](');
+    expect(esRaw).toContain('"@type":"AggregateRating"');
+    expect(enRaw).toContain('"@type":"AggregateRating"');
+    expect(esRaw).not.toContain('reviewBody');
 
-    const { html: ads } = renderService('ugc-ads-tiktok-meta', 'es');
+    const { html: ads, raw: adsRaw } = renderService('ugc-ads-tiktok-meta', 'es');
     expect(ads).not.toContain('4.8/5');
     expect(ads).not.toContain('173 reseñas');
+    expect(adsRaw).not.toContain('AggregateRating');
   });
 });
 
@@ -152,7 +158,23 @@ describe('service boot shells keep crawlable first HTML', () => {
     expect(es).not.toContain('fiverr.com/gisela_sm?');
     expect(es).toContain('un tope de 65 palabras por video');
     expect(en).toContain('65-word cap per video');
+    expect(es).not.toContain('[gisela_sm](');
+    expect(es).toContain('AggregateRating');
+    expect(en).toContain('AggregateRating');
     expect(ads).not.toContain('4.8/5 en 173');
     expect(ads).not.toContain('4.8/5 from 173');
+    expect(ads).not.toContain('AggregateRating');
+  });
+});
+
+describe('service inner presentation locks', () => {
+  it('keeps Empezar in the content column and darkens light-theme labels', () => {
+    const css = readFileSync(resolve(root, 'src/styles/templates.css'), 'utf8');
+    expect(css).toContain('overflow-x: clip');
+    expect(css).toContain('padding: 6rem 2.25rem 5rem');
+    expect(css).toContain('color: hsl(var(--foreground) / 0.84)');
+    expect(css).toContain('color: hsl(var(--foreground) / 0.82)');
+    expect(css).toContain('color: hsl(var(--foreground) / 0.74)');
+    expect(css).toContain('padding-bottom: 6.5rem');
   });
 });

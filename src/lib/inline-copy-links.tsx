@@ -2,6 +2,7 @@ import { Fragment, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
 const INLINE_LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const HAS_MARKDOWN_LINK_RE = /\[[^\]]+\]\([^)\s]+\)/;
 
 export type InlineCopySegment =
   | { type: 'text'; value: string }
@@ -37,10 +38,21 @@ export const inlineCopyHrefs = (text: string) =>
     .filter((segment): segment is Extract<InlineCopySegment, { type: 'link' }> => segment.type === 'link')
     .map((segment) => segment.href);
 
+export type InlineCopyInput = string | InlineCopySegment[];
+
+export const serializeRouteDataJson = (data: unknown) =>
+  JSON.stringify(data, (_key, value) => {
+    if (typeof value === 'string' && HAS_MARKDOWN_LINK_RE.test(value)) {
+      return parseInlineCopy(value);
+    }
+    return value;
+  }).replace(/</g, '\\u003c');
+
 const isExternalHref = (href: string) => /^https?:\/\//i.test(href);
 
-export const InlineCopy = ({ text }: { text: string }) => {
-  const nodes: ReactNode[] = parseInlineCopy(text).map((segment, index) => {
+export const InlineCopy = ({ text }: { text: InlineCopyInput }) => {
+  const segments = typeof text === 'string' ? parseInlineCopy(text) : text;
+  const nodes: ReactNode[] = segments.map((segment, index) => {
     if (segment.type === 'text') {
       return <Fragment key={`t-${index}`}>{segment.value}</Fragment>;
     }

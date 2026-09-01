@@ -21,6 +21,15 @@ Single source: `src/data/site-proof.ts`
 
 `ManifestoChapter` emits those values in the first HTML snapshot (no animated zeros for Googlebot). Homepage JSON-LD keeps `AggregateRating` 4.8/173 with `worstRating: "1"` and **does not** invent `Review` / `reviewBody` nodes.
 
+The same marketplace `AggregateRating` (no `Review` / `reviewBody`) is restored on:
+
+- `/servicios/creadora-ugc-bilingue/` and `/en/services/bilingual-ugc-creator/` — on the Service node, because those pages show 4.8/173 in the GEO fact.
+- `/servicios/` and `/en/services/` — on a ProfessionalService node, because the hub shows the same proof line.
+
+Other service pages and the verticals/resources hubs must **not** grow a rating. Homepage Person `alternateName: Gisela.UGC` is unchanged.
+
+Route-data JSON (`#route-data`) must not leak authoring markdown such as `[gisela_sm](https://www.fiverr.com/gisela_sm)`. `serializeRouteDataJson` in `src/lib/inline-copy-links.tsx` rewrites those strings to `{type,label,href}` segments before they hit the first HTML. Authoring in `service-pages.ts` / `hub-pages.ts` stays markdown.
+
 Dates: `src/data/content-dates.ts`. Sitemap lastmod, JSON-LD `dateModified`, visible "last updated" labels, and llms `Last-Updated` read from here. Hub shells use `CONTENT_DATES.hubs` (`2026-09-01` after hire-intent copy). Service and resource families are `2026-08-31` after the GEO-copy pass on bilingüe / how-to-hire.
 
 `public/sitemap.xml` is generated from `PAGE_REGISTRY` + `CONTENT_DATES` (`src/lib/sitemap.ts`). Vite writes that file during `vite build` (the same `/sitemap.xml` static path production serves). Do not invent URLs; do not serve the sitemap through React.
@@ -53,7 +62,7 @@ Rules:
 - Child links only to existing money-page routes (`src/data/hub-pages.ts`).
 - Hire-intent title, meta, H1, and body now live on these routes — see
   `2026-09-01-hire-intent-hub-copy.md`. Do not invent new URLs.
-- Fiverr 4.8/173 proof is services-hub only.
+- Fiverr 4.8/173 proof is services-hub only. Those two hub shells (and `HubPage` SSR) include `AggregateRating` 4.8/173; verticals and resources hubs do not.
 - Do not retarget bilingüe (`/servicios/creadora-ugc-bilingue/`) or cómo-contratar (`/recursos/como-contratar-creadora-ugc/`) breadcrumbs onto these hubs.
 
 Routing trap: `scripts/normalize-client-entrypoints.mjs` must map the **exact** hub `index.html` files to `src/entry-hub.tsx` *before* the `servicios/*` → `entry-service.tsx` prefix match. Otherwise the hub hydrates `ServiceLandingPage` and React 404s.

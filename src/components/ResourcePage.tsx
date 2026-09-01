@@ -11,7 +11,7 @@ import PageSeo from '@/components/PageSeo';
 import { RevealSection } from '@/components/motion/RevealSection';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
-import { InlineCopy } from '@/lib/inline-copy-links';
+import { InlineCopy, serializeRouteDataJson } from '@/lib/inline-copy-links';
 import '@/styles/templates.css';
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
@@ -74,8 +74,7 @@ const hasOwnNumber = (title: string) => /^\d+\.\s*/.test(title);
 const RESOURCE_DATE_PUBLISHED = '2026-03-24';
 const RESOURCE_DATE_MODIFIED = CONTENT_DATES.resources;
 
-const serializeRouteData = (routeData: ResourceLandingRouteData) =>
-  JSON.stringify(routeData).replace(/</g, '\\u003c');
+const serializeRouteData = serializeRouteDataJson;
 
 const ResourcePage = ({
   resourceId,
@@ -260,8 +259,8 @@ const ResourcePage = ({
                       </span>
                     )}
                     <h2 className="rsc-chapter-title font-serif">{section.title}</h2>
-                    {section.body.map((paragraph) => (
-                      <p key={paragraph.slice(0, 48)}>
+                    {section.body.map((paragraph, paragraphIndex) => (
+                      <p key={paragraphIndex}>
                         <InlineCopy text={paragraph} />
                       </p>
                     ))}

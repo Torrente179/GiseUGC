@@ -50,16 +50,15 @@ describe('GEO copy on bilingual service pages', () => {
     expect(page.geoFact).toContain(String(SITE_PROOF.fiverrReviewCount));
     expect(page.geoFact).toContain(`${SITE_PROOF.brandCampaigns}+`);
 
-    const html = visibleHtml(
-      renderAt(
-        page.path,
-        <ServiceLandingPage
-          serviceId="bilingual-ugc-creator"
-          locale="es"
-          routeData={buildServiceLandingRouteData('bilingual-ugc-creator', 'es')}
-        />,
-      ),
+    const raw = renderAt(
+      page.path,
+      <ServiceLandingPage
+        serviceId="bilingual-ugc-creator"
+        locale="es"
+        routeData={buildServiceLandingRouteData('bilingual-ugc-creator', 'es')}
+      />,
     );
+    const html = visibleHtml(raw);
     const introAt = html.indexOf('Qué resuelve este servicio');
     const factAt = html.indexOf('Gisela Saldarriaga es creadora UGC bilingüe');
     const requestAt = html.indexOf('Qué puedes pedir dentro de este servicio');
@@ -73,6 +72,9 @@ describe('GEO copy on bilingual service pages', () => {
     expect(html).toContain('un tope de 65 palabras por video');
     expect(html).not.toMatch(/24 mar 2026|Mar 24, 2026/u);
     expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.services, 'es'));
+    expect(raw).not.toContain('[gisela_sm](');
+    expect(raw).toContain('"@type":"AggregateRating"');
+    expect(JSON.stringify(raw)).not.toContain('reviewBody');
   });
 
   it('EN page ships the fact block after markets, with a query-free Fiverr link and 65-word English FAQ', () => {
@@ -83,16 +85,15 @@ describe('GEO copy on bilingual service pages', () => {
       'For English I work from a script, with a 65-word cap per video so it stays natural.',
     );
 
-    const html = visibleHtml(
-      renderAt(
-        page.path,
-        <ServiceLandingPage
-          serviceId="bilingual-ugc-creator"
-          locale="en"
-          routeData={buildServiceLandingRouteData('bilingual-ugc-creator', 'en')}
-        />,
-      ),
+    const raw = renderAt(
+      page.path,
+      <ServiceLandingPage
+        serviceId="bilingual-ugc-creator"
+        locale="en"
+        routeData={buildServiceLandingRouteData('bilingual-ugc-creator', 'en')}
+      />,
     );
+    const html = visibleHtml(raw);
     const introAt = html.indexOf('What this service solves');
     const factAt = html.indexOf('Gisela Saldarriaga is a bilingual UGC creator');
     const requestAt = html.indexOf('What you can request inside this service');
@@ -106,6 +107,8 @@ describe('GEO copy on bilingual service pages', () => {
     expect(html).toContain('65-word cap per video');
     expect(html).not.toMatch(/24 mar 2026|Mar 24, 2026/u);
     expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.services, 'en'));
+    expect(raw).not.toContain('[gisela_sm](');
+    expect(raw).toContain('"@type":"AggregateRating"');
   });
 });
 
@@ -123,16 +126,15 @@ describe('GEO copy on how-to-hire resource pages', () => {
     expect(profileCopy).toContain(`[Creadora UGC bilingüe](${getServicePath('bilingual-ugc-creator', 'es')})`);
     expect(page.sections.at(-1)?.title).toBe('Un perfil que puedes evaluar ahora');
 
-    const html = visibleHtml(
-      renderAt(
-        page.path,
-        <ResourcePage
-          resourceId="how-to-hire-ugc-creator"
-          locale="es"
-          routeData={buildResourceLandingRouteData('how-to-hire-ugc-creator', 'es')}
-        />,
-      ),
+    const raw = renderAt(
+      page.path,
+      <ResourcePage
+        resourceId="how-to-hire-ugc-creator"
+        locale="es"
+        routeData={buildResourceLandingRouteData('how-to-hire-ugc-creator', 'es')}
+      />,
     );
+    const html = visibleHtml(raw);
     const billoAt = html.indexOf('Billo, Insense o JoinBrands');
     const fiverrAt = html.indexOf('Fiverr es un canal directo con reseñas verificadas');
     const profileAt = html.indexOf('id="un-perfil-que-puedes-evaluar-ahora"');
@@ -146,6 +148,7 @@ describe('GEO copy on how-to-hire resource pages', () => {
     expect(html).toContain('Gisela Saldarriaga es creadora UGC bilingüe');
     expect(html).toContain(`href="${getServicePath('bilingual-ugc-creator', 'es')}"`);
     assertCrawlableFiverrLink(html);
+    expect(raw).not.toContain('[gisela_sm](');
   });
 
   it('EN hire guide names gisela_sm 4.8/173 and adds an evaluable profile before the CTA', () => {
@@ -161,16 +164,15 @@ describe('GEO copy on how-to-hire resource pages', () => {
     expect(profileCopy).toContain(`[Bilingual UGC creator](${getServicePath('bilingual-ugc-creator', 'en')})`);
     expect(page.sections.at(-1)?.title).toBe('A profile you can evaluate now');
 
-    const html = visibleHtml(
-      renderAt(
-        page.path,
-        <ResourcePage
-          resourceId="how-to-hire-ugc-creator"
-          locale="en"
-          routeData={buildResourceLandingRouteData('how-to-hire-ugc-creator', 'en')}
-        />,
-      ),
+    const raw = renderAt(
+      page.path,
+      <ResourcePage
+        resourceId="how-to-hire-ugc-creator"
+        locale="en"
+        routeData={buildResourceLandingRouteData('how-to-hire-ugc-creator', 'en')}
+      />,
     );
+    const html = visibleHtml(raw);
     const billoAt = html.indexOf('Billo, Insense or JoinBrands');
     const fiverrAt = html.indexOf('Fiverr is a direct channel with verified reviews');
     const profileAt = html.indexOf('id="a-profile-you-can-evaluate-now"');
@@ -183,5 +185,6 @@ describe('GEO copy on how-to-hire resource pages', () => {
     expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.resources, 'en'));
     expect(html).toContain(`href="${getServicePath('bilingual-ugc-creator', 'en')}"`);
     assertCrawlableFiverrLink(html);
+    expect(raw).not.toContain('[gisela_sm](');
   });
 });
