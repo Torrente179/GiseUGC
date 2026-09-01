@@ -1235,16 +1235,43 @@
       object-position: 50% 16%;
     }
 
-    /* The phone layout anchors the copy to the bottom-left rather than beside
-       her, so the vertical pass keeps every bit of its weight below ~30% and
-       is only opened above it — the clear band now runs to the top of the
-       frame instead of ramping back to 0.42 across her head. The navbar has
-       its own backdrop here too. The horizontal pass is left alone: at 0.36
-       falling to 0.02 it is already mild, and it holds the copy's left edge. */
+    /* The phone layout anchors the copy to the bottom-left, over her rather
+       than beside her, so protecting the copy and showing her pull against
+       each other here in a way they do not on desktop.
+
+       The band is resolved in favour of the photo: the copy carries its own
+       contrast in the text shadows below, so this only has to separate the
+       text from the plate rather than supply the whole of its legibility.
+       That is what lets her torso out of the dark — it was the copy's
+       contrast budget being spent across the full width of the frame.
+
+       The horizontal pass is unchanged: at 0.36 falling to 0.02 it is already
+       mild, and it holds the copy's left edge. */
     .portrait-hero__scrim {
       background:
-        linear-gradient(0deg, rgba(34, 31, 27, 0.94) 0%, rgba(34, 31, 27, 0.7) 30%, rgba(34, 31, 27, 0.04) 62%, rgba(34, 31, 27, 0.06) 86%, rgba(34, 31, 27, 0.24) 100%),
+        linear-gradient(0deg, rgba(34, 31, 27, 0.62) 0%, rgba(34, 31, 27, 0.42) 26%, rgba(34, 31, 27, 0.03) 58%, rgba(34, 31, 27, 0.05) 86%, rgba(34, 31, 27, 0.22) 100%),
         linear-gradient(90deg, rgba(34, 31, 27, 0.36) 0%, rgba(34, 31, 27, 0.02) 70%, rgba(34, 31, 27, 0.18) 100%);
+    }
+
+    /* Local contrast at the glyphs instead of a wash across the whole plate.
+       Tight radii, not a glow: a large blur would haze her back out and undo
+       the point of lifting the scrim. */
+    .portrait-hero__eyebrow,
+    .portrait-hero__subtitle,
+    .portrait-hero__description {
+      text-shadow:
+        0 1px 3px rgba(20, 18, 16, 0.92),
+        0 2px 10px rgba(20, 18, 16, 0.75);
+    }
+
+    #home .portrait-hero__title {
+      text-shadow:
+        0 1px 3px rgba(20, 18, 16, 0.85),
+        0 2px 14px rgba(20, 18, 16, 0.7);
+    }
+
+    .portrait-hero__rule {
+      box-shadow: 0 1px 6px rgba(20, 18, 16, 0.8);
     }
 
     .portrait-hero__layout {
