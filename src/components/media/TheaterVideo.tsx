@@ -25,12 +25,25 @@ const DEFAULT_STARTUP_FALLBACK_MS = 800;
 const HANDOFF_FADE_MS = 260;
 
 // The bridge is a full-resolution slice of the same clip, so crossfading into a
-// still-ramping adaptive level reads as the reel losing quality. Safari and iOS
-// play the master natively, where the start level is the player's to choose and
-// not ours, so the wait is what keeps the downgrade off screen there. It stays
-// shorter than the bridge loop — holding longer would trade a soft frame for a
-// visible restart.
-const HANDOFF_QUALITY_WAIT_MS = 1200;
+// still-ramping — or still-stalling — master reads as the reel dropping quality
+// and restarting. The deadline is the escape hatch behind both handoff gates:
+// the bridge is only 1.7s long, so holding past a couple of loops would trade
+// one soft second for a visibly repeating one.
+const HANDOFF_DEADLINE_MS = 3000;
+
+// `canplay`'s readyState. Below it the master has no run of frames queued past
+// the current one, and the crossfade lands on a stall.
+const HAVE_FUTURE_DATA = 3;
+
+/** Whether `time` sits inside a buffered range with room to keep playing. */
+const isTimeBuffered = (video: HTMLVideoElement, time: number) => {
+  for (let index = 0; index < video.buffered.length; index += 1) {
+    if (time >= video.buffered.start(index) && time <= video.buffered.end(index) - 0.1) {
+      return true;
+    }
+  }
+  return false;
+};
 
 const safePlay = async (video: HTMLVideoElement, preferAudio: boolean) => {
   video.defaultPlaybackRate = 1;
@@ -74,8 +87,8 @@ const TheaterVideo = memo(
     const bridgeRef = useRef<HTMLVideoElement>(null);
     const fallbackTimerRef = useRef<number | null>(null);
     const handoffTimerRef = useRef<number | null>(null);
-    const qualityTimerRef = useRef<number | null>(null);
-    const qualityWaivedRef = useRef(false);
+    const deadlineTimerRef = useRef<number | null>(null);
+    const handoffForcedRef = useRef(false);
     const syncAttemptedRef = useRef(false);
     const synchronizeRef = useRef<() => void>(() => undefined);
 
@@ -118,19 +131,19 @@ const TheaterVideo = memo(
         window.clearTimeout(handoffTimerRef.current);
         handoffTimerRef.current = null;
       }
-      if (qualityTimerRef.current !== null) {
-        window.clearTimeout(qualityTimerRef.current);
-        qualityTimerRef.current = null;
+      if (deadlineTimerRef.current !== null) {
+        window.clearTimeout(deadlineTimerRef.current);
+        deadlineTimerRef.current = null;
       }
     }, []);
 
-    const waitForPrimaryQuality = useCallback(() => {
-      if (qualityTimerRef.current !== null) return;
-      qualityTimerRef.current = window.setTimeout(() => {
-        qualityTimerRef.current = null;
-        qualityWaivedRef.current = true;
+    const scheduleHandoffDeadline = useCallback(() => {
+      if (deadlineTimerRef.current !== null) return;
+      deadlineTimerRef.current = window.setTimeout(() => {
+        deadlineTimerRef.current = null;
+        handoffForcedRef.current = true;
         synchronizeRef.current();
-      }, HANDOFF_QUALITY_WAIT_MS);
+      }, HANDOFF_DEADLINE_MS);
     }, []);
 
     const promoteFallback = useCallback(() => {
@@ -178,29 +191,48 @@ const TheaterVideo = memo(
       const bridge = bridgeRef.current;
       if (!primary || primaryVisible) return;
 
+      const forced = handoffForcedRef.current;
+      const bridgeOnScreen = Boolean(bridge) && !bridgeReleased;
+
       // Hold the sharp bridge frame until the master has climbed to at least the
       // bridge's own resolution. Re-entered from `timeupdate`, so an adaptive
       // level switch mid-wait promotes as soon as it lands.
       if (
         bridge &&
-        !bridgeReleased &&
-        !qualityWaivedRef.current &&
+        bridgeOnScreen &&
+        !forced &&
         primary.videoWidth > 0 &&
         bridge.videoWidth > 0 &&
         primary.videoWidth < bridge.videoWidth
       ) {
-        waitForPrimaryQuality();
+        scheduleHandoffDeadline();
+        return;
+      }
+
+      // And until it can actually keep playing. Crossfading onto a master that
+      // is still buffering is the "stops, then starts again" the bridge exists
+      // to prevent.
+      if (bridgeOnScreen && !forced && primary.readyState < HAVE_FUTURE_DATA) {
+        scheduleHandoffDeadline();
         return;
       }
 
       if (
         bridge &&
-        !bridgeReleased &&
+        bridgeOnScreen &&
         bridge.readyState >= 2 &&
         Number.isFinite(bridge.currentTime) &&
         Math.abs(primary.currentTime - bridge.currentTime) > 0.2 &&
         !syncAttemptedRef.current
       ) {
+        // A seek into an unbuffered range costs a fragment fetch mid-crossfade,
+        // which is the same visible stall by another route. Wait for the range
+        // instead; the deadline hands over without the seek if it never lands.
+        if (!forced && !isTimeBuffered(primary, bridge.currentTime)) {
+          scheduleHandoffDeadline();
+          return;
+        }
+
         syncAttemptedRef.current = true;
         try {
           primary.currentTime = bridge.currentTime;
@@ -211,7 +243,7 @@ const TheaterVideo = memo(
       }
 
       completeHandoff();
-    }, [bridgeReleased, completeHandoff, primaryVisible, waitForPrimaryQuality]);
+    }, [bridgeReleased, completeHandoff, primaryVisible, scheduleHandoffDeadline]);
 
     useEffect(() => {
       synchronizeRef.current = synchronizePrimary;
@@ -262,7 +294,7 @@ const TheaterVideo = memo(
       setIsPlaying(false);
       setIsMuted(false);
       syncAttemptedRef.current = false;
-      qualityWaivedRef.current = false;
+      handoffForcedRef.current = false;
     }, [candidateKey, clearTimers]);
 
     useEffect(() => {
@@ -384,11 +416,15 @@ const TheaterVideo = memo(
             event.currentTarget.playbackRate = 1;
           }}
           onCanPlay={synchronizePrimary}
+          onCanPlayThrough={synchronizePrimary}
           onPlaying={synchronizePrimary}
+          onProgress={() => {
+            if (!primaryVisible) synchronizePrimary();
+          }}
           onTimeUpdate={() => {
             if (!primaryVisible) synchronizePrimary();
           }}
-          onSeeked={completeHandoff}
+          onSeeked={synchronizePrimary}
           onPlay={() => {
             if (primaryVisible || !bridgeCandidate) setIsPlaying(true);
           }}

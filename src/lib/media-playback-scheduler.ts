@@ -37,7 +37,7 @@ const entries = new Map<number, SchedulerEntry>();
 let nextEntryId = 1;
 let listenersAttached = false;
 
-const getConnectionProfile = () => {
+export const getConnectionProfile = () => {
   if (typeof navigator === 'undefined') return { constrained: false, slow: false };
   const connection = (
     navigator as Navigator & {

@@ -8,7 +8,10 @@ import {
   type VideoHTMLAttributes,
 } from 'react';
 import { useMediaPlaybackSlot } from '@/hooks/use-media-playback-slot';
-import type { MediaPlaybackPriority } from '@/lib/media-playback-scheduler';
+import {
+  getConnectionProfile,
+  type MediaPlaybackPriority,
+} from '@/lib/media-playback-scheduler';
 import { useMediaSession } from '@/components/media/MediaSessionProvider';
 
 type AdaptiveVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poster'> & {
@@ -49,6 +52,7 @@ const attachFallbackSource = (video: HTMLVideoElement, src: string) => {
 };
 
 type HlsLevelLike = { width?: number };
+
 type HlsQualityControls = {
   levels?: HlsLevelLike[];
   startLevel: number;
@@ -83,6 +87,67 @@ export const selectTheaterLevel = (
   const startIndex = widths.indexOf(widths[capIndex]);
 
   return { capIndex, startIndex: startIndex === -1 ? capIndex : startIndex };
+};
+
+type HlsVariant = {
+  uri: string;
+  width: number;
+  bandwidth: number;
+  codecs?: string;
+};
+
+const STREAM_INF_PREFIX = '#EXT-X-STREAM-INF:';
+
+/**
+ * Safari and iOS play the master playlist themselves, and they open on the
+ * first variant they can decode — which in these ladders is the 360p rung. The
+ * ramp back up is the visible "starts sharp, then restarts soft" handoff on
+ * iPhone, and no player API can pre-empt it. So the theater reads the master
+ * itself and hands the player one variant playlist instead.
+ */
+export const parseHlsMasterVariants = (manifest: string): HlsVariant[] => {
+  const lines = manifest.split(/\r?\n/u);
+
+  return lines.flatMap((rawLine, index) => {
+    const line = rawLine.trim();
+    if (!line.startsWith(STREAM_INF_PREFIX)) return [];
+
+    const uri = lines[index + 1]?.trim();
+    if (!uri || uri.startsWith('#')) return [];
+
+    const attributes = line.slice(STREAM_INF_PREFIX.length);
+    const resolution = /RESOLUTION=(\d+)x(\d+)/u.exec(attributes);
+    // AVERAGE-BANDWIDTH also ends in BANDWIDTH, so the peak attribute is only
+    // the one at the start of the list or straight after a comma.
+    const bandwidth = /(?:^|,)BANDWIDTH=(\d+)/u.exec(attributes);
+    const codecs = /CODECS="([^"]*)"/u.exec(attributes);
+
+    return [{
+      uri,
+      width: resolution ? Number(resolution[1]) : 0,
+      bandwidth: bandwidth ? Number(bandwidth[1]) : 0,
+      codecs: codecs?.[1],
+    }];
+  });
+};
+
+export const selectNativeHlsVariant = (
+  manifest: string,
+  playerWidth: number,
+  pixelRatio: number,
+  canPlayCodecs: (codecs: string) => boolean,
+): HlsVariant | null => {
+  const variants = parseHlsMasterVariants(manifest)
+    .filter((variant) => variant.width > 0)
+    .filter((variant) => !variant.codecs || canPlayCodecs(variant.codecs))
+    // `selectTheaterLevel` reads the ladder the way hls.js hands it over:
+    // ascending bitrate, cheapest codec first within a resolution.
+    .sort((a, b) => a.bandwidth - b.bandwidth);
+
+  if (variants.length === 0) return null;
+
+  const { startIndex } = selectTheaterLevel(variants, playerWidth, pixelRatio);
+  return variants[startIndex] ?? null;
 };
 
 /**
@@ -260,14 +325,48 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
         // Safari/iOS play the .m3u8 directly. If that source errors (e.g. a
         // missing/404 master, or an incompletely uploaded ladder), fall back to
         // the progressive MP4 instead of leaving a broken video element.
+        let attachedHlsUrl = hlsSrc;
         const handleNativeHlsError = () => {
           if (cancelled) return;
-          if (video.getAttribute('src') !== hlsSrc) return;
+          if (video.getAttribute('src') !== attachedHlsUrl) return;
           video.removeEventListener('error', handleNativeHlsError);
           attachFallbackSource(video, src);
         };
+        const attachHls = (url: string) => {
+          attachedHlsUrl = url;
+          attachFallbackSource(video, url);
+        };
         video.addEventListener('error', handleNativeHlsError);
-        attachFallbackSource(video, hlsSrc);
+
+        // A pinned variant has no ladder left to fall back on, so a link that
+        // cannot hold the top rung keeps the master and its own adaptation —
+        // stalling on a sharp frame is not better than a soft one.
+        if (playbackPriority !== 'theater' || getConnectionProfile().slow) {
+          attachHls(hlsSrc);
+        } else {
+          // The bridge covers this one manifest round trip, so pinning costs
+          // nothing on screen and buys a full-resolution first frame.
+          void fetch(hlsSrc, { credentials: 'omit' })
+            .then((response) => (response.ok ? response.text() : Promise.reject(new Error('manifest'))))
+            .then((manifest) => {
+              if (cancelled) return;
+              const variant = selectNativeHlsVariant(
+                manifest,
+                video.clientWidth ||
+                  video.getBoundingClientRect().width ||
+                  THEATER_FALLBACK_PLAYER_WIDTH,
+                window.devicePixelRatio || 1,
+                (codecs) => video.canPlayType(`video/mp4; codecs="${codecs}"`) !== '',
+              );
+              attachHls(variant ? new URL(variant.uri, hlsSrc).href : hlsSrc);
+            })
+            .catch(() => {
+              // An unreadable master is still worth handing to the player: it
+              // may well play it, and the MP4 fallback stays behind that.
+              if (!cancelled) attachHls(hlsSrc);
+            });
+        }
+
         return () => {
           cancelled = true;
           video.removeEventListener('error', handleNativeHlsError);
