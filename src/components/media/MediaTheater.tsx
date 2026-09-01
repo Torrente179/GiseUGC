@@ -128,7 +128,7 @@ const MediaTheater = ({
 
   return (
     <div
-      className={`media-theater fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4${isClosing ? ' is-closing' : ''}`}
+      className={`media-theater dc-theater-overlay fixed inset-0 z-[200] flex items-center justify-center${isClosing ? ' is-closing' : ''}`}
       role="dialog"
       aria-modal="true"
       aria-label={title}
@@ -139,7 +139,7 @@ const MediaTheater = ({
         className="media-theater-backdrop pointer-events-none absolute inset-0"
         style={{ background: 'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)' }}
       />
-      <div className="media-theater-card relative w-full max-w-[430px]">
+      <div className="media-theater-card dc-theater-stage relative">
         <button
           type="button"
           className="theater-control absolute left-0 top-1/2 z-[220] h-9 w-9 -translate-x-[118%] -translate-y-1/2 md:h-10 md:w-10"
