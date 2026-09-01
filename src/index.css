@@ -765,15 +765,53 @@
   }
 
   /* Functional contrast scrims preserve the authentic image while keeping
-     the restored copy readable across every crop. */
+     the restored copy readable across every crop.
+
+     She is the subject, so the centre of the frame carries no wash at all. The
+     shade is spent where it does work — the copy column on the left, and the
+     bottom under the CTA.
+
+     The horizontal knee is derived, not guessed. `.portrait-hero__layout` caps
+     at 100rem and centres, so as the viewport widens the copy marches right
+     while she stays at the centre of the photo; a fixed percentage cannot serve
+     both. `--hero-copy-edge` reproduces that geometry — half the overflow past
+     100rem, plus the layout's own max padding, plus the inked width of the
+     longest line — so the falloff tracks the text at every width and always
+     clears before it reaches her. The `max(0px, …)` is load-bearing: below
+     100rem the container stops centring, so without the clamp the knee keeps
+     sliding left and strands the copy on the clear side of the ramp.
+
+     Stops that would run backwards on a narrow viewport are clamped to the
+     previous stop by the gradient spec, so this degrades rather than breaks.
+
+     The navbar carries its own `bg-background/75`, so the top of the frame does
+     not need to be darkened on its behalf. */
   .portrait-hero__scrim {
+    --hero-copy-edge: calc(max(0px, (100% - 100rem) / 2) + 5.5rem + 23rem);
+
     position: absolute;
     z-index: -2;
     inset: 0;
     pointer-events: none;
     background:
-      linear-gradient(90deg, rgba(34, 31, 27, 0.88) 0%, rgba(34, 31, 27, 0.58) 33%, rgba(34, 31, 27, 0.08) 61%, rgba(34, 31, 27, 0.22) 100%),
-      linear-gradient(0deg, rgba(34, 31, 27, 0.75) 0%, rgba(34, 31, 27, 0.08) 58%, rgba(34, 31, 27, 0.3) 100%);
+      linear-gradient(
+        90deg,
+        rgba(34, 31, 27, 0.9) 0%,
+        rgba(34, 31, 27, 0.74) calc(var(--hero-copy-edge) - 12rem),
+        rgba(34, 31, 27, 0.42) var(--hero-copy-edge),
+        rgba(34, 31, 27, 0.08) calc(var(--hero-copy-edge) + 7rem),
+        rgba(34, 31, 27, 0) calc(var(--hero-copy-edge) + 12rem),
+        rgba(34, 31, 27, 0) 74%,
+        rgba(34, 31, 27, 0.14) 100%
+      ),
+      linear-gradient(
+        0deg,
+        rgba(34, 31, 27, 0.78) 0%,
+        rgba(34, 31, 27, 0.14) 42%,
+        rgba(34, 31, 27, 0) 62%,
+        rgba(34, 31, 27, 0.1) 88%,
+        rgba(34, 31, 27, 0.26) 100%
+      );
   }
 
   .portrait-hero__layout {
