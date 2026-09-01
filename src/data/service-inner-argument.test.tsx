@@ -169,9 +169,19 @@ describe('service boot shells keep crawlable first HTML', () => {
 
 describe('service inner presentation locks', () => {
   it('keeps Empezar in the content column and darkens light-theme labels', () => {
+    const { html } = renderService('bilingual-ugc-creator', 'es');
+    expect(html).toContain('svc-inner-close-shell');
+    expect(html).toContain('svc-inner-close-top');
+    expect(html).toContain('svc-close-explore');
+    expect(html).not.toContain('st-container svc-inner-close-grid');
+
     const css = readFileSync(resolve(root, 'src/styles/templates.css'), 'utf8');
     expect(css).toContain('overflow-x: clip');
-    expect(css).toContain('padding: 6rem 2.25rem 5rem');
+    expect(css).toContain('.svc-inner-close-shell');
+    expect(css).toContain('.svc-close-explore-col');
+    expect(css).toMatch(/\.svc-close-explore \{[\s\S]*?align-items: start/u);
+    expect(css).toContain('align-items: start');
+    expect(css).not.toMatch(/\.svc-inner-close-grid \{[\s\S]*?align-items: end/u);
     expect(css).toContain('color: hsl(var(--foreground) / 0.84)');
     expect(css).toContain('color: hsl(var(--foreground) / 0.82)');
     expect(css).toContain('color: hsl(var(--foreground) / 0.74)');

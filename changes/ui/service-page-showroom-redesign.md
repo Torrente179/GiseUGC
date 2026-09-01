@@ -657,7 +657,7 @@ Non-negotiable crawl constraints folded into this inner-argument pass:
 
 Do not revert the inner argument. Do not change URLs, H1, or hero. Do not restore display serif on inner H2s.
 
-1. Empezar black band stays in the content column to the right of the sticky spine (`overflow-x: clip` on `.svc-walk` / `.svc-walk-main`, horizontal padding on `.svc-inner-close`). No full-bleed under the spine in light or `.dark`.
+1. Empezar black band stays in the content column to the right of the sticky spine. Copy, TAMBIÉN OFREZCO, and the 3 explore columns share one padded shell (`.svc-inner-close-shell`). The explore row is its own 3-col grid with `align-items: start` — not a third item in a 2-col `align-items: end` grid (that stair-stepped POR INDUSTRIA / RECURSOS / MÁS SERVICIOS and pulled the left column under the spine).
 2. Mobile: extra space under the in-page close CTA so it clears the fixed Pedir creativos bar.
 3. Light theme: kickers, ficha row labels, and inactive spine links use near-ink opacities (AA on cream). Active spine stays full foreground.
 4. SEO follow-up in the same ship: `#route-data` has no `[gisela_sm](` markdown; `AggregateRating` 4.8/173 on bilingüe + `/servicios/` ES+EN only.

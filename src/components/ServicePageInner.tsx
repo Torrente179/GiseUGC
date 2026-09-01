@@ -360,39 +360,41 @@ const ServicePageInner = ({
           id={idFor('empezar')}
           className={isMobile ? 'stm-beat stm-beat--close' : 'svc-inner-close svc-beat'}
         >
-          <div className={isMobile ? 'stm-beat-inner stm-close' : 'st-container svc-inner-close-grid'}>
-            <div>
-              <p className="st-eyebrow svc-inner-kicker">{kickerFor('empezar')}</p>
-              <h2 className={isMobile ? 'stm-close-title' : 'svc-inner-close-title font-serif'}>
-                {page.ctaTitle}
-              </h2>
-              <p className={isMobile ? 'stm-close-text' : 'svc-inner-close-text'}>{page.ctaText}</p>
-              <a href={page.primaryCtaHref} className={isMobile ? 'stm-close-cta' : 'st-cta-primary st-cta-primary--lg'}>
-                {page.primaryCtaLabel}
-              </a>
-              <p className={isMobile ? 'stm-close-updated' : 'svc-inner-updated'}>{updated}</p>
-            </div>
-            {relatedPages.length > 0 && (
+          <div className={isMobile ? 'stm-beat-inner stm-close' : 'svc-inner-close-shell'}>
+            <div className={isMobile ? 'stm-close-stack' : 'svc-inner-close-top'}>
               <div>
-                <p className={isMobile ? 'stm-close-sublabel' : 'st-eyebrow mb-5'}>{labels.alsoOffered}</p>
-                {page.relatedServiceIds.map((relatedId, index) => {
-                  const rel = relatedPages[index];
-                  if (!rel) return null;
-                  return (
-                    <Link
-                      key={relatedId}
-                      to={getServicePath(relatedId, locale)}
-                      className={isMobile ? 'stm-close-link' : 'st-related-row group'}
-                    >
-                      <span className={isMobile ? undefined : 'st-related-title'}>{rel.title}</span>
-                      <span className={isMobile ? 'stm-close-arrow' : 'st-related-arrow'} aria-hidden="true">
-                        →
-                      </span>
-                    </Link>
-                  );
-                })}
+                <p className="st-eyebrow svc-inner-kicker">{kickerFor('empezar')}</p>
+                <h2 className={isMobile ? 'stm-close-title' : 'svc-inner-close-title font-serif'}>
+                  {page.ctaTitle}
+                </h2>
+                <p className={isMobile ? 'stm-close-text' : 'svc-inner-close-text'}>{page.ctaText}</p>
+                <a href={page.primaryCtaHref} className={isMobile ? 'stm-close-cta' : 'st-cta-primary st-cta-primary--lg'}>
+                  {page.primaryCtaLabel}
+                </a>
+                <p className={isMobile ? 'stm-close-updated' : 'svc-inner-updated'}>{updated}</p>
               </div>
-            )}
+              {relatedPages.length > 0 && (
+                <div>
+                  <p className={isMobile ? 'stm-close-sublabel' : 'st-eyebrow mb-5'}>{labels.alsoOffered}</p>
+                  {page.relatedServiceIds.map((relatedId, index) => {
+                    const rel = relatedPages[index];
+                    if (!rel) return null;
+                    return (
+                      <Link
+                        key={relatedId}
+                        to={getServicePath(relatedId, locale)}
+                        className={isMobile ? 'stm-close-link' : 'st-related-row group'}
+                      >
+                        <span className={isMobile ? undefined : 'st-related-title'}>{rel.title}</span>
+                        <span className={isMobile ? 'stm-close-arrow' : 'st-related-arrow'} aria-hidden="true">
+                          →
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
             {exploreColumns.length > 0 && (
               <nav className={isMobile ? 'stm-close-explore' : 'svc-close-explore'} aria-label={labels.explore}>
                 {exploreColumns.map((column) => (

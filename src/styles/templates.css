@@ -2789,17 +2789,40 @@
     background: hsl(var(--svc-hero-ink));
     color: hsl(var(--pure-linen));
     box-sizing: border-box;
-    width: 100%;
+    width: auto;
     max-width: 100%;
     margin-left: 0;
     margin-right: 0;
     overflow-x: clip;
-    padding: 3.5rem 1.25rem 6.75rem;
+    padding: 3.5rem 0 6.75rem;
   }
 
   @media (min-width: 768px) {
     .svc-inner-close {
-      padding: 6rem 2.25rem 5rem;
+      padding: 6rem 0 5rem;
+    }
+  }
+
+  /* One inset for copy + TAMBIÉN + the 3 explore columns. Stays in walk-main,
+     to the right of the spine — never 100vw / negative-margin full-bleed. */
+  .svc-inner-close-shell {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0 1.5rem;
+  }
+
+  .svc-inner-close-top {
+    display: grid;
+    gap: 2.75rem;
+    min-width: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .svc-inner-close-top {
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+      gap: 4.5rem;
+      align-items: start;
     }
   }
 
@@ -2812,7 +2835,7 @@
     .svc-inner-close-grid {
       grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
       gap: 4.5rem;
-      align-items: end;
+      align-items: start;
     }
   }
 
@@ -3051,14 +3074,41 @@
   }
 
   .svc-close-explore {
-    grid-column: 1 / -1;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5rem 2rem;
+    align-items: start;
+    justify-items: stretch;
+    min-width: 0;
+    max-width: 100%;
+    margin: 2.75rem 0 0;
+  }
+
+  .svc-close-explore-col {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .svc-close-explore .st-related-title {
     font-size: 0.95rem;
+  }
+
+  .svc-inner-close .svc-explore-index {
+    color: hsl(var(--pure-linen) / 0.72);
+    border-bottom-color: hsl(var(--pure-linen) / 0.16);
+  }
+
+  .svc-inner-close .st-related-row {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .svc-inner-close .st-related-row:hover {
+    padding-left: 0;
+  }
+
+  .svc-close-explore .st-related-row:first-of-type {
+    border-top: 0;
   }
 
   /* ═══════════════════════════════════════════════════
