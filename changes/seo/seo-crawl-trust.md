@@ -65,3 +65,20 @@ Hub shells can be regenerated with `node scripts/sync-hub-entrypoints.mjs`. Copy
 ## IndexNow
 
 `scripts/indexnow-ping.sh` includes the six hub URLs plus the existing money pages.
+
+## 2026-09-01 — crawlable language switch
+
+Live Googlebot on `/` had zero body hrefs to `/en/`. The navbar language
+control was a pair of JS `<button>`s (`aria-label` Cambiar Idioma) that only
+called `navigateToRoute`. Head hreflang was already correct; crawlers still
+could not follow ES → EN from visible nav.
+
+`NavbarControls` now renders real `<a href>` pairs using
+`getLocalizedPathForCurrentRoute()`. The visual ES/EN pill is unchanged.
+Homepage nav SSR emits `href="/en/"` (and `href="/"` from English). Inner
+pages use the existing locale-path map (`/servicios/` ↔ `/en/services/`,
+etc.). No new routes. Hreflang is untouched.
+
+Tests: `src/data/crawl-trust.test.tsx` ("language switch is crawlable href pairs").
+Do not rebuild hub shells for this; Vercel prerender on `main` injects the
+navbar markup. Hub hire-intent copy is a separate file.

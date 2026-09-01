@@ -8,6 +8,7 @@ import ManifestoChapter from '@/components/chapters/ManifestoChapter';
 import { CONTENT_DATES, LLMS_LAST_UPDATED } from '@/data/content-dates';
 import { getHubChildLinks } from '@/data/hub-child-links';
 import HubPage from '@/components/HubPage';
+import Navbar from '@/components/Navbar';
 import { getServicePageContent } from '@/data/service-pages';
 import { getVerticalPageContent } from '@/data/vertical-pages';
 import { getResourcePageContent } from '@/data/resource-pages';
@@ -320,6 +321,48 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
     expect(read('src/components/ResourcePage.tsx')).not.toContain('getHubPath');
     expect(read('recursos/como-contratar-creadora-ugc/index.html')).not.toContain('href="/recursos/"');
     expect(read('servicios/creadora-ugc-bilingue/index.html')).not.toContain('href="/servicios/"');
+  });
+});
+
+const renderNavbar = (path: string) =>
+  renderToStaticMarkup(
+    <StaticRouter location={path}>
+      <LocaleProvider>
+        <Navbar />
+      </LocaleProvider>
+    </StaticRouter>,
+  );
+
+describe('language switch is crawlable href pairs', () => {
+  it('homepage nav HTML includes href="/en/" so a no-JS crawler can leave Spanish', () => {
+    const html = renderNavbar('/');
+    expect(html).toContain('href="/en/"');
+    expect(html).toContain('href="/"');
+    expect(html).toMatch(/<a\b[^>]*href="\/en\/"/u);
+    expect(html).toContain('aria-label="Cambiar Idioma to English"');
+    expect(html).not.toMatch(/<button[^>]*aria-label="[^"]*Cambiar Idioma/u);
+  });
+
+  it('English homepage nav includes href="/" back to Spanish', () => {
+    const html = renderNavbar('/en/');
+    expect(html).toContain('href="/"');
+    expect(html).toContain('href="/en/"');
+    expect(html).toMatch(/<a[^>]*href="\/"[^>]*>/u);
+    expect(html).not.toMatch(/<button[^>]*aria-label="[^"]*Change Language/u);
+  });
+
+  it('inner pages emit the matching localized path pair', () => {
+    const hub = renderNavbar('/servicios/');
+    expect(hub).toContain('href="/servicios/"');
+    expect(hub).toContain('href="/en/services/"');
+
+    const service = renderNavbar('/servicios/creadora-ugc-bilingue/');
+    expect(service).toContain('href="/servicios/creadora-ugc-bilingue/"');
+    expect(service).toContain('href="/en/services/bilingual-ugc-creator/"');
+
+    const englishService = renderNavbar('/en/services/spokesperson-videos/');
+    expect(englishService).toContain('href="/en/services/spokesperson-videos/"');
+    expect(englishService).toContain('href="/servicios/videos-de-portavoz/"');
   });
 });
 

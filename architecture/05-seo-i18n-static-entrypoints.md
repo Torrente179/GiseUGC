@@ -27,7 +27,9 @@ Service and vertical factories produce WebPage, BreadcrumbList, Service, FAQPage
 
 `src/lib/locale-context.tsx` selects bundled JSON dictionaries from the path.
 There is no browser language detector, i18next runtime, or translation request.
-Spanish is the default route family; English is under `/en/`.
+Spanish is the default route family; English is under `/en/`. The visible
+language switch in the navbar is a crawlable `<a href>` pair to those existing
+localized URLs; it does not invent routes and does not replace head hreflang.
 
 ## Static Entry Shells
 

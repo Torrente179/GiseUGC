@@ -58,7 +58,7 @@ The right side of the navbar read as three unrelated UI-kit pieces: a bordered E
 ### Verification
 1. `npm run build`
 2. Visual check: desktop navbar — one neutral rail + one teal CTA; mobile header matches compact rail sizing.
-3. Toggle ES/EN: pill animates; route locale updates via existing `changeLanguage` + `getLocalizedPathForCurrentRoute`.
+3. Toggle ES/EN: the control is a real `<a href>` pair (`getLocalizedPathForCurrentRoute`); the pill still tracks the active locale. Cross-locale navigation is a document load via the existing runtime anchor interceptor.
 4. Theme toggle inside rail: no layout shift vs former separate circle.
 
 ### i18n note

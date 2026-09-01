@@ -1,21 +1,26 @@
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from '@/lib/locale-context';
 import ThemeToggle from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
-import type { SiteLocale } from '@/lib/locale-path';
+import {
+  getLocaleFromPath,
+  getLocalizedPathForCurrentRoute,
+  type SiteLocale,
+} from '@/lib/locale-path';
 
 const LOCALES: SiteLocale[] = ['es', 'en'];
 
 type NavbarControlsProps = {
   compact?: boolean;
-  currentLocale: SiteLocale;
-  onLocaleChange: (locale: SiteLocale) => void;
 };
 
-const NavbarControls = ({ compact = false, currentLocale, onLocaleChange }: NavbarControlsProps) => {
+const NavbarControls = ({ compact = false }: NavbarControlsProps) => {
   const { t } = useTranslation();
+  const location = useLocation();
+  const currentLocale = getLocaleFromPath(location.pathname);
 
   const segmentClass = cn(
-    'relative z-10 inline-flex items-center justify-center rounded-full font-sans font-medium uppercase transition-colors duration-200',
+    'relative z-10 inline-flex items-center justify-center rounded-full font-sans font-medium uppercase no-underline transition-colors duration-200',
     compact
       ? 'h-8 min-w-[2rem] px-2 text-[10px] tracking-[0.08em]'
       : 'h-9 min-w-[2.35rem] px-2.5 text-[11px] tracking-[0.1em]',
@@ -41,12 +46,16 @@ const NavbarControls = ({ compact = false, currentLocale, onLocaleChange }: Navb
         />
         {LOCALES.map((locale) => {
           const isActive = currentLocale === locale;
+          const href = getLocalizedPathForCurrentRoute(
+            location.pathname,
+            locale,
+            location.hash,
+          );
 
           return (
-            <button
+            <a
               key={locale}
-              type="button"
-              onClick={() => onLocaleChange(locale)}
+              href={href}
               className={cn(
                 segmentClass,
                 isActive
@@ -58,10 +67,10 @@ const NavbarControls = ({ compact = false, currentLocale, onLocaleChange }: Navb
                   ? `${t('languageSwitcher.changeLanguage', { defaultValue: 'Change language' })} a Español`
                   : `${t('languageSwitcher.changeLanguage', { defaultValue: 'Change language' })} to English`
               }
-              aria-pressed={isActive}
+              aria-current={isActive ? 'page' : undefined}
             >
               <span className="relative">{locale}</span>
-            </button>
+            </a>
           );
         })}
       </div>

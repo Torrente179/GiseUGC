@@ -10,15 +10,13 @@ import {
   Linkedin,
   Facebook,
 } from 'lucide-react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import NavbarControls from '@/components/NavbarControls';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import {
   getHomeSectionHref,
-  getLocalizedPathForCurrentRoute,
   getLocaleFromPath,
   isHomePath,
-  type SiteLocale,
 } from '@/lib/locale-path';
 import { navigateToRoute } from '@/lib/route-navigation';
 import { CONTACT_URLS } from '@/lib/contact-channels';
@@ -367,15 +365,6 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
     },
   ];
 
-  const changeLanguage = (lng: SiteLocale) => {
-    if (currentLocale === lng) return;
-
-    const targetPath = getLocalizedPathForCurrentRoute(location.pathname, lng, window.location.hash);
-    // The other locale is a separate prerendered document. Pushing it
-    // client-side would keep this document's embedded route data and metadata.
-    navigateToRoute(targetPath);
-  };
-
   const hireMeCtaLabel = t('navbar.hireMeCta', {
     defaultValue: currentLocale === 'es' ? 'Contáctame' : 'Hire me',
   });
@@ -567,7 +556,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
             </div>
 
             <div className="hidden md:flex items-center gap-2">
-              <NavbarControls currentLocale={currentLocale} onLocaleChange={changeLanguage} />
+              <NavbarControls />
               <a
                 href={homeSectionHref('contact')}
                 onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -581,11 +570,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
             </div>
 
             <div className={cn('md:hidden flex items-center', compactMobile ? 'gap-1' : 'gap-2')}>
-              <NavbarControls
-                compact={compactMobile}
-                currentLocale={currentLocale}
-                onLocaleChange={changeLanguage}
-              />
+              <NavbarControls compact={compactMobile} />
               <button
                 onPointerDown={handleMobileMenuButtonPointerDown}
                 onClick={handleMobileMenuButtonClick}

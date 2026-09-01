@@ -48,6 +48,15 @@ is Spanish. `LocaleProvider` selects the bundled dictionary directly from that
 pathname and updates `document.documentElement.lang`. There is no runtime
 language detector or network translation backend.
 
+The navbar language control (`NavbarControls`) is a pair of real `<a href>`
+elements, not JS buttons. Each locale maps through
+`getLocalizedPathForCurrentRoute()` so a no-JS crawler can follow `/` ↔ `/en/`
+and the matching localized path on inner pages (`/servicios/` ↔ `/en/services/`,
+and so on). The visual ES/EN toggle is unchanged. Cross-locale clicks are
+ordinary same-origin anchors; `client-runtime.tsx` already turns those into
+document navigations. `navigateToRoute()` remains only for programmatic cases
+such as the back-button fallback. Head hreflang is unchanged.
+
 ## Static HTML Entrypoints
 
 The folders under `en/`, `servicios/`, `verticales/`, `recursos/`,
