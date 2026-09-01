@@ -2,10 +2,18 @@
 
 ## Pattern
 The route factories do not hard-code most page copy. They call typed data accessors:
+- `getHubPageContent(hubId, locale)`
 - `getServicePageContent(serviceId, locale)`
 - `getVerticalPageContent(verticalId, locale)`
 - `getResourcePageContent(resourceId, locale)`
 - `getLegalPageContent(pageId, locale)`
+
+## Hub Pages
+`src/data/hub-pages.ts` defines hire-intent copy for the three index routes
+(`/servicios/`, `/verticales/`, `/recursos/` and EN twins): metadata, H1, lead,
+ordered child links (existing money-page URLs only), optional Fiverr proof on
+the services hub, and sibling CTAs. Child display order is hub-specific and
+does not change `PAGE_REGISTRY`.
 
 ## Service Pages
 `src/data/service-pages.ts` defines each localized service page, including SEO metadata, hero copy, deliverables, best-fit rules, process steps, featured clip ids, FAQs, CTA copy, and related service ids.

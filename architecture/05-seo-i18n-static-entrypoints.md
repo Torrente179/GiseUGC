@@ -21,7 +21,7 @@ preload scanner reaches visual markup and critical assets earlier without
 reducing schema discoverability.
 
 ## Page Schema
-Service and vertical factories produce WebPage, BreadcrumbList, Service, FAQPage, and VideoObject nodes. Resource pages produce WebPage, BreadcrumbList, Article, and FAQPage. Legal pages produce WebPage and BreadcrumbList.
+Service and vertical factories produce WebPage, BreadcrumbList, Service, FAQPage, and VideoObject nodes. Resource pages produce WebPage, BreadcrumbList, Article, and FAQPage. Legal pages produce WebPage and BreadcrumbList. Hub indexes produce WebPage and BreadcrumbList; WebPage `name` is the hire-intent title from `src/data/hub-pages.ts`, not the bare entity name.
 
 ## i18n
 
