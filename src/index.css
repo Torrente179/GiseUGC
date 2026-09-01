@@ -1242,15 +1242,27 @@
        The band is resolved in favour of the photo: the copy carries its own
        contrast in the text shadows below, so this only has to separate the
        text from the plate rather than supply the whole of its legibility.
-       That is what lets her torso out of the dark — it was the copy's
-       contrast budget being spent across the full width of the frame.
 
-       The horizontal pass is unchanged: at 0.36 falling to 0.02 it is already
-       mild, and it holds the copy's left edge. */
+       Both ramps are cut to the copy actually measured on a 375x812 stage,
+       as % up from the bottom / across from the left:
+
+         CTA          2.3-4.3   up,  10-38 across
+         description  8.6-15.6  up,   5-68
+         subtitle    19.4-25.2  up,   5-70
+         title       27-41.8    up,   5-44
+         eyebrow     41.4-42.9  up,   5-34
+
+       Nothing is above 43% up, so the vertical ramp is clear by 46% instead
+       of washing the middle of the frame where there is no text to protect.
+       And above ~25% the copy is only ever on the left, so the horizontal
+       pass carries that half and is clear by 58% — the shade sits in the
+       bottom-left quadrant with the copy rather than in a full-width band.
+
+       Re-measure before retuning: these are element positions, not taste. */
     .portrait-hero__scrim {
       background:
-        linear-gradient(0deg, rgba(34, 31, 27, 0.62) 0%, rgba(34, 31, 27, 0.42) 26%, rgba(34, 31, 27, 0.03) 58%, rgba(34, 31, 27, 0.05) 86%, rgba(34, 31, 27, 0.22) 100%),
-        linear-gradient(90deg, rgba(34, 31, 27, 0.36) 0%, rgba(34, 31, 27, 0.02) 70%, rgba(34, 31, 27, 0.18) 100%);
+        linear-gradient(0deg, rgba(34, 31, 27, 0.6) 0%, rgba(34, 31, 27, 0.5) 20%, rgba(34, 31, 27, 0.34) 34%, rgba(34, 31, 27, 0.03) 46%, rgba(34, 31, 27, 0.04) 86%, rgba(34, 31, 27, 0.2) 100%),
+        linear-gradient(90deg, rgba(34, 31, 27, 0.4) 0%, rgba(34, 31, 27, 0.3) 34%, rgba(34, 31, 27, 0.02) 58%, rgba(34, 31, 27, 0.14) 100%);
     }
 
     /* Local contrast at the glyphs instead of a wash across the whole plate.
