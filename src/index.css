@@ -1229,9 +1229,15 @@
       object-position: 50% 16%;
     }
 
+    /* The phone layout anchors the copy to the bottom-left rather than beside
+       her, so the vertical pass keeps every bit of its weight below ~30% and
+       is only opened above it — the clear band now runs to the top of the
+       frame instead of ramping back to 0.42 across her head. The navbar has
+       its own backdrop here too. The horizontal pass is left alone: at 0.36
+       falling to 0.02 it is already mild, and it holds the copy's left edge. */
     .portrait-hero__scrim {
       background:
-        linear-gradient(0deg, rgba(34, 31, 27, 0.94) 0%, rgba(34, 31, 27, 0.7) 32%, rgba(34, 31, 27, 0.05) 67%, rgba(34, 31, 27, 0.42) 100%),
+        linear-gradient(0deg, rgba(34, 31, 27, 0.94) 0%, rgba(34, 31, 27, 0.7) 30%, rgba(34, 31, 27, 0.04) 62%, rgba(34, 31, 27, 0.06) 86%, rgba(34, 31, 27, 0.24) 100%),
         linear-gradient(90deg, rgba(34, 31, 27, 0.36) 0%, rgba(34, 31, 27, 0.02) 70%, rgba(34, 31, 27, 0.18) 100%);
     }
 
