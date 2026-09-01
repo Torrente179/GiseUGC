@@ -2288,35 +2288,56 @@
     to { transform: translate3d(0, 0, 0); }
   }
 
-  .testimonial-lightbox {
-    animation: testimonial-lightbox-in 280ms ease-out both;
+  /* ── Testimonial theater ──
+     The same stage language as the video theater in Portfolio/Services: a
+     tinted backdrop rather than flat black, two soft glows, and exactly one
+     card lit and centred. Neighbouring screenshots are carried off stage
+     entirely — they only surface, dimmed, while a swipe is in flight. */
+  .testimonial-theater {
+    animation: media-theater-backdrop-in 220ms var(--ease-out-expo) both;
     transition: opacity 240ms ease-out;
   }
 
-  .testimonial-lightbox.is-closing {
+  .testimonial-theater.is-closing {
     opacity: 0;
   }
 
-  @keyframes testimonial-lightbox-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  .testimonial-theater-stage {
+    width: 100%;
+    max-width: min(620px, 100%);
   }
 
-  .testimonial-lightbox-card {
-    opacity: 0.35;
-    transform: scale(0.9);
+  /* Off stage: far enough back that the swipe stays legible without ever
+     competing with the card in the light. */
+  .testimonial-theater-card {
+    opacity: 0.22;
+    transform: translate3d(0, 18px, 0) scale(0.94);
     transition: opacity 420ms var(--ease-premium), transform 420ms var(--ease-premium);
   }
 
-  .testimonial-lightbox-card.is-active {
+  .testimonial-theater-card.is-active {
     opacity: 1;
-    transform: scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 
-  .testimonial-lightbox.reduce-motion,
-  .testimonial-lightbox.reduce-motion .testimonial-lightbox-card {
+  /* The stage arrives with the video theater's own 18px rise. Kept in CSS
+     rather than a mounted state flip: a rAF never fires in a hidden tab, which
+     would leave the card stranded at its entrance pose. `backwards` fill is
+     load-bearing — `both` would pin the final transform and the drag-to-dismiss
+     inline transform could never take over again. */
+  .testimonial-theater-sheet {
+    animation: media-theater-card-in 320ms var(--ease-out-expo) backwards;
+  }
+
+  .testimonial-theater.reduce-motion,
+  .testimonial-theater.reduce-motion .testimonial-theater-sheet,
+  .testimonial-theater.reduce-motion .testimonial-theater-card {
     animation: none;
     transition: none;
+  }
+
+  .testimonial-theater.reduce-motion .testimonial-theater-card {
+    transform: none;
   }
 
   /* Hero block stagger entrance */

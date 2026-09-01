@@ -39,13 +39,13 @@ const FIVERR_REVIEW_COUNT = SITE_PROOF.fiverrReviewCount;
 
 // Same gesture model as the portfolio theater: embla owns left/right for
 // navigation, a vertical throw dismisses.
-const LIGHTBOX_DISMISS_DISTANCE_THRESHOLD = 96;
-const LIGHTBOX_DISMISS_VELOCITY_THRESHOLD = 0.4;
-const LIGHTBOX_AXIS_LOCK_SLOP_PX = 8;
-const LIGHTBOX_MAX_DRAG_DISTANCE = 240;
-const LIGHTBOX_CLOSE_DURATION_MS = 240;
+const THEATER_DISMISS_DISTANCE_THRESHOLD = 96;
+const THEATER_DISMISS_VELOCITY_THRESHOLD = 0.4;
+const THEATER_AXIS_LOCK_SLOP_PX = 8;
+const THEATER_MAX_DRAG_DISTANCE = 240;
+const THEATER_CLOSE_DURATION_MS = 240;
 
-type LightboxSwipeGesture = {
+type TheaterSwipeGesture = {
   x: number;
   y: number;
   timestamp: number;
@@ -141,13 +141,15 @@ const MarqueeRow = ({
   );
 };
 
-/* ─── Lightbox carousel ───
-   A self-contained, full-screen viewer. Deliberately NOT a Radix Dialog:
+/* ─── Testimonial theater ───
+   A self-contained, full-screen viewer sharing the video theater's stage
+   language: tinted backdrop, two soft glows, one card lit and centred.
+   Deliberately NOT a Radix Dialog:
    the page sets `body { overflow-x: hidden }`, which makes <body> a scroll
    container and breaks react-remove-scroll's scroll lock (the page jumps /
    freezes on close). We lock scroll ourselves with the position:fixed pattern,
    which is immune to that and restores the exact scroll position. */
-interface LightboxProps {
+interface TheaterProps {
   images: TestimonialImage[];
   startIndex: number;
   onClose: () => void;
@@ -161,7 +163,7 @@ interface LightboxProps {
   };
 }
 
-const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: LightboxProps) => {
+const Theater = ({ images, startIndex, onClose, reduceMotion, labels }: TheaterProps) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: 'center',
@@ -177,7 +179,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
   const rootRef = useRef<HTMLDivElement>(null);
   const closeTimerRef = useRef<number | null>(null);
   const isClosingRef = useRef(false);
-  const swipeRef = useRef<LightboxSwipeGesture | null>(null);
+  const swipeRef = useRef<TheaterSwipeGesture | null>(null);
   const dragFrameRef = useRef<number | null>(null);
   const pendingDragRef = useRef(0);
 
@@ -186,8 +188,8 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
 
   const queueDrag = useCallback((next: number) => {
     pendingDragRef.current = Math.max(
-      -LIGHTBOX_MAX_DRAG_DISTANCE,
-      Math.min(LIGHTBOX_MAX_DRAG_DISTANCE, next),
+      -THEATER_MAX_DRAG_DISTANCE,
+      Math.min(THEATER_MAX_DRAG_DISTANCE, next),
     );
     if (dragFrameRef.current !== null) return;
     dragFrameRef.current = window.requestAnimationFrame(() => {
@@ -209,7 +211,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
       setFlingDirection(fling);
       setIsDragging(false);
       setIsClosing(true);
-      closeTimerRef.current = window.setTimeout(onClose, LIGHTBOX_CLOSE_DURATION_MS);
+      closeTimerRef.current = window.setTimeout(onClose, THEATER_CLOSE_DURATION_MS);
     },
     [onClose, reduceMotion],
   );
@@ -248,8 +250,8 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
 
       if (swipe.axis === 'pending') {
         if (
-          Math.abs(deltaX) < LIGHTBOX_AXIS_LOCK_SLOP_PX &&
-          Math.abs(deltaY) < LIGHTBOX_AXIS_LOCK_SLOP_PX
+          Math.abs(deltaX) < THEATER_AXIS_LOCK_SLOP_PX &&
+          Math.abs(deltaY) < THEATER_AXIS_LOCK_SLOP_PX
         ) {
           return;
         }
@@ -282,8 +284,8 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
       const velocityY = deltaY / Math.max(1, performance.now() - swipe.timestamp);
       const allowed = deltaY > 0 ? swipe.canDismissDown : swipe.canDismissUp;
       const crossed =
-        Math.abs(deltaY) >= LIGHTBOX_DISMISS_DISTANCE_THRESHOLD ||
-        Math.abs(velocityY) >= LIGHTBOX_DISMISS_VELOCITY_THRESHOLD;
+        Math.abs(deltaY) >= THEATER_DISMISS_DISTANCE_THRESHOLD ||
+        Math.abs(velocityY) >= THEATER_DISMISS_VELOCITY_THRESHOLD;
 
       if (allowed && crossed) {
         requestClose(deltaY < 0 ? -1 : 1);
@@ -300,7 +302,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
     queueDrag(0);
   }, [queueDrag]);
 
-  const dragProgress = Math.min(Math.abs(dragY) / LIGHTBOX_MAX_DRAG_DISTANCE, 1);
+  const dragProgress = Math.min(Math.abs(dragY) / THEATER_MAX_DRAG_DISTANCE, 1);
   const sheetTransform =
     isClosing && flingDirection !== 0
       ? `translate3d(0, ${flingDirection * 100}vh, 0) scale(0.94)`
@@ -308,7 +310,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
   const sheetTransition = isDragging
     ? 'transform 0ms linear'
     : isClosing
-      ? `transform ${LIGHTBOX_CLOSE_DURATION_MS}ms cubic-bezier(0.3, 0.72, 0.08, 1)`
+      ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.3, 0.72, 0.08, 1)`
       : 'transform 340ms cubic-bezier(0.24, 0.92, 0.38, 1)';
 
   // Keep the active-slide highlight in sync with embla.
@@ -365,21 +367,30 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
       aria-modal="true"
       aria-label={labels.dialog}
       tabIndex={-1}
-      className={`testimonial-lightbox fixed inset-0 z-[10000] outline-none ${isClosing ? 'is-closing' : ''} ${reduceMotion ? 'reduce-motion' : ''}`}
+      className={`testimonial-theater fixed inset-0 z-[10000] outline-none ${isClosing ? 'is-closing' : ''} ${reduceMotion ? 'reduce-motion' : ''}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchCancel}
     >
       <div
-        className="absolute inset-0 bg-black/94"
+        className="absolute inset-0 bg-[hsl(var(--theater-backdrop)/0.94)]"
         style={{
           opacity: 1 - dragProgress * 0.45,
           transition: isDragging ? 'opacity 80ms linear' : 'opacity 280ms ease',
         }}
       />
       <div
-        className="relative flex h-full flex-col"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          opacity: 1 - dragProgress * 0.45,
+          transition: isDragging ? 'opacity 80ms linear' : 'opacity 320ms ease',
+          background:
+            'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)',
+        }}
+      />
+      <div
+        className="testimonial-theater-sheet relative flex h-full flex-col"
         onMouseDown={(e) => {
           // Anything that isn't a card or a control is backdrop. The sheet
           // covers the viewer edge to edge, so an identity check against
@@ -396,18 +407,18 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
       >
         {/* Top bar: counter + close */}
         <div className="flex shrink-0 items-center justify-between px-4 py-4 md:px-8 md:py-5">
-          <span className="text-sm font-medium tabular-nums text-white/55 tracking-wide">
+          <span className="theater-meta-chip inline-flex items-center rounded-full px-2.5 py-1 tabular-nums">
             {selected + 1}
-            <span className="mx-1.5 text-white/25">/</span>
+            <span className="mx-1.5 opacity-45">/</span>
             {images.length}
           </span>
           <button
             type="button"
             onClick={() => requestClose()}
             aria-label={labels.close}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-black/65 text-white/80 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+            className="theater-control h-10 w-10"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
@@ -420,10 +431,10 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
                 return (
                   <div
                     key={item.id}
-                    className="flex min-w-0 flex-[0_0_90%] items-center justify-center px-2 sm:flex-[0_0_74%] sm:px-3 lg:flex-[0_0_60%]"
+                    className="flex min-w-0 flex-[0_0_100%] items-center justify-center px-4 sm:px-8"
                   >
                     <figure
-                      className={`testimonial-lightbox-card relative max-h-full overflow-hidden rounded-2xl border border-white/10 bg-card shadow-2xl shadow-black/40 ${isActive ? 'is-active' : ''}`}
+                      className={`testimonial-theater-card testimonial-theater-stage relative max-h-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-card shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)] ${isActive ? 'is-active' : ''}`}
                     >
                       <div className="max-h-[78vh] overflow-y-auto overscroll-contain">
                         <img
@@ -449,7 +460,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
             type="button"
             onClick={scrollPrev}
             aria-label={labels.prev}
-            className="absolute left-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/65 text-white/85 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:left-6 md:h-12 md:w-12"
+            className="theater-control absolute left-2 top-1/2 h-11 w-11 -translate-y-1/2 md:left-6 md:h-12 md:w-12"
           >
             <svg className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -459,7 +470,7 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
             type="button"
             onClick={scrollNext}
             aria-label={labels.next}
-            className="absolute right-2 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-black/65 text-white/85 transition-colors hover:bg-black/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 md:right-6 md:h-12 md:w-12"
+            className="theater-control absolute right-2 top-1/2 h-11 w-11 -translate-y-1/2 md:right-6 md:h-12 md:w-12"
           >
             <svg className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -478,12 +489,14 @@ const Lightbox = ({ images, startIndex, onClose, reduceMotion, labels }: Lightbo
                 aria-label={`${labels.dialog} ${i + 1}`}
                 aria-current={i === selected}
                 className={`h-1.5 shrink-0 rounded-full transition-[width,background-color] duration-300 ${
-                  i === selected ? 'w-6 bg-white' : 'w-1.5 bg-white/30 hover:bg-white/50'
+                  i === selected
+                    ? 'w-6 bg-[hsl(var(--theater-overlay-title))]'
+                    : 'w-1.5 bg-[hsl(var(--theater-overlay-title)/0.3)] hover:bg-[hsl(var(--theater-overlay-title)/0.55)]'
                 }`}
               />
             ))}
           </div>
-          <p className="text-xs tracking-wide text-white/40">{labels.hint}</p>
+          <p className="text-xs tracking-wide text-[hsl(var(--theater-overlay-title)/0.45)]">{labels.hint}</p>
         </div>
       </div>
     </div>
@@ -665,8 +678,8 @@ const Testimonials = () => {
           instead of filling the viewport. */}
       {lightboxPortalTarget && zoomedIndex !== null
         ? createPortal(
-            <Lightbox
-              key="testimonial-lightbox"
+            <Theater
+              key="testimonial-theater"
               images={TESTIMONIAL_IMAGES}
               startIndex={zoomedIndex}
               onClose={() => setZoomedIndex(null)}
