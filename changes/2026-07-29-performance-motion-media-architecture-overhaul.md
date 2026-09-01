@@ -521,6 +521,136 @@ rule 10.
 Still owed, because it needs the deployed build: re-run the Lighthouse matrix
 and re-check tap-to-first-frame on the hero and theater once this is live.
 
+## iOS Theater Start Quality and Service Hero Autostart — 2026-09-01
+
+Two defects reported against the deployed site. Both are gaps in this overhaul's
+own work rather than new subsystems: the first is the half of the theater
+start-level fix that only ever covered the hls.js path, the second is the
+media-intent gate behaving exactly as written on a page where it should not.
+
+### 1. The theater opened at 360p on iPhone
+
+`applyTheaterQuality()` is wired to `Hls.Events.MANIFEST_PARSED`, so it only
+ever runs on the hls.js path. Safari and iOS never reach it: `shouldUseNativeHls()`
+hands them the master playlist and the platform player owns level selection.
+Apple's player opens on the first variant it can decode, and every ladder
+`scripts/encode-hls.sh` writes is ordered ascending-bitrate — so the first
+playable variant is the bottom of the ladder:
+
+```
+#EXT-X-STREAM-INF:BANDWIDTH=560000,RESOLUTION=360x204,CODECS="av01.0.04M.08"
+360p/av1/index.m3u8         <- where iPhone opens
+#EXT-X-STREAM-INF:BANDWIDTH=630000,RESOLUTION=360x204,CODECS="hvc1.1.6.L93.B0"
+360p/hevc/index.m3u8        <- where iPhone opens without an AV1 decoder
+...
+#EXT-X-STREAM-INF:BANDWIDTH=4760000,RESOLUTION=1080x608,CODECS="av01.0.08M.08"
+1080p/av1/index.m3u8        <- where it should open
+```
+
+The startup bridge is a 720x1280 slice of the same clip, so the crossfade ran
+*downhill* from 720p to 360p. `HANDOFF_QUALITY_WAIT_MS = 1200` guaranteed it:
+the quality gate held only 1.2s, which is far less than the master needs to
+climb five rungs, and then waived itself and handed over anyway. Reported as
+"starts at very high quality, then it stops and starts playing again at a much
+lower quality."
+
+**The RESOLUTION tags are half wrong, and it matters.** These are portrait
+reels, but the tags read `1080x608` — a 16:9 height derived from the width.
+Probed against the CDN by concatenating `init.mp4` with `segment_000.m4s` and
+reading the real track:
+
+| Rung | RESOLUTION tag | Actual encoded frame |
+| --- | --- | --- |
+| `360p/h264` | `360x204` | `360x640` |
+| `1080p/h264` | `1080x608` | `1080x1920` |
+| `2160p/h264` | `2160x1216` | `2160x3840` |
+
+The **width is correct in every case**; only the height is fabricated.
+`selectTheaterLevel()` reads `level.width` and nothing else, so its targeting
+was already sound — do not "fix" it to use height or aspect ratio.
+
+Three changes, all in the theater path only:
+
+- **`AdaptiveVideo` resolves the master itself on the native path.** It fetches
+  the manifest, parses `#EXT-X-STREAM-INF`, filters to codecs the element
+  reports via `canPlayType('video/mp4; codecs="…"')`, runs the same
+  `selectTheaterLevel()` targeting hls.js gets, and sets `video.src` to that one
+  variant playlist. A media playlist is a valid HLS source, so this needs no new
+  encodes and no R2 change. Peak `BANDWIDTH` is matched with `/(?:^|,)BANDWIDTH=/`
+  because `AVERAGE-BANDWIDTH` also ends in the same token.
+- **The handoff waits for `readyState >= HAVE_FUTURE_DATA`.** Crossfading onto a
+  master that cannot keep playing is the same visible stall by another route.
+- **The time sync only seeks into an already-buffered range.** An unbuffered seek
+  costs a fragment fetch in the middle of the crossfade.
+
+Both gates share **one 3s deadline** replacing the 1.2s quality waiver. The
+bridge is 1.667s (`public/uploads/videos/startups/v1/*.mp4`, 720x1280, ~2.3 Mbps,
+~500 KB), so the escape hatch stays inside two loops — holding longer would trade
+one soft second for a visibly repeating one.
+
+A pinned variant has **no ladder left to fall back on**, so pinning stands down
+on `saveData` / `slow-2g` / `2g` / `3g` and those links keep the master and its
+own adaptation. `getConnectionProfile()` is now exported from
+`src/lib/media-playback-scheduler.ts` for this. Stalling on a sharp frame is not
+better than a soft one.
+
+Fallback order on the native path is unchanged in shape and now three deep:
+pinned variant → master (if the fetch, parse, or codec filter yields nothing) →
+progressive MP4 (on a media `error`). `attachedHlsUrl` tracks whichever HLS URL
+is live so the MP4 fallback still fires when the pinned variant is the one that
+errors.
+
+CSP already permits the manifest fetch — `connect-src` in `vercel.json` lists
+`https://media.giselasaldarriaga.com`. No header change was needed.
+
+### 2. The service hero reel waited for a touch
+
+`useMediaIntent()` activates on `pointermove` / `pointerdown` / `touchstart` /
+`keydown`. A mobile scroll *begins* with `touchstart`, which is why the gate was
+written that way — it keeps synthetic audit scrolling from counting as intent
+while letting real mobile motion start naturally. On a service page that reads
+as the hero starting *because* you scrolled, on a page whose hero reel is the
+first thing the visitor came to see.
+
+`useMediaIntent({ autoStart: true })` additionally activates once the document
+has loaded. Waiting for `load` rather than mounting straight into playback keeps
+the poster, fonts, and hero copy ahead of the reel on the critical path — the
+whole point of the gate — it just no longer needs a human to trip it.
+
+**Nothing is deferred behind `requestAnimationFrame`.** rAF never fires in a
+background tab, so a frame-deferred activation would strand the hero on its
+poster until the tab was looked at. When `document.readyState` is already
+`complete` the hook activates synchronously in its effect; otherwise it listens
+for `load`.
+
+Applied to `ServiceLandingPage` only, which covers both its mobile and desktop
+heroes from the one call. The home hero (`Hero.tsx`) and `VerticalLandingPage`
+still wait for interaction.
+
+### Scope note
+
+Only the theater uses HLS. `previewHlsSrc` and `mobileHlsSrc` are declared on
+`ReelClip` but are populated **nowhere** in `src/data/`, so every hero and card
+preview is a progressive MP4 at one fixed quality and none of them can exhibit
+the start-quality defect above.
+
+### Validation
+
+| Check | Result |
+| --- | --- |
+| `npm run typecheck` | Passed |
+| `npx eslint` (touched files) | 0 errors; 3 pre-existing Fast Refresh warnings |
+| `npm test` | 124/124 passed (16 new: manifest parse, variant select, intent paths) |
+| `npm run build` | Passed; 46 routes prerendered |
+| Theater DOM/computed styles in Chrome | Verified |
+| CDN ladder probe (`init.mp4` + `segment_000.m4s`) | 1080p rung = `1080x1920` |
+
+**Not verified locally, and it cannot be:** actual playback. The scheduler's
+`reconcile()` grants no decoder while `document.visibilityState === 'hidden'`,
+and every automated browser surface here runs the page hidden. The iOS pinning
+and both handoff gates need a real iPhone against the deployed build — follow-up
+rule 4 below applies.
+
 ## Remaining Follow-up
 
 1. Make the default LHCI mobile simulation consistently reach 100 without
