@@ -20,8 +20,12 @@ copy onto those existing routes. No new URLs. Public brand is Gisela Saldarriaga
 ## What shipped
 
 Typed copy in `src/data/hub-pages.ts`. `HubPage` renders H1, lead, ordered
-child lists (with blurbs on the services hub), contact CTAs, and sibling-hub
+child lists with blurbs on all three hubs, contact CTAs, and sibling-hub
 links. WebPage JSON-LD `name` is the real title, not the bare entity name.
+
+Follow-up on the same ship (copy review): vertical and resource children
+gained blurbs; the `/recursos/` lead is no longer a copy of the meta.
+Fiverr stays off those two hubs.
 
 Fiverr 4.8/173 proof, with `gisela_sm` linked to
 `https://www.fiverr.com/gisela_sm` (no query string), is **only** on

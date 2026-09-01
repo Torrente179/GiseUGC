@@ -111,11 +111,11 @@ const hubs = [
       ['/recursos/', 'Guías para contratar'],
     ],
     children: [
-      ['/verticales/ugc-beauty/', 'UGC para beauty'],
-      ['/verticales/ugc-ecommerce/', 'UGC para ecommerce'],
-      ['/verticales/ugc-moda/', 'UGC para moda'],
-      ['/verticales/ugc-tech-saas/', 'UGC para tech y SaaS'],
-      ['/verticales/ugc-lifestyle-bienestar/', 'UGC para lifestyle y bienestar'],
+      ['/verticales/ugc-beauty/', 'UGC para beauty', 'Skincare, maquillaje y cuidado personal con producto en uso real, para ads y páginas de producto.'],
+      ['/verticales/ugc-ecommerce/', 'UGC para ecommerce', 'Persona real mostrando el producto para DTC, tienda online y páginas de conversión.'],
+      ['/verticales/ugc-moda/', 'UGC para moda', 'Prendas en cuerpo real, con estilo cotidiano. No es un editorial de estudio.'],
+      ['/verticales/ugc-tech-saas/', 'UGC para tech y SaaS', 'Software, apps y servicios explicados en claro, sin demo corporativa.'],
+      ['/verticales/ugc-lifestyle-bienestar/', 'UGC para lifestyle y bienestar', 'Rutina, wellness y producto en un día real, con tono cercano frente a cámara.'],
     ],
   },
   {
@@ -142,11 +142,11 @@ const hubs = [
       ['/en/resources/', 'Guides to hire'],
     ],
     children: [
-      ['/en/verticals/beauty-ugc-creator/', 'Beauty UGC'],
-      ['/en/verticals/ecommerce-ugc-creator/', 'Ecommerce UGC'],
-      ['/en/verticals/fashion-ugc-creator/', 'Fashion UGC'],
-      ['/en/verticals/tech-saas-ugc-creator/', 'Tech and SaaS UGC'],
-      ['/en/verticals/lifestyle-wellness-ugc-creator/', 'Lifestyle and wellness UGC'],
+      ['/en/verticals/beauty-ugc-creator/', 'Beauty UGC', 'Skincare, makeup, and personal care with the product on real skin, for ads and product pages.'],
+      ['/en/verticals/ecommerce-ugc-creator/', 'Ecommerce UGC', 'A real person on camera for DTC, online stores, and conversion pages.'],
+      ['/en/verticals/fashion-ugc-creator/', 'Fashion UGC', 'Clothes on a real body, everyday style. Not a studio editorial.'],
+      ['/en/verticals/tech-saas-ugc-creator/', 'Tech and SaaS UGC', 'Software, apps, and services explained clearly, without a corporate demo feel.'],
+      ['/en/verticals/lifestyle-wellness-ugc-creator/', 'Lifestyle and wellness UGC', 'Routine, wellness, and product in a real day, spoken like a real person on camera.'],
     ],
   },
   {
@@ -164,7 +164,7 @@ const hubs = [
       'Guías para contratar una creadora UGC bilingüe: brief, formatos de ads y UGC vs influencer. Para marcas en US hispano, España y LatAm que van a producir.',
     heroTitle: 'Cómo contratar una creadora UGC bilingüe: guías para marcas',
     lead:
-      'Guías para contratar una creadora UGC bilingüe: brief, formatos de ads y UGC vs influencer. Para marcas en US hispano, España y LatAm que van a producir.',
+      'Estas cuatro guías son para equipos que van a contratar una creadora UGC, no para armar una agencia. Sirven si vendes al mercado hispano de Estados Unidos, a España o a LatAm, o si el brief va en inglés. Empieza por cómo contratar; el resto aclara formatos, la diferencia con influencer y qué es UGC.',
     childrenTitle: 'Guías para marcas',
     contactLabel: 'Contáctame',
     contact: '/#contact',
@@ -173,10 +173,10 @@ const hubs = [
       ['/verticales/', 'UGC por industria'],
     ],
     children: [
-      ['/recursos/como-contratar-creadora-ugc/', 'Cómo contratar creadora UGC'],
-      ['/recursos/formatos-ugc-ads/', 'Formatos de UGC para ads'],
-      ['/recursos/ugc-vs-influencer-marketing/', 'UGC vs influencer marketing'],
-      ['/recursos/que-es-ugc/', 'Qué es UGC'],
+      ['/recursos/como-contratar-creadora-ugc/', 'Cómo contratar creadora UGC', 'El proceso, el brief y qué pedir antes de firmar con una creadora.'],
+      ['/recursos/formatos-ugc-ads/', 'Formatos de UGC para ads', 'Qué formato pedir (testimonial, demo, problema-solución, portavoz) según el objetivo de pauta.'],
+      ['/recursos/ugc-vs-influencer-marketing/', 'UGC vs influencer marketing', 'Por qué contratar creadora (contenido para tu marca) no es comprar un post en redes ajenas.'],
+      ['/recursos/que-es-ugc/', 'Qué es UGC', 'La base, en claro, para equipos que van a producir y pautar.'],
     ],
   },
   {
@@ -194,7 +194,7 @@ const hubs = [
       'Guides to hire a bilingual UGC creator: brief, ad formats, and UGC vs influencer. For US Hispanic, Spain, and LatAm brands ready to produce, not an agency.',
     heroTitle: 'How to hire a bilingual UGC creator: guides for brand teams',
     lead:
-      'Guides to hire a bilingual UGC creator: brief, ad formats, and UGC vs influencer. For US Hispanic, Spain, and LatAm brands ready to produce, not an agency.',
+      'These four guides are for teams hiring a UGC creator, not building an agency. They help if you sell to US Hispanic audiences, Spain, or LatAm, or if the brief is in English. Start with how to hire; the rest covers ad formats, UGC vs influencer, and what UGC actually is.',
     childrenTitle: 'Guides for brand teams',
     contactLabel: 'Contact me',
     contact: '/en/#contact',
@@ -203,10 +203,10 @@ const hubs = [
       ['/en/verticals/', 'UGC by industry'],
     ],
     children: [
-      ['/en/resources/how-to-hire-ugc-creator/', 'How to hire a UGC creator'],
-      ['/en/resources/ugc-ad-formats-guide/', 'UGC ad formats guide'],
-      ['/en/resources/ugc-vs-influencer-marketing/', 'UGC vs influencer marketing'],
-      ['/en/resources/what-is-ugc/', 'What is UGC'],
+      ['/en/resources/how-to-hire-ugc-creator/', 'How to hire a UGC creator', 'The process, the brief, and what to ask before you book a creator.'],
+      ['/en/resources/ugc-ad-formats-guide/', 'UGC ad formats guide', 'Which format to request (testimonial, demo, problem-solution, spokesperson) for the paid-social job.'],
+      ['/en/resources/ugc-vs-influencer-marketing/', 'UGC vs influencer marketing', 'Why hiring a creator (content for your brand) is not buying a post on someone else’s feed.'],
+      ['/en/resources/what-is-ugc/', 'What is UGC', 'The basics, in plain language, for teams about to produce and run ads.'],
     ],
   },
 ];

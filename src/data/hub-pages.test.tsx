@@ -7,7 +7,6 @@ import { LocaleProvider } from '@/lib/locale-context';
 import HubPage from '@/components/HubPage';
 import { CONTENT_DATES } from '@/data/content-dates';
 import {
-  getHubChildLinks,
   getHubPageContent,
   RESOURCE_HUB_CHILD_ORDER,
   SERVICE_HUB_CHILD_ORDER,
@@ -89,13 +88,22 @@ describe('hire-intent hub copy', () => {
       for (const child of page.children) {
         expect(html).toContain(child.href);
         expect(html).toContain(child.title);
-        if (child.blurb) expect(html).toContain(child.blurb);
+        expect(child.blurb).toBeTruthy();
+        expect(html).toContain(child.blurb!);
       }
       for (const link of page.secondaryLinks) {
         expect(html).toContain(link.href);
         expect(html).toContain(link.label);
       }
       expect(JSON.stringify(html)).not.toMatch(/GiseUGC/iu);
+    }
+  });
+
+  it('does not copy the resource meta into the resource hub lead', () => {
+    for (const locale of ['es', 'en'] as SiteLocale[]) {
+      const page = getHubPageContent('resources', locale);
+      expect(page.lead).not.toBe(page.metaDescription);
+      expect(page.lead).toMatch(/cuatro guías|four guides/u);
     }
   });
 
@@ -142,10 +150,11 @@ describe('hire-intent hub copy', () => {
       expect(html).toContain(`"name":"${page.metaTitle}"`);
       expect(html).toContain(`"dateModified":"${CONTENT_DATES.hubs}"`);
       expect(html).not.toMatch(/<title>Gisela Saldarriaga<\/title>/u);
-      const children = getHubChildLinks(hub.hubId, hub.locale);
-      for (const child of children) {
+      for (const child of page.children) {
         expect(html).toContain(`href="${child.href}"`);
-        expect(html).toContain(child.label);
+        expect(html).toContain(child.title);
+        expect(child.blurb).toBeTruthy();
+        expect(html).toContain(child.blurb!);
       }
       if (hub.hubId === 'services') {
         expect(html).toContain('4.8/5');

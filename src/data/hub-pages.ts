@@ -206,11 +206,26 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         { hubId: 'resources', label: 'Guías para contratar' },
       ],
       children: [
-        { title: 'UGC para beauty' },
-        { title: 'UGC para ecommerce' },
-        { title: 'UGC para moda' },
-        { title: 'UGC para tech y SaaS' },
-        { title: 'UGC para lifestyle y bienestar' },
+        {
+          title: 'UGC para beauty',
+          blurb: 'Skincare, maquillaje y cuidado personal con producto en uso real, para ads y páginas de producto.',
+        },
+        {
+          title: 'UGC para ecommerce',
+          blurb: 'Persona real mostrando el producto para DTC, tienda online y páginas de conversión.',
+        },
+        {
+          title: 'UGC para moda',
+          blurb: 'Prendas en cuerpo real, con estilo cotidiano. No es un editorial de estudio.',
+        },
+        {
+          title: 'UGC para tech y SaaS',
+          blurb: 'Software, apps y servicios explicados en claro, sin demo corporativa.',
+        },
+        {
+          title: 'UGC para lifestyle y bienestar',
+          blurb: 'Rutina, wellness y producto en un día real, con tono cercano frente a cámara.',
+        },
       ],
     },
     en: {
@@ -228,11 +243,26 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         { hubId: 'resources', label: 'Guides to hire' },
       ],
       children: [
-        { title: 'Beauty UGC' },
-        { title: 'Ecommerce UGC' },
-        { title: 'Fashion UGC' },
-        { title: 'Tech and SaaS UGC' },
-        { title: 'Lifestyle and wellness UGC' },
+        {
+          title: 'Beauty UGC',
+          blurb: 'Skincare, makeup, and personal care with the product on real skin, for ads and product pages.',
+        },
+        {
+          title: 'Ecommerce UGC',
+          blurb: 'A real person on camera for DTC, online stores, and conversion pages.',
+        },
+        {
+          title: 'Fashion UGC',
+          blurb: 'Clothes on a real body, everyday style. Not a studio editorial.',
+        },
+        {
+          title: 'Tech and SaaS UGC',
+          blurb: 'Software, apps, and services explained clearly, without a corporate demo feel.',
+        },
+        {
+          title: 'Lifestyle and wellness UGC',
+          blurb: 'Routine, wellness, and product in a real day, spoken like a real person on camera.',
+        },
       ],
     },
   },
@@ -244,7 +274,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         'Guías para contratar una creadora UGC bilingüe: brief, formatos de ads y UGC vs influencer. Para marcas en US hispano, España y LatAm que van a producir.',
       heroTitle: 'Cómo contratar una creadora UGC bilingüe: guías para marcas',
       lead:
-        'Guías para contratar una creadora UGC bilingüe: brief, formatos de ads y UGC vs influencer. Para marcas en US hispano, España y LatAm que van a producir.',
+        'Estas cuatro guías son para equipos que van a contratar una creadora UGC, no para armar una agencia. Sirven si vendes al mercado hispano de Estados Unidos, a España o a LatAm, o si el brief va en inglés. Empieza por cómo contratar; el resto aclara formatos, la diferencia con influencer y qué es UGC.',
       childrenTitle: 'Guías para marcas',
       primaryCtaLabel: 'Contáctame',
       secondaryLinks: [
@@ -252,10 +282,22 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         { hubId: 'verticals', label: 'UGC por industria' },
       ],
       children: [
-        { title: 'Cómo contratar creadora UGC' },
-        { title: 'Formatos de UGC para ads' },
-        { title: 'UGC vs influencer marketing' },
-        { title: 'Qué es UGC' },
+        {
+          title: 'Cómo contratar creadora UGC',
+          blurb: 'El proceso, el brief y qué pedir antes de firmar con una creadora.',
+        },
+        {
+          title: 'Formatos de UGC para ads',
+          blurb: 'Qué formato pedir (testimonial, demo, problema-solución, portavoz) según el objetivo de pauta.',
+        },
+        {
+          title: 'UGC vs influencer marketing',
+          blurb: 'Por qué contratar creadora (contenido para tu marca) no es comprar un post en redes ajenas.',
+        },
+        {
+          title: 'Qué es UGC',
+          blurb: 'La base, en claro, para equipos que van a producir y pautar.',
+        },
       ],
     },
     en: {
@@ -265,7 +307,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         'Guides to hire a bilingual UGC creator: brief, ad formats, and UGC vs influencer. For US Hispanic, Spain, and LatAm brands ready to produce, not an agency.',
       heroTitle: 'How to hire a bilingual UGC creator: guides for brand teams',
       lead:
-        'Guides to hire a bilingual UGC creator: brief, ad formats, and UGC vs influencer. For US Hispanic, Spain, and LatAm brands ready to produce, not an agency.',
+        'These four guides are for teams hiring a UGC creator, not building an agency. They help if you sell to US Hispanic audiences, Spain, or LatAm, or if the brief is in English. Start with how to hire; the rest covers ad formats, UGC vs influencer, and what UGC actually is.',
       childrenTitle: 'Guides for brand teams',
       primaryCtaLabel: 'Contact me',
       secondaryLinks: [
@@ -273,10 +315,22 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         { hubId: 'verticals', label: 'UGC by industry' },
       ],
       children: [
-        { title: 'How to hire a UGC creator' },
-        { title: 'UGC ad formats guide' },
-        { title: 'UGC vs influencer marketing' },
-        { title: 'What is UGC' },
+        {
+          title: 'How to hire a UGC creator',
+          blurb: 'The process, the brief, and what to ask before you book a creator.',
+        },
+        {
+          title: 'UGC ad formats guide',
+          blurb: 'Which format to request (testimonial, demo, problem-solution, spokesperson) for the paid-social job.',
+        },
+        {
+          title: 'UGC vs influencer marketing',
+          blurb: 'Why hiring a creator (content for your brand) is not buying a post on someone else’s feed.',
+        },
+        {
+          title: 'What is UGC',
+          blurb: 'The basics, in plain language, for teams about to produce and run ads.',
+        },
       ],
     },
   },
