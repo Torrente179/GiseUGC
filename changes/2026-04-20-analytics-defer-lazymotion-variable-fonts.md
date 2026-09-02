@@ -106,3 +106,23 @@ and their subdomains under `script-src`, `connect-src`, `img-src`, and
   runs under LazyMotion without change.
 - `AnimatePresence` and `useReducedMotion` keep their pre-existing
   behavior; only the component identifier changed.
+
+## 2026-09-02 — bounce page_view without loading GTM on LCP
+
+The deferred loader later waited for first interaction *or* `setTimeout(30000)`,
+so bounce sessions never fired `page_view`. That was an undercount bug, not a
+reason to put GTM back on the LCP path.
+
+`public/gtm-loader.js` now:
+
+1. Queues `gtag('js')` + `gtag('config', G-3W6XVBLWXH)` and injects
+   `gtag/js` as soon as the deferred loader runs. Bounce sessions count.
+2. Still defers heavy GTM (`GTM-TX2WCCLT`) until first interaction
+   (`touchstart` / `scroll` / `mousemove` / `keydown`) or a short idle
+   (`requestIdleCallback` with a 3.5s timeout, matching this file's original
+   idle window — not 30s).
+
+The July 2026 performance overhaul is unchanged: no eager GTM on parse, no
+media/font/motion rollback. HTML entries keep `<script defer src="/gtm-loader.js">`.
+
+Tests: `src/lib/gtm-loader.test.ts`.

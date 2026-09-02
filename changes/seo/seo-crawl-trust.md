@@ -74,3 +74,18 @@ Hub shells can be regenerated with `node scripts/sync-hub-entrypoints.mjs`. Copy
 ## IndexNow
 
 `scripts/indexnow-ping.sh` includes the six hub URLs plus the existing money pages.
+
+## 2026-09-02 — bounce page_view leftover (language switch already on main)
+
+The navbar language control on `main` is already real `<a href>` pairs via
+`getLocalizedPathForCurrentRoute()` (`/` ↔ `/en/`, matching localized paths
+on inner pages). Do not reopen that rewrite.
+
+What was still live-broken: `public/gtm-loader.js` deferred **both** GTM and
+gtag until first interaction or `setTimeout(30000)`, so bounce sessions never
+fired `page_view`. gtag config + `gtag/js` now run when the deferred loader
+runs. Heavy GTM (`GTM-TX2WCCLT`) still waits for first interaction or a short
+idle (`requestIdleCallback` timeout ~3.5s). See
+`changes/2026-04-20-analytics-defer-lazymotion-variable-fonts.md`.
+
+Tests: `src/lib/gtm-loader.test.ts`. No hub/copy/schema/llms changes.
