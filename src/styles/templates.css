@@ -1632,7 +1632,7 @@
     border: none;
     padding: 0;
     background: hsl(var(--ink-surface));
-    cursor: pointer;
+    cursor: default;
     -webkit-tap-highlight-color: transparent;
   }
 

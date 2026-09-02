@@ -110,7 +110,7 @@ const VerticalLandingPage = ({
     [activeProofIndex, proofExamples],
   );
   const isProofTheaterOpen = activeProofItem !== null;
-  const mediaIntent = useMediaIntent();
+  const mediaIntent = useMediaIntent({ autoStart: true });
 
   const openProofClip = useCallback(
     (index: number) => {
@@ -232,12 +232,7 @@ const VerticalLandingPage = ({
             {/* ── M1: APP HERO ── */}
             <section className="stm-hero">
               {leadProof ? (
-                <button
-                  type="button"
-                  className="stm-hero-poster"
-                  onClick={() => openProofClip(0)}
-                  aria-label={`${labels.openSample}: ${leadProof.example.title}`}
-                >
+                <div className="stm-hero-poster" aria-hidden="true">
                   {mediaIntent && !isProofTheaterOpen ? (
                     <AutoplayPreviewVideo
                       src={leadProof.clip.previewSrc}
@@ -246,6 +241,7 @@ const VerticalLandingPage = ({
                       aria-hidden="true"
                       preload="metadata"
                       playbackPriority="hero"
+                      loadStrategy="immediate"
                       rootMargin="220px 0px"
                       activationQuery="(max-width: 767px)"
                     />
@@ -262,7 +258,7 @@ const VerticalLandingPage = ({
                     />
                   )}
                   <div className="stm-hero-poster-overlay" />
-                </button>
+                </div>
               ) : (
                 <div className="stm-hero-poster stm-hero-poster--empty" />
               )}

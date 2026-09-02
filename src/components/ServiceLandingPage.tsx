@@ -300,12 +300,7 @@ const ServiceLandingPage = ({
             {/* ── M1: APP HERO — Full-viewport video poster ── */}
             <section className="stm-hero">
               {leadProof ? (
-                <button
-                  type="button"
-                  className="stm-hero-poster"
-                  onClick={() => openProofClip(0)}
-                  aria-label={`${labels.openSample}: ${leadProof.example.title}`}
-                >
+                <div className="stm-hero-poster" aria-hidden="true">
                   {mediaIntent && !isProofTheaterOpen ? (
                     <AutoplayPreviewVideo
                       src={leadProof.clip.previewSrc}
@@ -314,6 +309,7 @@ const ServiceLandingPage = ({
                       aria-hidden="true"
                       preload="metadata"
                       playbackPriority="hero"
+                      loadStrategy="immediate"
                       rootMargin="220px 0px"
                       activationQuery="(max-width: 767px)"
                     />
@@ -330,7 +326,7 @@ const ServiceLandingPage = ({
                     />
                   )}
                   <div className="stm-hero-poster-overlay" />
-                </button>
+                </div>
               ) : (
                 <div className="stm-hero-poster stm-hero-poster--empty" />
               )}
