@@ -187,4 +187,21 @@ describe('service inner presentation locks', () => {
     expect(css).toContain('color: hsl(var(--foreground) / 0.74)');
     expect(css).toContain('padding-bottom: 6.5rem');
   });
+
+  it('ships mobile inner as a document: spec rows, 01 type, slab CTA, no chips or cards', () => {
+    const { html } = renderService('ugc-ads-tiktok-meta', 'es');
+    expect(html).not.toContain('stm-chips');
+    expect(html).not.toContain('stm-chip');
+    expect(html).not.toContain('stm-ficha-card');
+    expect(html).toContain('stm-ficha-row');
+    expect(html).toContain('stm-sticky-bar--slab');
+    expect(html).toContain('class="stm-stepper-num" aria-hidden="true">01<');
+    expect(html).toContain('class="stm-stepper-num" aria-hidden="true">04<');
+
+    const css = readFileSync(resolve(root, 'src/styles/templates.css'), 'utf8');
+    expect(css).not.toContain('.stm-chip {');
+    expect(css).toContain('.stm-sticky-bar--slab');
+    expect(css).toContain('border-top: 2px solid hsl(var(--foreground))');
+    expect(css).toContain('body:has(.stm-sticky-bar--slab) .mtabbar');
+  });
 });

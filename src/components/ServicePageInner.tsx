@@ -10,7 +10,6 @@ import {
   beatDomId,
   buildServiceFicha,
   getInnerBeats,
-  getMobileChipBeats,
   type InnerBeatId,
 } from '@/lib/service-inner-argument';
 
@@ -145,7 +144,6 @@ const ServicePageInner = ({
 }: ServicePageInnerProps) => {
   const updated = formatLastUpdatedLabel(CONTENT_DATES.services, locale);
   const beats = getInnerBeats(locale);
-  const chipBeats = getMobileChipBeats(locale);
   const ficha = buildServiceFicha(page);
   const exploreColumns = buildExploreColumns({
     labels,
@@ -156,8 +154,8 @@ const ServicePageInner = ({
   });
   const isMobile = variant === 'mobile';
   const idFor = (id: InnerBeatId) => beatDomId(id, variant);
-  const spyIds = (isMobile ? chipBeats : beats).map((beat) => idFor(beat.id));
-  const activeId = useBeatSpy(spyIds, true);
+  const spyIds = beats.map((beat) => idFor(beat.id));
+  const activeId = useBeatSpy(spyIds, !isMobile);
   const kickerFor = (id: InnerBeatId) => {
     const beat = beats.find((item) => item.id === id);
     return beat ? `${beat.num} · ${beat.kicker}` : '';
@@ -165,26 +163,7 @@ const ServicePageInner = ({
 
   return (
     <div className={isMobile ? 'stm-walk' : 'svc-walk'}>
-      {isMobile ? (
-        <nav className="stm-chips" aria-label={locale === 'es' ? 'Secciones' : 'Sections'}>
-          <div className="stm-chips-track">
-            {chipBeats.map((beat) => {
-              const href = `#${idFor(beat.id)}`;
-              const isActive = activeId === idFor(beat.id);
-              return (
-                <a
-                  key={beat.id}
-                  href={href}
-                  className={`stm-chip${isActive ? ' is-active' : ''}`}
-                  aria-current={isActive ? 'location' : undefined}
-                >
-                  {beat.chip}
-                </a>
-              );
-            })}
-          </div>
-        </nav>
-      ) : (
+      {isMobile ? null : (
         <nav className="svc-spine" aria-label={locale === 'es' ? 'Índice de la página' : 'Page index'}>
           <ol className="svc-spine-list">
             {beats.map((beat) => {
@@ -215,14 +194,14 @@ const ServicePageInner = ({
               {page.sectionIntroTitle}
             </h2>
             {isMobile ? (
-              <div className="stm-ficha">
+              <dl className="stm-ficha">
                 {ficha.map((row) => (
-                  <article key={row.key} className="stm-ficha-card">
-                    <p className="stm-ficha-label">{row.label}</p>
-                    <p className="stm-ficha-value">{row.value}</p>
-                  </article>
+                  <div key={row.key} className="stm-ficha-row">
+                    <dt>{row.label}</dt>
+                    <dd>{row.value}</dd>
+                  </div>
                 ))}
-              </div>
+              </dl>
             ) : (
               <dl className="svc-ficha">
                 {ficha.map((row) => (
@@ -277,7 +256,7 @@ const ServicePageInner = ({
                 <li key={step.title} className={isMobile ? 'stm-stepper-item' : 'svc-process-cell'}>
                   {isMobile ? (
                     <span className="stm-stepper-num" aria-hidden="true">
-                      {index + 1}
+                      {String(index + 1).padStart(2, '0')}
                     </span>
                   ) : (
                     <span className="svc-process-cell-num" aria-hidden="true">
