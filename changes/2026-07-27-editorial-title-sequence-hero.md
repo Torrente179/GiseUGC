@@ -136,7 +136,7 @@ The implementation was visually reviewed at 320px and 390px widths as well as ta
 
 ## Navbar Integration
 
-`src/components/Navbar.tsx` applies the `title-sequence-nav` theme only while the homepage is at its top state. It maps the hero back to the existing linen, ebony, khaki, stone, and teal navigation tokens without changing navigation content, bilingual controls, contact links, or mobile menu behavior.
+`src/components/Navbar.tsx` applies the `title-sequence-nav` theme while Home **or a service landing** is at its top state. It maps the hero back to the existing linen, ebony, khaki, stone, and teal navigation tokens without changing navigation content, bilingual controls, contact links, or mobile menu behavior. After 18px of scroll the overlay class lifts and the themed frosted bar takes over. See `changes/ui/navbar-and-theater-hotfixes.md` (2026-09-02) for the service-page reuse.
 
 ## Motion and Accessibility
 

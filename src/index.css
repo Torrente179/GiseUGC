@@ -728,7 +728,7 @@
     position: relative;
   }
 
-  /* ─── Homepage portrait hero ─── */
+  /* ─── Overlay nav over dark cinematic heroes (home + service pages) ─── */
   .title-sequence-nav {
     --background: var(--ink-surface);
     --foreground: var(--pure-linen);

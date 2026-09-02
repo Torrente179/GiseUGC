@@ -16,6 +16,7 @@ import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navig
 import {
   getHomeSectionHref,
   getLocaleFromPath,
+  getServicePageIdFromPath,
   isHomePath,
 } from '@/lib/locale-path';
 import { navigateToRoute } from '@/lib/route-navigation';
@@ -75,6 +76,10 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
   const ignoreNextMenuButtonClickRef = useRef(false);
   const currentLocale = getLocaleFromPath(location.pathname);
   const onHomePage = isHomePath(location.pathname);
+  const onServicePage = Boolean(getServicePageIdFromPath(location.pathname));
+  // Home and service landings open on a dark cinematic hero. Reuse the same
+  // overlay palette and lift it after the first scroll, matching Home.
+  const useHeroOverlayNav = (onHomePage || onServicePage) && !isScrolled;
 
   useEffect(() => {
     const syncScrolledState = () => {
@@ -486,7 +491,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
           isScrolled
             ? 'border-b border-border/40 bg-background/95 shadow-[0_14px_36px_-30px_hsl(var(--foreground)/0.5)]'
             : 'border-b border-border/15 bg-background/75',
-          onHomePage && !isScrolled && 'title-sequence-nav',
+          useHeroOverlayNav && 'title-sequence-nav',
         )}
       >
         {!isScrolled && (

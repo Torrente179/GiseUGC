@@ -67,9 +67,8 @@ Recent regressions came from mobile-only interaction differences such as viewpor
 
 For any homepage hero or top-of-page navbar change, read:
 
-- [`2026-07-27-editorial-title-sequence-hero.md`](./2026-07-27-editorial-title-sequence-hero.md)
-
-It records the approved composition, real source assets, responsive behavior, accessibility requirements, superseded experiments, validation, and regression guardrails.
+- [`2026-07-27-editorial-title-sequence-hero.md`](./2026-07-27-editorial-title-sequence-hero.md) — approved Home hero composition, assets, accessibility, and regression guardrails.
+- [`ui/navbar-and-theater-hotfixes.md`](./ui/navbar-and-theater-hotfixes.md) — live overlay rule: `title-sequence-nav` on Home **and** service landings at rest, themed bar after scroll.
 
 ## Current Performance Source of Truth
 

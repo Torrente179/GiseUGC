@@ -9,6 +9,7 @@ This is the current UI note for the dedicated service pages. Historical dated se
 - `src/components/mobile/MobileAppShell.tsx`
 - `src/styles/templates.css`
 - `src/components/ServiceLandingPage.tsx` (unchanged cinematic hero; mounts the inner + Pedir creativos slab)
+- `src/components/Navbar.tsx` (dark overlay at rest over the cinematic hero; lifts on scroll, same as Home)
 - `src/data/service-pages.ts`
 - `src/data/service-inner-argument.test.tsx`
 - `src/components/PageSeo.tsx`
@@ -24,6 +25,16 @@ This is the current UI note for the dedicated service pages. Historical dated se
 4. The global 4-icon tab bar is HIDDEN on service inner mobile only (`MobileAppShell` + `body:has(.stm-sticky-bar--slab)`). Home / vertical / hub tab bars are unchanged.
 5. Hero, H1, routes, copy, and typeface are unchanged. Public brand is Gisela Saldarriaga / Gisela.UGC — never “GiseUGC”.
 6. The 2026-09-01 app-layout chips (sticky pills, stacked cards, cyan pill on the tab bar) are superseded by the 2026-09-02 document-mobile pass. Mock lock: `mockup/gise-design/service-inner/D-document-mobile.html` (and PNGs).
+7. Top-of-page navbar on all eight ES+EN service landings uses the Home `title-sequence-nav` overlay (dark tokens over the cinematic hero) and switches to the themed frosted bar after 18px of scroll. See `navbar-and-theater-hotfixes.md` (2026-09-02).
+
+## 2026-09-02 Service navbar matches Home overlay
+
+Service pages keep the cinematic hero. The global navbar now uses the same dark overlay-at-rest / frosted-bar-on-scroll treatment as Home, instead of sitting as a light strip on the video.
+
+### What changed
+1. `Navbar.tsx` treats `getServicePageIdFromPath` like Home for the `title-sequence-nav` overlay.
+2. Inner layout, copy, routes, and the Pedir creativos slab are unchanged.
+3. Regression lock: `Navbar.test.tsx` plus the existing service SSR suite (`title-sequence-nav` in first HTML).
 
 ## 2026-03-17 creator-showroom redesign pass
 

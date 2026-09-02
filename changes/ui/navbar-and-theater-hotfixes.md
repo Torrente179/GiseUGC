@@ -16,6 +16,28 @@ This is the living navbar note for language/theater regressions, layering fixes,
 2. Theater-related navbar behavior now keys off the document theater state instead of ad hoc layering assumptions.
 3. The March 9 theater-navbar experiment was rolled back, leaving the cleaner non-overlapping mobile clearance and layer behavior in place without keeping the experimental navbar treatment.
 4. Desktop and mobile share `NavbarControls`: ES/EN and theme live in one frosted segmented rail with a Framer `layoutId` locale pill; the hire CTA is the only filled primary control and uses `text-primary-foreground` with sentence-case copy (`navbar.hireMeCta`).
+5. `title-sequence-nav` is the dark overlay palette over cinematic heroes. It applies at the top of **Home and the eight service landings**, then lifts after 18px of scroll so the themed frosted bar takes over. Resource, vertical, hub, and legal pages stay on the themed bar.
+
+## 2026-09-02 Service-page hero overlay navbar
+
+Service landings open on the same kind of dark cinematic hero as Home (`stm-hero` / `svc-cine-hero`), but the overlay class was gated to `isHomePath`. At the top of a service page the nav stayed on the light theme tokens and read as a cream strip over video.
+
+### What changed
+1. `Navbar.tsx` now applies `title-sequence-nav` when `getServicePageIdFromPath` matches and `scrollY` is still under 18px — the same threshold and token remap Home already used.
+2. After the first scroll the class lifts, so the service inner (light document) gets the themed frosted bar. Language, theme, hire CTA, back chevron, and mobile menu are unchanged.
+3. Vertical, resource, hub, and legal routes were left alone; they do not share this dark-hero overlay.
+
+### Files changed
+- `src/components/Navbar.tsx`
+- `src/components/Navbar.test.tsx`
+- `src/data/service-inner-argument.test.tsx`
+- `src/index.css` (comment only: overlay is shared by home + service pages)
+
+### Verification
+1. Home `/`: dark overlay at top (`title-sequence-nav`, `rgba(43,43,43,0.75)`), class lifts after scroll.
+2. All eight ES+EN service landings: first HTML (SSR) includes `title-sequence-nav`.
+3. Resource, vertical, and hub routes: Navbar at rest does not include the overlay class.
+4. `npx vitest run src/components/Navbar.test.tsx src/data/service-inner-argument.test.tsx` — 40 passed.
 
 ## 2026-06-03 Navbar control rail and CTA polish
 

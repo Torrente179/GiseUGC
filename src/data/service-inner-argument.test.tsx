@@ -97,6 +97,7 @@ describe('service inner argument stays crawlable', () => {
       expect(raw).toContain('"@type":"Service"');
       expect(raw).toContain('"@type":"WebPageElement"');
       expect(raw).not.toContain('reviewBody');
+      expect(raw).toContain('title-sequence-nav');
     },
   );
 
