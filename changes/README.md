@@ -14,6 +14,7 @@ This folder is organized by subsystem instead of by date.
 - `ui/`
   - Hero, navbar, footer, contact flows, FAQ, rating cards, motion polish, and visual evolution.
   - **Current live hero:** `../2026-07-27-editorial-title-sequence-hero.md` — “CHAPTER 00” editorial opening with a solid `GISELA` title, three real film-strip stills, exact Medellín metadata, and a dedicated mobile app-quality composition. Earlier “Muro de trabajo,” wide contact-sheet, pencil-texture, and blue-mark experiments are historical rather than current.
+  - **Current service INNER (below hero):** `ui/service-page-showroom-redesign.md` (2026-09-02 document-mobile). Source of truth for the live ficha argument on all eight ES+EN service pages. The inner is not an app layout.
   - **Current full-screen viewers:** both the video theater (Portfolio, service
     pages) and the testimonial viewer share one stage language — `--theater-*`
     tokens, the `media-theater-*` keyframes, and `.theater-control`. Changing one

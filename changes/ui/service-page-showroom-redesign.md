@@ -1,30 +1,29 @@
 # Service Page Showroom Redesign
 
 ## Summary
-This is the current UI note for the dedicated service pages. It tracks the shift away from the generic shared-card template toward a creator-showroom layout that sells through earlier video proof, clearer section rhythm, and a more premium service-page presentation.
+This is the current UI note for the dedicated service pages. Historical dated sections below still record the March showroom / Screen Test / August continuation / 2026-09-01 app-mobile chips passes. The live INNER (below the cinematic hero) is the 2026-09-02 ficha argument — same document on desktop and mobile, not an app layout.
 
 ## Current runtime touchpoints
-- `src/components/ServiceLandingPage.tsx`
-- `src/index.css`
+- `src/components/ServicePageInner.tsx`
+- `src/lib/service-inner-argument.ts`
+- `src/components/mobile/MobileAppShell.tsx`
+- `src/styles/templates.css`
+- `src/components/ServiceLandingPage.tsx` (unchanged cinematic hero; mounts the inner + Pedir creativos slab)
 - `src/data/service-pages.ts`
-- `src/data/portfolio-clips.ts`
-- `src/data/video-lqip.ts`
-- `src/components/media/LazyVideo.tsx`
+- `src/data/service-inner-argument.test.tsx`
 - `src/components/PageSeo.tsx`
 - `scripts/enrich-service-entrypoints.mjs`
-- `servicios/creadora-ugc-bilingue/index.html`
-- `servicios/videos-de-portavoz/index.html`
-- `servicios/ugc-ads-tiktok-meta/index.html`
-- `en/services/bilingual-ugc-creator/index.html`
-- `en/services/spokesperson-videos/index.html`
-- `en/services/ugc-ads-tiktok-meta/index.html`
+- `scripts/expand-boot-shells.mjs`
+- All eight ES service boot shells under `servicios/` (not the `/servicios/` hub)
+- All eight EN service boot shells under `en/services/` (not the `/en/services/` hub)
 
 ## Current state
-1. The shared service-page template now behaves like a creator sales portfolio instead of a generic marketing layout with repeated bordered cards.
-2. Each service page brings video proof into the hero through a live preview stage with selectable examples, so visitors can evaluate Gisela's on-camera presence and style immediately.
-3. The supporting page sections now use differentiated layouts: a tighter service brief, editorial deliverable rows, a split fit-vs-not-fit module, and a process sequence instead of another four-card grid.
-4. FAQ, CTA, and related-service sections remain present for trust, conversion, and internal linking, but they carry less visual weight than the proof and service-logic sections above.
-5. The redesign kept the SEO contract intact by preserving the same H1-level content source, metadata wiring, FAQ visibility, and internal links without rewriting service copy or schema fields.
+1. Live on all eight ES+EN service pages. Inner below the unchanged cinematic hero is one argument: **Ficha → Recibes → Cómo corre → Encaja → Preguntas → Empezar**.
+2. Desktop = spine + spec table + ruled formatos + 01–04 process + two-col fit + FAQ + black Empezar in the content column (not under the spine).
+3. Mobile = the SAME document: spec rows, hairlines, type kicker (`1 · Ficha`), 01–04 process rules, full-bleed 0-radius slab **Pedir creativos**. No chips, no info pills, no rounded cards.
+4. The global 4-icon tab bar is HIDDEN on service inner mobile only (`MobileAppShell` + `body:has(.stm-sticky-bar--slab)`). Home / vertical / hub tab bars are unchanged.
+5. Hero, H1, routes, copy, and typeface are unchanged. Public brand is Gisela Saldarriaga / Gisela.UGC — never “GiseUGC”.
+6. The 2026-09-01 app-layout chips (sticky pills, stacked cards, cyan pill on the tab bar) are superseded by the 2026-09-02 document-mobile pass. Mock lock: `mockup/gise-design/service-inner/D-document-mobile.html` (and PNGs).
 
 ## 2026-03-17 creator-showroom redesign pass
 
@@ -616,6 +615,8 @@ No heading changes, no metadata changes, no schema changes. CSS-only.
 
 ## 2026-09-01 inner argument (ficha → empezar) + app mobile
 
+**Ships:** PR #9 `884911426c127f87d06daefdffbfe670b9ae102b`.
+
 Juan Pablo locked the inner body below the unchanged hero. The overlapping intro / markets / types / process essays are one argument on every service.
 
 ### Runtime touchpoints
@@ -655,6 +656,8 @@ Non-negotiable crawl constraints folded into this inner-argument pass:
 
 ## 2026-09-01 Empezar clip + light-theme labels
 
+**Ships:** PR #10 `7d1141aed29cb5135f1bc623ccfeb90a6f5853dd`.
+
 Do not revert the inner argument. Do not change URLs, H1, or hero. Do not restore display serif on inner H2s.
 
 1. Empezar black band stays in the content column to the right of the sticky spine. Copy, TAMBIÉN OFREZCO, and the 3 explore columns share one padded shell (`.svc-inner-close-shell`). The explore row is its own 3-col grid with `align-items: start` — not a third item in a 2-col `align-items: end` grid (that stair-stepped POR INDUSTRIA / RECURSOS / MÁS SERVICIOS and pulled the left column under the spine).
@@ -664,7 +667,13 @@ Do not revert the inner argument. Do not change URLs, H1, or hero. Do not restor
 
 ## 2026-09-02 service inner mobile = document
 
+**Ships:** PR #12 `0afd07dbded52b117cd0883590881128865de8e0`.
+
 Juan Pablo rejected chips, info pills, and rounded cards on service INNER mobile. Ship the same document as desktop, on the phone. Do not wait.
+
+**Mock lock:** `mockup/gise-design/service-inner/D-document-mobile.html` (and PNGs).
+
+The 2026-09-01 app-layout chips (sticky pills, stacked ficha cards, formato tiles, numbered circles, cyan Pedir creativos stacked on the tab bar) are superseded by this pass.
 
 ### Runtime touchpoints
 - `src/components/ServicePageInner.tsx`
