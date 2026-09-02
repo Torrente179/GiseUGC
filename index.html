@@ -35,14 +35,13 @@
 
         const storageKey = 'theme';
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         let storedTheme = null;
 
         try {
           storedTheme = localStorage.getItem(storageKey);
         } catch (_) {}
 
-        const activeTheme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : systemTheme;
+        const activeTheme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : 'light';
         const shouldUseDark = activeTheme === 'dark';
 
         root.classList.toggle('dark', shouldUseDark);

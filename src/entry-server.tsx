@@ -91,7 +91,7 @@ export const render = (url: string): Promise<string> =>
     const stream = renderToPipeableStream(
       <StaticRouter location={url}>
         <LocaleProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
             <App routeComponents={routeComponents} />
           </ThemeProvider>
         </LocaleProvider>
