@@ -213,3 +213,7 @@ The full editorial footer was not ready to ship, but pages still needed a legal 
 1. `npm run build`
 2. Confirm homepage ends with copyright + privacy/terms pills, not the large footer hero.
 3. Before re-enabling full footer: restore or relocate `#contact` for navbar CTA behavior.
+
+## 2026-09-02 service INNER hides the 4-icon tab bar
+
+On service INNER pages only, `MobileAppShell` hides the global 4-icon tab bar because Pedir creativos is a full-bleed 0-radius slab. Home, vertical, and hub tab bars are unchanged. Source of truth for the inner: `changes/ui/service-page-showroom-redesign.md` (2026-09-02 document-mobile).
