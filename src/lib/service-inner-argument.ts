@@ -53,6 +53,52 @@ const FICHA_LABELS: Record<SiteLocale, Record<FichaRow['key'], string>> = {
   },
 };
 
+/**
+ * Mobile ficha. The desktop `buildServiceFicha` joins list fields into one
+ * string per row, which on a phone renders as three paragraph blobs — the
+ * single heaviest thing to read in the section. Here the lists stay lists, and
+ * the fit rows are dropped because the Encaja beat already carries them in
+ * full: the ficha was repeating that copy verbatim a screen earlier.
+ */
+export type MobileFichaRow = {
+  key: 'ask' | 'markets';
+  label: string;
+  kind: 'chips' | 'lines';
+  items: string[];
+};
+
+export type MobileFicha = {
+  lead: string;
+  rows: MobileFichaRow[];
+};
+
+const MOBILE_FICHA_LABELS: Record<SiteLocale, Record<MobileFichaRow['key'], string>> = {
+  es: {
+    ask: 'Qué pides',
+    markets: 'Mercados y formatos',
+  },
+  en: {
+    ask: 'What you ask for',
+    markets: 'Markets and formats',
+  },
+};
+
+export const buildMobileFicha = (page: ServicePageContent): MobileFicha => {
+  const labels = MOBILE_FICHA_LABELS[page.locale];
+  return {
+    lead: page.sectionIntroText,
+    rows: [
+      {
+        key: 'ask',
+        label: labels.ask,
+        kind: 'chips',
+        items: page.deliverables.map((item) => item.title),
+      },
+      { key: 'markets', label: labels.markets, kind: 'lines', items: page.marketItems },
+    ],
+  };
+};
+
 export const getInnerBeats = (locale: SiteLocale): InnerBeat[] => BEATS[locale];
 
 export const getMobileChipBeats = (locale: SiteLocale): InnerBeat[] =>

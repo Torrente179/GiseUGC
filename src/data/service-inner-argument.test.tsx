@@ -10,7 +10,7 @@ import { buildServiceLandingRouteData } from './landing-route-data.server';
 import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
 import { FIVERR_PROFILE_URL } from '@/lib/contact-channels';
 import { getServicePath, type SiteLocale } from '@/lib/locale-path';
-import { buildServiceFicha } from '@/lib/service-inner-argument';
+import { buildMobileFicha, buildServiceFicha } from '@/lib/service-inner-argument';
 
 const root = resolve(process.cwd());
 
@@ -189,12 +189,16 @@ describe('service inner presentation locks', () => {
     expect(css).toContain('padding-bottom: 6.5rem');
   });
 
-  it('ships mobile inner as a document: spec rows, 01 type, slab CTA, no chips or cards', () => {
+  it('ships mobile inner as a document in beats: list values, 01 type, slab CTA, no chip nav', () => {
     const { html } = renderService('ugc-ads-tiktok-meta', 'es');
+    // The sticky chip nav stays gone. The ficha's own values are chips, which is
+    // a different element (stm-ficha-chip) and the fix for the joined blobs.
     expect(html).not.toContain('stm-chips');
-    expect(html).not.toContain('stm-chip');
     expect(html).not.toContain('stm-ficha-card');
     expect(html).toContain('stm-ficha-row');
+    expect(html).toContain('stm-ficha-chip');
+    expect(html).toContain('stm-beat--recibes');
+    expect(html).toContain('stm-beat-figure');
     expect(html).toContain('stm-sticky-bar--slab');
     expect(html).toContain('class="stm-stepper-num" aria-hidden="true">01<');
     expect(html).toContain('class="stm-stepper-num" aria-hidden="true">04<');
@@ -202,7 +206,25 @@ describe('service inner presentation locks', () => {
     const css = readFileSync(resolve(root, 'src/styles/templates.css'), 'utf8');
     expect(css).not.toContain('.stm-chip {');
     expect(css).toContain('.stm-sticky-bar--slab');
-    expect(css).toContain('border-top: 2px solid hsl(var(--foreground))');
+    // Process is a timeline rail, not stacked 2px rules.
+    expect(css).toContain('border-left: 1px solid hsl(var(--foreground) / 0.18)');
+    // Every beat owns a surface, and dark redeclares the whole set rather than
+    // inheriting a rhythm built on light-theme lightness jumps.
+    expect(css).toContain('.dark .stm-walk');
+    expect(css).toContain('--stm-bg-ink: hsl(var(--ink-surface))');
     expect(css).toContain('body:has(.stm-sticky-bar--slab) .mtabbar');
+  });
+
+  it('keeps the mobile ficha as lists and drops the fit rows Encaja already carries', () => {
+    const page = getServicePageContent('ugc-ads-tiktok-meta', 'es');
+    const ficha = buildMobileFicha(page);
+    expect(ficha.lead).toBe(page.sectionIntroText);
+    expect(ficha.rows.map((row) => row.key)).toEqual(['ask', 'markets']);
+    expect(ficha.rows[0]?.items).toEqual(page.deliverables.map((item) => item.title));
+    expect(ficha.rows[1]?.items).toEqual(page.marketItems);
+    // The duplication the ficha used to carry a screen above Encaja.
+    const flat = JSON.stringify(ficha);
+    expect(flat).not.toContain(page.bestFitItems[0] ?? '@@none@@');
+    expect(flat).not.toContain(page.notFitItems[0] ?? '@@none@@');
   });
 });

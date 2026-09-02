@@ -702,3 +702,122 @@ The 2026-09-01 app-layout chips (sticky pills, stacked ficha cards, formato tile
 
 ### Verification
 1. `npx vitest run src/data/service-inner-argument.test.tsx`
+
+## 2026-09-02 service inner mobile in beats ("A · Ritmo") + neutral ink plate
+
+**Status:** Live on main. Supersedes the flat-document pass above *only* in
+surface treatment — the document itself (type kickers, spec rows, hairlines, no
+cards, ink slab CTA) is kept and extended, not reverted.
+
+**Design lock:** artifact "Servicios móvil · explicación", page `A · Ritmo`
+(claro + oscuro artboards). Direction picked by Juan Pablo out of four
+(A Ritmo / B Ficha / C Deck / D Cinta).
+
+Juan Pablo's report: after the hero, the explanation section was heavy to read
+on mobile. Diagnosis, in the order the problems mattered:
+
+1. **Everything had the same visual weight.** Six beats, one uninterrupted
+   column, ~1.400 words, no surface change and no rest between sections.
+2. **`buildServiceFicha` turned lists into paragraphs.** It `join()`s
+   `deliverables`, `marketItems`, `bestFitItems` and `notFitItems` into one
+   string per row, so three of the five ficha rows rendered as text blobs.
+3. **The ficha repeated Encaja verbatim.** `Sirve si` / `No sirve si` appeared
+   in full in beat 1 and again in full in beat 4, a screen apart.
+
+### Runtime touchpoints
+- `src/lib/service-inner-argument.ts` — new `buildMobileFicha`
+- `src/components/ServicePageInner.tsx`
+- `src/styles/templates.css`
+- `src/index.css` — new `--ink-plate` token
+- `src/data/service-inner-argument.test.tsx`
+
+### What changed
+
+1. **Each beat owns a full-bleed surface**, so the section reads as a sequence
+   of slabs. Light: linen → ink `#2B2B2B` → sand → linen → grey → linen (with
+   the ink CTA slab inside the last one).
+2. **Dark is designed, not derived.** The light rhythm leans on large lightness
+   jumps that would blind on a dark page, so `.dark .stm-walk` redeclares the
+   whole surface set on the token elevation ladder — `--card #151923` →
+   `--background #0F121A` → `--secondary #212531` — and every beat boundary gets
+   a 1px `--border` hairline, because those steps are too subtle to read alone.
+   Warmth moves from the surfaces (the dark palette is cool, hue 222) to the
+   ink: `--accent` on kickers, numerals and bullets, `--muted-foreground` on
+   body. No pure white anywhere.
+3. **The beat numeral** is set in Cormorant at 4.75rem, low-contrast, in the
+   top-right corner. `.stm-beat-title` carries `padding-right: 5rem` so a
+   two-line heading cannot run through it.
+4. **Ficha values stay lists.** `buildMobileFicha` returns `{ lead, rows }`:
+   the intro is a paragraph, `Qué pides` is chips (`.stm-ficha-chip`), and
+   `Mercados y formatos` is a bulleted list. The desktop `buildServiceFicha` is
+   untouched, so the desktop spec table is unchanged.
+5. **The duplication is gone.** The mobile ficha drops the `fits` / `not` rows;
+   Encaja owns that copy. Locked by test.
+6. **Process is a timeline** — a 1px rail with a filled first dot — replacing
+   the stacked 2px top rules. `01`–`04` type is kept.
+7. **Encaja marks differ by shape, not tint**: drawn check on the yes list, dash
+   on the no list, no filled panels.
+8. **`--ink-plate`.** `6c1f129` moved 32 dark surfaces to `--ink-surface`, but
+   `.stm-close` and `.stm-sticky-bar--slab` landed on the parallel PR #12 branch
+   and stayed on `hsl(var(--foreground))` — still the old brown. They cannot
+   point at `--ink-surface` directly, because in dark those plates invert to
+   linen. So `--ink-plate` is `var(--ink-surface)` at `:root` and
+   `var(--foreground)` in `.dark`; both plates use it and keep
+   `color: hsl(var(--background))`.
+
+### Three implementation traps worth remembering
+
+1. **Tailwind purged five of six surface rules.** The beat modifier was built as
+   `` `stm-beat--${id}` ``. Component classes live in `@layer components`, so
+   Tailwind drops any rule whose class name is not a literal string in the
+   content globs. It fails silently — correct DOM, no CSS. Only
+   `.stm-beat--recibes` survived, and only because that exact string happened to
+   be written in the test file. Fixed with the static `MOBILE_BEAT_CLASS` map.
+   **Never build a `@layer components` class name by interpolation.**
+2. **Headings on the ink slab measured contrast 1.0 — invisible.** The global
+   `h2:not(.section-label):not(.type-brand-display):not(.font-serif)` rule in
+   `index.css` is (0,3,1) and paints every heading `--foreground`; the component
+   override was (0,2,0) and lost. Paragraphs were unaffected, so the symptom was
+   "the body copy inverts but the headings don't". Per that rule's own comment,
+   the exception is marked on the component and carried to (0,4,1). The same
+   latent bug was fixed on `.stm-close-title`.
+3. **The sticky kicker painted a visible band** over the sand and grey slabs:
+   it draws `--stm-beat-bg` on top of the slab, so a translucent surface stacked
+   with itself. Those two surfaces are now `color-mix(...)`, opaque.
+
+### Verification
+
+Chrome here cannot take its viewport under 768px and the Browser pane keeps the
+document `hidden`, so the mobile shell mounts in neither. Verified instead by
+compiling `templates.css` with the Tailwind CLI, rendering the section with
+`renderToStaticMarkup`, and reading `getComputedStyle` in both themes — not from
+screenshots, which misplace sticky layers after a programmatic scroll.
+
+Measured contrast, foreground against each beat's composited surface:
+
+| | claro | oscuro |
+| --- | --- | --- |
+| Ficha (H2 + lead) | 13.9 | 15.2 |
+| Recibes (H2 / H3 / body) | 13.8 / 13.8 / 13.8 | 16.2 / 16.2 / 9.5 |
+| Cómo corre | 9.1 | 13.2 |
+| Preguntas | 12.8 | 16.2 |
+| Empezar (título + CTA) | 13.8 / 13.9 | 16.2 / 16.2 |
+
+```bash
+npm run typecheck && npm test
+```
+
+166 tests pass. `service-inner-argument.test.tsx` gained a `buildMobileFicha`
+lock (values stay lists; `bestFitItems` / `notFitItems` absent) and its
+presentation lock now asserts the timeline rail, the per-beat surfaces and the
+`.dark .stm-walk` block. The stale `border-top: 2px solid hsl(var(--foreground))`
+assertion was replaced — that was the stepper rule the timeline supersedes.
+
+### Kept from the pass above, deliberately
+
+- **No sticky chip nav.** It was scaffolding from the pre-PR#12 page, not part
+  of direction A. The per-beat sticky kicker does that job.
+- Desktop inner untouched: spine, spec table via `buildServiceFicha`, 4-col
+  process, black Empezar band.
+- Hero, H1, routes, copy, FAQ answers, `CONTENT_DATES`, schema, boot shells and
+  the `:has(.stm-sticky-bar--slab)` tab-bar rule are all unchanged.

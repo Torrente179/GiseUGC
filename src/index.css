@@ -137,6 +137,12 @@
        site inherits it, so neutralising it there would have re-coloured
        the whole page, not the three plates that read as brown. */
     --ink-surface: 0 0% 17%;
+    /* Inverted plates that flip with the theme — the service inner CTA slab
+       and its sticky bar. In light they are a dark plate, so they take the
+       neutral --ink-surface and stop reading brown; in dark they invert to a
+       linen plate, which is what --foreground already gives there. Both keep
+       `color: hsl(var(--background))`, so the pairing stays legible either way. */
+    --ink-plate: var(--ink-surface);
     /* #2F2A24 */
 
     --background: var(--pure-linen);
@@ -206,6 +212,9 @@
   .dark {
     --background: 222 28% 8%;
     --foreground: 42 38% 92%;
+
+    /* Inverted plates read light on a dark page — see :root. */
+    --ink-plate: var(--foreground);
 
     --card: 222 24% 11%;
     --card-foreground: 42 34% 90%;

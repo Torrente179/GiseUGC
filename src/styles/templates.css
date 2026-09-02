@@ -2294,7 +2294,7 @@
     bottom: 0;
     z-index: 130;
     padding: 0;
-    background: hsl(var(--foreground));
+    background: hsl(var(--ink-plate));
     border: 0;
     border-radius: 0;
   }
@@ -2307,7 +2307,7 @@
     min-height: 52px;
     padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom, 0px));
     border-radius: 0;
-    background: hsl(var(--foreground));
+    background: hsl(var(--ink-plate));
     color: hsl(var(--background));
     box-shadow: none;
     filter: none;
@@ -2320,7 +2320,7 @@
 
   .stm-sticky-bar--slab .stm-sticky-btn:hover,
   .stm-sticky-bar--slab .stm-sticky-btn:active {
-    background: hsl(var(--foreground));
+    background: hsl(var(--ink-plate));
     color: hsl(var(--background));
     box-shadow: none;
     filter: none;
@@ -3156,26 +3156,116 @@
   }
 
   /* ═══════════════════════════════════════════════════
-     SERVICE INNER ARGUMENT — mobile document
+     SERVICE INNER ARGUMENT — mobile document, in beats
      Same language as desktop: type kickers, spec rows,
-     hairlines. No chips, cards, pills, or radius.
+     hairlines. No cards or pills outside the ficha values.
+     Each beat owns a full-bleed surface so the section reads
+     as a sequence instead of one uninterrupted column; the
+     surfaces are declared once here and swapped wholesale in
+     dark, because the light rhythm leans on lightness jumps
+     that would blind on a dark page. Dark uses the token
+     elevation ladder (card → background → secondary) plus a
+     hairline at every boundary to carry the same rhythm.
      ═══════════════════════════════════════════════════ */
   .stm-walk {
-    background: hsl(var(--background));
+    --stm-bg-page: hsl(var(--background));
+    /* Mixed, not alpha: the sticky kicker paints --stm-beat-bg over the slab,
+       so a translucent surface stacks with itself and shows as a band. */
+    --stm-bg-sand: color-mix(in srgb, hsl(var(--warm-sand)) 45%, hsl(var(--background)));
+    --stm-bg-mute: color-mix(in srgb, hsl(var(--foreground)) 4.5%, hsl(var(--background)));
+    --stm-bg-ink: hsl(var(--ink-surface));
+    --stm-ink-fg: hsl(var(--pure-linen));
+    --stm-ink-muted: hsl(var(--pure-linen) / 0.66);
+    --stm-ink-rule: hsl(var(--pure-linen) / 0.16);
+    --stm-ink-accent: hsl(var(--brand-sand));
+    --stm-ink-figure: hsl(var(--pure-linen) / 0.09);
+    --stm-figure: hsl(var(--warm-sand) / 0.6);
+    --stm-edge: transparent;
+
+    background: var(--stm-bg-page);
     padding-bottom: 6.5rem;
   }
 
+  .dark .stm-walk {
+    --stm-bg-page: hsl(var(--card));
+    --stm-bg-sand: hsl(var(--secondary));
+    --stm-bg-mute: hsl(var(--background));
+    --stm-bg-ink: hsl(var(--background));
+    --stm-ink-fg: hsl(var(--foreground));
+    --stm-ink-muted: hsl(var(--muted-foreground));
+    --stm-ink-rule: hsl(var(--foreground) / 0.14);
+    --stm-ink-accent: hsl(var(--accent));
+    --stm-ink-figure: hsl(var(--accent) / 0.12);
+    --stm-figure: hsl(var(--accent) / 0.14);
+    --stm-edge: hsl(var(--border));
+  }
+
   .stm-walk-main {
-    padding: 0.15rem 0 1.25rem;
+    padding: 0 0 1.25rem;
   }
 
   .stm-beat {
+    position: relative;
+    /* clip, not hidden: `overflow: hidden` would make this a scroll container
+       and kill the sticky kicker inside it. */
+    overflow: clip;
     scroll-margin-top: 5.5rem;
-    padding: 1.75rem 0 0.15rem;
+    padding: 2rem 0 2.25rem;
+    background: var(--stm-beat-bg, var(--stm-bg-page));
+    border-top: 1px solid var(--stm-edge);
+  }
+
+  .stm-beat--ficha {
+    --stm-beat-bg: var(--stm-bg-page);
+    border-top: 0;
+  }
+
+  .stm-beat--recibes {
+    --stm-beat-bg: var(--stm-bg-ink);
+    color: var(--stm-ink-fg);
+  }
+
+  .stm-beat--como-corre {
+    --stm-beat-bg: var(--stm-bg-sand);
+  }
+
+  .stm-beat--encaja {
+    --stm-beat-bg: var(--stm-bg-page);
+  }
+
+  .stm-beat--faq {
+    --stm-beat-bg: var(--stm-bg-mute);
+  }
+
+  .stm-beat--empezar {
+    --stm-beat-bg: var(--stm-bg-page);
   }
 
   .stm-beat-inner {
+    position: relative;
+    z-index: 1;
     padding: 0 1.15rem;
+  }
+
+  /* The numeral is the beat's marker — Cormorant, set large and low-contrast
+     behind the type, never a decorative shape. */
+  .stm-beat-figure {
+    position: absolute;
+    z-index: 0;
+    top: 0.15rem;
+    right: 0.9rem;
+    font-family: var(--font-brand);
+    font-weight: 600;
+    font-size: 4.75rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--stm-figure);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .stm-beat--recibes .stm-beat-figure {
+    color: var(--stm-ink-figure);
   }
 
   .stm-beat-inner > .svc-inner-kicker {
@@ -3184,11 +3274,18 @@
     z-index: 5;
     margin: 0 0 0.55rem;
     padding: 0.7rem 0 0.35rem;
-    background: hsl(var(--background));
+    background: var(--stm-beat-bg, var(--stm-bg-page));
     color: hsl(var(--foreground) / 0.84);
   }
 
+  .stm-beat--recibes .stm-beat-inner > .svc-inner-kicker {
+    color: var(--stm-ink-accent);
+  }
+
   .stm-beat-title {
+    /* Clears the numeral in the corner: without it a two-line heading runs
+       straight through the mark. */
+    padding-right: 5rem;
     margin: 0 0 1rem;
     font-family: var(--font-sans);
     font-weight: 700;
@@ -3196,6 +3293,26 @@
     letter-spacing: -0.03em;
     line-height: 1.15;
     color: hsl(var(--foreground));
+  }
+
+  /* The global `h2:not(...)` heading rule in index.css lands at (0,3,1) and
+     paints every heading in --foreground. On the ink slab that is dark-on-dark
+     at 1:1. Per the note on that rule, the exception is marked here instead of
+     widening its :not() chain — so these selectors are deliberately carried to
+     (0,4,1) to clear it. Same for the h3s below. */
+  .stm-walk .stm-beat--recibes .stm-beat-inner h2.stm-beat-title {
+    color: var(--stm-ink-fg);
+  }
+
+  /* ── Ficha: the lead is a paragraph, the values stay lists ── */
+  .stm-ficha-lead {
+    margin: 0 0 1.35rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.62;
+    color: hsl(var(--foreground) / 0.82);
+    text-wrap: pretty;
   }
 
   .stm-ficha {
@@ -3212,7 +3329,7 @@
   }
 
   .stm-ficha-row dt {
-    margin: 0 0 0.35rem;
+    margin: 0 0 0.5rem;
     font-family: var(--font-sans);
     font-size: 10px;
     font-weight: 650;
@@ -3234,6 +3351,46 @@
     color: hsl(var(--foreground) / 0.82);
   }
 
+  .stm-ficha-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .stm-ficha-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid hsl(var(--foreground) / 0.16);
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: hsl(var(--foreground));
+  }
+
+  .stm-ficha-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .stm-ficha-line {
+    position: relative;
+    padding-left: 0.9rem;
+  }
+
+  .stm-ficha-line::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: hsl(var(--accent));
+  }
+
   .stm-geo {
     margin-top: 1.15rem;
   }
@@ -3244,6 +3401,7 @@
     text-underline-offset: 2px;
   }
 
+  /* ── Recibes: numbered rows on the ink slab ── */
   .stm-formatos,
   .stm-faq-cards {
     display: flex;
@@ -3253,13 +3411,13 @@
 
   .stm-formato-card {
     padding: 0.95rem 0;
-    border-top: 1px solid hsl(var(--foreground) / 0.12);
+    border-top: 1px solid var(--stm-ink-rule);
     background: none;
     border-radius: 0;
   }
 
   .stm-formato-card:last-child {
-    border-bottom: 1px solid hsl(var(--foreground) / 0.12);
+    border-bottom: 1px solid var(--stm-ink-rule);
   }
 
   .stm-formato-title,
@@ -3272,21 +3430,49 @@
     color: hsl(var(--foreground));
   }
 
+  .stm-walk .stm-beat--recibes .stm-formatos h3.stm-formato-title {
+    color: var(--stm-ink-fg);
+  }
+
+  .stm-beat--recibes .stm-formato-desc {
+    color: var(--stm-ink-muted);
+  }
+
+  /* ── Cómo corre: a timeline, not stacked rules ── */
   .stm-stepper {
     list-style: none;
-    padding: 0;
-    margin: 1rem 0 0;
+    margin: 1.15rem 0 0;
+    padding: 0 0 0 1.6rem;
     display: flex;
     flex-direction: column;
     gap: 1.35rem;
+    border-left: 1px solid hsl(var(--foreground) / 0.18);
   }
 
   .stm-stepper-item {
+    position: relative;
     display: block;
-    padding-top: 0.85rem;
-    border-top: 2px solid hsl(var(--foreground));
+    padding-top: 0;
+    border-top: 0;
     background: none;
     border-radius: 0;
+  }
+
+  .stm-stepper-item::before {
+    content: '';
+    position: absolute;
+    left: -1.6rem;
+    top: 0.3rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    background: var(--stm-beat-bg, var(--stm-bg-page));
+    border: 2px solid hsl(var(--foreground) / 0.3);
+  }
+
+  .stm-stepper-item:first-child::before {
+    border-color: hsl(var(--foreground));
   }
 
   .stm-stepper-num {
@@ -3304,6 +3490,7 @@
     height: auto;
   }
 
+  /* ── Encaja: the two lists differ by mark, not by tint ── */
   .stm-fit {
     display: flex;
     flex-direction: column;
@@ -3324,12 +3511,39 @@
   }
 
   .stm-fit-panel li {
-    padding: 0.75rem 0;
+    position: relative;
+    padding: 0.75rem 0 0.75rem 1.65rem;
     border-top: 1px solid hsl(var(--foreground) / 0.12);
   }
 
   .stm-fit-panel li:last-child {
     border-bottom: 1px solid hsl(var(--foreground) / 0.12);
+  }
+
+  .stm-fit-panel--yes li::before {
+    content: '';
+    position: absolute;
+    left: 0.2rem;
+    top: 1.02rem;
+    width: 0.4rem;
+    height: 0.7rem;
+    border-right: 2px solid hsl(var(--accent));
+    border-bottom: 2px solid hsl(var(--accent));
+    transform: rotate(45deg);
+  }
+
+  .stm-fit-panel--no li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.35rem;
+    width: 0.75rem;
+    height: 2px;
+    background: hsl(var(--foreground) / 0.3);
+  }
+
+  .stm-fit-panel--no li {
+    color: hsl(var(--foreground) / 0.66);
   }
 
   .stm-fit-label {
@@ -3342,6 +3556,7 @@
     color: hsl(var(--foreground) / 0.82);
   }
 
+  /* ── Preguntas ── */
   .stm-faq-card {
     padding: 0;
     background: none;
@@ -3401,16 +3616,19 @@
     padding: 0 0 0.95rem;
   }
 
+  /* ── Empezar ── */
   .stm-beat--close {
     padding: 0;
     margin-top: 1.75rem;
+    overflow: visible;
+    border-top: 0;
   }
 
   .stm-close {
     margin: 0;
     padding: 1.75rem 1.15rem 2rem;
     border-radius: 0;
-    background: hsl(var(--foreground));
+    background: hsl(var(--ink-plate));
     color: hsl(var(--background));
     overflow-x: clip;
   }
@@ -3425,6 +3643,10 @@
     background: transparent;
     color: hsl(var(--background) / 0.72);
     padding: 0;
+  }
+
+  .stm-walk .stm-beat--close .stm-close h2.stm-close-title {
+    color: hsl(var(--background));
   }
 
   .stm-close-title {

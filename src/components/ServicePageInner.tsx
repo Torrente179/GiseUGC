@@ -8,12 +8,29 @@ import { InlineCopy } from '@/lib/inline-copy-links';
 import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
 import {
   beatDomId,
+  buildMobileFicha,
   buildServiceFicha,
   getInnerBeats,
   type InnerBeatId,
 } from '@/lib/service-inner-argument';
 
 const stripStepIndex = (title: string) => title.replace(/^\d+[.)]\s*/, '');
+
+/* Each beat owns a surface on mobile, so the section reads as a sequence of
+   slabs instead of one uninterrupted column. The modifier carries both the
+   surface and the sticky kicker's background — see --stm-beat-bg.
+   Spelled out rather than built as `stm-beat--${id}`: these live in
+   @layer components, and Tailwind's scanner only keeps rules whose selector it
+   can find as a literal in the source. Interpolated, every one of them is
+   purged from the production build. */
+const MOBILE_BEAT_CLASS: Record<InnerBeatId, string> = {
+  ficha: 'stm-beat stm-beat--ficha',
+  recibes: 'stm-beat stm-beat--recibes',
+  'como-corre': 'stm-beat stm-beat--como-corre',
+  encaja: 'stm-beat stm-beat--encaja',
+  faq: 'stm-beat stm-beat--faq',
+  empezar: 'stm-beat stm-beat--empezar',
+};
 
 const useBeatSpy = (ids: string[], enabled: boolean) => {
   const [activeId, setActiveId] = useState(ids[0] ?? '');
@@ -160,6 +177,19 @@ const ServicePageInner = ({
     const beat = beats.find((item) => item.id === id);
     return beat ? `${beat.num} · ${beat.kicker}` : '';
   };
+  const mobileFicha = buildMobileFicha(page);
+  const beatClass = (id: InnerBeatId, extra = '') =>
+    isMobile ? `${MOBILE_BEAT_CLASS[id]}${extra ? ` ${extra}` : ''}` : extra;
+  const figureFor = (id: InnerBeatId) => {
+    const beat = beats.find((item) => item.id === id);
+    return beat ? beat.num.padStart(2, '0') : '';
+  };
+  const BeatFigure = ({ id }: { id: InnerBeatId }) =>
+    isMobile ? (
+      <span className="stm-beat-figure" aria-hidden="true">
+        {figureFor(id)}
+      </span>
+    ) : null;
 
   return (
     <div className={isMobile ? 'stm-walk' : 'svc-walk'}>
@@ -186,22 +216,45 @@ const ServicePageInner = ({
         <BeatShell
           reveal={reveal}
           id={idFor('ficha')}
-          className={isMobile ? 'stm-beat' : 'svc-inner-block svc-inner-block--open svc-beat'}
+          className={
+            isMobile ? beatClass('ficha') : 'svc-inner-block svc-inner-block--open svc-beat'
+          }
         >
           <div className={isMobile ? 'stm-beat-inner' : 'st-container'}>
+            <BeatFigure id="ficha" />
             <p className="st-eyebrow svc-inner-kicker">{kickerFor('ficha')}</p>
             <h2 className={isMobile ? 'stm-beat-title' : 'svc-inner-heading font-serif'}>
               {page.sectionIntroTitle}
             </h2>
             {isMobile ? (
-              <dl className="stm-ficha">
-                {ficha.map((row) => (
-                  <div key={row.key} className="stm-ficha-row">
-                    <dt>{row.label}</dt>
-                    <dd>{row.value}</dd>
-                  </div>
-                ))}
-              </dl>
+              <>
+                <p className="stm-ficha-lead">{mobileFicha.lead}</p>
+                <dl className="stm-ficha">
+                  {mobileFicha.rows.map((row) => (
+                    <div key={row.key} className="stm-ficha-row">
+                      <dt>{row.label}</dt>
+                      <dd>
+                        <span
+                          className={
+                            row.kind === 'chips' ? 'stm-ficha-chips' : 'stm-ficha-lines'
+                          }
+                        >
+                          {row.items.map((item) => (
+                            <span
+                              key={item}
+                              className={
+                                row.kind === 'chips' ? 'stm-ficha-chip' : 'stm-ficha-line'
+                              }
+                            >
+                              {item}
+                            </span>
+                          ))}
+                        </span>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </>
             ) : (
               <dl className="svc-ficha">
                 {ficha.map((row) => (
@@ -223,9 +276,10 @@ const ServicePageInner = ({
         <BeatShell
           reveal={reveal}
           id={idFor('recibes')}
-          className={isMobile ? 'stm-beat' : 'svc-inner-block svc-beat'}
+          className={isMobile ? beatClass('recibes') : 'svc-inner-block svc-beat'}
         >
           <div className={isMobile ? 'stm-beat-inner' : 'st-container'}>
+            <BeatFigure id="recibes" />
             <p className="st-eyebrow svc-inner-kicker">{kickerFor('recibes')}</p>
             <h2 className={isMobile ? 'stm-beat-title' : 'svc-inner-heading font-serif'}>
               {page.deliverablesTitle}
@@ -244,9 +298,10 @@ const ServicePageInner = ({
         <BeatShell
           reveal={reveal}
           id={idFor('como-corre')}
-          className={isMobile ? 'stm-beat' : 'svc-inner-block svc-beat'}
+          className={isMobile ? beatClass('como-corre') : 'svc-inner-block svc-beat'}
         >
           <div className={isMobile ? 'stm-beat-inner' : 'st-container'}>
+            <BeatFigure id="como-corre" />
             <p className="st-eyebrow svc-inner-kicker">{kickerFor('como-corre')}</p>
             <h2 className={isMobile ? 'stm-beat-title' : 'svc-inner-heading font-serif'}>
               {page.processTitle}
@@ -280,15 +335,16 @@ const ServicePageInner = ({
         <BeatShell
           reveal={reveal}
           id={idFor('encaja')}
-          className={isMobile ? 'stm-beat' : 'svc-inner-block svc-beat'}
+          className={isMobile ? beatClass('encaja') : 'svc-inner-block svc-beat'}
         >
           <div className={isMobile ? 'stm-beat-inner' : 'st-container'}>
+            <BeatFigure id="encaja" />
             <p className="st-eyebrow svc-inner-kicker">{kickerFor('encaja')}</p>
             <h2 className={isMobile ? 'stm-beat-title' : 'svc-inner-heading font-serif'}>
               {labels.isThisForYou}
             </h2>
             <div className={isMobile ? 'stm-fit' : 'svc-fit-grid'}>
-              <div className={isMobile ? 'stm-fit-panel' : 'svc-fit-col'}>
+              <div className={isMobile ? 'stm-fit-panel stm-fit-panel--yes' : 'svc-fit-col'}>
                 <h3 className={isMobile ? 'stm-fit-label' : 'svc-fit-label'}>{page.bestFitTitle}</h3>
                 <ul>
                   {page.bestFitItems.map((item) => (
@@ -311,9 +367,10 @@ const ServicePageInner = ({
         <BeatShell
           reveal={reveal}
           id={idFor('faq')}
-          className={isMobile ? 'stm-beat' : 'svc-inner-block svc-beat'}
+          className={isMobile ? beatClass('faq') : 'svc-inner-block svc-beat'}
         >
           <div className={isMobile ? 'stm-beat-inner' : 'st-container'}>
+            <BeatFigure id="faq" />
             <p className="st-eyebrow svc-inner-kicker">{kickerFor('faq')}</p>
             <h2 className={isMobile ? 'stm-beat-title' : 'svc-inner-heading font-serif'}>{page.faqTitle}</h2>
             <div className={isMobile ? 'stm-faq-cards' : 'svc-faq-list'}>
@@ -337,7 +394,9 @@ const ServicePageInner = ({
         <BeatShell
           reveal={reveal}
           id={idFor('empezar')}
-          className={isMobile ? 'stm-beat stm-beat--close' : 'svc-inner-close svc-beat'}
+          className={
+            isMobile ? beatClass('empezar', 'stm-beat--close') : 'svc-inner-close svc-beat'
+          }
         >
           <div className={isMobile ? 'stm-beat-inner stm-close' : 'svc-inner-close-shell'}>
             <div className={isMobile ? 'stm-close-stack' : 'svc-inner-close-top'}>
