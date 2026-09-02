@@ -398,22 +398,77 @@ const ServicePageInner = ({
             isMobile ? beatClass('empezar', 'stm-beat--close') : 'svc-inner-close svc-beat'
           }
         >
-          <div className={isMobile ? 'stm-beat-inner stm-close' : 'svc-inner-close-shell'}>
-            <div className={isMobile ? 'stm-close-stack' : 'svc-inner-close-top'}>
-              <div>
+          {isMobile ? (
+            <div className="stm-beat-inner">
+              {/* The close is a contained card, not a full-bleed slab: a
+                  0-radius CTA inside a full-bleed slab reads as a white band
+                  cutting the section in half. Every link list moves out onto
+                  the page surface below, where navigation belongs — inside the
+                  card they made an endless dark tail. */}
+              <div className="stm-close">
                 <p className="st-eyebrow svc-inner-kicker">{kickerFor('empezar')}</p>
-                <h2 className={isMobile ? 'stm-close-title' : 'svc-inner-close-title font-serif'}>
-                  {page.ctaTitle}
-                </h2>
-                <p className={isMobile ? 'stm-close-text' : 'svc-inner-close-text'}>{page.ctaText}</p>
-                <a href={page.primaryCtaHref} className={isMobile ? 'stm-close-cta' : 'st-cta-primary st-cta-primary--lg'}>
+                <h2 className="stm-close-title">{page.ctaTitle}</h2>
+                <p className="stm-close-text">{page.ctaText}</p>
+                <a href={page.primaryCtaHref} className="stm-close-cta">
                   {page.primaryCtaLabel}
                 </a>
-                <p className={isMobile ? 'stm-close-updated' : 'svc-inner-updated'}>{updated}</p>
+                <p className="stm-close-updated">{updated}</p>
+              </div>
+
+              <nav className="stm-close-nav" aria-label={labels.explore}>
+                {relatedPages.length > 0 && (
+                  <div className="stm-nav-group">
+                    <p className="stm-nav-label">{labels.alsoOffered}</p>
+                    {page.relatedServiceIds.map((relatedId, index) => {
+                      const rel = relatedPages[index];
+                      if (!rel) return null;
+                      return (
+                        <Link
+                          key={relatedId}
+                          to={getServicePath(relatedId, locale)}
+                          className="stm-nav-link"
+                        >
+                          <span>{rel.title}</span>
+                          <span className="stm-nav-arrow" aria-hidden="true">
+                            →
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+                {exploreColumns.map((column) => (
+                  <div key={column.key} className="stm-nav-group">
+                    <p className="stm-nav-label">{column.label}</p>
+                    {column.items.map((item) => (
+                      <Link key={item.key} to={item.href} className="stm-nav-link">
+                        <span>{item.title}</span>
+                        <span className="stm-nav-arrow" aria-hidden="true">
+                          →
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                ))}
+              </nav>
+            </div>
+          ) : (
+          <div className="svc-inner-close-shell">
+            <div className="svc-inner-close-top">
+              <div>
+                <p className="st-eyebrow svc-inner-kicker">{kickerFor('empezar')}</p>
+                <h2 className="svc-inner-close-title font-serif">
+                  {page.ctaTitle}
+                </h2>
+                <p className="svc-inner-close-text">{page.ctaText}</p>
+                <a href={page.primaryCtaHref} className="st-cta-primary st-cta-primary--lg">
+                  {page.primaryCtaLabel}
+                </a>
+                <p className="svc-inner-updated">{updated}</p>
               </div>
               {relatedPages.length > 0 && (
                 <div>
-                  <p className={isMobile ? 'stm-close-sublabel' : 'st-eyebrow mb-5'}>{labels.alsoOffered}</p>
+                  <p className="st-eyebrow mb-5">{labels.alsoOffered}</p>
                   {page.relatedServiceIds.map((relatedId, index) => {
                     const rel = relatedPages[index];
                     if (!rel) return null;
@@ -421,10 +476,10 @@ const ServicePageInner = ({
                       <Link
                         key={relatedId}
                         to={getServicePath(relatedId, locale)}
-                        className={isMobile ? 'stm-close-link' : 'st-related-row group'}
+                        className="st-related-row group"
                       >
-                        <span className={isMobile ? undefined : 'st-related-title'}>{rel.title}</span>
-                        <span className={isMobile ? 'stm-close-arrow' : 'st-related-arrow'} aria-hidden="true">
+                        <span className="st-related-title">{rel.title}</span>
+                        <span className="st-related-arrow" aria-hidden="true">
                           →
                         </span>
                       </Link>
@@ -434,18 +489,18 @@ const ServicePageInner = ({
               )}
             </div>
             {exploreColumns.length > 0 && (
-              <nav className={isMobile ? 'stm-close-explore' : 'svc-close-explore'} aria-label={labels.explore}>
+              <nav className="svc-close-explore" aria-label={labels.explore}>
                 {exploreColumns.map((column) => (
-                  <div key={column.key} className={isMobile ? 'stm-close-explore-block' : 'svc-close-explore-col'}>
-                    <p className={isMobile ? 'stm-close-sublabel' : 'svc-explore-index'}>{column.label}</p>
+                  <div key={column.key} className="svc-close-explore-col">
+                    <p className="svc-explore-index">{column.label}</p>
                     {column.items.map((item) => (
                       <Link
                         key={item.key}
                         to={item.href}
-                        className={isMobile ? 'stm-close-link' : 'st-related-row group'}
+                        className="st-related-row group"
                       >
-                        <span className={isMobile ? undefined : 'st-related-title'}>{item.title}</span>
-                        <span className={isMobile ? 'stm-close-arrow' : 'st-related-arrow'} aria-hidden="true">
+                        <span className="st-related-title">{item.title}</span>
+                        <span className="st-related-arrow" aria-hidden="true">
                           →
                         </span>
                       </Link>
@@ -455,6 +510,7 @@ const ServicePageInner = ({
               </nav>
             )}
           </div>
+          )}
         </BeatShell>
       </div>
     </div>

@@ -186,7 +186,7 @@ describe('service inner presentation locks', () => {
     expect(css).toContain('color: hsl(var(--foreground) / 0.84)');
     expect(css).toContain('color: hsl(var(--foreground) / 0.82)');
     expect(css).toContain('color: hsl(var(--foreground) / 0.74)');
-    expect(css).toContain('padding-bottom: 6.5rem');
+    expect(css).toContain('padding-bottom: 2.5rem');
   });
 
   it('ships mobile inner as a document in beats: list values, 01 type, slab CTA, no chip nav', () => {
@@ -199,20 +199,27 @@ describe('service inner presentation locks', () => {
     expect(html).toContain('stm-ficha-chip');
     expect(html).toContain('stm-beat--recibes');
     expect(html).toContain('stm-beat-figure');
-    expect(html).toContain('stm-sticky-bar--slab');
     expect(html).toContain('class="stm-stepper-num" aria-hidden="true">01<');
     expect(html).toContain('class="stm-stepper-num" aria-hidden="true">04<');
+    // The close is a contained card and the link lists sit on the page surface
+    // below it, not inside the ink. The sticky "Pedir creativos" slab is gone:
+    // the global mobile tab bar is the navigation on these pages again.
+    expect(html).toContain('stm-close-nav');
+    expect(html).toContain('stm-nav-link');
+    expect(html).not.toContain('stm-sticky-bar');
+    expect(html).not.toContain('stm-close-link');
 
     const css = readFileSync(resolve(root, 'src/styles/templates.css'), 'utf8');
     expect(css).not.toContain('.stm-chip {');
-    expect(css).toContain('.stm-sticky-bar--slab');
+    expect(css).not.toContain('.stm-sticky-bar--slab');
+    expect(css).not.toContain('body:has(.stm-sticky-bar--slab) .mtabbar');
+    expect(css).toMatch(/\.stm-close \{[\s\S]*?border-radius: 1\.15rem/u);
     // Process is a timeline rail, not stacked 2px rules.
     expect(css).toContain('border-left: 1px solid hsl(var(--foreground) / 0.18)');
     // Every beat owns a surface, and dark redeclares the whole set rather than
     // inheriting a rhythm built on light-theme lightness jumps.
     expect(css).toContain('.dark .stm-walk');
     expect(css).toContain('--stm-bg-ink: hsl(var(--ink-surface))');
-    expect(css).toContain('body:has(.stm-sticky-bar--slab) .mtabbar');
   });
 
   it('keeps the mobile ficha as lists and drops the fit rows Encaja already carries', () => {

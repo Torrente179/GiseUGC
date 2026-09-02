@@ -821,3 +821,52 @@ assertion was replaced — that was the stepper rule the timeline supersedes.
   process, black Empezar band.
 - Hero, H1, routes, copy, FAQ answers, `CONTENT_DATES`, schema, boot shells and
   the `:has(.stm-sticky-bar--slab)` tab-bar rule are all unchanged.
+
+### 2026-09-02b — Empezar rebuilt, sticky CTA replaced by the tab bar
+
+Juan Pablo, on the live build: "until 5 it is great, number 6 is crooked. Lets
+redesign this part and lets bring back the navigation menu rather than Pedir
+creativos."
+
+Beats 1–5 stay exactly as shipped above. Three things were wrong with beat 6:
+
+1. **A 0-radius full-width CTA inside a full-bleed ink slab** read as a white
+   band cutting the section in half — not a button.
+2. **Every link list lived inside the ink.** TAMBIÉN OFREZCO + the three explore
+   columns turned the close into an endless dark tail.
+3. **Two "Pedir creativos" on one screen** — the in-slab CTA and the fixed
+   sticky slab bar.
+
+**What changed**
+
+- `.stm-close` is a **contained card** now: `1.15rem` radius, inset by the beat's
+  own padding, on `--ink-plate`. It holds only the pitch — kicker, title, text,
+  CTA, updated.
+- The CTA is a real button inside that card (`0.7rem` radius, full width), so it
+  reads as an action rather than a band.
+- **All link lists moved out onto the page surface** below the card, as
+  `.stm-close-nav` / `.stm-nav-group` / `.stm-nav-label` / `.stm-nav-link`.
+  Navigation reads as navigation on light ground, and the ink stops running.
+- **The sticky `.stm-sticky-bar--slab` is gone from service inner**, and with it
+  the two things that suppressed the global mobile tab bar:
+  `body:has(.stm-sticky-bar--slab) .mtabbar { display: none }` in
+  `templates.css`, and `hidden={contactOpen || onServiceInner}` in
+  `MobileAppShell.tsx`. The tab bar (Inicio / Portafolio / Servicios /
+  Contacto) is the navigation on these pages again, exactly as on every other
+  mobile route. This reverses point 4 of the 2026-09-02 document pass.
+- `.stm-walk` bottom padding drops `6.5rem → 2.5rem`: that clearance existed for
+  the sticky CTA, and `body` already reserves `--app-dock-clearance` for the tab
+  bar.
+- The base `.stm-sticky-bar` / `.stm-sticky-btn` rules **stay** — `VerticalLandingPage`
+  still uses them for its WhatsApp bar. Only the `--slab` variant was removed.
+- The desktop close branch was de-ternaried: it no longer carries unreachable
+  `isMobile ? 'stm-close-*' : ...` strings now that mobile has its own branch.
+
+**Contrast**, card against its own surface: light 13.8 (title) / 13.9 (CTA) /
+12.8 (nav links); dark 16.2 / 16.2 / 15.2. In dark the card inverts to linen with
+a dark button, which is `--ink-plate` doing its job.
+
+**Locks updated:** `stm-sticky-bar` must now be *absent* from service-page HTML,
+`.stm-sticky-bar--slab` and the `:has()` tab-bar rule absent from CSS,
+`stm-close-nav` / `stm-nav-link` present, and `.stm-close` must carry
+`border-radius: 1.15rem`. 169 tests pass.
