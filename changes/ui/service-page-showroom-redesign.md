@@ -661,3 +661,24 @@ Do not revert the inner argument. Do not change URLs, H1, or hero. Do not restor
 2. Mobile: extra space under the in-page close CTA so it clears the fixed Pedir creativos bar.
 3. Light theme: kickers, ficha row labels, and inactive spine links use near-ink opacities (AA on cream). Active spine stays full foreground.
 4. SEO follow-up in the same ship: `#route-data` has no `[gisela_sm](` markdown; `AggregateRating` 4.8/173 on bilingüe + `/servicios/` ES+EN only.
+
+## 2026-09-02 service inner mobile = document
+
+Juan Pablo rejected chips, info pills, and rounded cards on service INNER mobile. Ship the same document as desktop, on the phone. Do not wait.
+
+### Runtime touchpoints
+- `src/components/ServicePageInner.tsx`
+- `src/components/ServiceLandingPage.tsx`
+- `src/components/mobile/MobileAppShell.tsx`
+- `src/styles/templates.css`
+- `src/data/service-inner-argument.test.tsx`
+
+### What changed
+1. Deleted the sticky chip/pill nav. Index is the section kicker in type (`1 · Ficha`), sticky as text.
+2. Ficha is spec rows (label then value, hairlines). Recibes is a ruled list. Process is `01`–`04` type with a 2px top rule, not numbered circles. Encaja is two stacked ruled lists. FAQ is hairline `<details>`.
+3. No rounded cards, tiles, or 16px radius panels on the inner. Empezar stays the black/ink close band (0-radius).
+4. One chrome for Pedir creativos on these pages: full-bleed 0-radius ink slab. The global 4-icon tab bar is hidden on service inner mobile (`:has(.stm-sticky-bar--slab)` + `MobileAppShell`). Vertical/hub/home tab bar is unchanged.
+5. Desktop inner (spine + spec table + 4-col process + black Empezar band) is untouched. Hero, H1, routes, copy, FAQ answers, typeface, PAGE_REGISTRY / sitemap / llms.txt unchanged.
+
+### Verification
+1. `npx vitest run src/data/service-inner-argument.test.tsx`

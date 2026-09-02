@@ -416,7 +416,7 @@ const ServiceLandingPage = ({
               variant="mobile"
             />
 
-            <div className="stm-sticky-bar">
+            <div className="stm-sticky-bar stm-sticky-bar--slab">
               <a href={page.primaryCtaHref} className="stm-sticky-btn">
                 {page.primaryCtaLabel}
               </a>

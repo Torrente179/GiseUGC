@@ -1,5 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import MobileTabBar from '@/components/mobile/MobileTabBar';
+import { getServicePageIdFromPath } from '@/lib/locale-path';
 import {
   consumePendingContactDockAction,
   isMobileViewport,
@@ -18,7 +20,9 @@ const MobileContactSheet = lazy(() => import('@/components/mobile/MobileContactS
  * overlay; converting that to a vaul sheet is a tracked follow-up.
  */
 const MobileAppShell = () => {
+  const location = useLocation();
   const [contactOpen, setContactOpen] = useState(false);
+  const onServiceInner = Boolean(getServicePageIdFromPath(location.pathname));
 
   useEffect(() => {
     const handle = () => {
@@ -32,7 +36,11 @@ const MobileAppShell = () => {
 
   return (
     <>
-      <MobileTabBar contactOpen={contactOpen} onContact={() => setContactOpen(true)} hidden={contactOpen} />
+      <MobileTabBar
+        contactOpen={contactOpen}
+        onContact={() => setContactOpen(true)}
+        hidden={contactOpen || onServiceInner}
+      />
       {contactOpen ? (
         <Suspense fallback={null}>
           <MobileContactSheet open onOpenChange={setContactOpen} />
