@@ -822,7 +822,7 @@ assertion was replaced — that was the stepper rule the timeline supersedes.
 - Hero, H1, routes, copy, FAQ answers, `CONTENT_DATES`, schema, boot shells and
   the `:has(.stm-sticky-bar--slab)` tab-bar rule are all unchanged.
 
-### 2026-09-02b — Empezar rebuilt, sticky CTA replaced by the tab bar
+## 2026-09-02b Empezar rebuilt, sticky CTA replaced by the tab bar
 
 Juan Pablo, on the live build: "until 5 it is great, number 6 is crooked. Lets
 redesign this part and lets bring back the navigation menu rather than Pedir
