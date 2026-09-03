@@ -17,6 +17,28 @@ directions that were not taken):
 
 ## 1. What shipped
 
+`src/components/Hero.tsx`, `src/index.css` — 143 insertions, 13 deletions across
+2 files. Selectors touched, all inside `@media (max-width: 767px)` except the
+first and the last two:
+
+| Selector | Change |
+| --- | --- |
+| `.portrait-hero__phone-stack` | new; `display: none` at the base, so the deck never reaches desktop |
+| `.portrait-hero__picture` | `height` 55% → 60%, plus `overflow: hidden` to clip the oversized image |
+| `.portrait-hero__picture img` | new sizing block — see §2 |
+| `.portrait-hero__scrim` | ink ramp raised: solid at 41%, clear by 63% |
+| `.portrait-hero__phone-wrap` | `top: 27%` → `top: auto` + bottom anchor; `right` 1.25rem → 1.375rem; `width` 25vw → 30vw band |
+| `.portrait-hero__phone` | `transform: rotate(3deg)` |
+| `.portrait-hero__phone-stack--back` / `--mid` | new; the two turned cards and their `::after` washes |
+| `@media … and (max-height: 700px)` | new short-phone branch — band 56%, deck 26vw |
+| `@media … and (max-height: 650px)` | existing branch: `top: 22%` → bottom anchor, `width: 22vw` → clamped 24vw |
+| `@media … and (hover: hover)` | new; restates the turn under hover |
+| `@media … and (prefers-reduced-motion: reduce)` | new; restates the turn under reduced motion |
+
+In `Hero.tsx`: `HERO_DECK_CLIPS`, the `posterThumbSrc` import, and two
+`aria-hidden` spans rendered **before** the anchor so they paint beneath it by
+tree order — neither needs a `z-index`.
+
 The single reel card became a **deck of three**. The live card keeps the link,
 the play glyph and the `01 / 10` counter; two decorative cards sit behind it,
 turned `-11deg` and `-5.4deg`, dimmed with an `::after` wash, and carrying

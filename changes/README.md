@@ -65,9 +65,12 @@ Recent regressions came from mobile-only interaction differences such as viewpor
 
 ## Current Homepage Hero Source of Truth
 
-For any homepage hero or top-of-page navbar change, read:
+For any homepage hero or top-of-page navbar change, read these in order — the
+later entries supersede the earlier ones where they overlap:
 
 - [`2026-07-27-editorial-title-sequence-hero.md`](./2026-07-27-editorial-title-sequence-hero.md) — approved Home hero composition, assets, accessibility, and regression guardrails.
+- [`2026-09-02-hero-placa-neutral-surfaces-light-default.md`](./2026-09-02-hero-placa-neutral-surfaces-light-default.md) — direction "Placa": the H1 is the offer, not the name; the derived scrim knee (`--hero-copy-edge`) and why the 26rem headline cap keeps her lit. **Still current for desktop and tablet.**
+- [`2026-09-03-mobile-hero-reel-deck.md`](./2026-09-03-mobile-hero-reel-deck.md) — **current for mobile (`max-width: 767px`).** The reel deck, the oversized top-anchored crop that gets her head out from behind the navbar, and why the deck is anchored to the bottom rather than to a percentage of the stage.
 - [`ui/navbar-and-theater-hotfixes.md`](./ui/navbar-and-theater-hotfixes.md) — live overlay rule: `title-sequence-nav` on Home **and** service landings at rest, themed bar after scroll.
 
 ## Current Performance Source of Truth

@@ -90,6 +90,14 @@ mobile zone height on **both** made the image 55% of a box that was already
 55% — a third of the frame instead of a bit over half. The zone belongs on
 the wrapper only.
 
+> **Superseded for mobile on 2026-09-03.** "The zone belongs on the wrapper
+> only" still holds for the *band height*, but the `img` now deliberately
+> carries its own sizing at `max-width: 767px` — `width: 130%`,
+> `aspect-ratio: 1 / 2`, `max-width: none`, anchored to the top of the source.
+> That is what gets her head out from behind the navbar, and stripping it to
+> "restore" this note re-buries her. See
+> [`2026-09-03-mobile-hero-reel-deck.md`](./2026-09-03-mobile-hero-reel-deck.md) §2.
+
 ### Verified
 
 320 / 390 / 430 px (no horizontal overflow, CTA clears the dock at every
