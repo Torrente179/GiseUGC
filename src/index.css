@@ -992,6 +992,12 @@
     animation: portrait-phone-enter 1050ms var(--ease-out-expo) 180ms both;
   }
 
+  /* The deck is a mobile idea. Above the breakpoint the hero shows one card,
+     and the two behind it have no business taking up paint. */
+  .portrait-hero__phone-stack {
+    display: none;
+  }
+
   /* A plain media card, not an imitation handset. The drawn notch and home
      indicator this replaced read as a stock mockup, and they dated the frame
      to whichever phone was current when they were drawn. */
@@ -1263,11 +1269,34 @@
        so the lower half of the frame was never carrying the photograph. */
     .portrait-hero__picture {
       inset: 0 0 auto 0;
-      height: 55%;
+      height: 60%;
+      overflow: hidden;
     }
 
+    /* The old crop put the top of her head behind the navbar. `object-position`
+       could not fix it: it only slides the image inside a cover-fitted box, and
+       at cover scale the source's 95 rows of headroom compress to 12px — less
+       than the nav plate is tall. So the image is deliberately oversized and
+       anchored to the top of the source instead: 130% of the column, 1:2 like
+       the mobile crop it is served from, which puts her hair at ~96px and lets
+       the nav sit over background rather than over her.
+
+       `aspect-ratio` (not `height: auto`) is what keeps this CLS-free — the
+       element's width/height attributes describe the DESKTOP source, so an auto
+       height would reserve a 16:9 box and then jump on load.
+
+       The horizontal bias walks her left of centre so the reel deck lands
+       beside her face rather than across her jaw. */
     .portrait-hero__picture img {
-      object-position: 50% 18%;
+      inset: 0 auto auto 0;
+      left: -26.4%;
+      width: 130%;
+      /* Preflight's `img { max-width: 100% }` clamps the oversize straight back
+         to the column width, which is the whole point of this rule. */
+      max-width: none;
+      height: auto;
+      aspect-ratio: 1 / 2;
+      object-position: 50% 0;
     }
 
     .portrait-hero__scrim {
@@ -1281,10 +1310,10 @@
         linear-gradient(
           0deg,
           hsl(var(--ink-surface)) 0%,
-          hsl(var(--ink-surface)) 44%,
-          hsl(var(--ink-surface) / 0.82) 50%,
-          hsl(var(--ink-surface) / 0.25) 60%,
-          hsl(var(--ink-surface) / 0) 70%
+          hsl(var(--ink-surface)) 41%,
+          hsl(var(--ink-surface) / 0.85) 47%,
+          hsl(var(--ink-surface) / 0.35) 54%,
+          hsl(var(--ink-surface) / 0) 63%
         );
     }
 
@@ -1350,18 +1379,73 @@
       font-size: 0.8125rem;
     }
 
+    /* Anchored to the bottom, not to a percentage of the stage — and squared
+       off against the copy's own gutter rather than the old 1.25rem, so the
+       deck and the text column share a right edge.
+
+       The bottom anchor is what makes this hold up. The stage is
+       `max(40rem, 100svh - dock)`, so its height moves with the device while
+       the copy's does not, and a percentage `top` that cleared the signature
+       row on a 844-tall phone landed 22px inside it on a 740-tall one. This
+       offset is the copy's own inset plus its height plus a gap, so the
+       clearance stays put as the stage grows. */
     .portrait-hero__phone-wrap {
       position: absolute;
       z-index: 1;
-      top: 27%;
-      right: 1.25rem;
-      width: clamp(5.5rem, 25vw, 7rem);
+      top: auto;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 1.6rem + 18.5rem);
+      right: 1.375rem;
+      width: clamp(6.25rem, 30vw, 8rem);
       margin: 0;
     }
 
     .portrait-hero__phone {
       border-radius: 0.875rem;
       box-shadow: 0 24px 48px -22px rgba(0, 0, 0, 0.9);
+      transform: rotate(3deg);
+    }
+
+    /* One card says there is a video. Three, turned and dimmed, say there are
+       ten and that they are different takes — the count stops being a number in
+       a chip and becomes something you can see. These two are decorative and
+       sit below the live card in paint order by DOM position, so neither needs
+       a z-index of its own. */
+    .portrait-hero__phone-stack {
+      position: absolute;
+      inset: 0;
+      display: block;
+      overflow: hidden;
+      border: 1px solid hsl(var(--pure-linen) / 0.16);
+      border-radius: 0.875rem;
+      background-position: 50% 50%;
+      background-size: cover;
+      box-shadow: 0 18px 34px -22px rgba(0, 0, 0, 0.9);
+      transform-origin: 50% 100%;
+    }
+
+    .portrait-hero__phone-stack::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+    }
+
+    .portrait-hero__phone-stack--back {
+      opacity: 0.8;
+      transform: rotate(-11deg) translate3d(-14.4%, -5.7%, 0) scale(0.94);
+    }
+
+    .portrait-hero__phone-stack--back::after {
+      background: rgba(28, 28, 28, 0.46);
+    }
+
+    .portrait-hero__phone-stack--mid {
+      opacity: 0.92;
+      transform: rotate(-5.4deg) translate3d(-6.8%, -2.9%, 0) scale(0.97);
+    }
+
+    .portrait-hero__phone-stack--mid::after {
+      background: rgba(28, 28, 28, 0.28);
     }
 
     .portrait-hero__phone-caption {
@@ -1381,6 +1465,18 @@
     .portrait-hero__intro {
       gap: 1px;
       padding: 1px;
+    }
+  }
+
+  /* On a short phone the stage sits on its 40rem floor, so the same deck rides
+     much higher up the photograph. Trimming it keeps it off her face. */
+  @media (max-width: 767px) and (max-height: 700px) {
+    .portrait-hero__picture {
+      height: 56%;
+    }
+
+    .portrait-hero__phone-wrap {
+      width: clamp(5.25rem, 26vw, 6.75rem);
     }
   }
 
@@ -1404,8 +1500,8 @@
     }
 
     .portrait-hero__phone-wrap {
-      right: 1rem;
-      width: 24vw;
+      right: 1.15rem;
+      width: 28vw;
     }
   }
 
@@ -1457,8 +1553,8 @@
     }
 
     .portrait-hero__phone-wrap {
-      top: 22%;
-      width: 22vw;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 1.05rem + 12rem);
+      width: clamp(4.75rem, 24vw, 6rem);
     }
   }
 
@@ -1511,6 +1607,22 @@
     .portrait-hero__cta:hover .portrait-hero__cta-mark,
     .portrait-hero__phone:hover {
       transform: none;
+    }
+  }
+
+  /* Both of these restate the deck's turn, because the rules they override set
+     `transform` as a whole and would otherwise flatten the top card on hover.
+     They sit here, after those rules, so the cascade resolves without
+     `!important`. */
+  @media (max-width: 767px) and (hover: hover) {
+    .portrait-hero__phone:hover {
+      transform: rotate(3deg) translate3d(0, -3px, 0);
+    }
+  }
+
+  @media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+    .portrait-hero__phone:hover {
+      transform: rotate(3deg);
     }
   }
 

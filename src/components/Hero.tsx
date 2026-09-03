@@ -4,6 +4,7 @@ import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
 import {
   getPosterVariantSrc,
   LEGACY_REEL_CLIPS,
+  posterThumbSrc,
 } from '@/data/portfolio-clips';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useMediaIntent } from '@/hooks/use-media-intent';
@@ -12,6 +13,11 @@ import { useTranslation } from '@/lib/locale-context';
 const HERO_REEL_CLIPS = LEGACY_REEL_CLIPS;
 const HERO_INTRO_CLIP_COUNT = 3;
 const HERO_INTRO_CLIPS = HERO_REEL_CLIPS.slice(0, HERO_INTRO_CLIP_COUNT);
+
+// The two cards behind the live one on mobile. Fixed rather than derived from
+// the reel index: a pile of prints does not reshuffle itself every 3.5s, and
+// they are dimmed and turned far enough that a repeat would not read anyway.
+const HERO_DECK_CLIPS = [HERO_REEL_CLIPS[8], HERO_REEL_CLIPS[5]].filter(Boolean);
 
 const HERO_INTRO_STORAGE_KEY = 'gisela:portrait-phone-intro';
 const HERO_INTRO_VERSION = 'phone-contact-strip-v1';
@@ -254,6 +260,18 @@ const Hero = () => {
           </div>
 
           <div className="portrait-hero__phone-wrap">
+            {/* One card says there is a video; a stack says there are ten of
+                them, and that they are different takes. Purely decorative —
+                the card on top carries the link, the label and the count. */}
+            {HERO_DECK_CLIPS.map((clip, index) => (
+              <span
+                key={clip.id}
+                className={`portrait-hero__phone-stack portrait-hero__phone-stack--${index === 0 ? 'back' : 'mid'}`}
+                style={{ backgroundImage: `url(${posterThumbSrc(clip.posterSrc)})` }}
+                aria-hidden="true"
+              />
+            ))}
+
             <a
               href="#portfolio"
               className="portrait-hero__phone"
