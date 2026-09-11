@@ -27,7 +27,7 @@ This folder is organized by subsystem instead of by date.
 - `seo/`
   - Canonicals, metadata, schema, crawlability, and language-routing behavior.
   - **Current crawl-trust / hub indexes:** `seo/seo-crawl-trust.md` —
-    honest homepage proof (28+/173/4.8/ES+EN), CONTENT_DATES, Fiverr canonical
+    honest homepage proof (28+/177/4.7/ES+EN), CONTENT_DATES, Fiverr canonical
     without `?source=gig_page`, and Person `alternateName`.
     **Current hub index copy:** `seo/2026-09-01-hire-intent-hub-copy.md` —
     hire-intent title/H1/body on the six existing hub routes. Read both

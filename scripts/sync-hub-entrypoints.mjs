@@ -17,8 +17,8 @@ if (!DATE_MODIFIED) throw new Error('Unable to read CONTENT_DATES.hubs');
 const FIVERR = 'https://www.fiverr.com/gisela_sm';
 const FIVERR_AGGREGATE_RATING = {
   '@type': 'AggregateRating',
-  ratingValue: '4.8',
-  reviewCount: '173',
+  ratingValue: '4.7',
+  reviewCount: '177',
   bestRating: '5',
   worstRating: '1',
 };
@@ -43,7 +43,7 @@ const hubs = [
     childrenTitle: 'Qué puedes contratar',
     contactLabel: 'Contáctame',
     contact: '/#contact',
-    proof: `Llevo 28+ campañas de marca en beauty, moda, tech y lifestyle. Gisela Saldarriaga trabaja en Fiverr como [gisela_sm](${FIVERR}): 4.8/5 en 173 reseñas verificadas.`,
+    proof: `Llevo 28+ campañas de marca en beauty, moda, tech y lifestyle. Gisela Saldarriaga trabaja en Fiverr como [gisela_sm](${FIVERR}): 4.7/5 en 177 reseñas verificadas.`,
     secondary: [
       ['/verticales/', 'UGC por industria'],
       ['/recursos/', 'Guías para contratar'],
@@ -78,7 +78,7 @@ const hubs = [
     childrenTitle: 'What you can hire',
     contactLabel: 'Contact me',
     contact: '/en/#contact',
-    proof: `I’ve run 28+ brand campaigns in beauty, fashion, tech, and lifestyle. Gisela Saldarriaga works on Fiverr as [gisela_sm](${FIVERR}): 4.8/5 from 173 verified reviews.`,
+    proof: `I’ve run 28+ brand campaigns in beauty, fashion, tech, and lifestyle. Gisela Saldarriaga works on Fiverr as [gisela_sm](${FIVERR}): 4.7/5 from 177 verified reviews.`,
     secondary: [
       ['/en/verticals/', 'UGC by industry'],
       ['/en/resources/', 'Guides to hire'],

@@ -101,17 +101,17 @@ describe('service inner argument stays crawlable', () => {
     },
   );
 
-  it('keeps 4.8/173 GEO proof on bilingüe only, with a query-free Fiverr href', () => {
+  it('keeps 4.7/177 GEO proof on bilingüe only, with a query-free Fiverr href', () => {
     const { html: es, raw: esRaw } = renderService('bilingual-ugc-creator', 'es');
     const { html: en, raw: enRaw } = renderService('bilingual-ugc-creator', 'en');
     expect(es).toContain('Gisela Saldarriaga es creadora UGC bilingüe');
-    expect(es).toContain('4.8/5 en 173 reseñas verificadas');
+    expect(es).toContain('4.7/5 en 177 reseñas verificadas');
     expect(es).toContain('28+ campañas de marca');
     expect(es).toContain(`href="${FIVERR_PROFILE_URL}"`);
     expect(es).not.toContain('fiverr.com/gisela_sm?');
     expect(es).toContain('un tope de 65 palabras por video');
     expect(en).toContain('Gisela Saldarriaga is a bilingual UGC creator');
-    expect(en).toContain('4.8/5 from 173 verified reviews');
+    expect(en).toContain('4.7/5 from 177 verified reviews');
     expect(en).toContain('65-word cap per video');
     expect(esRaw).not.toContain('[gisela_sm](');
     expect(enRaw).not.toContain('[gisela_sm](');
@@ -120,7 +120,9 @@ describe('service inner argument stays crawlable', () => {
     expect(esRaw).not.toContain('reviewBody');
 
     const { html: ads, raw: adsRaw } = renderService('ugc-ads-tiktok-meta', 'es');
+    expect(ads).not.toContain('4.7/5');
     expect(ads).not.toContain('4.8/5');
+    expect(ads).not.toContain('177 reseñas');
     expect(ads).not.toContain('173 reseñas');
     expect(adsRaw).not.toContain('AggregateRating');
   });
@@ -150,18 +152,22 @@ describe('service boot shells keep crawlable first HTML', () => {
     },
   );
 
-  it('bilingüe boot shells keep GEO + 65-word FAQ; ads pages do not get 4.8/173', () => {
+  it('bilingüe boot shells keep GEO + 65-word FAQ; ads pages do not get 4.7/177', () => {
     const es = readFileSync(resolve(root, 'servicios/creadora-ugc-bilingue/index.html'), 'utf8');
     const en = readFileSync(resolve(root, 'en/services/bilingual-ugc-creator/index.html'), 'utf8');
     const ads = readFileSync(resolve(root, 'servicios/ugc-ads-tiktok-meta/index.html'), 'utf8');
     expect(es).toContain('Gisela Saldarriaga es creadora UGC bilingüe');
     expect(es).toContain('href="https://www.fiverr.com/gisela_sm"');
     expect(es).not.toContain('fiverr.com/gisela_sm?');
+    expect(es).toContain('4.7/5 en 177 reseñas verificadas');
+    expect(en).toContain('4.7/5 from 177 verified reviews');
     expect(es).toContain('un tope de 65 palabras por video');
     expect(en).toContain('65-word cap per video');
     expect(es).not.toContain('[gisela_sm](');
     expect(es).toContain('AggregateRating');
     expect(en).toContain('AggregateRating');
+    expect(ads).not.toContain('4.7/5 en 177');
+    expect(ads).not.toContain('4.7/5 from 177');
     expect(ads).not.toContain('4.8/5 en 173');
     expect(ads).not.toContain('4.8/5 from 173');
     expect(ads).not.toContain('AggregateRating');

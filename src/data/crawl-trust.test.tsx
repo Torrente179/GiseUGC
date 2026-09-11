@@ -49,11 +49,11 @@ describe('site proof figures stay internally consistent', () => {
 });
 
 describe('homepage prerender emits real proof, not zeros', () => {
-  it('Spanish manifesto HTML includes 28+, 173, 4.8 and ES+EN', () => {
+  it('Spanish manifesto HTML includes 28+, 177, 4.7 and ES+EN', () => {
     const html = renderManifesto('/');
     expect(html).toContain('28+');
-    expect(html).toContain('173');
-    expect(html).toContain('4.8');
+    expect(html).toContain('177');
+    expect(html).toContain('4.7');
     expect(html).toContain('ES+EN');
     expect(html).not.toMatch(/>0\+<|>0%<|>0M\+/u);
     expect(html).toContain('Marcas');
@@ -63,14 +63,14 @@ describe('homepage prerender emits real proof, not zeros', () => {
   it('English manifesto HTML uses the same numerals', () => {
     const html = renderManifesto('/en/');
     expect(html).toContain('28+');
-    expect(html).toContain('173');
-    expect(html).toContain('4.8');
+    expect(html).toContain('177');
+    expect(html).toContain('4.7');
     expect(html).toContain('Fiverr reviews');
   });
 });
 
 describe('homepage schema matches visible Fiverr proof', () => {
-  it.each(['index.html', 'en/index.html'])('%s has AggregateRating 4.8/173 and no invented reviews', (file) => {
+  it.each(['index.html', 'en/index.html'])('%s has AggregateRating 4.7/177 and no invented reviews', (file) => {
     const graph = extractJsonLd(read(file));
     const business = graph['@graph'].find((node) => node['@type'] === 'ProfessionalService');
     expect(business).toBeTruthy();
@@ -241,8 +241,8 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
       expect(html.toLowerCase()).toContain('<h1');
       if (hub.hubId === 'services') {
         expect(html).toContain('AggregateRating');
-        expect(html).toContain('"ratingValue":"4.8"');
-        expect(html).toContain('"reviewCount":"173"');
+        expect(html).toContain('"ratingValue":"4.7"');
+        expect(html).toContain('"reviewCount":"177"');
       } else {
         expect(html).not.toContain('AggregateRating');
       }

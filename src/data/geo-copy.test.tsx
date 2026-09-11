@@ -19,10 +19,10 @@ import { inlineCopyHrefs, visibleInlineCopy } from '@/lib/inline-copy-links';
 const FIVERR_HREF = `href="${FIVERR_PROFILE_URL}"`;
 
 const FACT_ES =
-  'Gisela Saldarriaga es creadora UGC bilingüe. Produce desde Medellín anuncios para TikTok y Meta, demos, reseñas y videos de portavoz en español e inglés para marcas en el mercado hispano de Estados Unidos, España y LatAm. Trabaja en Fiverr como gisela_sm: 4.8/5 en 173 reseñas verificadas. Lleva 28+ campañas de marca. El contenido se entrega a la marca; no lo publica en sus redes salvo un acuerdo de ambassador.';
+  'Gisela Saldarriaga es creadora UGC bilingüe. Produce desde Medellín anuncios para TikTok y Meta, demos, reseñas y videos de portavoz en español e inglés para marcas en el mercado hispano de Estados Unidos, España y LatAm. Trabaja en Fiverr como gisela_sm: 4.7/5 en 177 reseñas verificadas. Lleva 28+ campañas de marca. El contenido se entrega a la marca; no lo publica en sus redes salvo un acuerdo de ambassador.';
 
 const FACT_EN =
-  'Gisela Saldarriaga is a bilingual UGC creator. She produces TikTok and Meta ads, demos, reviews, and spokesperson videos from Medellín, in Spanish and English, for US Hispanic, Spain, and LatAm brands. She works on Fiverr as gisela_sm: 4.8/5 from 173 verified reviews. 28+ brand campaigns. Content is delivered to the brand; she does not post client work unless it is an ambassador deal.';
+  'Gisela Saldarriaga is a bilingual UGC creator. She produces TikTok and Meta ads, demos, reviews, and spokesperson videos from Medellín, in Spanish and English, for US Hispanic, Spain, and LatAm brands. She works on Fiverr as gisela_sm: 4.7/5 from 177 verified reviews. 28+ brand campaigns. Content is delivered to the brand; she does not post client work unless it is an ambassador deal.';
 
 const renderAt = (path: string, node: React.ReactNode) =>
   renderToStaticMarkup(
@@ -65,7 +65,7 @@ describe('GEO copy on bilingual service pages', () => {
     expect(introAt).toBeGreaterThan(-1);
     expect(factAt).toBeGreaterThan(introAt);
     expect(requestAt).toBeGreaterThan(factAt);
-    expect(html).toContain('4.8/5 en 173 reseñas verificadas');
+    expect(html).toContain('4.7/5 en 177 reseñas verificadas');
     expect(html).toContain('28+ campañas de marca');
     assertCrawlableFiverrLink(html);
     expect(html).toContain('¿Cómo trabajas el inglés?');
@@ -100,7 +100,7 @@ describe('GEO copy on bilingual service pages', () => {
     expect(introAt).toBeGreaterThan(-1);
     expect(factAt).toBeGreaterThan(introAt);
     expect(requestAt).toBeGreaterThan(factAt);
-    expect(html).toContain('4.8/5 from 173 verified reviews');
+    expect(html).toContain('4.7/5 from 177 verified reviews');
     expect(html).toContain('28+ brand campaigns');
     assertCrawlableFiverrLink(html);
     expect(html).toContain('How do you work in English?');
@@ -113,14 +113,14 @@ describe('GEO copy on bilingual service pages', () => {
 });
 
 describe('GEO copy on how-to-hire resource pages', () => {
-  it('ES hire guide names gisela_sm 4.8/173 and adds an evaluable profile before the CTA', () => {
+  it('ES hire guide names gisela_sm 4.7/177 and adds an evaluable profile before the CTA', () => {
     const page = getResourcePageContent('how-to-hire-ugc-creator', 'es');
     const findSection = page.sections.find((section) => section.title === 'Dónde encontrar creadoras UGC profesionales');
     const profile = page.sections.find((section) => section.title === 'Un perfil que puedes evaluar ahora');
     const findCopy = findSection?.body.join('\n') ?? '';
     const profileCopy = profile?.body.join('\n') ?? '';
 
-    expect(visibleInlineCopy(findCopy)).toContain('gisela_sm (4.8/5, 173 reseñas)');
+    expect(visibleInlineCopy(findCopy)).toContain('gisela_sm (4.7/5, 177 reseñas)');
     expect(inlineCopyHrefs(findCopy)).toEqual([FIVERR_PROFILE_URL]);
     expect(visibleInlineCopy(profileCopy)).toContain(FACT_ES);
     expect(profileCopy).toContain(`[Creadora UGC bilingüe](${getServicePath('bilingual-ugc-creator', 'es')})`);
@@ -143,7 +143,7 @@ describe('GEO copy on how-to-hire resource pages', () => {
     expect(fiverrAt).toBeGreaterThan(billoAt);
     expect(profileAt).toBeGreaterThan(fiverrAt);
     expect(ctaAt).toBeGreaterThan(profileAt);
-    expect(html).toContain('(4.8/5, 173 reseñas)');
+    expect(html).toContain('(4.7/5, 177 reseñas)');
     expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.resources, 'es'));
     expect(html).toContain('Gisela Saldarriaga es creadora UGC bilingüe');
     expect(html).toContain(`href="${getServicePath('bilingual-ugc-creator', 'es')}"`);
@@ -151,14 +151,14 @@ describe('GEO copy on how-to-hire resource pages', () => {
     expect(raw).not.toContain('[gisela_sm](');
   });
 
-  it('EN hire guide names gisela_sm 4.8/173 and adds an evaluable profile before the CTA', () => {
+  it('EN hire guide names gisela_sm 4.7/177 and adds an evaluable profile before the CTA', () => {
     const page = getResourcePageContent('how-to-hire-ugc-creator', 'en');
     const findSection = page.sections.find((section) => section.title === 'Where to find professional UGC creators');
     const profile = page.sections.find((section) => section.title === 'A profile you can evaluate now');
     const findCopy = findSection?.body.join('\n') ?? '';
     const profileCopy = profile?.body.join('\n') ?? '';
 
-    expect(visibleInlineCopy(findCopy)).toContain('gisela_sm (4.8/5, 173 reviews)');
+    expect(visibleInlineCopy(findCopy)).toContain('gisela_sm (4.7/5, 177 reviews)');
     expect(inlineCopyHrefs(findCopy)).toEqual([FIVERR_PROFILE_URL]);
     expect(visibleInlineCopy(profileCopy)).toContain(FACT_EN);
     expect(profileCopy).toContain(`[Bilingual UGC creator](${getServicePath('bilingual-ugc-creator', 'en')})`);
@@ -181,7 +181,7 @@ describe('GEO copy on how-to-hire resource pages', () => {
     expect(fiverrAt).toBeGreaterThan(billoAt);
     expect(profileAt).toBeGreaterThan(fiverrAt);
     expect(ctaAt).toBeGreaterThan(profileAt);
-    expect(html).toContain('(4.8/5, 173 reviews)');
+    expect(html).toContain('(4.7/5, 177 reviews)');
     expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.resources, 'en'));
     expect(html).toContain(`href="${getServicePath('bilingual-ugc-creator', 'en')}"`);
     assertCrawlableFiverrLink(html);

@@ -107,12 +107,12 @@ describe('hire-intent hub copy', () => {
     }
   });
 
-  it('puts 4.8/173 only on /servicios/ and /en/services/', () => {
+  it('puts 4.7/177 only on /servicios/ and /en/services/', () => {
     for (const entry of getHubPageRouteEntries()) {
       const html = visibleHtml(renderHub(entry.path, entry.hubId, entry.locale));
       if (entry.hubId === 'services') {
-        expect(html).toContain('4.8/5');
-        expect(html).toContain('173');
+        expect(html).toContain('4.7/5');
+        expect(html).toContain('177');
         expect(html).toContain(`href="${FIVERR_PROFILE_URL}"`);
         expect(html).toContain('>gisela_sm</a>');
         expect(html).not.toContain('fiverr.com/gisela_sm?');
@@ -173,7 +173,7 @@ describe('hire-intent hub copy', () => {
         expect(html).toContain(child.blurb!);
       }
       if (hub.hubId === 'services') {
-        expect(html).toContain('4.8/5');
+        expect(html).toContain('4.7/5');
         expect(html).toContain(`href="${FIVERR_PROFILE_URL}"`);
       } else {
         expect(html).not.toContain('4.8');

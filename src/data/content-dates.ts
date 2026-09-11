@@ -3,7 +3,7 @@
  * Sitemap lastmod, JSON-LD dateModified, visible "last updated" labels, and
  * llms Last-Updated should read from here so those surfaces cannot drift.
  *
- * home      — this crawl-trust pass (proof, schema, llms)
+ * home      — Fiverr seller-overall proof sync (4.7/177, schema, llms)
  * hubs      — hire-intent /servicios|verticales|recursos index copy
  * services  — GEO copy on bilingual UGC + service inner template (2026-08-31)
  * verticals — last vertical entry HTML / template commit
@@ -11,7 +11,7 @@
  * legal     — privacy / terms content commit
  */
 export const CONTENT_DATES = {
-  home: '2026-08-31',
+  home: '2026-09-11',
   hubs: '2026-09-01',
   services: '2026-08-31',
   verticals: '2026-07-29',
