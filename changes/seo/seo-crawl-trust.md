@@ -15,15 +15,17 @@ Related current schema delivery still lives in `seo-ssr-structured-data-and-meta
 Single source: `src/data/site-proof.ts`
 
 - `28+` brand campaigns
-- `173` Fiverr reviews
-- `4.8` Fiverr rating
+- `177` Fiverr reviews
+- `4.7` Fiverr rating
 - `ES+EN`
 
-`ManifestoChapter` emits those values in the first HTML snapshot (no animated zeros for Googlebot). Homepage JSON-LD keeps `AggregateRating` 4.8/173 with `worstRating: "1"` and **does not** invent `Review` / `reviewBody` nodes.
+Canonical Fiverr proof is **seller overall** on `https://www.fiverr.com/gisela_sm` (no `?source=`). Ignore gig-level ratings (one gig can still show 4.8).
+
+`ManifestoChapter` emits those values in the first HTML snapshot (no animated zeros for Googlebot). Homepage JSON-LD keeps `AggregateRating` 4.7/177 with `worstRating: "1"` and **does not** invent `Review` / `reviewBody` nodes.
 
 The same marketplace `AggregateRating` (no `Review` / `reviewBody`) is restored on:
 
-- `/servicios/creadora-ugc-bilingue/` and `/en/services/bilingual-ugc-creator/` — on the Service node, because those pages show 4.8/173 in the GEO fact.
+- `/servicios/creadora-ugc-bilingue/` and `/en/services/bilingual-ugc-creator/` — on the Service node, because those pages show 4.7/177 in the GEO fact.
 - `/servicios/` and `/en/services/` — on a ProfessionalService node, because the hub shows the same proof line.
 
 Other service pages and the verticals/resources hubs must **not** grow a rating. Homepage Person `alternateName: Gisela.UGC` is unchanged.
@@ -62,7 +64,7 @@ Rules:
 - Child links only to existing money-page routes (`src/data/hub-pages.ts`).
 - Hire-intent title, meta, H1, and body now live on these routes — see
   `2026-09-01-hire-intent-hub-copy.md`. Do not invent new URLs.
-- Fiverr 4.8/173 proof is services-hub only. Those two hub shells (and `HubPage` SSR) include `AggregateRating` 4.8/173; verticals and resources hubs do not.
+- Fiverr 4.7/177 proof is services-hub only. Those two hub shells (and `HubPage` SSR) include `AggregateRating` 4.7/177; verticals and resources hubs do not.
 - Do not retarget bilingüe (`/servicios/creadora-ugc-bilingue/`) or cómo-contratar (`/recursos/como-contratar-creadora-ugc/`) breadcrumbs onto these hubs.
 
 Routing trap: `scripts/normalize-client-entrypoints.mjs` must map the **exact** hub `index.html` files to `src/entry-hub.tsx` *before* the `servicios/*` → `entry-service.tsx` prefix match. Otherwise the hub hydrates `ServiceLandingPage` and React 404s.
@@ -89,3 +91,17 @@ idle (`requestIdleCallback` timeout ~3.5s). See
 `changes/2026-04-20-analytics-defer-lazymotion-variable-fonts.md`.
 
 Tests: `src/lib/gtm-loader.test.ts`. No hub/copy/schema/llms changes.
+
+## 2026-09-11 — seller-overall proof sync (4.8/173 → 4.7/177)
+
+Live Fiverr seller overall at `https://www.fiverr.com/gisela_sm` is **4.7 / 177**. Production crawlable proof still said 4.8/173. This pass hardens the existing surfaces — no rebuild, no new routes, no invented `Review` / `reviewBody` nodes, no GiseUGC keyword.
+
+Synced:
+
+- `src/data/site-proof.ts`: `fiverrRating` 4.7, `fiverrReviewCount` 177. `FIVERR_RATING_DISTRIBUTION` buckets from the live seller profile (156 / 12 / 4 / 0 / 5) so they sum to 177.
+- `AggregateRating` `ratingValue` `"4.7"` / `reviewCount` `"177"` on homepage, `/servicios/` + `/en/services/`, and bilingüe Service nodes. `worstRating`/`bestRating` unchanged.
+- Locked Landing Content GEO blocks and short proof lines ES+EN on homepage noscript, bilingüe, `/servicios/` hub twins, and cómo-contratar React copy. Fiverr href stays query-free.
+- `public/llms.txt` and `public/llms-full.txt`; `CONTENT_DATES.home` / llms `Last-Updated` → `2026-09-11`. Hub/service/resource family dates stay (this is a figure sync, not a GEO rewrite of those families).
+- Tests: crawl-trust, geo-copy, hub-pages, service-inner-argument.
+
+Gig-level 4.8(139) is ignored. Public brand remains Gisela Saldarriaga / Gisela.UGC.

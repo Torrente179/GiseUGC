@@ -5,8 +5,8 @@ const rootDir = path.resolve(path.dirname(new URL(import.meta.url).pathname), '.
 
 const FIVERR_AGGREGATE_RATING = {
   '@type': 'AggregateRating',
-  ratingValue: '4.8',
-  reviewCount: '173',
+  ratingValue: '4.7',
+  reviewCount: '177',
   bestRating: '5',
   worstRating: '1',
 };

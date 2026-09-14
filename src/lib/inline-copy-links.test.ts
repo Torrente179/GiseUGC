@@ -8,16 +8,16 @@ describe('parseInlineCopy', () => {
 
   it('splits a Fiverr handle link without keeping markdown in the visible text', () => {
     const segments = parseInlineCopy(
-      'Trabaja en Fiverr como [gisela_sm](https://www.fiverr.com/gisela_sm): 4.8/5 en 173 reseñas verificadas.',
+      'Trabaja en Fiverr como [gisela_sm](https://www.fiverr.com/gisela_sm): 4.7/5 en 177 reseñas verificadas.',
     );
     expect(segments).toEqual([
       { type: 'text', value: 'Trabaja en Fiverr como ' },
       { type: 'link', label: 'gisela_sm', href: 'https://www.fiverr.com/gisela_sm' },
-      { type: 'text', value: ': 4.8/5 en 173 reseñas verificadas.' },
+      { type: 'text', value: ': 4.7/5 en 177 reseñas verificadas.' },
     ]);
     expect(segments.some((segment) => segment.type === 'link' && segment.href.includes('?'))).toBe(false);
-    expect(visibleInlineCopy('Trabaja en Fiverr como [gisela_sm](https://www.fiverr.com/gisela_sm): 4.8/5.')).toBe(
-      'Trabaja en Fiverr como gisela_sm: 4.8/5.',
+    expect(visibleInlineCopy('Trabaja en Fiverr como [gisela_sm](https://www.fiverr.com/gisela_sm): 4.7/5.')).toBe(
+      'Trabaja en Fiverr como gisela_sm: 4.7/5.',
     );
   });
 
@@ -33,7 +33,7 @@ describe('serializeRouteDataJson', () => {
   it('does not emit Fiverr markdown in the JSON crawlers read', () => {
     const json = serializeRouteDataJson({
       geoFact:
-        'Trabaja en Fiverr como [gisela_sm](https://www.fiverr.com/gisela_sm): 4.8/5 en 173 reseñas verificadas.',
+        'Trabaja en Fiverr como [gisela_sm](https://www.fiverr.com/gisela_sm): 4.7/5 en 177 reseñas verificadas.',
     });
     expect(json).not.toContain('[gisela_sm](');
     expect(json).toContain('"label":"gisela_sm"');

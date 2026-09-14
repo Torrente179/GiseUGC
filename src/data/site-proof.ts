@@ -11,8 +11,8 @@
  */
 export const SITE_PROOF = {
   brandCampaigns: 28,
-  fiverrRating: 4.8,
-  fiverrReviewCount: 173,
+  fiverrRating: 4.7,
+  fiverrReviewCount: 177,
   languages: 'ES+EN',
 } as const;
 
@@ -25,12 +25,13 @@ export const FIVERR_AGGREGATE_RATING = {
   worstRating: '1',
 };
 
+/** Seller-overall star buckets from https://www.fiverr.com/gisela_sm (not gig-level). */
 export const FIVERR_RATING_DISTRIBUTION = [
-  { stars: 5, count: 158 },
-  { stars: 4, count: 9 },
-  { stars: 3, count: 3 },
+  { stars: 5, count: 156 },
+  { stars: 4, count: 12 },
+  { stars: 3, count: 4 },
   { stars: 2, count: 0 },
-  { stars: 1, count: 3 },
+  { stars: 1, count: 5 },
 ] as const;
 
 export const formatProofValue = (value: number, suffix = '', decimals = 0): string => {

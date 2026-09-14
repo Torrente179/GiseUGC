@@ -1,6 +1,7 @@
 import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getServicePath } from '@/lib/locale-path';
 import { FIVERR_PROFILE_URL } from '@/lib/contact-channels';
+import { SITE_PROOF } from '@/data/site-proof';
 
 export type ServiceFeature = {
   title: string;
@@ -134,7 +135,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
         'Vertical video para TikTok, Reels, Meta Ads, landing creatives y páginas de producto.',
       ],
       geoFact:
-        `Gisela Saldarriaga es creadora UGC bilingüe. Produce desde Medellín anuncios para TikTok y Meta, demos, reseñas y videos de portavoz en español e inglés para marcas en el mercado hispano de Estados Unidos, España y LatAm. Trabaja en Fiverr como [gisela_sm](${FIVERR_PROFILE_URL}): 4.8/5 en 173 reseñas verificadas. Lleva 28+ campañas de marca. El contenido se entrega a la marca; no lo publica en sus redes salvo un acuerdo de ambassador.`,
+        `Gisela Saldarriaga es creadora UGC bilingüe. Produce desde Medellín anuncios para TikTok y Meta, demos, reseñas y videos de portavoz en español e inglés para marcas en el mercado hispano de Estados Unidos, España y LatAm. Trabaja en Fiverr como [gisela_sm](${FIVERR_PROFILE_URL}): ${SITE_PROOF.fiverrRating}/5 en ${SITE_PROOF.fiverrReviewCount} reseñas verificadas. Lleva ${SITE_PROOF.brandCampaigns}+ campañas de marca. El contenido se entrega a la marca; no lo publica en sus redes salvo un acuerdo de ambassador.`,
       processTitle: 'Cómo suelo trabajar este tipo de proyecto',
       processSteps: [
         {
@@ -267,7 +268,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
         'Vertical video for TikTok, Reels, Meta ads, landing creatives, and product pages.',
       ],
       geoFact:
-        `Gisela Saldarriaga is a bilingual UGC creator. She produces TikTok and Meta ads, demos, reviews, and spokesperson videos from Medellín, in Spanish and English, for US Hispanic, Spain, and LatAm brands. She works on Fiverr as [gisela_sm](${FIVERR_PROFILE_URL}): 4.8/5 from 173 verified reviews. 28+ brand campaigns. Content is delivered to the brand; she does not post client work unless it is an ambassador deal.`,
+        `Gisela Saldarriaga is a bilingual UGC creator. She produces TikTok and Meta ads, demos, reviews, and spokesperson videos from Medellín, in Spanish and English, for US Hispanic, Spain, and LatAm brands. She works on Fiverr as [gisela_sm](${FIVERR_PROFILE_URL}): ${SITE_PROOF.fiverrRating}/5 from ${SITE_PROOF.fiverrReviewCount} verified reviews. ${SITE_PROOF.brandCampaigns}+ brand campaigns. Content is delivered to the brand; she does not post client work unless it is an ambassador deal.`,
       processTitle: 'How this kind of project usually runs',
       processSteps: [
         {
