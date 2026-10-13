@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { getOgImageMetaForCanonical } from '@/lib/og-image';
 
 type AlternateLinks = {
   es: string;
@@ -14,8 +15,6 @@ type PageSeoProps = {
   alternates: AlternateLinks;
   structuredData?: Record<string, unknown>;
 };
-
-const OG_IMAGE = 'https://www.giselasaldarriaga.com/og-image-es-en-20260219.jpg?v=20260219';
 
 // JSON.stringify happily emits "</script>" if any value contains it, which
 // would close the tag early and turn the rest of the graph into markup.
@@ -49,6 +48,7 @@ const PageSeo = ({ title, description, canonical, locale, alternates, structured
   useEffect(() => {
     document.title = title;
     document.documentElement.lang = locale;
+    const og = getOgImageMetaForCanonical(canonical, title);
 
     upsertMeta('meta[name="description"]', 'name', 'description', description);
     upsertMeta('meta[name="robots"]', 'name', 'robots', 'index,follow');
@@ -57,10 +57,13 @@ const PageSeo = ({ title, description, canonical, locale, alternates, structured
     upsertMeta('meta[property="og:url"]', 'property', 'og:url', canonical);
     upsertMeta('meta[property="og:title"]', 'property', 'og:title', title);
     upsertMeta('meta[property="og:description"]', 'property', 'og:description', description);
-    upsertMeta('meta[property="og:image"]', 'property', 'og:image', OG_IMAGE);
-    upsertMeta('meta[property="og:image:url"]', 'property', 'og:image:url', OG_IMAGE);
-    upsertMeta('meta[property="og:image:secure_url"]', 'property', 'og:image:secure_url', OG_IMAGE);
-    upsertMeta('meta[property="og:image:alt"]', 'property', 'og:image:alt', title);
+    upsertMeta('meta[property="og:image"]', 'property', 'og:image', og.url);
+    upsertMeta('meta[property="og:image:url"]', 'property', 'og:image:url', og.url);
+    upsertMeta('meta[property="og:image:secure_url"]', 'property', 'og:image:secure_url', og.url);
+    upsertMeta('meta[property="og:image:type"]', 'property', 'og:image:type', 'image/jpeg');
+    upsertMeta('meta[property="og:image:width"]', 'property', 'og:image:width', String(og.width));
+    upsertMeta('meta[property="og:image:height"]', 'property', 'og:image:height', String(og.height));
+    upsertMeta('meta[property="og:image:alt"]', 'property', 'og:image:alt', og.alt);
     upsertMeta('meta[property="og:locale"]', 'property', 'og:locale', locale === 'es' ? 'es_CO' : 'en_US');
     upsertMeta(
       'meta[property="og:locale:alternate"]',
@@ -73,9 +76,9 @@ const PageSeo = ({ title, description, canonical, locale, alternates, structured
     upsertMeta('meta[name="twitter:url"]', 'name', 'twitter:url', canonical);
     upsertMeta('meta[name="twitter:title"]', 'name', 'twitter:title', title);
     upsertMeta('meta[name="twitter:description"]', 'name', 'twitter:description', description);
-    upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', OG_IMAGE);
-    upsertMeta('meta[name="twitter:image:src"]', 'name', 'twitter:image:src', OG_IMAGE);
-    upsertMeta('meta[name="twitter:image:alt"]', 'name', 'twitter:image:alt', title);
+    upsertMeta('meta[name="twitter:image"]', 'name', 'twitter:image', og.url);
+    upsertMeta('meta[name="twitter:image:src"]', 'name', 'twitter:image:src', og.url);
+    upsertMeta('meta[name="twitter:image:alt"]', 'name', 'twitter:image:alt', og.alt);
 
     upsertLink('link[rel="canonical"]', { rel: 'canonical', href: canonical });
     upsertLink('link[rel="alternate"][hreflang="es"]', {

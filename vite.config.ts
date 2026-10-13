@@ -3,14 +3,20 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { getAllEntrypointPaths } from "./src/lib/locale-path";
 import { writeSitemapFile } from "./src/lib/sitemap";
+import { writeVideoSitemapFile } from "./src/lib/video-sitemap";
+import { writeOgImages } from "./src/lib/og-image-render";
 
-const giselaSitemap = (): Plugin => ({
-  name: "gisela-sitemap",
+const giselaSeoArtifacts = (): Plugin => ({
+  name: "gisela-seo-artifacts",
   apply: "build",
-  buildStart() {
-    // Same path production serves: public/sitemap.xml copied to dist/sitemap.xml.
-    // Throw here so a broken generator fails the Vercel build instead of HTTP 500.
+  async buildStart() {
+    // Same paths production serves from public/ → dist/.
+    // URL sitemap, curated video sitemap, and OG generation fail the build.
     writeSitemapFile();
+    await writeVideoSitemapFile(process.cwd(), {
+      verifyUrls: process.env.SEO_SKIP_VIDEO_HEAD !== "1",
+    });
+    await writeOgImages(process.cwd(), { updateEntrypoints: true });
   },
 });
 
@@ -36,7 +42,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    giselaSitemap(),
+    giselaSeoArtifacts(),
   ].filter(Boolean),
   build: {
     manifest: true,

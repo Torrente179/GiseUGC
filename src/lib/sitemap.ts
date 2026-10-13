@@ -38,7 +38,7 @@ const FAMILY_SITEMAP_META: Record<
 
 const absoluteUrl = (path: string) => `${SITEMAP_ORIGIN}${path}`;
 
-const escapeXml = (value: string) =>
+export const escapeXml = (value: string) =>
   value
     .replace(/&/gu, '&amp;')
     .replace(/</gu, '&lt;')

@@ -6,8 +6,8 @@
 
 - document title
 - description and robots
-- Open Graph tags
-- Twitter tags
+- Open Graph tags (per-page hashed `/og/<slug>.<hash>.jpg`, or the shared fallback only when a route has no H1)
+- Twitter tags (`summary_large_image`)
 - canonical link
 - Spanish, English, and x-default hreflang links
 - optional route-specific JSON-LD script
@@ -44,6 +44,8 @@ When adding or renaming a route, update all of these together:
 - the matching data module
 - static HTML shell folder/file
 - `public/sitemap.xml` (generated from `PAGE_REGISTRY` + `CONTENT_DATES` during `vite build`)
+- `public/sitemap-video.xml` (curated homepage VideoObject clips only; see `src/data/video-sitemap-curated.ts`)
+- `src/data/og-image-manifest.json` and `public/og/*.jpg` (generated at build time)
 - any entrypoint enrichment data used by the route
 
 Do not hand-add the route to `vite.config.ts`; the registry generates the

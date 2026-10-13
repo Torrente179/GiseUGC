@@ -19,6 +19,14 @@ Single source: `src/data/site-proof.ts`
 - `4.7` Fiverr rating
 - `ES+EN`
 
+OG images read `getOgProofLine()` from that same file (`OG_PROOF_LINE_MODE`,
+default `exact`). A build check fails if the interpolated `exact` line drifts
+from `4.7/5 · 177 reseñas en Fiverr` / `4.7/5 · 177 reviews on Fiverr`.
+
+**Authority resync:** any change to `fiverrRating` or `fiverrReviewCount` must
+also trigger a resync of the off-site bios (Fiverr, LinkedIn, and the
+directories paste pack, owned by the Authority team).
+
 Canonical Fiverr proof is **seller overall** on `https://www.fiverr.com/gisela_sm` (no `?source=`). Ignore gig-level ratings (one gig can still show 4.8).
 
 `ManifestoChapter` emits those values in the first HTML snapshot (no animated zeros for Googlebot). Homepage JSON-LD keeps `AggregateRating` 4.7/177 with `worstRating: "1"` and **does not** invent `Review` / `reviewBody` nodes.
