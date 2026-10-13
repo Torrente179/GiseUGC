@@ -143,3 +143,20 @@ Homepage schema validated clean via
 - **Hub index copy — resolved 2026-09-01.** `/servicios/`, `/verticales/`,
   `/recursos/` and EN twins now carry hire-intent title/H1/body. See
   `2026-09-01-hire-intent-hub-copy.md`.
+
+## 2026-10-13 — Person `sameAs` YouTube (no rebuild)
+
+Homepage Person JSON-LD is still authored in the static shells
+(`index.html`, `en/index.html`). There is no shared React source for that
+graph — `Index.tsx` `PageSeo` does not emit homepage schema.
+
+Appended `"https://www.youtube.com/@GiselaSaldarriaga"` to the **Person**
+`sameAs` array on both homepages. Existing entries are unchanged. Fiverr
+stays `https://www.fiverr.com/gisela_sm` with no query string.
+ProfessionalService `sameAs` is untouched.
+
+FAQ schema and in-page links are owned by a parallel PR — this pass does
+not touch them.
+
+Hire-intent alias 301s and the IndexNow production ping are recorded in
+`seo-crawl-trust.md`.

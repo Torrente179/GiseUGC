@@ -36,6 +36,36 @@
       ],
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/contratar",
+      "destination": "/recursos/como-contratar-creadora-ugc/",
+      "statusCode": 301
+    },
+    {
+      "source": "/contratar/",
+      "destination": "/recursos/como-contratar-creadora-ugc/",
+      "statusCode": 301
+    },
+    {
+      "source": "/hire",
+      "destination": "/en/resources/how-to-hire-ugc-creator/",
+      "statusCode": 301
+    },
+    {
+      "source": "/hire/",
+      "destination": "/en/resources/how-to-hire-ugc-creator/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/hire",
+      "destination": "/en/resources/how-to-hire-ugc-creator/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/hire/",
+      "destination": "/en/resources/how-to-hire-ugc-creator/",
+      "statusCode": 301
     }
   ],
   "headers": [

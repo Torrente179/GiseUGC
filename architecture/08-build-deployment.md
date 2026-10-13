@@ -44,10 +44,24 @@
 
 `vercel.json` controls immutable caching for hashed assets, fonts, poster
 variants, and startup bridges; short edge revalidation for HTML; CSP and other
-security headers; and legacy language-query redirects.
+security headers; legacy language-query redirects; and hire-intent alias 301s
+(`/contratar` → `/recursos/como-contratar-creadora-ugc/`, `/hire` and
+`/en/hire` → `/en/resources/how-to-hire-ugc-creator/`).
 
 Review it together with the route registry, static route shells, R2 CORS/cache
 policy, robots, sitemap, and public LLM files.
+
+## IndexNow
+
+After Vercel publishes `main`, `.github/workflows/indexnow.yml` waits for
+that production deploy and POSTs sitemap URLs to
+`https://api.indexnow.org/indexnow`. Host is `www.giselasaldarriaga.com`.
+The key is `public/bc6e18cf87bf49fcc1ad22e759c161ac.txt`, served at
+`/<key>.txt`. The job is fail-soft and is not a release gate.
+
+Manual: `npm run indexnow` or `./scripts/indexnow-ping.sh` from the repo
+root (add `--soft` to ignore API errors). The waiter is
+`./scripts/wait-for-production.sh`.
 
 ## Generated Files
 

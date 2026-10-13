@@ -1,17 +1,41 @@
 #!/usr/bin/env bash
-# IndexNow ping — submit changed URLs to Bing/Yandex for faster discovery.
-# Usage: ./scripts/indexnow-ping.sh
-# Requires INDEXNOW_KEY env var (or reads from public/<key>.txt).
-# Docs: https://www.indexnow.org/documentation
+# IndexNow ping — submit sitemap URLs to Bing/Yandex after a production deploy.
+#
+# Manual (from the repo root):
+#   npm run indexnow
+#   ./scripts/indexnow-ping.sh
+#   INDEXNOW_KEY=bc6e18cf87bf49fcc1ad22e759c161ac ./scripts/indexnow-ping.sh
+#   ./scripts/indexnow-ping.sh --soft    # never exit non-zero
+#
+# Production: .github/workflows/indexnow.yml runs this on push to main after
+# waiting for the Vercel production deploy. Fail-soft there so IndexNow never
+# blocks deploy. Docs: https://www.indexnow.org/documentation
+#
+# Requires: curl, node. Key file: public/<32-hex>.txt (content = key).
 
 set -euo pipefail
 
+SOFT=0
+if [[ "${1:-}" == "--soft" || "${INDEXNOW_FAIL_SOFT:-}" == "1" ]]; then
+  SOFT=1
+fi
+
+fail() {
+  echo "IndexNow: $*" >&2
+  if [[ "$SOFT" -eq 1 ]]; then
+    echo "IndexNow: failing soft (deploy is not blocked)." >&2
+    exit 0
+  fi
+  exit 1
+}
+
 SITE="https://www.giselasaldarriaga.com"
 HOST="www.giselasaldarriaga.com"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+SITEMAP="$ROOT/public/sitemap.xml"
 
-# Resolve IndexNow key
 if [[ -z "${INDEXNOW_KEY:-}" ]]; then
-  KEY_FILE=$(find public -maxdepth 1 -name '*.txt' \
+  KEY_FILE=$(find "$ROOT/public" -maxdepth 1 -name '*.txt' \
     ! -name 'robots.txt' \
     ! -name 'llms.txt' \
     ! -name 'llms-full.txt' \
@@ -19,79 +43,47 @@ if [[ -z "${INDEXNOW_KEY:-}" ]]; then
   if [[ -n "$KEY_FILE" ]]; then
     INDEXNOW_KEY=$(basename "$KEY_FILE" .txt)
   else
-    echo "Error: Set INDEXNOW_KEY or place a key file in public/" >&2
-    exit 1
+    fail "set INDEXNOW_KEY or place a 32-char hex key file in public/"
   fi
 fi
 
-# All indexable URLs (homepage + services + verticals)
-URLS=(
-  "$SITE/"
-  "$SITE/en/"
-  "$SITE/servicios/"
-  "$SITE/en/services/"
-  "$SITE/servicios/creadora-ugc-bilingue/"
-  "$SITE/servicios/videos-de-portavoz/"
-  "$SITE/servicios/ugc-ads-tiktok-meta/"
-  "$SITE/servicios/testimoniales-resenas-ugc/"
-  "$SITE/servicios/demo-producto-ugc/"
-  "$SITE/servicios/ugc-problema-solucion/"
-  "$SITE/servicios/ugc-lifestyle/"
-  "$SITE/servicios/b-roll-footage-ugc/"
-  "$SITE/en/services/bilingual-ugc-creator/"
-  "$SITE/en/services/spokesperson-videos/"
-  "$SITE/en/services/ugc-ads-tiktok-meta/"
-  "$SITE/en/services/ugc-testimonials-reviews/"
-  "$SITE/en/services/ugc-product-demo/"
-  "$SITE/en/services/ugc-problem-solution/"
-  "$SITE/en/services/lifestyle-ugc-organic-content/"
-  "$SITE/en/services/ugc-b-roll-footage/"
-  "$SITE/verticales/"
-  "$SITE/en/verticals/"
-  "$SITE/verticales/ugc-beauty/"
-  "$SITE/verticales/ugc-moda/"
-  "$SITE/verticales/ugc-tech-saas/"
-  "$SITE/verticales/ugc-ecommerce/"
-  "$SITE/verticales/ugc-lifestyle-bienestar/"
-  "$SITE/en/verticals/beauty-ugc-creator/"
-  "$SITE/en/verticals/fashion-ugc-creator/"
-  "$SITE/en/verticals/tech-saas-ugc-creator/"
-  "$SITE/en/verticals/ecommerce-ugc-creator/"
-  "$SITE/en/verticals/lifestyle-wellness-ugc-creator/"
-  "$SITE/recursos/"
-  "$SITE/en/resources/"
-  "$SITE/recursos/que-es-ugc/"
-  "$SITE/recursos/como-contratar-creadora-ugc/"
-  "$SITE/recursos/ugc-vs-influencer-marketing/"
-  "$SITE/recursos/formatos-ugc-ads/"
-  "$SITE/en/resources/what-is-ugc/"
-  "$SITE/en/resources/how-to-hire-ugc-creator/"
-  "$SITE/en/resources/ugc-vs-influencer-marketing/"
-  "$SITE/en/resources/ugc-ad-formats-guide/"
-)
+if [[ ! "$INDEXNOW_KEY" =~ ^[0-9a-f]{32}$ ]]; then
+  fail "INDEXNOW_KEY must be a 32-char lowercase hex string"
+fi
 
-# Build JSON array of URLs
-URL_JSON=$(printf '%s\n' "${URLS[@]}" | jq -R . | jq -s .)
+if [[ ! -f "$SITEMAP" ]]; then
+  fail "missing $SITEMAP"
+fi
 
-PAYLOAD=$(cat <<EOF
-{
-  "host": "$HOST",
-  "key": "$INDEXNOW_KEY",
-  "keyLocation": "$SITE/$INDEXNOW_KEY.txt",
-  "urlList": $URL_JSON
-}
-EOF
-)
+URLS_JSON=$(node -e '
+const fs = require("fs");
+const xml = fs.readFileSync(process.argv[1], "utf8");
+const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+if (locs.length === 0) process.exit(2);
+process.stdout.write(JSON.stringify(locs));
+' "$SITEMAP") || fail "could not parse <loc> entries from $SITEMAP"
 
-echo "Submitting ${#URLS[@]} URLs to IndexNow..."
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-  -X POST "https://api.indexnow.org/IndexNow" \
+PAYLOAD=$(INDEXNOW_KEY="$INDEXNOW_KEY" HOST="$HOST" SITE="$SITE" URLS_JSON="$URLS_JSON" node -e '
+const payload = {
+  host: process.env.HOST,
+  key: process.env.INDEXNOW_KEY,
+  keyLocation: `${process.env.SITE}/${process.env.INDEXNOW_KEY}.txt`,
+  urlList: JSON.parse(process.env.URLS_JSON),
+};
+process.stdout.write(JSON.stringify(payload));
+') || fail "could not build IndexNow payload"
+
+URL_COUNT=$(URLS_JSON="$URLS_JSON" node -e 'process.stdout.write(String(JSON.parse(process.env.URLS_JSON).length))')
+
+echo "Submitting ${URL_COUNT} sitemap URLs to IndexNow..."
+HTTP_CODE=$(curl -sS -o /tmp/indexnow-response.txt -w "%{http_code}" \
+  -X POST "https://api.indexnow.org/indexnow" \
   -H "Content-Type: application/json; charset=utf-8" \
-  -d "$PAYLOAD")
+  -d "$PAYLOAD") || fail "curl could not reach https://api.indexnow.org/indexnow"
 
 if [[ "$HTTP_CODE" == "200" || "$HTTP_CODE" == "202" ]]; then
-  echo "IndexNow accepted (HTTP $HTTP_CODE) — ${#URLS[@]} URLs submitted."
-else
-  echo "IndexNow returned HTTP $HTTP_CODE" >&2
-  exit 1
+  echo "IndexNow accepted (HTTP $HTTP_CODE) — ${URL_COUNT} URLs submitted."
+  exit 0
 fi
+
+fail "API returned HTTP ${HTTP_CODE}: $(tr '\n' ' ' </tmp/indexnow-response.txt)"
