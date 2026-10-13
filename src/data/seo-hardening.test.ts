@@ -99,6 +99,8 @@ describe('IndexNow key file', () => {
   it('is what the ping script submits, from sitemap URLs only, fail-soft on main', () => {
     const script = read('scripts/indexnow-ping.sh');
     expect(script).toContain('public/sitemap.xml');
+    expect(script).not.toContain('sitemap-video.xml');
+    expect(read('public/robots.txt')).toContain('Sitemap: https://www.giselasaldarriaga.com/sitemap-video.xml');
     expect(script).toContain('https://api.indexnow.org/indexnow');
     expect(script).toContain('www.giselasaldarriaga.com');
     expect(script).toContain('keyLocation');

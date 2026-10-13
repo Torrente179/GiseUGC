@@ -6,7 +6,7 @@
 
 - `prebuild`: catalog generation plus service, font, and client-entrypoint
   normalization
-- `build`: client Vite build, SSR Vite build, then 40-route prerender
+- `build`: client Vite build (writes `sitemap.xml`, curated `sitemap-video.xml`, and per-page OG JPEGs), SSR Vite build, then prerender
 - `build:dev`: development-mode client build after the prebuild tasks
 - `lighthouse:mobile`, `lighthouse:desktop`, `lighthouse:matrix`: controlled
   route matrices and budgets
@@ -49,7 +49,32 @@ security headers; legacy language-query redirects; and hire-intent alias 301s
 `/en/hire` → `/en/resources/how-to-hire-ugc-creator/`).
 
 Review it together with the route registry, static route shells, R2 CORS/cache
-policy, robots, sitemap, and public LLM files.
+policy, robots, both sitemaps, per-page OG images, and public LLM files.
+
+## Per-page OG images
+
+`vite.config.ts` (`gisela-seo-artifacts`) generates one 1200×630 JPEG per
+registry route from the page H1 plus `getOgProofLine()` in
+`src/data/site-proof.ts`. Fonts are the bundled TTFs in `public/fonts/og/`.
+The proof-line mode switch (`exact` | `none`) defaults to `exact`. An H1
+that still needs more than three lines at the minimum size, or a JPEG over
+150 KB, fails the build. Render errors fail the build. The shared
+`/og-image-es-en-20260219.jpg` is the fallback only for a route with no H1.
+
+## Video sitemap
+
+`public/sitemap-video.xml` lists each curated homepage clip once on `/` and
+once on `/en/`. Values come from the existing homepage VideoObject nodes.
+Each entry has `loc`, a unique-per-page `video:thumbnail_loc` (R2 poster,
+never the OG image), title, description, `content_loc`, and duration in
+seconds when known. A selected entry missing a required field fails the
+build. XML is escaped. Decorative and extra service/vertical proof clips
+are excluded; those pages still emit VideoObject JSON-LD (`name`,
+`thumbnailUrl`, `uploadDate`). The build HEADs every R2 content and
+thumbnail URL as Googlebot (with and without a Google referer) and
+rejects a robots or hotlink block. That live probe is skipped on Vercel
+(`VERCEL=1`) and lives in `npm run seo:check-video-urls`. `robots.txt`
+references the video sitemap. IndexNow does not.
 
 ## IndexNow
 

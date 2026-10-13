@@ -40,6 +40,9 @@ This folder is organized by subsystem instead of by date.
   - **Current hire aliases / IndexNow:** `seo/seo-crawl-trust.md` — Vercel 301s
     for `/contratar` and `/hire` onto the how-to-hire guides; IndexNow key +
     post-deploy ping on `main`. Do not add those aliases to the sitemap.
+  - **Current OG + video sitemap:** `seo/2026-10-13-per-page-og-and-video-sitemap.md`
+    — per-page hashed OG JPEGs, `OG_PROOF_LINE_MODE`, curated homepage video
+    sitemap. Authority resync note lives at the top of `src/data/site-proof.ts`.
 - `deployment/`
   - Hosting, caching, security hardening, and runtime instrumentation.
 

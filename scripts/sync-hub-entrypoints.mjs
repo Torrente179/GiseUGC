@@ -14,6 +14,12 @@ const ENTITY = 'Gisela Saldarriaga';
 const datesSource = fs.readFileSync(path.join(rootDir, 'src/data/content-dates.ts'), 'utf8');
 const DATE_MODIFIED = datesSource.match(/hubs: '(\d{4}-\d{2}-\d{2})'/u)?.[1];
 if (!DATE_MODIFIED) throw new Error('Unable to read CONTENT_DATES.hubs');
+const ogManifestPath = path.join(rootDir, 'src/data/og-image-manifest.json');
+const ogManifest = fs.existsSync(ogManifestPath)
+  ? JSON.parse(fs.readFileSync(ogManifestPath, 'utf8'))
+  : {};
+const ogImageUrl = (localePath) =>
+  ogManifest[localePath]?.url ?? `${SITE}/og-image-es-en-20260219.jpg?v=20260219`;
 const FIVERR = 'https://www.fiverr.com/gisela_sm';
 const FIVERR_AGGREGATE_RATING = {
   '@type': 'AggregateRating',
@@ -324,7 +330,10 @@ const renderHub = (hub) => {
     <meta property="og:url" content="${canonical}" />
     <meta property="og:title" content="${escapeHtml(hub.metaTitle)}" />
     <meta property="og:description" content="${escapeHtml(hub.metaDescription)}" />
-    <meta property="og:image" content="${SITE}/og-image-es-en-20260219.jpg?v=20260219" />
+    <meta property="og:image" content="${ogImageUrl(hub.path)}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="${escapeHtml(hub.heroTitle)}" />
     <meta property="og:site_name" content="${ENTITY}" />
     <meta property="og:locale" content="${hub.locale === 'es' ? 'es_CO' : 'en_US'}" />
     <meta property="og:locale:alternate" content="${hub.locale === 'es' ? 'en_US' : 'es_CO'}" />
@@ -332,7 +341,7 @@ const renderHub = (hub) => {
     <meta name="twitter:url" content="${canonical}" />
     <meta name="twitter:title" content="${escapeHtml(hub.metaTitle)}" />
     <meta name="twitter:description" content="${escapeHtml(hub.metaDescription)}" />
-    <meta name="twitter:image" content="${SITE}/og-image-es-en-20260219.jpg?v=20260219" />
+    <meta name="twitter:image" content="${ogImageUrl(hub.path)}" />
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
     <link
       rel="preload"

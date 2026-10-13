@@ -28,6 +28,7 @@ dist-ssr
 !.env.example
 
 # Local video transcode outputs (upload these to R2/CDN, do not commit)
+tmp/og-snapshots/
 tmp/video-encodes/
 tmp/video-encodes-nuevos/
 tmp/video-hls/
