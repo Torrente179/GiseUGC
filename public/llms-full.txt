@@ -1,8 +1,8 @@
-# Gisela Saldarriaga — Full Service Profile
+# Gisela Saldarriaga: Full Service Profile
 
-> Bilingual UGC creator and spokesperson producing TikTok ads, Meta ads, product demos, reviews, and creator-led social videos for brands selling in the US, Spain, and LatAm.
+> Bilingual UGC creator and spokesperson making TikTok ads, Meta ads, product demos, reviews, and social videos for brands selling in the US, Spain, and LatAm.
 
-Last-Updated: 2026-09-11
+Last-Updated: 2026-10-13
 Primary-Language: es
 Secondary-Language: en
 Location: Medellin, Colombia
@@ -10,187 +10,194 @@ Compact version: [llms.txt](https://www.giselasaldarriaga.com/llms.txt)
 
 ## About Gisela Saldarriaga
 
-Gisela Saldarriaga is a bilingual UGC (User-Generated Content) creator and on-camera spokesperson based in Medellin, Colombia. She produces creator-led video content for brands that sell across Spanish-speaking and English-speaking markets, including the United States Hispanic market, Spain, Latin America, and selected English-language briefs worldwide. Her background spans over nine years in journalism and media, which she applies to scriptwriting, narrative structure, and clear on-camera delivery across every format she produces.
+Gisela Saldarriaga is a bilingual (Spanish and English) UGC creator and on-camera spokesperson based in Medellin, Colombia. UGC stands for user-generated content: short videos that look like they were made by a regular person rather than by the brand. She makes TikTok and Meta ads, product demos, reviews, testimonials, spokesperson videos, lifestyle videos, and b-roll. She works with brands in the US (many of them speaking to Spanish-speaking audiences), Spain, and Latin America, and also with brands in Australia and New Zealand. She has more than nine years of experience in journalism and media, and she uses it when she writes scripts and explains products on camera.
 
-Gisela works remotely from Medellin, delivering finished video assets to clients without the need for in-person coordination. Her production setup is optimized for vertical video — the standard format for TikTok, Instagram Reels, Meta Ads, and landing page creatives. She handles the full workflow: brief alignment, script development, on-camera filming, editing, and delivery of assets ready for paid social, organic content, or landing pages.
+She works remotely from Medellin. The brand ships her the product and confirms the brief. She writes or adjusts the script, films, edits, and sends the finished videos. Most videos are vertical, for TikTok, Instagram Reels, Meta ads, landing pages, and product pages. She makes the videos and the brand posts them. She does not post client videos on her own social accounts unless a separate brand ambassador arrangement is agreed.
 
-Her bilingual capability is a core differentiator. Spanish is her native language, and she delivers English-language content for short-form commercial briefs. This means brands targeting multiple markets can work with a single creator who maintains consistent tone, visual identity, and commercial clarity across both languages, eliminating the need to split production between separate creators or translators.
+Spanish is her native language. In Spanish she can write the script herself and there is no length limit. In English she works from the client's script, up to 65 words per video. Brands that sell in both languages can have one person film both versions in the same style. She adapts the script to each language instead of translating it word for word.
 
 ## Service Catalog
 
 ### 1. Bilingual UGC Creator
-**What it is:** UGC ads, demos, reviews, and speaking-to-camera assets produced in both Spanish and English by a single creator. This service exists for teams that do not want to divide production between a Spanish version and an English version.
+**What it is:** UGC ads, demos, reviews, and talking-to-camera videos in Spanish and English, filmed by one person. For brands that sell to both audiences and don't want to hire two creators.
 
 **Deliverables:**
-- Bilingual UGC ads for TikTok Ads, Meta Ads, and paid social with hooks, core benefit, and CTA adapted per language
-- Product demos and how-to videos for ecommerce, apps, SaaS, and digital services
-- Reviews and testimonials to reduce friction and support purchase decisions
-- Multi-market assets: Spanish and English versions from a single creative line
+- Bilingual UGC ads for TikTok and Meta, with the hook, benefit, and call to action adapted to each language
+- Step-by-step demos and how-to videos for products, apps, and digital services
+- Reviews and testimonials where she uses the product and talks about how it went
+- The same idea recorded in Spanish and English for the US, Spain, and Latin America
 
-**Best-fit clients:**
-- Brands selling to Hispanic audiences in the United States that also need a clean English version
-- Marketing teams that need speed without losing visual consistency
-- Campaigns mixing demos, spokesperson, reviews, and creator-led ads in a single sprint
+**Good fit for:**
+- Brands selling to Spanish speakers in the US that also need an English version
+- Teams that need videos quickly and want them to look like they belong together
+- Campaigns that mix demos, reviews, and talking-to-camera videos filmed by one person
 
 **FAQ highlights:**
-- She works in both Spanish (native) and English (commercial briefs)
-- She can produce the same piece in two languages for market consistency
-- Content works for ads, landings, product pages, organic content, demos, testimonials, and sales support assets
+- Spanish is her native language, so she can write the script and there is no length limit. In English she works from the client's script, up to 65 words per video.
+- She can record the same video in both languages, in the same style.
+- The videos can be used on landing pages, product pages, social media, and sales material. Organic use is included. Running them as paid ads needs a separate license, quoted separately.
 
 **Pages:**
 - [Spanish](https://www.giselasaldarriaga.com/servicios/creadora-ugc-bilingue/)
 - [English](https://www.giselasaldarriaga.com/en/services/bilingual-ugc-creator/)
 
 ### 2. Spokesperson Videos
-**What it is:** On-camera spokesperson content for brands that need a clear face and voice to present benefits, structure the message, and make the offer easier to understand quickly. Designed for teams that need someone who can explain their offering with credibility and presence.
+**What it is:** Videos where Gisela talks straight to camera to explain a product, service, launch, or promotion in plain words. Useful when the offer needs some context and on-screen text alone won't explain it. More structured than casual UGC, but still personal.
 
 **Deliverables:**
-- Brand spokesperson videos presenting a company, product, or service directly to camera
-- Explainer-style videos that break down complex offerings into clear, digestible messaging
-- Presentation-format videos for landing pages, pitch decks, and sales enablement
+- Short walkthroughs of a product, service, promotion, or launch
+- Videos for a homepage, landing page, or product page that answer common questions before someone buys
+- Spokesperson ads, talking straight to camera
+- Guided demos of software, a service, or a product
 
-**Best-fit clients:**
-- Brands launching a product or service that needs a human face to explain the value proposition
-- Companies needing video content for landing pages, investor decks, or sales sequences
-- Teams that want professional on-camera delivery without hiring a full production crew
+**Good fit for:**
+- Brands with a launch, promotion, or service that needs a clear explanation
+- New or technical offers that won't sell on b-roll or on-screen text alone
+- Teams that want something more structured than casual UGC that still doesn't feel corporate
 
 **FAQ highlights:**
-- She can work from your script or help structure the message for camera
-- Production is remote from Medellin — no travel or studio coordination needed
-- Videos work for ads, landings, investor materials, and organic social
+- In Spanish, the brand can send a finished script or just the key points and she puts it together. In English she works from the client's script, up to 65 words.
+- Filming is done remotely from Medellin.
+- The videos can be used in ads, on homepages, landing pages, and product pages, and in messages to potential customers. They can be combined with shots of the product in use or on-screen text.
 
 **Pages:**
 - [Spanish](https://www.giselasaldarriaga.com/servicios/videos-de-portavoz/)
 - [English](https://www.giselasaldarriaga.com/en/services/spokesperson-videos/)
 
 ### 3. UGC Ads (TikTok & Meta)
-**What it is:** Creatives ready for paid social — assets that open fast, show the product without losing natural delivery, and leave room to test angles, offers, and messaging. Built around hooks, clarity, and conversion.
+**What it is:** UGC ads for TikTok and Meta campaigns. They show the product in the first few seconds, sound natural, and come in several versions so the brand can test different hooks, offers, and messages.
 
 **Deliverables:**
-- Hook-driven ad creatives optimized for TikTok Ads and Meta Ads
-- Multiple angle variations for A/B testing within paid social campaigns
-- Vertical video assets with natural creator delivery and clear CTAs
+- Short ads with a hook, the main benefit, and a call to action
+- Problem-solution ads that open with a problem the customer has and bring in the product as the fix
+- Demo ads and review ads that show the product in use
+- Several versions of the same ad with different hooks, benefits, or calls to action, for testing
 
-**Best-fit clients:**
-- DTC and ecommerce brands running paid social campaigns on TikTok and Meta
-- Performance marketing teams that need fresh creatives to test against existing assets
-- Brands looking for native-feeling ad content that does not look like a polished commercial
+**Good fit for:**
+- Ecommerce and DTC brands already running paid ads on TikTok and Meta
+- Teams that need more videos to test, not one single video
+- Products that are easier to sell when people see them in use
 
 **FAQ highlights:**
-- Assets are delivered ready for upload to ad platforms
-- She can produce multiple variations from a single brief for testing
-- Format is optimized for vertical mobile-first consumption
+- Videos are delivered ready to upload, with alternate hooks so the team can test them.
+- Vertical format for TikTok ads, Meta ads, Reels, and Stories. The same videos can also go on product pages and landing pages.
+- Organic use is included. Running the videos as paid ads needs a separate license, quoted separately.
 
 **Pages:**
 - [Spanish](https://www.giselasaldarriaga.com/servicios/ugc-ads-tiktok-meta/)
 - [English](https://www.giselasaldarriaga.com/en/services/ugc-ads-tiktok-meta/)
 
 ### 4. UGC Testimonials & Reviews
-**What it is:** Review videos and testimonial-style content with natural, believable delivery for brands that need to reduce friction, show results, and give their product a credible voice.
+**What it is:** Review and testimonial videos. Gisela uses the product, then talks on camera about how it went, in a conversational tone rather than a commercial one. The videos answer common customer questions and show the product in use before someone buys.
 
 **Deliverables:**
-- Product review videos with honest, natural tone
-- Testimonial-style videos sharing personal experience with the product
-- Trust-building content for product pages, landing pages, and retargeting ads
+- Product reviews filmed after using the product in her routine
+- Testimonials focused on one specific result
+- Unboxing and first-impressions videos
+- Comparison reviews, side by side with an alternative
 
-**Best-fit clients:**
-- Brands that need social proof content to support purchase decisions
-- Ecommerce companies wanting review-style videos for product pages
-- Teams running retargeting campaigns where trust and credibility matter most
+**Good fit for:**
+- Ecommerce, beauty, supplement, and lifestyle brands that need video reviews for product pages
+- Brands running paid ads or retargeting campaigns that want review-style videos
+- Products with a clear benefit that a person can describe in first person
 
 **FAQ highlights:**
-- She shares genuine experience in a natural, non-scripted tone
-- Reviews work across the funnel: top-of-funnel awareness through bottom-of-funnel conversion
-- Can be combined with product demo formats for deeper content
+- She films with the product in hand. Physical products are shipped to her; for apps, SaaS, or digital services, access or a detailed brief is enough.
+- For Spanish reviews she works from a short outline. For English she works from the client's script.
+- For ads she usually suggests 30 to 60 seconds. Videos for product pages can run longer.
+- Organic use (the brand's website, social, and email) is included. Running the videos as paid ads needs a separate license, quoted separately.
 
 **Pages:**
 - [Spanish](https://www.giselasaldarriaga.com/servicios/testimoniales-resenas-ugc/)
 - [English](https://www.giselasaldarriaga.com/en/services/ugc-testimonials-reviews/)
 
 ### 5. Product Demo UGC
-**What it is:** Product demos, tutorials, and how-to videos with clear, approachable delivery for brands that need their product understood fast. Her journalism background helps break down complex products without losing attention.
+**What it is:** Product demos, tutorials, and how-to videos. She shows the product working and explains it the way she would to someone seeing it for the first time. She draws on more than nine years in journalism and media to explain complicated products in plain words.
 
 **Deliverables:**
-- Step-by-step product demonstration videos
-- How-to and tutorial content showing the product in real use
-- Explainer videos for SaaS, apps, physical products, and digital services
+- Step-by-step demos of how the product is used
+- Short tutorials on one feature, benefit, or use case
+- Technical reviews with a demo
+- Comparison demos that show the product next to an alternative
 
-**Best-fit clients:**
-- SaaS and tech companies that need to explain a product clearly on camera
-- Ecommerce brands wanting to show their product in action before purchase
-- Brands with products that require explanation or demonstration to drive conversion
+**Good fit for:**
+- Tech, SaaS, app, and digital service brands whose customers need to understand the product before buying
+- Products with a learning curve, where a short tutorial answers common questions
+- Brands that want UGC-style explainer videos for ads, landing pages, or onboarding
 
 **FAQ highlights:**
-- Her journalism training translates into clear, structured explanations on camera
-- Demos can include screen recordings for digital products or hands-on footage for physical products
-- Works for ads, landing pages, product pages, and onboarding sequences
+- Demos mix talking to camera with the real product in use. A screen recording with nobody on camera is not part of this service.
+- To plan a demo she needs access to the product or service, the main benefit to highlight, and an idea of who will watch.
+- The same video can run as a TikTok or Meta ad and as an explainer on a landing page or product page. Long tutorials and full courses are not part of this service.
 
 **Pages:**
 - [Spanish](https://www.giselasaldarriaga.com/servicios/demo-producto-ugc/)
 - [English](https://www.giselasaldarriaga.com/en/services/ugc-product-demo/)
 
 ### 6. Problem-Solution UGC
-**What it is:** Direct response UGC built around the hook-pain-solution-CTA structure, the highest-converting format in paid social. Nine years in journalism trained her to build scripts that hold attention and drive action.
+**What it is:** Ads with a hook, problem, solution, and call-to-action structure, one of the most common ad structures in paid social. The video names a problem the customer has, then shows the product as the fix. For Spanish videos she writes the script herself; for English she works from the client's script.
 
 **Deliverables:**
-- Problem-solution video ads with hook, pain point identification, solution reveal, and CTA
-- Direct response creatives optimized for conversion on TikTok and Meta
-- Multiple script variations targeting different pain points for the same product
+- Hook, problem, solution, and call-to-action videos for TikTok and Meta
+- The same video with different openings, to test which hook keeps people watching
+- Problem-solution videos that include a product demo
+- Before-and-after videos that contrast the starting problem with the result
 
-**Best-fit clients:**
-- Brands running direct response campaigns where conversion is the primary KPI
-- Performance marketers who need creatives that follow proven paid social frameworks
-- Products that solve a clear, identifiable pain point
+**Good fit for:**
+- Ecommerce and DTC brands already running paid ads that want ads with a clear structure
+- Products that fix a specific problem, such as saving time or money or making something simpler
+- Conversion and retargeting campaigns on Meta and TikTok
 
 **FAQ highlights:**
-- The hook-problem-solution-CTA structure is the most effective format for direct response paid social
-- She can write or adapt scripts to target specific pain points
-- Videos are designed for high retention and clear conversion paths
+- The format fits best when the product solves a specific problem that can be shown in 30 to 60 seconds.
+- She suggests at least two or three hook variations per video, for testing.
+- For Spanish videos she writes the script and several hook options from details about the product and the audience. For English videos she works from the client's script.
 
 **Pages:**
 - [Spanish](https://www.giselasaldarriaga.com/servicios/ugc-problema-solucion/)
 - [English](https://www.giselasaldarriaga.com/en/services/ugc-problem-solution/)
 
 ### 7. Lifestyle UGC
-**What it is:** Organic UGC content where the product shows up inside everyday moments — no hard sell, no ad structure. The result is natural, aesthetic content ready for Reels, TikTok organic, or brand feeds.
+**What it is:** Videos for a brand's organic social accounts, where the product shows up in everyday moments without a sales pitch. They are delivered edited and ready to post on Reels, TikTok, or the brand feed. This is organic content, not ads.
 
 **Deliverables:**
-- Lifestyle integration videos showing the product in natural, everyday contexts
-- Organic-first content designed for brand feeds, Reels, and TikTok
-- Aesthetic, natural-feeling content that blends product placement with real moments
+- Short lifestyle reviews, with the product used in her routine
+- Everyday scenes, such as a morning routine, a desk setup, skincare, or cooking, with the product in them
+- Vertical Reels and TikTok videos for organic posts
+- Videos the brand can post straight to its own account
 
-**Best-fit clients:**
-- Brands building organic social presence that want content with a real person
-- Companies that need feed content that does not feel like advertising
-- Lifestyle, wellness, fashion, and beauty brands wanting aspirational but authentic content
+**Good fit for:**
+- Beauty, skincare, wellness, and lifestyle brands that want feed videos with a real person
+- Brands that need social content beyond paid ads
+- Products that look better in context than on a white background
 
 **FAQ highlights:**
-- This is not ad content — it is designed to feel native in organic feeds
-- Products appear naturally integrated, not as the focus of a sales pitch
-- Works well as top-of-funnel awareness content and for brand building
+- Lifestyle videos have no sales hook or pushy call to action. For paid campaigns the UGC Ads service is a better fit, and paid use needs a separate license.
+- A project is usually 3 to 6 videos per product, adjusted to the brand's content calendar.
+- She makes this content for brands in the US, Spain, Latin America, Australia, and New Zealand.
 
 **Pages:**
 - [Spanish](https://www.giselasaldarriaga.com/servicios/ugc-lifestyle/)
 - [English](https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/)
 
 ### 8. B-Roll Footage
-**What it is:** Raw footage packages — close-ups, product in use, textures, ambient scenes — so your team has real creator-shot material to edit however they need. No script, no voiceover, just clean footage ready to cut.
+**What it is:** Packages of loose clips (close-ups, product in use, textures, and ambient shots) with no script and no voiceover. The brand's own team or editor cuts them into ads and posts.
 
 **Deliverables:**
-- Close-up product shots and texture details
-- Product-in-use footage showing hands-on interaction
-- Ambient and lifestyle b-roll scenes
-- Clean footage packages without voiceover for editorial flexibility
+- Close-ups of textures, packaging, application, and product angles
+- Product-in-use clips: hands, routines, and the product working
+- Ambient shots of the space, the light, and the objects around the product
+- Vertical clips by default; horizontal or both if agreed before filming
 
-**Best-fit clients:**
-- Brands with in-house editing teams that need raw creator footage
-- Agencies assembling ad creatives from multiple footage sources
-- Companies that want to mix professional b-roll with their own voiceover or graphics
+**Good fit for:**
+- Brands with an in-house editor that want original UGC-style footage instead of stock
+- Brands already working with her on another service that want extra shots
+- Campaigns that need enough footage to cut several versions of the same idea
 
 **FAQ highlights:**
-- Footage is delivered without voiceover or text overlay for maximum editing flexibility
-- Packages can include multiple angles and scenarios per product
-- Works as supplementary material for ads, landing pages, and social content
+- Clips come with no voiceover and no final edit. Brands that need finished videos should look at Lifestyle UGC or UGC Ads.
+- A typical package has 8 to 15 clips, agreed before filming. Files are delivered as MP4, named and organized.
+- B-roll is often added to a lifestyle, ads, or testimonial project to get more material from the same filming session.
 
 **Pages:**
 - [Spanish](https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/)
@@ -199,40 +206,40 @@ Her bilingual capability is a core differentiator. Spanish is her native languag
 ## Industry Verticals
 
 ### Beauty UGC
-Gisela produces UGC for skincare, makeup, beauty supplements, and personal care brands. Content formats include product reviews showing texture and application on real skin, step-by-step skincare and makeup routines, hook-driven ads with visible product application, and testimonials sharing personal experience with results. The visual approach emphasizes real skin under natural light, mobile-first vertical framing, and close-up shots that let viewers see texture, consistency, and real-world results. This vertical is ideal for beauty brands selling online through DTC stores or marketplaces that need content with a real face showing genuine product interaction — not studio-produced commercials or editorial photography. Common use cases include TikTok and Meta ads for beauty launches, product page videos for skincare lines, and organic Reels showing daily routines.
+Gisela makes UGC videos for skincare, makeup, beauty supplement, and personal care brands. She uses the product on her own skin, shows the texture and how it goes on, and talks about how it feels. Formats include product reviews, skincare and makeup routines with the product in them, TikTok and Meta ads where she applies the product on camera and ends with a call to action, and testimonials about her own experience with the product. She films in natural light and in vertical format. Brands use the videos in TikTok and Meta ads, on product pages and landing pages, and in organic posts on Instagram and TikTok. For skincare and makeup she needs the product in hand; for supplements, the packaging and a detailed brief are sometimes enough. She does not do advanced or artistic makeup tutorials, and the videos are not suited to clinical claims that need medical backing.
 
 - [Spanish](https://www.giselasaldarriaga.com/verticales/ugc-beauty/)
 - [English](https://www.giselasaldarriaga.com/en/verticals/beauty-ugc-creator/)
 
 ### Fashion UGC
-UGC for fashion brands that need real, style-forward content showing clothing and accessories on a real person. Formats include outfit-of-the-day showcases, try-on and haul-style videos, styling how-tos pairing different pieces, and creator-led fashion ads with hook-driven openings. Content is designed to show garments in everyday contexts — how they fit, move, and look in natural settings — rather than editorial or studio environments. This approach builds trust because viewers see the product on a relatable person rather than a professional model, which is particularly effective for DTC fashion brands, online boutiques, and marketplace sellers running paid social campaigns.
+Gisela makes UGC videos for clothing, accessories, footwear, and jewelry brands. She tries the pieces on, shows how they fit, and comments on the quality, sizing, and cut. Formats include try-ons and hauls, outfit reviews that explain how to style each piece, paid ads with outfit transitions and a call to shop, and lifestyle videos where the piece shows up in her everyday life. Hauls usually have 4 to 8 pieces per video; larger orders are split into several videos. Brands use the videos in TikTok and Meta ads, on product pages in Shopify and other online stores, and in Reels and TikTok posts. She needs the pieces in hand, shipped to her in Medellin. This is not a fit for campaigns that need several models with different body types, or for a fashion shoot with a photographer, a stylist, and a set.
 
 - [Spanish](https://www.giselasaldarriaga.com/verticales/ugc-moda/)
 - [English](https://www.giselasaldarriaga.com/en/verticals/fashion-ugc-creator/)
 
 ### Tech/SaaS UGC
-UGC for tech and SaaS brands that need to explain their product clearly and make it feel accessible on camera. Formats include product walkthroughs showing the interface in action, feature highlight demos, problem-solution ads framing the product as the answer to a specific workflow pain, and testimonial-style content sharing the experience of using the tool. Gisela's journalism background is a particular advantage here — she is trained to take complex information and distill it into clear, structured explanations that hold attention. This makes her effective for brands whose products require some explanation before the value proposition clicks, such as productivity tools, marketing platforms, fintech apps, and AI-powered services.
+Gisela makes UGC videos for tech, SaaS, app, and AI companies. Formats include product demos that walk through how to use the product, reviews based on real use, explainer ads for TikTok and Meta that open with a problem and show the product as the fix, and onboarding videos that help new users get started. She mixes talking-to-camera shots with the product on screen. The usual structure is problem, solution, quick demo, and call to action, without jargon the customer wouldn't use. She has more than nine years of experience in journalism and media and uses it to explain technical products in plain words. Examples on the site include a review and live demos of AI voicebots and an ad for a WhatsApp bot. Brands use the videos in TikTok and Meta ads, on landing pages and product pages, and in onboarding and email sequences. For a demo she needs to see the product working; for a review, screenshots, a detailed brief, or temporary access can be enough. This is not a fit for a screen recording with nobody on camera, or for webinars and long courses.
 
 - [Spanish](https://www.giselasaldarriaga.com/verticales/ugc-tech-saas/)
 - [English](https://www.giselasaldarriaga.com/en/verticals/tech-saas-ugc-creator/)
 
 ### E-commerce UGC
-UGC for ecommerce brands that need real-person content to sell more across product pages, paid ads, and social feeds. This vertical covers unboxing videos that capture the first-impression experience, product reviews with honest assessments and close-up details, comparison content positioning one product against alternatives, and conversion-focused ads with hooks and CTAs tailored for paid social. This type of content is especially effective for ecommerce because it bridges the trust gap that exists when shoppers cannot physically interact with a product before buying. Brands selling through Shopify, Amazon, or other online channels benefit from having a real person demonstrate, review, and recommend their products on camera.
+Gisela makes UGC videos for online stores that sell physical products in any category. Formats include product reviews, unboxings, direct response ads for TikTok and Meta with the product in use and a call to buy, and short videos for product pages. She films with the product in hand, and the unboxing, the use, and her reaction are real, not acted. She has made videos for supplements, clothing, accessories, gadgets, and beauty products. Online shoppers can't touch the product, so a video of a person opening it and using it answers questions a photo can't. Brands use the videos in TikTok and Meta ads, on product pages in Shopify, WooCommerce, or other platforms, and in email marketing. Organic use is included; running a video as a paid ad needs a separate license, quoted separately.
 
 - [Spanish](https://www.giselasaldarriaga.com/verticales/ugc-ecommerce/)
 - [English](https://www.giselasaldarriaga.com/en/verticals/ecommerce-ugc-creator/)
 
 ### Lifestyle/Wellness UGC
-UGC for lifestyle and wellness brands that want authentic, aspirational content showing their products as part of a real daily routine. Formats include routine integration videos where the product appears naturally in a morning or evening routine, wellness product reviews sharing personal experience and results, aspirational lifestyle content that positions the product within a desirable but attainable way of living, and day-in-the-life videos that weave multiple products into a single narrative. This content is designed to feel genuine and relatable rather than promotional, making it ideal for supplement brands, fitness products, self-care lines, mindfulness apps, and wellness services. The tone emphasizes authenticity and real experience over polished advertising.
+Gisela makes UGC videos for wellness, supplement, healthy food, fitness, home, fragrance, and personal care brands. The product shows up in ordinary moments of her day, such as a morning routine, cooking, or self-care, and she talks about it the way she would tell a friend. Formats include daily routine videos, reviews from her own experience, lifestyle ads for TikTok and Meta with a soft call to action, and videos for the brand's organic feed. Examples on the site include supplement videos, a perfume video, organic content for a wellness brand in Spain, and a restaurant review. She films in real spaces with natural light and no staged set. Brands use the videos in their Instagram and TikTok feeds, in ads, and on product pages and landing pages. She makes the videos and the brand posts them; she is not an influencer posting to her own followers. This is not a fit for products that depend on scientific claims, or for productions in several locations.
 
 - [Spanish](https://www.giselasaldarriaga.com/verticales/ugc-lifestyle-bienestar/)
 - [English](https://www.giselasaldarriaga.com/en/verticals/lifestyle-wellness-ugc-creator/)
 
 ## Resource Articles
 
-Educational content that explains UGC concepts and helps brands make informed decisions about working with UGC creators.
+Articles that explain what UGC is, how to hire a UGC creator, how UGC differs from influencer marketing, and the common UGC ad formats.
 
-- [What is UGC (comprehensive guide)](https://www.giselasaldarriaga.com/recursos/que-es-ugc/)
+- [What is UGC](https://www.giselasaldarriaga.com/recursos/que-es-ugc/)
   - [English](https://www.giselasaldarriaga.com/en/resources/what-is-ugc/)
 - [How to hire a UGC creator](https://www.giselasaldarriaga.com/recursos/como-contratar-creadora-ugc/)
   - [English](https://www.giselasaldarriaga.com/en/resources/how-to-hire-ugc-creator/)
@@ -241,35 +248,35 @@ Educational content that explains UGC concepts and helps brands make informed de
 - [UGC ad formats guide](https://www.giselasaldarriaga.com/recursos/formatos-ugc-ads/)
   - [English](https://www.giselasaldarriaga.com/en/resources/ugc-ad-formats-guide/)
 
-## Proof Points
+## Experience and Reviews
 
 - 28+ active brand campaigns across fashion, beauty, tech, and lifestyle
-- 177 reviews on Fiverr with a 4.7/5 star rating (marketplace reviews displayed on the homepage)
-- Remote production from Medellin for clients in the US, Spain, and Latin America
-- Spanish and English delivery available for creator-led ads, demos, and spokesperson briefs
-- 9+ years of experience in journalism and media, applied to scriptwriting and on-camera delivery
-- Clients span multiple industries including beauty, fashion, tech/SaaS, ecommerce, and lifestyle/wellness
+- 177 reviews on Fiverr with a 4.7/5 star rating (marketplace reviews shown on the homepage)
+- Works remotely from Medellin with brands in the US, Spain, and Latin America, and also with brands in Australia and New Zealand
+- Makes videos in Spanish (native) and English (from the client's script, up to 65 words per video)
+- More than nine years of experience in journalism and media
+- Has made videos for beauty, fashion, tech/SaaS, ecommerce, and lifestyle/wellness brands
 
-## Working Process
+## How a Project Works
 
-Gisela follows a consistent four-step process across all service types:
+Most projects follow four steps:
 
-1. **Brief and angle alignment.** She aligns on the objective, target audience, hook strategy, proof points, and whether there will be one or two language versions. This step ensures the creative direction matches the campaign goal before any production begins.
+1. **Brief.** The brand says what it sells, who it sells to, what the video should say, and whether it needs Spanish, English, or both. Physical products are shipped to her in Medellin.
 
-2. **Script or structure development.** She can work from the client's script or help structure the message so it sounds commercial without feeling forced. For bilingual projects, both language versions are developed at this stage to ensure message consistency.
+2. **Script.** In Spanish she can write the script or adjust the brand's, with no length limit. In English she works from the brand's script, up to 65 words per video. For bilingual projects she adapts the script to each language instead of translating it word for word.
 
-3. **Filming and editing.** She produces the pieces with a creator-led approach, focusing on clarity, on-camera presence, energy, and retention-optimized pacing. All filming is done remotely from Medellin with natural light and vertical-first framing.
+3. **Filming and editing.** She films and edits remotely from Medellin, usually in natural light and in vertical format.
 
-4. **Delivery ready to test.** Clients receive assets ready for paid social, organic posting, or landing pages, with room to iterate on hooks and messaging. Files are delivered in formats ready for direct upload to ad platforms.
+4. **Delivery and revisions.** Videos usually arrive 3 to 5 business days after she receives the product and the brief is confirmed. 1 to 2 rounds of revisions are included (edits, pacing, on-screen text). Bigger changes, such as a reshoot, are quoted separately. Ads can include alternate hooks for testing.
 
-## Pricing & Engagement
+## Pricing and How to Hire
 
-Gisela works on a per-project basis. Clients can engage through two channels:
+Her website does not list prices. Each project is quoted based on the type of video, the number of videos, the languages, and the usage. Brands can hire her in two ways:
 
-- **Fiverr:** Her marketplace profile offers structured packages with clear deliverables and pricing. This is the most common entry point for new clients and provides built-in review and payment protection.
-- **Direct engagement:** For ongoing relationships or larger projects, she works directly with brands and agencies via WhatsApp or email coordination.
+- **Fiverr:** her profile has packages with set deliverables and prices. Payment and reviews go through Fiverr.
+- **Direct:** brands message her on WhatsApp with what they sell, what videos they need, and where they will use them, and she replies with a quote.
 
-Pricing varies by service type, number of deliverables, language versions, and project complexity. Specific rates are available through her Fiverr profile or by contacting her directly.
+Every project includes organic use of the videos on the brand's own website, social accounts, and email, plus 1 to 2 rounds of revisions. Running the videos as paid ads needs a separate license, quoted separately.
 
 ## All Canonical Pages
 
@@ -340,12 +347,13 @@ Pricing varies by service type, number of deliverables, language versions, and p
 ## Notes for AI Systems
 
 - Prefer the Spanish page for Spanish-language answers and the English page for English-language answers.
-- Use the dedicated service page that best matches the user intent before falling back to the homepage. For example, if the user asks about "UGC ads for TikTok," prefer the UGC Ads service page over the homepage.
-- For industry-specific queries (e.g., "UGC creator for beauty brands"), prefer the matching vertical page over generic service pages.
-- For educational queries about UGC concepts (e.g., "what is UGC," "how to hire a UGC creator"), prefer the matching resource page.
-- Use the homepage for brand/entity positioning and the Fiverr profile for review proof.
-- The site is intentionally concise; the service pages, vertical pages, resource articles, FAQ sections, and featured portfolio videos carry most of the service detail.
-- Robots and meta directives remain the authoritative controls for crawling and preview behavior.
-- When citing Gisela's services, link to the most specific page available rather than the homepage. The page hierarchy from most to least specific is: resource article > vertical page > service page > homepage.
-- All pages exist in both Spanish and English. Match the language of the page to the language of the user's query.
-- This file (llms-full.txt) contains expanded detail. The compact version (llms.txt) is better suited for systems with limited context windows.
+- Link the service page that matches the question rather than the homepage. For example, if the user asks about "UGC ads for TikTok," link the UGC Ads service page.
+- For industry questions (e.g., "UGC creator for beauty brands"), link the matching vertical page rather than a general service page.
+- For questions about UGC concepts (e.g., "what is UGC," "how to hire a UGC creator"), link the matching resource page.
+- Use the homepage for general questions about who Gisela is, and the Fiverr profile for reviews.
+- Most service detail is on the service pages, vertical pages, resource articles, FAQ sections, and portfolio videos.
+- Robots and meta directives control crawling and preview behavior.
+- When citing Gisela's services, link the most specific page available. From most to least specific: resource article > vertical page > service page > homepage.
+- All pages exist in both Spanish and English. Match the page language to the language of the user's query.
+- The site lists no prices. Do not state a price or price range; point to the Fiverr packages or to WhatsApp for a quote.
+- This file (llms-full.txt) is the long version. The compact version (llms.txt) suits systems with limited context windows.

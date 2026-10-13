@@ -93,13 +93,13 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       breadcrumbLabel: 'Servicios',
       metaTitle: 'Contrata creadora UGC bilingüe ES+EN | Gisela Saldarriaga',
       metaDescription:
-        'Contrata a Gisela Saldarriaga: ads UGC, demos y portavoz en español e inglés. Producción en Medellín para US hispano, España, LatAm y briefs en inglés.',
-      heroTitle: 'Contrata a Gisela Saldarriaga como tu creadora UGC bilingüe',
+        'Soy creadora UGC bilingüe en Medellín. Grabo anuncios, demos, reseñas y videos de portavoz en español e inglés para marcas de EE. UU., España y LatAm.',
+      heroTitle: 'Contrata a Gisela Saldarriaga, creadora UGC bilingüe',
       lead:
-        `Si tu marca necesita una creadora UGC bilingüe, no una agencia: ads, demos, reseñas y videos de portavoz en español e inglés, entregados a ti. Produzco desde Medellín para equipos en el mercado hispano de Estados Unidos, España y LatAm, y para briefs en inglés. El contenido es de la marca. No lo publico en mis redes, salvo un acuerdo de ambassador. Lee [cómo contratar una creadora UGC bilingüe](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
+        `Hago videos UGC en español e inglés: anuncios para TikTok y Meta, demos de producto, reseñas y videos hablando a cámara. Trabajas directo conmigo, sin agencia de por medio. Grabo desde Medellín para marcas de Estados Unidos (incluido el mercado hispano), España y Latinoamérica. Los videos son para tu marca y no los publico en mis redes, salvo que acordemos que sea embajadora. Si es tu primera vez, lee [cómo contratar una creadora UGC bilingüe](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
       childrenTitle: 'Qué puedes contratar',
-      primaryCtaLabel: 'Contáctame',
-      proof: `Llevo ${SITE_PROOF.brandCampaigns}+ campañas de marca en beauty, moda, tech y lifestyle. Gisela Saldarriaga trabaja en Fiverr como [gisela_sm](${FIVERR_PROFILE_URL}): ${SITE_PROOF.fiverrRating}/5 en ${SITE_PROOF.fiverrReviewCount} reseñas verificadas.`,
+      primaryCtaLabel: 'Escríbeme',
+      proof: `Llevo ${SITE_PROOF.brandCampaigns}+ campañas con marcas de beauty, moda, tech y lifestyle. En Fiverr me encuentras como [gisela_sm](${FIVERR_PROFILE_URL}), con ${SITE_PROOF.fiverrRating}/5 en ${SITE_PROOF.fiverrReviewCount} reseñas.`,
       secondaryLinks: [
         { hubId: 'verticals', label: 'UGC por industria' },
         { hubId: 'resources', label: 'Guías para contratar' },
@@ -107,35 +107,35 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       children: [
         {
           title: 'Creadora UGC bilingüe',
-          blurb: 'Una misma cara en español e inglés, sin partir el lote entre dos perfiles.',
+          blurb: 'Grabo las dos versiones yo misma, así no tienes que contratar a dos creadoras.',
         },
         {
           title: 'UGC Ads para TikTok y Meta',
-          blurb: 'Creativos para pauta: hooks, beneficio y CTA listos para testear, no un video hero.',
+          blurb: 'Anuncios cortos con hook, beneficio y CTA para probar en tu pauta.',
         },
         {
           title: 'Videos de portavoz',
-          blurb: 'Cara y voz a cámara cuando la oferta necesita explicarse, no solo verse.',
+          blurb: 'Hablo a cámara por tu marca cuando el producto necesita que alguien lo explique.',
         },
         {
           title: 'Testimoniales y reseñas UGC',
-          blurb: 'Social proof en video para ads, páginas de producto y retargeting.',
+          blurb: 'Reseñas en video para tus anuncios, páginas de producto y retargeting.',
         },
         {
-          title: 'Demo de producto UGC',
-          blurb: 'How-to y demos para que el producto se entienda rápido y se compre con menos dudas.',
+          title: 'Demos de producto UGC',
+          blurb: 'Muestro cómo se usa tu producto, paso a paso, para que tus clientes lo entiendan rápido.',
         },
         {
           title: 'UGC problema-solución',
-          blurb: 'El formato que arranca en el dolor y aterriza el producto como solución.',
+          blurb: 'Empiezo por el problema de tu cliente y muestro tu producto como la solución.',
         },
         {
           title: 'UGC lifestyle',
-          blurb: 'Piezas que se sienten nativas en el feed de tu marca, no en un set.',
+          blurb: 'Tu producto en escenas del día a día, grabadas en espacios reales y no en un set.',
         },
         {
-          title: 'B-roll y footage UGC',
-          blurb: 'Tomas de producto y escenas sin voiceover para que tu equipo edite.',
+          title: 'B-roll UGC',
+          blurb: 'Tomas del producto y escenas sin voz en off para que tu equipo las edite.',
         },
       ],
     },
@@ -143,64 +143,64 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       breadcrumbLabel: 'Services',
       metaTitle: 'Hire a bilingual UGC creator, ES+EN | Gisela Saldarriaga',
       metaDescription:
-        'Hire Gisela Saldarriaga for bilingual UGC ads, demos, and spokesperson videos. Produced in Medellín for US Hispanic, Spain, LatAm, and English briefs.',
-      heroTitle: 'Hire Gisela Saldarriaga as your bilingual UGC creator',
+        'I’m a bilingual UGC creator in Medellín. I make ads, demos, reviews, and spokesperson videos in Spanish and English for brands in the US, Spain, and LatAm.',
+      heroTitle: 'Hire Gisela Saldarriaga, a bilingual UGC creator',
       lead:
-        `If you need a named bilingual UGC creator, not an agency: ads, demos, reviews, and spokesperson videos in Spanish and English, delivered to your brand. I produce from Medellín for teams selling to US Hispanic audiences, Spain, and LatAm, plus English briefs. The content belongs to the brand. I don’t post client work on my socials unless we agree on an ambassador deal. Read [how to hire a bilingual UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
-      childrenTitle: 'What you can hire',
-      primaryCtaLabel: 'Contact me',
-      proof: `I’ve run ${SITE_PROOF.brandCampaigns}+ brand campaigns in beauty, fashion, tech, and lifestyle. Gisela Saldarriaga works on Fiverr as [gisela_sm](${FIVERR_PROFILE_URL}): ${SITE_PROOF.fiverrRating}/5 from ${SITE_PROOF.fiverrReviewCount} verified reviews.`,
+        `I make UGC videos in Spanish and English: ads for TikTok and Meta, product demos, reviews, and talking-to-camera videos. You work with me directly, with no agency in between. I film from Medellín for brands in the US (including the US Hispanic market), Spain, and Latin America. I make the videos for your brand and don’t post them on my own accounts unless we set up an ambassador deal. If it’s your first time, read [how to hire a bilingual UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
+      childrenTitle: 'What you can hire me for',
+      primaryCtaLabel: 'Message me',
+      proof: `I’ve done ${SITE_PROOF.brandCampaigns}+ brand campaigns in beauty, fashion, tech, and lifestyle. On Fiverr I’m [gisela_sm](${FIVERR_PROFILE_URL}), rated ${SITE_PROOF.fiverrRating}/5 from ${SITE_PROOF.fiverrReviewCount} reviews.`,
       secondaryLinks: [
         { hubId: 'verticals', label: 'UGC by industry' },
-        { hubId: 'resources', label: 'Guides to hire' },
+        { hubId: 'resources', label: 'Hiring guides' },
       ],
       children: [
         {
           title: 'Bilingual UGC creator',
-          blurb: 'One face in Spanish and English, without splitting the batch across two profiles.',
+          blurb: 'I record both language versions myself, so you don’t need two creators.',
         },
         {
-          title: 'UGC Ads for TikTok and Meta',
-          blurb: 'Paid creatives: hooks, benefit, and CTA ready to test, not a hero video.',
+          title: 'UGC ads for TikTok and Meta',
+          blurb: 'Short ads with a hook, the main benefit, and a CTA that you can test in your paid campaigns.',
         },
         {
           title: 'Spokesperson videos',
-          blurb: 'Face and voice on camera when the offer needs to be explained, not just seen.',
+          blurb: 'I talk to camera for your brand when the product needs someone to explain it.',
         },
         {
           title: 'UGC testimonials and reviews',
-          blurb: 'Video social proof for ads, product pages, and retargeting.',
+          blurb: 'Video reviews for your ads, product pages, and retargeting.',
         },
         {
-          title: 'UGC product demo',
-          blurb: 'How-tos and demos so the product is understood quickly and bought with fewer doubts.',
+          title: 'UGC product demos',
+          blurb: 'I show how your product works, step by step, so your customers get it quickly.',
         },
         {
           title: 'Problem-solution UGC',
-          blurb: 'The format that starts in the pain and lands the product as the solution.',
+          blurb: 'I start with your customer’s problem and then show your product as the fix.',
         },
         {
           title: 'Lifestyle UGC',
-          blurb: 'Pieces that feel native in your brand’s feed, not on a set.',
+          blurb: 'Your product in everyday moments, filmed in real-life settings instead of on a set.',
         },
         {
           title: 'UGC b-roll and footage',
-          blurb: 'Product shots and scenes without voiceover so your team can edit.',
+          blurb: 'Product shots and scenes without voiceover, for your team to edit.',
         },
       ],
     },
   },
   verticals: {
     es: {
-      breadcrumbLabel: 'Verticales',
-      metaTitle: 'Contrata UGC de beauty y ecommerce | Gisela Saldarriaga',
+      breadcrumbLabel: 'Industrias',
+      metaTitle: 'Creadora UGC para beauty y ecommerce | Gisela Saldarriaga',
       metaDescription:
-        'Contrata a Gisela Saldarriaga para UGC de beauty, ecommerce, moda, tech y bienestar. Creadora bilingüe en Medellín para marcas en US hispano, España y LatAm.',
-      heroTitle: 'Contrata UGC por industria: beauty, ecommerce, moda, tech y bienestar',
+        'UGC en español e inglés para marcas de beauty, ecommerce, moda, tech y bienestar. Soy creadora en Medellín y grabo para EE. UU., España y LatAm.',
+      heroTitle: 'UGC por industria: beauty, ecommerce, moda, tech y bienestar',
       lead:
-        `Si tu marca necesita una creadora UGC bilingüe por industria, no una agencia, empieza aquí. Produzco desde Medellín para equipos de beauty, ecommerce, moda, tech/SaaS y bienestar que venden en el mercado hispano de Estados Unidos, España, LatAm, o con un brief en inglés. El contenido se entrega a la marca. Puedes [contratar una creadora UGC bilingüe](${getServicePath('bilingual-ugc-creator', 'es')}) o leer [cómo contratar una creadora UGC](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
+        `Grabo UGC en español e inglés para marcas de beauty, ecommerce, moda, tech/SaaS y bienestar. Estoy en Medellín y trabajo con equipos de Estados Unidos (incluido el mercado hispano), España y Latinoamérica. Tratas directamente conmigo, sin agencia, y los videos se entregan a tu marca. Puedes [contratar una creadora UGC bilingüe](${getServicePath('bilingual-ugc-creator', 'es')}) o leer [cómo contratar una creadora UGC](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
       childrenTitle: 'Por industria',
-      primaryCtaLabel: 'Contáctame',
+      primaryCtaLabel: 'Escríbeme',
       secondaryLinks: [
         { hubId: 'services', label: 'Qué puedes contratar' },
         { hubId: 'resources', label: 'Guías para contratar' },
@@ -208,60 +208,60 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       children: [
         {
           title: 'UGC para beauty',
-          blurb: 'Skincare, maquillaje y cuidado personal con producto en uso real, para ads y páginas de producto.',
+          blurb: 'Skincare, maquillaje y cuidado personal aplicados en piel real, para anuncios y páginas de producto.',
         },
         {
           title: 'UGC para ecommerce',
-          blurb: 'Persona real mostrando el producto para DTC, tienda online y páginas de conversión.',
+          blurb: 'Una persona real mostrando tu producto, para tiendas online, marcas DTC y páginas de producto.',
         },
         {
           title: 'UGC para moda',
-          blurb: 'Prendas en cuerpo real, con estilo cotidiano. No es un editorial de estudio.',
+          blurb: 'Ropa puesta en un cuerpo real, con estilo del día a día y no de sesión de estudio.',
         },
         {
           title: 'UGC para tech y SaaS',
-          blurb: 'Software, apps y servicios explicados en claro, sin demo corporativa.',
+          blurb: 'Software, apps y servicios explicados en palabras sencillas, sin sonar a demo corporativa.',
         },
         {
           title: 'UGC para lifestyle y bienestar',
-          blurb: 'Rutina, wellness y producto en un día real, con tono cercano frente a cámara.',
+          blurb: 'Tu producto dentro de una rutina de todos los días, hablando a cámara con naturalidad.',
         },
       ],
     },
     en: {
-      breadcrumbLabel: 'Verticals',
-      metaTitle: 'Hire beauty and ecommerce UGC creator | Gisela Saldarriaga',
+      breadcrumbLabel: 'Industries',
+      metaTitle: 'Beauty and ecommerce UGC creator | Gisela Saldarriaga',
       metaDescription:
-        'Hire Gisela Saldarriaga for beauty, ecommerce, fashion, tech, and wellness UGC. Bilingual creator in Medellín for US Hispanic, Spain, LatAm, and English briefs.',
-      heroTitle: 'Hire a UGC creator by industry: beauty, ecommerce, fashion, tech, wellness',
+        'UGC in Spanish and English for beauty, ecommerce, fashion, tech, and wellness brands. I’m a creator in Medellín and film for the US, Spain, and LatAm.',
+      heroTitle: 'UGC by industry: beauty, ecommerce, fashion, tech, and wellness',
       lead:
-        `If your brand needs a bilingual UGC creator by industry, not an agency, start here. I produce from Medellín for beauty, ecommerce, fashion, tech/SaaS, and wellness teams selling to US Hispanic audiences, Spain, LatAm, or with an English brief. The content is delivered to the brand. You can [hire a bilingual UGC creator](${getServicePath('bilingual-ugc-creator', 'en')}) or read [how to hire a UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
+        `I make UGC in Spanish and English for beauty, ecommerce, fashion, tech/SaaS, and wellness brands. I’m based in Medellín and work with teams in the US (including the US Hispanic market), Spain, and Latin America. You deal with me directly, no agency, and the videos are delivered to your brand. You can [hire a bilingual UGC creator](${getServicePath('bilingual-ugc-creator', 'en')}) or read [how to hire a UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
       childrenTitle: 'By industry',
-      primaryCtaLabel: 'Contact me',
+      primaryCtaLabel: 'Message me',
       secondaryLinks: [
-        { hubId: 'services', label: 'What you can hire' },
-        { hubId: 'resources', label: 'Guides to hire' },
+        { hubId: 'services', label: 'What you can hire me for' },
+        { hubId: 'resources', label: 'Hiring guides' },
       ],
       children: [
         {
           title: 'Beauty UGC',
-          blurb: 'Skincare, makeup, and personal care with the product on real skin, for ads and product pages.',
+          blurb: 'Skincare, makeup, and personal care, tried on real skin for your ads and product pages.',
         },
         {
           title: 'Ecommerce UGC',
-          blurb: 'A real person on camera for DTC, online stores, and conversion pages.',
+          blurb: 'A real person showing your product, for online stores, DTC brands, and product pages.',
         },
         {
           title: 'Fashion UGC',
-          blurb: 'Clothes on a real body, everyday style. Not a studio editorial.',
+          blurb: 'Clothes worn on a real body, styled for everyday life rather than a studio shoot.',
         },
         {
           title: 'Tech and SaaS UGC',
-          blurb: 'Software, apps, and services explained clearly, without a corporate demo feel.',
+          blurb: 'Software, apps, and services explained in plain words, without sounding like a corporate demo.',
         },
         {
           title: 'Lifestyle and wellness UGC',
-          blurb: 'Routine, wellness, and product in a real day, spoken like a real person on camera.',
+          blurb: 'Your product as part of an everyday routine, with me talking to camera in a relaxed way.',
         },
       ],
     },
@@ -269,14 +269,14 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
   resources: {
     es: {
       breadcrumbLabel: 'Recursos',
-      metaTitle: 'Cómo contratar creadora UGC bilingüe | Gisela Saldarriaga',
+      metaTitle: 'Cómo contratar una creadora UGC bilingüe | Gisela Saldarriaga',
       metaDescription:
-        'Guías para contratar una creadora UGC bilingüe: brief, formatos de ads y UGC vs influencer. Para marcas en US hispano, España y LatAm que van a producir.',
+        'Guías para contratar una creadora UGC bilingüe: qué poner en el brief, qué formatos pedir para anuncios y en qué se diferencia el UGC de un influencer.',
       heroTitle: 'Cómo contratar una creadora UGC bilingüe: guías para marcas',
       lead:
-        'Estas cuatro guías son para equipos que van a contratar una creadora UGC, no para armar una agencia. Sirven si vendes al mercado hispano de Estados Unidos, a España o a LatAm, o si el brief va en inglés. Empieza por cómo contratar; el resto aclara formatos, la diferencia con influencer y qué es UGC.',
+        'Estas cuatro guías son para marcas que van a contratar a una creadora UGC. Te sirven si le vendes al mercado hispano de Estados Unidos, a España o a Latinoamérica, o si tu brief está en inglés. Si es tu primera vez, empieza por cómo contratar. Las demás explican los formatos para anuncios, la diferencia entre UGC e influencer marketing y qué es el UGC.',
       childrenTitle: 'Guías para marcas',
-      primaryCtaLabel: 'Contáctame',
+      primaryCtaLabel: 'Escríbeme',
       secondaryLinks: [
         { hubId: 'services', label: 'Qué puedes contratar' },
         { hubId: 'verticals', label: 'UGC por industria' },
@@ -284,19 +284,19 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       children: [
         {
           title: 'Cómo contratar creadora UGC',
-          blurb: 'El proceso, el brief y qué pedir antes de firmar con una creadora.',
+          blurb: 'Cómo funciona el proceso, qué poner en el brief y qué preguntar antes de cerrar el trato.',
         },
         {
           title: 'Formatos de UGC para ads',
-          blurb: 'Qué formato pedir (testimonial, demo, problema-solución, portavoz) según el objetivo de pauta.',
+          blurb: 'Testimonial, demo, problema-solución o portavoz: cuál pedir según lo que buscas con tu pauta.',
         },
         {
           title: 'UGC vs influencer marketing',
-          blurb: 'Por qué contratar creadora (contenido para tu marca) no es comprar un post en redes ajenas.',
+          blurb: 'Con una creadora UGC compras videos para tu marca. Con un influencer, pagas por un post en su cuenta.',
         },
         {
           title: 'Qué es UGC',
-          blurb: 'La base, en claro, para equipos que van a producir y pautar.',
+          blurb: 'Lo básico, en palabras sencillas, para equipos que van a producir videos y pautarlos.',
         },
       ],
     },
@@ -304,32 +304,32 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       breadcrumbLabel: 'Resources',
       metaTitle: 'How to hire a bilingual UGC creator | Gisela Saldarriaga',
       metaDescription:
-        'Guides to hire a bilingual UGC creator: brief, ad formats, and UGC vs influencer. For US Hispanic, Spain, and LatAm brands ready to produce, not an agency.',
-      heroTitle: 'How to hire a bilingual UGC creator: guides for brand teams',
+        'Guides for hiring a bilingual UGC creator: what to put in the brief, which ad formats to ask for, and how UGC differs from influencer marketing.',
+      heroTitle: 'How to hire a bilingual UGC creator: guides for brands',
       lead:
-        'These four guides are for teams hiring a UGC creator, not building an agency. They help if you sell to US Hispanic audiences, Spain, or LatAm, or if the brief is in English. Start with how to hire; the rest covers ad formats, UGC vs influencer, and what UGC actually is.',
-      childrenTitle: 'Guides for brand teams',
-      primaryCtaLabel: 'Contact me',
+        'These four guides are for brands about to hire a UGC creator. They’re useful if you sell to the US Hispanic market, Spain, or Latin America, or if your brief is in English. If it’s your first time, start with how to hire. The others cover ad formats, how UGC differs from influencer marketing, and what UGC is.',
+      childrenTitle: 'Guides for brands',
+      primaryCtaLabel: 'Message me',
       secondaryLinks: [
-        { hubId: 'services', label: 'What you can hire' },
+        { hubId: 'services', label: 'What you can hire me for' },
         { hubId: 'verticals', label: 'UGC by industry' },
       ],
       children: [
         {
           title: 'How to hire a UGC creator',
-          blurb: 'The process, the brief, and what to ask before you book a creator.',
+          blurb: 'How the process works, what goes in the brief, and what to ask before you book.',
         },
         {
           title: 'UGC ad formats guide',
-          blurb: 'Which format to request (testimonial, demo, problem-solution, spokesperson) for the paid-social job.',
+          blurb: 'Testimonial, demo, problem-solution, or spokesperson: which one to ask for based on what your ads need to do.',
         },
         {
           title: 'UGC vs influencer marketing',
-          blurb: 'Why hiring a creator (content for your brand) is not buying a post on someone else’s feed.',
+          blurb: 'With a UGC creator, you’re buying videos for your brand. With an influencer, you’re paying for a post on their account.',
         },
         {
           title: 'What is UGC',
-          blurb: 'The basics, in plain language, for teams about to produce and run ads.',
+          blurb: 'The basics in plain language, if you’re about to make videos and run them as ads.',
         },
       ],
     },

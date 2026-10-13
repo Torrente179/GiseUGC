@@ -6,24 +6,24 @@
     "testimonials": "Testimonials",
     "contact": "Contact",
     "hireMe": "Contact me",
-    "studioLabel": "UGC and Advertisement Studio"
+    "studioLabel": "UGC creator in Medellín"
   },
   "languageSwitcher": {
-    "changeLanguage": "Change Language"
+    "changeLanguage": "Change language"
   },
   "hero": {
     "subtitle": "Bilingual UGC, product demos, and spokesperson videos for brands that sell through social",
-    "offerTitle": "Bilingual UGC, demos and spokesperson videos",
-    "offerLead": "For campaigns on Meta, TikTok and YouTube. I produce from Medellín for brands in the US, Spain and Latin America.",
+    "offerTitle": "I make UGC videos in Spanish and English",
+    "offerLead": "Ads for TikTok and Meta, product demos, reviews, and talking-to-camera videos. I work from Medellín with brands in the US, Spain, and Latin America.",
     "signatureMeta": "Medellín · ES + EN",
-    "reelNote": "{{count}} selected pieces",
+    "reelNote": "{{count}} sample videos",
     "reelLabel": "Reel",
     "headline": "UGC with presence",
     "headlineAccent": "and conversion focus",
     "signature": "Bilingual UGC creator and spokesperson for TikTok ads, Meta ads, and product demos",
     "description": "I create UGC ads, product demos, reviews, and spokesperson videos in Spanish and English for global brands.",
-    "buttonPortfolio": "See My Work",
-    "buttonContact": "Contact",
+    "buttonPortfolio": "See my work",
+    "buttonContact": "Message me",
     "imageAlt": "Gisela Saldarriaga, UGC creator and spokesperson",
     "scrollPrompt": "Explore My Services",
     "pillStrategy": "Creative direction",
@@ -35,105 +35,106 @@
     "tagline": "Bilingual UGC",
     "introduction": {
       "eyebrow": "Creative UGC",
-      "title": "A more human presence for campaigns that need credibility",
-      "description": "I work with brands that need TikTok ads, Meta ads, demos, testimonials, and speaking-to-camera assets with a polished visual standard. I produce remotely from Medellin for teams in the US, Spain, and LatAm."
+      "title": "Hi, I’m Gisela",
+      "description": "You send me the product and tell me what you need. I write or adjust the script, film, edit, and in 3 to 5 business days you have videos ready to post or run as ads."
     }
   },
   "services": {
     "sectionSubtitle": "What I Offer",
     "sectionTitle": "UGC and spokesperson services",
-    "motionTitle": "The complete toolkit for modern advertisers",
-    "motionSubtitle": "Bilingual content in Spanish and English for TikTok ads, Meta ads, demos, reviews, and spokesperson pieces built around conversion.",
+    "motionTitle": "Everything I can film for your",
+    "motionTitleAccent": "brand",
+    "motionSubtitle": "I can shoot any of these in Spanish, English, or both.",
     "videoPreviewLabel": "Video preview",
     "videoPreviewClose": "Close video preview",
     "service1": {
-      "title": "UGC Ads",
-      "subtitle": "Ad Videos",
+      "title": "UGC ads",
+      "subtitle": "For TikTok, Meta, and YouTube",
       "description": "I create UGC videos designed to convert: powerful hooks, clear benefits, and calls to action for campaigns on Meta, TikTok, and YouTube."
     },
     "service2": {
-      "title": "Testimonials / UGC Reviews",
-      "subtitle": "Social proof on video",
+      "title": "Testimonials and reviews",
+      "subtitle": "Video reviews of your product",
       "description": "I produce authentic and persuasive reviews that build trust, showcase results, and help your audience make purchasing decisions."
     },
     "service3": {
-      "title": "Demo / How-to",
-      "subtitle": "Product Tutorial",
+      "title": "Demos and tutorials",
+      "subtitle": "How your product works",
       "description": "I record step-by-step demonstrations and tutorials so your customer understands how to use the product, sees its value, and wants it from the first minute."
     },
     "service4": {
-      "title": "Problem-Solution",
-      "subtitle": "Pain → Solution",
-      "description": "I create pieces that connect from the consumer's real problem and show how your product solves it in a clear, credible, and attractive way."
+      "title": "Problem-solution",
+      "subtitle": "From the problem to your product",
+      "description": "I create pieces that connect from the consumer’s real problem and show how your product solves it in a clear, credible, and attractive way."
     },
     "service5": {
       "title": "Lifestyle UGC",
-      "subtitle": "Organic Social Content",
+      "subtitle": "Your product in everyday life",
       "description": "I integrate your product into real-life scenes with curated aesthetics and natural storytelling, ideal for Reels, TikTok, and organic brand content."
     },
     "service6": {
-      "title": "B-Roll / UGC Footage",
-      "subtitle": "Clips for Editing",
+      "title": "B-roll",
+      "subtitle": "Raw clips for your editors",
       "description": "I deliver premium shot packages (close-ups, details, action shots, and environments) for your team to edit into multiple ads and posts."
     },
     "service7": {
-      "title": "Bilingual UGC Creator",
-      "subtitle": "Spanish + English",
+      "title": "Bilingual UGC",
+      "subtitle": "Spanish and English",
       "description": "Professional UGC content in both Spanish and English from a single creator. Perfect for brands reaching audiences in both languages without losing authenticity."
     },
     "service8": {
-      "title": "Spokesperson Videos",
-      "subtitle": "Brand Presenter",
+      "title": "Spokesperson videos",
+      "subtitle": "A face for your brand",
       "description": "I represent your brand on camera with journalist-level professionalism and creator warmth. Perfect for ads, launches, and corporate communication."
     },
     "marqueeCards": {
       "card1": {
-        "title": "UGC Ads for TikTok and Meta",
-        "description": "Conversion-focused creatives with strong hooks and clear CTAs for paid performance campaigns."
+        "title": "UGC ads for TikTok and Meta",
+        "description": "Ads that open with a strong hook and end with a clear call to action, for your paid campaigns."
       },
       "card2": {
-        "title": "Spokesperson Videos",
-        "description": "Professional on-camera delivery to explain your offer, launches, and promotional messaging."
+        "title": "Spokesperson videos",
+        "description": "I talk to camera to explain your offer, a launch, or a promotion."
       },
       "card3": {
-        "title": "Brand Ambassador UGC (ES/EN)",
-        "description": "Recurring content that represents your brand naturally in both Spanish and English."
+        "title": "Brand ambassador (ES/EN)",
+        "description": "Regular videos for your brand in Spanish and English, so your audience keeps seeing a familiar face."
       },
       "card4": {
-        "title": "UGC Testimonials and Reviews",
-        "description": "Credible social proof videos that build trust and reduce friction in the buying decision."
+        "title": "Testimonials and reviews",
+        "description": "I share how your product worked for me, so people who are on the fence feel ready to buy."
       },
       "card5": {
-        "title": "Product Demo and How-to",
-        "description": "Step-by-step educational videos for ecommerce products, apps, and digital services."
+        "title": "Demos and tutorials",
+        "description": "I show step by step how your product, app, or service works."
       },
       "card6": {
-        "title": "Voiceover + On-Camera (ES/EN)",
-        "description": "Voiceover and speaking-to-camera assets for ads, landing creatives, and organic social."
+        "title": "Voiceover and on-camera (ES/EN)",
+        "description": "Voiceover or talking to camera, for ads, landing pages, and social."
       },
       "card7": {
-        "title": "Social Media Videos (Reels/TikTok)",
-        "description": "Platform-native vertical videos designed to improve retention, reach, and engagement."
+        "title": "Videos for Reels and TikTok",
+        "description": "Vertical videos made for each platform, so people keep watching."
       },
       "card8": {
-        "title": "UGC for Beauty and Skincare",
-        "description": "Creator-led routines, benefits, and result-focused storytelling for beauty brands."
+        "title": "UGC for beauty and skincare",
+        "description": "Routines, textures, and results shown on real skin."
       },
       "card9": {
-        "title": "UGC for SaaS, AI, and Tech",
-        "description": "Simple, persuasive explainers that communicate digital product value with clarity."
+        "title": "UGC for SaaS, AI, and tech",
+        "description": "I explain your tool in plain words, the way I’d explain it to a friend."
       },
       "card10": {
-        "title": "UGC for Fashion and Lifestyle",
-        "description": "Real-world product integration with premium aesthetics for aspirational positioning."
+        "title": "UGC for fashion and lifestyle",
+        "description": "Your product in real-life moments, with a clean, styled look."
       },
       "card11": {
-        "title": "B-Roll and Footage Packs",
-        "description": "Reusable clip banks for creative iteration, A/B testing, and always-on production."
+        "title": "B-roll and footage packs",
+        "description": "A bank of clips so your team can cut several versions and test which one works best."
       },
       "card12": {
-        "title": "Local + Global Production from Medellin",
-        "description": "LatAm-aware storytelling with international standards for Spanish-first and English markets."
+        "title": "Remote production from Medellín",
+        "description": "I film in Colombia for brands speaking to Latino and English-speaking audiences."
       }
     }
   },
@@ -148,16 +149,16 @@
     "reelAriaNext": "Scroll next videos",
     "reelPreviewLabel": "Reel preview",
     "reelPreviewClose": "Close reel preview",
-    "reelPreviewPrev": "Previous opened reel",
-    "reelPreviewNext": "Next opened reel",
+    "reelPreviewPrev": "Previous video",
+    "reelPreviewNext": "Next video",
     "reelPreviewSwipeHint": "Swipe up/down to close, left/right to browse",
-    "collageEyebrow": "Creator advantage",
-    "collageTitle": "High-converting UGC coverage across your full funnel",
-    "collageDescription": "From first impression to final decision, I create creator-led assets that make your brand feel credible, human, and purchase-ready.",
-    "collagePoint1": "Platform-native hooks and storytelling built to increase retention in the first seconds.",
-    "collagePoint2": "Multi-angle product demonstrations that reduce buyer hesitation and increase confidence.",
-    "collagePoint3": "A reusable creative bank to test offers, audiences, and messaging much faster.",
-    "collageCta": "Plan your UGC package - Contact me",
+    "collageEyebrow": "One product, several videos",
+    "collageTitle": "Videos for every step before the sale",
+    "collageDescription": "From one shoot I can give you the ad someone sees first, the demo that answers their questions, and the review that gets them to buy.",
+    "collagePoint1": "Hooks made for each platform, so people don’t scroll past in the first few seconds.",
+    "collagePoint2": "Your product from several angles, so people can see it clearly and understand how it works.",
+    "collagePoint3": "Plenty of footage to test different offers, audiences, and messages.",
+    "collageCta": "Tell me what you need",
     "collageClip1": "UGC Clothing — Look 1",
     "collageClip2": "UGC Clothing — Look 2",
     "collageClip3": "UGC Clothing — Look 3",
@@ -171,20 +172,20 @@
       "lifestyle": "Lifestyle"
     },
     "items": {
-      "item1": "Lifestyle Product Review",
-      "item2": "Brand Spokesperson",
-      "item3": "Voicebot Review",
-      "item4": "Creatine Supplement Review",
-      "item5": "Business Promotion",
-      "item6": "Services Presentation",
-      "item7": "AI Services Review",
-      "item8": "Dynamic Lifestyle Review",
-      "item9": "Bots Voiceover Review",
-      "item10": "Premium Lifestyle Review"
+      "item1": "Lifestyle product review",
+      "item2": "Brand spokesperson",
+      "item3": "Voicebot review",
+      "item4": "Creatine supplement review",
+      "item5": "Business promo",
+      "item6": "Services intro",
+      "item7": "AI services review",
+      "item8": "Lifestyle review (2)",
+      "item9": "Voiceover for bots",
+      "item10": "Lifestyle review (3)"
     }
   },
   "testimonials": {
-    "sectionSubtitle": "Client Feedback",
+    "sectionSubtitle": "What clients say",
     "sectionTitle": "Testimonials",
     "testimonial1": {
       "name": "Sara Jiménez",
@@ -196,7 +197,7 @@
       "name": "Miguel Chen",
       "company": "TechGadget Inc.",
       "role": "E-commerce Manager",
-      "text": "I was blown away by the quality and creativity of the content. The product videos perfectly showcased our new tech gadgets and helped us connect with our target audience in a way we hadn't before."
+      "text": "I was blown away by the quality and creativity of the content. The product videos perfectly showcased our new tech gadgets and helped us connect with our target audience in a way we hadn’t before."
     },
     "testimonial3": {
       "name": "Emma García",
@@ -211,13 +212,13 @@
     "ariaDialog": "Testimonials viewer",
     "swipeHint": "Swipe or use ← → · Esc to close",
     "reviewCount": "{{count}} reviews",
-    "hoverHint": "Click any review to expand"
+    "hoverHint": "Click a review to read it in full"
   },
   "contact": {
     "sectionSubtitle": "Get In Touch",
-    "sectionTitle": "Contact Me",
-    "heading": "Let's Discuss Your Project",
-    "description": "Ready to elevate your brand with professional UGC content? I'd love to hear about your project and discuss how we can collaborate to achieve your goals.",
+    "sectionTitle": "Contact me",
+    "heading": "Tell me about your project",
+    "description": "Ready to elevate your brand with professional UGC content? I’d love to hear about your project and discuss how we can collaborate to achieve your goals.",
     "emailLabel": "Direct contact",
     "emailValue": "WhatsApp or Fiverr",
     "fiverrLabel": "Fiverr",
@@ -236,17 +237,17 @@
     },
     "toast": {
       "successTitle": "Message Sent!",
-      "successDescription": "Thanks for your message. I'll get back to you soon."
+      "successDescription": "Thanks for your message. I’ll get back to you soon."
     }
   },
   "footer": {
     "eyebrow": "Premium creator studio",
-    "title": "Human presence for campaigns that sell.",
-    "description": "Bilingual UGC, product demos, and spokesperson videos for TikTok ads, Meta ads, and social-first launches.",
+    "title": "Let’s make your next video.",
+    "description": "UGC, product demos, and spokesperson videos in Spanish and English, for your TikTok and Meta ads and your own social channels.",
     "contactCardEyebrow": "Start your next campaign",
     "contactCardTitle": "Clear brief, fast communication, polished delivery.",
     "contactCardDescription": "WhatsApp is the fastest route for availability, timing, and creative fit. Fiverr stays open for teams that prefer marketplace workflow.",
-    "primaryCta": "Message on WhatsApp",
+    "primaryCta": "Message me on WhatsApp",
     "telegramPrompt": "Prefer Telegram? Send the brief here.",
     "proofBrands": "28+ brands",
     "proofMarkets": "US, Spain, and LatAm",
@@ -257,9 +258,9 @@
     "legalTitle": "Legal",
     "privacyPolicy": "Privacy Policy",
     "termsContentUse": "Terms & Content Use",
-    "studioSummary": "Remote production from Medellin for beauty, lifestyle, ecommerce, SaaS, and tech teams that need bilingual creator-led ads, demos, and spokesperson assets.",
-    "studioFactLocation": "Medellin, Colombia",
-    "studioFactLanguages": "Spanish and English delivery",
+    "studioSummary": "I film from Medellín for beauty, lifestyle, ecommerce, SaaS, and tech brands: ads, demos, and spokesperson videos in Spanish and English.",
+    "studioFactLocation": "Medellín, Colombia",
+    "studioFactLanguages": "Spanish and English",
     "studioFactTurnaround": "Typical delivery: 3 to 5 business days",
     "bottomNote": "Medellin, Colombia · Spanish and English · Remote for the US, Spain, and LatAm.",
     "services": {
@@ -270,13 +271,13 @@
       "ugc-product-demo": "UGC product demos",
       "ugc-problem-solution": "Problem-solution UGC",
       "ugc-lifestyle": "Lifestyle UGC",
-      "ugc-broll-footage": "UGC b-roll"
+      "ugc-broll-footage": "UGC B-roll and footage"
     },
     "fiverr": {
       "name": "Gisela",
       "handle": "@gisela_sm",
       "profileTitle": "Spokesperson Professional Presenter Voiceover Expert UGC Creator",
-      "country": "Medellin, Colombia",
+      "country": "Medellín, Colombia",
       "language": "Spanish, English",
       "reviewsTitle": "{{count}} Reviews",
       "ratingBreakdown": "Rating breakdown",
@@ -295,48 +296,48 @@
     "languages": "Languages"
   },
   "faq": {
-    "sectionSubtitle": "Frequently Asked Questions",
+    "sectionSubtitle": "Frequently asked questions",
     "sectionTitle": "FAQ",
     "items": [
       {
         "question": "What is UGC and how can it help my brand?",
-        "answer": "They're authentic, natural-looking videos made by creators like me, designed for ad campaigns. Instead of feeling like a corporate ad, UGC feels real, and that builds far more trust and engagement."
+        "answer": "UGC stands for user-generated content: videos that look like they were made by a regular person, not by the brand. Creators like me film them for ads and social. Because they don’t feel like a commercial, people trust them more and keep watching."
       },
       {
-        "question": "What types of UGC content do you create?",
-        "answer": "A bit of everything: ads with strong hooks, spokesperson videos, reviews, product demos, lifestyle content, and B-Roll. All in Spanish, English, or both, in vertical format ready for social."
+        "question": "What kinds of videos do you make?",
+        "answer": "Ads for TikTok and Meta, spokesperson videos, reviews, product demos, lifestyle content, and B-roll. All vertical, in Spanish, English, or both."
       },
       {
-        "question": "Do you publish the content on your social media?",
-        "answer": "No. All the content is exclusively for your brand. You get the files and use them however you want: social media, paid ads, landing pages. I don't post anything on my accounts unless we agree on a brand ambassador deal."
+        "question": "Do you post the content on your own social media?",
+        "answer": "No. I send you the files and you post them on your own channels: your social accounts, your website, or your landing pages. Running them as paid ads needs a separate license. I don’t post anything on my accounts unless we agree on a brand ambassador deal."
       },
       {
-        "question": "How does the work process work?",
-        "answer": "Pretty simple: you tell me what you need, I send you a proposal, we align on the brief together, I shoot, edit, and deliver. If I need the product, you ship it beforehand. Everything is remote and smooth."
+        "question": "How does the process work?",
+        "answer": "You tell me what you need and I send you a proposal. Once we agree on the brief, I film, edit, and deliver. If I need the product, you ship it to me first. It’s all remote."
       },
       {
-        "question": "How much does UGC content cost?",
-        "answer": "It depends on the content type, how many videos you need, and the complexity of the project. Reach out through the form or Fiverr and I'll send you a quote tailored to what you're looking for."
+        "question": "How much does it cost?",
+        "answer": "It depends on the type of video, how many you need, and how complex the project is. Message me on WhatsApp or Fiverr with what you have in mind and I’ll send you a quote."
       },
       {
-        "question": "Do you include revisions?",
-        "answer": "Yes, every project includes 1 to 2 revision rounds for editing tweaks, pacing, or on-screen text. If you need something bigger like a full re-shoot, we coordinate that separately."
+        "question": "Are revisions included?",
+        "answer": "Yes. Every project includes 1 or 2 rounds of revisions for edits, pacing, or on-screen text. If you need something bigger, like a reshoot, we quote that separately."
       },
       {
-        "question": "How long does content delivery take?",
-        "answer": "Usually 3 to 5 business days after I receive the product and we confirm the brief. If you have a tight deadline, tell me upfront and we'll make it work."
+        "question": "How long does delivery take?",
+        "answer": "Usually 3 to 5 business days after I receive the product and we confirm the brief. If you have a tight deadline, tell me upfront and we’ll make it work."
       },
       {
-        "question": "What usage rights does the brand get over the content?",
-        "answer": "Rights for organic posts are included in every project. If you also want to use the content in paid ads, that comes with a separate license we quote together."
+        "question": "What usage rights does the brand get?",
+        "answer": "Every project includes the rights to post the videos organically on your channels. If you also want to run them as paid ads, that needs a separate license, which we quote together."
       },
       {
         "question": "What kinds of brands do you usually work with?",
-        "answer": "Most of my projects come from brands speaking to Spanish-speaking audiences in the US, along with teams in Spain, Europe, and Latin America. I also take on selected English-language briefs when the tone feels right. Everything is produced remotely from Medellin with a process that stays simple."
+        "answer": "Mostly brands speaking to Spanish-speaking audiences in the US, plus teams in Spain and Latin America. I also make English videos when a project needs them. I film everything remotely from Medellín."
       },
       {
         "question": "What languages do you work in?",
-        "answer": "In Spanish with no word limit or script needed, it's my native language. In English too, with a script from your side and a 65-word limit per video to keep it natural."
+        "answer": "Spanish and English. Spanish is my native language, so I don’t need a script and there’s no length limit. In English I work from your script, up to 65 words per video, so it sounds natural."
       }
     ]
   },

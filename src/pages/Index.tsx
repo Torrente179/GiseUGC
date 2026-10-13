@@ -82,12 +82,12 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
     es: {
       title: 'Gisela Saldarriaga | Creadora UGC bilingüe y videos de portavoz',
       description:
-        'Creadora UGC bilingüe en Medellín para TikTok Ads, Meta Ads, demos de producto y videos de portavoz. Trabajo con marcas de Estados Unidos, España y Latinoamérica.',
+        'Creadora UGC bilingüe en Medellín. Hago anuncios para TikTok y Meta, demos, reseñas y videos de portavoz para marcas de EE. UU., España y Latinoamérica.',
     },
     en: {
       title: 'Gisela Saldarriaga | Bilingual UGC creator and spokesperson',
       description:
-        'Bilingual UGC creator in Medellin for TikTok ads, Meta ads, product demos, reviews, and spokesperson videos for brands in the US, Spain, and LatAm.',
+        'Bilingual UGC creator in Medellín. I make TikTok and Meta ads, product demos, reviews, and spokesperson videos for brands in the US, Spain, and LatAm.',
     },
   };
   const homeSeo = homeSeoByLocale[locale];

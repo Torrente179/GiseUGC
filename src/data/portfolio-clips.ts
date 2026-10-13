@@ -4,6 +4,8 @@ export interface ReelClip {
   id: number;
   titleKey?: string;
   title?: string;
+  /** Per-locale display titles for clips that only carry a raw `title`. */
+  localizedTitle?: Partial<Record<ReelClipLocale, string>>;
   category: 'fashion' | 'beauty' | 'tech' | 'lifestyle';
   mainSrc: string;
   mobileSrc: string;
@@ -117,8 +119,8 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     language: 'es',
     durationSeconds: 72.93,
     schemaDescription: {
-      es: 'Reseña lifestyle con tono cercano y demostración de producto pensada para TikTok, Reels y pauta.',
-      en: 'A lifestyle product review with a warm, natural delivery built for TikTok, Reels, and paid social.',
+      es: 'Reseña de un producto lifestyle, grabada para TikTok, Reels y anuncios.',
+      en: 'A lifestyle product review made for TikTok, Reels, and ads.',
     },
   },
   {
@@ -133,8 +135,8 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     language: 'es',
     durationSeconds: 23.5,
     schemaDescription: {
-      es: 'Pieza de portavoz orientada a comunicar beneficios y presencia de marca con una entrega clara frente a cámara.',
-      en: 'A spokesperson-style piece built to communicate benefits and brand presence with a clear on-camera delivery.',
+      es: 'Video de portavoz: explico los beneficios de una marca hablando a cámara.',
+      en: 'A spokesperson video: I explain a brand’s benefits talking straight to camera.',
     },
   },
   {
@@ -161,8 +163,8 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     language: 'es',
     durationSeconds: 41.45,
     schemaDescription: {
-      es: 'Review de bienestar y suplemento con enfoque testimonial, beneficios visibles y una puesta en escena cercana.',
-      en: 'A wellness-focused testimonial review built around clear benefits, believable delivery, and a close-to-camera feel.',
+      es: 'Reseña de un suplemento de bienestar, contada como experiencia personal.',
+      en: 'A review of a wellness supplement, told as a personal experience.',
     },
   },
   {
@@ -201,8 +203,8 @@ export const LEGACY_REEL_CLIPS: ReelClip[] = [
     language: 'es',
     durationSeconds: 23.06,
     schemaDescription: {
-      es: 'Demo y reseña para servicios de AI con explicación directa, ritmo ágil y enfoque en claridad comercial.',
-      en: 'A creator-led AI services demo with direct explanation, brisk pacing, and a commercial focus on clarity.',
+      es: 'Demo y reseña de servicios de IA, explicados de forma directa.',
+      en: 'A demo and review of AI services, explained in plain words.',
     },
   },
   {

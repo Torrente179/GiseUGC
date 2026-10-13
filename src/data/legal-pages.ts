@@ -52,21 +52,21 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
     es: {
       metaTitle: 'Política de privacidad | Gisela Saldarriaga',
       metaDescription:
-        'Política de privacidad de Gisela Saldarriaga para el sitio de portafolio, servicios UGC y contacto comercial. Explica datos tratados, fines, derechos y contacto.',
+        'Política de privacidad del sitio de Gisela Saldarriaga: qué datos se tratan, con qué fines, qué derechos tiene y cómo contactar.',
       breadcrumbLabel: 'Política de privacidad',
       eyebrow: 'Privacidad y datos',
-      title: 'Política de privacidad para un sitio de portafolio, prospección y contacto comercial',
+      title: 'Política de privacidad del sitio web de Gisela Saldarriaga',
       intro:
         'Esta política explica cómo Gisela Saldarriaga trata la información relacionada con este sitio web, su portafolio de videos, sus páginas de servicio y sus canales de contacto profesionales.',
       audienceNote:
-        'El sitio está posicionado principalmente para marcas y equipos que venden a audiencias hispanohablantes en Estados Unidos, España y Latinoamérica, además de briefs seleccionados en inglés.',
-      updatedDateLabel: 'Última actualización: 22 de marzo de 2026',
-      effectiveDateLabel: 'Vigente desde: 22 de marzo de 2026',
+        'El sitio está dirigido sobre todo a marcas y equipos que venden a público hispanohablante en Estados Unidos, España y Latinoamérica, y también a algunos proyectos con brief en inglés.',
+      updatedDateLabel: 'Última actualización: 13 de octubre de 2026',
+      effectiveDateLabel: 'Vigente desde: 13 de octubre de 2026',
       summaryItems: [
         'Responsable: Gisela Saldarriaga',
         `Contacto de privacidad: ${SUPPORT_EMAIL}`,
         'Mercados principales: EE. UU., España y LatAm',
-        'Estado actual del formulario: validación local, sin envío desde el sitio',
+        'Formularios: el sitio no tiene formulario de contacto',
       ],
       tocTitle: 'Contenido',
       sections: [
@@ -75,12 +75,12 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
           title: '1. Responsable, alcance y contexto del sitio',
           paragraphs: [
             'La responsable del tratamiento descrito en esta página es Gisela Saldarriaga. Esta política cubre el dominio principal www.giselasaldarriaga.com, sus versiones en español e inglés, sus páginas de servicio, sus recursos estáticos y el material de portafolio accesible desde ese entorno.',
-            'El sitio funciona como presencia profesional, portafolio, punto de descubrimiento orgánico y superficie de contacto comercial para servicios de UGC, demos de producto, videos de portavoz, reseñas y paquetes de footage.',
+            'El sitio funciona como página profesional, portafolio, punto de entrada desde buscadores y canal de contacto comercial para servicios de UGC, demos de producto, videos de portavoz, reseñas y paquetes de B-roll.',
           ],
           bullets: [
-            'Controladora pública del tratamiento: Gisela Saldarriaga.',
+            'Responsable del tratamiento: Gisela Saldarriaga.',
             `Canal de privacidad y derechos: ${SUPPORT_EMAIL}.`,
-            'Ubicación operativa comunicada en el sitio: Medellín, Colombia.',
+            'Lugar de operación indicado en el sitio: Medellín, Colombia.',
           ],
         },
         {
@@ -93,19 +93,19 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
             'Datos de contacto que usted decide compartir, como nombre, correo, asunto, brief comercial o mensajes enviados por email o plataformas externas.',
             'Datos técnicos de navegación, como dirección IP aproximada, navegador, dispositivo, idioma, páginas visitadas, tiempos de carga y eventos de uso agregados o seudonimizados asociados a la analítica del sitio.',
             'Preferencias técnicas guardadas localmente en su navegador, como la preferencia de tema claro u oscuro.',
-            'Datos derivados del acceso a videos, imágenes y otros assets servidos desde la infraestructura de media/CDN del sitio.',
-            'Datos que usted comparta directamente con plataformas externas si decide contactar por WhatsApp, Telegram, Fiverr o redes sociales enlazadas desde esta web.',
+            'Datos derivados del acceso a videos, imágenes y otros archivos servidos desde la infraestructura de medios/CDN del sitio.',
+            'Datos que usted comparta directamente con plataformas externas si decide contactarme por WhatsApp, Telegram, Fiverr o redes sociales enlazadas desde esta web.',
           ],
           note:
-            'El formulario actual del sitio valida campos en el navegador y muestra feedback visual, pero hoy no transmite ni almacena la información en esta web mientras no se implemente un backend o integrador real.',
+            'El sitio no tiene formulario de contacto. Los mensajes que usted envíe llegan por email o por plataformas externas, no a través de esta web.',
         },
         {
           id: 'fuentes',
-          title: '3. Fuentes de datos y tecnologías actualmente presentes',
+          title: '3. Fuentes de datos y tecnologías en uso actualmente',
           bullets: [
             'Carga de páginas y recursos del sitio desde la infraestructura de hosting y distribución de contenido.',
             'Herramientas de medición de rendimiento y uso actualmente visibles en el código, como Vercel Analytics y Vercel Speed Insights.',
-            'Google Fonts para la carga tipográfica.',
+            'Google Fonts para cargar las tipografías.',
             'localStorage para recordar la preferencia de tema del usuario.',
             'Plataformas externas de contacto o perfil cuando usted hace clic y continúa la conversación fuera de esta web.',
           ],
@@ -117,26 +117,26 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
           id: 'fines-bases',
           title: '4. Finalidades del tratamiento y bases jurídicas',
           bullets: [
-            'Atender solicitudes comerciales, briefs, preguntas de servicio o mensajes directos: medidas precontractuales, ejecución de una solicitud y, cuando aplique, consentimiento del remitente.',
+            'Atender solicitudes comerciales, briefs, preguntas sobre servicios o mensajes directos: medidas precontractuales, ejecución de una solicitud y, cuando corresponda, consentimiento del remitente.',
             'Operar, asegurar y mejorar el sitio, su rendimiento, estabilidad y experiencia de navegación: interés legítimo en administrar una web profesional segura y funcional.',
             'Mantener preferencias técnicas como el tema visual: interés legítimo y, en su caso, la acción solicitada por el usuario dentro del dispositivo.',
-            'Cumplir obligaciones legales, responder requerimientos de autoridades o defender reclamaciones: cumplimiento de obligaciones legales e interés legítimo.',
+            'Cumplir obligaciones legales, responder requerimientos de autoridades o defenderse frente a reclamaciones: cumplimiento de obligaciones legales e interés legítimo.',
           ],
           paragraphs: [
-            'No utilizo esta web para vender datos personales ni para activar publicidad comportamental de terceros basada en píxeles o perfiles publicitarios propios del sitio en su estado actual.',
+            'En su estado actual, no utilizo esta web para vender datos personales ni para activar publicidad comportamental de terceros basada en píxeles o perfiles publicitarios propios del sitio.',
           ],
         },
         {
           id: 'destinatarios',
           title: '5. Destinatarios, proveedores y transferencias internacionales',
           paragraphs: [
-            'Para operar esta web puedo apoyarme en proveedores de infraestructura, analítica, tipografía, media/CDN y comunicación. Según la ruta de contacto elegida, sus datos pueden ser tratados por terceros que operan fuera de Colombia o del EEE/Reino Unido.',
+            'Para operar esta web, puedo apoyarme en proveedores de infraestructura, analítica, tipografía, medios/CDN y comunicación. Según el canal de contacto elegido, sus datos pueden ser tratados por terceros que operan fuera de Colombia o del EEE/Reino Unido.',
           ],
           bullets: [
-            'Proveedor de hosting y capa de rendimiento del sitio, incluyendo servicios de analítica y speed insights de Vercel.',
+            'Proveedor de hosting y de rendimiento del sitio, incluidos los servicios de analítica y Speed Insights de Vercel.',
             'Proveedor de tipografías web, como Google Fonts.',
-            'Infraestructura de media/CDN para servir videos, posters e imágenes del portafolio.',
-            'Plataformas externas de contacto o marketplace, como WhatsApp, Telegram, Fiverr e interfaces sociales enlazadas desde la web.',
+            'Infraestructura de medios/CDN para servir videos, pósteres e imágenes del portafolio.',
+            'Plataformas externas de contacto o marketplace, como WhatsApp, Telegram, Fiverr y redes sociales enlazadas desde la web.',
             'Asesores profesionales o autoridades cuando exista una obligación legal o necesidad razonable de defensa.',
           ],
           note:
@@ -149,10 +149,9 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
             'Datos de navegación, rendimiento o logs: por el tiempo razonablemente necesario para operar, asegurar, depurar o medir el sitio, sujeto a los periodos de retención del proveedor correspondiente.',
             'Mensajes comerciales o solicitudes directas: por el tiempo necesario para responder, dar seguimiento al proyecto, mantener historial comercial básico o cumplir exigencias legales.',
             'Preferencia de tema en el navegador: hasta que usted la borre, limpie el almacenamiento local o cambie la preferencia.',
-            'Datos no enviados por el formulario actual del sitio: no se conservan en esta web porque hoy el formulario no transmite la información.',
           ],
           paragraphs: [
-            'Aplico un criterio de minimización: intentar no recoger más información de la necesaria para la relación comercial o la operación técnica del sitio.',
+            'Aplico un criterio de minimización: procuro no recoger más información de la necesaria para la relación comercial o la operación técnica del sitio.',
             'Ningún sistema conectado a internet es absolutamente infalible. Por eso, aunque se aplican medidas razonables de seguridad, no se puede garantizar seguridad absoluta en todo momento.',
           ],
         },
@@ -164,14 +163,14 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
           ],
           bullets: [
             `Puede ejercer estos derechos escribiendo a ${SUPPORT_EMAIL}.`,
-            'La solicitud debe permitir identificar al titular, describir el derecho que desea ejercer y, si aplica, aportar contexto suficiente para ubicar la interacción o comunicación relevante.',
+            'La solicitud debe permitir identificar al titular, describir el derecho que desea ejercer y, si corresponde, aportar contexto suficiente para ubicar la interacción o comunicación relevante.',
           ],
         },
         {
           id: 'eea-uk',
           title: '8. Derechos para EEE y Reino Unido',
           paragraphs: [
-            'Cuando aplique GDPR u otra normativa equivalente del EEE/Reino Unido, puede solicitar acceso, rectificación, supresión, restricción, oposición, portabilidad y retiro del consentimiento cuando el tratamiento dependa de él.',
+            'Cuando se aplique el RGPD (GDPR) u otra normativa equivalente del EEE/Reino Unido, puede solicitar acceso, rectificación, supresión, restricción, oposición, portabilidad y retiro del consentimiento cuando el tratamiento dependa de él.',
           ],
           bullets: [
             'También puede presentar una reclamación ante la autoridad de control competente si considera que el tratamiento infringe la normativa aplicable.',
@@ -183,11 +182,11 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
           title: '9. Derechos de California y privacidad de menores',
           paragraphs: [
             'Si una ley de privacidad de California le resulta aplicable, puede pedir información sobre categorías de datos tratados, finalidades, fuentes, destinatarios, acceso, corrección o supresión, sujeto a excepciones legales.',
-            'En el estado actual de esta web, no se vende información personal ni se comparte información para publicidad comportamental cross-context desde este sitio.',
+            'En el estado actual de esta web, no se vende información personal ni se comparte información para publicidad comportamental entre contextos (cross-context) desde este sitio.',
           ],
           bullets: [
             'Este sitio no está dirigido a menores y no está diseñado para captar datos de niños como audiencia principal.',
-            'Si cree que un menor compartió datos personales a través de algún canal conectado con esta web, escriba a soporte para revisar y actuar según corresponda.',
+            'Si cree que un menor compartió datos personales a través de algún canal conectado con esta web, escriba al correo de soporte para que pueda revisarlo y actuar según corresponda.',
           ],
         },
         {
@@ -201,7 +200,7 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
       ],
       contactTitle: 'Solicitudes de privacidad y derechos',
       contactBody:
-        'Para peticiones de acceso, corrección, supresión, objeción o dudas sobre esta política, use el correo de soporte. El mensaje debe incluir suficiente contexto para localizar la interacción relevante.',
+        'Para peticiones de acceso, corrección, supresión, oposición o dudas sobre esta política, use el correo de soporte. El mensaje debe incluir suficiente contexto para localizar la interacción relevante.',
       contactEmail: SUPPORT_EMAIL,
       counterpartLabel: 'Ver términos y uso de contenido',
       disclaimer:
@@ -210,21 +209,21 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
     en: {
       metaTitle: 'Privacy Policy | Gisela Saldarriaga',
       metaDescription:
-        'Privacy Policy for Gisela Saldarriaga portfolio, UGC services, and commercial contact website. Covers data categories, purposes, rights, and contact details.',
+        'Privacy Policy for Gisela Saldarriaga’s website: what data is handled, why, what rights you have, and how to get in touch.',
       breadcrumbLabel: 'Privacy Policy',
       eyebrow: 'Privacy and data',
-      title: 'Privacy Policy for a portfolio, lead-generation, and commercial contact website',
+      title: 'Privacy Policy for Gisela Saldarriaga’s website',
       intro:
         'This policy explains how Gisela Saldarriaga handles information connected to this website, its video portfolio, its service pages, and its professional contact channels.',
       audienceNote:
-        'The site is positioned primarily for brands and teams selling to Spanish-speaking audiences in the United States, Spain, and Latin America, plus selected English-language briefs.',
-      updatedDateLabel: 'Last updated: March 22, 2026',
-      effectiveDateLabel: 'Effective date: March 22, 2026',
+        'The site is mainly aimed at brands and teams selling to Spanish-speaking audiences in the United States, Spain, and Latin America, and at some projects with English-language briefs.',
+      updatedDateLabel: 'Last updated: October 13, 2026',
+      effectiveDateLabel: 'Effective date: October 13, 2026',
       summaryItems: [
         'Controller: Gisela Saldarriaga',
         `Privacy contact: ${SUPPORT_EMAIL}`,
         'Primary markets: US, Spain, and LatAm',
-        'Current form status: local validation only, no site-side submission',
+        'Forms: the site has no contact form',
       ],
       tocTitle: 'Contents',
       sections: [
@@ -233,12 +232,12 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
           title: '1. Controller, scope, and site context',
           paragraphs: [
             'The controller described on this page is Gisela Saldarriaga. This policy covers the main domain www.giselasaldarriaga.com, its Spanish and English versions, its service pages, static resources, and the portfolio material made available in that environment.',
-            'The site operates as a professional presence, portfolio, organic discovery surface, and commercial contact point for UGC services, product demos, spokesperson videos, reviews, and footage packages.',
+            'The site works as a professional website, a portfolio, an entry point from search engines, and a commercial contact point for UGC services, product demos, spokesperson videos, reviews, and footage packages.',
           ],
           bullets: [
-            'Public controller: Gisela Saldarriaga.',
+            'Controller: Gisela Saldarriaga.',
             `Privacy and rights contact: ${SUPPORT_EMAIL}.`,
-            'Operating location stated on the site: Medellin, Colombia.',
+            'Operating location stated on the site: Medellín, Colombia.',
           ],
         },
         {
@@ -251,20 +250,20 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
             'Contact details you choose to share, such as name, email address, subject line, commercial brief, or messages sent through email or third-party platforms.',
             'Technical browsing data, such as approximate IP-related information, browser, device, language, visited pages, load timing, and aggregated or pseudonymized usage events tied to site analytics.',
             'Technical preferences stored locally in your browser, such as light or dark theme preference.',
-            'Data generated from access to videos, images, and other assets served through the site media/CDN infrastructure.',
-            'Data you provide directly to third-party platforms if you decide to contact through WhatsApp, Telegram, Fiverr, or social profiles linked from this website.',
+            'Data generated from access to videos, images, and other assets served through the site’s media/CDN infrastructure.',
+            'Data you provide directly to third-party platforms if you decide to contact me through WhatsApp, Telegram, Fiverr, or social profiles linked from this website.',
           ],
           note:
-            'The current on-site form validates fields in the browser and shows UI feedback, but it does not currently transmit or store the submitted information on this website unless a real backend or third-party integration is later implemented.',
+            'The site has no contact form. Messages you send reach me by email or through third-party platforms, not through this website.',
         },
         {
           id: 'sources',
           title: '3. Data sources and technologies currently present',
           bullets: [
-            'Page and asset delivery through the site hosting and content-delivery infrastructure.',
+            'Page and asset delivery through the site’s hosting and content-delivery infrastructure.',
             'Performance and usage tooling currently visible in the codebase, including Vercel Analytics and Vercel Speed Insights.',
             'Google Fonts for web typography.',
-            'localStorage to remember the user theme preference.',
+            'localStorage to remember the user’s theme preference.',
             'External communication or marketplace platforms when you click out of this site and continue the conversation elsewhere.',
           ],
           paragraphs: [
@@ -275,7 +274,7 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
           id: 'purposes-bases',
           title: '4. Purposes of processing and legal bases',
           bullets: [
-            'Responding to commercial inquiries, service briefs, or direct messages: pre-contractual steps, handling a request, and, where relevant, the sender consent.',
+            'Responding to commercial inquiries, service briefs, or direct messages: pre-contractual steps, handling a request, and, where relevant, the sender’s consent.',
             'Operating, securing, and improving the site, including performance, stability, and browsing experience: legitimate interest in running a secure and functional professional website.',
             'Maintaining technical preferences such as the visual theme: legitimate interest and, where applicable, the action requested by the user on the device.',
             'Complying with legal obligations, responding to lawful requests, or defending claims: legal obligation and legitimate interest.',
@@ -294,11 +293,11 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
             'Hosting and performance-layer providers, including Vercel services used for analytics and speed insights.',
             'Web font providers such as Google Fonts.',
             'Media/CDN infrastructure used to deliver portfolio videos, posters, and imagery.',
-            'External contact and marketplace platforms such as WhatsApp, Telegram, Fiverr, and social interfaces linked from the website.',
+            'External contact and marketplace platforms such as WhatsApp, Telegram, Fiverr, and social media profiles linked from the website.',
             'Professional advisers or authorities where legally required or reasonably necessary for defense purposes.',
           ],
           note:
-            'Once you leave the website for an external platform, further processing is also governed by that platform own terms and privacy rules.',
+            'Once you leave the website for an external platform, further processing is also governed by that platform’s own terms and privacy rules.',
         },
         {
           id: 'retention',
@@ -307,7 +306,6 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
             'Browsing, performance, or log data: for as long as reasonably needed to operate, secure, troubleshoot, or measure the site, subject to the retention periods of the relevant provider.',
             'Commercial messages or direct inquiries: for as long as needed to respond, follow up on the project, keep a basic commercial record, or comply with legal requirements.',
             'Theme preference in the browser: until you clear local storage, change the preference, or reset browser data.',
-            'Data not actually sent by the current on-site form: not retained by this website because the form does not currently transmit the information.',
           ],
           paragraphs: [
             'A minimization approach is applied whenever possible: not collecting more information than is reasonably needed for the commercial relationship or for the technical operation of the site.',
@@ -338,13 +336,13 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
         },
         {
           id: 'california-children',
-          title: '9. California rights and children privacy',
+          title: '9. California rights and children’s privacy',
           paragraphs: [
             'If a California privacy law applies to you, you may request information about the categories of data handled, purposes, sources, recipients, access, correction, or deletion, subject to legal exceptions.',
             'In the current state of this website, personal information is not sold and is not shared for cross-context behavioral advertising from the site itself.',
           ],
           bullets: [
-            'This site is not directed to children and is not designed to collect child data as a primary audience surface.',
+            'This site is not directed to children and is not designed to collect data from children as its primary audience.',
             'If you believe a minor submitted personal data through a channel connected to this website, contact support so the matter can be reviewed and addressed where appropriate.',
           ],
         },
@@ -370,18 +368,18 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
     es: {
       metaTitle: 'Términos y uso de contenido | Gisela Saldarriaga',
       metaDescription:
-        'Términos y uso de contenido para el sitio de Gisela Saldarriaga. Define titularidad, permisos limitados, usos prohibidos, scraping, IA y contacto.',
+        'Términos y uso de contenido del sitio de Gisela Saldarriaga: titularidad, permisos limitados, usos prohibidos, scraping, IA y contacto.',
       breadcrumbLabel: 'Términos y uso de contenido',
-      eyebrow: 'Uso del sitio e IP',
+      eyebrow: 'Uso del sitio y propiedad intelectual',
       title: 'Términos y uso de contenido del sitio, portafolio y materiales visibles',
       intro:
         'Estos términos regulan cómo puede usarse el contenido visible en esta web, incluyendo videos, fotografía, copy, diseño, marca y material de portafolio.',
       audienceNote:
-        'La web existe para evaluación comercial de marcas, agencias y equipos que consideran contratar servicios de contenido creator-led, UGC y portavoz.',
-      updatedDateLabel: 'Última actualización: 22 de marzo de 2026',
-      effectiveDateLabel: 'Vigente desde: 22 de marzo de 2026',
+        'El sitio está dirigido a marcas, agencias y equipos que están evaluando contratar contenido hecho por creadores, UGC o videos de portavoz.',
+      updatedDateLabel: 'Última actualización: 13 de octubre de 2026',
+      effectiveDateLabel: 'Vigente desde: 13 de octubre de 2026',
       summaryItems: [
-        'Titularidad pública: Gisela Saldarriaga',
+        'Titular: Gisela Saldarriaga',
         `Contacto legal: ${SUPPORT_EMAIL}`,
         'Permiso limitado: revisar el sitio para evaluar servicios',
         'No hay licencia implícita para reutilización, scraping o entrenamiento',
@@ -395,7 +393,7 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
             'Salvo que se indique lo contrario, el contenido visible en este sitio y su selección, organización y presentación están protegidos por derechos de autor, derechos conexos, marcas, diseño, competencia desleal u otras normas aplicables.',
           ],
           bullets: [
-            'Videos de portafolio, clips, posters, fotografía, copy, estructura editorial, composición visual, branding y elementos gráficos del sitio.',
+            'Videos de portafolio, clips, pósteres, fotografía, textos, estructura editorial, composición visual, identidad de marca y elementos gráficos del sitio.',
             'Nombre comercial, señales de origen y materiales propios de Gisela Saldarriaga o de su estudio profesional cuando así se presenten.',
             'No se transfiere propiedad intelectual por el simple acceso a la web.',
           ],
@@ -404,11 +402,11 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
           id: 'permiso',
           title: '2. Permiso limitado de navegación y evaluación',
           paragraphs: [
-            'Puede navegar el sitio y revisar sus materiales únicamente para entender la oferta, evaluar un posible encaje comercial, compartir internamente la referencia de la web dentro de su equipo o contactar para una posible contratación.',
+            'Puede navegar por el sitio y revisar sus materiales únicamente para entender la oferta, evaluar una posible colaboración comercial, compartir la referencia de la web dentro de su equipo o contactarme para una posible contratación.',
           ],
           bullets: [
             'Ese permiso es revocable, no exclusivo y no transferible.',
-            'No autoriza copiar bibliotecas de contenido, descargar de forma masiva ni reutilizar materiales en campañas, piezas propias, datasets o assets públicos.',
+            'No autoriza copiar bibliotecas de contenido, descargar de forma masiva ni reutilizar materiales en campañas, piezas propias, datasets o contenidos públicos.',
           ],
         },
         {
@@ -428,7 +426,7 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
             'Sin autorización previa y por escrito, no está permitido usar el sitio o su contenido como fuente para scraping, extracción automatizada, minería de datasets, benchmarking no autorizado, fine-tuning, entrenamiento, reentrenamiento, embeddings, indexación privada o cualquier otra reutilización orientada a sistemas de IA o bases de datos comerciales.',
           ],
           bullets: [
-            'También se prohíbe descargar material de portafolio en bloque o compilarlo en colecciones, repositorios o librerías de prompts, ejemplos o entrenamiento.',
+            'También se prohíbe descargar material de portafolio en bloque o compilarlo en colecciones, repositorios o bibliotecas de prompts, ejemplos o entrenamiento.',
             'Una política de privacidad no sustituye esta restricción de uso: la limitación aquí es contractual y de propiedad intelectual, no solo de datos personales.',
           ],
         },
@@ -437,14 +435,14 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
           title: '5. Marcas de terceros, plataformas y entregables de cliente',
           paragraphs: [
             'Las marcas, nombres de plataformas y logos de terceros mencionados o enlazados en el sitio pertenecen a sus respectivos titulares y se muestran con fines identificativos, contextuales o de referencia comercial.',
-            'Los entregables creados para clientes, así como sus derechos de uso, exclusividad, whitelisting, paid usage, territorios o plazos, se rigen por acuerdos, propuestas, SOWs o contratos específicos. Nada en esta página reemplaza esos acuerdos.',
+            'Los entregables creados para clientes, así como sus derechos de uso, exclusividad, whitelisting, uso en anuncios pagados, territorios o plazos, se rigen por acuerdos, propuestas, SOW o contratos específicos. Nada en esta página reemplaza esos acuerdos.',
           ],
         },
         {
           id: 'disponibilidad',
           title: '6. Disponibilidad, exactitud y límites del contenido público',
           paragraphs: [
-            'El sitio puede actualizarse, reorganizarse, retirar piezas de portafolio, cambiar textos o modificar la forma de presentar servicios sin previo aviso. Aunque se busca mantener una descripción profesional y fiel de la oferta, el contenido público no sustituye una propuesta comercial cerrada ni una asesoría legal, fiscal o regulatoria.',
+            'El sitio puede actualizarse o reorganizarse, y pueden retirarse piezas del portafolio, cambiarse textos o modificarse la forma de presentar los servicios, sin previo aviso. Aunque se busca mantener una descripción profesional y fiel de la oferta, el contenido público no sustituye una propuesta comercial cerrada ni una asesoría legal, fiscal o regulatoria.',
           ],
           bullets: [
             'La disponibilidad de servicios, formatos, licencias, tiempos o mercados siempre debe confirmarse en una conversación comercial directa.',
@@ -471,18 +469,18 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
     en: {
       metaTitle: 'Terms & Content Use | Gisela Saldarriaga',
       metaDescription:
-        'Terms & Content Use for the Gisela Saldarriaga website. Covers ownership, limited permissions, prohibited uses, scraping, AI reuse, and contact.',
+        'Terms & Content Use for Gisela Saldarriaga’s website: ownership, limited permissions, prohibited uses, scraping, AI reuse, and contact.',
       breadcrumbLabel: 'Terms & Content Use',
-      eyebrow: 'Site use and IP',
+      eyebrow: 'Site use and intellectual property',
       title: 'Terms and content-use rules for the website, portfolio, and visible materials',
       intro:
         'These terms govern how the visible content on this website may be used, including videos, photography, copy, design, branding, and portfolio materials.',
       audienceNote:
-        'The website exists as a commercial-evaluation surface for brands, agencies, and teams considering creator-led content, UGC, and spokesperson services.',
-      updatedDateLabel: 'Last updated: March 22, 2026',
-      effectiveDateLabel: 'Effective date: March 22, 2026',
+        'The website is meant for brands, agencies, and teams evaluating whether to hire creator-made content, UGC, or spokesperson services.',
+      updatedDateLabel: 'Last updated: October 13, 2026',
+      effectiveDateLabel: 'Effective date: October 13, 2026',
       summaryItems: [
-        'Public owner: Gisela Saldarriaga',
+        'Owner: Gisela Saldarriaga',
         `Legal contact: ${SUPPORT_EMAIL}`,
         'Limited permission: review the site to evaluate services',
         'No implied license for reuse, scraping, or training',
@@ -497,7 +495,7 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
           ],
           bullets: [
             'Portfolio videos, clips, posters, photography, copy, editorial structure, visual composition, branding, and graphic elements of the site.',
-            'Trade name, source identifiers, and materials belonging to Gisela Saldarriaga or the professional studio where presented that way.',
+            'Trade name, source identifiers, and materials belonging to Gisela Saldarriaga or her professional studio, where presented that way.',
             'No intellectual-property ownership is transferred simply because the site can be accessed.',
           ],
         },
@@ -545,7 +543,7 @@ const LEGAL_PAGE_CONTENT: LocalizedLegalPageMap = {
           id: 'availability',
           title: '6. Availability, accuracy, and limits of public-facing content',
           paragraphs: [
-            'The site may be updated, reorganized, have portfolio pieces removed, have text changed, or present services differently without notice. While the intent is to keep the public description professional and accurate, public-facing content does not replace a final commercial proposal or legal, tax, or regulatory advice.',
+            'The site may be updated or reorganized, portfolio pieces may be removed, text may change, and services may be presented differently, all without notice. While the intent is to keep the public description professional and accurate, public-facing content does not replace a final commercial proposal or legal, tax, or regulatory advice.',
           ],
           bullets: [
             'Availability of services, formats, licenses, timelines, or markets should always be confirmed in a direct commercial conversation.',

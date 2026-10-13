@@ -169,6 +169,8 @@ const renderHub = (hub) => {
     <meta property="og:title" content="${escapeHtml(hub.metaTitle)}" />
     <meta property="og:description" content="${escapeHtml(hub.metaDescription)}" />
     <meta property="og:image" content="${ogImageUrl(hub.path)}" />
+    <meta name="twitter:image:alt" content="${escapeHtml(hub.heroTitle)}" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="${escapeHtml(hub.heroTitle)}" />

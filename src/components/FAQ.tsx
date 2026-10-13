@@ -16,8 +16,8 @@ const FAQ = () => {
 
   const items = t('faq.items', { returnObjects: true }) as FAQItem[];
 
-  const stillQuestion = locale === 'es' ? '¿No encuentras tu respuesta?' : 'Still can’t find your answer?';
-  const talkLabel = locale === 'es' ? 'Hablemos' : 'Let’s talk';
+  const stillQuestion = locale === 'es' ? '¿Tienes otra pregunta?' : 'Have another question?';
+  const talkLabel = locale === 'es' ? 'Escríbeme' : 'Message me';
 
   return (
     <section id="faq" className="studio-section bg-background border-t border-border/40">

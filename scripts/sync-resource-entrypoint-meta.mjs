@@ -22,7 +22,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { loadTsModule, rootDir } from './lib/load-ts-module.mjs';
-import { entryFileForPath, escapeAttr, escapeText, replaceRequired } from './lib/entry-html.mjs';
+import {
+  entryFileForPath,
+  escapeText,
+  renderInlineCopy,
+  replaceRequired,
+  visibleInlineCopy,
+} from './lib/entry-html.mjs';
 
 const { getAllResourceIds, getResourcePageContent } = await loadTsModule('src/data/resource-pages.ts');
 const { CONTENT_DATES, formatLastUpdatedLabel } = await loadTsModule('src/data/content-dates.ts');
@@ -33,23 +39,6 @@ const LABELS = {
   es: { home: 'Inicio', resources: 'Recursos', faq: 'Preguntas frecuentes', atAGlance: 'De un vistazo' },
   en: { home: 'Home', resources: 'Resources', faq: 'Frequently asked questions', atAGlance: 'At a glance' },
 };
-
-/* Copy links are written as [label](href) in the data (see src/lib/inline-copy-links.tsx). */
-const INLINE_LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/gu;
-
-const renderInline = (text) => {
-  let html = '';
-  let cursor = 0;
-  for (const match of text.matchAll(INLINE_LINK_RE)) {
-    html += escapeText(text.slice(cursor, match.index));
-    html += `<a href="${escapeAttr(match[2])}">${escapeText(match[1])}</a>`;
-    cursor = match.index + match[0].length;
-  }
-  return html + escapeText(text.slice(cursor));
-};
-
-/** Plain text for the <noscript> FAQ: link labels only, like visibleInlineCopy(). */
-const plainInline = (text) => text.replace(INLINE_LINK_RE, '$1');
 
 const H2_STYLE = 'font-size:1.3rem;margin-top:2rem;margin-bottom:0.75rem';
 const P_STYLE = 'line-height:1.7;margin-bottom:1rem';
@@ -86,14 +75,14 @@ const renderBody = (page, locale) => {
   const sections = page.sections.map((section) =>
     [
       `        <h2 style="${H2_STYLE}">${escapeText(section.title)}</h2>`,
-      ...section.body.map((paragraph) => `        <p style="${P_STYLE}">${renderInline(paragraph)}</p>`),
+      ...section.body.map((paragraph) => `        <p style="${P_STYLE}">${renderInlineCopy(paragraph)}</p>`),
     ].join('\n'),
   );
   if (page.comparisonTable) sections.push(renderTable(page.comparisonTable, labels.atAGlance));
 
   const faqs = page.faqs.flatMap((faq) => [
-    `          <dt>${escapeText(plainInline(faq.question))}</dt>`,
-    `          <dd>${escapeText(plainInline(faq.answer))}</dd>`,
+    `          <dt>${escapeText(visibleInlineCopy(faq.question))}</dt>`,
+    `          <dd>${escapeText(visibleInlineCopy(faq.answer))}</dd>`,
   ]);
 
   return [
@@ -103,7 +92,7 @@ const renderBody = (page, locale) => {
     `          <a href="${homePath}">${labels.home}</a> / <a href="${homePath}#services">${labels.resources}</a> / <span>${escapeText(page.breadcrumbLabel)}</span>`,
     '        </nav>',
     `        <h1 style="font-size:1.8rem;line-height:1.2;margin-bottom:1rem">${escapeText(page.heroTitle)}</h1>`,
-    `        <p style="font-size:1.05rem;line-height:1.7;margin-bottom:1.5rem">${renderInline(page.heroSummary)}</p>`,
+    `        <p style="font-size:1.05rem;line-height:1.7;margin-bottom:1.5rem">${renderInlineCopy(page.heroSummary)}</p>`,
     '',
     sections.join('\n\n'),
     '',

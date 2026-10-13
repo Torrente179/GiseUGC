@@ -3,20 +3,16 @@
  * Sitemap lastmod, JSON-LD dateModified, visible "last updated" labels, and
  * llms Last-Updated should read from here so those surfaces cannot drift.
  *
- * home      — Fiverr seller-overall proof sync (4.7/177, schema, llms)
- * hubs      — hire-intent copy + body links to bilingüe / cómo-contratar
- * services  — GEO copy on bilingual UGC + service inner template (2026-08-31)
- * verticals — FAQ orthography + money-page body links (2026-10-13)
- * resources — GEO copy on how-to-hire + resource template (2026-08-31)
- * legal     — privacy / terms content commit
+ * Every family moved to 2026-10-13 with the site-wide copy rewrite (plain,
+ * first-person voice in ES and EN). Bump a family when its visible copy changes.
  */
 export const CONTENT_DATES = {
-  home: '2026-09-11',
+  home: '2026-10-13',
   hubs: '2026-10-13',
-  services: '2026-08-31',
+  services: '2026-10-13',
   verticals: '2026-10-13',
-  resources: '2026-08-31',
-  legal: '2026-03-22',
+  resources: '2026-10-13',
+  legal: '2026-10-13',
 } as const;
 
 export type ContentFamily = keyof typeof CONTENT_DATES;

@@ -7,12 +7,12 @@ const NotFound = () => {
   const locale = getLocaleFromPath(location.pathname);
   const copy = locale === "en"
     ? {
-        title: "Oops! Page not found",
-        action: "Back to Home",
+        title: "This page doesn’t exist",
+        action: "Back to home",
       }
     : {
-        title: "¡Ups! Página no encontrada",
-        action: "Volver al Inicio",
+        title: "Esta página no existe",
+        action: "Volver al inicio",
       };
 
   useEffect(() => {

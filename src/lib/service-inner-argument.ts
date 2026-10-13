@@ -19,37 +19,37 @@ export type FichaRow = {
 
 const BEATS: Record<SiteLocale, InnerBeat[]> = {
   es: [
-    { id: 'ficha', num: '1', kicker: 'Ficha', chip: 'Ficha', spine: 'Ficha' },
-    { id: 'recibes', num: '2', kicker: 'Recibes', chip: 'Recibes', spine: 'Recibes' },
-    { id: 'como-corre', num: '3', kicker: 'Cómo corre', chip: 'Cómo', spine: 'Cómo corre' },
-    { id: 'encaja', num: '4', kicker: 'Encaja', chip: 'Encaja', spine: 'Encaja' },
+    { id: 'ficha', num: '1', kicker: 'Resumen', chip: 'Resumen', spine: 'Resumen' },
+    { id: 'recibes', num: '2', kicker: 'Formatos', chip: 'Formatos', spine: 'Formatos' },
+    { id: 'como-corre', num: '3', kicker: 'Proceso', chip: 'Proceso', spine: 'Proceso' },
+    { id: 'encaja', num: '4', kicker: 'Para quién', chip: 'Para quién', spine: 'Para quién' },
     { id: 'faq', num: '5', kicker: 'Preguntas', chip: 'Preguntas', spine: 'Preguntas' },
     { id: 'empezar', num: '6', kicker: 'Empezar', chip: 'Empezar', spine: 'Empezar' },
   ],
   en: [
-    { id: 'ficha', num: '1', kicker: 'Spec', chip: 'Spec', spine: 'Spec' },
-    { id: 'recibes', num: '2', kicker: 'You get', chip: 'You get', spine: 'You get' },
-    { id: 'como-corre', num: '3', kicker: 'How it runs', chip: 'How', spine: 'How it runs' },
+    { id: 'ficha', num: '1', kicker: 'Overview', chip: 'Overview', spine: 'Overview' },
+    { id: 'recibes', num: '2', kicker: 'Formats', chip: 'Formats', spine: 'Formats' },
+    { id: 'como-corre', num: '3', kicker: 'Process', chip: 'Process', spine: 'Process' },
     { id: 'encaja', num: '4', kicker: 'Fit', chip: 'Fit', spine: 'Fit' },
     { id: 'faq', num: '5', kicker: 'Questions', chip: 'Questions', spine: 'Questions' },
-    { id: 'empezar', num: '6', kicker: 'Start', chip: 'Start', spine: 'Start' },
+    { id: 'empezar', num: '6', kicker: 'Get started', chip: 'Start', spine: 'Get started' },
   ],
 };
 
 const FICHA_LABELS: Record<SiteLocale, Record<FichaRow['key'], string>> = {
   es: {
     what: 'Qué es',
-    ask: 'Qué pides',
-    languages: 'Idiomas',
-    fits: 'Sirve si',
-    not: 'No sirve si',
+    ask: 'Qué puedes pedir',
+    languages: 'Mercados',
+    fits: 'Te conviene si',
+    not: 'No te conviene si',
   },
   en: {
     what: 'What it is',
-    ask: 'What you ask for',
-    languages: 'Languages',
-    fits: 'Fits if',
-    not: 'Does not fit if',
+    ask: 'What you can request',
+    languages: 'Markets',
+    fits: 'For you if',
+    not: 'Not for you if',
   },
 };
 
@@ -74,11 +74,11 @@ export type MobileFicha = {
 
 const MOBILE_FICHA_LABELS: Record<SiteLocale, Record<MobileFichaRow['key'], string>> = {
   es: {
-    ask: 'Qué pides',
+    ask: 'Qué puedes pedir',
     markets: 'Mercados y formatos',
   },
   en: {
-    ask: 'What you ask for',
+    ask: 'What you can request',
     markets: 'Markets and formats',
   },
 };

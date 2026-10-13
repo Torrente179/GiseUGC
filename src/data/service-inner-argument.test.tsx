@@ -143,7 +143,7 @@ describe('service boot shells keep crawlable first HTML', () => {
       expect(html).toContain('class="boot-expanded"');
       expect(html).toContain('.boot-ficha {');
       expect(html).toContain(locale === 'es' ? '>Qué es<' : '>What it is<');
-      expect(html).toContain(locale === 'es' ? '>Qué pides<' : '>What you ask for<');
+      expect(html).toContain(locale === 'es' ? '>Qué puedes pedir<' : '>What you can request<');
       expect(html).toContain('hreflang="es"');
       expect(html).toContain('hreflang="en"');
       expect(html).toContain(`href="https://www.giselasaldarriaga.com${getServicePath(serviceId, 'es')}" hreflang="x-default"`);

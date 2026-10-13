@@ -1,66 +1,82 @@
 {
   "Adds marketing.MP4": {
-    "title": "UGC Ads para Vender Más",
-    "category": "tech"
+    "title": "UGC Ads para vender más",
+    "category": "tech",
+    "titleEn": "UGC ad for sales"
   },
   "Contenido Tik Tok.MP4": {
     "title": "Contenido UGC para TikTok",
-    "category": "lifestyle"
+    "category": "lifestyle",
+    "titleEn": "UGC content for TikTok"
   },
   "Croma Key.MP4": {
-    "title": "Anuncio de Rotulación Vehicular",
-    "category": "tech"
+    "title": "Anuncio de rotulación vehicular",
+    "category": "tech",
+    "titleEn": "Vehicle wrap ad"
   },
   "Croma key plano cerrado.MP4": {
-    "title": "Review de Restaurante Colombiano",
-    "category": "lifestyle"
+    "title": "Reseña de un restaurante colombiano",
+    "category": "lifestyle",
+    "titleEn": "Colombian restaurant review"
   },
   "Croma key sobrepuesto.MP4": {
-    "title": "Spokesperson de Ayuda Financiera",
-    "category": "tech"
+    "title": "Portavoz de ayuda financiera",
+    "category": "tech",
+    "titleEn": "Financial aid spokesperson"
   },
   "DEEDCEA0-6288-4AB4-B5E5-39F8A50822E7.MOV": {
-    "title": "Portavoz UGC Multiservicio",
-    "category": "lifestyle"
+    "title": "Portavoz multiservicio",
+    "category": "lifestyle",
+    "titleEn": "Multi-service spokesperson"
   },
   "Detrás de cámaras.MP4": {
-    "title": "Presentadora de Noticias UGC",
-    "category": "lifestyle"
+    "title": "Presentadora de noticias",
+    "category": "lifestyle",
+    "titleEn": "News presenter"
   },
   "IMG_5793.MOV": {
-    "title": "Demo Voicebot para Automotriz",
-    "category": "tech"
+    "title": "Demo de voicebot automotriz",
+    "category": "tech",
+    "titleEn": "Automotive voicebot demo"
   },
   "IMG_8435.MOV": {
-    "title": "WhatsApp Bot para Ventas 24/7",
-    "category": "tech"
+    "title": "Bot de WhatsApp para ventas 24/7",
+    "category": "tech",
+    "titleEn": "24/7 WhatsApp sales bot"
   },
   "Reporte noticioso USA.MP4": {
-    "title": "Reporte Noticioso Internacional",
-    "category": "lifestyle"
+    "title": "Reporte de noticias internacional",
+    "category": "lifestyle",
+    "titleEn": "International news report"
   },
   "WhatsApp Video 2026-02-13 at 00.02.34.mp4": {
-    "title": "Voicebot para Clínica Dental",
-    "category": "tech"
+    "title": "Voicebot para clínica dental",
+    "category": "tech",
+    "titleEn": "Dental clinic voicebot"
   },
   "WhatsApp Video 2026-02-13 at 00.39.53.mp4": {
-    "title": "Voicebot que Cierra Ventas",
-    "category": "tech"
+    "title": "Voicebot que cierra ventas",
+    "category": "tech",
+    "titleEn": "Voicebot that closes sales"
   },
   "WhatsApp Video 2026-02-13 at 00.42.58.mp4": {
-    "title": "Testimonial Powerful Abdomen",
-    "category": "beauty"
+    "title": "Testimonio Powerful Abdomen",
+    "category": "beauty",
+    "titleEn": "Powerful Abdomen testimonial"
   },
   "WhatsApp Video 2026-02-19 at 14.08.01.mp4": {
-    "title": "Venta de Lotes en Pennsylvania",
-    "category": "lifestyle"
+    "title": "Venta de lotes en Pennsylvania",
+    "category": "lifestyle",
+    "titleEn": "Land lots for sale in Pennsylvania"
   },
   "WhatsApp Video 2026-02-19 at 14.09.00.mp4": {
-    "title": "App de Domicilios por WhatsApp",
-    "category": "tech"
+    "title": "App de domicilios por WhatsApp",
+    "category": "tech",
+    "titleEn": "WhatsApp delivery app"
   },
   "WhatsApp Video 2026-02-19 at 16.05.21.mp4": {
-    "title": "Segunda Cuenta de WhatsApp",
-    "category": "tech"
+    "title": "Segunda cuenta de WhatsApp",
+    "category": "tech",
+    "titleEn": "Second WhatsApp account"
   }
 }

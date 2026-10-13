@@ -39,11 +39,11 @@ const Services = () => {
           <div>
             <h2 className="font-serif text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight-serif leading-[1]">
               {isEs ? 'Lo que ' : 'What I '}
-              <span className="italic text-primary">{isEs ? 'produzco' : 'produce'}</span>
+              <span className="italic text-primary">{isEs ? 'hago' : 'make'}</span>
             </h2>
           </div>
           <p className="dc-index-meta hidden max-w-[16rem] !text-muted-foreground/70 md:block">
-            {isEs ? '8 formatos · cada uno con su página' : '8 formats · each with its own page'}
+            {isEs ? '8 tipos de video · elige uno para ver más' : '8 kinds of video · pick one to see more'}
           </p>
         </div>
 

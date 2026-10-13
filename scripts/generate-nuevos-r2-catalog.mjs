@@ -136,11 +136,12 @@ function loadSeoOverrides(overridesPath) {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return;
 
     const title = sanitizeOverrideTitle(value.title);
+    const titleEn = sanitizeOverrideTitle(value.titleEn);
     const category = sanitizeOverrideCategory(value.category);
 
     const normalizedNfc = filenameKey.normalize('NFC');
     const normalizedNfd = filenameKey.normalize('NFD');
-    const override = { title, category };
+    const override = { title, titleEn, category };
     overrides.set(normalizedNfc, override);
     overrides.set(normalizedNfd, override);
     loadedCount += 1;
@@ -243,6 +244,7 @@ async function main() {
         originalIndex: index,
         sourceFilename,
         title: override?.title ?? toReadableVideoTitle(sourceFilename),
+        titleEn: override?.titleEn,
         category: override?.category ?? inferVideoCategory(sourceFilename),
         durationSeconds: Number.parseFloat(cells[3] ?? ''),
         language: 'es',
@@ -339,6 +341,7 @@ async function main() {
       readyClips.push({
         id: 1000 + candidate.originalIndex + 1,
         title: candidate.title,
+        titleEn: candidate.titleEn,
         category: candidate.category,
         mainSrc: candidate.assets.main,
         mobileSrc: candidate.assets.mobile,
@@ -371,7 +374,7 @@ async function main() {
       (clip) => `  {
     id: ${clip.id},
     title: '${escapeSingleQuotes(clip.title)}',
-    category: '${clip.category}',
+${clip.titleEn ? `    localizedTitle: { en: '${escapeSingleQuotes(clip.titleEn)}' },\n` : ''}    category: '${clip.category}',
     mainSrc: '${escapeSingleQuotes(clip.mainSrc)}',
     mobileSrc: '${escapeSingleQuotes(clip.mobileSrc)}',
     previewSrc: '${escapeSingleQuotes(clip.previewSrc)}',

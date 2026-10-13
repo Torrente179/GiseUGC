@@ -34,6 +34,24 @@ export const escapeText = (value) =>
 
 export const escapeAttr = (value) => escapeText(value).replaceAll('"', '&quot;');
 
+/* Copy links are written as [label](href) in the data (see src/lib/inline-copy-links.tsx). */
+const INLINE_LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/gu;
+
+/** Escaped HTML with [label](href) rendered as <a>. */
+export const renderInlineCopy = (text) => {
+  let html = '';
+  let cursor = 0;
+  for (const match of text.matchAll(INLINE_LINK_RE)) {
+    html += escapeText(text.slice(cursor, match.index));
+    html += `<a href="${escapeAttr(match[2])}">${escapeText(match[1])}</a>`;
+    cursor = match.index + match[0].length;
+  }
+  return html + escapeText(text.slice(cursor));
+};
+
+/** Visible text only (link labels kept, hrefs dropped), like visibleInlineCopy(). */
+export const visibleInlineCopy = (text) => text.replace(INLINE_LINK_RE, '$1');
+
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 
 /**
@@ -177,7 +195,8 @@ export const setBootPanelIntro = (html, { title, text, listTitle }) => {
   const next = replaceRequired(
     html,
     /(<aside class="boot-panel">\s*<h2>)[^<]*(<\/h2>\s*<p>)[^<]*(<\/p>)/u,
-    (_match, open, middle, close) => `${open}${escapeText(title)}${middle}${escapeText(text)}${close}`,
+    (_match, open, middle, close) =>
+      `${open}${escapeText(title)}${middle}${escapeText(visibleInlineCopy(text))}${close}`,
     'aside.boot-panel h2/p',
   );
   return listTitle === undefined

@@ -21,7 +21,7 @@ const MobileContactSheet = ({ open, onOpenChange }: MobileContactSheetProps) => 
             {t('contact.sectionTitle', { defaultValue: 'Contacto' })}
           </DrawerTitle>
           <DrawerDescription className="msheet-sub">
-            {t('contact.heading', { defaultValue: 'Hablemos de tu proyecto' })}
+            {t('contact.heading', { defaultValue: 'Cuéntame de tu proyecto' })}
           </DrawerDescription>
         </div>
         <div className="msheet-list">

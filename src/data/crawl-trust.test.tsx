@@ -322,9 +322,9 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
     expect(read('src/components/VerticalLandingPage.tsx')).toContain('formatLastUpdatedLabel(CONTENT_DATES.verticals');
     expect(read('src/components/ResourcePage.tsx')).toContain('formatLastUpdatedLabel(CONTENT_DATES.resources');
     expect(read('recursos/como-contratar-creadora-ugc/index.html')).not.toContain('24 mar 2026');
-    expect(read('recursos/como-contratar-creadora-ugc/index.html')).toContain('31 ago 2026');
+    expect(read('recursos/como-contratar-creadora-ugc/index.html')).toContain('13 oct 2026');
     expect(read('en/resources/how-to-hire-ugc-creator/index.html')).not.toContain('Mar 24, 2026');
-    expect(read('en/resources/how-to-hire-ugc-creator/index.html')).toContain('Aug 31, 2026');
+    expect(read('en/resources/how-to-hire-ugc-creator/index.html')).toContain('Oct 13, 2026');
   });
 
   it('does not retarget bilingüe or cómo-contratar breadcrumbs onto hub indexes', () => {

@@ -91,8 +91,9 @@ const Portfolio = () => {
     [utcDayBucket],
   );
   const getReelTitle = useCallback(
-    (clip: ReelClip) => (clip.titleKey ? t(clip.titleKey) : clip.title ?? `Clip ${clip.id}`),
-    [t],
+    (clip: ReelClip) =>
+      clip.titleKey ? t(clip.titleKey) : clip.localizedTitle?.[pageLocale] ?? clip.title ?? `Clip ${clip.id}`,
+    [pageLocale, t],
   );
 
   // ── Card metadata (chips + title band) ──

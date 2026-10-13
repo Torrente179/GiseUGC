@@ -43,8 +43,8 @@ describe('GEO copy on bilingual service pages', () => {
     const page = getServicePageContent('bilingual-ugc-creator', 'es');
     expect(visibleInlineCopy(page.geoFact ?? '')).toBe(FACT_ES);
     expect(inlineCopyHrefs(page.geoFact ?? '')).toEqual([FIVERR_PROFILE_URL]);
-    expect(page.faqs.find((faq) => faq.question === '¿Cómo trabajas el inglés?')?.answer).toBe(
-      'En inglés trabajo con guion y un tope de 65 palabras por video para que suene natural.',
+    expect(page.faqs.find((faq) => faq.question === '¿Cómo trabajas en inglés?')?.answer).toBe(
+      'En inglés trabajo con tu guion y un tope de 65 palabras por video, para que suene natural.',
     );
     expect(page.geoFact).toContain(`${SITE_PROOF.fiverrRating}/5`);
     expect(page.geoFact).toContain(String(SITE_PROOF.fiverrReviewCount));
@@ -59,16 +59,16 @@ describe('GEO copy on bilingual service pages', () => {
       />,
     );
     const html = visibleHtml(raw);
-    const introAt = html.indexOf('Qué resuelve este servicio');
+    const introAt = html.indexOf(page.sectionIntroTitle);
     const factAt = html.indexOf('Gisela Saldarriaga es creadora UGC bilingüe');
-    const requestAt = html.indexOf('Qué puedes pedir dentro de este servicio');
+    const requestAt = html.indexOf(page.deliverablesTitle, factAt);
     expect(introAt).toBeGreaterThan(-1);
     expect(factAt).toBeGreaterThan(introAt);
     expect(requestAt).toBeGreaterThan(factAt);
     expect(html).toContain('4.7/5 en 177 reseñas verificadas');
     expect(html).toContain('28+ campañas de marca');
     assertCrawlableFiverrLink(html);
-    expect(html).toContain('¿Cómo trabajas el inglés?');
+    expect(html).toContain('¿Cómo trabajas en inglés?');
     expect(html).toContain('un tope de 65 palabras por video');
     expect(html).not.toMatch(/24 mar 2026|Mar 24, 2026/u);
     expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.services, 'es'));
@@ -82,7 +82,7 @@ describe('GEO copy on bilingual service pages', () => {
     expect(visibleInlineCopy(page.geoFact ?? '')).toBe(FACT_EN);
     expect(inlineCopyHrefs(page.geoFact ?? '')).toEqual([FIVERR_PROFILE_URL]);
     expect(page.faqs.find((faq) => faq.question === 'How do you work in English?')?.answer).toBe(
-      'For English I work from a script, with a 65-word cap per video so it stays natural.',
+      'For English I work from your script, with a 65-word cap per video so it stays natural.',
     );
 
     const raw = renderAt(
@@ -94,9 +94,9 @@ describe('GEO copy on bilingual service pages', () => {
       />,
     );
     const html = visibleHtml(raw);
-    const introAt = html.indexOf('What this service solves');
+    const introAt = html.indexOf(page.sectionIntroTitle);
     const factAt = html.indexOf('Gisela Saldarriaga is a bilingual UGC creator');
-    const requestAt = html.indexOf('What you can request inside this service');
+    const requestAt = html.indexOf(page.deliverablesTitle, factAt);
     expect(introAt).toBeGreaterThan(-1);
     expect(factAt).toBeGreaterThan(introAt);
     expect(requestAt).toBeGreaterThan(factAt);
