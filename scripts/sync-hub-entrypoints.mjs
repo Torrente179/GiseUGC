@@ -39,7 +39,7 @@ const hubs = [
       'Contrata a Gisela Saldarriaga: ads UGC, demos y portavoz en español e inglés. Producción en Medellín para US hispano, España, LatAm y briefs en inglés.',
     heroTitle: 'Contrata a Gisela Saldarriaga como tu creadora UGC bilingüe',
     lead:
-      'Si tu marca necesita una creadora UGC bilingüe, no una agencia: ads, demos, reseñas y videos de portavoz en español e inglés, entregados a ti. Produzco desde Medellín para equipos en el mercado hispano de Estados Unidos, España y LatAm, y para briefs en inglés. El contenido es de la marca. No lo publico en mis redes, salvo un acuerdo de ambassador.',
+      'Si tu marca necesita una creadora UGC bilingüe, no una agencia: ads, demos, reseñas y videos de portavoz en español e inglés, entregados a ti. Produzco desde Medellín para equipos en el mercado hispano de Estados Unidos, España y LatAm, y para briefs en inglés. El contenido es de la marca. No lo publico en mis redes, salvo un acuerdo de ambassador. Lee [cómo contratar una creadora UGC bilingüe](/recursos/como-contratar-creadora-ugc/).',
     childrenTitle: 'Qué puedes contratar',
     contactLabel: 'Contáctame',
     contact: '/#contact',
@@ -74,7 +74,7 @@ const hubs = [
       'Hire Gisela Saldarriaga for bilingual UGC ads, demos, and spokesperson videos. Produced in Medellín for US Hispanic, Spain, LatAm, and English briefs.',
     heroTitle: 'Hire Gisela Saldarriaga as your bilingual UGC creator',
     lead:
-      'If you need a named bilingual UGC creator, not an agency: ads, demos, reviews, and spokesperson videos in Spanish and English, delivered to your brand. I produce from Medellín for teams selling to US Hispanic audiences, Spain, and LatAm, plus English briefs. The content belongs to the brand. I don’t post client work on my socials unless we agree on an ambassador deal.',
+      'If you need a named bilingual UGC creator, not an agency: ads, demos, reviews, and spokesperson videos in Spanish and English, delivered to your brand. I produce from Medellín for teams selling to US Hispanic audiences, Spain, and LatAm, plus English briefs. The content belongs to the brand. I don’t post client work on my socials unless we agree on an ambassador deal. Read [how to hire a bilingual UGC creator](/en/resources/how-to-hire-ugc-creator/).',
     childrenTitle: 'What you can hire',
     contactLabel: 'Contact me',
     contact: '/en/#contact',
@@ -109,7 +109,7 @@ const hubs = [
       'Contrata a Gisela Saldarriaga para UGC de beauty, ecommerce, moda, tech y bienestar. Creadora bilingüe en Medellín para marcas en US hispano, España y LatAm.',
     heroTitle: 'Contrata UGC por industria: beauty, ecommerce, moda, tech y bienestar',
     lead:
-      'Si tu marca necesita una creadora UGC bilingüe por industria, no una agencia, empieza aquí. Produzco desde Medellín para equipos de beauty, ecommerce, moda, tech/SaaS y bienestar que venden en el mercado hispano de Estados Unidos, España, LatAm, o con un brief en inglés. El contenido se entrega a la marca.',
+      'Si tu marca necesita una creadora UGC bilingüe por industria, no una agencia, empieza aquí. Produzco desde Medellín para equipos de beauty, ecommerce, moda, tech/SaaS y bienestar que venden en el mercado hispano de Estados Unidos, España, LatAm, o con un brief en inglés. El contenido se entrega a la marca. Puedes [contratar una creadora UGC bilingüe](/servicios/creadora-ugc-bilingue/) o leer [cómo contratar una creadora UGC](/recursos/como-contratar-creadora-ugc/).',
     childrenTitle: 'Por industria',
     contactLabel: 'Contáctame',
     contact: '/#contact',
@@ -140,7 +140,7 @@ const hubs = [
       'Hire Gisela Saldarriaga for beauty, ecommerce, fashion, tech, and wellness UGC. Bilingual creator in Medellín for US Hispanic, Spain, LatAm, and English briefs.',
     heroTitle: 'Hire a UGC creator by industry: beauty, ecommerce, fashion, tech, wellness',
     lead:
-      'If your brand needs a bilingual UGC creator by industry, not an agency, start here. I produce from Medellín for beauty, ecommerce, fashion, tech/SaaS, and wellness teams selling to US Hispanic audiences, Spain, LatAm, or with an English brief. The content is delivered to the brand.',
+      'If your brand needs a bilingual UGC creator by industry, not an agency, start here. I produce from Medellín for beauty, ecommerce, fashion, tech/SaaS, and wellness teams selling to US Hispanic audiences, Spain, LatAm, or with an English brief. The content is delivered to the brand. You can [hire a bilingual UGC creator](/en/services/bilingual-ugc-creator/) or read [how to hire a UGC creator](/en/resources/how-to-hire-ugc-creator/).',
     childrenTitle: 'By industry',
     contactLabel: 'Contact me',
     contact: '/en/#contact',
@@ -239,6 +239,9 @@ const renderSecondary = (hub) =>
   hub.secondary
     .map(([href, label], index) => `${index > 0 ? ' · ' : ''}<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>`)
     .join('');
+
+const renderInlineCopy = (value) =>
+  escapeHtml(value).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
 
 const renderHub = (hub) => {
   const canonical = `${SITE}${hub.path}`;
@@ -344,7 +347,7 @@ const renderHub = (hub) => {
     <div id="root">
       <main>
         <h1>${escapeHtml(hub.heroTitle)}</h1>
-        <p>${escapeHtml(hub.lead)}</p>
+        <p>${renderInlineCopy(hub.lead)}</p>
         <section>
           <h2>${escapeHtml(hub.childrenTitle)}</h2>
           <nav aria-label="${escapeHtml(hub.linksLabel)}">

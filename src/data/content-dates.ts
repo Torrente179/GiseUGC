@@ -4,17 +4,17 @@
  * llms Last-Updated should read from here so those surfaces cannot drift.
  *
  * home      — Fiverr seller-overall proof sync (4.7/177, schema, llms)
- * hubs      — hire-intent /servicios|verticales|recursos index copy
+ * hubs      — hire-intent copy + body links to bilingüe / cómo-contratar
  * services  — GEO copy on bilingual UGC + service inner template (2026-08-31)
- * verticals — last vertical entry HTML / template commit
+ * verticals — FAQ orthography + money-page body links (2026-10-13)
  * resources — GEO copy on how-to-hire + resource template (2026-08-31)
  * legal     — privacy / terms content commit
  */
 export const CONTENT_DATES = {
   home: '2026-09-11',
-  hubs: '2026-09-01',
+  hubs: '2026-10-13',
   services: '2026-08-31',
-  verticals: '2026-07-29',
+  verticals: '2026-10-13',
   resources: '2026-08-31',
   legal: '2026-03-22',
 } as const;

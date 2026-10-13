@@ -120,6 +120,35 @@ for (const htmlPath of htmlFiles) {
     dom.window.document.body.append(schema);
   }
 
+  // PageSeo already renders FAQPage from page.faqs. Boot-shell graphs used to
+  // keep a second copy, so every service/vertical route emitted FAQPage twice.
+  // Keep the PageSeo block (data-route-schema) and strip FAQPage from the rest.
+  const routeSchema = dom.window.document.querySelector(
+    'script[data-route-schema][type="application/ld+json"]',
+  );
+  if (routeSchema) {
+    for (const script of dom.window.document.querySelectorAll(
+      'script[type="application/ld+json"]',
+    )) {
+      if (script === routeSchema) continue;
+      try {
+        const data = JSON.parse(script.textContent ?? '');
+        const graph = Array.isArray(data['@graph']) ? data['@graph'] : null;
+        if (!graph) continue;
+        const next = graph.filter((node) => node['@type'] !== 'FAQPage');
+        if (next.length === graph.length) continue;
+        if (next.length === 0) {
+          script.remove();
+          continue;
+        }
+        data['@graph'] = next;
+        script.textContent = JSON.stringify(data);
+      } catch {
+        // Leave malformed boot schema untouched rather than fail the build.
+      }
+    }
+  }
+
   // Beasties is selector-based rather than viewport-aware. Limit its matching
   // surface to the fixed navigation and the first visible section so each
   // route gets only the CSS needed for an immediately styled first paint.

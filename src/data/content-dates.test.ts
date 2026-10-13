@@ -13,7 +13,7 @@ describe('formatLastUpdatedLabel', () => {
     expect(formatLastUpdatedLabel(CONTENT_DATES.services, 'es')).toBe('Última actualización: 31 ago 2026');
     expect(formatLastUpdatedLabel(CONTENT_DATES.services, 'en')).toBe('Last updated: Aug 31, 2026');
     expect(formatLastUpdatedLabel(CONTENT_DATES.resources, 'es')).toBe('Última actualización: 31 ago 2026');
-    expect(formatLastUpdatedLabel(CONTENT_DATES.verticals, 'es')).toBe('Última actualización: 29 jul 2026');
+    expect(formatLastUpdatedLabel(CONTENT_DATES.verticals, 'es')).toBe('Última actualización: 13 oct 2026');
   });
 
   it('rejects non-ISO dates instead of inventing a label', () => {

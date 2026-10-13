@@ -96,7 +96,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         'Contrata a Gisela Saldarriaga: ads UGC, demos y portavoz en español e inglés. Producción en Medellín para US hispano, España, LatAm y briefs en inglés.',
       heroTitle: 'Contrata a Gisela Saldarriaga como tu creadora UGC bilingüe',
       lead:
-        'Si tu marca necesita una creadora UGC bilingüe, no una agencia: ads, demos, reseñas y videos de portavoz en español e inglés, entregados a ti. Produzco desde Medellín para equipos en el mercado hispano de Estados Unidos, España y LatAm, y para briefs en inglés. El contenido es de la marca. No lo publico en mis redes, salvo un acuerdo de ambassador.',
+        `Si tu marca necesita una creadora UGC bilingüe, no una agencia: ads, demos, reseñas y videos de portavoz en español e inglés, entregados a ti. Produzco desde Medellín para equipos en el mercado hispano de Estados Unidos, España y LatAm, y para briefs en inglés. El contenido es de la marca. No lo publico en mis redes, salvo un acuerdo de ambassador. Lee [cómo contratar una creadora UGC bilingüe](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
       childrenTitle: 'Qué puedes contratar',
       primaryCtaLabel: 'Contáctame',
       proof: `Llevo ${SITE_PROOF.brandCampaigns}+ campañas de marca en beauty, moda, tech y lifestyle. Gisela Saldarriaga trabaja en Fiverr como [gisela_sm](${FIVERR_PROFILE_URL}): ${SITE_PROOF.fiverrRating}/5 en ${SITE_PROOF.fiverrReviewCount} reseñas verificadas.`,
@@ -146,7 +146,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         'Hire Gisela Saldarriaga for bilingual UGC ads, demos, and spokesperson videos. Produced in Medellín for US Hispanic, Spain, LatAm, and English briefs.',
       heroTitle: 'Hire Gisela Saldarriaga as your bilingual UGC creator',
       lead:
-        'If you need a named bilingual UGC creator, not an agency: ads, demos, reviews, and spokesperson videos in Spanish and English, delivered to your brand. I produce from Medellín for teams selling to US Hispanic audiences, Spain, and LatAm, plus English briefs. The content belongs to the brand. I don’t post client work on my socials unless we agree on an ambassador deal.',
+        `If you need a named bilingual UGC creator, not an agency: ads, demos, reviews, and spokesperson videos in Spanish and English, delivered to your brand. I produce from Medellín for teams selling to US Hispanic audiences, Spain, and LatAm, plus English briefs. The content belongs to the brand. I don’t post client work on my socials unless we agree on an ambassador deal. Read [how to hire a bilingual UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
       childrenTitle: 'What you can hire',
       primaryCtaLabel: 'Contact me',
       proof: `I’ve run ${SITE_PROOF.brandCampaigns}+ brand campaigns in beauty, fashion, tech, and lifestyle. Gisela Saldarriaga works on Fiverr as [gisela_sm](${FIVERR_PROFILE_URL}): ${SITE_PROOF.fiverrRating}/5 from ${SITE_PROOF.fiverrReviewCount} verified reviews.`,
@@ -198,7 +198,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         'Contrata a Gisela Saldarriaga para UGC de beauty, ecommerce, moda, tech y bienestar. Creadora bilingüe en Medellín para marcas en US hispano, España y LatAm.',
       heroTitle: 'Contrata UGC por industria: beauty, ecommerce, moda, tech y bienestar',
       lead:
-        'Si tu marca necesita una creadora UGC bilingüe por industria, no una agencia, empieza aquí. Produzco desde Medellín para equipos de beauty, ecommerce, moda, tech/SaaS y bienestar que venden en el mercado hispano de Estados Unidos, España, LatAm, o con un brief en inglés. El contenido se entrega a la marca.',
+        `Si tu marca necesita una creadora UGC bilingüe por industria, no una agencia, empieza aquí. Produzco desde Medellín para equipos de beauty, ecommerce, moda, tech/SaaS y bienestar que venden en el mercado hispano de Estados Unidos, España, LatAm, o con un brief en inglés. El contenido se entrega a la marca. Puedes [contratar una creadora UGC bilingüe](${getServicePath('bilingual-ugc-creator', 'es')}) o leer [cómo contratar una creadora UGC](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
       childrenTitle: 'Por industria',
       primaryCtaLabel: 'Contáctame',
       secondaryLinks: [
@@ -235,7 +235,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         'Hire Gisela Saldarriaga for beauty, ecommerce, fashion, tech, and wellness UGC. Bilingual creator in Medellín for US Hispanic, Spain, LatAm, and English briefs.',
       heroTitle: 'Hire a UGC creator by industry: beauty, ecommerce, fashion, tech, wellness',
       lead:
-        'If your brand needs a bilingual UGC creator by industry, not an agency, start here. I produce from Medellín for beauty, ecommerce, fashion, tech/SaaS, and wellness teams selling to US Hispanic audiences, Spain, LatAm, or with an English brief. The content is delivered to the brand.',
+        `If your brand needs a bilingual UGC creator by industry, not an agency, start here. I produce from Medellín for beauty, ecommerce, fashion, tech/SaaS, and wellness teams selling to US Hispanic audiences, Spain, LatAm, or with an English brief. The content is delivered to the brand. You can [hire a bilingual UGC creator](${getServicePath('bilingual-ugc-creator', 'en')}) or read [how to hire a UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
       childrenTitle: 'By industry',
       primaryCtaLabel: 'Contact me',
       secondaryLinks: [

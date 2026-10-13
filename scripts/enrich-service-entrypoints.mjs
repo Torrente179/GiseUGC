@@ -543,20 +543,10 @@ for (const entry of serviceFaqs) {
     }
   }
 
+  // FAQPage lives only in PageSeo (page.faqs). A second copy here made every
+  // service route emit FAQPage twice after prerender. Keep the boot graph for
+  // WebPage / BreadcrumbList / Service; leave FAQ to the React tree.
   const filteredGraph = graph.filter((item) => item['@type'] !== 'FAQPage');
-  filteredGraph.push({
-    '@type': 'FAQPage',
-    '@id': `${entry.canonical}#faq`,
-    inLanguage: entry.locale,
-    mainEntity: entry.faqs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  });
 
   const updatedSchema = {
     ...schema,
@@ -593,4 +583,4 @@ for (const entry of serviceFaqs) {
   fs.writeFileSync(absolutePath, updated);
 }
 
-console.log(`Enriched ${serviceFaqs.length} service entrypoints with FAQ schema`);
+console.log(`Enriched ${serviceFaqs.length} service entrypoints (FAQPage left to PageSeo)`);

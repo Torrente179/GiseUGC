@@ -18,7 +18,7 @@ import { useMediaIntent } from '@/hooks/use-media-intent';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
 import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
-import { serializeRouteDataJson } from '@/lib/inline-copy-links';
+import { InlineCopy, serializeRouteDataJson } from '@/lib/inline-copy-links';
 import '@/styles/templates.css';
 
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
@@ -400,7 +400,9 @@ const VerticalLandingPage = ({
               </details>
 
               <div className="stm-quote-block">
-                <p className="stm-quote">{page.sectionIntroText}</p>
+                <p className="stm-quote [&_a]:underline [&_a]:underline-offset-4">
+                  <InlineCopy text={page.sectionIntroText} />
+                </p>
               </div>
             </section>
 
@@ -497,7 +499,9 @@ const VerticalLandingPage = ({
               <div className="st-container">
                 <div className="st-brief-grid">
                   <div className="st-brief-statement">
-                    <p className="st-pullquote">{page.sectionIntroText}</p>
+                    <p className="st-pullquote [&_a]:underline [&_a]:underline-offset-4">
+                      <InlineCopy text={page.sectionIntroText} />
+                    </p>
                     <div className="st-market-strip">
                       {page.marketItems.map((item, i) => (
                         <span key={item}>{i > 0 && <span className="st-middot" aria-hidden="true">&middot;</span>}{item}</span>

@@ -119,8 +119,8 @@ const HubPage = ({ hubId, locale }: HubPageProps) => {
         <h1 className="route-title-accent type-marketing-display max-w-[28ch] text-[1.75rem] font-semibold leading-[1.14] tracking-tight-marketing md:text-[2rem] lg:text-[2.25rem]">
           {page.heroTitle}
         </h1>
-        <p className="mt-6 max-w-3xl text-base font-light leading-[1.9] text-foreground/78 md:text-[1.04rem]">
-          {page.lead}
+        <p className="mt-6 max-w-3xl text-base font-light leading-[1.9] text-foreground/78 md:text-[1.04rem] [&_a]:underline [&_a]:underline-offset-4">
+          <InlineCopy text={page.lead} />
         </p>
 
         <section className="mt-12">

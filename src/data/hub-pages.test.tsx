@@ -14,7 +14,7 @@ import {
 } from '@/data/hub-pages';
 import { SITE_PROOF } from '@/data/site-proof';
 import { FIVERR_PROFILE_URL } from '@/lib/contact-channels';
-import { inlineCopyHrefs, visibleInlineCopy } from '@/lib/inline-copy-links';
+import { inlineCopyHrefs, parseInlineCopy, visibleInlineCopy } from '@/lib/inline-copy-links';
 import {
   getHubPageRouteEntries,
   getResourcePath,
@@ -37,6 +37,15 @@ const HUB_ENTRYPOINTS = [
 ] as const;
 
 const visibleHtml = (html: string) => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/giu, '');
+
+const expectLeadCopy = (html: string, lead: string) => {
+  for (const segment of parseInlineCopy(lead)) {
+    expect(html).toContain(segment.type === 'text' ? segment.value : segment.label);
+  }
+  for (const href of inlineCopyHrefs(lead)) {
+    expect(html).toContain(`href="${href}"`);
+  }
+};
 
 const renderHub = (path: string, hubId: HubPageId, locale: SiteLocale) =>
   renderToStaticMarkup(
@@ -82,7 +91,7 @@ describe('hire-intent hub copy', () => {
       const html = visibleHtml(renderHub(entry.path, entry.hubId, entry.locale));
       expect(html).toContain(`<h1`);
       expect(html).toContain(page.heroTitle);
-      expect(html).toContain(page.lead);
+      expectLeadCopy(html, page.lead);
       expect(html).toContain(page.primaryCtaHref);
       expect(html).toContain(page.primaryCtaLabel);
       for (const child of page.children) {
@@ -161,7 +170,7 @@ describe('hire-intent hub copy', () => {
       expect(html).toContain(`<title>${page.metaTitle}</title>`);
       expect(html).toContain(`content="${page.metaDescription}"`);
       expect(html).toContain(`<h1>${page.heroTitle}</h1>`);
-      expect(html).toContain(page.lead);
+      expectLeadCopy(html, page.lead);
       expect(html).toContain('/src/entry-hub.tsx');
       expect(html).toContain(`"name":"${page.metaTitle}"`);
       expect(html).toContain(`"dateModified":"${CONTENT_DATES.hubs}"`);
