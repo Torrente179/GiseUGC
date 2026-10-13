@@ -37,6 +37,20 @@
       "eyebrow": "UGC Creativo",
       "title": "Hola, soy Gisela",
       "description": "Me mandas el producto y me cuentas qué necesitas. Yo preparo o ajusto el guion, grabo, edito y en 3 a 5 días hábiles tienes tus videos listos para publicar o pautar."
+    },
+    "feed": {
+      "greeting": "Hola, soy Gisela.",
+      "role": "Creadora UGC · Medellín",
+      "sound": "Sonido original · Español + English",
+      "soundShort": "Sonido original · ES + EN",
+      "servicesButton": "Ver servicios",
+      "railLabel": "Reseñas y contacto",
+      "ratingLabel": "en Fiverr",
+      "ratingAria": "{{rating}} de 5 en Fiverr",
+      "reviewsLabel": "reseñas",
+      "reviewsAria": "{{count}} reseñas en Fiverr",
+      "brandsLabel": "marcas",
+      "brandsAria": "Más de {{count}} marcas"
     }
   },
   "services": {

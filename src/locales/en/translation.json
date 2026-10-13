@@ -37,6 +37,20 @@
       "eyebrow": "Creative UGC",
       "title": "Hi, I’m Gisela",
       "description": "You send me the product and tell me what you need. I write or adjust the script, film, edit, and in 3 to 5 business days you have videos ready to post or run as ads."
+    },
+    "feed": {
+      "greeting": "Hi, I’m Gisela.",
+      "role": "UGC creator · Medellín",
+      "sound": "Original sound · Español + English",
+      "soundShort": "Original sound · ES + EN",
+      "servicesButton": "See services",
+      "railLabel": "Reviews and contact",
+      "ratingLabel": "on Fiverr",
+      "ratingAria": "Rated {{rating}} out of 5 on Fiverr",
+      "reviewsLabel": "reviews",
+      "reviewsAria": "{{count}} reviews on Fiverr",
+      "brandsLabel": "brands",
+      "brandsAria": "More than {{count}} brands"
     }
   },
   "services": {
