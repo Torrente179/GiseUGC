@@ -44,6 +44,7 @@
 }
 
 ::view-transition-group(site-nav),
+::view-transition-group(site-nav-tools),
 ::view-transition-group(site-tabs),
 ::view-transition-group(site-dock) {
   z-index: 100;
@@ -51,12 +52,14 @@
 }
 
 ::view-transition-old(site-nav),
+::view-transition-old(site-nav-tools),
 ::view-transition-old(site-tabs),
 ::view-transition-old(site-dock) {
   display: none;
 }
 
 ::view-transition-new(site-nav),
+::view-transition-new(site-nav-tools),
 ::view-transition-new(site-tabs),
 ::view-transition-new(site-dock) {
   animation: none;
@@ -2422,6 +2425,176 @@
      on every document load, which read as the nav jumping between pages. */
   .site-nav {
     view-transition-name: site-nav;
+  }
+
+  /* ── Desktop nav: Idea 2's floating pill ──
+     The root nav turns transparent and click-through at md+, and the two pills
+     carry the chrome. They take the view-transition names themselves, not the
+     root: a named element is a backdrop root, so naming the root would stop
+     the pills' own blur from seeing the page behind them. */
+  .site-nav-desktop {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .site-nav {
+      view-transition-name: none;
+    }
+
+    .site-nav-desktop {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem clamp(1rem, 2.5vw, 2rem) 0;
+    }
+  }
+
+  .site-nav-pill,
+  .site-nav-tools {
+    /* 0.82 keeps it near-black over light pages too, not a mid grey. */
+    --site-nav-glass: rgb(16 16 19 / 0.82);
+    pointer-events: auto;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 999px;
+    background: var(--site-nav-glass);
+    box-shadow: 0 12px 32px -16px rgb(0 0 0 / 0.5);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    backdrop-filter: blur(16px) saturate(1.2);
+  }
+
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .site-nav-pill,
+    .site-nav-tools {
+      --site-nav-glass: rgb(16 16 19 / 0.94);
+    }
+  }
+
+  .site-nav-pill {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 5px;
+    font-family: var(--font-marketing);
+    view-transition-name: site-nav;
+  }
+
+  .site-nav-pill__mark,
+  .site-nav-pill__link,
+  .site-nav-pill__cta {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    border-radius: 999px;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-decoration: none;
+    text-transform: none;
+    white-space: nowrap;
+    transition:
+      background-color 300ms var(--ease-premium),
+      color 300ms var(--ease-premium),
+      scale 400ms var(--ease-premium);
+  }
+
+  .site-nav-pill__mark {
+    justify-content: center;
+    width: 44px;
+    background: rgb(255 255 255 / 0.09);
+    color: #f4f3f1;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .site-nav-pill__dot {
+    color: hsl(var(--coastal-teal));
+  }
+
+  .site-nav-pill__link {
+    padding: 0 15px;
+    color: rgb(255 255 255 / 0.84);
+    font-weight: 500;
+  }
+
+  .site-nav-pill__mark:hover,
+  .site-nav-pill__link:hover {
+    background: rgb(255 255 255 / 0.08);
+    color: #fff;
+  }
+
+  .site-nav-pill__link.is-active {
+    background: rgb(255 255 255 / 0.13);
+    color: #fff;
+  }
+
+  .site-nav-pill__cta {
+    margin-left: 6px;
+    padding: 0 20px;
+    background: #f4f3f1;
+    color: #121214;
+    font-weight: 600;
+  }
+
+  .site-nav-pill__cta:hover {
+    background: #fff;
+    color: #121214;
+  }
+
+  .site-nav-pill__mark:active,
+  .site-nav-pill__link:active,
+  .site-nav-pill__cta:active {
+    scale: 0.97;
+  }
+
+  .site-nav-pill a:focus-visible,
+  .site-nav-tools :focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
+  /* Language and theme keep their own control, re-skinned onto the same dark
+     glass whatever the page's theme is. */
+  .site-nav-tools {
+    --background: var(--ink-surface);
+    --foreground: var(--pure-linen);
+    --muted-foreground: var(--soft-stone);
+    --border: var(--soft-stone);
+    grid-column: 3;
+    justify-self: end;
+    padding: 4px;
+    color: hsl(var(--pure-linen));
+    view-transition-name: site-nav-tools;
+  }
+
+  .site-nav-tools .nav-control-rail {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .site-nav-pill__link {
+      padding: 0 10px;
+      font-size: 13px;
+    }
+
+    .site-nav-pill__cta {
+      padding: 0 14px;
+      font-size: 13px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-nav-pill__mark,
+    .site-nav-pill__link,
+    .site-nav-pill__cta {
+      transition: none;
+    }
   }
 
   .page-end-legal-rail {

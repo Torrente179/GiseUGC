@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
 import NavbarControls from '@/components/NavbarControls';
+import { useActiveSection } from '@/hooks/use-active-section';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import {
   getHomeSectionHref,
@@ -24,6 +25,16 @@ import { CONTACT_URLS } from '@/lib/contact-channels';
 import { cn } from '@/lib/utils';
 
 const SCROLL_THRESHOLD = 18;
+
+// Desktop pill, in the order the sections appear on Home. The monogram is
+// Home and the CTA is contact, so neither repeats here.
+const DESKTOP_PILL_LINKS = [
+  { id: 'portfolio', key: 'navbar.portfolio' },
+  { id: 'services', key: 'navbar.services' },
+  { id: 'testimonials', key: 'navbar.testimonials' },
+  { id: 'faq', key: 'navbar.faq' },
+] as const;
+const DESKTOP_SPY_IDS = ['home', ...DESKTOP_PILL_LINKS.map((link) => link.id)];
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101';
@@ -80,6 +91,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
   // Home and service landings open on a dark cinematic hero. Reuse the same
   // overlay palette and lift it after the first scroll, matching Home.
   const useHeroOverlayNav = (onHomePage || onServicePage) && !isScrolled;
+  const activeSection = useActiveSection(DESKTOP_SPY_IDS, onHomePage);
 
   useEffect(() => {
     const syncScrolledState = () => {
@@ -370,10 +382,6 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
     },
   ];
 
-  const hireMeCtaLabel = t('navbar.hireMeCta', {
-    defaultValue: currentLocale === 'es' ? 'Contáctame' : 'Hire me',
-  });
-
   return (
     <>
       <div
@@ -491,16 +499,17 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
           isScrolled
             ? 'border-b border-border/40 bg-background/95 shadow-[0_14px_36px_-30px_hsl(var(--foreground)/0.5)]'
             : 'border-b border-border/15 bg-background/75',
+          'md:pointer-events-none md:border-b-0 md:bg-transparent md:shadow-none',
           useHeroOverlayNav && 'title-sequence-nav',
         )}
       >
         {!isScrolled && (
           <div
-            className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background/55 to-transparent dark:from-background/65"
+            className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-background/55 to-transparent dark:from-background/65 md:hidden"
             aria-hidden="true"
           />
         )}
-        <div className="container relative mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
+        <div className="container relative mx-auto px-4 sm:px-6 md:hidden">
           <div
             className={cn(
               'flex items-center justify-between transition-[padding] duration-300',
@@ -545,35 +554,6 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
               </a>
             </div>
 
-            <div className="hidden md:flex items-center gap-7">
-              {desktopNavLinkKeys.map((link) => (
-                <a
-                  key={link.key}
-                  href={link.href}
-                  onClick={(event) => {
-                    if (onHomePage) handleHashLinkClick(event);
-                  }}
-                  className="section-label text-foreground/90 transition-colors hover:text-primary nav-link-underline"
-                >
-                  {t(link.key)}
-                </a>
-              ))}
-            </div>
-
-            <div className="hidden md:flex items-center gap-2">
-              <NavbarControls currentLocale={currentLocale} />
-              <a
-                href={homeSectionHref('contact')}
-                onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
-                  if (onHomePage) handleHashLinkClick(event);
-                }}
-                className="btn-primary-nordic btn-primary-nordic--sm"
-              >
-                {hireMeCtaLabel}
-                <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-              </a>
-            </div>
-
             <div className={cn('md:hidden flex items-center', compactMobile ? 'gap-1' : 'gap-2')}>
               <NavbarControls compact={compactMobile} currentLocale={currentLocale} />
               <button
@@ -604,6 +584,51 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
                 </div>
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* Desktop: a floating pill, centred, with language and theme in a
+            matching pill on the right. Same look on every route. */}
+        <div className="site-nav-desktop">
+          <div className="site-nav-pill" aria-label={t('navbar.desktopLabel')} role="group">
+            <a
+              href={homeSectionHref('home')}
+              className="site-nav-pill__mark"
+              aria-label={t('navbar.homeAria')}
+              onClick={(event) => {
+                if (onHomePage) handleHashLinkClick(event);
+              }}
+            >
+              g<span className="site-nav-pill__dot" aria-hidden="true">.</span>
+            </a>
+            {DESKTOP_PILL_LINKS.map((link) => {
+              const isActive = onHomePage && activeSection === link.id;
+              return (
+                <a
+                  key={link.id}
+                  href={homeSectionHref(link.id)}
+                  className={cn('site-nav-pill__link', isActive && 'is-active')}
+                  aria-current={isActive ? 'true' : undefined}
+                  onClick={(event) => {
+                    if (onHomePage) handleHashLinkClick(event);
+                  }}
+                >
+                  {t(link.key)}
+                </a>
+              );
+            })}
+            <a
+              href={homeSectionHref('contact')}
+              className="site-nav-pill__cta"
+              onClick={(event) => {
+                if (onHomePage) handleHashLinkClick(event);
+              }}
+            >
+              {t('navbar.messageMe')}
+            </a>
+          </div>
+          <div className="site-nav-tools">
+            <NavbarControls currentLocale={currentLocale} />
           </div>
         </div>
       </nav>

@@ -6,7 +6,11 @@
     "testimonials": "Testimonials",
     "contact": "Contact",
     "hireMe": "Contact me",
-    "studioLabel": "UGC creator in Medellín"
+    "studioLabel": "UGC creator in Medellín",
+    "faq": "FAQ",
+    "messageMe": "Message me",
+    "homeAria": "Gisela UGC, home",
+    "desktopLabel": "Main navigation"
   },
   "languageSwitcher": {
     "changeLanguage": "Change language"

@@ -162,3 +162,32 @@ judgement.
   buttons on the left, side button + Camera Control on the right. Width
   `clamp(12rem, 18.5vw, 18rem)` (266 px at 1440, up from 197), seated near the
   foot so it clears the name.
+
+## 9. Desktop nav: Idea 2's floating pill (site-wide)
+
+JP asked for the desktop nav, on every page, to look like Idea 2's. At md+ the
+full-width bar is gone; `src/components/Navbar.tsx` renders, inside the same
+fixed `nav.site-nav`:
+
+- `.site-nav-pill`, centred: a "g." monogram (Home), Portafolio · Servicios ·
+  Testimonios · Preguntas (Home section order), and a white "Escríbeme" CTA to
+  `#contact`. On Home the link for the section in view is highlighted via
+  `useActiveSection`.
+- `.site-nav-tools`, top right: the existing `NavbarControls` (ES/EN and
+  theme), re-skinned onto the same dark glass by overriding the palette
+  variables locally. It does **not** use `title-sequence-nav`, which
+  `Navbar.test.tsx` requires to be absent on resource, vertical and hub routes.
+- Dark glass `rgb(16 16 19 / 0.82)` + blur on every route and theme; 0.72
+  read as mid-grey over light pages.
+- The root nav is transparent and `pointer-events: none` at md+, so it never
+  blocks the page; the pills re-enable pointer events.
+- View-transition names moved from the root to the pills (`site-nav`,
+  `site-nav-tools`) at md+. A named element is a backdrop root, so naming the
+  root would cut the pills' blur off from the page behind them.
+- Mobile is unchanged: same bar, back button, controls and menu.
+- Hub pages (`/servicios/`, `/verticales/`, `/recursos/` and EN twins) render
+  no site nav at all, before and after this change.
+
+Verify inner routes against `npm run build` + `npm run preview -- --port 4173`:
+the dev server cannot hydrate them ("Missing prerendered route data"). The
+build rewrites `src/data/nuevos-r2-ready.ts`; restore it before committing.
