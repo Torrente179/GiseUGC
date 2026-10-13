@@ -35,11 +35,10 @@ const extractFaqPages = (html: string) => {
   const pages: Array<Array<{ question: string; answer: string }>> = [];
 
   for (const block of blocks) {
-    const data = JSON.parse(decodeJsonLd(block[1] ?? '')) as {
-      '@type'?: string;
-      '@graph'?: Array<Record<string, unknown>>;
-    };
-    const graph = Array.isArray(data['@graph']) ? data['@graph'] : [data];
+    const data = JSON.parse(decodeJsonLd(block[1] ?? '')) as Record<string, unknown>;
+    const graph = Array.isArray(data['@graph'])
+      ? (data['@graph'] as Array<Record<string, unknown>>)
+      : [data];
     for (const node of graph) {
       if (node['@type'] !== 'FAQPage') continue;
       const entities = (node.mainEntity as Array<Record<string, unknown>> | undefined) ?? [];
