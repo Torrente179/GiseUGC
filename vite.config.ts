@@ -1,10 +1,10 @@
-import { defineConfig, type Plugin } from "vite";
+import { createServer, defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { getAllEntrypointPaths } from "./src/lib/locale-path";
 import { writeSitemapFile } from "./src/lib/sitemap";
-import { writeVideoSitemapFile } from "./src/lib/video-sitemap";
-import { writeOgImages } from "./src/lib/og-image-render";
+
+const srcRoot = path.resolve(__dirname, "src");
 
 const giselaSeoArtifacts = (): Plugin => ({
   name: "gisela-seo-artifacts",
@@ -12,11 +12,32 @@ const giselaSeoArtifacts = (): Plugin => ({
   async buildStart() {
     // Same paths production serves from public/ → dist/.
     // URL sitemap, curated video sitemap, and OG generation fail the build.
+    // A nested Vite server with configFile:false resolves `@/` without
+    // re-entering this config file.
     writeSitemapFile();
-    await writeVideoSitemapFile(process.cwd(), {
-      verifyUrls: process.env.SEO_SKIP_VIDEO_HEAD !== "1",
+    const loader = await createServer({
+      configFile: false,
+      root: __dirname,
+      resolve: { alias: { "@": srcRoot } },
+      server: { middlewareMode: true },
+      appType: "custom",
+      plugins: [],
     });
-    await writeOgImages(process.cwd(), { updateEntrypoints: true });
+    try {
+      const { writeVideoSitemapFile, shouldVerifyVideoUrlsAtBuild } = await loader.ssrLoadModule(
+        "/src/lib/video-sitemap.ts",
+      );
+      const { writeOgImages } = await loader.ssrLoadModule("/src/lib/og-image-render.ts");
+      await writeVideoSitemapFile(process.cwd(), {
+        // Vercel preview/prod has no guaranteed egress to R2. Live HEAD
+        // checks belong to `npm run seo:check-video-urls`, not this build.
+        verifyUrls: shouldVerifyVideoUrlsAtBuild(),
+        softVerify: Boolean(process.env.VERCEL),
+      });
+      await writeOgImages(process.cwd(), { updateEntrypoints: true });
+    } finally {
+      await loader.close();
+    }
   },
 });
 

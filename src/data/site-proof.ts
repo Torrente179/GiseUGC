@@ -66,20 +66,17 @@ export const OG_PROOF_LINE_NONE = {
 } as const;
 
 export const getOgProofLine = (locale: 'es' | 'en'): string => {
-  if (OG_PROOF_LINE_MODE === 'none') return OG_PROOF_LINE_NONE[locale];
-  if (OG_PROOF_LINE_MODE !== 'exact') {
-    throw new Error(`Unknown OG_PROOF_LINE_MODE: ${String(OG_PROOF_LINE_MODE)}`);
-  }
-  assertFiverrProofLine();
-  return FIVERR_PROOF_LINE[locale];
+  assertOgProofLineConfig();
+  return String(OG_PROOF_LINE_MODE) === 'none' ? OG_PROOF_LINE_NONE[locale] : FIVERR_PROOF_LINE[locale];
 };
 
 export const assertOgProofLineConfig = () => {
-  if (OG_PROOF_LINE_MODE === 'exact') {
+  const mode = String(OG_PROOF_LINE_MODE);
+  if (mode === 'exact') {
     assertFiverrProofLine();
     return;
   }
-  if (OG_PROOF_LINE_MODE === 'none') {
+  if (mode === 'none') {
     if (OG_PROOF_LINE_NONE.es !== 'Creadora UGC bilingüe · Fiverr') {
       throw new Error('OG_PROOF_LINE_NONE.es drifted');
     }
@@ -88,7 +85,7 @@ export const assertOgProofLineConfig = () => {
     }
     return;
   }
-  throw new Error(`Unknown OG_PROOF_LINE_MODE: ${String(OG_PROOF_LINE_MODE)}`);
+  throw new Error(`Unknown OG_PROOF_LINE_MODE: ${mode}`);
 };
 
 /** Marketplace aggregate only. Never attach Review / reviewBody. */

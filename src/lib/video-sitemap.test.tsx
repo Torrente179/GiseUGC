@@ -15,6 +15,7 @@ import {
   collectExcludedVideos,
   collectHomeVideoObjects,
   selectCuratedSitemapVideos,
+  shouldVerifyVideoUrlsAtBuild,
   writeVideoSitemapFile,
 } from '@/lib/video-sitemap';
 import { PAGE_REGISTRY } from '@/lib/locale-path';
@@ -145,6 +146,24 @@ describe('curated video sitemap', () => {
         expect(node.uploadDate).toBeTruthy();
       }
     }
+  });
+});
+
+describe('video sitemap live URL checks', () => {
+  it('skips hard HEAD checks on Vercel builds', () => {
+    const previousVercel = process.env.VERCEL;
+    const previousSkip = process.env.SEO_SKIP_VIDEO_HEAD;
+    process.env.VERCEL = '1';
+    delete process.env.SEO_SKIP_VIDEO_HEAD;
+    expect(shouldVerifyVideoUrlsAtBuild()).toBe(false);
+    delete process.env.VERCEL;
+    expect(shouldVerifyVideoUrlsAtBuild()).toBe(true);
+    process.env.SEO_SKIP_VIDEO_HEAD = '1';
+    expect(shouldVerifyVideoUrlsAtBuild()).toBe(false);
+    if (previousVercel === undefined) delete process.env.VERCEL;
+    else process.env.VERCEL = previousVercel;
+    if (previousSkip === undefined) delete process.env.SEO_SKIP_VIDEO_HEAD;
+    else process.env.SEO_SKIP_VIDEO_HEAD = previousSkip;
   });
 });
 

@@ -56,7 +56,7 @@ Each sitemap entry copies existing fields only:
 - `video:publication_date` (`uploadDate` from the homepage VideoObject)
 - `video:duration` in **seconds** when duration data exists
 
-A selected entry missing a required field fails the build. XML is escaped. Build HEADs every content and thumbnail URL as Googlebot and checks `media.giselasaldarriaga.com/robots.txt` for a Googlebot block.
+A selected entry missing a required field fails the build. XML is escaped. Local / non-Vercel builds HEAD every content and thumbnail URL as Googlebot and check `media.giselasaldarriaga.com/robots.txt` for a Googlebot block. **Vercel builds skip that live probe** (`VERCEL=1`) so a missing egress path cannot fail the deploy. Run `npm run seo:check-video-urls` from a networked machine.
 
 `robots.txt` has `Sitemap: …/sitemap-video.xml`. IndexNow still pings `sitemap.xml` locs only — not the video sitemap.
 
@@ -64,5 +64,7 @@ A selected entry missing a required field fails the build. XML is escaped. Build
 
 ```
 npx vitest run src/lib/og-image.test.ts src/lib/video-sitemap.test.tsx
+npm run typecheck
 npm run build
+npm run seo:check-video-urls
 ```

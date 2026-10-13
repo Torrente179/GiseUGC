@@ -72,8 +72,9 @@ build. XML is escaped. Decorative and extra service/vertical proof clips
 are excluded; those pages still emit VideoObject JSON-LD (`name`,
 `thumbnailUrl`, `uploadDate`). The build HEADs every R2 content and
 thumbnail URL as Googlebot (with and without a Google referer) and
-rejects a robots or hotlink block. `robots.txt` references the video
-sitemap. IndexNow does not.
+rejects a robots or hotlink block. That live probe is skipped on Vercel
+(`VERCEL=1`) and lives in `npm run seo:check-video-urls`. `robots.txt`
+references the video sitemap. IndexNow does not.
 
 ## IndexNow
 

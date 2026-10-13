@@ -54,7 +54,12 @@ const durationSecondsFromIso = (value?: string): number | undefined => {
 
 export { parseHomeVideoObjects };
 
-export const assertSelectedVideoFields = (video: PageVideoObject, pagePath: string): void => {
+type AssertSelectedVideoFields = (
+  video: PageVideoObject,
+  pagePath: string,
+) => asserts video is PageVideoObject & { uploadDate: string };
+
+export const assertSelectedVideoFields: AssertSelectedVideoFields = (video, pagePath) => {
   if (
     !video.name.trim() ||
     !video.description.trim() ||
@@ -137,6 +142,10 @@ export const selectCuratedSitemapVideos = (root = process.cwd()): VideoSitemapEn
         throw new Error(`homepage VideoObject is not in the curated clip list: ${video.contentUrl}`);
       }
       assertSelectedVideoFields(video, pagePath);
+      const uploadDate = video.uploadDate;
+      if (!uploadDate) {
+        throw new Error(`selected video missing required field on ${pagePath}: uploadDate`);
+      }
       if (video.thumbnailUrl.includes('/og-image') || video.thumbnailUrl.includes('/og/')) {
         throw new Error(`video thumbnail must not be the OG image: ${video.thumbnailUrl}`);
       }
@@ -147,7 +156,7 @@ export const selectCuratedSitemapVideos = (root = process.cwd()): VideoSitemapEn
         description: video.description,
         thumbnailLoc: video.thumbnailUrl,
         contentLoc: video.contentUrl,
-        uploadDate: video.uploadDate,
+        uploadDate,
         durationSeconds:
           durationSecondsFromIso(video.duration) ??
           (clip?.durationSeconds ? Math.round(clip.durationSeconds) : undefined),
@@ -296,17 +305,30 @@ export const assertR2AllowsGooglebot = async (sampleUrl?: string): Promise<void>
 
 export const writeVideoSitemapFile = async (
   root = process.cwd(),
-  options: { verifyUrls?: boolean } = {},
+  options: { verifyUrls?: boolean; softVerify?: boolean } = {},
 ): Promise<{ xml: string; entries: VideoSitemapEntry[]; excluded: ExcludedVideo[] }> => {
   const entries = selectCuratedSitemapVideos(root);
   const excluded = collectExcludedVideos(root);
   const xml = buildVideoSitemapXml(entries);
   if (options.verifyUrls) {
-    await assertVideoUrlsReachable(entries);
-    await assertR2AllowsGooglebot(entries[0]?.contentLoc);
+    try {
+      await assertVideoUrlsReachable(entries);
+      await assertR2AllowsGooglebot(entries[0]?.contentLoc);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      if (options.softVerify) {
+        console.warn(`[seo] video URL check is soft and did not fail the build:\n${message}`);
+      } else {
+        throw error;
+      }
+    }
   }
   writeFileSync(resolve(root, VIDEO_SITEMAP_RELATIVE), xml, 'utf8');
   return { xml, entries, excluded };
 };
+
+/** Live R2 HEAD/robots probes. Off on Vercel (no guaranteed egress). */
+export const shouldVerifyVideoUrlsAtBuild = (): boolean =>
+  process.env.SEO_SKIP_VIDEO_HEAD !== '1' && !process.env.VERCEL;
 
 export const videoSitemapPublicUrl = `${SITEMAP_ORIGIN}/sitemap-video.xml`;
