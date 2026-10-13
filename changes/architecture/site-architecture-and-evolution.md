@@ -90,6 +90,7 @@ than reordering the entire document after hydration.
    editing.
 3. `Portfolio.tsx` expects one authoritative clip library built from `LEGACY_REEL_CLIPS` plus `NUEVOS_R2_READY_CLIPS`.
 4. SEO-facing language behavior is path-based, not query-string-based.
+4a. Every vertical landing (ES and EN) has exactly one H1, authored in `VerticalLandingPage.tsx` (desktop `.st-hero-title`). The mobile overlay title is a non-heading.
 5. Static entries are complete prerendered pages and must stay hydratable.
 6. A `PlaybackCandidate` owns its MP4/HLS pair; never recreate parallel source
    arrays.

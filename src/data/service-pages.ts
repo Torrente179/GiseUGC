@@ -77,7 +77,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
   'bilingual-ugc-creator': {
     es: {
       navLabel: 'Creadora UGC bilingüe',
-      metaTitle: 'Creadora UGC bilingüe | Gisela Saldarriaga',
+      metaTitle: 'Contrata una creadora UGC bilingüe | Gisela Saldarriaga',
       metaDescription:
         'Creadora UGC bilingüe en Medellín. Grabo anuncios, demos y reseñas en español e inglés para marcas de Estados Unidos, España y Latinoamérica.',
       breadcrumbLabel: 'Creadora UGC bilingüe',
@@ -210,7 +210,7 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
     },
     en: {
       navLabel: 'Bilingual UGC creator',
-      metaTitle: 'Bilingual UGC creator | Gisela Saldarriaga',
+      metaTitle: 'Hire a bilingual UGC creator (ES+EN) | Gisela Saldarriaga',
       metaDescription:
         'Bilingual UGC creator based in Medellín. I make ads, demos, and reviews in Spanish and English for brands in the US, Spain, and Latin America.',
       breadcrumbLabel: 'Bilingual UGC creator',

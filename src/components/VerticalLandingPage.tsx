@@ -265,9 +265,9 @@ const VerticalLandingPage = ({
 
               <div className="stm-hero-bottom">
                 <p className="st-eyebrow st-eyebrow--light mb-2">{page.heroEyebrow}</p>
-                <h1 className="stm-hero-title stm-hero-title--reveal">
+                <p className="stm-hero-title stm-hero-title--reveal">
                   {page.heroTitle}
-                </h1>
+                </p>
                 <p className="stm-hero-hook">{page.heroSummary}</p>
               </div>
 

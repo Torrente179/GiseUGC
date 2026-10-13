@@ -100,10 +100,32 @@ const renderHub = (hubId: 'services' | 'verticals', locale: SiteLocale) => {
   return { raw, html: visibleHtml(raw), page };
 };
 
+const countTag = (html: string, tag: 'h1') => (html.match(new RegExp(`<${tag}\\b`, 'giu')) ?? []).length;
+
+const extractJsonLdIds = (html: string): string[] => {
+  const ids: string[] = [];
+  for (const block of html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/giu)) {
+    const data = JSON.parse((block[1] ?? '').replace(/\\u003c/giu, '<')) as Record<string, unknown>;
+    const graph = Array.isArray(data['@graph']) ? (data['@graph'] as Array<Record<string, unknown>>) : [data];
+    for (const node of graph) {
+      if (typeof node['@id'] === 'string') ids.push(node['@id']);
+    }
+  }
+  return ids;
+};
+
 const MONEY_LINKS: Record<
   string,
   Array<{ href: string; anchor: string }>
 > = {
+  'beauty-ugc:es': [
+    { href: getServicePath('bilingual-ugc-creator', 'es'), anchor: 'creadora UGC de belleza en español e inglés' },
+    { href: getResourcePath('how-to-hire-ugc-creator', 'es'), anchor: 'cómo contratar una creadora UGC bilingüe' },
+  ],
+  'beauty-ugc:en': [
+    { href: getServicePath('bilingual-ugc-creator', 'en'), anchor: 'bilingual beauty UGC creator' },
+    { href: getResourcePath('how-to-hire-ugc-creator', 'en'), anchor: 'how to hire a bilingual UGC creator' },
+  ],
   'fashion-ugc:es': [
     { href: getServicePath('bilingual-ugc-creator', 'es'), anchor: 'creadora UGC de moda en español e inglés' },
     { href: getResourcePath('how-to-hire-ugc-creator', 'es'), anchor: 'guía para contratar una creadora UGC' },
@@ -144,7 +166,7 @@ const MONEY_LINKS: Record<
   ],
 };
 
-const LINKED_VERTICALS = ['fashion-ugc', 'tech-saas-ugc', 'lifestyle-wellness-ugc'] as const;
+const LINKED_VERTICALS = ['beauty-ugc', 'fashion-ugc', 'tech-saas-ugc', 'lifestyle-wellness-ugc'] as const;
 
 const expectExactAnchor = (html: string, href: string, anchor: string) => {
   expect(html).toContain(`href="${href}"`);
@@ -212,6 +234,53 @@ describe('service and vertical pages emit one FAQPage that matches the visible F
     const tech = getVerticalPageContent('tech-saas-ugc', 'es');
     expect(tech.faqs[2]?.question).toContain('campañas de adquisición');
     expect(tech.faqs[2]?.question).toContain('retención');
+  });
+});
+
+describe('vertical pages ship exactly one H1', () => {
+  it.each(getAllVerticalIds().flatMap((id) => (['es', 'en'] as const).map((locale) => [id, locale] as const)))(
+    '%s (%s) keeps the desktop hero as the only H1 and demotes the mobile title',
+    (verticalId, locale) => {
+      const { html, page } = renderVertical(verticalId, locale);
+      expect(countTag(html, 'h1')).toBe(1);
+      expect(html).toContain(`<h1 class="st-hero-title">${page.heroTitle}</h1>`);
+      expect(html).toContain(`<p class="stm-hero-title stm-hero-title--reveal">${page.heroTitle}</p>`);
+      expect(html).not.toContain('<h1 class="stm-hero-title');
+      expect(html.toLowerCase()).not.toContain('giseugc');
+    },
+  );
+});
+
+describe('PageSeo JSON-LD @ids are unique inside the route graph', () => {
+  it.each(getAllVerticalIds().flatMap((id) => (['es', 'en'] as const).map((locale) => [id, locale] as const)))(
+    '%s (%s) route schema has unique @ids',
+    (verticalId, locale) => {
+      const { raw } = renderVertical(verticalId, locale);
+      const ids = extractJsonLdIds(raw);
+      expect(ids.length).toBeGreaterThan(0);
+      expect(new Set(ids).size).toBe(ids.length);
+    },
+  );
+
+  it.each(getAllServiceIds().flatMap((id) => (['es', 'en'] as const).map((locale) => [id, locale] as const)))(
+    '%s (%s) route schema has unique @ids',
+    (serviceId, locale) => {
+      const { raw } = renderService(serviceId, locale);
+      const ids = extractJsonLdIds(raw);
+      expect(ids.length).toBeGreaterThan(0);
+      expect(new Set(ids).size).toBe(ids.length);
+    },
+  );
+
+  it('boot-shell graphs reuse the same @ids as PageSeo, so collapsing them would drop fields', () => {
+    const page = getVerticalPageContent('beauty-ugc', 'es');
+    const { raw } = renderVertical('beauty-ugc', 'es');
+    const routeIds = new Set(extractJsonLdIds(raw));
+    const bootIds = extractJsonLdIds(read(bootFileFor(page.path)));
+    const overlap = bootIds.filter((id) => routeIds.has(id));
+    expect(bootIds.length).toBeGreaterThan(0);
+    expect(overlap.sort()).toEqual([...new Set(bootIds)].sort());
+    expect(routeIds.size).toBeGreaterThan(bootIds.length);
   });
 });
 

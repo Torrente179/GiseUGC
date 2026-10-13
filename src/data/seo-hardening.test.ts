@@ -3,6 +3,9 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { getResourcePath } from '@/lib/locale-path';
 import { buildSitemapXml, getSitemapLocs } from '@/lib/sitemap';
+import { getHubPageContent } from '@/data/hub-pages';
+import { getServicePageContent } from '@/data/service-pages';
+import { getResourcePageContent } from '@/data/resource-pages';
 
 const root = resolve(process.cwd());
 const read = (relative: string) => readFileSync(resolve(root, relative), 'utf8');
@@ -81,6 +84,43 @@ describe('Person sameAs includes YouTube without rewriting existing profiles', (
     );
     expect(sameAs.filter((url) => url === FIVERR_PROFILE)).toHaveLength(1);
     expect(sameAs.filter((url) => url === YOUTUBE_CHANNEL)).toHaveLength(1);
+  });
+
+  it('llms profile lists include the same YouTube URL', () => {
+    for (const file of ['public/llms.txt', 'public/llms-full.txt']) {
+      const text = read(file);
+      expect(text).toContain(`[YouTube](${YOUTUBE_CHANNEL})`);
+      expect(text.toLowerCase()).not.toContain('giseugc');
+    }
+  });
+});
+
+describe('hire-intent titles and hub descriptions stay on the briefed strings', () => {
+  it('locks the six titles and two services-hub descriptions', () => {
+    expect(getServicePageContent('bilingual-ugc-creator', 'es').metaTitle).toBe(
+      'Contrata una creadora UGC bilingüe | Gisela Saldarriaga',
+    );
+    expect(getServicePageContent('bilingual-ugc-creator', 'en').metaTitle).toBe(
+      'Hire a bilingual UGC creator (ES+EN) | Gisela Saldarriaga',
+    );
+    expect(getResourcePageContent('how-to-hire-ugc-creator', 'es').metaTitle).toBe(
+      'Cómo contratar una creadora UGC bilingüe | Gisela Saldarriaga',
+    );
+    expect(getResourcePageContent('how-to-hire-ugc-creator', 'en').metaTitle).toBe(
+      'How to hire a bilingual UGC creator | Gisela Saldarriaga',
+    );
+    expect(getHubPageContent('services', 'es').metaTitle).toBe(
+      'Servicios de contenido UGC en español e inglés | Gisela Saldarriaga',
+    );
+    expect(getHubPageContent('services', 'en').metaTitle).toBe(
+      'UGC content services in Spanish and English | Gisela Saldarriaga',
+    );
+    expect(getHubPageContent('services', 'es').metaDescription).toBe(
+      'Contrata a tu creadora UGC bilingüe en Medellín. Grabo anuncios, demos, reseñas y videos de portavoz en español e inglés para EE. UU., España y LatAm.',
+    );
+    expect(getHubPageContent('services', 'en').metaDescription).toBe(
+      'Hire me as your bilingual UGC creator in Medellín. I make ads, demos, reviews, and spokesperson videos in Spanish and English for the US, Spain, and LatAm.',
+    );
   });
 });
 

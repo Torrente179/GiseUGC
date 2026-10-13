@@ -1707,8 +1707,9 @@
     }
   }
 
-  /* Beat the global `h1:not(...)` dark-heading rule so the hero title stays light/legible */
-  .stm-hero .stm-hero-bottom h1.stm-hero-title {
+  /* Keep the linen color even if this title is later retagged as h1
+     (the global `h1:not(...)` dark-heading rule would otherwise win). */
+  .stm-hero .stm-hero-bottom .stm-hero-title {
     color: hsl(var(--pure-linen));
   }
 

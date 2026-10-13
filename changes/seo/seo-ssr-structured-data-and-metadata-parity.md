@@ -188,6 +188,8 @@ Brand stays Gisela Saldarriaga / Gisela.UGC — never GiseUGC.
 |---|---|
 | `/verticales/` | contratar una creadora UGC bilingüe → bilingüe; cómo contratar una creadora UGC → cómo-contratar |
 | `/en/verticals/` | hire a bilingual UGC creator; how to hire a UGC creator |
+| `/verticales/ugc-beauty/` | creadora UGC de belleza en español e inglés; cómo contratar una creadora UGC bilingüe |
+| `/en/verticals/beauty-ugc-creator/` | bilingual beauty UGC creator; how to hire a bilingual UGC creator |
 | `/verticales/ugc-moda/` | creadora UGC de moda en español e inglés; guía para contratar una creadora UGC |
 | `/en/verticals/fashion-ugc-creator/` | bilingual fashion UGC creator; guide to hiring a UGC creator |
 | `/verticales/ugc-tech-saas/` | creadora UGC bilingüe para tech y SaaS; qué pedir al contratar una creadora UGC |
@@ -203,6 +205,15 @@ Optional hub FAQs stay on hold. Service-page money links are unchanged.
 
 Verify: `npx vitest run src/data/faq-schema-and-links.test.tsx` — one FAQPage,
 schema Q/A equals visible Q/A, exact anchors.
+
+## 2026-10-13 — duplicate `@id`s left in place
+
+Boot-shell JSON-LD and the PageSeo `data-route-schema` block still share
+`#webpage`, `#breadcrumb`, and `#service` on service and vertical routes.
+Prerender already removes a second FAQPage from the boot graph. Collapsing
+the rest was skipped: the two graphs are not identical (boot `serviceType` vs
+`page.navLabel`, plus FAQ/VideoObject nodes only on PageSeo). See
+`2026-10-13-vertical-h1-llms-titles.md`.
 
 ## 2026-10-13 — Person `sameAs` YouTube (no rebuild)
 
