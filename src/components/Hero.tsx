@@ -25,7 +25,11 @@ const HERO_REEL_INTERVAL_MS = 3500;
 const DESKTOP_HERO_QUERY = '(min-width: 768px)';
 
 // Mirrors `--feed-figure-width` in index.css.
-const HERO_FIGURE_SIZES = '(max-width: 767px) min(92vw, 327px), min(42.5vw, 54.4vh, 680px)';
+const HERO_FIGURE_SIZES = '(max-width: 767px) min(92vw, 330px), min(42.5vw, 54.4vh, 680px)';
+
+// The backdrop is the clip the reel card is playing, pre-blurred and
+// brightness-matched by scripts/generate-hero-plates.mjs.
+const heroPlateSrc = (clipId: number) => `/uploads/hero-plates/reel-${clipId}.webp`;
 
 type HeroIntroState = 'idle' | 'loading' | 'playing' | 'complete';
 
@@ -49,6 +53,11 @@ const Hero = () => {
   const [introState, setIntroState] = useState<HeroIntroState>('idle');
   const [isHeroActive, setIsHeroActive] = useState(true);
   const [reelIndex, setReelIndex] = useState(0);
+  // `base` is the backdrop already on screen; `incoming` fades in over it.
+  const [plates, setPlates] = useState<{ base: number; incoming: number | null }>({
+    base: 0,
+    incoming: null,
+  });
   const loadedIntroClipIds = useRef(new Set<number>());
   const ownsIntroRun = useRef(false);
 
@@ -151,6 +160,23 @@ const Hero = () => {
   }, [introState, isHeroActive, isMobile, mediaIntent]);
 
   useEffect(() => {
+    setPlates((current) => {
+      const shown = current.incoming ?? current.base;
+      return shown === reelIndex ? current : { base: shown, incoming: reelIndex };
+    });
+  }, [reelIndex]);
+
+  // The plates are ~2 KB each; warming all ten keeps every cross-fade from
+  // fading in an image that has not arrived yet.
+  useEffect(() => {
+    if (isMobile) return;
+    HERO_REEL_CLIPS.forEach((clip) => {
+      const image = new Image();
+      image.src = heroPlateSrc(clip.id);
+    });
+  }, [isMobile]);
+
+  useEffect(() => {
     if (introState !== 'loading' && introState !== 'playing') return undefined;
 
     const timeout = window.setTimeout(
@@ -180,6 +206,8 @@ const Hero = () => {
   const formattedReelIndex = String(reelIndex + 1).padStart(2, '0');
   const formattedReelTotal = String(HERO_REEL_CLIPS.length).padStart(2, '0');
   const introIsRunning = introState === 'loading' || introState === 'playing';
+  const basePlateClip = HERO_REEL_CLIPS[plates.base] ?? HERO_REEL_CLIPS[0];
+  const incomingPlateClip = plates.incoming === null ? null : HERO_REEL_CLIPS[plates.incoming];
 
   return (
     <section
@@ -189,23 +217,31 @@ const Hero = () => {
       aria-labelledby="feed-hero-title"
     >
       <div className="feed-hero__stage">
-        {/* Her own photo, blurred into a backdrop. Scrolling dims it. */}
+        {/* The reel's current clip, out of focus. Scrolling dims it. */}
         <div className="feed-hero__plate-track" aria-hidden="true">
-          <picture className="feed-hero__plate feed-hero-fade" style={enterDelay(0)}>
-            <source
-              media="(max-width: 767px)"
-              type="image/webp"
-              srcSet="/uploads/gisela-hero-plate-mobile.webp"
-            />
+          <div className="feed-hero__plate feed-hero-fade" style={enterDelay(0)}>
             <img
-              src="/uploads/gisela-hero-plate-desktop.webp"
+              key={`plate-${basePlateClip.id}`}
+              className="feed-hero__plate-image"
+              src={heroPlateSrc(basePlateClip.id)}
               alt=""
-              width="960"
-              height="540"
+              width="180"
+              height="320"
               loading="eager"
               decoding="async"
             />
-          </picture>
+            {incomingPlateClip && (
+              <img
+                key={`plate-${incomingPlateClip.id}`}
+                className="feed-hero__plate-image feed-hero__plate-image--incoming"
+                src={heroPlateSrc(incomingPlateClip.id)}
+                alt=""
+                width="180"
+                height="320"
+                decoding="async"
+              />
+            )}
+          </div>
           <span className="feed-hero__glow" />
         </div>
         <div className="feed-hero__fade" aria-hidden="true" />
@@ -221,24 +257,20 @@ const Hero = () => {
         <div className="feed-hero__figure-track">
           <div className="feed-hero__figure-depth" data-depth="16">
             <picture className="feed-hero__figure feed-hero-settle" style={enterDelay(140)}>
-              {/* Cut from the 4032×2268 original, where she spans 980×2070 px.
-                  The stylesheet caps her rendered width on dense screens so
-                  the browser never has to stretch past those pixels. */}
-              <source
-                type="image/avif"
-                srcSet="/uploads/gisela-cutout-520.avif 520w, /uploads/gisela-cutout-760.avif 760w, /uploads/gisela-cutout-980.avif 980w"
-                sizes={HERO_FIGURE_SIZES}
-              />
+              {/* Cut from the 4032×2268 original, where she spans 991×2071 px.
+                  WebP only: AVIF compresses alpha lossily and steps the
+                  outline. The stylesheet caps her rendered width on dense
+                  screens so the browser never stretches past those pixels. */}
               <source
                 type="image/webp"
-                srcSet="/uploads/gisela-cutout-520.webp 520w, /uploads/gisela-cutout-760.webp 760w, /uploads/gisela-cutout-980.webp 980w"
+                srcSet="/uploads/gisela-cutout-520.webp 520w, /uploads/gisela-cutout-760.webp 760w, /uploads/gisela-cutout-991.webp 991w"
                 sizes={HERO_FIGURE_SIZES}
               />
               <img
                 src="/uploads/gisela-cutout-640.png"
                 alt={t('hero.imageAlt')}
-                width="980"
-                height="2070"
+                width="991"
+                height="2071"
                 loading="eager"
                 decoding="async"
                 {...({ fetchpriority: 'high' } as Record<string, string>)}
@@ -329,72 +361,81 @@ const Hero = () => {
                 aria-label={phoneAriaLabel}
                 onClick={handleHashLinkClick}
               >
-                <span className="feed-hero__phone-screen" aria-hidden="true">
-                  <ResponsivePosterImage
-                    clip={activeReelClip}
-                    alt=""
-                    className="feed-hero__phone-poster"
-                    loading="lazy"
-                    decoding="async"
-                    sizes="(max-width: 1023px) 13vw, 11.7rem"
-                    fetchpriority="low"
-                    rootMargin="0px"
-                  />
-
-                  {mediaIntent && !isMobile && !introIsRunning && (
-                    <AutoplayPreviewVideo
-                      key={activeReelClip.id}
-                      className="feed-hero__phone-video"
-                      src={activeReelClip.mobileSrc}
-                      hlsSrc={activeReelClip.mobileHlsSrc ?? activeReelClip.hlsSrc}
-                      poster={getPosterVariantSrc(activeReelClip, 720, 'avif')}
-                      preload="metadata"
-                      playbackPriority="hero"
-                      loadStrategy="immediate"
-                      rootMargin="120px 0px"
+                <span className="feed-hero__phone-button feed-hero__phone-button--action" aria-hidden="true" />
+                <span className="feed-hero__phone-button feed-hero__phone-button--volume-up" aria-hidden="true" />
+                <span className="feed-hero__phone-button feed-hero__phone-button--volume-down" aria-hidden="true" />
+                <span className="feed-hero__phone-button feed-hero__phone-button--side" aria-hidden="true" />
+                <span className="feed-hero__phone-button feed-hero__phone-button--camera" aria-hidden="true" />
+                <span className="feed-hero__phone-glass" aria-hidden="true">
+                  <span className="feed-hero__phone-screen">
+                    <ResponsivePosterImage
+                      clip={activeReelClip}
+                      alt=""
+                      className="feed-hero__phone-poster"
+                      loading="lazy"
+                      decoding="async"
+                      sizes="(max-width: 1023px) 18vw, 16.5rem"
+                      fetchpriority="low"
+                      rootMargin="0px"
                     />
-                  )}
 
-                  {introIsRunning && (
-                    <span
-                      className={`feed-hero__intro${introState === 'playing' ? ' is-playing' : ''}`}
-                      onAnimationEnd={(event) => {
-                        if (event.target === event.currentTarget) completeIntro(true);
-                      }}
-                    >
-                      {HERO_INTRO_CLIPS.map((clip) => (
-                        <span className="feed-hero__fragment" key={clip.id}>
-                          <ResponsivePosterImage
-                            clip={clip}
-                            alt=""
-                            loading="eager"
-                            decoding="async"
-                            sizes="6vw"
-                            fetchpriority="low"
-                            rootMargin="0px"
-                            onLoad={() => handleIntroFragmentLoad(clip.id)}
-                          />
-                        </span>
-                      ))}
-                    </span>
-                  )}
+                    {mediaIntent && !isMobile && !introIsRunning && (
+                      <AutoplayPreviewVideo
+                        key={activeReelClip.id}
+                        className="feed-hero__phone-video"
+                        src={activeReelClip.mobileSrc}
+                        hlsSrc={activeReelClip.mobileHlsSrc ?? activeReelClip.hlsSrc}
+                        poster={getPosterVariantSrc(activeReelClip, 720, 'avif')}
+                        preload="metadata"
+                        playbackPriority="hero"
+                        loadStrategy="immediate"
+                        rootMargin="120px 0px"
+                      />
+                    )}
 
-                  <span className="feed-hero__phone-shade" aria-hidden="true" />
-
-                  <span className="feed-hero__phone-caption" aria-hidden="true">
-                    <span className="feed-hero__phone-caption-label">
-                      <svg
-                        className="feed-hero__phone-caption-mark"
-                        viewBox="0 0 12 14"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        focusable="false"
+                    {introIsRunning && (
+                      <span
+                        className={`feed-hero__intro${introState === 'playing' ? ' is-playing' : ''}`}
+                        onAnimationEnd={(event) => {
+                          if (event.target === event.currentTarget) completeIntro(true);
+                        }}
                       >
-                        <path d="M11.2 6.13 1.6.29A1 1 0 0 0 .1 1.15v11.7a1 1 0 0 0 1.5.86l9.6-5.84a1 1 0 0 0 0-1.74Z" />
-                      </svg>
-                      <span>{t('hero.reelLabel')}</span>
+                        {HERO_INTRO_CLIPS.map((clip) => (
+                          <span className="feed-hero__fragment" key={clip.id}>
+                            <ResponsivePosterImage
+                              clip={clip}
+                              alt=""
+                              loading="eager"
+                              decoding="async"
+                              sizes="6vw"
+                              fetchpriority="low"
+                              rootMargin="0px"
+                              onLoad={() => handleIntroFragmentLoad(clip.id)}
+                            />
+                          </span>
+                        ))}
+                      </span>
+                    )}
+
+                    <span className="feed-hero__phone-shade" aria-hidden="true" />
+
+                    <span className="feed-hero__phone-caption" aria-hidden="true">
+                      <span className="feed-hero__phone-caption-label">
+                        <svg
+                          className="feed-hero__phone-caption-mark"
+                          viewBox="0 0 12 14"
+                          fill="currentColor"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <path d="M11.2 6.13 1.6.29A1 1 0 0 0 .1 1.15v11.7a1 1 0 0 0 1.5.86l9.6-5.84a1 1 0 0 0 0-1.74Z" />
+                        </svg>
+                        <span>{t('hero.reelLabel')}</span>
+                      </span>
+                      <span>{formattedReelIndex} / {formattedReelTotal}</span>
                     </span>
-                    <span>{formattedReelIndex} / {formattedReelTotal}</span>
+
+                    <span className="feed-hero__phone-island" />
                   </span>
                 </span>
               </a>

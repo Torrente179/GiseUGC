@@ -133,3 +133,32 @@ Testing note: the Browser pane never activates **view** timelines (they need a
 rendered frame, and the pane's document never renders one), so it reports
 `progress: null` and full opacity. Use headless Chrome through
 `puppeteer-core` (in node_modules) for anything scroll-driven.
+
+## 8. Revision after JP's review (same day)
+
+JP: the image was "weirdly cut on the edges", the bottom shadow and the
+background were too dark, use Idea 1's reel backdrop, and the phone "is not an
+iPhone 17 Pro Max and it needs to be bigger". He left the brightness call to
+judgement.
+
+- **Edges.** The first clean-up solved each edge pixel against an estimated
+  background; Vision's interior is not fully opaque, so that tinted the skin and
+  left a dark rim, and a contrast curve then hardened it into a visible cut.
+  AVIF also compressed the alpha lossily and stepped the outline.
+  `scripts/clean-hero-cutout.py` now runs a guided filter along skin and
+  clothes only (it shreds hair), makes the interior solid, and gives every
+  partly transparent pixel the colour of the nearest solid pixel of her, so an
+  edge can only fade. The cut-out ships as **WebP only** (lossless alpha):
+  520/760/991 + PNG 640.
+- **Backdrop.** The plate is now the clip the reel card is playing, pre-blurred
+  by `scripts/generate-hero-plates.mjs` into ~2 KB 180×320 images
+  (`public/uploads/hero-plates/reel-<id>.webp`) normalised to the same mean
+  brightness (sRGB ≈118), and cross-faded over 1.2 s when the reel advances.
+  No CSS blur, so the fade stays on the compositor. The ground is a warm
+  `#1d1916`, the foot fade stops at 0.42 instead of solid black, and the
+  caption gets a local radial shade instead of a full-width bottom scrim.
+- **Phone.** Drawn as the device: silver aluminium rim (1 mm), black glass
+  (1.55 mm), concentric radii, Dynamic Island with a lens, Action + volume
+  buttons on the left, side button + Camera Control on the right. Width
+  `clamp(12rem, 18.5vw, 18rem)` (266 px at 1440, up from 197), seated near the
+  foot so it clears the name.

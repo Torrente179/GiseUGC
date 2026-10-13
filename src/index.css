@@ -775,7 +775,7 @@
      the same letters at every aspect ratio: `--feed-u` follows the width until
      the height runs out, and stops growing at 20px. */
   .feed-hero {
-    --feed-ground: #0b0b0d;
+    --feed-ground: #1d1916;
     --feed-ink: #f3f2ef;
     --feed-accent: hsl(var(--coastal-teal));
     --feed-on-accent: #0e1114;
@@ -792,12 +792,12 @@
     background: var(--feed-ground);
   }
 
-  /* The cut-out is 980 px wide. On 2x screens the unit stops at 14.4px so
+  /* The cut-out is 991 px wide. On 2x screens the unit stops at 14.5px so
      her 34-unit width never asks for more than those pixels; the name scales
      with her, so the composition holds and only gets smaller. */
   @media (min-resolution: 2dppx) {
     .feed-hero {
-      --feed-u: min(1.25vw, 1.6vh, 14.4px);
+      --feed-u: min(1.25vw, 1.6vh, 14.5px);
     }
   }
 
@@ -824,7 +824,7 @@
   .feed-hero__scrim { z-index: 4; }
 
   .feed-hero__plate,
-  .feed-hero__plate img,
+  .feed-hero__plate-image,
   .feed-hero__glow {
     position: absolute;
     inset: 0;
@@ -833,28 +833,35 @@
     height: 100%;
   }
 
-  .feed-hero__plate img {
+  /* Plates are pre-blurred 180px images; upscaling them is the rest of the
+     blur, and costs nothing. */
+  .feed-hero__plate-image {
+    max-width: none;
     object-fit: cover;
-    transform: scale(1.06);
-    filter: saturate(0.92) brightness(0.9);
+  }
+
+  .feed-hero__plate-image--incoming {
+    animation: feed-hero-fade 1.2s var(--ease-premium) both;
   }
 
   .feed-hero__glow {
     background: radial-gradient(
-      ellipse 34% 46% at 50% 34%,
-      rgb(184 103 74 / 0.55) 0%,
-      rgb(184 103 74 / 0) 100%
+      ellipse 36% 48% at 50% 34%,
+      rgb(214 150 112 / 0.32) 0%,
+      rgb(214 150 112 / 0) 100%
     );
   }
 
+  /* A light hand: a little shade under the nav and along the foot, and the
+     rest of the plate left as the clip's own light. */
   .feed-hero__fade {
     background: linear-gradient(
       180deg,
-      rgb(11 11 13 / 0.3) 0%,
-      rgb(11 11 13 / 0) 22%,
-      rgb(11 11 13 / 0.3) 52%,
-      rgb(11 11 13 / 0.86) 72%,
-      var(--feed-ground) 86%
+      rgb(11 11 13 / 0.32) 0%,
+      rgb(11 11 13 / 0.06) 20%,
+      rgb(11 11 13 / 0) 42%,
+      rgb(11 11 13 / 0.16) 74%,
+      rgb(11 11 13 / 0.42) 100%
     );
   }
 
@@ -901,16 +908,18 @@
   }
 
   .feed-hero__figure img {
-    -webkit-mask-image: linear-gradient(180deg, #000 56%, transparent 80%);
-    mask-image: linear-gradient(180deg, #000 56%, transparent 80%);
+    -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 88%);
+    mask-image: linear-gradient(180deg, #000 62%, transparent 88%);
   }
 
+  /* Shade only where the caption sits, so the white copy reads without
+     darkening the whole foot of the hero. */
   .feed-hero__scrim {
-    background: linear-gradient(
-      0deg,
-      rgb(11 11 13 / 0.92) 0%,
-      rgb(11 11 13 / 0.6) 22%,
-      rgb(11 11 13 / 0) 46%
+    background: radial-gradient(
+      ellipse 52% 62% at 0% 100%,
+      rgb(11 11 13 / 0.66) 0%,
+      rgb(11 11 13 / 0.38) 42%,
+      rgb(11 11 13 / 0) 78%
     );
   }
 
@@ -1082,19 +1091,31 @@
     outline-offset: 4px;
   }
 
-  /* ── Reel card (desktop): an iPhone 17 Pro Max at scale ──
+  /* ── Reel card (desktop): an iPhone 17 Pro Max, drawn at scale ──
      Apple's specs give the body as 78.0 × 163.4 mm and the panel as
-     1320 × 2868 px at 460 ppi, i.e. 72.9 × 158.4 mm. That leaves a ~2.55 mm
-     bezel on every side, 3.27% of the body width, which is what the padding
-     is (padding percentages resolve against width on all four sides). Apple
-     does not publish the corner radius; the screen uses the commonly measured
-     62 pt on its 440 pt width, and the body radius is that plus the bezel so
-     the two curves stay concentric. Proportions only: no drawn Dynamic
-     Island, which would date the frame to one model's cut-out. */
+     1320 × 2868 px at 460 ppi, i.e. 72.9 × 158.4 mm, so 2.55 mm (3.27% of the
+     width) separates body edge and screen on every side. That splits here into
+     a 1 mm aluminium rim (1.28%) and 1.55 mm of black glass (2%). Apple does
+     not publish the radii; the screen uses the commonly measured 62 pt on its
+     440 pt width, and each outer layer adds its own thickness so the three
+     curves stay concentric. The Dynamic Island is Apple's 126 × 37 pt cut-out
+     11 pt below the top edge, scaled to the 440 pt screen. Button positions
+     follow the Pro Max's left (Action, volume) and right (side, Camera
+     Control) layout; their exact millimetres are approximations. */
   .feed-hero__reel {
-    --feed-phone-w: clamp(9.5rem, 13.7vw, 12.5rem);
+    --feed-phone-w: clamp(12rem, 18.5vw, 18rem);
+    --feed-phone-metal: linear-gradient(
+      135deg,
+      #f4f5f7 0%,
+      #babec4 20%,
+      #e9ebee 46%,
+      #a7abb2 72%,
+      #dfe2e5 100%
+    );
     width: var(--feed-phone-w);
-    margin-bottom: 1.5rem;
+    /* Seated lower than the caption, near the foot of the hero, so a phone
+       this size clears the name above it. */
+    margin-bottom: calc(1.75rem - clamp(3rem, 8vh, 4.5rem));
   }
 
   .feed-hero__phone {
@@ -1103,17 +1124,28 @@
     box-sizing: border-box;
     width: 100%;
     aspect-ratio: 78 / 163.4;
-    padding: 3.27%;
+    padding: 1.28%;
     border-radius: calc(var(--feed-phone-w) * 0.164);
-    background: #050506;
+    background: var(--feed-phone-metal);
     box-shadow:
-      0 0 0 1px hsl(var(--pure-linen) / 0.22),
-      0 44px 90px -44px rgb(0 0 0 / 0.9);
+      inset 0 0 0 0.5px rgb(255 255 255 / 0.7),
+      0 0 0 0.5px rgb(0 0 0 / 0.45),
+      0 18px 40px -20px rgb(0 0 0 / 0.55),
+      0 60px 110px -50px rgb(0 0 0 / 0.75);
     text-decoration: none;
     transition:
-      box-shadow 300ms var(--ease-premium),
       translate 400ms var(--ease-premium),
       scale 400ms var(--ease-premium);
+  }
+
+  .feed-hero__phone-glass {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: calc(var(--feed-phone-w) * 0.02);
+    border-radius: calc(var(--feed-phone-w) * 0.1512);
+    background: #050506;
   }
 
   .feed-hero__phone-screen {
@@ -1122,8 +1154,65 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border-radius: calc(var(--feed-phone-w) * 0.1313);
+    border-radius: calc(var(--feed-phone-w) * 0.1312);
     background: hsl(var(--ink-surface));
+  }
+
+  .feed-hero__phone-island {
+    position: absolute;
+    z-index: 5;
+    top: calc(var(--feed-phone-w) * 0.0234);
+    left: 50%;
+    width: calc(var(--feed-phone-w) * 0.2676);
+    height: calc(var(--feed-phone-w) * 0.0786);
+    border-radius: 999px;
+    background: #000;
+    translate: -50% 0;
+  }
+
+  /* The front camera, a faint lens at the island's right end. */
+  .feed-hero__phone-island::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 14%;
+    width: 22%;
+    aspect-ratio: 1;
+    border-radius: 999px;
+    background: radial-gradient(circle at 35% 35%, #1d2a3f 0%, #0b0f17 55%, #000 100%);
+    translate: 0 -50%;
+  }
+
+  .feed-hero__phone-button {
+    position: absolute;
+    width: calc(var(--feed-phone-w) * 0.011);
+    background: var(--feed-phone-metal);
+  }
+
+  .feed-hero__phone-button--action,
+  .feed-hero__phone-button--volume-up,
+  .feed-hero__phone-button--volume-down {
+    right: 100%;
+    border-radius: 2px 0 0 2px;
+  }
+
+  .feed-hero__phone-button--side,
+  .feed-hero__phone-button--camera {
+    left: 100%;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .feed-hero__phone-button--action { top: 19.5%; height: 5%; }
+  .feed-hero__phone-button--volume-up { top: 27.5%; height: 9.5%; }
+  .feed-hero__phone-button--volume-down { top: 39%; height: 9.5%; }
+  .feed-hero__phone-button--side { top: 30%; height: 14%; }
+
+  /* Camera Control sits nearly flush, with a sapphire face. */
+  .feed-hero__phone-button--camera {
+    top: 58%;
+    height: 10.5%;
+    width: calc(var(--feed-phone-w) * 0.007);
+    background: linear-gradient(90deg, #8d939b, #c9ced4);
   }
 
   .feed-hero__phone-poster,
@@ -1287,10 +1376,7 @@
     }
 
     .feed-hero__phone:hover {
-      box-shadow:
-        0 0 0 1px hsl(var(--pure-linen) / 0.5),
-        0 44px 90px -44px rgb(0 0 0 / 0.9);
-      translate: 0 -3px;
+      translate: 0 -4px;
     }
   }
 
@@ -1308,10 +1394,10 @@
       --feed-figure-top: calc(var(--feed-name-top) + var(--feed-name-size) * 0.53);
     }
 
-    /* At 3x, 327px is the widest she renders from 980 source pixels. */
+    /* At 3x, 330px is the widest she renders from 991 source pixels. */
     @media (min-resolution: 3dppx) {
       .feed-hero {
-        --feed-figure-width: min(92vw, 327px);
+        --feed-figure-width: min(92vw, 330px);
       }
     }
 
@@ -1322,33 +1408,33 @@
     .feed-hero__glow {
       background: radial-gradient(
         ellipse 62% 30% at 50% 24%,
-        rgb(184 103 74 / 0.55) 0%,
-        rgb(184 103 74 / 0) 100%
+        rgb(214 150 112 / 0.32) 0%,
+        rgb(214 150 112 / 0) 100%
       );
     }
 
     .feed-hero__fade {
       background: linear-gradient(
         180deg,
-        rgb(11 11 13 / 0.25) 0%,
-        rgb(11 11 13 / 0) 14%,
-        rgb(11 11 13 / 0.25) 48%,
-        rgb(11 11 13 / 0.85) 66%,
-        var(--feed-ground) 80%
+        rgb(11 11 13 / 0.3) 0%,
+        rgb(11 11 13 / 0.04) 14%,
+        rgb(11 11 13 / 0) 44%,
+        rgb(11 11 13 / 0.2) 70%,
+        rgb(11 11 13 / 0.45) 100%
       );
     }
 
     .feed-hero__figure img {
-      -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent 84%);
-      mask-image: linear-gradient(180deg, #000 58%, transparent 84%);
+      -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 88%);
+      mask-image: linear-gradient(180deg, #000 62%, transparent 88%);
     }
 
     .feed-hero__scrim {
       background: linear-gradient(
         0deg,
-        rgb(11 11 13 / 0.94) 0%,
-        rgb(11 11 13 / 0.78) 30%,
-        rgb(11 11 13 / 0) 54%
+        rgb(11 11 13 / 0.72) 0%,
+        rgb(11 11 13 / 0.48) 26%,
+        rgb(11 11 13 / 0) 52%
       );
     }
 
@@ -1539,8 +1625,10 @@
     .feed-hero__ghost,
     .feed-hero__cta-mark,
     .feed-hero__phone,
-    .feed-hero__rail-icon {
+    .feed-hero__rail-icon,
+    .feed-hero__plate-image--incoming {
       transition: none;
+      animation: none;
     }
 
     .feed-hero__cta:hover .feed-hero__cta-mark,
