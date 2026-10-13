@@ -55,3 +55,16 @@ The folders under `en/`, `servicios/`, `verticales/`, `recursos/`,
 inputs. `vite.config.ts` derives its Rollup input map from
 `getAllEntrypointPaths()` rather than maintaining a second hand-written list.
 The prerender step turns those shells into complete route documents.
+
+## Hire-intent alias 301s
+
+`/contratar`, `/hire`, and `/en/hire` (with and without a trailing slash)
+are not registered routes. Production (`vercel.json`) 301s them onto the
+existing how-to-hire guides:
+
+- ES: `/recursos/como-contratar-creadora-ugc/`
+- EN: `/en/resources/how-to-hire-ugc-creator/`
+
+Those targets stay in `PAGE_REGISTRY` and the sitemap. The aliases do not.
+Do not add React Router redirects or in-page links for the aliases; a
+parallel PR owns FAQ schema and page links.

@@ -35,7 +35,11 @@ This folder is organized by subsystem instead of by date.
   - **Current schema delivery:** `seo/seo-ssr-structured-data-and-metadata-parity.md` —
     route JSON-LD renders server-side via `PageSeo`, resource `<head>` metadata is
     generated from `src/data/resource-pages.ts` in prebuild. Read this before
-    touching `PageSeo`, resource shells, or homepage JSON-LD.
+    touching `PageSeo`, resource shells, or homepage JSON-LD. Person `sameAs`
+    (including YouTube) is authored on the homepage shells.
+  - **Current hire aliases / IndexNow:** `seo/seo-crawl-trust.md` — Vercel 301s
+    for `/contratar` and `/hire` onto the how-to-hire guides; IndexNow key +
+    post-deploy ping on `main`. Do not add those aliases to the sitemap.
 - `deployment/`
   - Hosting, caching, security hardening, and runtime instrumentation.
 
