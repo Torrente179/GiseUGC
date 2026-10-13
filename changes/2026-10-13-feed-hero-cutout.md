@@ -108,3 +108,28 @@ the tab bar.
 - `npm run typecheck` clean; `npm test` 295/296 — the one failure is
   pre-existing (`og-image.test.ts` writes to `/opt/cursor/artifacts`, which only
   exists on Cursor's cloud agents).
+
+## 7. Site-wide motion (same day, follow-up commit)
+
+JP asked for the JP Website's smoothness "for everything", not just the hero:
+
+- **Page transitions** (`src/index.css`, top): cross-document view transitions
+  now run the JP timings — old page out in 160ms `ease-in`, new page rises
+  14px in over 420ms on `--ease-premium` after 80ms. The nav (`.site-nav`),
+  mobile tab bar (`.mtabbar`) and desktop contact dock
+  (`.floating-contact-dock`) carry `view-transition-name`s with no animation,
+  so the chrome holds still while the page changes under it.
+- **Nav entrance removed**: `.site-nav-enter` slid the nav down 12px on every
+  document load, which read as the nav jumping between pages.
+- **Scroll reveals** (`.svc-reveal`, in both `src/index.css` and
+  `src/styles/templates.css`): where `animation-timeline: view()` exists, the
+  reveal is scrubbed by the scroll — opacity 0→1 and 28px→0 over the first
+  260px of each block entering. Other browsers keep the IntersectionObserver
+  path. Measured in headless Chrome: 0.35 at 65px, 0.57 at 130px, 0.80 at
+  195px, 1 at 260px.
+- **Hero buttons** press to 0.97 on `:active`, as JP's `.btn` does.
+
+Testing note: the Browser pane never activates **view** timelines (they need a
+rendered frame, and the pane's document never renders one), so it reports
+`progress: null` and full opacity. Use headless Chrome through
+`puppeteer-core` (in node_modules) for anything scroll-driven.

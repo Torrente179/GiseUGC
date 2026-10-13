@@ -487,7 +487,7 @@ const Navbar = ({ compactMobile = false }: NavbarProps) => {
 
       <nav
         className={cn(
-          'site-nav-enter fixed top-0 left-0 w-full z-[110] transition-[background-color,border-color,box-shadow] duration-300',
+          'site-nav fixed top-0 left-0 w-full z-[110] transition-[background-color,border-color,box-shadow] duration-300',
           isScrolled
             ? 'border-b border-border/40 bg-background/95 shadow-[0_14px_36px_-30px_hsl(var(--foreground)/0.5)]'
             : 'border-b border-border/15 bg-background/75',
