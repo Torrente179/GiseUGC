@@ -143,3 +143,62 @@ Homepage schema validated clean via
 - **Hub index copy — resolved 2026-09-01.** `/servicios/`, `/verticales/`,
   `/recursos/` and EN twins now carry hire-intent title/H1/body. See
   `2026-09-01-hire-intent-hub-copy.md`.
+
+## 2026-10-13 — one FAQPage, visible Q/A, vertical money-page links
+
+Harden only. No new FAQs, no hub FAQ blocks, no redirect / Person `sameAs` /
+IndexNow work.
+
+### One FAQPage per service and vertical page
+
+Boot-shell JSON-LD and `PageSeo` both used to emit `FAQPage` with the same
+`@id`. After prerender that was two FAQPage nodes on every ES+EN service and
+vertical URL. `page.faqs` in `service-pages.ts` / `vertical-pages.ts` is now
+the only source:
+
+- `PageSeo` still renders one `FAQPage` from `page.faqs`.
+- `scripts/enrich-service-entrypoints.mjs` no longer writes a boot-shell
+  `FAQPage`.
+- Committed service and vertical shells drop the extra `FAQPage` node.
+- `scripts/prerender.mjs` strips leftover boot-shell `FAQPage` when the
+  `data-route-schema` graph already has one.
+
+### tech-saas Q3/Q4 match the visible FAQ
+
+The boot-shell graph had shorter Q3/Q4 than the on-page FAQ. With one
+FAQPage from `page.faqs`, ES and EN Q3/Q4 are the visible strings:
+
+- ES: «¿Sirve para campañas de adquisición o solo para retención?» /
+  «¿Puedes hacer videos en inglés para mi audiencia estadounidense?»
+- EN: “Does this work for acquisition campaigns or only for retention?” /
+  “Can you produce videos in English for my US audience?”
+
+### Spanish vertical FAQ orthography
+
+All five ES vertical FAQ sets now open with `¿` and carry accents (`á/é/í/ó/ú`,
+`ñ`, `Sí`). Facts are unchanged: 3–5 videos, 5–7 días hábiles, 4.7/177, 28+.
+Brand stays Gisela Saldarriaga / Gisela.UGC — never GiseUGC.
+
+### Body links (exact anchors)
+
+16 vertical links plus one cómo-contratar link per services hub, in body copy:
+
+| Source | Anchor → target |
+|---|---|
+| `/verticales/` | contratar una creadora UGC bilingüe → bilingüe; cómo contratar una creadora UGC → cómo-contratar |
+| `/en/verticals/` | hire a bilingual UGC creator; how to hire a UGC creator |
+| `/verticales/ugc-moda/` | creadora UGC de moda en español e inglés; guía para contratar una creadora UGC |
+| `/en/verticals/fashion-ugc-creator/` | bilingual fashion UGC creator; guide to hiring a UGC creator |
+| `/verticales/ugc-tech-saas/` | creadora UGC bilingüe para tech y SaaS; qué pedir al contratar una creadora UGC |
+| `/en/verticals/tech-saas-ugc-creator/` | hire a bilingual SaaS UGC creator; what to ask before hiring a UGC creator |
+| `/verticales/ugc-lifestyle-bienestar/` | contratar UGC de bienestar bilingüe; pasos para contratar una creadora UGC |
+| `/en/verticals/lifestyle-wellness-ugc-creator/` | hire a bilingual wellness UGC creator; steps to hire a UGC creator |
+| `/servicios/` | cómo contratar una creadora UGC bilingüe |
+| `/en/services/` | how to hire a bilingual UGC creator |
+
+Optional hub FAQs stay on hold. Service-page money links are unchanged.
+
+`CONTENT_DATES.verticals` and `CONTENT_DATES.hubs` are `2026-10-13`.
+
+Verify: `npx vitest run src/data/faq-schema-and-links.test.tsx` — one FAQPage,
+schema Q/A equals visible Q/A, exact anchors.

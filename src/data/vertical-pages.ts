@@ -1,5 +1,5 @@
 import type { VerticalPageId, ServicePageId, SiteLocale } from '@/lib/locale-path';
-import { getHomePath, getVerticalPath } from '@/lib/locale-path';
+import { getHomePath, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
 
 export type VerticalFeature = {
   title: string;
@@ -166,24 +166,24 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       faqTitle: 'Preguntas frecuentes sobre UGC para beauty',
       faqs: [
         {
-          question: 'Necesito enviarte el producto fisico?',
+          question: '¿Necesito enviarte el producto físico?',
           answer:
-            'En la mayoria de casos si, especialmente para skincare y maquillaje. Necesito el producto en mano para mostrar textura, aplicacion y resultado real. Para suplementos puedo trabajar con el envase y un brief detallado.',
+            'En la mayoría de casos sí, especialmente para skincare y maquillaje. Necesito el producto en mano para mostrar textura, aplicación y resultado real. Para suplementos puedo trabajar con el envase y un brief detallado.',
         },
         {
-          question: 'Puedes hacer videos de maquillaje con tecnicas avanzadas?',
+          question: '¿Puedes hacer videos de maquillaje con técnicas avanzadas?',
           answer:
-            'Mi fuerte es el contenido UGC natural y comercial, no tutoriales de maquillaje artistico. Si lo que necesitas es alguien que muestre tu producto con presencia real y tono de recomendacion, eso es justo lo que hago.',
+            'Mi fuerte es el contenido UGC natural y comercial, no tutoriales de maquillaje artístico. Si lo que necesitas es alguien que muestre tu producto con presencia real y tono de recomendación, eso es justo lo que hago.',
         },
         {
-          question: 'Funcionan estos videos solo para ads?',
+          question: '¿Funcionan estos videos solo para ads?',
           answer:
-            'No. Tambien funcionan para paginas de producto, landings, email marketing y contenido organico. Un buen video de beauty UGC tiene vida util larga porque genera confianza en cualquier punto del funnel.',
+            'No. También funcionan para páginas de producto, landings, email marketing y contenido orgánico. Un buen video de beauty UGC tiene vida útil larga porque genera confianza en cualquier punto del funnel.',
         },
         {
-          question: 'Trabajas con marcas fuera de Colombia?',
+          question: '¿Trabajas con marcas fuera de Colombia?',
           answer:
-            'Si. Produzco contenido para marcas en Estados Unidos, Espana, Australia y Latinoamerica. Todo se coordina de forma remota y el envio de producto funciona bien.',
+            'Sí. Produzco contenido para marcas en Estados Unidos, España, Australia y Latinoamérica. Todo se coordina de forma remota y el envío de producto funciona bien.',
         },
       ],
       ctaTitle: 'Si tu marca de beauty necesita contenido UGC que convierta, hablemos',
@@ -342,7 +342,7 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       secondaryCtaHref: getHomePath('es', '#portfolio'),
       sectionIntroTitle: 'Por que el UGC es clave en moda',
       sectionIntroText:
-        'En moda la gente compra lo que ve puesto en alguien real. Las fotos de estudio ya no alcanzan para convencer, especialmente en redes. Un video UGC donde alguien se prueba la ropa, muestra como queda y da su opinion honesta genera mas confianza que cualquier catalogo. Ese es el contenido que mueve la compra.',
+        `En moda la gente compra lo que ve puesto en alguien real. Las fotos de estudio ya no alcanzan para convencer, especialmente en redes. Un video UGC donde alguien se prueba la ropa, muestra como queda y da su opinion honesta genera mas confianza que cualquier catalogo. Ese es el contenido que mueve la compra. Si buscas una [creadora UGC de moda en español e inglés](${getServicePath('bilingual-ugc-creator', 'es')}), esta [guía para contratar una creadora UGC](${getResourcePath('how-to-hire-ugc-creator', 'es')}) te dice cómo arrancar.`,
       deliverablesTitle: 'Formatos que mejor funcionan en moda',
       deliverables: [
         {
@@ -421,24 +421,24 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       faqTitle: 'Preguntas frecuentes sobre UGC para moda',
       faqs: [
         {
-          question: 'Necesito enviarte las prendas?',
+          question: '¿Necesito enviarte las prendas?',
           answer:
-            'Si. Para que el contenido se vea real y autentico necesito tener las prendas en mano, probarmelas y mostrar como quedan de verdad. Coordino envio a Medellin con la marca.',
+            'Sí. Para que el contenido se vea real y auténtico necesito tener las prendas en mano, probármelas y mostrar cómo quedan de verdad. Coordino envío a Medellín con la marca.',
         },
         {
-          question: 'Puedes hacer hauls con muchas prendas?',
+          question: '¿Puedes hacer hauls con muchas prendas?',
           answer:
-            'Si. Los hauls de 4 a 8 prendas funcionan muy bien. Si necesitas un volumen mayor, lo estructuramos en lotes para que cada pieza tenga suficiente tiempo en pantalla.',
+            'Sí. Los hauls de 4 a 8 prendas funcionan muy bien. Si necesitas un volumen mayor, lo estructuramos en lotes para que cada pieza tenga suficiente tiempo en pantalla.',
         },
         {
-          question: 'El contenido sirve para la pagina de producto?',
+          question: '¿El contenido sirve para la página de producto?',
           answer:
-            'Si. De hecho ese es uno de los usos mas efectivos. Un video corto de try-on en una PDP puede subir la conversion mas que cualquier foto de catalogo.',
+            'Sí. De hecho ese es uno de los usos más efectivos. Un video corto de try-on en una PDP puede subir la conversión más que cualquier foto de catálogo.',
         },
         {
-          question: 'Trabajas en ingles tambien?',
+          question: '¿Trabajas en inglés también?',
           answer:
-            'Si. Puedo producir versiones en espanol e ingles del mismo contenido para marcas que venden en varios mercados.',
+            'Sí. Puedo producir versiones en español e inglés del mismo contenido para marcas que venden en varios mercados.',
         },
       ],
       ctaTitle: 'Si tu marca de moda necesita contenido que venda, hablemos',
@@ -468,7 +468,7 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       secondaryCtaHref: getHomePath('en', '#portfolio'),
       sectionIntroTitle: 'Why UGC is essential in fashion',
       sectionIntroText:
-        'In fashion, people buy what they see on someone real. Studio photos are no longer enough to convince, especially on social. A UGC video where someone tries on the clothes, shows how they fit, and gives an honest opinion builds more trust than any catalog. That is the content that drives the purchase.',
+        `In fashion, people buy what they see on someone real. Studio photos are no longer enough to convince, especially on social. A UGC video where someone tries on the clothes, shows how they fit, and gives an honest opinion builds more trust than any catalog. That is the content that drives the purchase. If you need a [bilingual fashion UGC creator](${getServicePath('bilingual-ugc-creator', 'en')}), this [guide to hiring a UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}) covers the brief.`,
       deliverablesTitle: 'Formats that work best in fashion',
       deliverables: [
         {
@@ -597,7 +597,7 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       secondaryCtaHref: getHomePath('es', '#portfolio'),
       sectionIntroTitle: 'Por que el UGC funciona en tech y SaaS',
       sectionIntroText:
-        'En tech la barrera de compra casi siempre es la comprension. Si el usuario no entiende que hace tu producto en los primeros segundos, no convierte. Un video UGC con alguien real que lo explique, lo muestre funcionando y lo conecte con un dolor concreto acorta ese camino. No es un screencast: es una persona de confianza que te dice por que vale la pena.',
+        `En tech la barrera de compra casi siempre es la comprension. Si el usuario no entiende que hace tu producto en los primeros segundos, no convierte. Un video UGC con alguien real que lo explique, lo muestre funcionando y lo conecte con un dolor concreto acorta ese camino. No es un screencast: es una persona de confianza que te dice por que vale la pena. Si necesitas una [creadora UGC bilingüe para tech y SaaS](${getServicePath('bilingual-ugc-creator', 'es')}), revisa [qué pedir al contratar una creadora UGC](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
       deliverablesTitle: 'Formatos que mejor funcionan en tech',
       deliverables: [
         {
@@ -676,24 +676,24 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       faqTitle: 'Preguntas frecuentes sobre UGC para tech y SaaS',
       faqs: [
         {
-          question: 'Puedes explicar productos tecnicos sin que suene complicado?',
+          question: '¿Puedes explicar productos técnicos sin que suene complicado?',
           answer:
-            'Si. Tengo mas de 9 anos de experiencia en periodismo y medios, lo que me entreno para tomar temas complejos y hacerlos claros. Eso se traduce directamente en como armo demos y explicaciones de producto.',
+            'Sí. Tengo más de 9 años de experiencia en periodismo y medios, lo que me entrenó para tomar temas complejos y hacerlos claros. Eso se traduce directamente en cómo armo demos y explicaciones de producto.',
         },
         {
-          question: 'Necesito darte acceso a mi plataforma?',
+          question: '¿Necesito darte acceso a mi plataforma?',
           answer:
             'Depende del formato. Para una demo necesito ver el producto funcionando. Para un review puedo trabajar con screenshots, brief detallado o acceso temporal a la herramienta.',
         },
         {
-          question: 'Sirve para campanas de adquisicion o solo para retencion?',
+          question: '¿Sirve para campañas de adquisición o solo para retención?',
           answer:
-            'Para ambas. Los videos explicativos funcionan muy bien en top-of-funnel cuando el usuario todavia no conoce tu producto, y tambien en onboarding y retencion cuando necesitas que lo active y use.',
+            'Para ambas. Los videos explicativos funcionan muy bien en top-of-funnel cuando el usuario todavía no conoce tu producto, y también en onboarding y retención cuando necesitas que lo active y use.',
         },
         {
-          question: 'Puedes hacer videos en ingles para mi audiencia estadounidense?',
+          question: '¿Puedes hacer videos en inglés para mi audiencia estadounidense?',
           answer:
-            'Si. Trabajo en espanol e ingles. Para piezas en ingles prefiero partir de un guion claro para mantener la naturalidad y precision del mensaje.',
+            'Sí. Trabajo en español e inglés. Para piezas en inglés prefiero partir de un guion claro para mantener la naturalidad y precisión del mensaje.',
         },
       ],
       ctaTitle: 'Si tu empresa tech necesita contenido UGC que explique y convierta, hablemos',
@@ -723,7 +723,7 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       secondaryCtaHref: getHomePath('en', '#portfolio'),
       sectionIntroTitle: 'Why UGC works in tech and SaaS',
       sectionIntroText:
-        'In tech, the purchase barrier is almost always comprehension. If the user does not understand what your product does in the first few seconds, they will not convert. A UGC video with a real person who explains it, shows it working, and connects it to a specific pain point shortens that path. It is not a screencast - it is a trusted person telling you why it is worth trying.',
+        `In tech, the purchase barrier is almost always comprehension. If the user does not understand what your product does in the first few seconds, they will not convert. A UGC video with a real person who explains it, shows it working, and connects it to a specific pain point shortens that path. It is not a screencast - it is a trusted person telling you why it is worth trying. To [hire a bilingual SaaS UGC creator](${getServicePath('bilingual-ugc-creator', 'en')}), start with [what to ask before hiring a UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
       deliverablesTitle: 'Formats that work best in tech',
       deliverables: [
         {
@@ -931,24 +931,24 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       faqTitle: 'Preguntas frecuentes sobre UGC para ecommerce',
       faqs: [
         {
-          question: 'Sirve para cualquier tipo de producto?',
+          question: '¿Sirve para cualquier tipo de producto?',
           answer:
-            'Si, siempre que sea un producto que se pueda mostrar en uso real frente a camara. He trabajado con suplementos, ropa, accesorios, gadgets, productos de belleza y servicios con componente fisico.',
+            'Sí, siempre que sea un producto que se pueda mostrar en uso real frente a cámara. He trabajado con suplementos, ropa, accesorios, gadgets, productos de belleza y servicios con componente físico.',
         },
         {
-          question: 'El video funciona mejor que las fotos en una PDP?',
+          question: '¿El video funciona mejor que las fotos en una PDP?',
           answer:
-            'En la mayoria de casos si, especialmente para productos que necesitan contexto de uso. Un video corto de review o demo puede subir la conversion de la pagina de producto de forma significativa.',
+            'En la mayoría de casos sí, especialmente para productos que necesitan contexto de uso. Un video corto de review o demo puede subir la conversión de la página de producto de forma significativa.',
         },
         {
-          question: 'Puedo usar el mismo video como ad y en mi pagina?',
+          question: '¿Puedo usar el mismo video como ad y en mi página?',
           answer:
-            'Si. De hecho muchos equipos de ecommerce usan la misma pieza en TikTok Ads, en su PDP y en email marketing. Un buen video UGC tiene vida util en varios canales.',
+            'Sí. De hecho muchos equipos de ecommerce usan la misma pieza en TikTok Ads, en su PDP y en email marketing. Un buen video UGC tiene vida útil en varios canales.',
         },
         {
-          question: 'Cuanto tarda la entrega?',
+          question: '¿Cuánto tarda la entrega?',
           answer:
-            'Depende del volumen, pero un lote tipico de 3 a 5 videos se entrega en 5 a 7 dias habiles despues de recibir el producto y aprobar la estructura.',
+            'Depende del volumen, pero un lote típico de 3 a 5 videos se entrega en 5 a 7 días hábiles después de recibir el producto y aprobar la estructura.',
         },
       ],
       ctaTitle: 'Si tu tienda online necesita contenido con persona real, hablemos',
@@ -1107,7 +1107,7 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       secondaryCtaHref: getHomePath('es', '#portfolio'),
       sectionIntroTitle: 'Por que el UGC lifestyle conecta mejor',
       sectionIntroText:
-        'En lifestyle y bienestar la gente no compra productos: compra versiones de la vida que quiere tener. Un video UGC donde alguien real usa el producto en su rutina, en su cocina, en su momento de cuidado personal, genera una conexion emocional que ningun contenido de estudio puede replicar. El formato creator-led funciona porque transmite aspiracion alcanzable, no publicidad.',
+        `En lifestyle y bienestar la gente no compra productos: compra versiones de la vida que quiere tener. Un video UGC donde alguien real usa el producto en su rutina, en su cocina, en su momento de cuidado personal, genera una conexion emocional que ningun contenido de estudio puede replicar. El formato creator-led funciona porque transmite aspiracion alcanzable, no publicidad. Puedes [contratar UGC de bienestar bilingüe](${getServicePath('bilingual-ugc-creator', 'es')}) o seguir los [pasos para contratar una creadora UGC](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
       deliverablesTitle: 'Formatos que mejor funcionan en lifestyle',
       deliverables: [
         {
@@ -1186,24 +1186,24 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       faqTitle: 'Preguntas frecuentes sobre UGC lifestyle y bienestar',
       faqs: [
         {
-          question: 'Cual es la diferencia entre contenido lifestyle y UGC ads?',
+          question: '¿Cuál es la diferencia entre contenido lifestyle y UGC ads?',
           answer:
-            'El contenido lifestyle esta pensado para el feed organico: el producto aparece en un momento real, sin hook de venta agresivo. Los UGC ads tienen estructura de retencion y conversion para pauta pagada. Puedo hacer ambos formatos segun lo que necesites.',
+            'El contenido lifestyle está pensado para el feed orgánico: el producto aparece en un momento real, sin hook de venta agresivo. Los UGC ads tienen estructura de retención y conversión para pauta pagada. Puedo hacer ambos formatos según lo que necesites.',
         },
         {
-          question: 'Necesitas que te envie el producto?',
+          question: '¿Necesitas que te envíe el producto?',
           answer:
-            'Si, en la mayoria de los casos. Para que el contenido sea autentico necesito usar el producto de verdad. Coordino envio a Medellin con la marca.',
+            'Sí, en la mayoría de los casos. Para que el contenido sea auténtico necesito usar el producto de verdad. Coordino envío a Medellín con la marca.',
         },
         {
-          question: 'Trabajas con marcas de alimentos?',
+          question: '¿Trabajas con marcas de alimentos?',
           answer:
-            'Si. He trabajado con marcas de suplementos, snacks saludables y productos organicos. El formato funciona muy bien cuando el producto se puede mostrar en un contexto de preparacion o consumo real.',
+            'Sí. He trabajado con marcas de suplementos, snacks saludables y productos orgánicos. El formato funciona muy bien cuando el producto se puede mostrar en un contexto de preparación o consumo real.',
         },
         {
-          question: 'El contenido sirve tambien para ads?',
+          question: '¿El contenido sirve también para ads?',
           answer:
-            'Tecnicamente si, pero si lo que necesitas son piezas optimizadas para conversion, el servicio de UGC ads va a darte mejores resultados. El contenido lifestyle funciona mejor como pieza organica o de awareness.',
+            'Técnicamente sí, pero si lo que necesitas son piezas optimizadas para conversión, el servicio de UGC ads va a darte mejores resultados. El contenido lifestyle funciona mejor como pieza orgánica o de awareness.',
         },
       ],
       ctaTitle: 'Si tu marca de lifestyle necesita contenido autentico, hablemos',
@@ -1233,7 +1233,7 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       secondaryCtaHref: getHomePath('en', '#portfolio'),
       sectionIntroTitle: 'Why lifestyle UGC connects better',
       sectionIntroText:
-        'In lifestyle and wellness, people do not buy products - they buy versions of the life they want to have. A UGC video where a real person uses the product in their routine, in their kitchen, in their self-care moment, creates an emotional connection that no studio content can replicate. The creator-led format works because it conveys attainable aspiration, not advertising.',
+        `In lifestyle and wellness, people do not buy products - they buy versions of the life they want to have. A UGC video where a real person uses the product in their routine, in their kitchen, in their self-care moment, creates an emotional connection that no studio content can replicate. The creator-led format works because it conveys attainable aspiration, not advertising. You can [hire a bilingual wellness UGC creator](${getServicePath('bilingual-ugc-creator', 'en')}) or follow the [steps to hire a UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
       deliverablesTitle: 'Formats that work best in lifestyle',
       deliverables: [
         {

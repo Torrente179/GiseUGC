@@ -82,7 +82,10 @@ describe('hire-intent hub copy', () => {
       const html = visibleHtml(renderHub(entry.path, entry.hubId, entry.locale));
       expect(html).toContain(`<h1`);
       expect(html).toContain(page.heroTitle);
-      expect(html).toContain(page.lead);
+      expect(html).toContain(visibleInlineCopy(page.lead));
+      for (const href of inlineCopyHrefs(page.lead)) {
+        expect(html).toContain(`href="${href}"`);
+      }
       expect(html).toContain(page.primaryCtaHref);
       expect(html).toContain(page.primaryCtaLabel);
       for (const child of page.children) {
@@ -161,7 +164,10 @@ describe('hire-intent hub copy', () => {
       expect(html).toContain(`<title>${page.metaTitle}</title>`);
       expect(html).toContain(`content="${page.metaDescription}"`);
       expect(html).toContain(`<h1>${page.heroTitle}</h1>`);
-      expect(html).toContain(page.lead);
+      expect(html).toContain(visibleInlineCopy(page.lead));
+      for (const href of inlineCopyHrefs(page.lead)) {
+        expect(html).toContain(`href="${href}"`);
+      }
       expect(html).toContain('/src/entry-hub.tsx');
       expect(html).toContain(`"name":"${page.metaTitle}"`);
       expect(html).toContain(`"dateModified":"${CONTENT_DATES.hubs}"`);
