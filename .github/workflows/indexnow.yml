@@ -1,0 +1,37 @@
+name: IndexNow
+
+# Production-only discovery ping. Vercel deploys independently from main;
+# this workflow must never gate or fail that deploy.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  ping:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: read
+      statuses: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Wait for Vercel production
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: bash scripts/wait-for-production.sh
+
+      - name: Submit sitemap URLs to IndexNow
+        continue-on-error: true
+        env:
+          INDEXNOW_FAIL_SOFT: "1"
+        run: bash scripts/indexnow-ping.sh --soft

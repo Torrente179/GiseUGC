@@ -140,19 +140,18 @@ describe('sitemap lastmod and llms dates are honest', () => {
 });
 
 describe('IndexNow ping list includes resource URLs', () => {
-  it('lists every resource path and has a committed key file', () => {
+  it('reads sitemap locs and has a committed key file', () => {
     const script = read('scripts/indexnow-ping.sh');
-    expect(script).toContain('/recursos/que-es-ugc/');
-    expect(script).toContain('/en/resources/what-is-ugc/');
-    expect(script).toContain('/recursos/formatos-ugc-ads/');
+    expect(script).toContain('public/sitemap.xml');
+    expect(script).toContain('<loc>');
     expect(script).toContain('llms-full.txt');
     expect(read('public/bc6e18cf87bf49fcc1ad22e759c161ac.txt').trim()).toBe(
       'bc6e18cf87bf49fcc1ad22e759c161ac',
     );
   });
 
-  it('lists the six hub index URLs as their own entries', () => {
-    const script = read('scripts/indexnow-ping.sh');
+  it('sitemap still lists the six hub index URLs as their own entries', () => {
+    const xml = read('public/sitemap.xml');
     for (const path of [
       '/servicios/',
       '/en/services/',
@@ -161,7 +160,7 @@ describe('IndexNow ping list includes resource URLs', () => {
       '/recursos/',
       '/en/resources/',
     ]) {
-      expect(script).toContain(`\n  "$SITE${path}"\n`);
+      expect(xml).toContain(`https://www.giselasaldarriaga.com${path}</loc>`);
     }
   });
 });
@@ -195,6 +194,7 @@ describe('Person schema carries the studio mark as alternateName', () => {
     expect(person?.alternateName).toBe('Gisela.UGC');
     expect(business?.alternateName).toBeUndefined();
     expect(JSON.stringify(person?.sameAs)).toContain('https://www.fiverr.com/gisela_sm');
+    expect(JSON.stringify(person?.sameAs)).toContain('https://www.youtube.com/@GiselaSaldarriaga');
     expect(JSON.stringify(person?.sameAs)).not.toContain('source=gig_page');
   });
 });

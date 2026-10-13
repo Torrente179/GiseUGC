@@ -31,7 +31,8 @@
     "video:service-posters": "bash scripts/generate-service-posters.sh",
     "video:responsive-posters": "bash scripts/generate-responsive-posters.sh",
     "video:startups": "node scripts/generate-startup-videos.mjs",
-    "video:catalog": "node scripts/generate-nuevos-r2-catalog.mjs"
+    "video:catalog": "node scripts/generate-nuevos-r2-catalog.mjs",
+    "indexnow": "bash scripts/indexnow-ping.sh"
   },
   "dependencies": {
     "@vercel/analytics": "^1.6.1",

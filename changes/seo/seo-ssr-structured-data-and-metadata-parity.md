@@ -146,8 +146,9 @@ Homepage schema validated clean via
 
 ## 2026-10-13 — one FAQPage, visible Q/A, vertical money-page links
 
-Harden only. No new FAQs, no hub FAQ blocks, no redirect / Person `sameAs` /
-IndexNow work.
+Harden only. No new FAQs, no hub FAQ blocks. Hire-intent 301s, Person
+`sameAs` YouTube, and IndexNow landed on main from PR #15 and stay in this
+merge.
 
 ### One FAQPage per service and vertical page
 
@@ -202,3 +203,18 @@ Optional hub FAQs stay on hold. Service-page money links are unchanged.
 
 Verify: `npx vitest run src/data/faq-schema-and-links.test.tsx` — one FAQPage,
 schema Q/A equals visible Q/A, exact anchors.
+
+## 2026-10-13 — Person `sameAs` YouTube (no rebuild)
+
+Homepage Person JSON-LD is still authored in the static shells
+(`index.html`, `en/index.html`). There is no shared React source for that
+graph — `Index.tsx` `PageSeo` does not emit homepage schema.
+
+Appended `"https://www.youtube.com/@GiselaSaldarriaga"` to the **Person**
+`sameAs` array on both homepages. Existing entries are unchanged. Fiverr
+stays `https://www.fiverr.com/gisela_sm` with no query string.
+ProfessionalService `sameAs` is untouched.
+
+FAQ schema and in-page links are recorded above (this merge). Hire-intent
+alias 301s and the IndexNow production ping are recorded in
+`seo-crawl-trust.md`.

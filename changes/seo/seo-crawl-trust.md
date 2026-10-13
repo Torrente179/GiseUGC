@@ -75,7 +75,37 @@ Hub shells can be regenerated with `node scripts/sync-hub-entrypoints.mjs`. Copy
 
 ## IndexNow
 
-`scripts/indexnow-ping.sh` includes the six hub URLs plus the existing money pages.
+`scripts/indexnow-ping.sh` submits every `<loc>` from `public/sitemap.xml`
+(not a second hand-written URL list) to `https://api.indexnow.org/indexnow`
+with `host` `www.giselasaldarriaga.com` and `keyLocation`
+`https://www.giselasaldarriaga.com/<key>.txt`.
+
+Key file (content = key): `public/bc6e18cf87bf49fcc1ad22e759c161ac.txt`,
+served at `/bc6e18cf87bf49fcc1ad22e759c161ac.txt`.
+
+**Manual:** from the repo root, `npm run indexnow` or
+`./scripts/indexnow-ping.sh`. Use `--soft` or `INDEXNOW_FAIL_SOFT=1` to
+keep a non-zero IndexNow response from failing the shell.
+
+**Production:** `.github/workflows/indexnow.yml` runs only on push to
+`main` (and `workflow_dispatch`). It waits for the Vercel production
+deploy (`scripts/wait-for-production.sh`), then pings. Every step is
+fail-soft (`continue-on-error`, `--soft`) so IndexNow never blocks
+deploy. Vercel still publishes from `main` independently of this
+workflow.
+
+Alias 301s (`/contratar`, `/hire`, `/en/hire` and trailing-slash twins)
+are Vercel-only. They are **not** in `PAGE_REGISTRY` or the sitemap.
+
+## Hire-intent alias 301s (2026-10-13)
+
+Permanent 301s in `vercel.json`, targeting the live self-canonical
+guides (both 200):
+
+- `/contratar` and `/contratar/` → `/recursos/como-contratar-creadora-ugc/`
+- `/hire`, `/hire/`, `/en/hire`, `/en/hire/` → `/en/resources/how-to-hire-ugc-creator/`
+
+Do not add these aliases to the sitemap, FAQ schema, or in-page links.
 
 ## 2026-09-02 — bounce page_view leftover (language switch already on main)
 
