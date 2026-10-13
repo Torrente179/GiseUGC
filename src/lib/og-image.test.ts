@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
@@ -34,6 +34,14 @@ import { PAGE_REGISTRY, SITE_LOCALES } from '@/lib/locale-path';
 const require = createRequire(import.meta.url);
 const fontkit = require('fontkit');
 const root = process.cwd();
+
+// Cursor cloud agents collect screenshots from /opt/cursor/artifacts. Elsewhere
+// (local Macs, GitHub CI) that folder doesn't exist, so the copy is skipped
+// unless CURSOR_ARTIFACTS_DIR points somewhere writable.
+const CURSOR_ARTIFACTS_ROOT = '/opt/cursor/artifacts';
+const cursorScreenshotDir =
+  process.env.CURSOR_ARTIFACTS_DIR ??
+  (existsSync(CURSOR_ARTIFACTS_ROOT) ? resolve(CURSOR_ARTIFACTS_ROOT, 'screenshots') : undefined);
 
 const jpegSize = (buffer: Buffer) => {
   if (buffer[0] !== 0xff || buffer[1] !== 0xd8) throw new Error('not a jpeg');
@@ -178,10 +186,11 @@ describe('OG image files', () => {
     const en = readFileSync(snapshots.en!);
     expect(jpegSize(es)).toEqual({ width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT });
     expect(jpegSize(en)).toEqual({ width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT });
-    const artifactDir = '/opt/cursor/artifacts/screenshots';
-    mkdirSync(artifactDir, { recursive: true });
-    writeFileSync(resolve(artifactDir, 'og-longest-es.jpg'), es);
-    writeFileSync(resolve(artifactDir, 'og-longest-en.jpg'), en);
+    if (cursorScreenshotDir) {
+      mkdirSync(cursorScreenshotDir, { recursive: true });
+      writeFileSync(resolve(cursorScreenshotDir, 'og-longest-es.jpg'), es);
+      writeFileSync(resolve(cursorScreenshotDir, 'og-longest-en.jpg'), en);
+    }
   }, 120_000);
 });
 
