@@ -11,6 +11,10 @@ This folder is organized by subsystem instead of by date.
   - This is the source of truth for prerendering, hydration, fonts, CSS delivery,
     media scheduling, theater startup, HLS quality, motion budgets, validation,
     and remaining Lighthouse gates.
+- **Current site copy:** `2026-10-13-site-copy-plain-voice.md`
+  - The voice the user chose (plain, first person, neutral LatAm Spanish with
+    *tú*), the facts the copy states, and how every static entry shell is now
+    generated from `src/data/*.ts`. Read before editing copy or any shell HTML.
 - `ui/`
   - Hero, navbar, footer, contact flows, FAQ, rating cards, motion polish, and visual evolution.
   - **Current live hero:** `../2026-07-27-editorial-title-sequence-hero.md` — “CHAPTER 00” editorial opening with a solid `GISELA` title, three real film-strip stills, exact Medellín metadata, and a dedicated mobile app-quality composition. Earlier “Muro de trabajo,” wide contact-sheet, pencil-texture, and blue-mark experiments are historical rather than current.
