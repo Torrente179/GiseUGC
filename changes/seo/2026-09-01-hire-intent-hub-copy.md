@@ -42,6 +42,13 @@ at these hubs.
 `CONTENT_DATES.hubs` is `2026-09-01`. Sitemap lastmod for the six hub locs
 follows that date.
 
+## 2026-10-13 title/description follow-up
+
+`/servicios/` and `/en/services/` titles no longer compete with the bilingüe
+service page. Current strings and the two hub meta descriptions are locked in
+`seo/2026-10-13-vertical-h1-llms-titles.md`. H1/lead/proof copy on the hubs
+is unchanged.
+
 ## Files
 
 - `src/data/hub-pages.ts` — titles, meta, H1, lead, children, proof, CTAs

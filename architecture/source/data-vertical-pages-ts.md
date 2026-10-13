@@ -35,3 +35,4 @@ Content Data Model
 ## Forensic Notes
 - It is route/locale aware and can affect bilingual navigation or canonical behavior.
 - It is part of the typed content model; schema changes ripple into page factories.
+- Beauty, fashion, tech/SaaS, and lifestyle/wellness `sectionIntroText` (ES+EN) each close with two money-page markdown links: bilingüe service + how-to-hire guide. Ecommerce does not. Anchors are locked in `src/data/faq-schema-and-links.test.tsx`. Do not rewrite Juan's surrounding paragraph.

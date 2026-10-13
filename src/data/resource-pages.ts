@@ -275,7 +275,7 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
   'how-to-hire-ugc-creator': {
     es: {
       navLabel: 'Cómo contratar creadora UGC',
-      metaTitle: 'Cómo contratar una creadora UGC: qué revisar y qué preguntar | Gisela Saldarriaga',
+      metaTitle: 'Cómo contratar una creadora UGC bilingüe | Gisela Saldarriaga',
       metaDescription:
         'Qué revisar en el portafolio, qué preguntar, qué poner en el brief y qué esperar del proceso cuando vas a contratar una creadora UGC.',
       breadcrumbLabel: 'Cómo contratar creadora UGC',
@@ -383,7 +383,7 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
     },
     en: {
       navLabel: 'How to hire a UGC creator',
-      metaTitle: 'How to hire a UGC creator: what to check and what to ask | Gisela Saldarriaga',
+      metaTitle: 'How to hire a bilingual UGC creator | Gisela Saldarriaga',
       metaDescription:
         'What to look for in a portfolio, what to ask, what to put in the brief, and what to expect from the process when you hire a UGC creator.',
       breadcrumbLabel: 'How to hire a UGC creator',

@@ -47,6 +47,12 @@ This folder is organized by subsystem instead of by date.
   - **Current OG + video sitemap:** `seo/2026-10-13-per-page-og-and-video-sitemap.md`
     — per-page hashed OG JPEGs, `OG_PROOF_LINE_MODE`, curated homepage video
     sitemap. Authority resync note lives at the top of `src/data/site-proof.ts`.
+  - **Current vertical H1 / llms YouTube / hire-intent titles:**
+    `seo/2026-10-13-vertical-h1-llms-titles.md` — one H1 per vertical (desktop
+    `.st-hero-title`), YouTube on `llms.txt` + `llms-full.txt`, beauty
+    money-page sentence, six title rewrites and two hub descriptions. OG
+    JPEGs were not regenerated (H1s unchanged). Duplicate boot+PageSeo `@id`s
+    were left in place; see that file.
 - `deployment/`
   - Hosting, caching, security hardening, and runtime instrumentation.
 

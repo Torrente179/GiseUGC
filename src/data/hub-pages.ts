@@ -91,9 +91,9 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
   services: {
     es: {
       breadcrumbLabel: 'Servicios',
-      metaTitle: 'Contrata creadora UGC bilingüe ES+EN | Gisela Saldarriaga',
+      metaTitle: 'Servicios de contenido UGC en español e inglés | Gisela Saldarriaga',
       metaDescription:
-        'Soy creadora UGC bilingüe en Medellín. Grabo anuncios, demos, reseñas y videos de portavoz en español e inglés para marcas de EE. UU., España y LatAm.',
+        'Contrata a tu creadora UGC bilingüe en Medellín. Grabo anuncios, demos, reseñas y videos de portavoz en español e inglés para EE. UU., España y LatAm.',
       heroTitle: 'Contrata a Gisela Saldarriaga, creadora UGC bilingüe',
       lead:
         `Hago videos UGC en español e inglés: anuncios para TikTok y Meta, demos de producto, reseñas y videos hablando a cámara. Trabajas directo conmigo, sin agencia de por medio. Grabo desde Medellín para marcas de Estados Unidos (incluido el mercado hispano), España y Latinoamérica. Los videos son para tu marca y no los publico en mis redes, salvo que acordemos que sea embajadora. Si es tu primera vez, lee [cómo contratar una creadora UGC bilingüe](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
@@ -141,9 +141,9 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
     },
     en: {
       breadcrumbLabel: 'Services',
-      metaTitle: 'Hire a bilingual UGC creator, ES+EN | Gisela Saldarriaga',
+      metaTitle: 'UGC content services in Spanish and English | Gisela Saldarriaga',
       metaDescription:
-        'I’m a bilingual UGC creator in Medellín. I make ads, demos, reviews, and spokesperson videos in Spanish and English for brands in the US, Spain, and LatAm.',
+        'Hire me as your bilingual UGC creator in Medellín. I make ads, demos, reviews, and spokesperson videos in Spanish and English for the US, Spain, and LatAm.',
       heroTitle: 'Hire Gisela Saldarriaga, a bilingual UGC creator',
       lead:
         `I make UGC videos in Spanish and English: ads for TikTok and Meta, product demos, reviews, and talking-to-camera videos. You work with me directly, with no agency in between. I film from Medellín for brands in the US (including the US Hispanic market), Spain, and Latin America. I make the videos for your brand and don’t post them on my own accounts unless we set up an ambassador deal. If it’s your first time, read [how to hire a bilingual UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,

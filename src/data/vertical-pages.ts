@@ -87,7 +87,7 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       secondaryCtaHref: getHomePath('es', '#portfolio'),
       sectionIntroTitle: 'Por qué usar UGC en belleza',
       sectionIntroText:
-        'Antes de comprar un sérum o una base, la gente quiere verlos en una piel de verdad. Quiere saber qué textura tienen, cómo se aplican y cómo se ven después. Cuando alguien los usa en su rutina y los explica con sus propias palabras, el video se siente como la recomendación de una persona que de verdad usa el producto. Por eso el UGC funciona tan bien en belleza.',
+        `Antes de comprar un sérum o una base, la gente quiere verlos en una piel de verdad. Quiere saber qué textura tienen, cómo se aplican y cómo se ven después. Cuando alguien los usa en su rutina y los explica con sus propias palabras, el video se siente como la recomendación de una persona que de verdad usa el producto. Por eso el UGC funciona tan bien en belleza. Si quieres contratar una [creadora UGC de belleza en español e inglés](${getServicePath('bilingual-ugc-creator', 'es')}), mira primero [cómo contratar una creadora UGC bilingüe](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
       deliverablesTitle: 'Qué videos hago para marcas de belleza',
       deliverables: [
         {
@@ -213,7 +213,7 @@ const VERTICAL_PAGE_CONTENT: LocalizedVerticalPageMap = {
       secondaryCtaHref: getHomePath('en', '#portfolio'),
       sectionIntroTitle: 'Why use UGC for beauty',
       sectionIntroText:
-        'Before someone buys a serum or a foundation, they want to see it on real skin. What’s the texture like? How do you apply it? How does it look afterward? When a real person uses it in their routine and talks about it in their own words, the video comes across as a recommendation from someone who actually uses the product. That’s why UGC works so well in beauty.',
+        `Before someone buys a serum or a foundation, they want to see it on real skin. What’s the texture like? How do you apply it? How does it look afterward? When a real person uses it in their routine and talks about it in their own words, the video comes across as a recommendation from someone who actually uses the product. That’s why UGC works so well in beauty. If you want to hire a [bilingual beauty UGC creator](${getServicePath('bilingual-ugc-creator', 'en')}), start with [how to hire a bilingual UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
       deliverablesTitle: 'What I make for beauty brands',
       deliverables: [
         {
