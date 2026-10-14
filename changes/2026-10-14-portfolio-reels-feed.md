@@ -37,7 +37,9 @@ existing serif style. The rows "round 3" and "the mix" are on
   - a round glass ✕ at the top right.
 
   The feed opens on the reel the card was showing, with sound on. When it
-  closes (✕ or Escape), the card shows wherever the feed left off.
+  closes (✕ or Escape), the card shows wherever the feed left off. Glass ‹ ›
+  arrows on the card browse the reels before opening one. Video files and
+  playback: changes/2026-10-14-feed-video-delivery.md.
 - **Title:** "Reels que *venden*" stays in Cormorant, as the user asked. It is
   larger, on two lines, and a brushed underline draws under the italic word the
   first time the section comes into view. EN: "Reels that *sell*".

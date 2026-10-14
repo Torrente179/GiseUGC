@@ -13,6 +13,7 @@ import {
   type MediaPlaybackPriority,
 } from '@/lib/media-playback-scheduler';
 import { useMediaSession } from '@/components/media/MediaSessionProvider';
+import { resolveFeedSource } from '@/lib/feed-media';
 
 type AdaptiveVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poster'> & {
   src: string;
@@ -305,6 +306,24 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
         video.removeAttribute('src');
         video.load();
         return undefined;
+      }
+
+      // Every site video with feed files plays its single, full-quality,
+      // fast-start MP4 (src/lib/feed-media.ts) instead of an HLS ladder or the
+      // old 480p preview loop. If that file ever fails, the old source stands.
+      const feed = resolveFeedSource(src, hlsSrc);
+      if (feed) {
+        const handleFeedError = () => {
+          if (cancelled || video.getAttribute('src') !== feed.src) return;
+          video.removeEventListener('error', handleFeedError);
+          attachFallbackSource(video, src);
+        };
+        video.addEventListener('error', handleFeedError);
+        attachFallbackSource(video, feed.src);
+        return () => {
+          cancelled = true;
+          video.removeEventListener('error', handleFeedError);
+        };
       }
 
       const fallbackToMp4 = () => {

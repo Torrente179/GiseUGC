@@ -1,3 +1,5 @@
+import { feedVideoSrc, getClipFeedMedia } from '@/lib/feed-media';
+
 export type ResponsivePosterSource = {
   src: string;
   width: number;
@@ -74,6 +76,15 @@ export const createClipPlaybackCandidates = (
   _preferMobile: boolean,
 ): PlaybackCandidate[] => {
   if (!clip) return [];
+
+  // A reel with feed files plays its one full-quality, fast-start MP4: there is
+  // no ladder to climb, so no startup bridge to hand over from either.
+  const feed = clip.mainSrc ? getClipFeedMedia({ mainSrc: clip.mainSrc }) : null;
+  if (feed) {
+    return createPlaybackCandidates([
+      { id: 'feed', mp4: feedVideoSrc(feed), width: feed.width, height: feed.height, quality: 'main' },
+    ]);
+  }
 
   const main: PlaybackCandidateInput = {
     id: 'main',

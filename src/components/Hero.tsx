@@ -8,6 +8,7 @@ import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navig
 import { useHeroDepth } from '@/hooks/use-hero-depth';
 import { useMediaIntent } from '@/hooks/use-media-intent';
 import { isMobileViewport, openContactDock, toggleContactDock } from '@/lib/contact-dock';
+import { resolveFeedSource, warmFeedVideo } from '@/lib/feed-media';
 import { useTranslation } from '@/lib/locale-context';
 
 const HERO_REEL_CLIPS = LEGACY_REEL_CLIPS;
@@ -213,6 +214,14 @@ const Hero = () => {
   const activeReelClip = HERO_REEL_CLIPS[reelIndex] ?? HERO_REEL_CLIPS[0];
   const introIsRunning = introState === 'loading' || introState === 'playing';
   const reelIsPlaying = mediaIntent && !isMobile && isHeroActive && !introIsRunning;
+  const nextReelClip = HERO_REEL_CLIPS[(reelIndex + 1) % HERO_REEL_CLIPS.length];
+
+  // Each reel shows for 3.5 s, so the phone plays the reels' 6 s opening loops
+  // and the next one is already buffering when the rotation lands on it.
+  useEffect(() => {
+    if (!reelIsPlaying || !nextReelClip) return;
+    warmFeedVideo(resolveFeedSource(nextReelClip.previewSrc)?.src);
+  }, [nextReelClip, reelIsPlaying]);
   const clipTitle = (clip: ReelClip) => (
     clip.titleKey ? t(clip.titleKey) : clip.localizedTitle?.[locale] ?? clip.title ?? ''
   );
@@ -400,8 +409,7 @@ const Hero = () => {
                   <AutoplayPreviewVideo
                     key={activeReelClip.id}
                     className="feed-hero__phone-video"
-                    src={activeReelClip.mobileSrc}
-                    hlsSrc={activeReelClip.mobileHlsSrc ?? activeReelClip.hlsSrc}
+                    src={activeReelClip.previewSrc}
                     poster={getPosterVariantSrc(activeReelClip, 720, 'avif')}
                     preload="metadata"
                     playbackPriority="hero"

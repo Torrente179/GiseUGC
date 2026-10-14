@@ -16,6 +16,10 @@ import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navig
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import AdaptiveVideo from '@/components/media/AdaptiveVideo';
 import ReelPhone from '@/components/media/ReelPhone';
+import { FeedMedia, FeedPosterPreload, FeedPoolSync } from '@/components/media/FeedMedia';
+import { useMediaSession } from '@/components/media/MediaSessionProvider';
+import { useMediaPlaybackSlot } from '@/hooks/use-media-playback-slot';
+import { FeedPlayerPool, getClipFeedMedia } from '@/lib/feed-media';
 import { getPosterVariantSrc, LEGACY_REEL_CLIPS, type ReelClip } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import { CONTACT_URLS } from '@/lib/contact-channels';
@@ -30,8 +34,11 @@ import '@/styles/reels-feed.css';
  * that names the reel, and "up next". Phones show one reel in a card inside
  * the page (swipe sideways for the next one), and a tap opens the full-screen
  * feed, swiped up and down like the app, with a close button. The page itself
- * never has to scroll through the feed. Only the active reel mounts a video;
- * every other slide is a poster. Styles and both themes: src/styles/reels-feed.css.
+ * never has to scroll through the feed. Reels play from the feed encodes
+ * through a small pool of <video> elements (src/lib/feed-media.ts): the next
+ * reel is buffering before the swipe, and opening the full-screen feed carries
+ * the playing video over instead of reloading it. Styles and both themes:
+ * src/styles/reels-feed.css.
  */
 
 type Category = ReelClip['category'];
@@ -88,9 +95,16 @@ const SoundIcon = ({ on }: { on: boolean }) => (
   </svg>
 );
 
-const Chevron = ({ up }: { up: boolean }) => (
+const CHEVRON_PATHS = {
+  up: 'm6 15 6-6 6 6',
+  down: 'm6 9 6 6 6-6',
+  left: 'm15 6-6 6 6 6',
+  right: 'm9 6 6 6-6 6',
+} as const;
+
+const Chevron = ({ to }: { to: keyof typeof CHEVRON_PATHS }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
-    <path d={up ? 'm6 15 6-6 6 6' : 'm6 9 6 6 6-6'} />
+    <path d={CHEVRON_PATHS[to]} />
   </svg>
 );
 
@@ -99,6 +113,7 @@ const Portfolio = () => {
   const isMobile = useIsMobile();
   const reducedMotion = usePrefersReducedMotion();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
+  const mediaSession = useMediaSession();
 
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -121,6 +136,8 @@ const Portfolio = () => {
   const [inView, setInView] = useState(false);
   const [open, setOpen] = useState(false);
   const [seen, setSeen] = useState(false);
+  const [near, setNear] = useState(false);
+  const [pool] = useState(() => new FeedPlayerPool());
   const [ambient, setAmbient] = useState<{ a: string; b: string; showA: boolean }>({ a: '', b: '', showA: true });
 
   const clips = useMemo(() => shuffleWithSeed(ALL_REEL_CLIPS, dayBucket), [dayBucket]);
@@ -130,6 +147,19 @@ const Portfolio = () => {
   );
   const activeIndex = Math.min(index, Math.max(list.length - 1, 0));
   const clip = list[activeIndex];
+  const warm = near || open;
+  const nextClip = list.length > 1 ? list[(activeIndex + 1) % list.length] : undefined;
+  const previousClip = list.length > 2 ? list[(activeIndex - 1 + list.length) % list.length] : undefined;
+  const activeSlug = clip ? getClipFeedMedia(clip)?.slug : undefined;
+  const nextSlug = nextClip ? getClipFeedMedia(nextClip)?.slug : undefined;
+  const previousSlug = previousClip ? getClipFeedMedia(previousClip)?.slug : undefined;
+  const keepSlugs = useMemo(
+    () => (warm ? [activeSlug, nextSlug, previousSlug].filter((slug): slug is string => Boolean(slug)) : []),
+    [activeSlug, nextSlug, previousSlug, warm],
+  );
+  // One decoder slot for the section, held across the card → full-screen
+  // hand-over so the reel never pauses in between.
+  const slotGranted = useMediaPlaybackSlot(warm && (inView || open), 'preview');
 
   const titleOf = useCallback(
     (item: ReelClip) => (item.titleKey ? t(item.titleKey) : item.localizedTitle?.[locale] ?? item.title ?? ''),
@@ -176,6 +206,29 @@ const Portfolio = () => {
     observer.observe(section);
     return () => observer.disconnect();
   }, [isMobile]);
+
+  // A screen ahead: start loading the first reel before the section arrives,
+  // and let the pool go once it is far behind.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || typeof IntersectionObserver === 'undefined') {
+      setNear(true);
+      return undefined;
+    }
+    const observer = new IntersectionObserver(([entry]) => setNear(Boolean(entry?.isIntersecting)), {
+      rootMargin: '100% 0px',
+    });
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [isMobile]);
+
+  useEffect(() => () => pool.destroy(), [pool]);
+
+  // The full-screen feed has the page's attention: every other video pauses.
+  useEffect(() => {
+    if (!open) return undefined;
+    return mediaSession?.acquireTheater();
+  }, [mediaSession, open]);
 
   // Dark-theme ambient light: crossfade between two blurred, tiny posters.
   useEffect(() => {
@@ -281,6 +334,24 @@ const Portfolio = () => {
   const handleEnded = () => {
     if (!reducedMotion) go(1, true);
   };
+  const setProgress = (ratio: number) => {
+    progressRef.current?.style.setProperty('--rf-progress', String(ratio));
+  };
+  const muteAfterRefusal = () => setSoundOn(false);
+  // Sound has to start inside the tap for iOS to allow it, so it is switched on
+  // here, synchronously, and the tap blesses the rest of the pool with it.
+  const unmuteNow = () => {
+    pool.bless(activeSlug);
+    const active = activeSlug ? pool.peek(activeSlug) : null;
+    if (!active) return;
+    active.muted = false;
+    void active.play().catch(() => undefined);
+  };
+  const toggleSound = () => {
+    if (!soundOn) unmuteNow();
+    setSoundOn(!soundOn);
+  };
+  const posterOf = (item: ReelClip) => getPosterVariantSrc(item, 720, 'webp');
 
   const video = (
     <AdaptiveVideo
@@ -325,6 +396,7 @@ const Portfolio = () => {
 
   if (isMobile) {
     const openFeed = () => {
+      unmuteNow();
       setFeedScrolled(false);
       setSoundOn(true);
       setOpen(true);
@@ -358,9 +430,20 @@ const Portfolio = () => {
                 {list.map((item, i) => (
                   <div key={item.id} className="rf-mob-slide" aria-hidden={i !== activeIndex}>
                     {Math.abs(i - activeIndex) <= 2 ? (
-                      <img src={getPosterVariantSrc(item, 720, 'webp')} alt="" loading="lazy" decoding="async" />
+                      <FeedMedia
+                        pool={pool}
+                        clip={item}
+                        active={i === activeIndex}
+                        playing={slotGranted}
+                        muted={!soundOn}
+                        loop
+                        posterSize={Math.abs(i - activeIndex) <= 1 ? 'full' : 'small'}
+                        fallbackPoster={posterOf(item)}
+                        fallbackVideo={video}
+                        onProgress={setProgress}
+                        onSoundBlocked={muteAfterRefusal}
+                      />
                     ) : null}
-                    {i === activeIndex ? video : null}
                   </div>
                 ))}
               </div>
@@ -395,7 +478,7 @@ const Portfolio = () => {
                   className="rf-mob-act rf-mob-act--sound"
                   aria-pressed={soundOn}
                   aria-label={t(soundOn ? 'portfolio.feed.soundOff' : 'portfolio.feed.soundOn')}
-                  onClick={() => setSoundOn((on) => !on)}
+                  onClick={toggleSound}
                 >
                   <span className="rf-mob-disc"><SoundIcon on={soundOn} /></span>
                 </button>
@@ -443,7 +526,7 @@ const Portfolio = () => {
               <div className="rf-mob-progress" aria-hidden="true"><span ref={progressRef} /></div>
 
               <div className="rf-mob-hint" data-hidden={feedScrolled} aria-hidden="true">
-                <Chevron up />
+                <Chevron to="up" />
                 {t('portfolio.feed.swipe')}
               </div>
             </div>,
@@ -459,6 +542,7 @@ const Portfolio = () => {
         data-seen={seen}
         aria-labelledby="portfolio-title"
       >
+        <FeedPoolSync pool={pool} keep={keepSlugs} next={nextSlug} previous={previousSlug} />
         <div className="rf-orbs" aria-hidden="true" />
         <div className="rf-amb" aria-hidden="true">
           {ambient.a ? <img src={ambient.a} alt="" data-on={ambient.showA} /> : null}
@@ -509,8 +593,23 @@ const Portfolio = () => {
             }
           }}
         >
-          <img src={poster} alt="" decoding="async" />
-          {!open ? video : null}
+          <FeedMedia
+            pool={pool}
+            clip={clip}
+            active={warm && !open}
+            playing={slotGranted && inView && !reducedMotion}
+            muted={!soundOn}
+            loop
+            fallbackPoster={poster}
+            fallbackVideo={video}
+            onProgress={setProgress}
+            onSoundBlocked={muteAfterRefusal}
+          />
+          {warm
+            ? [nextClip, previousClip].map((item) =>
+                item ? <FeedPosterPreload key={item.id} clip={item} fallback={posterOf(item)} /> : null,
+              )
+            : null}
           <div className="rf-reel-shade" aria-hidden="true" />
           <p className="rf-reel-top" aria-hidden="true">
             <img src={AVATAR_SRC} alt="" width={160} height={160} />
@@ -543,6 +642,22 @@ const Portfolio = () => {
               if (!swallowClickRef.current) openFeed();
             }}
           />
+          <button
+            type="button"
+            className="rf-reel-nav rf-reel-nav--prev"
+            aria-label={t('portfolio.feed.prev')}
+            onClick={() => go(-1, true)}
+          >
+            <Chevron to="left" />
+          </button>
+          <button
+            type="button"
+            className="rf-reel-nav rf-reel-nav--next"
+            aria-label={t('portfolio.feed.next')}
+            onClick={() => go(1, true)}
+          >
+            <Chevron to="right" />
+          </button>
         </div>
 
         <a className="rf-cta rf-cta--block" href={whatsappHref} target="_blank" rel="noopener noreferrer">
@@ -565,6 +680,7 @@ const Portfolio = () => {
       data-seen={seen}
       aria-labelledby="portfolio-title"
     >
+      <FeedPoolSync pool={pool} keep={keepSlugs} next={nextSlug} previous={previousSlug} />
       <div className="rf-orbs" aria-hidden="true" />
       <div className="rf-amb" aria-hidden="true">
         {ambient.a ? <img src={ambient.a} alt="" data-on={ambient.showA} /> : null}
@@ -655,8 +771,19 @@ const Portfolio = () => {
                     style={{ '--rf-n': i } as CSSProperties}
                     aria-hidden={i !== activeIndex}
                   >
-                    <img src={getPosterVariantSrc(item, 720, 'webp')} alt="" decoding="async" />
-                    {i === activeIndex ? video : null}
+                    <FeedMedia
+                      pool={pool}
+                      clip={item}
+                      active={warm && i === activeIndex}
+                      playing={slotGranted && playing}
+                      muted={!soundOn}
+                      loop={false}
+                      fallbackPoster={posterOf(item)}
+                      fallbackVideo={video}
+                      onEnded={handleEnded}
+                      onProgress={setProgress}
+                      onSoundBlocked={muteAfterRefusal}
+                    />
                   </div>
                 ) : null,
               )}
@@ -672,7 +799,7 @@ const Portfolio = () => {
               disabled={activeIndex === 0}
               onClick={() => go(-1)}
             >
-              <Chevron up />
+              <Chevron to="up" />
             </button>
             <button
               type="button"
@@ -680,14 +807,14 @@ const Portfolio = () => {
               aria-label={t('portfolio.feed.next')}
               onClick={() => go(1, true)}
             >
-              <Chevron up={false} />
+              <Chevron to="down" />
             </button>
             <button
               type="button"
               className="rf-ctrl"
               aria-pressed={soundOn}
               aria-label={t(soundOn ? 'portfolio.feed.soundOff' : 'portfolio.feed.soundOn')}
-              onClick={() => setSoundOn((on) => !on)}
+              onClick={toggleSound}
             >
               <SoundIcon on={soundOn} />
             </button>

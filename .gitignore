@@ -42,3 +42,5 @@ media-sources/nuevos/*
 
 # Local architecture handoff doc
 ARCHITECTURE.md
+tmp/video-feed/
+tmp/feed-sources/

@@ -6,6 +6,7 @@ import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import AdaptiveVideo from '@/components/media/AdaptiveVideo';
 import ReelPhone from '@/components/media/ReelPhone';
 import { r2PreviewVideo } from '@/data/portfolio-clips';
+import { resolveFeedSource, warmFeedVideo } from '@/lib/feed-media';
 import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -121,6 +122,13 @@ const CreatorAdvantage = () => {
     const id = window.setInterval(() => setFront((current) => (current + 1) % CUTS.length), CUT_INTERVAL_MS);
     return () => window.clearInterval(id);
   }, [isRotating, cycle]);
+
+  // The cut that rotates in next is already buffering when it turns.
+  useEffect(() => {
+    if (!isSectionNearViewport || shouldReduceMotion) return;
+    const next = CUTS[(front + 1) % CUTS.length];
+    warmFeedVideo(resolveFeedSource(r2PreviewVideo(`${next.file}.mp4`))?.src);
+  }, [front, isSectionNearViewport, shouldReduceMotion]);
 
   const showNext = useCallback(() => {
     setFront((current) => (current + 1) % CUTS.length);
