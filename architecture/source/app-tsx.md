@@ -25,6 +25,7 @@ Bootstrap and Providers
 
 ## Depends On
 - `src/components/ThemeRuntimeSync.tsx`
+- `src/lib/hash-section-scroll.ts`
 - `src/lib/locale-path.ts`
 - `src/lib/perf-debug.ts`
 - `src/lib/referral-attribution.ts`
