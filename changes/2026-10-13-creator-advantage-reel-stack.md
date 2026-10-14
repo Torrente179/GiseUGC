@@ -41,8 +41,9 @@ Design canvas: the user compared three layouts in the spatial-glass style
 
 The stack's geometry is in `cqi` of `.ca-stage` (a size container). It switches
 to the roomy composition at a **400px stage**, not at a viewport width, so a
-1024px iPad landscape (418px stage) gets the roomy stack while a 430px iPhone
-(390px stage) keeps the tall one.
+1024px iPad landscape (418px stage) gets the roomy stack. The tall composition
+under 400px only shows if the stack is ever shown on phones again; today phones
+get the iPhone instead.
 
 ## Gotchas
 
