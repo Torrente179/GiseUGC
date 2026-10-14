@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
+import ReelPhone from '@/components/media/ReelPhone';
 import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
-import { getPosterVariantSrc, LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
+import { getPosterVariantSrc, LEGACY_REEL_CLIPS, type ReelClip } from '@/data/portfolio-clips';
 import { SITE_PROOF } from '@/data/site-proof';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useHeroDepth } from '@/hooks/use-hero-depth';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { useMediaIntent } from '@/hooks/use-media-intent';
-import { openContactDock } from '@/lib/contact-dock';
+import { isMobileViewport, openContactDock, toggleContactDock } from '@/lib/contact-dock';
 import { useTranslation } from '@/lib/locale-context';
 
 const HERO_REEL_CLIPS = LEGACY_REEL_CLIPS;
@@ -20,9 +20,22 @@ const HERO_INTRO_LOAD_TIMEOUT_MS = 2600;
 const HERO_INTRO_PLAY_TIMEOUT_MS = 2500;
 const HERO_REEL_INTERVAL_MS = 3500;
 
-// The reel card only exists above the phone breakpoint; below it the proof
-// rail takes its place, so nothing reel-related should run there.
-const DESKTOP_HERO_QUERY = '(min-width: 768px)';
+// Phones and portrait tablets get the compact composition (proof rail, no
+// reel phone); mirrors the compact media query in index.css. Nothing
+// reel-related runs there.
+const COMPACT_HERO_QUERY = '(max-width: 767px), (orientation: portrait) and (max-width: 1100px)';
+
+const useCompactHero = () => {
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia(COMPACT_HERO_QUERY);
+    const sync = () => setCompact(query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
+  return compact;
+};
 
 // Her rendered width, from the frame geometry in index.css: the cut-out is
 // 24.6% of a 16:9 frame at least 128% of the stage tall (desktop), and on
@@ -48,7 +61,7 @@ const Hero = () => {
   const { locale, t } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const mediaIntent = useMediaIntent();
-  const isMobile = useIsMobile();
+  const isMobile = useCompactHero();
   const heroRef = useRef<HTMLElement>(null);
   const [introState, setIntroState] = useState<HeroIntroState>('idle');
   const [isHeroActive, setIsHeroActive] = useState(true);
@@ -78,7 +91,7 @@ const Hero = () => {
 
   useEffect(() => {
     if (HERO_INTRO_CLIPS.length !== HERO_INTRO_CLIP_COUNT) return undefined;
-    if (!window.matchMedia(DESKTOP_HERO_QUERY).matches) return undefined;
+    if (window.matchMedia(COMPACT_HERO_QUERY).matches) return undefined;
 
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (motionQuery.matches) return undefined;
@@ -197,13 +210,20 @@ const Hero = () => {
     });
   }, []);
 
-  const phoneAriaLabel = locale === 'es'
-    ? 'Ver el portafolio de videos UGC de Gisela'
-    : "View Gisela's UGC video portfolio";
   const activeReelClip = HERO_REEL_CLIPS[reelIndex] ?? HERO_REEL_CLIPS[0];
-  const formattedReelIndex = String(reelIndex + 1).padStart(2, '0');
-  const formattedReelTotal = String(HERO_REEL_CLIPS.length).padStart(2, '0');
   const introIsRunning = introState === 'loading' || introState === 'playing';
+  const reelIsPlaying = mediaIntent && !isMobile && isHeroActive && !introIsRunning;
+  const clipTitle = (clip: ReelClip) => (
+    clip.titleKey ? t(clip.titleKey) : clip.localizedTitle?.[locale] ?? clip.title ?? ''
+  );
+  const handleContactClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (isMobileViewport()) {
+      event.preventDefault();
+      toggleContactDock();
+      return;
+    }
+    handleHashLinkClick(event);
+  };
 
   return (
     <section
@@ -220,6 +240,20 @@ const Hero = () => {
           <div className="feed-hero__frame-depth" data-depth="8">
             <img
               className="feed-hero__scene"
+              src="/uploads/gisela-scene-2016.webp"
+              srcSet="/uploads/gisela-scene-1344.webp 1344w, /uploads/gisela-scene-2016.webp 2016w"
+              sizes={HERO_SCENE_SIZES}
+              alt=""
+              width="2016"
+              height="1134"
+              loading="eager"
+              decoding="async"
+            />
+            {/* Upright tablets seat her lower than the photo's top edge. The
+                scene mirrored above it fills that strip, where the bare
+                ground would show as a band. Same file, so no second fetch. */}
+            <img
+              className="feed-hero__scene feed-hero__scene--mirror"
               src="/uploads/gisela-scene-2016.webp"
               srcSet="/uploads/gisela-scene-1344.webp 1344w, /uploads/gisela-scene-2016.webp 2016w"
               sizes={HERO_SCENE_SIZES}
@@ -342,90 +376,64 @@ const Hero = () => {
 
           <div className="feed-hero__reel-depth" data-depth="-8" data-tilt="3">
             <div className="feed-hero__reel feed-hero-rise" style={enterDelay(560)}>
-              <a
-                href="#portfolio"
+              <ReelPhone
                 className="feed-hero__phone"
-                aria-label={phoneAriaLabel}
-                onClick={handleHashLinkClick}
+                title={clipTitle(activeReelClip)}
+                reelKey={activeReelClip.id}
+                playing={reelIsPlaying}
+                clipMs={HERO_REEL_INTERVAL_MS}
+                onNavigate={handleHashLinkClick}
+                onContact={handleContactClick}
               >
-                <span className="feed-hero__phone-button feed-hero__phone-button--action" aria-hidden="true" />
-                <span className="feed-hero__phone-button feed-hero__phone-button--volume-up" aria-hidden="true" />
-                <span className="feed-hero__phone-button feed-hero__phone-button--volume-down" aria-hidden="true" />
-                <span className="feed-hero__phone-button feed-hero__phone-button--side" aria-hidden="true" />
-                <span className="feed-hero__phone-button feed-hero__phone-button--camera" aria-hidden="true" />
-                <span className="feed-hero__phone-glass" aria-hidden="true">
-                  <span className="feed-hero__phone-screen">
-                    <ResponsivePosterImage
-                      clip={activeReelClip}
-                      alt=""
-                      className="feed-hero__phone-poster"
-                      loading="lazy"
-                      decoding="async"
-                      sizes="(max-width: 1023px) 18vw, 16.5rem"
-                      fetchpriority="low"
-                      rootMargin="0px"
-                    />
+                <ResponsivePosterImage
+                  clip={activeReelClip}
+                  alt=""
+                  className="feed-hero__phone-poster"
+                  loading="lazy"
+                  decoding="async"
+                  sizes="(max-width: 1037px) 12rem, (max-width: 1556px) 18.5vw, 18rem"
+                  fetchpriority="low"
+                  rootMargin="0px"
+                />
 
-                    {mediaIntent && !isMobile && !introIsRunning && (
-                      <AutoplayPreviewVideo
-                        key={activeReelClip.id}
-                        className="feed-hero__phone-video"
-                        src={activeReelClip.mobileSrc}
-                        hlsSrc={activeReelClip.mobileHlsSrc ?? activeReelClip.hlsSrc}
-                        poster={getPosterVariantSrc(activeReelClip, 720, 'avif')}
-                        preload="metadata"
-                        playbackPriority="hero"
-                        loadStrategy="immediate"
-                        rootMargin="120px 0px"
-                      />
-                    )}
+                {mediaIntent && !isMobile && !introIsRunning && (
+                  <AutoplayPreviewVideo
+                    key={activeReelClip.id}
+                    className="feed-hero__phone-video"
+                    src={activeReelClip.mobileSrc}
+                    hlsSrc={activeReelClip.mobileHlsSrc ?? activeReelClip.hlsSrc}
+                    poster={getPosterVariantSrc(activeReelClip, 720, 'avif')}
+                    preload="metadata"
+                    playbackPriority="hero"
+                    loadStrategy="immediate"
+                    rootMargin="120px 0px"
+                  />
+                )}
 
-                    {introIsRunning && (
-                      <span
-                        className={`feed-hero__intro${introState === 'playing' ? ' is-playing' : ''}`}
-                        onAnimationEnd={(event) => {
-                          if (event.target === event.currentTarget) completeIntro(true);
-                        }}
-                      >
-                        {HERO_INTRO_CLIPS.map((clip) => (
-                          <span className="feed-hero__fragment" key={clip.id}>
-                            <ResponsivePosterImage
-                              clip={clip}
-                              alt=""
-                              loading="eager"
-                              decoding="async"
-                              sizes="6vw"
-                              fetchpriority="low"
-                              rootMargin="0px"
-                              onLoad={() => handleIntroFragmentLoad(clip.id)}
-                            />
-                          </span>
-                        ))}
+                {introIsRunning && (
+                  <span
+                    className={`feed-hero__intro${introState === 'playing' ? ' is-playing' : ''}`}
+                    onAnimationEnd={(event) => {
+                      if (event.target === event.currentTarget) completeIntro(true);
+                    }}
+                  >
+                    {HERO_INTRO_CLIPS.map((clip) => (
+                      <span className="feed-hero__fragment" key={clip.id}>
+                        <ResponsivePosterImage
+                          clip={clip}
+                          alt=""
+                          loading="eager"
+                          decoding="async"
+                          sizes="6vw"
+                          fetchpriority="low"
+                          rootMargin="0px"
+                          onLoad={() => handleIntroFragmentLoad(clip.id)}
+                        />
                       </span>
-                    )}
-
-                    <span className="feed-hero__phone-shade" aria-hidden="true" />
-
-                    <span className="feed-hero__phone-caption" aria-hidden="true">
-                      <span className="feed-hero__phone-caption-label">
-                        <svg
-                          className="feed-hero__phone-caption-mark"
-                          viewBox="0 0 12 14"
-                          fill="currentColor"
-                          aria-hidden="true"
-                          focusable="false"
-                        >
-                          <path d="M11.2 6.13 1.6.29A1 1 0 0 0 .1 1.15v11.7a1 1 0 0 0 1.5.86l9.6-5.84a1 1 0 0 0 0-1.74Z" />
-                        </svg>
-                        <span>{t('hero.reelLabel')}</span>
-                      </span>
-                      <span>{formattedReelIndex} / {formattedReelTotal}</span>
-                    </span>
-
-                    <span className="feed-hero__phone-island" />
+                    ))}
                   </span>
-                </span>
-              </a>
+                )}
+              </ReelPhone>
             </div>
           </div>
         </div>

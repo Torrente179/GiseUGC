@@ -282,3 +282,45 @@ and a cropped photo. They are now the hero in miniature:
 
 Regenerate without a full build: load `src/lib/og-image-render.ts` through
 Vite's `ssrLoadModule` and call `writeOgImages(root, { updateEntrypoints: true })`.
+
+## 13. Reel phone with an action column, and upright tablets
+
+JP picked Idea D from the canvas ("Double-tap, alive"), with one change: only
+a click likes the reel. Nothing loops on its own.
+
+- `src/components/media/ReelPhone.tsx` + `src/styles/reel-phone.css`: one
+  iPhone 17 Pro Max (78 × 163.4 mm body, 1 mm rim, 1.55 mm glass, concentric
+  radii, Pro Max button layout) with a short-video feed's column on the
+  screen: avatar with a follow badge (→ #contact), heart with the Fiverr
+  rating, comments with the review count (→ #testimonials), bookmark with the
+  campaign count (→ #portfolio), share (→ contact), and a spinning sound disc.
+  Caption with her name, the clip title and the sound line; a progress bar
+  that runs one clip length per clip.
+- Clicking the video, or the heart, likes it: a teal heart bursts where the
+  click landed and three small hearts float up the column. Keyboard presses
+  burst at the centre. A hint pill ("Toca el video para darle me gusta") shows
+  until the first like. Reduced motion gets a flash, no float, no spin.
+- Everything on the screen is sized in `cqw` of the screen (the glass is a
+  size container), with pixel floors so labels stay at 10px or more on the
+  smallest phone. The parent sets the width with `--reel-phone-w`.
+- Used twice: the desktop hero (`.feed-hero__reel`, 12–18rem wide) and the
+  "Mira cómo se ve" phone after Services, on every screen size
+  (`.creator-reel-phone`, 16.5–20rem). The old phone frame, notch and chips
+  are gone from both.
+
+Upright tablets (iPad mini to iPad Pro 13", portrait) now take the phone
+composition, not the landscape one: `COMPACT_HERO_QUERY` in `Hero.tsx` and
+the matching media query in `index.css` are
+`(max-width: 767px), (orientation: portrait) and (max-width: 1100px)`. At
+600px and up in portrait the caption and the rail grow, the lead and the long
+labels come back, and the bottom shade is a little stronger for the lead.
+Landscape iPads keep the reel phone.
+
+On those screens her head sits lower than the photo's top edge, which left a
+band of bare ground under the nav. The scene is now drawn a second time,
+mirrored, directly above itself (`.feed-hero__scene--mirror`, same file, one
+pixel of overlap), so the blurred background continues upward.
+
+Verified with puppeteer at 375×667, 393×852, 440×956, 744×1133, 820×1180,
+834×1194, 1032×1376, 1133×744, 1180×820, 1376×1032 and 1440×900, plus a click
+on each phone (liked state, burst and floats present).

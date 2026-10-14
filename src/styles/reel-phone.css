@@ -1,0 +1,471 @@
+/* ─── ReelPhone: an iPhone 17 Pro Max playing a reel ───
+   Used by the home hero (desktop) and the "Mira cómo se ve" section after
+   Services. The parent sets the width with --reel-phone-w.
+
+   Body: Apple's specs give 78.0 × 163.4 mm and a 1320 × 2868 px panel at
+   460 ppi (72.9 × 158.4 mm), so 2.55 mm — 3.27% of the width — separates body
+   edge and screen on every side: a 1 mm aluminium rim (1.28%) and 1.55 mm of
+   black glass (2%). Apple does not publish the radii; the screen uses the
+   commonly measured 62 pt on its 440 pt width and each outer layer adds its
+   own thickness, so the curves stay concentric. Button positions follow the
+   Pro Max layout (Action and volume left, side and Camera Control right).
+
+   Screen: the glass is a size container, so everything on the screen is sized
+   in cqw of the screen and scales with the phone. The values come from the
+   canvas design drawn on a 336 px screen (1cqw = 3.36 px there). */
+
+.reel-phone {
+  /* The consumer's --reel-phone-w, read once here so a default never
+     overrides it. */
+  --rp-w: var(--reel-phone-w, 18rem);
+  --reel-phone-metal: linear-gradient(135deg, #f4f5f7 0%, #babec4 20%, #e9ebee 46%, #a7abb2 72%, #dfe2e5 100%);
+  --reel-phone-accent: hsl(193 63.9% 47.8%);
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: var(--rp-w);
+  aspect-ratio: 78 / 163.4;
+  padding: calc(var(--rp-w) * 0.0128);
+  border-radius: calc(var(--rp-w) * 0.164);
+  background: var(--reel-phone-metal);
+  box-shadow:
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.7),
+    0 0 0 0.5px rgb(0 0 0 / 0.45),
+    0 18px 40px -20px rgb(0 0 0 / 0.55),
+    0 60px 110px -50px rgb(0 0 0 / 0.75);
+  color: #fff;
+  font-family: var(--font-marketing, 'DM Sans', system-ui, sans-serif);
+  -webkit-tap-highlight-color: transparent;
+  transition: translate 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reel-phone__button {
+  position: absolute;
+  width: calc(var(--rp-w) * 0.011);
+  background: var(--reel-phone-metal);
+}
+
+.reel-phone__button--action,
+.reel-phone__button--volume-up,
+.reel-phone__button--volume-down {
+  right: 100%;
+  border-radius: 2px 0 0 2px;
+}
+
+.reel-phone__button--side,
+.reel-phone__button--camera {
+  left: 100%;
+  border-radius: 0 2px 2px 0;
+}
+
+.reel-phone__button--action { top: 19.5%; height: 5%; }
+.reel-phone__button--volume-up { top: 27.5%; height: 9.5%; }
+.reel-phone__button--volume-down { top: 39%; height: 9.5%; }
+.reel-phone__button--side { top: 30%; height: 14%; }
+
+/* Camera Control sits nearly flush, with a sapphire face. */
+.reel-phone__button--camera {
+  top: 58%;
+  height: 10.5%;
+  width: calc(var(--rp-w) * 0.007);
+  background: linear-gradient(90deg, #8d939b, #c9ced4);
+}
+
+.reel-phone__glass {
+  container-type: size;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: calc(var(--rp-w) * 0.02);
+  border-radius: calc(var(--rp-w) * 0.1512);
+  background: #050506;
+}
+
+.reel-phone__screen {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: calc(var(--rp-w) * 0.1312);
+  background: #111;
+}
+
+.reel-phone__shade {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.42) 0%, rgb(0 0 0 / 0) 18%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.66) 0%, rgb(0 0 0 / 0) 44%);
+}
+
+/* The whole video is the like button. */
+.reel-phone__tap {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.reel-phone__tap:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+  border-radius: inherit;
+}
+
+.reel-phone__island {
+  position: absolute;
+  z-index: 6;
+  top: 2.5cqw;
+  left: 50%;
+  width: 28.6cqw;
+  height: 8.4cqw;
+  border-radius: 999px;
+  background: #000;
+  translate: -50% 0;
+  pointer-events: none;
+}
+
+.reel-phone__island::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 14%;
+  width: 22%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 35%, #1d2a3f 0%, #0b0f17 55%, #000 100%);
+  translate: 0 -50%;
+}
+
+.reel-phone__hint {
+  position: absolute;
+  z-index: 3;
+  top: 15cqw;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  height: 8.3cqw;
+  padding: 0 3.6cqw;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 999px;
+  background: rgb(19 19 19 / 0.55);
+  font-size: max(10px, 3.6cqw);
+  font-weight: 600;
+  white-space: nowrap;
+  translate: -50% 0;
+  pointer-events: none;
+}
+
+/* ── Action column ── */
+.reel-phone__rail {
+  position: absolute;
+  z-index: 4;
+  right: 2.4cqw;
+  bottom: 22cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4.5cqw;
+  width: 18cqw;
+  /* A tight shadow and a wide one: white labels stay legible over a white
+     wall in the clip. */
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 0 10px rgb(0 0 0 / 0.35);
+}
+
+.reel-phone__avatar {
+  position: relative;
+  display: block;
+  width: 13.7cqw;
+  height: 13.7cqw;
+  margin-bottom: 2.4cqw;
+}
+
+.reel-phone__avatar img {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 0.6cqw solid #fff;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.reel-phone__follow {
+  position: absolute;
+  left: 50%;
+  bottom: -2.7cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 6cqw;
+  height: 6cqw;
+  border-radius: 999px;
+  background: var(--reel-phone-accent);
+  color: #0e1114;
+  font-size: 4.5cqw;
+  font-weight: 700;
+  line-height: 1;
+  translate: -50% 0;
+}
+
+.reel-phone__action {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5cqw;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font: inherit;
+  font-size: max(10px, 3.6cqw);
+  font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.reel-phone__action:hover,
+.reel-phone__avatar:hover {
+  color: #fff;
+}
+
+.reel-phone__action > svg {
+  width: 10cqw;
+  height: 10cqw;
+  fill: #fff;
+  filter: drop-shadow(0 1px 4px rgb(0 0 0 / 0.35));
+  transition: fill 200ms ease, scale 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reel-phone__action.is-liked > svg {
+  fill: var(--reel-phone-accent);
+}
+
+.reel-phone__action:active > svg {
+  scale: 0.88;
+}
+
+.reel-phone__action:focus-visible,
+.reel-phone__avatar:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.reel-phone__disc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12.5cqw;
+  height: 12.5cqw;
+  margin-top: 1.2cqw;
+  border-radius: 999px;
+  background: radial-gradient(circle, #3a3a3e 0 34%, #111 35% 62%, #2a2a2e 63% 64%, #111 65% 100%);
+}
+
+.reel-phone__disc img {
+  width: 6.5cqw;
+  height: 6.5cqw;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+/* ── Caption ──
+   Colours are set on each line: the site's global `p` rule would otherwise
+   paint them in the page foreground. */
+.reel-phone__caption {
+  position: absolute;
+  z-index: 3;
+  left: 4.2cqw;
+  right: 24cqw;
+  bottom: 7.7cqw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8cqw;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 0 10px rgb(0 0 0 / 0.35);
+}
+
+.reel-phone__caption p {
+  margin: 0;
+}
+
+.reel-phone__name {
+  color: #fff;
+  font-size: max(11px, 4.5cqw);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.reel-phone__title {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: max(10.5px, 4cqw);
+  line-height: 1.35;
+  color: rgb(255 255 255 / 0.92);
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.reel-phone__sound {
+  display: flex;
+  align-items: center;
+  gap: 1.8cqw;
+  font-size: max(10px, 3.7cqw);
+  color: rgb(255 255 255 / 0.88);
+}
+
+.reel-phone__sound svg {
+  flex: none;
+  width: 3.9cqw;
+  height: 3.9cqw;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Progress: one clip's length per fill ── */
+.reel-phone__progress {
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: max(2px, 0.9cqw);
+  background: rgb(255 255 255 / 0.22);
+  pointer-events: none;
+}
+
+.reel-phone__progress-fill {
+  display: block;
+  width: 18%;
+  height: 100%;
+  background: var(--reel-phone-accent);
+}
+
+/* ── Like: a heart where the click landed, hearts up the column ── */
+.reel-phone__burst {
+  position: absolute;
+  z-index: 5;
+  width: 35cqw;
+  height: 35cqw;
+  translate: -50% -50%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.reel-phone__burst svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: var(--reel-phone-accent);
+  filter: drop-shadow(0 6px 18px rgb(44 167 200 / 0.55));
+}
+
+.reel-phone__floats {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.reel-phone__floats svg {
+  position: absolute;
+  top: 0;
+  width: 4.6cqw;
+  height: 4.6cqw;
+  opacity: 0;
+  fill: var(--reel-phone-accent);
+}
+
+.reel-phone__floats svg:nth-child(1) { left: -4cqw; }
+.reel-phone__floats svg:nth-child(2) { left: 0.5cqw; width: 3.4cqw; height: 3.4cqw; fill: #fff; }
+.reel-phone__floats svg:nth-child(3) { left: -1.5cqw; width: 4cqw; height: 4cqw; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .reel-phone__progress-fill.is-playing {
+    animation: reel-phone-progress var(--reel-clip-ms, 3500ms) linear both;
+  }
+
+  .reel-phone__burst {
+    animation: reel-phone-burst 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .reel-phone__floats svg {
+    animation: reel-phone-float 1400ms ease-out both;
+  }
+
+  .reel-phone__floats svg:nth-child(2) { animation-delay: 140ms; }
+  .reel-phone__floats svg:nth-child(3) { animation-delay: 280ms; }
+
+  .reel-phone__disc {
+    animation: reel-phone-spin 6s linear infinite;
+  }
+
+  @media (hover: hover) {
+    .reel-phone:hover {
+      translate: 0 -4px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel-phone__burst {
+    animation: reel-phone-flash 900ms ease both;
+  }
+
+  .reel-phone,
+  .reel-phone__action > svg {
+    transition: none;
+  }
+}
+
+@keyframes reel-phone-progress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes reel-phone-burst {
+  0% { opacity: 0; scale: 0.4; rotate: -14deg; }
+  14% { opacity: 1; scale: 1.15; rotate: -9deg; }
+  28% { scale: 0.95; }
+  40% { scale: 1; }
+  72% { opacity: 1; translate: -50% -50%; }
+  100% { opacity: 0; scale: 1.06; translate: -50% -70%; rotate: -9deg; }
+}
+
+@keyframes reel-phone-float {
+  0% { opacity: 0; translate: 0 0; scale: 0.6; }
+  15% { opacity: 1; }
+  100% { opacity: 0; translate: -3cqw -34cqw; scale: 1.1; }
+}
+
+@keyframes reel-phone-flash {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes reel-phone-spin {
+  to { rotate: 360deg; }
+}
+
+/* ── Consumers ── */
+.creator-reel-phone {
+  --reel-phone-w: clamp(16.5rem, 26vw, 20rem);
+}

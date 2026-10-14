@@ -858,6 +858,14 @@
     max-width: none;
   }
 
+  /* Overlaps by a pixel so a fractional frame top never opens a hairline of
+     ground between the two. */
+  .feed-hero__scene--mirror {
+    top: auto;
+    bottom: calc(100% - 1px);
+    transform: scaleY(-1);
+  }
+
   .feed-hero__figure {
     position: absolute;
     top: var(--feed-cut-top);
@@ -1077,8 +1085,7 @@
   }
 
   .feed-hero__cta:active,
-  .feed-hero__ghost:active,
-  .feed-hero__phone:active {
+  .feed-hero__ghost:active {
     scale: 0.97;
   }
 
@@ -1091,134 +1098,19 @@
 
   .feed-hero__cta:focus-visible,
   .feed-hero__ghost:focus-visible,
-  .feed-hero__phone:focus-visible,
   .feed-hero__rail-item:focus-visible {
     outline: 2px solid hsl(var(--pure-linen));
     outline-offset: 4px;
   }
 
-  /* ── Reel card (desktop): an iPhone 17 Pro Max, drawn at scale ──
-     Apple's specs give the body as 78.0 × 163.4 mm and the panel as
-     1320 × 2868 px at 460 ppi, i.e. 72.9 × 158.4 mm, so 2.55 mm (3.27% of the
-     width) separates body edge and screen on every side. That splits here into
-     a 1 mm aluminium rim (1.28%) and 1.55 mm of black glass (2%). Apple does
-     not publish the radii; the screen uses the commonly measured 62 pt on its
-     440 pt width, and each outer layer adds its own thickness so the three
-     curves stay concentric. The Dynamic Island is Apple's 126 × 37 pt cut-out
-     11 pt below the top edge, scaled to the 440 pt screen. Button positions
-     follow the Pro Max's left (Action, volume) and right (side, Camera
-     Control) layout; their exact millimetres are approximations. */
+  /* ── Reel phone (desktop): the iPhone 17 Pro Max with its action column,
+     src/components/media/ReelPhone.tsx + src/styles/reel-phone.css. Here only
+     its size and its seat: lower than the caption, near the foot of the hero,
+     so a phone this size clears the name above it. */
   .feed-hero__reel {
-    --feed-phone-w: clamp(12rem, 18.5vw, 18rem);
-    --feed-phone-metal: linear-gradient(
-      135deg,
-      #f4f5f7 0%,
-      #babec4 20%,
-      #e9ebee 46%,
-      #a7abb2 72%,
-      #dfe2e5 100%
-    );
-    width: var(--feed-phone-w);
-    /* Seated lower than the caption, near the foot of the hero, so a phone
-       this size clears the name above it. */
+    --reel-phone-w: clamp(12rem, 18.5vw, 18rem);
+    width: var(--reel-phone-w);
     margin-bottom: calc(1.75rem - clamp(3rem, 8vh, 4.5rem));
-  }
-
-  .feed-hero__phone {
-    position: relative;
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    aspect-ratio: 78 / 163.4;
-    padding: 1.28%;
-    border-radius: calc(var(--feed-phone-w) * 0.164);
-    background: var(--feed-phone-metal);
-    box-shadow:
-      inset 0 0 0 0.5px rgb(255 255 255 / 0.7),
-      0 0 0 0.5px rgb(0 0 0 / 0.45),
-      0 18px 40px -20px rgb(0 0 0 / 0.55),
-      0 60px 110px -50px rgb(0 0 0 / 0.75);
-    text-decoration: none;
-    transition:
-      translate 400ms var(--ease-premium),
-      scale 400ms var(--ease-premium);
-  }
-
-  .feed-hero__phone-glass {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    padding: calc(var(--feed-phone-w) * 0.02);
-    border-radius: calc(var(--feed-phone-w) * 0.1512);
-    background: #050506;
-  }
-
-  .feed-hero__phone-screen {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border-radius: calc(var(--feed-phone-w) * 0.1312);
-    background: hsl(var(--ink-surface));
-  }
-
-  .feed-hero__phone-island {
-    position: absolute;
-    z-index: 5;
-    top: calc(var(--feed-phone-w) * 0.0234);
-    left: 50%;
-    width: calc(var(--feed-phone-w) * 0.2676);
-    height: calc(var(--feed-phone-w) * 0.0786);
-    border-radius: 999px;
-    background: #000;
-    translate: -50% 0;
-  }
-
-  /* The front camera, a faint lens at the island's right end. */
-  .feed-hero__phone-island::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 14%;
-    width: 22%;
-    aspect-ratio: 1;
-    border-radius: 999px;
-    background: radial-gradient(circle at 35% 35%, #1d2a3f 0%, #0b0f17 55%, #000 100%);
-    translate: 0 -50%;
-  }
-
-  .feed-hero__phone-button {
-    position: absolute;
-    width: calc(var(--feed-phone-w) * 0.011);
-    background: var(--feed-phone-metal);
-  }
-
-  .feed-hero__phone-button--action,
-  .feed-hero__phone-button--volume-up,
-  .feed-hero__phone-button--volume-down {
-    right: 100%;
-    border-radius: 2px 0 0 2px;
-  }
-
-  .feed-hero__phone-button--side,
-  .feed-hero__phone-button--camera {
-    left: 100%;
-    border-radius: 0 2px 2px 0;
-  }
-
-  .feed-hero__phone-button--action { top: 19.5%; height: 5%; }
-  .feed-hero__phone-button--volume-up { top: 27.5%; height: 9.5%; }
-  .feed-hero__phone-button--volume-down { top: 39%; height: 9.5%; }
-  .feed-hero__phone-button--side { top: 30%; height: 14%; }
-
-  /* Camera Control sits nearly flush, with a sapphire face. */
-  .feed-hero__phone-button--camera {
-    top: 58%;
-    height: 10.5%;
-    width: calc(var(--feed-phone-w) * 0.007);
-    background: linear-gradient(90deg, #8d939b, #c9ced4);
   }
 
   .feed-hero__phone-poster,
@@ -1235,55 +1127,6 @@
   .feed-hero__phone-video {
     z-index: 1;
     animation: feed-hero-fade 650ms ease-out both;
-  }
-
-  .feed-hero__phone-shade {
-    position: absolute;
-    z-index: 3;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(0deg, rgb(31 31 31 / 0.6) 0%, rgb(31 31 31 / 0) 44%);
-  }
-
-  .feed-hero__phone-caption {
-    position: absolute;
-    z-index: 4;
-    right: 0.75rem;
-    bottom: 0.75rem;
-    left: 0.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.625rem;
-    height: 2rem;
-    padding: 0 0.8125rem;
-    border: 1px solid hsl(var(--pure-linen) / 0.2);
-    border-radius: 999px;
-    background: rgb(19 19 19 / 0.72);
-    color: hsl(var(--pure-linen));
-    font-family: var(--font-sans);
-    font-size: 0.59375rem;
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .feed-hero__phone-caption-label {
-    display: flex;
-    align-items: center;
-    gap: 0.4375rem;
-  }
-
-  .feed-hero__phone-caption-mark {
-    display: block;
-    flex: none;
-    width: 0.5rem;
-    height: 0.625rem;
-  }
-
-  .feed-hero__phone-caption > span:last-child {
-    color: hsl(var(--pure-linen) / 0.72);
   }
 
   .feed-hero__intro {
@@ -1380,10 +1223,6 @@
       border-color: rgb(255 255 255 / 0.5);
       background: rgb(255 255 255 / 0.06);
     }
-
-    .feed-hero__phone:hover {
-      translate: 0 -4px;
-    }
   }
 
   @media (min-width: 768px) and (max-height: 720px) {
@@ -1392,7 +1231,11 @@
     }
   }
 
-  @media (max-width: 767px) {
+  /* Phones, and tablets held upright: a portrait iPad is a tall screen like a
+     phone, so it takes the phone composition (her full height under the name,
+     the proof rail beside the caption) rather than the landscape one with the
+     reel phone. Keep in sync with COMPACT_HERO_QUERY in Hero.tsx. */
+  @media (max-width: 767px), (orientation: portrait) and (max-width: 1100px) {
     .feed-hero {
       --feed-name-size: 31.5vw;
       --feed-name-top: calc(env(safe-area-inset-top, 0px) + 4.25rem);
@@ -1563,6 +1406,108 @@
     }
   }
 
+  /* Tablets held upright: the phone composition at tablet scale. The caption
+     and the rail grow, and the lead and the long labels come back. */
+  @media (min-width: 600px) and (orientation: portrait) and (max-width: 1100px) {
+    .feed-hero__layout {
+      padding:
+        0
+        calc(var(--feed-gutter) + 5.75rem)
+        calc(env(safe-area-inset-bottom, 0px) + clamp(1.75rem, 3vh, 2.75rem))
+        var(--feed-gutter);
+    }
+
+    .feed-hero__caption {
+      gap: 0.875rem;
+      max-width: 34rem;
+    }
+
+    /* The lead is back, and it is smaller type over her light vest. */
+    .feed-hero__scrim {
+      background: linear-gradient(
+        0deg,
+        rgb(11 11 13 / 0.78) 0%,
+        rgb(11 11 13 / 0.56) 30%,
+        rgb(11 11 13 / 0) 58%
+      );
+    }
+
+    .feed-hero__avatar {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+
+    .feed-hero__author-name {
+      font-size: 0.9375rem;
+    }
+
+    .feed-hero__author-role {
+      font-size: 0.8125rem;
+    }
+
+    #home .feed-hero__title {
+      font-size: clamp(1.75rem, 3.8vw, 2.25rem);
+      line-height: 1.12;
+    }
+
+    .feed-hero__lead {
+      display: block;
+    }
+
+    .feed-hero__sound-full,
+    .feed-hero__ghost-full {
+      display: inline;
+    }
+
+    .feed-hero__sound-short,
+    .feed-hero__ghost-short {
+      display: none;
+    }
+
+    .feed-hero__sound {
+      height: 2rem;
+      padding: 0 0.875rem;
+      font-size: 0.8125rem;
+    }
+
+    .feed-hero__actions {
+      gap: 0.625rem;
+    }
+
+    .feed-hero__cta,
+    .feed-hero__ghost {
+      min-height: 3rem;
+      padding: 0 1.375rem;
+      font-size: 0.9375rem;
+    }
+
+    .feed-hero__rail {
+      right: calc(var(--feed-gutter) - 0.625rem);
+      bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(1.75rem, 3vh, 2.75rem));
+      gap: 1.125rem;
+      width: 4.75rem;
+    }
+
+    .feed-hero__rail-item {
+      gap: 0.375rem;
+      font-size: 0.8125rem;
+    }
+
+    .feed-hero__rail-icon {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+
+    .feed-hero__rail-icon svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .feed-hero__progress {
+      height: 3px;
+    }
+  }
+
   /* ── Motion, from the reference: one stagger on load, then a scroll timeline
      that lifts the name and lowers the photo, so the whole word comes into
      view. Compositor-only (opacity, translate, scale); no JS involved. Both
@@ -1609,15 +1554,13 @@
     .feed-hero__cta,
     .feed-hero__ghost,
     .feed-hero__cta-mark,
-    .feed-hero__phone,
     .feed-hero__rail-icon,
     .feed-hero__frame--scene {
       transition: none;
       animation: none;
     }
 
-    .feed-hero__cta:hover .feed-hero__cta-mark,
-    .feed-hero__phone:hover {
+    .feed-hero__cta:hover .feed-hero__cta-mark {
       translate: none;
     }
   }
@@ -1712,32 +1655,6 @@
   }
 
   /* ─── Hero Phone Frame ─── */
-  .hero-phone-frame {
-    position: relative;
-    width: 300px;
-    height: 650px;
-    border-radius: 40px;
-    border: 3px solid rgba(255, 255, 255, 0.15);
-    background: #000;
-    overflow: hidden;
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.06),
-      0 30px 60px -10px rgba(0, 0, 0, 0.55);
-  }
-
-  .hero-phone-notch {
-    position: absolute;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 26px;
-    border-radius: 16px;
-    background: #000;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    z-index: 2;
-  }
-
   .hero-phone-video {
     position: absolute;
     inset: 0;

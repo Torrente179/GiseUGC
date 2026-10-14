@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { useTranslation } from '@/lib/locale-context';
-import { Play } from 'lucide-react';
+import ReelPhone from '@/components/media/ReelPhone';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
@@ -9,8 +9,10 @@ import { getPosterVariantSrc, LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
 import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 
+const REEL_INTERVAL_MS = 3500;
+
 const CreatorAdvantage = () => {
-  const { t } = useTranslation();
+  const { locale, t } = useTranslation();
   const shouldReduceMotion = usePrefersReducedMotion();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const sectionRef = useRef<HTMLElement>(null);
@@ -59,24 +61,30 @@ const CreatorAdvantage = () => {
     };
   }, []);
 
+  const reelIsPlaying = !shouldReduceMotion && isSectionNearViewport;
   useEffect(() => {
-    if (shouldReduceMotion || !isSectionNearViewport) return;
+    if (!reelIsPlaying) return;
     const id = window.setInterval(
       () => setReelIndex((prev) => (prev + 1) % reelClips.length),
-      3500,
+      REEL_INTERVAL_MS,
     );
     return () => window.clearInterval(id);
-  }, [isSectionNearViewport, shouldReduceMotion, reelClips.length]);
+  }, [reelIsPlaying, reelClips.length]);
   const reelClip = reelClips[reelIndex];
+  const reelTitle = reelClip.titleKey
+    ? t(reelClip.titleKey)
+    : reelClip.localizedTitle?.[locale] ?? reelClip.title ?? '';
 
   const renderPhoneReel = () => (
-    <a
-      href="#portfolio"
-      onClick={handleHashLinkClick}
-      className="hero-phone-frame mx-auto cursor-pointer"
+    <ReelPhone
+      className="creator-reel-phone"
+      title={reelTitle}
+      reelKey={reelClip.id}
+      playing={reelIsPlaying}
+      clipMs={REEL_INTERVAL_MS}
+      onNavigate={handleHashLinkClick}
+      onContact={handleContactCtaClick}
     >
-      <span className="sr-only">{t('portfolio.collageCta')}</span>
-      <div className="hero-phone-notch" />
       <AdaptiveVideo
         key={reelClip.id}
         className="hero-phone-video"
@@ -91,18 +99,8 @@ const CreatorAdvantage = () => {
         playbackPriority="preview"
         rootMargin="180px 0px"
       />
-      <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 backdrop-blur-sm">
-        <Play className="h-2.5 w-2.5 fill-white text-white" />
-        <span className="text-[9px] font-bold uppercase tracking-prestige text-white/90">UGC Reel</span>
-      </div>
-      <div className="absolute right-3 top-3 z-10 rounded-full bg-black/50 px-2.5 py-1 backdrop-blur-sm">
-        <span className="text-[9px] font-bold uppercase tracking-prestige text-white/80">
-          {reelIndex + 1}/{reelClips.length}
-        </span>
-      </div>
-    </a>
+    </ReelPhone>
   );
-
 
   return (
     <section ref={sectionRef} className="studio-section bg-background pt-0">
