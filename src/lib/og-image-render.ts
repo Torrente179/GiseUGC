@@ -106,8 +106,12 @@ const measureWidth = (font: FontLike, text: string, fontSize: number, tracking =
 const missingGlyphsIn = (font: FontLike, text: string): string[] =>
   [...new Set(text)].filter((char) => char !== ' ' && font.glyphForCodePoint(char.charCodeAt(0)).id === 0);
 
+// Break only where a browser would: a no-break space (U+00A0) keeps
+// "Creadora UGC" on one line, so it is not a split point here either.
+const BREAKABLE_SPACE = /[^\S\u00a0]+/u;
+
 const wrapWords = (font: FontLike, text: string, fontSize: number, maxWidth: number): string[] => {
-  const words = text.split(/\s+/u).filter(Boolean);
+  const words = text.split(BREAKABLE_SPACE).filter(Boolean);
   const lines: string[] = [];
   let current = '';
   for (const word of words) {
@@ -127,13 +131,13 @@ export const layoutOgTitle = (font: FontLike, title: string, maxWidth = TITLE_WI
   const missingGlyphs = missingGlyphsIn(font, title);
   for (let fontSize = TITLE_MAX; fontSize >= TITLE_MIN; fontSize -= 1) {
     const lines = wrapWords(font, title, fontSize, maxWidth);
-    const overflowWord = title.split(/\s+/u).some((word) => measureWidth(font, word, fontSize) > maxWidth);
+    const overflowWord = title.split(BREAKABLE_SPACE).some((word) => measureWidth(font, word, fontSize) > maxWidth);
     if (lines.length <= TITLE_MAX_LINES && !overflowWord) {
       return { lines, fontSize, truncated: false, missingGlyphs };
     }
   }
   const lines = wrapWords(font, title, TITLE_MIN, maxWidth);
-  const overflowWord = title.split(/\s+/u).some((word) => measureWidth(font, word, TITLE_MIN) > maxWidth);
+  const overflowWord = title.split(BREAKABLE_SPACE).some((word) => measureWidth(font, word, TITLE_MIN) > maxWidth);
   return {
     lines,
     fontSize: TITLE_MIN,
