@@ -112,3 +112,17 @@ named at the top of the card.
   fewer color-contrast failures (the old kickers); the one left is the hero's
   "The work" eyebrow. The strict budgets in `lighthouse.shared.cjs` (20 KB CSS,
   150 KB JS, LCP 1.8 s) were already exceeded before this change.
+
+## Follow-up: the phone frame
+
+The CSS phone in Formats and in the close's fan (`.kn-phone`) is the iPhone 17
+Pro Max frame of the home page's reel phone (`.reel-phone`, same radii, glass,
+island and button positions). Its rim was written as `padding: 1.28%`, and a
+percentage padding resolves against the containing block, not the phone: at
+1440 px the rim was 18 px instead of 4 px on the Formats phone (8 px instead of
+4 px on the fan), which read as a thick silver frame. It is now
+`calc(var(--w) * 0.0128)`, the reel phone's formula, so the rim is 1.28% of the
+device width in every shell. Measured on the build, every frame proportion
+(body, glass and screen radii, island size and position, button offsets) now
+matches `.reel-phone` within pixel rounding. Before/after shots of Formats
+(light and dark, 1440 and 390) are in `_mockups/service-keynote/shots/phone-fix/`.

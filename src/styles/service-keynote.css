@@ -527,7 +527,10 @@
   position: absolute;
   width: var(--w);
   aspect-ratio: 78 / 163.4;
-  padding: 1.28%;
+  /* The reel phone's rim (1.28% of the device width). Not a % value: padding
+     percentages resolve against the containing block, which made the rim 4x
+     thicker on desktop. */
+  padding: calc(var(--w) * 0.0128);
   border-radius: calc(var(--w) * 0.164);
   background: var(--metal);
   box-shadow: inset 0 0 0 0.5px var(--kn-phone-inset), var(--kn-phone-edge),

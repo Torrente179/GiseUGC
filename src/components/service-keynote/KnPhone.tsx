@@ -8,8 +8,10 @@ type KnPhoneProps = {
 };
 
 /**
- * A phone drawn in CSS. Geometry follows `--w` (the device width), so the same
- * markup serves the Formats stage and the fan in the close.
+ * A phone drawn in CSS: the iPhone 17 Pro Max frame of `ReelPhone`
+ * (`.reel-phone` in reel-phone.css has the measurements; keep the two in step).
+ * Geometry follows `--w` (the device width), so the same markup serves the
+ * Formats stage and the fan in the close.
  */
 const KnPhone = ({ children, className = '', style }: KnPhoneProps) => (
   <div className={`kn-phone ${className}`.trim()} style={style}>
