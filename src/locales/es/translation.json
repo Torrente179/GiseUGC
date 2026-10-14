@@ -176,6 +176,12 @@
     "collagePoint2": "Tu producto desde varios ángulos, para que se vea bien y se entienda cómo funciona.",
     "collagePoint3": "Material de sobra para probar distintas ofertas, públicos y mensajes.",
     "collageCta": "Cuéntame qué necesitas",
+    "collageCuts": {
+      "ad": { "label": "Anuncio", "caption": "El anuncio que alguien ve primero" },
+      "demo": { "label": "Demo", "caption": "La demo que le resuelve las dudas" },
+      "review": { "label": "Reseña", "caption": "La reseña que lo termina de convencer" }
+    },
+    "collageNextCut": "Ver el siguiente video",
     "collageClip1": "Moda UGC — Look 1",
     "collageClip2": "Moda UGC — Look 2",
     "collageClip3": "Moda UGC — Look 3",

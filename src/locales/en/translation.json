@@ -176,6 +176,12 @@
     "collagePoint2": "Your product from several angles, so people can see it clearly and understand how it works.",
     "collagePoint3": "Plenty of footage to test different offers, audiences, and messages.",
     "collageCta": "Tell me what you need",
+    "collageCuts": {
+      "ad": { "label": "Ad", "caption": "The ad someone sees first" },
+      "demo": { "label": "Demo", "caption": "The demo that answers their questions" },
+      "review": { "label": "Review", "caption": "The review that gets them to buy" }
+    },
+    "collageNextCut": "Show the next video",
     "collageClip1": "UGC Clothing — Look 1",
     "collageClip2": "UGC Clothing — Look 2",
     "collageClip3": "UGC Clothing — Look 3",
