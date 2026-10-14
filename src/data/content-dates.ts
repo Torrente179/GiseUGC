@@ -5,9 +5,11 @@
  *
  * Every family moved to 2026-10-13 with the site-wide copy rewrite (plain,
  * first-person voice in ES and EN). Bump a family when its visible copy changes.
+ * Home (and therefore llms Last-Updated) moved to 2026-10-14 when the compact
+ * AI profile gained the journalism/television line that matches the homepage H1.
  */
 export const CONTENT_DATES = {
-  home: '2026-10-13',
+  home: '2026-10-14',
   hubs: '2026-10-13',
   services: '2026-10-13',
   verticals: '2026-10-13',

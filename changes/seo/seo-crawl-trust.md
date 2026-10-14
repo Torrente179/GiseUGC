@@ -40,7 +40,7 @@ Other service pages and the verticals/resources hubs must **not** grow a rating.
 
 Route-data JSON (`#route-data`) must not leak authoring markdown such as `[gisela_sm](https://www.fiverr.com/gisela_sm)`. `serializeRouteDataJson` in `src/lib/inline-copy-links.tsx` rewrites those strings to `{type,label,href}` segments before they hit the first HTML. Authoring in `service-pages.ts` / `hub-pages.ts` stays markdown.
 
-Dates: `src/data/content-dates.ts`. Sitemap lastmod, JSON-LD `dateModified`, visible "last updated" labels, and llms `Last-Updated` read from here. Hub shells use `CONTENT_DATES.hubs` (`2026-10-13` after the FAQ/link harden). Vertical family is `2026-10-13`. Service and resource families are `2026-08-31` after the GEO-copy pass on bilingüe / how-to-hire. See `seo-ssr-structured-data-and-metadata-parity.md` (2026-10-13) for the FAQPage dedupe and body-link pass. Do not change Person `sameAs` or IndexNow here.
+Dates: `src/data/content-dates.ts`. Sitemap lastmod, JSON-LD `dateModified`, visible "last updated" labels, and llms `Last-Updated` read from here. `CONTENT_DATES.home` (and therefore llms `Last-Updated`) is `2026-10-14` after the journalism/TV line on `llms.txt`. Hub/vertical/service/resource/legal families stay `2026-10-13`. See `2026-10-14-llms-journalism-tv-line.md`. Do not change Person `sameAs` or IndexNow here.
 
 `public/sitemap.xml` is generated from `PAGE_REGISTRY` + `CONTENT_DATES` (`src/lib/sitemap.ts`). Vite writes that file during `vite build` (the same `/sitemap.xml` static path production serves). Do not invent URLs; do not serve the sitemap through React.
 

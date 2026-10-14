@@ -53,6 +53,11 @@ This folder is organized by subsystem instead of by date.
     money-page sentence, six title rewrites and two hub descriptions. OG
     JPEGs were not regenerated (H1s unchanged). Duplicate boot+PageSeo `@id`s
     were left in place; see that file.
+  - **Current llms journalism/TV line:**
+    `seo/2026-10-14-llms-journalism-tv-line.md` — one homepage-H1 line on
+    `llms.txt` and `llms-full.txt` (`9 years of experience as a journalist
+    and comes from television.`). `Last-Updated` / `CONTENT_DATES.home`
+    `2026-10-14`. Summary blockquote unchanged.
 - `deployment/`
   - Hosting, caching, security hardening, and runtime instrumentation.
 
