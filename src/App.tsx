@@ -180,12 +180,12 @@ const jumpToY = (y: number) => {
 
 // Smooth-scroll to a section element by ID, retrying until it appears in the DOM.
 // Required because some sections are lazily mounted and may not exist yet.
-const scrollToSection = (sectionId: string, attempts = 0) => {
+const scrollToSection = (sectionId: string, attempts = 0, previousY: number | null = null) => {
   const element = document.getElementById(sectionId);
   if (element) {
     const y = element.getBoundingClientRect().top + window.scrollY - HASH_SCROLL_NAV_OFFSET;
-    if (shouldRetryHashScroll(y, document.documentElement.scrollHeight, window.innerHeight, attempts)) {
-      setTimeout(() => scrollToSection(sectionId, attempts + 1), 80);
+    if (shouldRetryHashScroll(y, document.documentElement.scrollHeight, window.innerHeight, attempts, previousY)) {
+      setTimeout(() => scrollToSection(sectionId, attempts + 1, y), 80);
       return;
     }
     // Immediate: a later view-transition or POP restore must not cancel this.
