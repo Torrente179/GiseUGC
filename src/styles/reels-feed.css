@@ -430,8 +430,16 @@
   }
 }
 
+/* Two columns (tablets, small laptops): the copy column is only as wide as
+   its content and the pair is centred, so the phone sits next to the copy
+   instead of at the far edge with an empty band between them. */
 @media (max-width: 1199px) {
-  .rf-grid { padding-bottom: 8rem; }
+  .rf-grid {
+    grid-template-columns: minmax(0, 24rem) auto;
+    justify-content: center;
+    column-gap: clamp(3rem, 7vw, 5.5rem);
+    padding-bottom: 8rem;
+  }
 }
 
 .rf-ctrl {

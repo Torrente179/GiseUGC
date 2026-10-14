@@ -51,6 +51,12 @@ existing serif style. The rows "round 3" and "the mix" are on
   and `dc-reel-*` rules in `index.css` are now unused (left in place: that file
   is edited in parallel).
 
+- **Tablets and small laptops (768–1199 px):** two columns. The copy column
+  is only as wide as its content (24rem at most) and the pair is centred with
+  a `clamp(3rem, 7vw, 5.5rem)` gap. Before, the copy took every leftover pixel
+  (`1fr`), which left an empty band between it and the phone on iPad (reported
+  by the user, 2026-10-14).
+
 ## Scroll handling
 
 - **Desktop wheel:** a non-passive listener on the phone moves through the feed
