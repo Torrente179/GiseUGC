@@ -13,9 +13,9 @@
  * This makes resource-pages.ts the single source of truth for both surfaces.
  * Idempotent: re-running with no data change rewrites nothing.
  *
- * The article placeholder inside #root and the FAQ <noscript> after it are
- * rebuilt from the same data. Prerender replaces #root, but the <noscript>
- * sits outside it and ships to production, so it must never carry stale copy.
+ * The article placeholder inside #root is rebuilt from the same data.
+ * FAQ copy lives once, as headings + paragraphs inside #root. A second
+ * FAQ <dl> in <noscript> used to ship next to the prerendered heading FAQ.
  *
  * Runs in prebuild via `npm run resource:entrypoints`.
  */
@@ -99,8 +99,8 @@ const renderBody = (page, locale) => {
   if (page.comparisonTable) sections.push(renderTable(page.comparisonTable, { heading: labels.atAGlance }));
 
   const faqs = page.faqs.flatMap((faq) => [
-    `          <dt>${escapeText(visibleInlineCopy(faq.question))}</dt>`,
-    `          <dd>${escapeText(visibleInlineCopy(faq.answer))}</dd>`,
+    `        <h3 style="${H2_STYLE}">${escapeText(visibleInlineCopy(faq.question))}</h3>`,
+    `        <p style="${P_STYLE}">${escapeText(visibleInlineCopy(faq.answer))}</p>`,
   ]);
 
   return [
@@ -116,20 +116,15 @@ const renderBody = (page, locale) => {
       : '',
     '',
     sections.join('\n\n'),
-    '',
+    page.faqs.length
+      ? `\n        <h2 style="${H2_STYLE}">${escapeText(labels.faq)}</h2>\n${faqs.join('\n')}\n`
+      : '',
     `        <p style="font-size:0.8rem;color:#888;margin-top:2rem">${escapeText(
       formatLastUpdatedLabel(CONTENT_DATES.resources, locale),
     )}</p>`,
     '      </div>',
     '    </div>',
-    '    <noscript>',
-    '      <div style="max-width:56rem;margin:0 auto;padding:2rem 1.5rem">',
-    `        <h2>${labels.faq}</h2>`,
-    '        <dl>',
-    ...faqs,
-    '        </dl>',
-    '      </div>',
-    '    </noscript>',
+    '    <noscript></noscript>',
   ].join('\n');
 };
 
