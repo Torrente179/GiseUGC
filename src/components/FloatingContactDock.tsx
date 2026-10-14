@@ -50,21 +50,6 @@ const FloatingContactDock = () => {
   }, [shouldReduceMotion]);
 
   useEffect(() => {
-    const hero = document.getElementById('home');
-    if (!hero) {
-      setIsHeroVisible(false);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsHeroVisible(entry.intersectionRatio > 0.08),
-      { threshold: 0.08 }
-    );
-    observer.observe(hero);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
     const desktopMediaQuery = window.matchMedia('(min-width: 768px)');
     let rafId: number | null = null;
     let cachedFooter: HTMLElement | null = null;
@@ -97,6 +82,17 @@ const FloatingContactDock = () => {
 
     const evaluateDockState = () => {
       rafId = null;
+
+      // The dock waits only while the hero still fills the screen: once its
+      // bottom edge rises above 85% of the viewport (the next section is
+      // coming in), it slides up. It used to wait until less than 8% of the
+      // hero was left, which put its entrance a whole section late. Routes
+      // without a hero show it right away.
+      const hero = document.getElementById('home');
+      const heroFillsScreen = hero
+        ? hero.getBoundingClientRect().bottom > window.innerHeight * 0.85
+        : false;
+      setIsHeroVisible((previous) => (previous === heroFillsScreen ? previous : heroFillsScreen));
 
       if (!desktopMediaQuery.matches) {
         setIsDesktopDockGhosted(false);
