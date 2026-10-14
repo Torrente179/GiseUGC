@@ -1,11 +1,8 @@
-import { useLocation } from 'react-router-dom';
 import { useTranslation } from '@/lib/locale-context';
 import { ArrowUpRight } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
 import { CONTACT_CHANNELS, CHANNEL_LOGO_SRC } from '@/lib/contact-channels';
 import ContactChannelGlyph from '@/components/mobile/ContactChannelGlyph';
-import NavbarControls from '@/components/NavbarControls';
-import { getLocaleFromPath } from '@/lib/locale-path';
 
 type MobileContactSheetProps = {
   open: boolean;
@@ -15,7 +12,6 @@ type MobileContactSheetProps = {
 /** App-style contact bottom sheet (mobile) — replaces the floating bubble. */
 const MobileContactSheet = ({ open, onOpenChange }: MobileContactSheetProps) => {
   const { t } = useTranslation();
-  const { pathname } = useLocation();
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} shouldScaleBackground={false}>
@@ -52,11 +48,6 @@ const MobileContactSheet = ({ open, onOpenChange }: MobileContactSheetProps) => 
               </a>
             );
           })}
-        </div>
-        {/* Phones have no top bar, so language and theme live here. */}
-        <div className="msheet-controls items-center gap-3 border-t border-border/50 pt-3">
-          <span className="msheet-label">{t('navbar.languageAndTheme')}</span>
-          <NavbarControls currentLocale={getLocaleFromPath(pathname)} />
         </div>
       </DrawerContent>
     </Drawer>

@@ -4016,11 +4016,11 @@
     color: hsl(var(--primary));
   }
 
-  /* Phones have no top bar, so the resource hero only has to clear the status
-     area; it used to reserve room for the bar. */
+  /* Phones have no top bar, only the floating language and theme pill (16px
+     from the top, 40px tall). The resource hero starts 16px below it. */
   @media (max-width: 767px) {
     .rsc-hero {
-      padding-top: calc(env(safe-area-inset-top, 0px) + 3.5rem);
+      padding-top: calc(env(safe-area-inset-top, 0px) + 4.5rem);
     }
   }
 

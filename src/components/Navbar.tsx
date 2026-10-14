@@ -61,14 +61,21 @@ const Navbar = () => {
   return (
     <nav
       className={cn(
-        'site-nav fixed top-0 left-0 z-[110] hidden w-full md:pointer-events-none md:block',
+        'site-nav pointer-events-none fixed top-0 left-0 z-[110] w-full',
         useHeroOverlayNav && 'title-sequence-nav',
       )}
     >
-      {/* Desktop only: a floating pill, centred, with language and theme in a
-          matching pill on the right. Same look on every route. Phones have no
-          top bar: sections and Contacto are in the bottom tab bar, and
-          language and theme live in the Contacto sheet. */}
+      {/* Phones: no top bar. Only the language and theme pill floats in the
+          top-right corner; sections and Contacto are in the bottom tab bar.
+          The nav ignores taps, so only the pill itself is clickable. */}
+      <div className="flex justify-end px-4 pb-2 pt-[calc(env(safe-area-inset-top,0px)+1rem)] md:hidden">
+        <div className="pointer-events-auto">
+          <NavbarControls currentLocale={currentLocale} />
+        </div>
+      </div>
+
+      {/* Desktop: a floating pill, centred, with language and theme in a
+          matching pill on the right. Same look on every route. */}
       <div className="site-nav-desktop">
         <div className="site-nav-pill" aria-label={t('navbar.desktopLabel')} role="group">
           <a
