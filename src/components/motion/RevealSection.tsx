@@ -8,14 +8,16 @@ export function RevealSection({
   children,
   className = '',
   id,
+  labelledBy,
 }: {
   children: ReactNode;
   className?: string;
   id?: string;
+  labelledBy?: string;
 }) {
   const ref = useScrollReveal<HTMLElement>();
   return (
-    <section ref={ref} id={id} className={`svc-reveal ${className}`}>
+    <section ref={ref} id={id} aria-labelledby={labelledBy} className={`svc-reveal ${className}`}>
       {children}
     </section>
   );

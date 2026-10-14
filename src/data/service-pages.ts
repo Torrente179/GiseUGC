@@ -2,10 +2,13 @@ import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getServicePath } from '@/lib/locale-path';
 import { FIVERR_PROFILE_URL } from '@/lib/contact-channels';
 import { SITE_PROOF } from '@/data/site-proof';
+import { SERVICE_FORMAT_CLIP_IDS, SERVICE_TAILORING } from '@/data/service-page-tailoring';
 
 export type ServiceFeature = {
   title: string;
   description: string;
+  /** Clip shown on the Formats phone for this deliverable (same id in ES and EN). */
+  clipId?: number;
 };
 
 export type ServiceFaq = {
@@ -25,6 +28,9 @@ export type FeaturedExample = {
 };
 
 export type RelatedServiceSummary = {
+  id: ServicePageId;
+  /** Lead clip of that service; its poster is the tile image in the page close. */
+  leadClipId?: number;
   eyebrow: string;
   title: string;
   summary: string;
@@ -48,13 +54,19 @@ export type ServicePageContent = {
   secondaryCtaLabel: string;
   secondaryCtaHref: string;
   sectionIntroTitle: string;
+  /** Phrase of `sectionIntroTitle` that takes the gradient accent. */
+  sectionIntroTitleAccent?: string;
   sectionIntroText: string;
+  /** Phrases of `sectionIntroText` shown in full ink. */
+  sectionIntroHighlights?: string[];
   deliverablesTitle: string;
   deliverables: ServiceFeature[];
   bestFitTitle: string;
   bestFitItems: string[];
   notFitTitle: string;
   notFitItems: string[];
+  /** Phrases of the fit items (both lists) shown in full ink. */
+  fitHighlights?: string[];
   marketTitle: string;
   marketItems: string[];
   geoFact?: string;
@@ -2124,9 +2136,17 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
 
 export const getServicePageContent = (serviceId: ServicePageId, locale: SiteLocale): ServicePageContent => {
   const localized = SERVICE_PAGE_CONTENT[serviceId][locale];
+  const tailoring = SERVICE_TAILORING[serviceId][locale];
+  const clipIds = SERVICE_FORMAT_CLIP_IDS[serviceId];
+  const fallbackClips = localized.featuredExamples;
 
   return {
     ...localized,
+    ...tailoring,
+    deliverables: localized.deliverables.map((item, index) => ({
+      ...item,
+      clipId: clipIds[index] ?? fallbackClips[index % Math.max(fallbackClips.length, 1)]?.clipId,
+    })),
     id: serviceId,
     locale,
     path: getServicePath(serviceId, locale),
@@ -2152,6 +2172,8 @@ export const getRelatedServiceSummaries = (
   serviceIds.map((serviceId) => {
     const page = getServicePageContent(serviceId, locale);
     return {
+      id: serviceId,
+      leadClipId: page.featuredExamples[0]?.clipId,
       eyebrow: page.heroEyebrow,
       title: page.navLabel,
       summary: page.metaDescription,

@@ -1,66 +1,30 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import type { ReactNode } from 'react';
 import type { SiteLocale, ResourcePageId } from '@/lib/locale-path';
-import { getServicePath, getVerticalPath, getResourcePath } from '@/lib/locale-path';
 import type { ServiceLandingRouteData } from '@/data/landing-route-types';
 import { RevealSection } from '@/components/motion/RevealSection';
-import { InlineCopy } from '@/lib/inline-copy-links';
 import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
 import {
   beatDomId,
-  buildMobileFicha,
-  buildServiceFicha,
   getInnerBeats,
   type InnerBeatId,
 } from '@/lib/service-inner-argument';
+import CloseBeat from '@/components/service-keynote/CloseBeat';
+import FitBeat from '@/components/service-keynote/FitBeat';
+import FormatsBeat from '@/components/service-keynote/FormatsBeat';
+import LocalNav from '@/components/service-keynote/LocalNav';
+import OverviewBeat from '@/components/service-keynote/OverviewBeat';
+import ProcessBeat from '@/components/service-keynote/ProcessBeat';
+import QuestionsBeat from '@/components/service-keynote/QuestionsBeat';
+import { useBeatSpy } from '@/components/service-keynote/hooks';
+import '@/styles/service-keynote.css';
 
-const stripStepIndex = (title: string) => title.replace(/^\d+[.)]\s*/, '');
-
-/* Each beat owns a surface on mobile, so the section reads as a sequence of
-   slabs instead of one uninterrupted column. The modifier carries both the
-   surface and the sticky kicker's background — see --stm-beat-bg.
-   Spelled out rather than built as `stm-beat--${id}`: these live in
-   @layer components, and Tailwind's scanner only keeps rules whose selector it
-   can find as a literal in the source. Interpolated, every one of them is
-   purged from the production build. */
-const MOBILE_BEAT_CLASS: Record<InnerBeatId, string> = {
-  ficha: 'stm-beat stm-beat--ficha',
-  recibes: 'stm-beat stm-beat--recibes',
-  'como-corre': 'stm-beat stm-beat--como-corre',
-  encaja: 'stm-beat stm-beat--encaja',
-  faq: 'stm-beat stm-beat--faq',
-  empezar: 'stm-beat stm-beat--empezar',
-};
-
-const useBeatSpy = (ids: string[], enabled: boolean) => {
-  const [activeId, setActiveId] = useState(ids[0] ?? '');
-  const idsKey = ids.join('|');
-
-  useEffect(() => {
-    if (!enabled || typeof window === 'undefined' || !idsKey) return;
-    const list = idsKey.split('|');
-    const nodes = list
-      .map((id) => document.getElementById(id))
-      .filter((node): node is HTMLElement => Boolean(node));
-    if (nodes.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        const nextId = visible[0]?.target.id;
-        if (nextId) setActiveId(nextId);
-      },
-      { rootMargin: '-28% 0px -58% 0px', threshold: [0, 0.15, 0.4, 0.75] },
-    );
-
-    nodes.forEach((node) => observer.observe(node));
-    return () => observer.disconnect();
-  }, [enabled, idsKey]);
-
-  return activeId;
-};
+/*
+ * Everything below the service hero. Six beats keep their ids (ficha,
+ * recibes, como-corre, encaja, faq, empezar), so the page schema, the local
+ * nav, and the deep links stay as they were; what changed is how each beat is
+ * drawn. The styles live in service-keynote.css as plain CSS with literal
+ * class names, so Tailwind's purge has nothing to drop.
+ */
 
 type ServicePageInnerProps = {
   page: ServiceLandingRouteData['page'];
@@ -81,68 +45,28 @@ type ServicePageInnerProps = {
   variant: 'mobile' | 'desktop';
 };
 
-const buildExploreColumns = ({
-  labels,
-  locale,
-  relevantVerticals,
-  resourceLinks,
-  allOtherServices,
-}: Pick<
-  ServicePageInnerProps,
-  'labels' | 'locale' | 'relevantVerticals' | 'resourceLinks' | 'allOtherServices'
->) => {
-  const columns = [
-    relevantVerticals.length > 0 && {
-      key: 'industry',
-      label: labels.byIndustry,
-      items: relevantVerticals.map((vertical) => ({
-        key: vertical.id,
-        href: getVerticalPath(vertical.id, locale),
-        title: vertical.navLabel,
-      })),
-    },
-    resourceLinks.length > 0 && {
-      key: 'resources',
-      label: labels.resources,
-      items: resourceLinks.map((resource) => ({
-        key: resource.id,
-        href: getResourcePath(resource.id, locale),
-        title: resource.label,
-      })),
-    },
-    allOtherServices.length > 0 && {
-      key: 'services',
-      label: labels.moreServices,
-      items: allOtherServices.map((service) => ({
-        key: service.id,
-        href: getServicePath(service.id, locale),
-        title: service.navLabel,
-      })),
-    },
-  ].filter((column): column is Exclude<typeof column, false> => Boolean(column));
-  return columns;
-};
-
 const BeatShell = ({
   reveal,
   id,
   className,
+  labelledBy,
   children,
 }: {
   reveal: boolean;
   id: string;
   className: string;
+  labelledBy: string;
   children: ReactNode;
 }) => {
   if (reveal) {
     return (
-      <RevealSection id={id} className={className}>
+      <RevealSection id={id} className={className} labelledBy={labelledBy}>
         {children}
       </RevealSection>
     );
   }
   return (
-    <section id={id} className={className}>
+    <section id={id} className={className} aria-labelledby={labelledBy}>
       {children}
     </section>
   );
@@ -161,358 +85,67 @@ const ServicePageInner = ({
 }: ServicePageInnerProps) => {
   const updated = formatLastUpdatedLabel(CONTENT_DATES.services, locale);
   const beats = getInnerBeats(locale);
-  const ficha = buildServiceFicha(page);
-  const exploreColumns = buildExploreColumns({
-    labels,
-    locale,
-    relevantVerticals,
-    resourceLinks,
-    allOtherServices,
-  });
   const isMobile = variant === 'mobile';
   const idFor = (id: InnerBeatId) => beatDomId(id, variant);
-  const spyIds = beats.map((beat) => idFor(beat.id));
-  const activeId = useBeatSpy(spyIds, !isMobile);
-  const kickerFor = (id: InnerBeatId) => {
+  const activeId = useBeatSpy(
+    beats.map((beat) => idFor(beat.id)),
+    true,
+  );
+
+  const beatProps = (id: InnerBeatId) => {
     const beat = beats.find((item) => item.id === id);
-    return beat ? `${beat.num} · ${beat.kicker}` : '';
+    return {
+      page,
+      locale,
+      variant,
+      kicker: beat ? `${beat.num} · ${beat.kicker}` : '',
+      titleId: `${idFor(id)}-title`,
+    };
   };
-  const mobileFicha = buildMobileFicha(page);
-  const beatClass = (id: InnerBeatId, extra = '') =>
-    isMobile ? `${MOBILE_BEAT_CLASS[id]}${extra ? ` ${extra}` : ''}` : extra;
-  const figureFor = (id: InnerBeatId) => {
-    const beat = beats.find((item) => item.id === id);
-    return beat ? beat.num.padStart(2, '0') : '';
-  };
-  const BeatFigure = ({ id }: { id: InnerBeatId }) =>
-    isMobile ? (
-      <span className="stm-beat-figure" aria-hidden="true">
-        {figureFor(id)}
-      </span>
-    ) : null;
+  const shell = (id: InnerBeatId, className: string, children: ReactNode) => (
+    <BeatShell
+      reveal={reveal}
+      id={idFor(id)}
+      className={`kn-beat ${className}`}
+      labelledBy={`${idFor(id)}-title`}
+    >
+      {children}
+    </BeatShell>
+  );
 
   return (
-    <div className={isMobile ? 'stm-walk' : 'svc-walk'}>
-      {isMobile ? null : (
-        <nav className="svc-spine" aria-label={locale === 'es' ? 'Índice de la página' : 'Page index'}>
-          <ol className="svc-spine-list">
-            {beats.map((beat) => {
-              const href = `#${idFor(beat.id)}`;
-              const isActive = activeId === idFor(beat.id);
-              return (
-                <li key={beat.id}>
-                  <a href={href} className={`svc-spine-link${isActive ? ' is-active' : ''}`}>
-                    <span className="svc-spine-num">{beat.num}.</span>
-                    <span>{beat.spine}</span>
-                  </a>
-                </li>
-              );
-            })}
-          </ol>
-        </nav>
+    <div className={isMobile ? 'kn kn--m' : 'kn kn--d'}>
+      <div className="kn-handoff" aria-hidden="true" />
+      <div className="kn-ease" aria-hidden="true" />
+
+      <LocalNav
+        page={page}
+        locale={locale}
+        variant={variant}
+        beats={beats.filter((beat) => beat.id !== 'empezar')}
+        idFor={idFor}
+        activeId={activeId}
+      />
+
+      {shell('ficha', 'kn-ov', <OverviewBeat {...beatProps('ficha')} />)}
+      {shell('recibes', 'kn-fm', <FormatsBeat {...beatProps('recibes')} />)}
+      {shell('como-corre', 'kn-pr', <ProcessBeat {...beatProps('como-corre')} />)}
+      {shell('encaja', 'kn-fit', <FitBeat {...beatProps('encaja')} title={labels.isThisForYou} />)}
+      {shell('faq', 'kn-qa', <QuestionsBeat {...beatProps('faq')} />)}
+      <div className="kn-band" aria-hidden="true" />
+      {shell(
+        'empezar',
+        'kn-close',
+        <CloseBeat
+          {...beatProps('empezar')}
+          labels={labels}
+          updated={updated}
+          relevantVerticals={relevantVerticals}
+          resourceLinks={resourceLinks}
+          relatedPages={relatedPages}
+          allOtherServices={allOtherServices}
+        />,
       )}
-
-      <div className={isMobile ? 'stm-walk-main' : 'svc-walk-main'}>
-        <BeatShell
-          reveal={reveal}
-          id={idFor('ficha')}
-          className={
-            isMobile ? beatClass('ficha') : 'svc-inner-block svc-inner-block--open svc-beat'
-          }
-        >
-          <div className={isMobile ? 'stm-beat-inner' : 'st-container'}>
-            <BeatFigure id="ficha" />
-            <p className="st-eyebrow svc-inner-kicker">{kickerFor('ficha')}</p>
-            <h2 className={isMobile ? 'stm-beat-title' : 'svc-inner-heading font-serif'}>
-              {page.sectionIntroTitle}
-            </h2>
-            {isMobile ? (
-              <>
-                <p className="stm-ficha-lead">{mobileFicha.lead}</p>
-                <dl className="stm-ficha">
-                  {mobileFicha.rows.map((row) => (
-                    <div key={row.key} className="stm-ficha-row">
-                      <dt>{row.label}</dt>
-                      <dd>
-                        <span
-                          className={
-                            row.kind === 'chips' ? 'stm-ficha-chips' : 'stm-ficha-lines'
-                          }
-                        >
-                          {row.items.map((item) => (
-                            <span
-                              key={item}
-                              className={
-                                row.kind === 'chips' ? 'stm-ficha-chip' : 'stm-ficha-line'
-                              }
-                            >
-                              {item}
-                            </span>
-                          ))}
-                        </span>
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </>
-            ) : (
-              <dl className="svc-ficha">
-                {ficha.map((row) => (
-                  <div key={row.key} className="svc-ficha-row">
-                    <dt>{row.label}</dt>
-                    <dd>{row.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-            {page.geoFact ? (
-              <p className={isMobile ? 'stm-geo' : 'svc-inner-lead svc-ficha-geo'}>
-                <InlineCopy text={page.geoFact} />
-              </p>
-            ) : null}
-          </div>
-        </BeatShell>
-
-        <BeatShell
-          reveal={reveal}
-          id={idFor('recibes')}
-          className={isMobile ? beatClass('recibes') : 'svc-inner-block svc-beat'}
-        >
-          <div className={isMobile ? 'stm-beat-inner' : 'st-container'}>
-            <BeatFigure id="recibes" />
-            <p className="st-eyebrow svc-inner-kicker">{kickerFor('recibes')}</p>
-            <h2 className={isMobile ? 'stm-beat-title' : 'svc-inner-heading font-serif'}>
-              {page.deliverablesTitle}
-            </h2>
-            <div className={isMobile ? 'stm-formatos' : 'svc-formatos'}>
-              {page.deliverables.map((item) => (
-                <article key={item.title} className={isMobile ? 'stm-formato-card' : 'svc-formato'}>
-                  <h3 className={isMobile ? 'stm-formato-title' : 'svc-formato-title'}>{item.title}</h3>
-                  <p className={isMobile ? 'stm-formato-desc' : 'svc-formato-desc'}>{item.description}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </BeatShell>
-
-        <BeatShell
-          reveal={reveal}
-          id={idFor('como-corre')}
-          className={isMobile ? beatClass('como-corre') : 'svc-inner-block svc-beat'}
-        >
-          <div className={isMobile ? 'stm-beat-inner' : 'st-container'}>
-            <BeatFigure id="como-corre" />
-            <p className="st-eyebrow svc-inner-kicker">{kickerFor('como-corre')}</p>
-            <h2 className={isMobile ? 'stm-beat-title' : 'svc-inner-heading font-serif'}>
-              {page.processTitle}
-            </h2>
-            <ol className={isMobile ? 'stm-stepper' : 'svc-process-row'}>
-              {page.processSteps.map((step, index) => (
-                <li key={step.title} className={isMobile ? 'stm-stepper-item' : 'svc-process-cell'}>
-                  {isMobile ? (
-                    <span className="stm-stepper-num" aria-hidden="true">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                  ) : (
-                    <span className="svc-process-cell-num" aria-hidden="true">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                  )}
-                  <div>
-                    <h3 className={isMobile ? 'stm-stepper-title' : 'svc-process-cell-title'}>
-                      {stripStepIndex(step.title)}
-                    </h3>
-                    <p className={isMobile ? 'stm-stepper-desc' : 'svc-process-cell-desc'}>
-                      {step.description}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </BeatShell>
-
-        <BeatShell
-          reveal={reveal}
-          id={idFor('encaja')}
-          className={isMobile ? beatClass('encaja') : 'svc-inner-block svc-beat'}
-        >
-          <div className={isMobile ? 'stm-beat-inner' : 'st-container'}>
-            <BeatFigure id="encaja" />
-            <p className="st-eyebrow svc-inner-kicker">{kickerFor('encaja')}</p>
-            <h2 className={isMobile ? 'stm-beat-title' : 'svc-inner-heading font-serif'}>
-              {labels.isThisForYou}
-            </h2>
-            <div className={isMobile ? 'stm-fit' : 'svc-fit-grid'}>
-              <div className={isMobile ? 'stm-fit-panel stm-fit-panel--yes' : 'svc-fit-col'}>
-                <h3 className={isMobile ? 'stm-fit-label' : 'svc-fit-label'}>{page.bestFitTitle}</h3>
-                <ul>
-                  {page.bestFitItems.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className={isMobile ? 'stm-fit-panel stm-fit-panel--no' : 'svc-fit-col svc-fit-col--no'}>
-                <h3 className={isMobile ? 'stm-fit-label' : 'svc-fit-label'}>{page.notFitTitle}</h3>
-                <ul>
-                  {page.notFitItems.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </BeatShell>
-
-        <BeatShell
-          reveal={reveal}
-          id={idFor('faq')}
-          className={isMobile ? beatClass('faq') : 'svc-inner-block svc-beat'}
-        >
-          <div className={isMobile ? 'stm-beat-inner' : 'st-container'}>
-            <BeatFigure id="faq" />
-            <p className="st-eyebrow svc-inner-kicker">{kickerFor('faq')}</p>
-            <h2 className={isMobile ? 'stm-beat-title' : 'svc-inner-heading font-serif'}>{page.faqTitle}</h2>
-            <div className={isMobile ? 'stm-faq-cards' : 'svc-faq-list'}>
-              {page.faqs.map((faq, index) => (
-                <details
-                  key={faq.question}
-                  className={isMobile ? 'stm-faq-card' : 'svc-faq-item'}
-                  {...(index === 0 ? { open: true } : {})}
-                >
-                  <summary className={isMobile ? 'stm-faq-card-q' : undefined}>
-                    <span>{faq.question}</span>
-                    <span className={isMobile ? 'stm-faq-card-mark' : 'svc-faq-mark'} aria-hidden="true" />
-                  </summary>
-                  <p className={isMobile ? 'stm-faq-card-a' : undefined}>{faq.answer}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </BeatShell>
-
-        <BeatShell
-          reveal={reveal}
-          id={idFor('empezar')}
-          className={
-            isMobile ? beatClass('empezar', 'stm-beat--close') : 'svc-inner-close svc-beat'
-          }
-        >
-          {isMobile ? (
-            <div className="stm-beat-inner">
-              {/* The close is a contained card, not a full-bleed slab: a
-                  0-radius CTA inside a full-bleed slab reads as a white band
-                  cutting the section in half. Every link list moves out onto
-                  the page surface below, where navigation belongs — inside the
-                  card they made an endless dark tail. */}
-              <div className="stm-close">
-                <p className="st-eyebrow svc-inner-kicker">{kickerFor('empezar')}</p>
-                <h2 className="stm-close-title">{page.ctaTitle}</h2>
-                <p className="stm-close-text">{page.ctaText}</p>
-                <a href={page.primaryCtaHref} className="stm-close-cta">
-                  {page.primaryCtaLabel}
-                </a>
-                <p className="stm-close-updated">{updated}</p>
-              </div>
-
-              <nav className="stm-close-nav" aria-label={labels.explore}>
-                {relatedPages.length > 0 && (
-                  <div className="stm-nav-group">
-                    <p className="stm-nav-label">{labels.alsoOffered}</p>
-                    {page.relatedServiceIds.map((relatedId, index) => {
-                      const rel = relatedPages[index];
-                      if (!rel) return null;
-                      return (
-                        <Link
-                          key={relatedId}
-                          to={getServicePath(relatedId, locale)}
-                          className="stm-nav-link"
-                        >
-                          <span>{rel.title}</span>
-                          <span className="stm-nav-arrow" aria-hidden="true">
-                            →
-                          </span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
-                {exploreColumns.map((column) => (
-                  <div key={column.key} className="stm-nav-group">
-                    <p className="stm-nav-label">{column.label}</p>
-                    {column.items.map((item) => (
-                      <Link key={item.key} to={item.href} className="stm-nav-link">
-                        <span>{item.title}</span>
-                        <span className="stm-nav-arrow" aria-hidden="true">
-                          →
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                ))}
-              </nav>
-            </div>
-          ) : (
-          <div className="svc-inner-close-shell">
-            <div className="svc-inner-close-top">
-              <div>
-                <p className="st-eyebrow svc-inner-kicker">{kickerFor('empezar')}</p>
-                <h2 className="svc-inner-close-title font-serif">
-                  {page.ctaTitle}
-                </h2>
-                <p className="svc-inner-close-text">{page.ctaText}</p>
-                <a href={page.primaryCtaHref} className="st-cta-primary st-cta-primary--lg">
-                  {page.primaryCtaLabel}
-                </a>
-                <p className="svc-inner-updated">{updated}</p>
-              </div>
-              {relatedPages.length > 0 && (
-                <div>
-                  <p className="st-eyebrow mb-5">{labels.alsoOffered}</p>
-                  {page.relatedServiceIds.map((relatedId, index) => {
-                    const rel = relatedPages[index];
-                    if (!rel) return null;
-                    return (
-                      <Link
-                        key={relatedId}
-                        to={getServicePath(relatedId, locale)}
-                        className="st-related-row group"
-                      >
-                        <span className="st-related-title">{rel.title}</span>
-                        <span className="st-related-arrow" aria-hidden="true">
-                          →
-                        </span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-            {exploreColumns.length > 0 && (
-              <nav className="svc-close-explore" aria-label={labels.explore}>
-                {exploreColumns.map((column) => (
-                  <div key={column.key} className="svc-close-explore-col">
-                    <p className="svc-explore-index">{column.label}</p>
-                    {column.items.map((item) => (
-                      <Link
-                        key={item.key}
-                        to={item.href}
-                        className="st-related-row group"
-                      >
-                        <span className="st-related-title">{item.title}</span>
-                        <span className="st-related-arrow" aria-hidden="true">
-                          →
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                ))}
-              </nav>
-            )}
-          </div>
-          )}
-        </BeatShell>
-      </div>
     </div>
   );
 };

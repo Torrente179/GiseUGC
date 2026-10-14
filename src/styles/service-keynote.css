@@ -1,0 +1,2600 @@
+/*
+ * Service pages, everything below the hero ("9 · Keynote").
+ *
+ * Plain CSS with literal class names on purpose: nothing here sits inside
+ * @layer components, so Tailwind's purge cannot drop a rule it fails to find
+ * in an interpolated class string.
+ *
+ * Theme: the section follows the site theme (`.dark` on <html>). The hero above
+ * stays dark in both themes, so in light mode this section rises out of it as a
+ * linen sheet. Tokens are declared once per theme; everything else reads them.
+ * Type is DM Sans only below the hero.
+ *
+ * Two responsive shells are mounted at all times (`kn--d`, `kn--m`); the
+ * site's `viewport-layout--*` rules show exactly one.
+ */
+
+/* ── Theme tokens ─────────────────────────────────────────────────── */
+.kn {
+  /* light (default): linen ground, ebony ink */
+  --kn-page: linear-gradient(180deg, #121212 0, #121212 116px, #fdfcfb 116px);
+  --kn-handoff: #121212;
+  --kn-ink: #2b2620;
+  --kn-body: #6a5c50;
+  --kn-say: #8f7d6b;
+  --kn-hair: rgba(43, 38, 32, 0.14);
+  --kn-seg-bg: rgba(43, 38, 32, 0.06);
+  --kn-thumb-bg: #fff;
+  --kn-thumb-ink: #2b2620;
+  --kn-thumb-sh: 0 0 0 0.5px rgba(43, 38, 32, 0.06), 0 1px 2px rgba(43, 38, 32, 0.08),
+    0 6px 16px -6px rgba(43, 38, 32, 0.24);
+  --kn-arr-bg: rgba(43, 38, 32, 0.07);
+  --kn-arr-off-bg: rgba(43, 38, 32, 0.035);
+  --kn-arr-off: #b7ad9f;
+  --kn-card-bg: #f3ebdd;
+  --kn-card-edge: inset 0 0 0 1px rgba(43, 38, 32, 0.08);
+  --kn-grad: linear-gradient(95deg, #14758f 0%, #1a87a7 52%, #2ca6c8 100%);
+  --kn-focus: #14758f;
+  --kn-cta-bg: #2b2620;
+  --kn-cta-ink: #fdfcfb;
+  --kn-menu-bg: rgba(253, 252, 251, 0.94);
+  --kn-menu-sh: 0 0 0 1px rgba(43, 38, 32, 0.08), 0 24px 48px -20px rgba(43, 38, 32, 0.4);
+  --kn-spot-main: radial-gradient(
+    closest-side,
+    rgba(234, 223, 202, 0.6),
+    rgba(234, 223, 202, 0.42) 22%,
+    rgba(236, 226, 207, 0.22) 50%,
+    rgba(240, 232, 217, 0.08) 76%,
+    rgba(243, 235, 221, 0)
+  );
+  --kn-spot-dev: radial-gradient(
+    closest-side,
+    rgba(234, 223, 202, 0.46),
+    rgba(234, 223, 202, 0.3) 24%,
+    rgba(236, 226, 207, 0.13) 52%,
+    rgba(240, 232, 217, 0.04) 78%,
+    rgba(243, 235, 221, 0)
+  );
+  --kn-shadow-bg: radial-gradient(closest-side, rgba(43, 38, 32, 0.26), rgba(43, 38, 32, 0));
+  --kn-shadow-blur: 5px;
+  --kn-phone-edge: 0 0 0 0.5px rgba(60, 50, 40, 0.4);
+  --kn-phone-lift: rgba(43, 38, 32, 0.5);
+  --kn-phone-inset: rgba(255, 255, 255, 0.8);
+  --kn-band: linear-gradient(180deg, rgba(248, 244, 237, 0) 0%, rgba(248, 244, 237, 0.55) 45%, #f8f4ed 100%);
+  --kn-ease-bg: #fdfcfb;
+  --kn-ease-h: 44px;
+  --kn-ease-radius: 44px 44px 0 0;
+
+  /* the close */
+  --knc-ground: linear-gradient(180deg, #f8f4ed 0%, #f9f5ef 55%, #f3ebdd 100%);
+  --knc-orb-a: radial-gradient(closest-side, rgba(226, 208, 176, 0.38), rgba(226, 208, 176, 0));
+  --knc-orb-b: radial-gradient(closest-side, rgba(44, 166, 200, 0.1), rgba(44, 166, 200, 0));
+  --knc-ink: #26211c;
+  --knc-body: #6a5c50;
+  --knc-mute: rgba(43, 38, 32, 0.7);
+  --knc-label: rgba(43, 38, 32, 0.72);
+  --knc-label-b: #14758f;
+  --knc-pill-bg: rgba(43, 38, 32, 0.06);
+  --knc-pill-edge: inset 0 0 0 1px rgba(43, 38, 32, 0.08);
+  --knc-pill-ink: #3a342d;
+  --knc-rule: rgba(43, 38, 32, 0.14);
+  --knc-rule-strong: rgba(43, 38, 32, 0.28);
+  --knc-row-ink: rgba(43, 38, 32, 0.86);
+  --knc-row-icon: rgba(43, 38, 32, 0.4);
+  --knc-row-line: rgba(43, 38, 32, 0.12);
+  --knc-cta-sh: 0 18px 36px -16px rgba(30, 128, 158, 0.55);
+  --knc-cta-dot: #fdfcfb;
+  --knc-spot: radial-gradient(closest-side, rgba(44, 166, 200, 0.3), rgba(44, 166, 200, 0.1) 58%, rgba(44, 166, 200, 0));
+  --knc-floor: radial-gradient(closest-side, rgba(43, 38, 32, 0.38), rgba(43, 38, 32, 0));
+  --knc-dim: 0.9;
+  --knc-tile-bg: #d9d2c6;
+  --knc-tile-sh: 0 0 0 1px rgba(43, 38, 32, 0.08), 0 34px 50px -30px rgba(43, 38, 32, 0.55);
+  --knc-tile-btn-bg: rgba(255, 255, 255, 0.6);
+  --knc-tile-btn-edge: rgba(255, 255, 255, 0.75);
+  --knc-tile-btn-ink: #2b2620;
+  --knc-dot: rgba(43, 38, 32, 0.22);
+  --knc-dot-on: #2b2620;
+  --knc-seg-bg: rgba(43, 38, 32, 0.06);
+  --knc-seg-edge: inset 0 0 0 1px rgba(43, 38, 32, 0.08);
+  --knc-tab-ink: rgba(43, 38, 32, 0.72);
+  --knc-tab-on-bg: #2b2620;
+  --knc-tab-on-ink: #fdfcfb;
+  --knc-tab-on-sh: 0 10px 20px -10px rgba(43, 38, 32, 0.6);
+  --knc-panel-bg: rgba(255, 255, 255, 0.74);
+  --knc-panel-sh: inset 0 0 0 1px rgba(43, 38, 32, 0.08), 0 30px 50px -34px rgba(43, 38, 32, 0.35),
+    0 2px 8px -2px rgba(43, 38, 32, 0.06);
+  --knc-ic-bg: #f3ecdf;
+  --knc-ic-ink: #2b2620;
+  --knc-t-ink: rgba(43, 38, 32, 0.92);
+  --knc-chev: rgba(43, 38, 32, 0.36);
+  --knc-sep: rgba(43, 38, 32, 0.09);
+}
+
+.dark .kn {
+  /* dark: true black easing to #0a0a0b, then a long band into the warm close */
+  --kn-page: linear-gradient(180deg, #000 0%, #000 30%, #0a0a0b 70%, #0a0a0b 100%);
+  --kn-ink: #f5f5f7;
+  --kn-body: #8d8a86;
+  --kn-say: #8d8a86;
+  --kn-hair: rgba(245, 245, 247, 0.14);
+  --kn-seg-bg: rgba(245, 245, 247, 0.1);
+  --kn-thumb-bg: #f5f5f7;
+  --kn-thumb-ink: #000;
+  --kn-thumb-sh: none;
+  --kn-arr-bg: rgba(245, 245, 247, 0.12);
+  --kn-arr-off-bg: rgba(245, 245, 247, 0.05);
+  --kn-arr-off: rgba(245, 245, 247, 0.3);
+  --kn-card-bg: #141414;
+  --kn-card-edge: none;
+  --kn-grad: linear-gradient(95deg, #2ca6c8 0%, #7cc9df 42%, #f5f5f7 88%);
+  --kn-focus: #7cc9df;
+  --kn-cta-bg: #f5f5f7;
+  --kn-cta-ink: #000;
+  --kn-menu-bg: rgba(24, 22, 20, 0.94);
+  --kn-menu-sh: 0 0 0 1px rgba(245, 245, 247, 0.12), 0 24px 48px -20px rgba(0, 0, 0, 0.8);
+  --kn-spot-main: radial-gradient(closest-side, rgba(255, 236, 210, 0.17), rgba(255, 236, 210, 0.05) 50%, rgba(255, 236, 210, 0));
+  --kn-spot-dev: radial-gradient(closest-side, rgba(255, 236, 210, 0.12), rgba(255, 236, 210, 0.035) 55%, rgba(255, 236, 210, 0));
+  --kn-shadow-bg: radial-gradient(closest-side, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0));
+  --kn-shadow-blur: 0px;
+  --kn-phone-edge: 0 0 0 0.5px rgba(0, 0, 0, 0.45);
+  --kn-phone-lift: rgba(0, 0, 0, 0.7);
+  --kn-phone-inset: rgba(255, 255, 255, 0.7);
+  --kn-band: linear-gradient(180deg, rgba(26, 22, 19, 0) 0%, rgba(26, 22, 19, 0.3) 40%, #1a1613 100%);
+  --kn-ease-bg: linear-gradient(180deg, #121212, rgba(0, 0, 0, 0));
+  --kn-ease-h: 280px;
+  --kn-ease-radius: 0;
+
+  --knc-ground: #1a1613;
+  --knc-orb-a: radial-gradient(closest-side, rgba(214, 178, 128, 0.15), rgba(214, 178, 128, 0));
+  --knc-orb-b: radial-gradient(closest-side, rgba(150, 140, 90, 0.15), rgba(150, 140, 90, 0));
+  --knc-ink: #f4f3f1;
+  --knc-body: rgba(255, 255, 255, 0.76);
+  --knc-mute: rgba(255, 255, 255, 0.64);
+  --knc-label: rgba(255, 255, 255, 0.74);
+  --knc-label-b: #2ca6c8;
+  --knc-pill-bg: rgba(255, 255, 255, 0.1);
+  --knc-pill-edge: none;
+  --knc-pill-ink: #f1f0ee;
+  --knc-rule: rgba(255, 255, 255, 0.12);
+  --knc-rule-strong: rgba(255, 255, 255, 0.26);
+  --knc-row-ink: rgba(255, 255, 255, 0.8);
+  --knc-row-icon: rgba(255, 255, 255, 0.38);
+  --knc-row-line: rgba(255, 255, 255, 0.1);
+  --knc-cta-sh: 0 18px 40px -16px rgba(44, 166, 200, 0.7);
+  --knc-cta-dot: #f3f2ef;
+  --knc-spot: radial-gradient(closest-side, rgba(44, 166, 200, 0.4), rgba(44, 166, 200, 0.12) 58%, rgba(44, 166, 200, 0));
+  --knc-floor: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+  --knc-dim: 0.78;
+  --knc-tile-bg: #222;
+  --knc-tile-sh: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 40px 60px -34px rgba(0, 0, 0, 0.9);
+  --knc-tile-btn-bg: rgba(20, 18, 16, 0.5);
+  --knc-tile-btn-edge: rgba(255, 255, 255, 0.22);
+  --knc-tile-btn-ink: #fff;
+  --knc-dot: rgba(255, 255, 255, 0.28);
+  --knc-dot-on: #f3f2ef;
+  --knc-seg-bg: rgba(255, 255, 255, 0.07);
+  --knc-seg-edge: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+  --knc-tab-ink: rgba(255, 255, 255, 0.7);
+  --knc-tab-on-bg: #f4f3f1;
+  --knc-tab-on-ink: #121214;
+  --knc-tab-on-sh: 0 8px 20px -8px rgba(0, 0, 0, 0.6);
+  --knc-panel-bg: rgba(255, 255, 255, 0.05);
+  --knc-panel-sh: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 30px 50px -34px rgba(0, 0, 0, 0.8);
+  --knc-ic-bg: rgba(255, 255, 255, 0.08);
+  --knc-ic-ink: rgba(255, 255, 255, 0.9);
+  --knc-t-ink: rgba(255, 255, 255, 0.9);
+  --knc-chev: rgba(255, 255, 255, 0.38);
+  --knc-sep: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Base ─────────────────────────────────────────────────────────── */
+/* Headings carry the class `section-label` only as a hook: it takes them out of
+   the site-wide h1–h6 rules in index.css, whose :not() chain out-ranks any single
+   class. Its own small-caps look is reset here, and every heading rule below is
+   prefixed with `.kn` so it out-ranks `h2.section-label` as well. This block has
+   to stay first: the rules after it tie with it and win by order. */
+.kn .section-label {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: none;
+  color: inherit;
+}
+
+.kn {
+  --kn-gutter: clamp(32px, 6.67vw, 96px);
+  /* Side padding that keeps content to 1248px on wide screens; use on full-width blocks only. */
+  --kn-pad: max(var(--kn-gutter), calc((100% - 1248px) / 2));
+  --kn-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  overflow-x: clip;
+  background: var(--kn-page);
+  color: var(--kn-ink);
+  font-family: var(--font-marketing, 'DM Sans', ui-sans-serif, system-ui, sans-serif);
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.kn,
+.kn *,
+.kn *::before,
+.kn *::after {
+  box-sizing: border-box;
+}
+
+.kn :where(p, h1, h2, h3, ul, ol, dl, dd, figure) {
+  margin: 0;
+}
+
+.kn ul,
+.kn ol {
+  padding: 0;
+  list-style: none;
+}
+
+/* :where() keeps this at class weight, so every paragraph class below still wins by order. */
+.kn :where(p) {
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.kn a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.kn button {
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.kn [hidden] {
+  display: none !important;
+}
+
+.kn-pic {
+  display: contents;
+}
+
+.kn-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.kn a:focus-visible,
+.kn button:focus-visible,
+.kn summary:focus-visible,
+.kn .kn-rail:focus-visible {
+  outline: 2px solid var(--kn-focus);
+  outline-offset: 3px;
+}
+
+/* Hand-off from the hero: dark in both themes; in light the linen sheet rises out of it. */
+.kn-handoff {
+  height: 72px;
+  background: var(--kn-handoff);
+}
+
+.kn-ease {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 72px;
+  height: var(--kn-ease-h);
+  border-radius: var(--kn-ease-radius);
+  background: var(--kn-ease-bg);
+  pointer-events: none;
+}
+
+.kn-beat {
+  position: relative;
+  scroll-margin-top: 6.5rem;
+}
+
+/* type: 600 for statements and labels, 400 for reading */
+.kn .kn-k {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--kn-body);
+  font-variant-numeric: tabular-nums;
+}
+
+.kn .kn-h {
+  font-size: calc(var(--kn-h-size, 96px) * var(--kn-h-scale, 1));
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 0.94;
+  color: var(--kn-ink);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+.kn-h--xl { --kn-h-scale: 1; }
+.kn-h--lg { --kn-h-scale: 0.86; }
+.kn-h--md { --kn-h-scale: 0.72; }
+.kn-h--sm { --kn-h-scale: 0.62; }
+
+.kn-grad {
+  padding-right: 0.03em;
+  background: var(--kn-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ── Local nav ────────────────────────────────────────────────────── */
+.kn-lnav {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 52px;
+  border-bottom: 1px solid var(--kn-hair);
+}
+
+.kn-lnav-t {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+}
+
+.kn-lnav-end {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.kn-lnav-list {
+  display: flex;
+  gap: 34px;
+}
+
+/* "Escríbeme" for this service: a compact pill at the right end of the nav. */
+.kn .kn-lnav-cta {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 38px;
+  margin-left: 30px;
+  padding: 0 16px 0 14px;
+  border-radius: 999px;
+  background: var(--kn-cta-bg);
+  color: var(--kn-cta-ink);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.005em;
+  transition: opacity 0.25s, transform 0.3s var(--kn-ease-out);
+}
+
+.kn .kn-lnav-cta:hover {
+  opacity: 0.88;
+}
+
+.kn .kn-lnav-cta:active {
+  transform: scale(0.97);
+}
+
+.kn-lnav-cta svg {
+  width: 16px;
+  height: 16px;
+}
+
+.kn-lnav-list a {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  color: var(--kn-body);
+  transition: color 0.3s;
+}
+
+.kn-lnav-list a:hover,
+.kn-lnav-list a[aria-current],
+.kn-lnav-menu a[aria-current] {
+  color: var(--kn-ink);
+}
+
+.kn-lnav-btn {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  height: 44px;
+  margin-right: -4px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  font-size: 12px;
+  color: var(--kn-ink);
+  cursor: pointer;
+}
+
+.kn-lnav-btn svg {
+  width: 11px;
+  height: 11px;
+  color: var(--kn-body);
+  transition: transform 0.3s var(--kn-ease-out);
+}
+
+.kn-lnav-btn svg.is-open {
+  transform: rotate(180deg);
+}
+
+.kn-lnav-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 6;
+  min-width: 208px;
+  padding: 6px;
+  border-radius: 22px;
+  background: var(--kn-menu-bg);
+  box-shadow: var(--kn-menu-sh);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  backdrop-filter: blur(24px) saturate(1.3);
+}
+
+.kn-lnav-menu a {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 16px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--kn-body);
+}
+
+.kn-lnav-menu a[aria-current] {
+  background: var(--kn-seg-bg);
+}
+
+/* ── Shared: segmented controls ───────────────────────────────────── */
+.kn-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  border-radius: 999px;
+  background: var(--kn-thumb-bg);
+  box-shadow: var(--kn-thumb-sh);
+  pointer-events: none;
+  transition: transform 0.55s var(--kn-ease-out), width 0.55s var(--kn-ease-out), height 0.55s var(--kn-ease-out);
+}
+
+[role='tablist'].is-measured > .kn-thumb {
+  display: block;
+}
+
+.kn-sb {
+  position: relative;
+  z-index: 1;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--kn-body);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.kn-sb.is-on {
+  color: var(--kn-thumb-ink);
+}
+
+/* Before the first measurement the selected tab paints its own pill. */
+[role='tablist']:not(.is-measured) > .kn-sb.is-on {
+  background: var(--kn-thumb-bg);
+  box-shadow: var(--kn-thumb-sh);
+}
+
+/* ── Shared: the phone ────────────────────────────────────────────── */
+.kn-phone {
+  --w: 232px;
+  --metal: linear-gradient(135deg, #f4f5f7 0%, #babec4 20%, #e9ebee 46%, #a7abb2 72%, #dfe2e5 100%);
+  position: absolute;
+  width: var(--w);
+  aspect-ratio: 78 / 163.4;
+  padding: 1.28%;
+  border-radius: calc(var(--w) * 0.164);
+  background: var(--metal);
+  box-shadow: inset 0 0 0 0.5px var(--kn-phone-inset), var(--kn-phone-edge),
+    0 calc(var(--w) * 0.068) calc(var(--w) * 0.14) calc(var(--w) * -0.068) var(--kn-phone-lift),
+    0 calc(var(--w) * 0.2) calc(var(--w) * 0.34) calc(var(--w) * -0.15) var(--kn-phone-lift);
+}
+
+.kn-glass {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: calc(var(--w) * 0.02);
+  border-radius: calc(var(--w) * 0.1512);
+  background: #050506;
+}
+
+.kn-scr {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: calc(var(--w) * 0.1312);
+  background: #111;
+}
+
+.kn-scr::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 22%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0));
+  pointer-events: none;
+}
+
+.kn-island {
+  position: absolute;
+  z-index: 5;
+  top: calc(var(--w) * 0.0234);
+  left: 50%;
+  width: calc(var(--w) * 0.2676);
+  height: calc(var(--w) * 0.0786);
+  border-radius: 999px;
+  background: #000;
+  transform: translateX(-50%);
+}
+
+.kn-island::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 14%;
+  width: 22%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 35%, #1d2a3f 0%, #0b0f17 55%, #000 100%);
+  transform: translateY(-50%);
+}
+
+.kn-pb {
+  position: absolute;
+  width: calc(var(--w) * 0.011);
+  background: var(--metal);
+}
+
+.kn-pb--a,
+.kn-pb--v1,
+.kn-pb--v2 {
+  right: 100%;
+  border-radius: 2px 0 0 2px;
+}
+
+.kn-pb--s,
+.kn-pb--cam {
+  left: 100%;
+  border-radius: 0 2px 2px 0;
+}
+
+.kn-pb--a { top: 19.5%; height: 5%; }
+.kn-pb--v1 { top: 27.5%; height: 9.5%; }
+.kn-pb--v2 { top: 39%; height: 9.5%; }
+.kn-pb--s { top: 30%; height: 14%; }
+.kn-pb--cam {
+  top: 58%;
+  height: 10.5%;
+  width: calc(var(--w) * 0.007);
+  background: linear-gradient(90deg, #8d939b, #c9ced4);
+}
+
+.kn-shot,
+.kn-vid,
+.knc-poster {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.kn-shot {
+  object-position: 50% 30%;
+  opacity: 0;
+  transform: scale(1.05);
+  transition: opacity 0.7s var(--kn-ease-out), transform 1.4s var(--kn-ease-out);
+}
+
+.kn-shot.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.kn-vid {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.kn-vid.is-on {
+  opacity: 1;
+}
+
+.kn-bars {
+  position: absolute;
+  z-index: 4;
+  top: calc(var(--w) * 0.135);
+  left: calc(var(--w) * 0.07);
+  right: calc(var(--w) * 0.07);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.kn-bars i {
+  display: block;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.34);
+  transition: background 0.5s;
+}
+
+.kn-bars i.is-on {
+  background: #2ca6c8;
+}
+
+.kn-spot {
+  position: absolute;
+  background: var(--kn-spot-main);
+  pointer-events: none;
+}
+
+/* ── 1 · Overview ─────────────────────────────────────────────────── */
+.kn-ov {
+  --kn-h-size: min(168px, 11.67vw);
+  z-index: 1;
+  text-align: center;
+}
+
+.kn-fig {
+  position: absolute;
+  left: 50%;
+  width: auto;
+  max-width: none;
+  transform: translateX(-50%);
+  -webkit-mask-image: linear-gradient(180deg, #000 50%, rgba(0, 0, 0, 0) 84%);
+  mask-image: linear-gradient(180deg, #000 50%, rgba(0, 0, 0, 0) 84%);
+}
+
+.kn-say {
+  position: relative;
+  z-index: 1;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  text-align: left;
+  color: var(--kn-say);
+  text-wrap: pretty;
+}
+
+.kn-say b {
+  font-weight: 600;
+  color: var(--kn-ink);
+}
+
+.kn-spec {
+  text-align: left;
+  border-bottom: 1px solid var(--kn-hair);
+}
+
+.kn-row {
+  border-top: 1px solid var(--kn-hair);
+}
+
+.kn-req li {
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.kn-mkt li {
+  color: var(--kn-body);
+  text-wrap: pretty;
+}
+
+.kn-geo {
+  max-width: 72ch;
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--kn-body);
+}
+
+.kn-geo a {
+  color: var(--kn-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── 2 · Formats ──────────────────────────────────────────────────── */
+.kn-fm {
+  --kn-h-size: min(112px, 7.78vw);
+  text-align: center;
+}
+
+.kn-fm .kn-h {
+  line-height: 1;
+}
+
+.kn-dev {
+  position: relative;
+}
+
+.kn-dev .kn-spot {
+  background: var(--kn-spot-dev);
+}
+
+.kn-shadow {
+  position: absolute;
+  left: 50%;
+  border-radius: 50%;
+  background: var(--kn-shadow-bg);
+  filter: blur(var(--kn-shadow-blur));
+  pointer-events: none;
+}
+
+.kn-phone--stage {
+  left: 50%;
+  top: 0;
+  margin-left: calc(var(--w) / -2);
+}
+
+.kn-seg {
+  position: relative;
+  display: grid;
+  padding: 4px;
+  background: var(--kn-seg-bg);
+}
+
+.kn-cap {
+  display: grid;
+}
+
+.kn-cap > div {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.45s, transform 0.6s var(--kn-ease-out), visibility 0s linear 0.45s;
+}
+
+.kn-cap > div.is-on {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.kn .kn-cap h3 {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--kn-ink);
+}
+
+.kn-cap p {
+  letter-spacing: -0.012em;
+  color: var(--kn-body);
+  text-wrap: balance;
+}
+
+/* ── 3 · Process ──────────────────────────────────────────────────── */
+.kn-pr {
+  --kn-h-size: min(132px, 9.17vw);
+}
+
+.kn-pr .kn-h {
+  text-align: left;
+}
+
+.kn-pr-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.kn-arrows {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 12px;
+}
+
+.kn-arr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--kn-arr-bg);
+  color: var(--kn-ink);
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.kn-arr svg {
+  width: 18px;
+  height: 18px;
+}
+
+.kn-arr[aria-disabled='true'] {
+  background: var(--kn-arr-off-bg);
+  color: var(--kn-arr-off);
+  cursor: default;
+}
+
+.kn-rail {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.kn-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.kn-card {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.kn-ci {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--kn-card-bg);
+}
+
+.kn-ci img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.kn-ci::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 24%, rgba(0, 0, 0, 0) 44%);
+  box-shadow: var(--kn-card-edge);
+  pointer-events: none;
+}
+
+.kn-ct {
+  position: absolute;
+  z-index: 2;
+  left: 30px;
+  right: 30px;
+  bottom: 28px;
+}
+
+.kn .kn-ct .kn-k {
+  color: rgba(245, 245, 247, 0.8);
+}
+
+.kn .kn-ct h3 {
+  margin-top: 12px;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: #fff;
+}
+
+.kn-card > p {
+  max-width: 32ch;
+  padding-left: 2px;
+  color: var(--kn-body);
+  text-wrap: pretty;
+}
+
+/* ── 4 · Fit ──────────────────────────────────────────────────────── */
+.kn-fit {
+  --kn-h-size: min(150px, 10.42vw);
+  text-align: center;
+}
+
+.kn-plate {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--kn-card-bg);
+}
+
+.kn-plate img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.kn .kn-col h3 {
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--kn-ink);
+}
+
+.kn .kn-col--no h3 {
+  color: var(--kn-say);
+}
+
+.kn-col li {
+  border-top: 1px solid var(--kn-hair);
+  color: var(--kn-body);
+  text-wrap: balance;
+}
+
+.kn-col li b,
+.kn-list li b {
+  font-weight: 400;
+  color: var(--kn-ink);
+}
+
+/* ── 5 · Questions ────────────────────────────────────────────────── */
+.kn-qa {
+  --kn-h-size: min(96px, 6.67vw);
+  z-index: 1;
+  text-align: center;
+}
+
+.kn-qa .kn-h {
+  line-height: 0.98;
+}
+
+.kn-acc {
+  text-align: left;
+  border-bottom: 1px solid var(--kn-hair);
+}
+
+.kn-acc details {
+  border-top: 1px solid var(--kn-hair);
+}
+
+.kn-acc summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  cursor: pointer;
+}
+
+.kn-acc summary::-webkit-details-marker {
+  display: none;
+}
+
+.kn .kn-acc h3 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--kn-ink);
+}
+
+.kn-plus {
+  position: relative;
+  flex: none;
+}
+
+.kn-plus::before,
+.kn-plus::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: var(--kn-ink);
+}
+
+.kn-plus::before {
+  width: 100%;
+  height: 1px;
+  margin: -0.5px 0 0 -50%;
+}
+
+.kn-plus::after {
+  width: 1px;
+  height: 100%;
+  margin: -50% 0 0 -0.5px;
+  transition: transform 0.35s var(--kn-ease-out);
+}
+
+.kn-acc details[open] .kn-plus::after {
+  transform: scaleY(0);
+}
+
+.kn-acc details p {
+  color: var(--kn-body);
+  text-wrap: pretty;
+}
+
+.kn-band {
+  position: relative;
+  z-index: 0;
+  background: var(--kn-band);
+  pointer-events: none;
+}
+
+/* ── 6 · The close ────────────────────────────────────────────────── */
+.kn-close {
+  z-index: 1;
+}
+
+.knc {
+  position: relative;
+  /* The warm orb at the top-left rises out of the close into the band above it, as on
+     the board, so the sides and bottom are clipped but the top is not. */
+  clip-path: inset(-400px 0 0 0);
+  background: var(--knc-ground);
+  color: var(--knc-ink);
+}
+
+/* The next block on the page is the site's own surface; ease into it instead of cutting. */
+.knc::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  height: 120px;
+  background: linear-gradient(180deg, transparent, hsl(var(--background)));
+  pointer-events: none;
+}
+
+.knc-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.knc-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.knc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: 999px;
+  background: var(--knc-pill-bg);
+  box-shadow: var(--knc-pill-edge);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--knc-pill-ink);
+}
+
+.knc-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2ca6c8;
+  box-shadow: 0 0 0 3px rgba(44, 166, 200, 0.25);
+}
+
+.kn .knc-title {
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: var(--knc-ink);
+  text-wrap: balance;
+}
+
+.knc-lead {
+  color: var(--knc-body);
+}
+
+.knc .knc-cta {
+  display: inline-flex;
+  align-items: center;
+  height: 62px;
+  border-radius: 999px;
+  background: #2ca6c8;
+  color: #0e1114;
+  font-size: 17px;
+  font-weight: 600;
+  box-shadow: var(--knc-cta-sh);
+}
+
+.knc-cta i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #0e1114;
+  color: var(--knc-cta-dot);
+}
+
+.knc-cta svg {
+  width: 18px;
+  height: 18px;
+}
+
+.knc-updated {
+  color: var(--knc-mute);
+}
+
+.knc-stage {
+  position: relative;
+}
+
+.knc-spot {
+  position: absolute;
+  left: 50%;
+  border-radius: 50%;
+  background: var(--knc-spot);
+  pointer-events: none;
+}
+
+.knc-floor {
+  position: absolute;
+  left: 50%;
+  border-radius: 50%;
+  background: var(--knc-floor);
+  filter: blur(6px);
+}
+
+.knc-fan-phone--l,
+.knc-fan-phone--r {
+  filter: brightness(var(--knc-dim));
+}
+
+.knc-fan-phone--l { z-index: 1; transform: rotate(-8deg); }
+.knc-fan-phone--r { z-index: 2; transform: rotate(8deg); }
+.knc-fan-phone--c { z-index: 3; }
+
+.knc-shade {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(31, 31, 31, 0.62) 0%, rgba(31, 31, 31, 0) 44%);
+}
+
+.knc-cap {
+  position: absolute;
+  z-index: 4;
+  left: calc(var(--w) * 0.045);
+  right: calc(var(--w) * 0.045);
+  bottom: calc(var(--w) * 0.045);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--w) * 0.03);
+  height: calc(var(--w) * 0.1);
+  padding: 0 calc(var(--w) * 0.045);
+  border: 1px solid rgba(243, 242, 239, 0.2);
+  border-radius: 999px;
+  background: rgba(19, 19, 19, 0.72);
+  font-size: calc(var(--w) * 0.0305);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f3f2ef;
+  line-height: 1;
+}
+
+.knc-cap b {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  gap: calc(var(--w) * 0.022);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.knc-cap b span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.knc-cap svg {
+  flex: none;
+  width: calc(var(--w) * 0.026);
+  height: calc(var(--w) * 0.033);
+}
+
+.knc-cap > span {
+  flex: none;
+  color: rgba(243, 242, 239, 0.72);
+}
+
+.knc-label {
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--knc-label);
+}
+
+.knc-label b {
+  margin-right: 12px;
+  font-weight: 600;
+  color: var(--knc-label-b);
+  letter-spacing: 0.08em;
+}
+
+.knc-count {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--knc-mute);
+  font-variant-numeric: tabular-nums;
+}
+
+.knc-row {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: var(--knc-row-ink);
+}
+
+.knc-tile {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--knc-tile-bg);
+  box-shadow: var(--knc-tile-sh);
+}
+
+.knc-tile-img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 100%;
+}
+
+.knc-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(14, 12, 10, 0.95) 0%, rgba(14, 12, 10, 0.7) 38%, rgba(14, 12, 10, 0) 72%);
+  pointer-events: none;
+}
+
+.knc-tile-t {
+  position: absolute;
+  z-index: 2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.knc-tile-a {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.knc-tile-a svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ═════════════ Desktop shell ═════════════ */
+.kn--d .kn-lnav {
+  margin: 0 var(--kn-pad);
+}
+
+.kn--d .kn-ov {
+  padding: 120px var(--kn-pad) 0;
+}
+
+.kn--d .kn-ov .kn-h {
+  margin-top: 36px;
+}
+
+.kn--d .kn-stage {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 400px) minmax(0, 1fr) minmax(0, 400px);
+  min-height: 640px;
+  margin-top: 4px;
+}
+
+.kn--d .kn-fig-wrap {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 640px;
+}
+
+.kn--d .kn-spot {
+  left: 50%;
+  top: -60px;
+  width: 1240px;
+  height: 900px;
+  margin-left: -620px;
+}
+
+.kn--d .kn-fig {
+  top: 56px;
+  height: 700px;
+}
+
+.kn--d .kn-say--a {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  margin-top: 150px;
+}
+
+.kn--d .kn-say--b {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: start;
+  margin-top: 330px;
+}
+
+.kn--d .kn-say--lg { font-size: 40px; }
+.kn--d .kn-say--md { font-size: 34px; }
+.kn--d .kn-say--sm { font-size: 30px; }
+
+.kn--d .kn-row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  padding: 34px 0 38px;
+}
+
+.kn--d .kn-row h3 {
+  grid-column: 1 / 4;
+  padding-top: 10px;
+}
+
+.kn--d .kn-req {
+  grid-column: 4 / 13;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  justify-content: space-between;
+  gap: 10px 32px;
+}
+
+.kn--d .kn-req li {
+  font-size: clamp(20px, 1.95vw, 28px);
+  line-height: 1.1;
+}
+
+.kn--d .kn-mkt {
+  grid-column: 4 / 13;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 24px;
+}
+
+.kn--d .kn-mkt li {
+  max-width: 24ch;
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.kn--d .kn-geo {
+  margin-top: 32px;
+}
+
+.kn--d .kn-fm {
+  padding-top: 168px;
+}
+
+.kn--d .kn-fm .kn-h {
+  margin-top: 34px;
+}
+
+.kn--d .kn-dev {
+  height: 676px;
+  margin-top: 64px;
+}
+
+.kn--d .kn-dev .kn-spot {
+  top: -150px;
+  width: 1100px;
+  height: 1000px;
+  margin-left: -550px;
+}
+
+.kn--d .kn-shadow {
+  bottom: -22px;
+  width: 440px;
+  height: 60px;
+  margin-left: -220px;
+}
+
+.kn--d .kn-phone--stage {
+  --w: 322px;
+}
+
+.kn--d .kn-seg {
+  width: min(calc(100% - 2 * var(--kn-gutter)), 900px);
+  margin: 52px auto 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-radius: 999px;
+}
+
+.kn--d .kn-sb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  text-align: center;
+}
+
+.kn--d .kn-cap {
+  max-width: 600px;
+  margin: 36px auto 0;
+}
+
+.kn--d .kn-cap h3,
+.kn--d .kn-cap p {
+  font-size: 21px;
+}
+
+.kn--d .kn-cap h3 {
+  line-height: 1.3;
+}
+
+.kn--d .kn-cap p {
+  margin-top: 6px;
+  line-height: 1.42;
+}
+
+.kn--d .kn-pr {
+  padding-top: 168px;
+}
+
+.kn--d .kn-pr-head {
+  padding: 0 var(--kn-pad);
+}
+
+.kn--d .kn-pr .kn-h {
+  margin-top: 30px;
+}
+
+.kn--d .kn-rail {
+  gap: 24px;
+  margin: 60px 0 0;
+  padding: 0 var(--kn-pad);
+  scroll-padding: 0 var(--kn-pad);
+}
+
+.kn--d .kn-card {
+  width: clamp(280px, 26.4vw, 380px);
+}
+
+.kn--d .kn-ci {
+  height: clamp(380px, 34.7vw, 500px);
+}
+
+.kn--d .kn-card > p {
+  margin-top: 24px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.kn--d .kn-fit {
+  padding: 168px var(--kn-pad) 0;
+}
+
+.kn--d .kn-fit .kn-h {
+  margin-top: 34px;
+}
+
+.kn--d .kn-plate {
+  height: clamp(320px, 41.7vw, 600px);
+  margin-top: 64px;
+}
+
+.kn--d .kn-cmp {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 24px;
+  margin-top: 72px;
+}
+
+.kn--d .kn-col {
+  padding: 0 clamp(16px, 3.33vw, 48px);
+}
+
+.kn--d .kn-col h3 {
+  font-size: clamp(32px, 3.33vw, 48px);
+}
+
+.kn--d .kn-col ul {
+  margin-top: 40px;
+}
+
+.kn--d .kn-col li {
+  padding: 24px 12px 26px;
+  font-size: 19px;
+  line-height: 1.55;
+}
+
+.kn--d .kn-qa {
+  padding: 168px var(--kn-pad) 130px;
+}
+
+.kn--d .kn-qa .kn-h {
+  margin-top: 34px;
+}
+
+.kn--d .kn-acc {
+  max-width: 880px;
+  margin: 80px auto 0;
+}
+
+.kn--d .kn-acc summary {
+  gap: 40px;
+  min-height: 92px;
+  padding: 26px 0;
+}
+
+.kn--d .kn-acc h3 {
+  font-size: 24px;
+  line-height: 1.25;
+}
+
+.kn--d .kn-plus {
+  width: 22px;
+  height: 22px;
+}
+
+.kn--d .kn-acc details p {
+  max-width: 60ch;
+  padding: 0 0 38px;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.kn--d .kn-band {
+  height: 460px;
+  margin-top: -460px;
+}
+
+.kn--d .knc-orb--a {
+  left: -240px;
+  top: -200px;
+  width: 900px;
+  height: 760px;
+  background: var(--knc-orb-a);
+}
+
+.kn--d .knc-orb--b {
+  left: 820px;
+  top: 760px;
+  width: 900px;
+  height: 700px;
+  background: var(--knc-orb-b);
+}
+
+.kn--d .knc-wrap {
+  padding: 100px var(--kn-pad) 88px;
+}
+
+.kn--d .knc-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 640px;
+  gap: 40px;
+  align-items: center;
+}
+
+.kn--d .knc-pill {
+  height: 32px;
+  padding: 0 15px 0 13px;
+  font-size: 11px;
+}
+
+.kn--d .knc-title {
+  margin-top: 28px;
+  font-size: clamp(48px, 5vw, 72px);
+  line-height: 1.02;
+}
+
+.kn--d .knc-lead {
+  max-width: 31rem;
+  margin-top: 26px;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.kn--d .knc-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 38px;
+}
+
+.kn--d .knc-cta {
+  gap: 22px;
+  padding: 0 9px 0 34px;
+}
+
+.kn--d .knc-cta i {
+  width: 44px;
+  height: 44px;
+}
+
+.kn--d .knc-updated {
+  max-width: 11rem;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.kn--d .knc-stage {
+  height: 700px;
+}
+
+.kn--d .knc-spot {
+  top: 48%;
+  width: 760px;
+  height: 760px;
+  margin: -380px 0 0 -380px;
+}
+
+.kn--d .knc-floor {
+  bottom: -6px;
+  width: 560px;
+  height: 60px;
+  margin-left: -280px;
+}
+
+.kn--d .knc-fan-phone--l {
+  --w: 246px;
+  left: 0;
+  top: 130px;
+}
+
+.kn--d .knc-fan-phone--r {
+  --w: 246px;
+  left: 394px;
+  top: 130px;
+}
+
+.kn--d .knc-fan-phone--c {
+  --w: 312px;
+  left: 164px;
+  top: 30px;
+}
+
+.kn--d .knc-index {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: 32px;
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid var(--knc-rule);
+}
+
+.kn--d .knc-span {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+  align-content: start;
+}
+
+.kn--d .knc-span--one {
+  grid-column: span 1;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.kn--d .knc-gh {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--knc-rule-strong);
+}
+
+.kn--d .knc-span .knc-gh {
+  grid-column: 1 / -1;
+}
+
+.kn--d .knc-label {
+  font-size: 11px;
+}
+
+.kn--d .knc-row {
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 68px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--knc-row-line);
+  font-size: 18px;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.kn--d .knc-row svg {
+  flex: none;
+  width: 19px;
+  height: 19px;
+  color: var(--knc-row-icon);
+  transition: transform 0.3s var(--kn-ease-out), color 0.3s;
+}
+
+.kn--d .knc-row:hover {
+  color: var(--knc-ink);
+}
+
+.kn--d .knc-row:hover svg {
+  color: #2ca6c8;
+  transform: translateX(3px);
+}
+
+.kn--d .knc-tile {
+  height: 322px;
+  margin-top: 20px;
+  border-radius: 26px;
+}
+
+.kn--d .knc-tile-t {
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  font-size: 21px;
+  line-height: 1.15;
+}
+
+.kn--d .knc-tile-a {
+  top: 16px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--knc-tile-btn-bg);
+  border: 1px solid var(--knc-tile-btn-edge);
+  color: var(--knc-tile-btn-ink);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+/* Narrower desktop (768–1100): the overview sets the figure above the two halves, the close stacks. */
+@media (max-width: 1100px) {
+  .kn--d .kn-stage {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 32px;
+    min-height: 0;
+  }
+
+  .kn--d .kn-fig-wrap {
+    grid-column: 1 / -1;
+    min-height: 560px;
+  }
+
+  .kn--d .kn-fig {
+    top: 20px;
+    height: 560px;
+  }
+
+  .kn--d .kn-say--a,
+  .kn--d .kn-say--b {
+    grid-row: 2;
+    margin-top: 0;
+    font-size: 28px;
+  }
+
+  .kn--d .kn-say--a { grid-column: 1; }
+  .kn--d .kn-say--b { grid-column: 2; }
+
+  .kn--d .kn-row h3 {
+    grid-column: 1 / -1;
+    padding-top: 0;
+    margin-bottom: 18px;
+  }
+
+  .kn--d .kn-req,
+  .kn--d .kn-mkt {
+    grid-column: 1 / -1;
+  }
+
+  .kn--d .knc-top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kn--d .knc-stage {
+    width: 640px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .kn--d .knc-index {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 48px;
+  }
+
+  .kn--d .knc-span {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ═════════════ Phone shell ═════════════ */
+.dark .kn--m {
+  --kn-ease-h: 220px;
+}
+
+html:not(.dark) .kn--m {
+  --kn-page: linear-gradient(180deg, #121212 0, #121212 108px, #fdfcfb 108px);
+  --kn-ease-h: 36px;
+  --kn-ease-radius: 36px 36px 0 0;
+}
+
+.kn--m .kn-beat {
+  scroll-margin-top: 5.5rem;
+}
+
+.kn--m .kn-k {
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+}
+
+.kn--m .kn-h {
+  letter-spacing: -0.048em;
+  line-height: 0.98;
+}
+
+.kn--m .kn-lnav {
+  margin: 0 20px;
+}
+
+.kn--m .kn-lnav-t {
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+
+.kn--m .kn-lnav-end {
+  gap: 2px;
+}
+
+.kn--m .kn-lnav-cta {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  margin: 0 -6px 0 2px;
+  padding: 0;
+}
+
+.kn--m .kn-lnav-cta svg {
+  width: 20px;
+  height: 20px;
+}
+
+.kn--m .kn-lnav-cta span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.kn--m .kn-ov {
+  --kn-h-size: min(62px, 15.9vw);
+  padding: 80px 20px 0;
+}
+
+.kn--m .kn-ov .kn-h {
+  margin-top: 22px;
+}
+
+.kn--m .kn-stage {
+  position: relative;
+  height: 430px;
+  margin: 12px -20px 0;
+}
+
+.kn--m .kn-spot {
+  left: 50%;
+  top: -40px;
+  width: 600px;
+  height: 560px;
+  margin-left: -300px;
+}
+
+.kn--m .kn-fig {
+  top: 26px;
+  height: 470px;
+  -webkit-mask-image: linear-gradient(180deg, #000 50%, rgba(0, 0, 0, 0) 86%);
+  mask-image: linear-gradient(180deg, #000 50%, rgba(0, 0, 0, 0) 86%);
+}
+
+.kn--m .kn-say {
+  margin-top: -34px;
+  font-size: 28px;
+  line-height: 1.18;
+  letter-spacing: -0.028em;
+}
+
+.kn--m .kn-spec {
+  margin-top: 56px;
+  border-bottom: 0;
+}
+
+.kn--m .kn-row {
+  padding: 22px 0 26px;
+}
+
+.kn--m .kn-row:last-child {
+  border-bottom: 1px solid var(--kn-hair);
+}
+
+.kn--m .kn-req,
+.kn--m .kn-mkt {
+  margin-top: 16px;
+}
+
+.kn--m .kn-req li {
+  font-size: 24px;
+  line-height: 1.36;
+}
+
+.kn--m .kn-mkt li {
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.kn--m .kn-mkt li + li {
+  margin-top: 10px;
+}
+
+.kn--m .kn-geo {
+  margin-top: 22px;
+  font-size: 14px;
+}
+
+.kn--m .kn-fm {
+  --kn-h-size: min(50px, 12.8vw);
+  padding: 104px 20px 0;
+}
+
+.kn--m .kn-fm .kn-h {
+  margin-top: 22px;
+}
+
+.kn--m .kn-dev {
+  height: 486px;
+  margin-top: 40px;
+}
+
+.kn--m .kn-dev .kn-spot {
+  top: -90px;
+  width: 620px;
+  height: 660px;
+  margin-left: -310px;
+}
+
+.kn--m .kn-shadow {
+  bottom: -14px;
+  width: 290px;
+  height: 42px;
+  margin-left: -145px;
+}
+
+.kn--m .kn-phone--stage {
+  --w: 232px;
+}
+
+.kn--m .kn-bars {
+  gap: 3px;
+}
+
+.kn--m .kn-seg {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 44px;
+  border-radius: 27px;
+}
+
+.kn--m .kn-seg .kn-thumb {
+  border-radius: 23px;
+}
+
+.kn--m .kn-seg .kn-sb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border-radius: 23px;
+  text-align: center;
+}
+
+.kn--m .kn-cap {
+  margin-top: 28px;
+}
+
+.kn--m .kn-cap h3 {
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.kn--m .kn-cap p {
+  max-width: 31ch;
+  margin: 4px auto 0;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.kn--m .kn-pr {
+  --kn-h-size: min(60px, 15.4vw);
+  padding-top: 104px;
+}
+
+.kn--m .kn-pr-head {
+  padding: 0 20px;
+}
+
+.kn--m .kn-pr .kn-h {
+  margin-top: 22px;
+}
+
+.kn--m .kn-rail {
+  gap: 12px;
+  margin: 36px 0 0;
+  padding: 0 20px;
+  scroll-padding: 0 20px;
+}
+
+.kn--m .kn-card {
+  width: 290px;
+}
+
+.kn--m .kn-ci {
+  height: 410px;
+}
+
+.kn--m .kn-ci::after {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 26%, rgba(0, 0, 0, 0) 46%);
+}
+
+.kn--m .kn-ct {
+  left: 24px;
+  right: 24px;
+  bottom: 22px;
+}
+
+.kn--m .kn-ct h3 {
+  margin-top: 10px;
+  font-size: 28px;
+}
+
+.kn--m .kn-card > p {
+  margin-top: 18px;
+  padding: 0 4px 0 2px;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.kn--m .kn-fit {
+  --kn-h-size: min(56px, 14.4vw);
+  padding: 104px 20px 0;
+}
+
+.kn--m .kn-fit .kn-h {
+  margin-top: 22px;
+}
+
+.kn--m .kn-plate {
+  height: 330px;
+  margin-top: 40px;
+}
+
+.kn--m .kn-tog {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 28px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--kn-seg-bg);
+}
+
+.kn--m .kn-tog .kn-sb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  text-align: center;
+}
+
+.kn--m .kn-list {
+  margin-top: 12px;
+  text-align: left;
+  animation: kn-in 0.45s var(--kn-ease-out) both;
+}
+
+.kn--m .kn-list li {
+  padding: 20px 2px 22px;
+  font-size: 17px;
+  line-height: 1.55;
+  letter-spacing: -0.008em;
+  color: var(--kn-body);
+  text-wrap: pretty;
+}
+
+.kn--m .kn-list li + li {
+  border-top: 1px solid var(--kn-hair);
+}
+
+@keyframes kn-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.kn--m .kn-qa {
+  --kn-h-size: min(52px, 13.3vw);
+  padding: 104px 20px 104px;
+}
+
+.kn--m .kn-qa .kn-h {
+  margin-top: 22px;
+}
+
+.kn--m .kn-acc {
+  margin-top: 40px;
+}
+
+.kn--m .kn-acc summary {
+  gap: 24px;
+  min-height: 76px;
+  padding: 20px 0;
+}
+
+.kn--m .kn-acc h3 {
+  font-size: 19px;
+  line-height: 1.3;
+  letter-spacing: -0.018em;
+}
+
+.kn--m .kn-plus {
+  width: 18px;
+  height: 18px;
+}
+
+.kn--m .kn-acc details p {
+  padding: 0 0 26px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.kn--m .kn-band {
+  height: 320px;
+  margin-top: -320px;
+}
+
+.kn--m .knc-orb--a {
+  left: -220px;
+  top: -120px;
+  width: 560px;
+  height: 560px;
+  background: var(--knc-orb-a);
+}
+
+.kn--m .knc-orb--b {
+  left: 100px;
+  bottom: -60px;
+  width: 600px;
+  height: 600px;
+  background: var(--knc-orb-b);
+}
+
+.kn--m .knc-wrap {
+  padding: 64px 20px 56px;
+}
+
+.kn--m .knc-pill {
+  height: 30px;
+  padding: 0 14px 0 12px;
+  font-size: 10.5px;
+}
+
+.kn--m .knc-title {
+  margin-top: 22px;
+  font-size: min(46px, 11.8vw);
+  line-height: 1.03;
+}
+
+.kn--m .knc-stage {
+  height: 468px;
+  margin: 28px -20px 0;
+}
+
+.kn--m .knc-spot {
+  top: 50%;
+  width: 520px;
+  height: 520px;
+  margin: -260px 0 0 -260px;
+}
+
+.kn--m .knc-fan-phone--l {
+  --w: 160px;
+  left: 4px;
+  top: 82px;
+}
+
+.kn--m .knc-fan-phone--r {
+  --w: 160px;
+  left: auto;
+  right: 4px;
+  top: 82px;
+}
+
+.kn--m .knc-fan-phone--c {
+  --w: 214px;
+  left: 50%;
+  margin-left: -107px;
+  top: 14px;
+}
+
+.kn--m .knc-lead {
+  margin-top: 28px;
+  font-size: 16.5px;
+  line-height: 1.6;
+}
+
+.kn--m .knc .knc-cta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 26px;
+  padding: 0 10px 0 28px;
+}
+
+.kn--m .knc-cta i {
+  width: 42px;
+  height: 42px;
+}
+
+.kn--m .knc-updated {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 12.5px;
+}
+
+.kn--m .knc-sec {
+  display: block;
+  margin-top: 48px;
+}
+
+.kn--m .knc-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.kn--m .knc-label {
+  font-size: 10.5px;
+}
+
+.kn--m .knc-rail {
+  display: flex;
+  gap: 12px;
+  margin: 16px -20px 0;
+  padding: 0 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 20px;
+  scrollbar-width: none;
+}
+
+.kn--m .knc-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.kn--m .knc-tile {
+  flex: none;
+  width: 262px;
+  height: 340px;
+  border-radius: 28px;
+  scroll-snap-align: start;
+  box-shadow: var(--knc-tile-sh);
+}
+
+.kn--m .knc-tile-img {
+  object-position: 50% 62%;
+}
+
+.kn--m .knc-tile::after {
+  background: linear-gradient(0deg, rgba(14, 12, 10, 0.95) 0%, rgba(14, 12, 10, 0.7) 34%, rgba(14, 12, 10, 0) 68%);
+}
+
+.kn--m .knc-tile-t {
+  left: 20px;
+  right: 64px;
+  bottom: 20px;
+  font-size: 22px;
+  line-height: 1.12;
+}
+
+.kn--m .knc-tile-a {
+  right: 16px;
+  bottom: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f3f2ef;
+  color: #0e1114;
+}
+
+.kn--m .knc-tile-a svg {
+  width: 16px;
+  height: 16px;
+}
+
+.kn--m .knc-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.kn--m .knc-dots i {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--knc-dot);
+  transition: width 0.3s var(--kn-ease-out), background 0.3s;
+}
+
+.kn--m .knc-dots i.is-on {
+  width: 18px;
+  border-radius: 999px;
+  background: var(--knc-dot-on);
+}
+
+.kn--m .knc-seg {
+  --kn-thumb-bg: var(--knc-tab-on-bg);
+  --kn-thumb-ink: var(--knc-tab-on-ink);
+  --kn-thumb-sh: var(--knc-tab-on-sh);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 16px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--knc-seg-bg);
+  box-shadow: var(--knc-seg-edge);
+}
+
+.kn--m .knc-seg .kn-sb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 4px 6px;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--knc-tab-ink);
+}
+
+.kn--m .knc-seg .kn-sb.is-on {
+  color: var(--knc-tab-on-ink);
+}
+
+.kn--m .knc-panel {
+  margin-top: 14px;
+  padding: 6px;
+  border-radius: 30px;
+  background: var(--knc-panel-bg);
+  box-shadow: var(--knc-panel-sh);
+  -webkit-backdrop-filter: blur(30px) saturate(1.3);
+  backdrop-filter: blur(30px) saturate(1.3);
+  animation: kn-in 0.42s var(--kn-ease-out) both;
+}
+
+.kn--m .knc-row {
+  position: relative;
+  gap: 14px;
+  min-height: 66px;
+  padding: 10px 14px 10px 12px;
+  border-radius: 24px;
+}
+
+.kn--m .knc-row + .knc-row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 64px;
+  right: 14px;
+  height: 1px;
+  background: var(--knc-sep);
+}
+
+.kn--m .knc-ic {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: var(--knc-ic-bg);
+  color: var(--knc-ic-ink);
+}
+
+.kn--m .knc-ic svg {
+  width: 20px;
+  height: 20px;
+}
+
+.kn--m .knc-t {
+  flex: 1;
+  min-width: 0;
+  font-size: 17px;
+  letter-spacing: -0.012em;
+  line-height: 1.22;
+  color: var(--knc-t-ink);
+}
+
+.kn--m .knc-chev {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  color: var(--knc-chev);
+}
+
+/* ── The "Escríbeme" choice (portaled to <body>, so it carries its own tokens) ── */
+.kn-ctc-layer {
+  display: contents;
+}
+
+.kn-ctc-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: transparent;
+}
+
+.kn-ctc,
+.kn-ctc *,
+.kn-ctc *::before,
+.kn-ctc *::after {
+  box-sizing: border-box;
+}
+
+.kn-ctc {
+  position: absolute;
+  z-index: 10001;
+  width: 23.25rem;
+  max-width: calc(100vw - 24px);
+  padding: 1.25rem;
+  border-radius: 1.875rem;
+  font-family: var(--font-marketing, 'DM Sans', ui-sans-serif, system-ui, sans-serif);
+  color: hsl(var(--foreground));
+  box-shadow:
+    0 40px 80px -30px hsl(var(--chrome-shadow) / 0.55),
+    0 2px 8px hsl(var(--chrome-shadow) / 0.06),
+    inset 0 1px 0 var(--chrome-edge);
+  visibility: hidden;
+}
+
+.kn-ctc[data-placed='true'] {
+  visibility: visible;
+  animation: kn-ctc-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes kn-ctc-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .kn-ctc-scrim {
+    background: rgba(10, 8, 6, 0.38);
+  }
+
+  .kn-ctc {
+    position: fixed !important;
+    top: auto !important;
+    left: 12px !important;
+    right: 12px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    width: auto;
+    max-width: none;
+    visibility: visible;
+    animation: kn-ctc-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .kn-ctc .cdock-close {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .kn-ctc .cdock-row {
+    min-height: 3.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kn-ctc[data-placed='true'],
+  .kn-ctc {
+    animation: none;
+  }
+}
+
+/* ── Motion ───────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .kn-thumb,
+  .kn-shot,
+  .kn-vid,
+  .kn-cap > div,
+  .kn-plus::after,
+  .kn-lnav-btn svg,
+  .kn .knc-row svg,
+  .kn--m .kn-list,
+  .kn--m .knc-panel {
+    transition: none;
+    animation: none;
+  }
+
+  .kn-shot {
+    transform: none;
+  }
+}

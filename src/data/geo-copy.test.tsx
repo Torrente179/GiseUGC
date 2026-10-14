@@ -33,6 +33,14 @@ const renderAt = (path: string, node: React.ReactNode) =>
 
 const visibleHtml = (html: string) => html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/giu, '');
 
+/** Visible text with inline wrappers dropped, for order checks across the accent-split title. */
+const plainText = (html: string) =>
+  html
+    .replace(/<\/?(?:b|span|i|em|strong|picture|source)\b[^>]*>/giu, '')
+    .replace(/<[^>]+>/gu, ' ')
+    .replace(/\s+/gu, ' ')
+    .trim();
+
 const assertCrawlableFiverrLink = (html: string) => {
   expect(html).toContain(FIVERR_HREF);
   expect(html).toContain('>gisela_sm</a>');
@@ -59,9 +67,10 @@ describe('GEO copy on bilingual service pages', () => {
       />,
     );
     const html = visibleHtml(raw);
-    const introAt = html.indexOf(page.sectionIntroTitle);
-    const factAt = html.indexOf('Gisela Saldarriaga es creadora UGC bilingüe');
-    const requestAt = html.indexOf(page.deliverablesTitle, factAt);
+    const text = plainText(html);
+    const introAt = text.indexOf(page.sectionIntroTitle);
+    const factAt = text.indexOf('Gisela Saldarriaga es creadora UGC bilingüe');
+    const requestAt = text.indexOf(page.deliverablesTitle, factAt);
     expect(introAt).toBeGreaterThan(-1);
     expect(factAt).toBeGreaterThan(introAt);
     expect(requestAt).toBeGreaterThan(factAt);
@@ -94,9 +103,10 @@ describe('GEO copy on bilingual service pages', () => {
       />,
     );
     const html = visibleHtml(raw);
-    const introAt = html.indexOf(page.sectionIntroTitle);
-    const factAt = html.indexOf('Gisela Saldarriaga is a bilingual UGC creator');
-    const requestAt = html.indexOf(page.deliverablesTitle, factAt);
+    const text = plainText(html);
+    const introAt = text.indexOf(page.sectionIntroTitle);
+    const factAt = text.indexOf('Gisela Saldarriaga is a bilingual UGC creator');
+    const requestAt = text.indexOf(page.deliverablesTitle, factAt);
     expect(introAt).toBeGreaterThan(-1);
     expect(factAt).toBeGreaterThan(introAt);
     expect(requestAt).toBeGreaterThan(factAt);

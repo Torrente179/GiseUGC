@@ -20,6 +20,18 @@ const visibleHtml = (html: string) =>
     .replace(/&#x27;/giu, "'")
     .replace(/&amp;/giu, '&');
 
+/**
+ * Visible text with inline wrappers (<b>, accent <span>, <picture>) removed and
+ * every other tag turned into a space, so copy split around a figure or
+ * highlighted mid-sentence still reads as the original string.
+ */
+const plainText = (html: string) =>
+  visibleHtml(html)
+    .replace(/<\/?(?:b|span|i|em|strong|picture|source)\b[^>]*>/giu, '')
+    .replace(/<[^>]+>/gu, ' ')
+    .replace(/\s+/gu, ' ')
+    .trim();
+
 const countTag = (html: string, tag: 'h1' | 'h2') =>
   (html.match(new RegExp(`<${tag}\\b`, 'giu')) ?? []).length;
 
@@ -36,7 +48,8 @@ const renderService = (serviceId: ReturnType<typeof getAllServiceIds>[number], l
       </LocaleProvider>
     </StaticRouter>,
   );
-  return { raw, html: visibleHtml(raw), page };
+  const html = visibleHtml(raw);
+  return { raw, html, text: plainText(raw), page };
 };
 
 describe('service inner argument stays crawlable', () => {
@@ -54,7 +67,7 @@ describe('service inner argument stays crawlable', () => {
   it.each(getAllServiceIds().flatMap((id) => (['es', 'en'] as const).map((locale) => [id, locale] as const)))(
     '%s (%s) ships one H1, H2 beats, FAQ answers, and contact hrefs in first HTML',
     (serviceId, locale) => {
-      const { html, raw, page } = renderService(serviceId, locale);
+      const { html, raw, text, page } = renderService(serviceId, locale);
 
       expect(html.toLowerCase()).not.toContain('giseugc');
       expect(html).toContain(`<h1`);
@@ -66,7 +79,10 @@ describe('service inner argument stays crawlable', () => {
       expect(html).toContain('hreflang="es"');
       expect(html).toContain('hreflang="en"');
       expect(html).not.toMatch(/<button[^>]*aria-pressed[^>]*>\s*<span class="relative">(es|en)<\/span>/u);
-      expect(html).toContain(page.sectionIntroText);
+      // The intro is set around a figure and the title carries a gradient accent,
+      // so both are checked as text, not as one unbroken string of markup.
+      expect(text).toContain(page.sectionIntroText);
+      expect(text).toContain(page.sectionIntroTitle);
       expect(html).toContain(page.deliverablesTitle);
       expect(html).toContain(page.processTitle);
       expect(html).toContain(page.faqTitle);
@@ -76,11 +92,14 @@ describe('service inner argument stays crawlable', () => {
         expect(html).toContain(item.title);
         expect(html).toContain(item.description);
       }
+      for (const item of [...page.bestFitItems, ...page.notFitItems]) expect(text).toContain(item);
       for (const faq of page.faqs) {
         expect(html).toContain(faq.question);
         expect(html).toContain(faq.answer);
       }
-      expect(html).toContain(page.primaryCtaHref);
+      // The CTA opens the contact choice with scripts; without them it links to the page's own contact block.
+      expect(html).toContain(`href="${page.path}#contact"`);
+      expect(html).toContain('https://wa.me/573043786101');
       expect(html).toContain(page.primaryCtaLabel);
       expect(html).toContain(formatLastUpdatedLabel(CONTENT_DATES.services, locale));
       expect(html).not.toMatch(/24 mar 2026|Mar 24, 2026/u);
@@ -175,57 +194,120 @@ describe('service boot shells keep crawlable first HTML', () => {
 });
 
 describe('service inner presentation locks', () => {
-  it('keeps Empezar in the content column and darkens light-theme labels', () => {
-    const { html } = renderService('bilingual-ugc-creator', 'es');
-    expect(html).toContain('svc-inner-close-shell');
-    expect(html).toContain('svc-inner-close-top');
-    expect(html).toContain('svc-close-explore');
-    expect(html).not.toContain('st-container svc-inner-close-grid');
+  it('draws the desktop shell as the keynote: local nav, tablists, rail, fit columns, close index', () => {
+    const { html, text, page } = renderService('ugc-ads-tiktok-meta', 'en');
+    const desktop = html.slice(html.indexOf('kn kn--d'));
 
-    const css = readFileSync(resolve(root, 'src/styles/templates.css'), 'utf8');
-    expect(css).toContain('overflow-x: clip');
-    expect(css).toContain('.svc-inner-close-shell');
-    expect(css).toContain('.svc-close-explore-col');
-    expect(css).toMatch(/\.svc-close-explore \{[\s\S]*?align-items: start/u);
-    expect(css).toContain('align-items: start');
-    expect(css).not.toMatch(/\.svc-inner-close-grid \{[\s\S]*?align-items: end/u);
-    expect(css).toContain('color: hsl(var(--foreground) / 0.84)');
-    expect(css).toContain('color: hsl(var(--foreground) / 0.82)');
-    expect(css).toContain('color: hsl(var(--foreground) / 0.74)');
-    expect(css).toContain('padding-bottom: 2.5rem');
+    // Local nav: the page name and the five section names, linking to the beat ids.
+    expect(desktop).toContain('class="kn-lnav"');
+    for (const id of ['ficha', 'recibes', 'como-corre', 'encaja', 'faq']) {
+      expect(desktop).toContain(`href="#${id}"`);
+    }
+    expect(desktop).not.toContain('svc-spine');
+
+    // Formats: a proper tablist, one tab per deliverable, every description in the HTML.
+    expect(desktop).toContain('role="tablist"');
+    expect((desktop.match(/role="tab"/gu) ?? []).length).toBe(page.deliverables.length);
+    expect((desktop.match(/role="tabpanel"/gu) ?? []).length).toBe(page.deliverables.length);
+    expect(desktop).toContain('aria-selected="true"');
+    expect(desktop).toContain('class="kn-phone kn-phone--stage"');
+
+    // Process: a rail of four image cards with their step numbers.
+    expect((desktop.match(/class="kn-card"/gu) ?? []).length).toBe(page.processSteps.length);
+    expect(desktop).toContain('aria-label="Previous step"');
+    expect(desktop).toContain('aria-label="Next step"');
+
+    // Fit: both columns present, with key phrases in full ink.
+    expect(desktop).toContain('class="kn-col kn-col--no"');
+    expect(desktop).toContain('<b>more videos to test</b>');
+    expect(text).toContain(page.notFitTitle);
+
+    // Questions: native details, only the first open.
+    expect((desktop.match(/<details open=""/gu) ?? []).length).toBe(1);
+    expect((desktop.match(/<details/gu) ?? []).length).toBe(page.faqs.length);
+
+    // Close: the fan of the page's three featured clips, the tiles, and four index columns.
+    expect(desktop).toContain('knc-fan-phone--c');
+    expect((desktop.match(/knc-fan-phone--[lcr]/gu) ?? []).length).toBe(3);
+    expect(desktop).toContain('class="knc-tile"');
+    expect(desktop).toContain('class="knc-index"');
+
+    // Contact: the nav pill and the close CTA both open the Escríbeme choice. Until scripts run
+    // they are links to this page's own contact block, never to another path (the runtime would
+    // turn that into a page load before the panel could open).
+    expect((desktop.match(/aria-haspopup="dialog"/gu) ?? []).length).toBe(2);
+    expect(desktop).toContain('class="kn-lnav-cta"');
+    expect(desktop).toContain('aria-label="Message me: UGC ads for TikTok and Meta"');
+    expect((desktop.match(new RegExp(`href="${page.path}#contact"`, 'gu')) ?? []).length).toBe(2);
   });
 
-  it('ships mobile inner as a document in beats: list values, 01 type, slab CTA, no chip nav', () => {
-    const { html } = renderService('ugc-ads-tiktok-meta', 'es');
-    // The sticky chip nav stays gone. The ficha's own values are chips, which is
-    // a different element (stm-ficha-chip) and the fix for the joined blobs.
-    expect(html).not.toContain('stm-chips');
-    expect(html).not.toContain('stm-ficha-card');
-    expect(html).toContain('stm-ficha-row');
-    expect(html).toContain('stm-ficha-chip');
-    expect(html).toContain('stm-beat--recibes');
-    expect(html).toContain('stm-beat-figure');
-    expect(html).toContain('class="stm-stepper-num" aria-hidden="true">01<');
-    expect(html).toContain('class="stm-stepper-num" aria-hidden="true">04<');
-    // The close is a contained card and the link lists sit on the page surface
-    // below it, not inside the ink. The sticky "Pedir creativos" slab is gone:
-    // the global mobile tab bar is the navigation on these pages again.
-    expect(html).toContain('stm-close-nav');
-    expect(html).toContain('stm-nav-link');
-    expect(html).not.toContain('stm-sticky-bar');
-    expect(html).not.toContain('stm-close-link');
+  it('ships the phone shell as an app: section menu, 2x2 formats, toggle, both fit lists, explore tabs', () => {
+    const { html, page } = renderService('ugc-ads-tiktok-meta', 'es');
+    const mobile = html.slice(html.indexOf('kn kn--m'), html.indexOf('kn kn--d'));
 
-    const css = readFileSync(resolve(root, 'src/styles/templates.css'), 'utf8');
-    expect(css).not.toContain('.stm-chip {');
-    expect(css).not.toContain('.stm-sticky-bar--slab');
-    expect(css).not.toContain('body:has(.stm-sticky-bar--slab) .mtabbar');
-    expect(css).toMatch(/\.stm-close \{[\s\S]*?border-radius: 1\.15rem/u);
-    // Process is a timeline rail, not stacked 2px rules.
-    expect(css).toContain('border-left: 1px solid hsl(var(--foreground) / 0.18)');
-    // Every beat owns a surface, and dark redeclares the whole set rather than
-    // inheriting a rhythm built on light-theme lightness jumps.
-    expect(css).toContain('.dark .stm-walk');
-    expect(css).toContain('--stm-bg-ink: hsl(var(--ink-surface))');
+    expect(mobile).toContain('class="kn-lnav-btn"');
+    expect(mobile).toContain('aria-expanded="false"');
+    expect(mobile).toContain('class="kn-lnav-menu"');
+    for (const id of ['ficha-m', 'recibes-m', 'como-corre-m', 'encaja-m', 'faq-m']) {
+      expect(mobile).toContain(`href="#${id}"`);
+    }
+    expect(mobile).toContain('id="kn-fm-mobile-tab-0"');
+    // Fit toggle: both lists stay in the DOM, the inactive one hidden.
+    expect(mobile).toContain('class="kn-tog"');
+    expect((mobile.match(/class="kn-list"/gu) ?? []).length).toBe(2);
+    expect((mobile.match(/class="kn-list" hidden=""/gu) ?? []).length).toBe(1);
+    // Explore: three tabs over three panels, all links in the DOM.
+    expect(mobile).toContain('class="knc-seg"');
+    expect((mobile.match(/class="knc-panel"/gu) ?? []).length).toBe(3);
+    expect(mobile).toContain('class="knc-rail"');
+    for (const relatedId of page.relatedServiceIds) {
+      expect(mobile).toContain(getServicePath(relatedId, 'es'));
+    }
+    expect(mobile).not.toContain('stm-beat');
+    expect(mobile).not.toContain('stm-chips');
+  });
+
+  it('lists a related service once: tiles in Also offered, never again under More services', () => {
+    for (const serviceId of getAllServiceIds()) {
+      const page = getServicePageContent(serviceId, 'en');
+      const route = buildServiceLandingRouteData(serviceId, 'en');
+      const { html } = renderService(serviceId, 'en');
+      const desktop = html.slice(html.indexOf('kn kn--d'));
+      const index = desktop.slice(desktop.indexOf('class="knc-index"'));
+      for (const relatedId of page.relatedServiceIds) {
+        const href = getServicePath(relatedId, 'en');
+        expect((index.match(new RegExp(`href="${href}"`, 'gu')) ?? []).length).toBe(1);
+      }
+      for (const other of route.allOtherServices.filter((item) => !page.relatedServiceIds.includes(item.id))) {
+        expect((index.match(new RegExp(`href="${getServicePath(other.id, 'en')}"`, 'gu')) ?? []).length).toBe(1);
+      }
+    }
+  });
+
+  it('keeps below-hero type on DM Sans and ships both themes from one stylesheet', () => {
+    const { html } = renderService('bilingual-ugc-creator', 'es');
+    const inner = html.slice(html.indexOf('kn kn--m'));
+    expect(inner).not.toContain('font-serif');
+
+    const css = readFileSync(resolve(root, 'src/styles/service-keynote.css'), 'utf8');
+    expect(css).not.toMatch(/cormorant|font-serif|(?<!sans-)\bserif\b/iu);
+    // Light is the default; dark redeclares the whole token set.
+    expect(css).toContain('.dark .kn {');
+    expect(css).toContain('--kn-ink: #2b2620');
+    expect(css).toContain('--kn-ink: #f5f5f7');
+    expect(css).toContain('--kn-body: #6a5c50');
+    expect(css).toContain('--kn-page: linear-gradient(180deg, #121212 0, #121212 116px, #fdfcfb 116px)');
+    // Targets and motion: 44px tap size, reduced motion honoured, no sticky nav over the site pills.
+    expect(css).toContain('min-height: 44px');
+    expect(css).toContain('prefers-reduced-motion: reduce');
+    expect(css).not.toMatch(/\.kn-lnav\s*\{[^}]*position:\s*sticky/u);
+  });
+
+  it('retired the old inner markup from the page component', () => {
+    const source = readFileSync(resolve(root, 'src/components/ServicePageInner.tsx'), 'utf8');
+    for (const retired of ['svc-spine', 'stm-beat', 'svc-ficha', 'stm-stepper', 'stm-close']) {
+      expect(source).not.toContain(retired);
+    }
   });
 
   it('keeps the mobile ficha as lists and drops the fit rows Encaja already carries', () => {
