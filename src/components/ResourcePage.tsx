@@ -183,7 +183,7 @@ const ResourcePage = ({
       />
 
       <div className="min-h-screen bg-background">
-        <Navbar compactMobile />
+        <Navbar />
 
         <main className="rsc-page">
           <RevealSection className="rsc-hero">

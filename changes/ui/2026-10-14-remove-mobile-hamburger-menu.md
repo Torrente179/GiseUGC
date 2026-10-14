@@ -1,5 +1,8 @@
 # 2026-10-14 · Mobile hamburger menu removed
 
+Follow-up: the rest of the mobile header (logo, Back, ES/EN, theme) was removed
+the same day, see `2026-10-14-remove-mobile-top-bar.md`.
+
 The full-screen hamburger overlay in `Navbar.tsx` is gone. The bottom tab bar
 (`MobileAppShell` → `MobileTabBar` + `MobileContactSheet`, added 2026-06-14) had
 already replaced everything it did.

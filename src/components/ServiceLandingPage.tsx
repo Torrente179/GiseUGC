@@ -286,7 +286,7 @@ const ServiceLandingPage = ({
       />
 
       <div className="min-h-screen bg-background">
-        <Navbar compactMobile />
+        <Navbar />
 
         <main>
           {/* Both route shells stay mounted so hydration never replaces the

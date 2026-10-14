@@ -9,7 +9,8 @@
     "messageMe": "Message me",
     "homeAria": "Gisela UGC, home",
     "desktopLabel": "Main navigation",
-    "mobileNavLabel": "Navigation"
+    "mobileNavLabel": "Navigation",
+    "languageAndTheme": "Language and theme"
   },
   "languageSwitcher": {
     "changeLanguage": "Change language"

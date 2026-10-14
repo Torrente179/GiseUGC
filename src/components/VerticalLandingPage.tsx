@@ -218,7 +218,7 @@ const VerticalLandingPage = ({
       />
 
       <div className="min-h-screen bg-background">
-        <Navbar compactMobile />
+        <Navbar />
 
         <main>
           {/* Responsive CSS selects one stable prerendered shell. Keeping the

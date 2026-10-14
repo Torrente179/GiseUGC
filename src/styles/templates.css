@@ -4016,4 +4016,12 @@
     color: hsl(var(--primary));
   }
 
+  /* Phones have no top bar, so the resource hero only has to clear the status
+     area; it used to reserve room for the bar. */
+  @media (max-width: 767px) {
+    .rsc-hero {
+      padding-top: calc(env(safe-area-inset-top, 0px) + 3.5rem);
+    }
+  }
+
 }
