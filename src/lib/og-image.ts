@@ -29,7 +29,7 @@ export const OG_FALLBACK_PATH = '/og-image-es-en-20260219.jpg';
 export const OG_FALLBACK_URL = `${OG_SITE_ORIGIN}${OG_FALLBACK_PATH}?v=20260219`;
 export const OG_IMAGE_WIDTH = 1200;
 export const OG_IMAGE_HEIGHT = 630;
-export const OG_STYLE_VERSION = '20261013a';
+export const OG_STYLE_VERSION = '20261013b';
 
 export type OgImageMeta = {
   path: string;

@@ -1,367 +1,367 @@
 {
   "/": {
-    "path": "/og/es-home.086a2d2909.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-home.086a2d2909.jpg",
+    "path": "/og/es-home.660359e6d2.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-home.660359e6d2.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Hago videos UGC en español e inglés",
     "fallback": false
   },
   "/en/": {
-    "path": "/og/en-home.1942b7734e.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-home.1942b7734e.jpg",
+    "path": "/og/en-home.57af1065ef.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-home.57af1065ef.jpg",
     "width": 1200,
     "height": 630,
     "alt": "I make UGC videos in Spanish and English",
     "fallback": false
   },
   "/servicios/": {
-    "path": "/og/es-servicios.a3b784dc05.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-servicios.a3b784dc05.jpg",
+    "path": "/og/es-servicios.80b0dba389.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-servicios.80b0dba389.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Contrata a Gisela Saldarriaga, creadora UGC bilingüe",
     "fallback": false
   },
   "/en/services/": {
-    "path": "/og/en-services.0a59197dbd.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-services.0a59197dbd.jpg",
+    "path": "/og/en-services.82a09aa4f0.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-services.82a09aa4f0.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Hire Gisela Saldarriaga, a bilingual UGC creator",
     "fallback": false
   },
   "/servicios/creadora-ugc-bilingue/": {
-    "path": "/og/es-servicios-creadora-ugc-bilingue.6cb622cace.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-servicios-creadora-ugc-bilingue.6cb622cace.jpg",
+    "path": "/og/es-servicios-creadora-ugc-bilingue.5390b11aed.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-servicios-creadora-ugc-bilingue.5390b11aed.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Creadora UGC bilingüe para marcas que venden en español e inglés",
     "fallback": false
   },
   "/en/services/bilingual-ugc-creator/": {
-    "path": "/og/en-services-bilingual-ugc-creator.229b0ddc97.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-services-bilingual-ugc-creator.229b0ddc97.jpg",
+    "path": "/og/en-services-bilingual-ugc-creator.3268be8f9c.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-services-bilingual-ugc-creator.3268be8f9c.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Bilingual UGC creator for brands that sell in Spanish and English",
     "fallback": false
   },
   "/servicios/videos-de-portavoz/": {
-    "path": "/og/es-servicios-videos-de-portavoz.83c9d181c2.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-servicios-videos-de-portavoz.83c9d181c2.jpg",
+    "path": "/og/es-servicios-videos-de-portavoz.457749978d.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-servicios-videos-de-portavoz.457749978d.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Videos de portavoz para marcas que necesitan explicar bien lo que venden",
     "fallback": false
   },
   "/en/services/spokesperson-videos/": {
-    "path": "/og/en-services-spokesperson-videos.254db1a872.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-services-spokesperson-videos.254db1a872.jpg",
+    "path": "/og/en-services-spokesperson-videos.c0aa77a53a.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-services-spokesperson-videos.c0aa77a53a.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Spokesperson videos for brands that need to explain what they sell",
     "fallback": false
   },
   "/servicios/ugc-ads-tiktok-meta/": {
-    "path": "/og/es-servicios-ugc-ads-tiktok-meta.3fec7036b4.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-servicios-ugc-ads-tiktok-meta.3fec7036b4.jpg",
+    "path": "/og/es-servicios-ugc-ads-tiktok-meta.a9f5916351.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-servicios-ugc-ads-tiktok-meta.a9f5916351.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC Ads para TikTok y Meta, con hooks y versiones para probar",
     "fallback": false
   },
   "/en/services/ugc-ads-tiktok-meta/": {
-    "path": "/og/en-services-ugc-ads-tiktok-meta.eeca7b2223.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-services-ugc-ads-tiktok-meta.eeca7b2223.jpg",
+    "path": "/og/en-services-ugc-ads-tiktok-meta.f1d430b3b8.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-services-ugc-ads-tiktok-meta.f1d430b3b8.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC ads for TikTok and Meta, with hooks and versions to test",
     "fallback": false
   },
   "/servicios/testimoniales-resenas-ugc/": {
-    "path": "/og/es-servicios-testimoniales-resenas-ugc.8713ce6414.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-servicios-testimoniales-resenas-ugc.8713ce6414.jpg",
+    "path": "/og/es-servicios-testimoniales-resenas-ugc.48a56e0621.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-servicios-testimoniales-resenas-ugc.48a56e0621.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Testimoniales y reseñas UGC para que tus clientes confíen antes de comprar",
     "fallback": false
   },
   "/en/services/ugc-testimonials-reviews/": {
-    "path": "/og/en-services-ugc-testimonials-reviews.37b40c4e68.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-services-ugc-testimonials-reviews.37b40c4e68.jpg",
+    "path": "/og/en-services-ugc-testimonials-reviews.d19dda1ddf.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-services-ugc-testimonials-reviews.d19dda1ddf.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC testimonials and review videos that help people trust you before they buy",
     "fallback": false
   },
   "/servicios/demo-producto-ugc/": {
-    "path": "/og/es-servicios-demo-producto-ugc.46b1bafc9c.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-servicios-demo-producto-ugc.46b1bafc9c.jpg",
+    "path": "/og/es-servicios-demo-producto-ugc.628fd7b815.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-servicios-demo-producto-ugc.628fd7b815.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Demos de producto UGC que explican cómo funciona sin aburrir",
     "fallback": false
   },
   "/en/services/ugc-product-demo/": {
-    "path": "/og/en-services-ugc-product-demo.4236e7893d.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-services-ugc-product-demo.4236e7893d.jpg",
+    "path": "/og/en-services-ugc-product-demo.f875240114.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-services-ugc-product-demo.f875240114.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC product demos that explain how it works without boring anyone",
     "fallback": false
   },
   "/servicios/ugc-problema-solucion/": {
-    "path": "/og/es-servicios-ugc-problema-solucion.360de31b09.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-servicios-ugc-problema-solucion.360de31b09.jpg",
+    "path": "/og/es-servicios-ugc-problema-solucion.d824e1f37f.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-servicios-ugc-problema-solucion.d824e1f37f.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Videos UGC problema-solución que empiezan por lo que le molesta a tu cliente",
     "fallback": false
   },
   "/en/services/ugc-problem-solution/": {
-    "path": "/og/en-services-ugc-problem-solution.b502ad0c13.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-services-ugc-problem-solution.b502ad0c13.jpg",
+    "path": "/og/en-services-ugc-problem-solution.e0f797fb01.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-services-ugc-problem-solution.e0f797fb01.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Problem-solution UGC videos that start with what bugs your customer",
     "fallback": false
   },
   "/servicios/ugc-lifestyle/": {
-    "path": "/og/es-servicios-ugc-lifestyle.ee393542b5.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-servicios-ugc-lifestyle.ee393542b5.jpg",
+    "path": "/og/es-servicios-ugc-lifestyle.b8f18bc072.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-servicios-ugc-lifestyle.b8f18bc072.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Contenido lifestyle UGC que se ve real en el feed de tu marca",
     "fallback": false
   },
   "/en/services/lifestyle-ugc-organic-content/": {
-    "path": "/og/en-services-lifestyle-ugc-organic-content.c454160b0c.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-services-lifestyle-ugc-organic-content.c454160b0c.jpg",
+    "path": "/og/en-services-lifestyle-ugc-organic-content.e9aec49262.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-services-lifestyle-ugc-organic-content.e9aec49262.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Lifestyle UGC content that looks real in your brand feed",
     "fallback": false
   },
   "/servicios/b-roll-footage-ugc/": {
-    "path": "/og/es-servicios-b-roll-footage-ugc.0a5789b8cf.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-servicios-b-roll-footage-ugc.0a5789b8cf.jpg",
+    "path": "/og/es-servicios-b-roll-footage-ugc.2f72d486bc.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-servicios-b-roll-footage-ugc.2f72d486bc.jpg",
     "width": 1200,
     "height": 630,
     "alt": "B-roll UGC para tu equipo: tomas de producto y clips sin voz en off",
     "fallback": false
   },
   "/en/services/ugc-b-roll-footage/": {
-    "path": "/og/en-services-ugc-b-roll-footage.5d51f92bf3.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-services-ugc-b-roll-footage.5d51f92bf3.jpg",
+    "path": "/og/en-services-ugc-b-roll-footage.9a47eec76f.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-services-ugc-b-roll-footage.9a47eec76f.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC b-roll footage for your team: product shots and clips with no voiceover",
     "fallback": false
   },
   "/verticales/": {
-    "path": "/og/es-verticales.66369e57dc.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-verticales.66369e57dc.jpg",
+    "path": "/og/es-verticales.c40e2d57c4.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-verticales.c40e2d57c4.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC por industria: beauty, ecommerce, moda, tech y bienestar",
     "fallback": false
   },
   "/en/verticals/": {
-    "path": "/og/en-verticals.1f4e718615.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-verticals.1f4e718615.jpg",
+    "path": "/og/en-verticals.c2fe7099bb.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-verticals.c2fe7099bb.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC by industry: beauty, ecommerce, fashion, tech, and wellness",
     "fallback": false
   },
   "/verticales/ugc-beauty/": {
-    "path": "/og/es-verticales-ugc-beauty.22261a0b58.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-verticales-ugc-beauty.22261a0b58.jpg",
+    "path": "/og/es-verticales-ugc-beauty.a072dd1e3b.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-verticales-ugc-beauty.a072dd1e3b.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC para marcas de beauty: videos de skincare, maquillaje y suplementos",
     "fallback": false
   },
   "/en/verticals/beauty-ugc-creator/": {
-    "path": "/og/en-verticals-beauty-ugc-creator.30c8d55ac7.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-verticals-beauty-ugc-creator.30c8d55ac7.jpg",
+    "path": "/og/en-verticals-beauty-ugc-creator.60ddc42313.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-verticals-beauty-ugc-creator.60ddc42313.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC for beauty brands: skincare, makeup, and supplement videos",
     "fallback": false
   },
   "/verticales/ugc-moda/": {
-    "path": "/og/es-verticales-ugc-moda.7b23498eb8.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-verticales-ugc-moda.7b23498eb8.jpg",
+    "path": "/og/es-verticales-ugc-moda.1b18809d6c.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-verticales-ugc-moda.1b18809d6c.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC para marcas de moda: try-ons, hauls y reseñas de outfits",
     "fallback": false
   },
   "/en/verticals/fashion-ugc-creator/": {
-    "path": "/og/en-verticals-fashion-ugc-creator.4ab06b7e6b.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-verticals-fashion-ugc-creator.4ab06b7e6b.jpg",
+    "path": "/og/en-verticals-fashion-ugc-creator.4e710fba73.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-verticals-fashion-ugc-creator.4e710fba73.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC for fashion brands: try-ons, hauls, and outfit reviews",
     "fallback": false
   },
   "/verticales/ugc-tech-saas/": {
-    "path": "/og/es-verticales-ugc-tech-saas.933aaace59.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-verticales-ugc-tech-saas.933aaace59.jpg",
+    "path": "/og/es-verticales-ugc-tech-saas.f2a561f9f5.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-verticales-ugc-tech-saas.f2a561f9f5.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC para marcas tech y SaaS: demos y videos que explican tu producto",
     "fallback": false
   },
   "/en/verticals/tech-saas-ugc-creator/": {
-    "path": "/og/en-verticals-tech-saas-ugc-creator.f5609ff349.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-verticals-tech-saas-ugc-creator.f5609ff349.jpg",
+    "path": "/og/en-verticals-tech-saas-ugc-creator.fd7b36a46b.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-verticals-tech-saas-ugc-creator.fd7b36a46b.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC for tech and SaaS brands: demos and videos that explain your product",
     "fallback": false
   },
   "/verticales/ugc-ecommerce/": {
-    "path": "/og/es-verticales-ugc-ecommerce.f49dd1efa9.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-verticales-ugc-ecommerce.f49dd1efa9.jpg",
+    "path": "/og/es-verticales-ugc-ecommerce.4f612a9e29.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-verticales-ugc-ecommerce.4f612a9e29.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC para ecommerce: reseñas, unboxings y demos con tu producto",
     "fallback": false
   },
   "/en/verticals/ecommerce-ugc-creator/": {
-    "path": "/og/en-verticals-ecommerce-ugc-creator.5cb622ba1a.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-verticals-ecommerce-ugc-creator.5cb622ba1a.jpg",
+    "path": "/og/en-verticals-ecommerce-ugc-creator.a571a2a002.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-verticals-ecommerce-ugc-creator.a571a2a002.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC for ecommerce: reviews, unboxings, and demos with your product",
     "fallback": false
   },
   "/verticales/ugc-lifestyle-bienestar/": {
-    "path": "/og/es-verticales-ugc-lifestyle-bienestar.aa6326d660.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-verticales-ugc-lifestyle-bienestar.aa6326d660.jpg",
+    "path": "/og/es-verticales-ugc-lifestyle-bienestar.b9c4baaae0.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-verticales-ugc-lifestyle-bienestar.b9c4baaae0.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC para marcas de lifestyle y bienestar: tu producto en el día a día",
     "fallback": false
   },
   "/en/verticals/lifestyle-wellness-ugc-creator/": {
-    "path": "/og/en-verticals-lifestyle-wellness-ugc-creator.2a39a108c6.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-verticals-lifestyle-wellness-ugc-creator.2a39a108c6.jpg",
+    "path": "/og/en-verticals-lifestyle-wellness-ugc-creator.a9cf1d46e1.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-verticals-lifestyle-wellness-ugc-creator.a9cf1d46e1.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC for lifestyle and wellness brands: your product in everyday life",
     "fallback": false
   },
   "/recursos/": {
-    "path": "/og/es-recursos.e4d74d6a2c.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-recursos.e4d74d6a2c.jpg",
+    "path": "/og/es-recursos.3e8fa27c01.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-recursos.3e8fa27c01.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Cómo contratar una creadora UGC bilingüe: guías para marcas",
     "fallback": false
   },
   "/en/resources/": {
-    "path": "/og/en-resources.01fc6b9e09.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-resources.01fc6b9e09.jpg",
+    "path": "/og/en-resources.5ab9afc643.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-resources.5ab9afc643.jpg",
     "width": 1200,
     "height": 630,
     "alt": "How to hire a bilingual UGC creator: guides for brands",
     "fallback": false
   },
   "/recursos/que-es-ugc/": {
-    "path": "/og/es-recursos-que-es-ugc.7d24c1289c.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-recursos-que-es-ugc.7d24c1289c.jpg",
+    "path": "/og/es-recursos-que-es-ugc.56e972cb0b.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-recursos-que-es-ugc.56e972cb0b.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Qué es UGC y cómo lo usan las marcas",
     "fallback": false
   },
   "/en/resources/what-is-ugc/": {
-    "path": "/og/en-resources-what-is-ugc.48eb69bbf3.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-resources-what-is-ugc.48eb69bbf3.jpg",
+    "path": "/og/en-resources-what-is-ugc.a240ddd3df.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-resources-what-is-ugc.a240ddd3df.jpg",
     "width": 1200,
     "height": 630,
     "alt": "What is UGC and how do brands use it?",
     "fallback": false
   },
   "/recursos/como-contratar-creadora-ugc/": {
-    "path": "/og/es-recursos-como-contratar-creadora-ugc.43837a88dd.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-recursos-como-contratar-creadora-ugc.43837a88dd.jpg",
+    "path": "/og/es-recursos-como-contratar-creadora-ugc.a5010c6688.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-recursos-como-contratar-creadora-ugc.a5010c6688.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Cómo contratar una creadora UGC",
     "fallback": false
   },
   "/en/resources/how-to-hire-ugc-creator/": {
-    "path": "/og/en-resources-how-to-hire-ugc-creator.f4968141e5.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-resources-how-to-hire-ugc-creator.f4968141e5.jpg",
+    "path": "/og/en-resources-how-to-hire-ugc-creator.976723720b.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-resources-how-to-hire-ugc-creator.976723720b.jpg",
     "width": 1200,
     "height": 630,
     "alt": "How to hire a UGC creator",
     "fallback": false
   },
   "/recursos/ugc-vs-influencer-marketing/": {
-    "path": "/og/es-recursos-ugc-vs-influencer-marketing.80025f01f0.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-recursos-ugc-vs-influencer-marketing.80025f01f0.jpg",
+    "path": "/og/es-recursos-ugc-vs-influencer-marketing.f7754b1abd.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-recursos-ugc-vs-influencer-marketing.f7754b1abd.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC vs influencer marketing: diferencias y cuándo usar cada uno",
     "fallback": false
   },
   "/en/resources/ugc-vs-influencer-marketing/": {
-    "path": "/og/en-resources-ugc-vs-influencer-marketing.2bf11e052b.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-resources-ugc-vs-influencer-marketing.2bf11e052b.jpg",
+    "path": "/og/en-resources-ugc-vs-influencer-marketing.f89fa6030a.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-resources-ugc-vs-influencer-marketing.f89fa6030a.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC vs influencer marketing: the differences and when to use each",
     "fallback": false
   },
   "/recursos/formatos-ugc-ads/": {
-    "path": "/og/es-recursos-formatos-ugc-ads.e22104892d.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-recursos-formatos-ugc-ads.e22104892d.jpg",
+    "path": "/og/es-recursos-formatos-ugc-ads.2648c37b8d.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-recursos-formatos-ugc-ads.2648c37b8d.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Formatos de UGC ads para TikTok y Meta",
     "fallback": false
   },
   "/en/resources/ugc-ad-formats-guide/": {
-    "path": "/og/en-resources-ugc-ad-formats-guide.b12c621582.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-resources-ugc-ad-formats-guide.b12c621582.jpg",
+    "path": "/og/en-resources-ugc-ad-formats-guide.b14c1d5108.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-resources-ugc-ad-formats-guide.b14c1d5108.jpg",
     "width": 1200,
     "height": 630,
     "alt": "UGC ad formats for TikTok and Meta",
     "fallback": false
   },
   "/politica-de-privacidad/": {
-    "path": "/og/es-politica-de-privacidad.0bb321d1b7.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-politica-de-privacidad.0bb321d1b7.jpg",
+    "path": "/og/es-politica-de-privacidad.dc3630959f.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-politica-de-privacidad.dc3630959f.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Política de privacidad del sitio web de Gisela Saldarriaga",
     "fallback": false
   },
   "/en/privacy-policy/": {
-    "path": "/og/en-privacy-policy.6d84b0d992.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-privacy-policy.6d84b0d992.jpg",
+    "path": "/og/en-privacy-policy.75cc1d7fed.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-privacy-policy.75cc1d7fed.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Privacy Policy for Gisela Saldarriaga’s website",
     "fallback": false
   },
   "/terminos-y-uso-de-contenido/": {
-    "path": "/og/es-terminos-y-uso-de-contenido.5ae6c305b3.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/es-terminos-y-uso-de-contenido.5ae6c305b3.jpg",
+    "path": "/og/es-terminos-y-uso-de-contenido.54eae711cd.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-terminos-y-uso-de-contenido.54eae711cd.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Términos y uso de contenido del sitio, portafolio y materiales visibles",
     "fallback": false
   },
   "/en/terms-and-content-use/": {
-    "path": "/og/en-terms-and-content-use.32b248d260.jpg",
-    "url": "https://www.giselasaldarriaga.com/og/en-terms-and-content-use.32b248d260.jpg",
+    "path": "/og/en-terms-and-content-use.ed4bd813b6.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-terms-and-content-use.ed4bd813b6.jpg",
     "width": 1200,
     "height": 630,
     "alt": "Terms and content-use rules for the website, portfolio, and visible materials",

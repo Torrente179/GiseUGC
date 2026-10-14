@@ -25,14 +25,12 @@ import {
   getLongestOgCopy,
   hashedOgPublicPath,
   layoutOgTitle,
+  loadOgTitleFont,
   renderOgJpeg,
   writeOgImages,
 } from '@/lib/og-image-render';
-import { createRequire } from 'node:module';
 import { PAGE_REGISTRY, SITE_LOCALES } from '@/lib/locale-path';
 
-const require = createRequire(import.meta.url);
-const fontkit = require('fontkit');
 const root = process.cwd();
 
 // Cursor cloud agents collect screenshots from /opt/cursor/artifacts. Elsewhere
@@ -91,7 +89,7 @@ describe('per-page OG copy', () => {
 });
 
 describe('OG title layout never truncates', () => {
-  const titleFont = fontkit.create(readFileSync(resolve(root, 'public/fonts/og/cormorant-garamond-latin.ttf')));
+  const titleFont = loadOgTitleFont(root);
 
   it('keeps the full H1, including the services-hub name line, in at most 3 lines', () => {
     for (const copy of getAllOgRouteCopy()) {

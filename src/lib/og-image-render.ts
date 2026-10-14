@@ -1,7 +1,12 @@
 /**
- * Build-time OG rasterizer. Uses the bundled TTF/OTF files in public/fonts/og/
- * and the existing shared portrait. Never fetches fonts. Render errors fail
- * the build. The shared fallback image is used only for a route with no H1.
+ * Build-time OG rasterizer. The card is the home hero in miniature: her own
+ * scene, lightly blurred, a large "Gisela" behind her, the cut-out of her in
+ * front, and the page's H1 with the Fiverr proof line in the lower left.
+ * Scene and cut-out are the hero's own files and are placed with the same
+ * geometry, so her edges sit on the background they were photographed on.
+ * Type is DM Sans only, drawn as paths from the bundled variable font in
+ * public/fonts/og/; nothing is fetched. Render errors fail the build. The
+ * shared fallback image is used only for a route with no H1.
  */
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -33,6 +38,7 @@ const fontkit = require('fontkit') as {
 type FontLike = {
   familyName?: string;
   unitsPerEm: number;
+  getVariation: (settings: Record<string, number>) => FontLike;
   glyphForCodePoint: (codePoint: number) => { id: number };
   layout: (text: string) => {
     glyphs: Array<{ advanceWidth: number; path?: { toSVG?: () => string } }>;
@@ -43,15 +49,36 @@ type FontLike = {
 const here = dirname(fileURLToPath(import.meta.url));
 const defaultRoot = resolve(here, '../..');
 
-const INK = '#0F121A';
-const CREAM = '#EBE4D6';
-const SAND = '#BFAB88';
-const TITLE_MAX = 56;
+const INK = '#0B0B0D';
+const WHITE = '#F4F3F1';
+const SOFT = 'rgba(244, 243, 241, 0.8)';
+const TITLE_MAX = 50;
 const TITLE_MIN = 18;
 const TITLE_MAX_LINES = 3;
-const TITLE_WIDTH = 640;
-const TITLE_LINE_HEIGHT = 1.12;
-const PHOTO_WIDTH = 520;
+const TITLE_WIDTH = 540;
+const TITLE_LINE_HEIGHT = 1.14;
+const MARGIN_X = 60;
+const MARGIN_BOTTOM = 56;
+
+const UI_FONT_PATH = 'public/fonts/og/dm-sans-latin.ttf';
+
+// The hero's layers and where she sits in the 4032×2268 photo they come
+// from (printed by scripts/clean-hero-cutout.py; mirrors --feed-cut-* in
+// src/index.css). The card shows that photo as a frame 980px tall with her
+// face at FACE_AT_X and the top of her head at HEAD_TOP. At this scale her
+// head overlaps the edges of the "s" and the "e", as it does in the hero;
+// FACE_AT_X is as far right as the frame can go and still cover the left edge.
+const SCENE_PATH = 'public/uploads/gisela-scene-2016.webp';
+const CUTOUT_PATH = 'public/uploads/gisela-cutout-980.webp';
+const PHOTO = { width: 4032, height: 2268, cutX: 1425, cutY: 196, cutWidth: 980, cutHeight: 2072, faceX: 0.4767 };
+const FRAME_HEIGHT = 980;
+const FACE_AT_X = 830;
+const HEAD_TOP = 62;
+
+const NAME = 'Gisela';
+const NAME_SIZE = 252;
+const NAME_TRACKING = -0.05;
+const NAME_BASELINE = 262;
 
 export type OgTitleLayout = {
   lines: string[];
@@ -60,17 +87,20 @@ export type OgTitleLayout = {
   missingGlyphs: string[];
 };
 
-const loadFont = (root: string, relative: string): FontLike => {
-  const buffer = readFileSync(resolve(root, relative));
-  return fontkit.create(buffer);
+const loadFont = (root: string, relative: string, weight?: number): FontLike => {
+  const font = fontkit.create(readFileSync(resolve(root, relative)));
+  return weight === undefined ? font : font.getVariation({ wght: weight });
 };
 
-const measureWidth = (font: FontLike, text: string, fontSize: number): number => {
+/** The H1 face, DM Sans Medium, as both the renderer and the tests lay it out. */
+export const loadOgTitleFont = (root = defaultRoot): FontLike => loadFont(root, UI_FONT_PATH, 500);
+
+const measureWidth = (font: FontLike, text: string, fontSize: number, tracking = 0): number => {
   const scale = fontSize / font.unitsPerEm;
   const run = font.layout(text);
   let width = 0;
   for (const position of run.positions) width += position.xAdvance;
-  return width * scale;
+  return width * scale + tracking * fontSize * Math.max(0, run.positions.length - 1);
 };
 
 const missingGlyphsIn = (font: FontLike, text: string): string[] =>
@@ -112,9 +142,18 @@ export const layoutOgTitle = (font: FontLike, title: string, maxWidth = TITLE_WI
   };
 };
 
-const lineToSvg = (font: FontLike, text: string, fontSize: number, x: number, y: number, fill: string): string => {
+const lineToSvg = (
+  font: FontLike,
+  text: string,
+  fontSize: number,
+  x: number,
+  y: number,
+  fill: string,
+  tracking = 0,
+): string => {
   const scale = fontSize / font.unitsPerEm;
   const run = font.layout(text);
+  const trackingUnits = (tracking * fontSize) / scale;
   let cursor = 0;
   const parts: string[] = [];
   for (let index = 0; index < run.glyphs.length; index += 1) {
@@ -128,7 +167,7 @@ const lineToSvg = (font: FontLike, text: string, fontSize: number, x: number, y:
         `<path fill="${fill}" transform="translate(${gx.toFixed(2)},${gy.toFixed(2)}) scale(${scale},${-scale})" d="${d}"/>`,
       );
     }
-    cursor += position.xAdvance;
+    cursor += position.xAdvance + trackingUnits;
   }
   return parts.join('');
 };
@@ -141,33 +180,57 @@ const hashPayload = (copy: OgRouteCopy): string =>
 
 export const hashedOgPublicPath = (copy: OgRouteCopy): string => `/og/${copy.slug}.${hashPayload(copy)}.jpg`;
 
-const cropPortrait = async (root: string) => {
-  const source = sharp(resolve(root, `public${OG_FALLBACK_PATH}`));
-  const meta = await source.metadata();
-  const srcW = meta.width ?? OG_IMAGE_WIDTH;
-  const srcH = meta.height ?? OG_IMAGE_HEIGHT;
-  const targetRatio = PHOTO_WIDTH / OG_IMAGE_HEIGHT;
-  const srcRatio = srcW / srcH;
-  let width = srcW;
-  let height = srcH;
-  let left = 0;
-  let top = 0;
-  if (srcRatio > targetRatio) {
-    width = Math.round(srcH * targetRatio);
-    left = Math.round((srcW - width) / 2);
-  } else {
-    height = Math.round(srcW / targetRatio);
-    top = Math.round((srcH - height) * 0.18);
-  }
-  return source.extract({ left, top, width, height }).resize(PHOTO_WIDTH, OG_IMAGE_HEIGHT, { fit: 'fill' }).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
+const frameGeometry = () => {
+  const scale = FRAME_HEIGHT / PHOTO.height;
+  const frameWidth = PHOTO.width * scale;
+  const left = FACE_AT_X - PHOTO.faceX * frameWidth;
+  const top = HEAD_TOP - PHOTO.cutY * scale;
+  return { scale, frameWidth, left, top };
 };
+
+/** The scene, sized as the frame and cut to the card. */
+const renderScene = async (root: string): Promise<Buffer> => {
+  const { frameWidth, left, top } = frameGeometry();
+  return sharp(resolve(root, SCENE_PATH))
+    .resize(Math.round(frameWidth), FRAME_HEIGHT, { fit: 'fill' })
+    .extract({ left: Math.round(-left), top: Math.round(-top), width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT })
+    .png()
+    .toBuffer();
+};
+
+/** Her cut-out at the frame's scale, trimmed to what falls on the card. */
+const renderCutout = async (root: string): Promise<{ input: Buffer; left: number; top: number }> => {
+  const { scale, left, top } = frameGeometry();
+  const width = Math.round(PHOTO.cutWidth * scale);
+  const height = Math.round(PHOTO.cutHeight * scale);
+  const x = Math.round(left + PHOTO.cutX * scale);
+  const y = Math.round(top + PHOTO.cutY * scale);
+  const resized = await sharp(resolve(root, CUTOUT_PATH))
+    .resize(width, height, { fit: 'fill', kernel: 'lanczos3' })
+    .png()
+    .toBuffer();
+  const input = await sharp(resized)
+    .extract({ left: 0, top: 0, width, height: Math.min(height, OG_IMAGE_HEIGHT - y) })
+    .png()
+    .toBuffer();
+  return { input, left: x, top: y };
+};
+
+const svgLayer = (body: string) => Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
+<svg width="${OG_IMAGE_WIDTH}" height="${OG_IMAGE_HEIGHT}" viewBox="0 0 ${OG_IMAGE_WIDTH} ${OG_IMAGE_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
+${body}
+</svg>`);
+
+const STAR =
+  'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
 
 export const renderOgJpeg = async (copy: OgRouteCopy, root = defaultRoot): Promise<{ buffer: Buffer; layout: OgTitleLayout }> => {
   if (copy.proof !== getOgProofLine(copy.locale)) {
     throw new Error(`OG proof line must equal getOgProofLine(${copy.locale})`);
   }
-  const titleFont = loadFont(root, 'public/fonts/og/cormorant-garamond-latin.ttf');
-  const uiFont = loadFont(root, 'public/fonts/og/dm-sans-latin.ttf');
+  const titleFont = loadOgTitleFont(root);
+  const nameFont = loadFont(root, UI_FONT_PATH, 700);
+  const uiFont = loadFont(root, UI_FONT_PATH, 500);
   const layout = layoutOgTitle(titleFont, copy.h1);
   if (layout.truncated || layout.lines.length > TITLE_MAX_LINES) {
     throw new Error(`OG H1 needs more than ${TITLE_MAX_LINES} lines at min ${TITLE_MIN}px: ${copy.h1}`);
@@ -175,38 +238,53 @@ export const renderOgJpeg = async (copy: OgRouteCopy, root = defaultRoot): Promi
   if (layout.missingGlyphs.length > 0) {
     throw new Error(`OG font missing glyphs in "${copy.h1}": ${layout.missingGlyphs.join(' ')}`);
   }
-  const photo = await cropPortrait(root);
-  const photoUri = `data:image/jpeg;base64,${photo.toString('base64')}`;
-  const brand = copy.locale === 'es' ? 'Gisela Saldarriaga · Gisela.UGC' : 'Gisela Saldarriaga · Gisela.UGC';
-  let y = 118;
-  const paths: string[] = [];
-  paths.push(lineToSvg(uiFont, brand, 20, 64, y, SAND));
-  y += 36;
-  paths.push(`<rect x="64" y="${y}" width="72" height="2" fill="${SAND}"/>`);
-  y += 52;
-  for (const line of layout.lines) {
-    paths.push(lineToSvg(titleFont, line, layout.fontSize, 64, y + layout.fontSize * 0.78, CREAM));
-    y += layout.fontSize * TITLE_LINE_HEIGHT;
-  }
-  y += 28;
-  paths.push(lineToSvg(uiFont, copy.proof, 22, 64, y, SAND));
 
-  const svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="${OG_IMAGE_WIDTH}" height="${OG_IMAGE_HEIGHT}" viewBox="0 0 ${OG_IMAGE_WIDTH} ${OG_IMAGE_HEIGHT}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <rect width="${OG_IMAGE_WIDTH}" height="${OG_IMAGE_HEIGHT}" fill="${INK}"/>
-  <image xlink:href="${photoUri}" x="${OG_IMAGE_WIDTH - PHOTO_WIDTH}" y="0" width="${PHOTO_WIDTH}" height="${OG_IMAGE_HEIGHT}" preserveAspectRatio="xMidYMid slice"/>
+  // Behind her: a little shade under the name, then the name.
+  const nameWidth = measureWidth(nameFont, NAME, NAME_SIZE, NAME_TRACKING);
+  const nameX = Math.min(FACE_AT_X - nameWidth / 2, OG_IMAGE_WIDTH - 40 - nameWidth);
+  const back = svgLayer(`
   <defs>
-    <linearGradient id="fade" x1="${OG_IMAGE_WIDTH - PHOTO_WIDTH}" y1="0" x2="${OG_IMAGE_WIDTH - PHOTO_WIDTH + 160}" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="${INK}" stop-opacity="1"/>
-      <stop offset="1" stop-color="${INK}" stop-opacity="0"/>
+    <linearGradient id="top" x1="0" y1="0" x2="0" y2="${OG_IMAGE_HEIGHT}" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="${INK}" stop-opacity="0.34"/>
+      <stop offset="0.5" stop-color="${INK}" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect x="${OG_IMAGE_WIDTH - PHOTO_WIDTH}" y="0" width="160" height="${OG_IMAGE_HEIGHT}" fill="url(#fade)"/>
-  ${paths.join('\n  ')}
-</svg>`;
+  <rect width="${OG_IMAGE_WIDTH}" height="${OG_IMAGE_HEIGHT}" fill="url(#top)"/>
+  ${lineToSvg(nameFont, NAME, NAME_SIZE, nameX, NAME_BASELINE, WHITE, NAME_TRACKING)}`);
 
-  const buffer = await sharp(Buffer.from(svg))
-    .jpeg({ quality: 70, mozjpeg: true, chromaSubsampling: '4:2:0', force: true })
+  // In front of her: shade where the copy sits, then the copy, set from the
+  // bottom up so every H1 length keeps the same foot.
+  const titleStep = layout.fontSize * TITLE_LINE_HEIGHT;
+  const proofY = OG_IMAGE_HEIGHT - MARGIN_BOTTOM;
+  const lastTitleY = proofY - 46;
+  const firstTitleY = lastTitleY - titleStep * (layout.lines.length - 1);
+  const brandY = firstTitleY - layout.fontSize - 22;
+  const parts: string[] = [];
+  parts.push(lineToSvg(uiFont, 'Gisela Saldarriaga · Gisela.UGC', 21, MARGIN_X, brandY, SOFT));
+  layout.lines.forEach((line, index) => {
+    parts.push(lineToSvg(titleFont, line, layout.fontSize, MARGIN_X, firstTitleY + index * titleStep, WHITE));
+  });
+  parts.push(`<path fill="${WHITE}" transform="translate(${MARGIN_X},${proofY - 18}) scale(0.82)" d="${STAR}"/>`);
+  parts.push(lineToSvg(uiFont, copy.proof, 22, MARGIN_X + 28, proofY, SOFT));
+  const front = svgLayer(`
+  <defs>
+    <radialGradient id="caption" cx="0" cy="${OG_IMAGE_HEIGHT}" r="780" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="${INK}" stop-opacity="0.8"/>
+      <stop offset="0.5" stop-color="${INK}" stop-opacity="0.48"/>
+      <stop offset="1" stop-color="${INK}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="${OG_IMAGE_WIDTH}" height="${OG_IMAGE_HEIGHT}" fill="url(#caption)"/>
+  ${parts.join('\n  ')}`);
+
+  const [scene, cutout] = await Promise.all([renderScene(root), renderCutout(root)]);
+  const buffer = await sharp(scene)
+    .composite([
+      { input: back, left: 0, top: 0 },
+      { input: cutout.input, left: cutout.left, top: cutout.top },
+      { input: front, left: 0, top: 0 },
+    ])
+    .jpeg({ quality: 80, mozjpeg: true, chromaSubsampling: '4:2:0', force: true })
     .toBuffer();
   return { buffer, layout };
 };
@@ -300,10 +378,8 @@ export const writeOgImages = async (
 };
 
 export const assertRequiredGlyphs = (root = defaultRoot) => {
-  const titleFont = loadFont(root, 'public/fonts/og/cormorant-garamond-latin.ttf');
-  const uiFont = loadFont(root, 'public/fonts/og/dm-sans-latin.ttf');
   const sample = 'ñáéíóúü¿· Gisela Saldarriaga 4.7/5 reseñas bilingüe';
-  for (const font of [titleFont, uiFont]) {
+  for (const font of [loadOgTitleFont(root), loadFont(root, UI_FONT_PATH, 700)]) {
     const missing = missingGlyphsIn(font, sample);
     if (missing.length > 0) {
       throw new Error(`brand font missing required glyphs: ${missing.join(' ')}`);

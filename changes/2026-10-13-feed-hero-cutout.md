@@ -259,3 +259,26 @@ crisp, clean edges with no halo.
 - New geometry: cut-out 980×2072 at (1425, 196) → `--feed-cut-left: 35.342%`,
   `--feed-cut-width: 24.306%`, `--feed-face-x: 0.4767`; the phone frame factor
   is 2.3142.
+
+## 12. Link previews (Open Graph) in the hero's look
+
+The 46 per-page cards (`src/lib/og-image-render.ts`, generated at build and
+committed under `public/og/`) were the old navy panel with a serif headline
+and a cropped photo. They are now the hero in miniature:
+
+- the hero's own scene and cut-out (`gisela-scene-2016.webp`,
+  `gisela-cutout-980.webp`), composited with sharp at the same alignment —
+  a 980px frame with her face at x 830 and her head 62px from the top, so her
+  head overlaps the edges of the "s" and the "e" as on the site;
+- "Gisela" in DM Sans Bold behind her, the page H1 in DM Sans Medium in the
+  lower left with "Gisela Saldarriaga · Gisela.UGC" above it and the locked
+  Fiverr proof line (with a star) below; a radial shade under the copy;
+- DM Sans only, from the bundled variable font (`getVariation({ wght })`);
+  Cormorant is no longer used for OG, and the layout test lays titles out with
+  `loadOgTitleFont()` so it measures what the renderer draws.
+- `OG_STYLE_VERSION` 20261013b, so every card got a new hashed filename and
+  no share cache serves the old one. Cards are 61–67 KB; H1s fit in ≤3 lines
+  at 36–50px.
+
+Regenerate without a full build: load `src/lib/og-image-render.ts` through
+Vite's `ssrLoadModule` and call `writeOgImages(root, { updateEntrypoints: true })`.
