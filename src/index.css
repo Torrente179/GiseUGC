@@ -1767,8 +1767,15 @@
     font-weight: 700;
     font-size: 5.2rem;
     line-height: 1;
+    /* Lining figures: Cormorant's default old-style "0" sits at x-height and
+       the "7" drops into the poster, so "07" read as "o7". */
+    font-variant-numeric: lining-nums;
     color: transparent;
-    -webkit-text-stroke: 1.2px hsl(var(--accent) / 0.5);
+    /* Was a 1.2px stroke at 50% accent (~1.6:1 on the linen), so the numeral
+       vanished on the page and on light posters. The halo keeps it legible
+       where it crosses a dark poster. */
+    -webkit-text-stroke: 1.6px hsl(var(--muted-foreground));
+    filter: drop-shadow(0 0 1.5px hsl(var(--background) / 0.9));
     pointer-events: none;
   }
 
@@ -1933,6 +1940,9 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
     scroll-snap-type: x proximity;
+    /* Same gutter as .dc-gallery-track's padding-left, so a card snaps to the
+       gutter rather than flush with the edge, which clipped the "01" numeral. */
+    scroll-padding-left: max(3rem, calc((100vw - 1400px) / 2 + 3rem));
   }
 
   .dc-gallery-viewport::-webkit-scrollbar {
