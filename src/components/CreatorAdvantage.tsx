@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { useTranslation } from '@/lib/locale-context';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
 import AdaptiveVideo from '@/components/media/AdaptiveVideo';
+import ReelPhone from '@/components/media/ReelPhone';
 import { r2PreviewVideo } from '@/data/portfolio-clips';
 import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
+import { useIsMobile } from '@/hooks/use-mobile';
 import '@/styles/creator-advantage.css';
 
 /**
@@ -18,6 +20,12 @@ import '@/styles/creator-advantage.css';
  *
  * All three cuts come from the same clothing shoot, so the stack shows what
  * the copy promises: one recording, an ad, a demo and a review.
+ *
+ * Phones get the hero's iPhone (ReelPhone) instead of the stack, playing the
+ * same three cuts, with a segmented control under it to pick one: the
+ * phone's own screen tap is its like gesture. CSS decides which of the two
+ * shows, so the prerendered HTML never flashes the wrong one; JS only decides
+ * which of them mounts a video.
  */
 
 const CUT_INTERVAL_MS = 4000;
@@ -56,6 +64,7 @@ const PointIcon = ({ index }: { index: number }) => (
 const CreatorAdvantage = () => {
   const { t } = useTranslation();
   const shouldReduceMotion = usePrefersReducedMotion();
+  const isPhone = useIsMobile();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const sectionRef = useRef<HTMLElement>(null);
   const deckRef = useRef<HTMLDivElement>(null);
@@ -115,6 +124,11 @@ const CreatorAdvantage = () => {
 
   const showNext = useCallback(() => {
     setFront((current) => (current + 1) % CUTS.length);
+    setCycle((current) => current + 1);
+  }, []);
+
+  const showCut = useCallback((index: number) => {
+    setFront(index);
     setCycle((current) => current + 1);
   }, []);
 
@@ -195,6 +209,72 @@ const CreatorAdvantage = () => {
               {t('portfolio.collageEyebrow')}
             </p>
 
+            <div className="ca-phone-wrap">
+              <div className="ca-aura" aria-hidden="true">
+                <span className="ca-orb ca-orb--a" />
+                <span className="ca-orb ca-orb--b" />
+                <span className="ca-orb ca-orb--c" />
+              </div>
+
+              <ReelPhone
+                className="ca-phone"
+                title={t(`portfolio.collageCuts.${frontCut.id}.caption`)}
+                reelKey={frontCut.id}
+                playing={isRotating}
+                clipMs={CUT_INTERVAL_MS}
+                onNavigate={handleHashLinkClick}
+                onContact={handleContactCtaClick}
+              >
+                <img
+                  key={`poster-${frontCut.id}`}
+                  className="ca-phone-media"
+                  src={posterVariant(frontCut.file, 720, 'webp')}
+                  srcSet={`${posterVariant(frontCut.file, 360, 'webp')} 360w, ${posterVariant(frontCut.file, 720, 'webp')} 720w`}
+                  sizes="68vw"
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+                {isPhone && !shouldReduceMotion ? (
+                  <AdaptiveVideo
+                    key={frontCut.id}
+                    className="ca-phone-media ca-phone-video"
+                    src={r2PreviewVideo(`${frontCut.file}.mp4`)}
+                    poster={posterVariant(frontCut.file, 720, 'webp')}
+                    muted
+                    loop
+                    autoPlay
+                    playsInline
+                    preload="metadata"
+                    playbackPriority="preview"
+                    rootMargin="180px 0px"
+                    aria-hidden="true"
+                  />
+                ) : null}
+              </ReelPhone>
+
+              <div
+                className="ca-cuts"
+                role="group"
+                aria-label={t('portfolio.collageEyebrow')}
+                style={{ '--ca-cut': front } as CSSProperties}
+              >
+                <span className="ca-cuts-ind" aria-hidden="true" />
+                {CUTS.map((cut, index) => (
+                  <button
+                    key={cut.id}
+                    type="button"
+                    className="ca-cut"
+                    aria-pressed={index === front}
+                    onClick={() => showCut(index)}
+                  >
+                    <span className="ca-cut-num" aria-hidden="true">{index + 1}</span>
+                    {t(`portfolio.collageCuts.${cut.id}.label`)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div ref={deckRef} className="ca-deck">
               <div className="ca-aura" aria-hidden="true">
                 <span className="ca-orb ca-orb--a" />
@@ -225,7 +305,7 @@ const CreatorAdvantage = () => {
                             decoding="async"
                           />
                         </picture>
-                        {isFront && !shouldReduceMotion ? (
+                        {isFront && !isPhone && !shouldReduceMotion ? (
                           <AdaptiveVideo
                             key={cut.id}
                             src={r2PreviewVideo(`${cut.file}.mp4`)}
