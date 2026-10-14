@@ -324,3 +324,21 @@ pixel of overlap), so the blurred background continues upward.
 Verified with puppeteer at 375×667, 393×852, 440×956, 744×1133, 820×1180,
 834×1194, 1032×1376, 1133×744, 1180×820, 1376×1032 and 1440×900, plus a click
 on each phone (liked state, burst and floats present).
+
+## 2026-10-14: the reel phone on iPad Air and Pro held upright
+
+The user asked for the desktop hero on iPad. Held sideways, iPads already got
+it. Held upright, the portrait composition was kept and only its proof rail
+was swapped for the playing reel phone, as desktop does (the user picked this
+over the full desktop layout).
+- **iPad Air / Pro upright (portrait, 800–1100 px):** the phone sits beside
+  the caption, bottom-aligned, `--reel-phone-w: clamp(14.5rem, 28vw, 18rem)`.
+  The caption is capped at 32rem and the rail is hidden.
+- **iPad mini upright (744 px):** unchanged. There is no room for the caption
+  and the phone side by side.
+- **`Hero.tsx`:** `NO_REEL_QUERY` replaces the compact query for everything
+  reel-related: the video, the rotation and the intro. The layout itself still
+  follows the compact CSS block.
+
+Verified at 744×1133, 820×1180, 834×1194, 1024×1366 and 1180×820. There is no
+overlap between the caption and the phone, and no horizontal overflow.

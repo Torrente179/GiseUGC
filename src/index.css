@@ -1231,8 +1231,9 @@
 
   /* Phones, and tablets held upright: a portrait iPad is a tall screen like a
      phone, so it takes the phone composition (her full height under the name,
-     the proof rail beside the caption) rather than the landscape one with the
-     reel phone. Keep in sync with COMPACT_HERO_QUERY in Hero.tsx. */
+     the proof rail beside the caption) rather than the landscape one. iPad Air
+     and Pro then put the reel phone back in the rail's place (below). Keep in
+     sync with NO_REEL_QUERY in Hero.tsx. */
   @media (max-width: 767px), (orientation: portrait) and (max-width: 1100px) {
     .feed-hero {
       --feed-name-size: 31.5vw;
@@ -1503,6 +1504,36 @@
 
     .feed-hero__progress {
       height: 3px;
+    }
+  }
+
+  /* Larger tablets held upright (iPad Air, Pro): the reel phone takes the
+     rail's place beside the caption, as on desktop, playing the same reels. The
+     iPad mini (744px) keeps the rail; there is no room for both there. */
+  @media (orientation: portrait) and (min-width: 800px) and (max-width: 1100px) {
+    .feed-hero__layout {
+      gap: 2rem;
+      padding-right: var(--feed-gutter);
+    }
+
+    .feed-hero__caption {
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: 32rem;
+    }
+
+    .feed-hero__reel-depth {
+      display: block;
+      flex: none;
+    }
+
+    .feed-hero__reel {
+      --reel-phone-w: clamp(14.5rem, 28vw, 18rem);
+      margin-bottom: 0;
+    }
+
+    .feed-hero__rail {
+      display: none;
     }
   }
 

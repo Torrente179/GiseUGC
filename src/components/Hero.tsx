@@ -21,21 +21,23 @@ const HERO_INTRO_LOAD_TIMEOUT_MS = 2600;
 const HERO_INTRO_PLAY_TIMEOUT_MS = 2500;
 const HERO_REEL_INTERVAL_MS = 3500;
 
-// Phones and portrait tablets get the compact composition (proof rail, no
-// reel phone); mirrors the compact media query in index.css. Nothing
-// reel-related runs there.
-const COMPACT_HERO_QUERY = '(max-width: 767px), (orientation: portrait) and (max-width: 1100px)';
+// Where the reel phone is hidden: phones, and small tablets held upright
+// (iPad mini), which show the proof rail instead. Larger tablets held upright
+// (iPad Air, Pro) keep the portrait composition but show the reel phone in the
+// rail's place, as desktop does. Mirrors the hero media queries in index.css.
+// Nothing reel-related runs where the phone is hidden.
+const NO_REEL_QUERY = '(max-width: 767px), (orientation: portrait) and (max-width: 799.98px)';
 
-const useCompactHero = () => {
-  const [compact, setCompact] = useState(false);
+const useReelHidden = () => {
+  const [hidden, setHidden] = useState(false);
   useEffect(() => {
-    const query = window.matchMedia(COMPACT_HERO_QUERY);
-    const sync = () => setCompact(query.matches);
+    const query = window.matchMedia(NO_REEL_QUERY);
+    const sync = () => setHidden(query.matches);
     sync();
     query.addEventListener('change', sync);
     return () => query.removeEventListener('change', sync);
   }, []);
-  return compact;
+  return hidden;
 };
 
 // Her rendered width, from the frame geometry in index.css: the cut-out is
@@ -62,7 +64,7 @@ const Hero = () => {
   const { locale, t } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const mediaIntent = useMediaIntent();
-  const isMobile = useCompactHero();
+  const reelHidden = useReelHidden();
   const heroRef = useRef<HTMLElement>(null);
   const [introState, setIntroState] = useState<HeroIntroState>('idle');
   const [isHeroActive, setIsHeroActive] = useState(true);
@@ -92,7 +94,7 @@ const Hero = () => {
 
   useEffect(() => {
     if (HERO_INTRO_CLIPS.length !== HERO_INTRO_CLIP_COUNT) return undefined;
-    if (window.matchMedia(COMPACT_HERO_QUERY).matches) return undefined;
+    if (window.matchMedia(NO_REEL_QUERY).matches) return undefined;
 
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (motionQuery.matches) return undefined;
@@ -160,7 +162,7 @@ const Hero = () => {
 
   useEffect(() => {
     const introIsActive = introState === 'loading' || introState === 'playing';
-    if (isMobile || !mediaIntent || !isHeroActive || introIsActive || HERO_REEL_CLIPS.length < 2) {
+    if (reelHidden || !mediaIntent || !isHeroActive || introIsActive || HERO_REEL_CLIPS.length < 2) {
       return undefined;
     }
 
@@ -168,7 +170,7 @@ const Hero = () => {
       setReelIndex((currentIndex) => (currentIndex + 1) % HERO_REEL_CLIPS.length);
     }, HERO_REEL_INTERVAL_MS);
     return () => window.clearInterval(interval);
-  }, [introState, isHeroActive, isMobile, mediaIntent]);
+  }, [introState, isHeroActive, reelHidden, mediaIntent]);
 
   // The scene behind her has the place where she stood filled in, which only
   // reads as background once she is drawn over it. Show it after she loads.
@@ -213,7 +215,7 @@ const Hero = () => {
 
   const activeReelClip = HERO_REEL_CLIPS[reelIndex] ?? HERO_REEL_CLIPS[0];
   const introIsRunning = introState === 'loading' || introState === 'playing';
-  const reelIsPlaying = mediaIntent && !isMobile && isHeroActive && !introIsRunning;
+  const reelIsPlaying = mediaIntent && !reelHidden && isHeroActive && !introIsRunning;
   const nextReelClip = HERO_REEL_CLIPS[(reelIndex + 1) % HERO_REEL_CLIPS.length];
 
   // Each reel shows for 3.5 s, so the phone plays the reels' 6 s opening loops
@@ -405,7 +407,7 @@ const Hero = () => {
                   rootMargin="0px"
                 />
 
-                {mediaIntent && !isMobile && !introIsRunning && (
+                {mediaIntent && !reelHidden && !introIsRunning && (
                   <AutoplayPreviewVideo
                     key={activeReelClip.id}
                     className="feed-hero__phone-video"
