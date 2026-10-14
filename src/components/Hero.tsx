@@ -244,19 +244,19 @@ const Hero = () => {
         <div className="feed-hero__frame feed-hero__frame--figure">
           <div className="feed-hero__frame-depth" data-depth="8">
             <picture className="feed-hero__figure">
-              {/* Cut from the 4032×2268 original, where she spans 991×2072 px.
+              {/* Cut from the 4032×2268 photo, where she spans 980×2072 px.
                   WebP only: AVIF compresses alpha lossily and steps the
                   outline. */}
               <source
                 type="image/webp"
-                srcSet="/uploads/gisela-cutout-520.webp 520w, /uploads/gisela-cutout-760.webp 760w, /uploads/gisela-cutout-991.webp 991w"
+                srcSet="/uploads/gisela-cutout-520.webp 520w, /uploads/gisela-cutout-760.webp 760w, /uploads/gisela-cutout-980.webp 980w"
                 sizes={HERO_FIGURE_SIZES}
               />
               <img
                 ref={figureRef}
                 src="/uploads/gisela-cutout-640.png"
                 alt={t('hero.imageAlt')}
-                width="991"
+                width="980"
                 height="2072"
                 loading="eager"
                 decoding="async"

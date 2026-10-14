@@ -51,7 +51,7 @@ styled through `#home .feed-hero__title` because the global heading rule is
 - Source: the original iPhone 13 Pro Max photo, 4032×2268
   (`~/Downloads/IMG_8146.JPG` on JP's machine). She spans **980×2070 px** in
   it; that is the ceiling for this photo.
-- `scripts/hero-cutout.swift` (Apple Vision subject mask), then
+- (superseded by §11) `scripts/hero-cutout.swift` (Apple Vision subject mask), then
   `scripts/clean-hero-cutout.py`, which decontaminates the soft edge against a
   local background estimate (no glass halo on her hair) and drops strips of
   light background the mask counted as hair. Output: AVIF (q72, visually
@@ -234,3 +234,28 @@ filtering fixes that.
 
 Known trade-off: on short laptop screens (≤ ~800 px tall) the phone overlaps
 the last letter of the name.
+
+## 11. New source photo and BiRefNet matte
+
+JP: "the edge detection tech you are using is faulty", and supplied the
+retouched edit of the same shot (`~/Downloads/Photos/E3AF5948-…(2)-EDIT.jpg`,
+4032×2268, pixel-aligned with IMG_8146: smoother skin, slightly warmer).
+
+Four mattes were compared on 1:1 crops of hair and both arms over a flat
+colour: Apple Vision's subject mask (the one used so far: grey halo round the
+hair, smeared arm edges), Vision's person segmentation (.accurate; only
+2016×1512, glow round the hair, a dark blob on one arm), and BiRefNet-portrait
+on a crop round her, whole and tiled. BiRefNet whole-crop was clearly best:
+crisp, clean edges with no halo.
+
+- `scripts/hero-matte.py` (needs a Python 3.12 venv with onnxruntime; see its
+  docstring) runs `onnx-community/BiRefNet-portrait-ONNX` (MIT, ~970 MB, cached
+  by huggingface_hub) on the whole photo to find her, then on a crop round her.
+  It replaces `scripts/hero-cutout.swift`, which is deleted.
+- `scripts/clean-hero-cutout.py <photo> <matte> public/uploads` now uses the
+  matte as it is. The guided filter, the hair-gap repainting and the steeper
+  hair falloff were workarounds for the Vision mask and are gone; the one edge
+  treatment left is taking edge colour from the nearest solid pixel of her.
+- New geometry: cut-out 980×2072 at (1425, 196) → `--feed-cut-left: 35.342%`,
+  `--feed-cut-width: 24.306%`, `--feed-face-x: 0.4767`; the phone frame factor
+  is 2.3142.

@@ -769,7 +769,8 @@
   }
 
   /* ─── Home hero: her photo, with her name between her and the scene ───
-     Both photographic layers come from one picture (IMG_8146, 4032×2268) via
+     Both photographic layers come from one picture (the retouched edit of
+     IMG_8146, 4032×2268) via scripts/hero-matte.py (BiRefNet) and
      scripts/clean-hero-cutout.py: the scene with her removed and lightly
      blurred, and the cut-out of her. They sit in two `.feed-hero__frame`s with
      identical geometry, so every edge pixel of the cut-out lands on the
@@ -794,10 +795,10 @@
     --feed-name-size: calc(var(--feed-u) * 23);
     --feed-name-top: calc(env(safe-area-inset-top, 0px) + 4.25rem + var(--feed-u) * 0.5);
     --feed-gutter: clamp(1.5rem, 5vw, 4.5rem);
-    --feed-cut-left: 35.169%;
+    --feed-cut-left: 35.342%;
     --feed-cut-top: 8.642%;
-    --feed-cut-width: 24.578%;
-    --feed-face-x: 0.4756;
+    --feed-cut-width: 24.306%;
+    --feed-face-x: 0.4767;
     --feed-head-y: 0.0864;
     position: relative;
     width: 100%;
@@ -1406,10 +1407,10 @@
     /* Phones size the frame from her width (92% of the screen, 330px at most
        so 3x screens stay at her native pixels) but never shorter than 108% of
        the stage, so she always reaches the foot. Her head sits just under the
-       name's baseline, as in the canvas. 2.2886 = 1 / (cut width × 16:9). The
+       name's baseline, as in the canvas. 2.3142 = 1 / (cut width × 16:9). The
        top of the frame can start below the stage top; the nav bar covers it. */
     .feed-hero__frame {
-      --frame-h: max(calc(min(92cqw, 330px) * 2.2886), 108cqh);
+      --frame-h: max(calc(min(92cqw, 330px) * 2.3142), 108cqh);
       top: calc(var(--feed-name-top) + var(--feed-name-size) * 0.53 - var(--feed-head-y) * var(--frame-h));
       left: clamp(
         calc(100cqw - var(--frame-w)),
