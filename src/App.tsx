@@ -31,6 +31,11 @@ import {
 } from '@/lib/locale-path';
 import { getChatGptReferralContext } from '@/lib/referral-attribution';
 import { startMobileMediaPressureObserver } from '@/lib/perf-debug';
+import {
+  HASH_SCROLL_MAX_ATTEMPTS,
+  HASH_SCROLL_NAV_OFFSET,
+  shouldRetryHashScroll,
+} from '@/lib/hash-section-scroll';
 import { scrollToY } from '@/lib/motion/native-scroll';
 
 const MobileAppShell = lazy(() => import('@/components/mobile/MobileAppShell'));
@@ -178,14 +183,19 @@ const jumpToY = (y: number) => {
 const scrollToSection = (sectionId: string, attempts = 0) => {
   const element = document.getElementById(sectionId);
   if (element) {
-    const y = element.getBoundingClientRect().top + window.scrollY - 80;
-    scrollToY(Math.max(0, y));
+    const y = element.getBoundingClientRect().top + window.scrollY - HASH_SCROLL_NAV_OFFSET;
+    if (shouldRetryHashScroll(y, document.documentElement.scrollHeight, window.innerHeight, attempts)) {
+      setTimeout(() => scrollToSection(sectionId, attempts + 1), 80);
+      return;
+    }
+    // Immediate: a later view-transition or POP restore must not cancel this.
+    scrollToY(Math.max(0, y), { immediate: true });
     // Clear the hash from the URL without triggering a React Router navigation
     const cleanPath = window.location.pathname + window.location.search;
     window.history.replaceState(null, '', cleanPath);
     return;
   }
-  if (attempts < 15) {
+  if (attempts < HASH_SCROLL_MAX_ATTEMPTS) {
     setTimeout(() => scrollToSection(sectionId, attempts + 1), 80);
   }
 };
@@ -247,7 +257,12 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
     }
     prevLocationKeyRef.current = location.key;
 
-    if (navigationType === 'POP') {
+    if (location.hash) {
+      // Hash wins over POP restore so a cold load of /#contact (or /en/#contact)
+      // scrolls to the target instead of jumping to y=0.
+      jumpToY(0);
+      requestAnimationFrame(() => scrollToSection(location.hash.slice(1)));
+    } else if (navigationType === 'POP') {
       // Browser back / forward — restore exact saved scroll position.
       // Two rAF hops let the browser finish route layout before restoring scroll,
       // preventing main-thread contention on media-heavy pages.
@@ -257,10 +272,6 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
           jumpToY(savedY);
         });
       });
-    } else if (location.hash) {
-      // Navigating to a hash section (e.g. /#services from a service page)
-      jumpToY(0);
-      requestAnimationFrame(() => scrollToSection(location.hash.slice(1)));
     } else {
       // Normal forward navigation — start at the top
       jumpToY(0);

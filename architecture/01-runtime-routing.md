@@ -38,12 +38,13 @@ Only the current route is mounted. Hidden home media is not preserved behind a
 subroute.
 
 `/#contact` and `/en/#contact` target `id="contact"` on the rendered homepage
-footer (`PageEndStrip` while `SHOW_SITE_FOOTER` is false). App hash navigation
-retries until that element exists, then scrolls to it.
+footer (`PageEndStrip` while `SHOW_SITE_FOOTER` is false). Hash navigation wins
+over POP restore (a cold load is a `POP`). `scrollToSection` waits until the
+measured Y has settled, then jumps immediately and clears the hash.
 
 ## Scroll Behavior
 
-`App.tsx` persists scroll positions by React Router `location.key`. On browser back/forward it restores the saved Y position after two animation frames. Hash navigation retries until lazy-mounted sections exist, then clears the hash from the URL.
+`App.tsx` persists scroll positions by React Router `location.key`. On browser back/forward without a hash it restores the saved Y position after two animation frames. A hash in the URL is handled first so `/#contact` does not get reset to `y=0`. Hash navigation retries until the target's layout has settled, then clears the hash from the URL.
 
 ## Locale Behavior
 

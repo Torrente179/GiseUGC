@@ -62,6 +62,9 @@ This folder is organized by subsystem instead of by date.
     — `/recursos/cuanto-cobra-creadora-ugc/` and
     `/en/resources/how-much-does-a-ugc-creator-charge/`. Prices live in
     `FIVERR_PRICING`; any change needs a Fiverr re-check and an Authority ping.
+  - **Current `/#contact` scroll:** `seo/2026-10-14-contact-hash-scroll.md` —
+    hash wins over POP restore; `scrollToSection` retries until the footer Y
+    has settled, then jumps immediately.
 - `deployment/`
   - Hosting, caching, security hardening, and runtime instrumentation.
 
