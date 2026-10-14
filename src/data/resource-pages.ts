@@ -106,8 +106,13 @@ const usd = (amount: number) => `$${amount}`;
 const mdLink = (label: string, href: string) => `[${label}](${href})`;
 const mdPrice = (amount: number, href: string, prefix = '') => mdLink(`${prefix}${usd(amount)}`, href);
 
-const dualSpokespersonPrice = (amount: number) =>
-  `${mdPrice(amount, FIVERR_PRICING.gigs.spokespersonGreenWhite)} · ${mdPrice(amount, FIVERR_PRICING.gigs.spokespersonJournalist)}`;
+const dualSpokespersonPrice = (amount: number, locale: SiteLocale) => {
+  const labels =
+    locale === 'es'
+      ? { greenWhite: 'gig fondo verde/blanco', journalist: 'gig presentadora' }
+      : { greenWhite: 'green/white backdrop gig', journalist: 'presenter gig' };
+  return `${usd(amount)} (${mdLink(labels.greenWhite, FIVERR_PRICING.gigs.spokespersonGreenWhite)} · ${mdLink(labels.journalist, FIVERR_PRICING.gigs.spokespersonJournalist)})`;
+};
 
 const verifiedParts = () => {
   const [year, month, day] = FIVERR_PRICING.verifiedOn.split('-');
@@ -1212,21 +1217,21 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
                 'Hasta 65 palabras',
                 'Video a cámara',
                 spokespersonDelivery(),
-                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words65.price),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words65.price, 'es'),
               ],
               [
                 'Video de portavoz en español',
                 '~130 palabras',
                 'Video a cámara',
                 spokespersonDelivery(),
-                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words130.price),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words130.price, 'es'),
               ],
               [
                 'Video de portavoz en español',
                 'Hasta 260 palabras',
                 'Video a cámara',
                 spokespersonDelivery(),
-                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words260.price),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words260.price, 'es'),
               ],
               [
                 'Voz en off en español',
@@ -1347,21 +1352,21 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
                 'Up to 65 words',
                 'On-camera delivery',
                 spokespersonDelivery(),
-                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words65.price),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words65.price, 'en'),
               ],
               [
                 'Spokesperson video in Spanish',
                 '~130 words',
                 'On-camera delivery',
                 spokespersonDelivery(),
-                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words130.price),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words130.price, 'en'),
               ],
               [
                 'Spokesperson video in Spanish',
                 'Up to 260 words',
                 'On-camera delivery',
                 spokespersonDelivery(),
-                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words260.price),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words260.price, 'en'),
               ],
               [
                 'Voiceover in Spanish',

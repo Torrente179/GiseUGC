@@ -153,8 +153,39 @@ describe('pricing resource pages', () => {
       );
       expect((spokespersonGreen ?? []).length).toBeGreaterThanOrEqual(3);
       expect((spokespersonJournalist ?? []).length).toBeGreaterThanOrEqual(3);
-      expect(html).toContain(locale === 'es' ? '/#contact' : '/en/#contact');
+      expect(html).not.toContain('$25 · $25');
+      expect(html).not.toContain('$40 · $40');
+      expect(html).not.toContain('$75 · $75');
+      if (locale === 'es') {
+        expect(html).toContain('$25 (');
+        expect(html).toContain('gig fondo verde/blanco');
+        expect(html).toContain('gig presentadora');
+        expect(html).toContain('/#contact');
+      } else {
+        expect(html).toContain('$25 (');
+        expect(html).toContain('green/white backdrop gig');
+        expect(html).toContain('presenter gig');
+        expect(html).toContain('/en/#contact');
+      }
     }
+  });
+
+  it('renders one FAQ block whose visible text matches FAQPage', () => {
+    for (const locale of ['es', 'en'] as const) {
+      const { raw, html } = renderPricing(locale);
+      const faqHeading = locale === 'es' ? 'Preguntas frecuentes' : 'Frequently asked questions';
+      expect((html.match(new RegExp(faqHeading, 'gu')) ?? []).length).toBe(1);
+      expect(html).not.toContain('<dl');
+      expect(html).not.toContain('<dt');
+      const faqPages = extractFaqPages(raw);
+      expect(faqPages).toHaveLength(1);
+    }
+    const esShell = read('recursos/cuanto-cobra-creadora-ugc/index.html');
+    const enShell = read('en/resources/how-much-does-a-ugc-creator-charge/index.html');
+    expect(esShell).not.toMatch(/<dl[\s>]/u);
+    expect(enShell).not.toMatch(/<dl[\s>]/u);
+    expect((esShell.match(/Preguntas frecuentes/gu) ?? []).length).toBe(1);
+    expect((enShell.match(/Frequently asked questions/gu) ?? []).length).toBe(1);
   });
 
   it('uses the approved titles, paths, and hire-guide budget FAQ', () => {
