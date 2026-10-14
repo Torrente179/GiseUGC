@@ -24,8 +24,9 @@ Service schema, and deep links are unchanged.
    sliding tablist (arrow keys, Home/End). One muted preview plays on top, only
    while the phone is in view and only in the visible shell; reduced motion
    keeps the posters. All four descriptions stay in the HTML.
-3. Process: a rail of tall image cards with step number and name over the still;
-   arrow buttons on desktop, a snap rail on phones.
+3. Process: tall image cards with step number and name over the still; a grid
+   inside the content width on desktop (see the follow-up below), a snap rail on
+   phones.
 4. Fit: one wide photo, then the two columns; on phones a two-option toggle
    that keeps both lists in the DOM.
 5. Questions: native `<details>`, the first open.
@@ -126,3 +127,35 @@ device width in every shell. Measured on the build, every frame proportion
 (body, glass and screen radii, island size and position, button offsets) now
 matches `.reel-phone` within pixel rounding. Before/after shots of Formats
 (light and dark, 1440 and 390) are in `_mockups/service-keynote/shots/phone-fix/`.
+
+## Follow-up: Process as a grid on desktop
+
+On the desktop shell "Cómo trabajamos" no longer scrolls sideways. The prev/next
+arrows and the horizontal rail are gone (the fourth card used to sit half cut off
+at 1440); the four cards are a grid in the same content width as the title
+(`--kn-pad`, 1248 px at most), so the title's left edge is the grid's left edge
+and the grid is centred on wide screens.
+
+- 4 columns from 1200 px, 2 x 2 below (768-1199). The breakpoint is where the
+  four-up cards stop being comfortable: at 1200 a card is 242 px wide, and the
+  longest step name wraps to three lines inside it.
+- Cards keep the 380:500 proportion they had, radius 28, the same stills and crop,
+  the number and name over the still at the same size, and the sentence below at
+  17 px. Only the card width and the gap changed (24 px between columns, 56 px
+  between the two rows of the 2 x 2).
+- The phone shell is untouched: same snap rail, same cards, still focusable as a
+  scroller. The phone shots are pixel-identical before and after. The rail keeps
+  its tab stop only on phones; on desktop the list is plain content.
+- Removed with the arrows: `.kn-arrows`, `.kn-arr` and the `--kn-arr-*` tokens in
+  `service-keynote.css`, the `previousStep` / `nextStep` strings in `labels.ts`,
+  and `useRail` in `ProcessBeat` (`CloseBeat` still uses the hook). The `sizes`
+  hint of the stills is now `(min-width: 1200px) 294px, 50vw`.
+- `service-inner-argument.test.tsx`: the desktop check now expects four cards in a
+  list with no arrow buttons; the phone check expects the focusable rail.
+
+Checked: typecheck, lint (0 errors), 373 unit tests, production build with
+prerender. On the build, all 16 service routes at 1920, 1440, 1280, 1200, 1199,
+1024, 768 and 390: column count, grid centred, title flush with the grid, no step
+name overflowing its card, no horizontal page scroll, phone rail still scrolls.
+Before/after shots (1440, 1024, 390, light and dark, two pages) are in
+`_mockups/service-keynote/shots/process-grid/` at the repo's parent.

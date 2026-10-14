@@ -3,8 +3,6 @@ import type { SiteLocale } from '@/lib/locale-path';
 export type KeynoteLabels = {
   onThisPage: string;
   sectionsMenu: (current: string) => string;
-  previousStep: string;
-  nextStep: string;
   processRail: string;
   formatsList: string;
   fitToggle: string;
@@ -20,8 +18,6 @@ export const KEYNOTE_LABELS: Record<SiteLocale, KeynoteLabels> = {
   es: {
     onThisPage: 'En esta página',
     sectionsMenu: (current) => `Secciones, actual: ${current}`,
-    previousStep: 'Paso anterior',
-    nextStep: 'Siguiente paso',
     processRail: 'Pasos del proceso',
     formatsList: 'Formatos',
     fitToggle: '¿Es para ti?',
@@ -33,8 +29,6 @@ export const KEYNOTE_LABELS: Record<SiteLocale, KeynoteLabels> = {
   en: {
     onThisPage: 'On this page',
     sectionsMenu: (current) => `Sections, current: ${current}`,
-    previousStep: 'Previous step',
-    nextStep: 'Next step',
     processRail: 'Process steps',
     formatsList: 'Formats',
     fitToggle: 'Is this for you?',

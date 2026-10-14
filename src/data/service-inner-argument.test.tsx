@@ -212,10 +212,11 @@ describe('service inner presentation locks', () => {
     expect(desktop).toContain('aria-selected="true"');
     expect(desktop).toContain('class="kn-phone kn-phone--stage"');
 
-    // Process: a rail of four image cards with their step numbers.
+    // Process: four image cards with their step numbers, laid out as a grid (no arrows, no scroll stop).
     expect((desktop.match(/class="kn-card"/gu) ?? []).length).toBe(page.processSteps.length);
-    expect(desktop).toContain('aria-label="Previous step"');
-    expect(desktop).toContain('aria-label="Next step"');
+    expect(desktop).toContain('<ol class="kn-rail" aria-label="Process steps">');
+    expect(desktop).not.toContain('aria-label="Previous step"');
+    expect(desktop).not.toContain('aria-label="Next step"');
 
     // Fit: both columns present, with key phrases in full ink.
     expect(desktop).toContain('class="kn-col kn-col--no"');
@@ -252,6 +253,9 @@ describe('service inner presentation locks', () => {
       expect(mobile).toContain(`href="#${id}"`);
     }
     expect(mobile).toContain('id="kn-fm-mobile-tab-0"');
+    // Process keeps the swipe rail on phones: a focusable scroller, no arrow buttons.
+    expect(mobile).toContain('<ol class="kn-rail" aria-label="Pasos del proceso" tabindex="0">');
+    expect(mobile).not.toContain('aria-label="Paso anterior"');
     // Fit toggle: both lists stay in the DOM, the inactive one hidden.
     expect(mobile).toContain('class="kn-tog"');
     expect((mobile.match(/class="kn-list"/gu) ?? []).length).toBe(2);
