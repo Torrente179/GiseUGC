@@ -1,0 +1,769 @@
+/* ═══════════════════════════════════════════════════
+   Contact chrome in the spatial-glass language
+   - Desktop: the "Escríbeme" pill and its contact panel (FloatingContactDock)
+   - Phones: the Liquid-glass tab bar (MobileTabBar) and contact sheet
+     (MobileContactSheet)
+
+   Replaces the old row of eight brand logos (.floating-contact-dock), the
+   flat tab bar (.mtabbar) and the plain list sheet (.msheet); those rules in
+   index.css are no longer referenced.
+
+   Plain stylesheet (no @layer) so Tailwind can't purge it.
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  --chrome-glass: hsl(40 33% 98.8% / 0.74);
+  --chrome-glass-strong: hsl(40 33% 98.8% / 0.84);
+  --chrome-tile: hsl(0 0% 100% / 0.68);
+  --chrome-tile-hover: hsl(0 0% 100% / 0.92);
+  --chrome-ring: hsl(33 13% 16% / 0.06);
+  --chrome-edge: hsl(0 0% 100% / 0.95);
+  --chrome-shadow: 33 13% 16%;
+  --chrome-soft: hsl(30 15% 32%);
+  --chrome-lens: hsl(0 0% 100% / 0.9);
+  --chrome-rim-hi: hsl(0 0% 100% / 1);
+  --chrome-rim-lo: hsl(0 0% 100% / 0.16);
+  --chrome-wa: #25d366;
+  --chrome-tg-bg: hsl(199 73% 49% / 0.14);
+  --chrome-tg: hsl(199 74% 36%);
+  --chrome-fi-bg: hsl(151 74% 43% / 0.14);
+  --chrome-fi: hsl(151 75% 31%);
+  --chrome-star: hsl(47 23% 51%);
+}
+
+.dark {
+  --chrome-glass: hsl(222 24% 12% / 0.72);
+  --chrome-glass-strong: hsl(222 24% 12% / 0.86);
+  --chrome-tile: hsl(0 0% 100% / 0.07);
+  --chrome-tile-hover: hsl(0 0% 100% / 0.12);
+  --chrome-ring: hsl(0 0% 100% / 0.08);
+  --chrome-edge: hsl(0 0% 100% / 0.12);
+  --chrome-shadow: 0 0% 0%;
+  --chrome-soft: hsl(38 20% 72%);
+  --chrome-lens: hsl(0 0% 100% / 0.14);
+  --chrome-rim-hi: hsl(0 0% 100% / 0.35);
+  --chrome-rim-lo: hsl(0 0% 100% / 0.05);
+  --chrome-tg-bg: hsl(199 73% 49% / 0.2);
+  --chrome-tg: hsl(199 80% 68%);
+  --chrome-fi-bg: hsl(151 74% 43% / 0.2);
+  --chrome-fi: hsl(151 60% 60%);
+  --chrome-star: hsl(42 28% 60%);
+}
+
+/* Shared glass recipe: tint + blur, a top highlight, and a lit rim drawn as
+   a masked gradient border on ::after. */
+.chrome-glass {
+  background: var(--chrome-glass);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+}
+
+.chrome-rim::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  background: linear-gradient(
+    160deg,
+    var(--chrome-rim-hi),
+    var(--chrome-rim-lo) 40%,
+    var(--chrome-rim-lo) 60%,
+    var(--chrome-rim-hi)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .chrome-glass { background: var(--chrome-glass-strong); }
+}
+
+.chrome-avatar {
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.chrome-arrow {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ═════════ Desktop: pill + panel ═════════ */
+
+.cdock {
+  position: fixed;
+  right: max(2rem, env(safe-area-inset-right, 0px));
+  bottom: max(2rem, env(safe-area-inset-bottom, 0px));
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  pointer-events: none;
+  font-family: var(--font-marketing);
+  color: hsl(var(--foreground));
+}
+
+@media (max-width: 767px) {
+  .cdock { display: none; }
+}
+
+.cdock-pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 3.75rem;
+  padding: 0 1.25rem 0 0.5rem;
+  border: 0;
+  border-radius: 999px;
+  color: inherit;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  /* Named here, not on .cdock: an element with a view-transition-name is a
+     backdrop root, so naming the wrapper would leave the glass inside it
+     nothing to blur. The pill stays put across page transitions. */
+  view-transition-name: site-dock;
+  box-shadow:
+    0 24px 48px -22px hsl(var(--chrome-shadow) / 0.55),
+    inset 0 1px 0 var(--chrome-edge),
+    inset 0 0 0 1px var(--chrome-ring);
+  opacity: 0;
+  translate: 0 1rem;
+  scale: 0.96;
+  pointer-events: none;
+  transition:
+    opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    translate 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+    scale 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cdock[data-visible='true'] .cdock-pill {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
+  pointer-events: auto;
+}
+
+/* Over the footer's own contact links the pill steps back. */
+.cdock[data-visible='true'][data-ghost='true'] .cdock-pill {
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .cdock[data-visible='true'] .cdock-pill:hover { translate: 0 -2px; }
+}
+
+.cdock-pill:focus-visible {
+  outline: 2px solid hsl(var(--foreground));
+  outline-offset: 3px;
+}
+
+.cdock-pill-face {
+  position: relative;
+  flex: none;
+}
+
+.cdock-pill-face .chrome-avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.cdock-pill-badge {
+  position: absolute;
+  right: -0.125rem;
+  bottom: -0.125rem;
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: var(--chrome-wa);
+  color: #fff;
+  box-shadow: 0 0 0 2px hsl(var(--background));
+}
+
+.cdock-pill-badge svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.cdock-chev {
+  width: 1rem;
+  height: 1rem;
+  transition: rotate 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cdock-pill[aria-expanded='true'] .cdock-chev { rotate: 180deg; }
+
+.cdock-panel {
+  position: relative;
+  width: 23.25rem;
+  padding: 1.25rem;
+  border-radius: 1.875rem;
+  box-shadow:
+    0 40px 80px -30px hsl(var(--chrome-shadow) / 0.55),
+    0 2px 8px hsl(var(--chrome-shadow) / 0.06),
+    inset 0 1px 0 var(--chrome-edge);
+  transform-origin: 100% 100%;
+  opacity: 0;
+  translate: 0 0.75rem;
+  scale: 0.96;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    translate 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    scale 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.45s;
+}
+
+.cdock-panel[data-open='true'] {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.cdock-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cdock-head .chrome-avatar {
+  width: 2.875rem;
+  height: 2.875rem;
+}
+
+.cdock-head-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.cdock-title {
+  margin: 0;
+  color: hsl(var(--foreground));
+  font-size: 1.25rem;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.cdock-sub {
+  margin: 0.1875rem 0 0;
+  font-size: 0.875rem;
+  color: var(--chrome-soft);
+}
+
+.cdock-close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: hsl(var(--foreground) / 0.07);
+  color: inherit;
+  cursor: pointer;
+}
+
+.cdock-close svg { width: 1rem; height: 1rem; }
+
+.cdock-close:focus-visible,
+.cdock-row:focus-visible,
+.cdock-social a:focus-visible {
+  outline: 2px solid hsl(var(--foreground));
+  outline-offset: 2px;
+}
+
+.cdock-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.125rem;
+}
+
+.cdock-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.375rem;
+  padding: 0.5rem 1rem 0.5rem 0.5625rem;
+  border-radius: 1.125rem;
+  background: var(--chrome-tile);
+  box-shadow: inset 0 0 0 1px var(--chrome-ring);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.25s ease, translate 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cdock-row:hover {
+  background: var(--chrome-tile-hover);
+  translate: -2px 0;
+}
+
+.cdock-row--primary {
+  min-height: 3.625rem;
+  background: hsl(var(--foreground));
+  box-shadow: none;
+  color: hsl(var(--background));
+}
+
+.cdock-row--primary:hover { background: hsl(var(--foreground)); }
+
+.cdock-tile {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.6875rem;
+}
+
+.cdock-tile svg { width: 1.125rem; height: 1.125rem; }
+
+.cdock-row--primary .cdock-tile {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: var(--chrome-wa);
+  color: #fff;
+}
+
+.cdock-row--primary .cdock-tile svg { width: 1.3rem; height: 1.3rem; }
+
+.chrome-tile--telegram { background: var(--chrome-tg-bg); color: var(--chrome-tg); }
+.chrome-tile--fiverr { background: var(--chrome-fi-bg); color: var(--chrome-fi); }
+.chrome-tile--fiverr svg { width: 1.375rem; height: 1.375rem; }
+
+.cdock-row-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.cdock-row--primary .cdock-row-text { font-size: 1rem; }
+
+.chrome-proof {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.125rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--chrome-soft);
+}
+
+.chrome-proof svg {
+  width: 0.6875rem;
+  height: 0.6875rem;
+  fill: var(--chrome-star);
+}
+
+.cdock-follow {
+  margin: 1.125rem 0 0.625rem 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--chrome-soft);
+}
+
+.cdock-social {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.cdock-social a {
+  display: grid;
+  place-items: center;
+  height: 3rem;
+  border-radius: 1rem;
+  background: var(--chrome-tile);
+  box-shadow: inset 0 0 0 1px var(--chrome-ring);
+  color: inherit;
+  transition: background-color 0.25s ease, translate 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cdock-social a:hover {
+  background: var(--chrome-tile-hover);
+  translate: 0 -2px;
+}
+
+.cdock-social svg { width: 1.25rem; height: 1.25rem; }
+
+/* ═════════ Phones: Liquid-glass tab bar ═════════ */
+
+.lgbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0 1rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  pointer-events: none;
+  font-family: var(--font-marketing);
+  transition:
+    transform 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.25s ease;
+}
+
+/* The page fades out under the bar, the way a native scroll edge does, so
+   the glass never sits on a hard cut of busy content. */
+.lgbar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100% + 2.5rem);
+  z-index: -1;
+  background: linear-gradient(to top, hsl(var(--background) / 0.9), hsl(var(--background) / 0));
+  pointer-events: none;
+}
+
+.lgbar.is-hidden {
+  transform: translateY(135%);
+  opacity: 0;
+}
+
+@media (min-width: 768px) {
+  .lgbar { display: none; }
+}
+
+/* Footer and last content clear the taller floating bar. Specificity (0,1,1)
+   beats the :root default in index.css whatever the bundle order. */
+@media (max-width: 767px) {
+  html:root { --app-dock-clearance: calc(5.25rem + env(safe-area-inset-bottom, 0px)); }
+}
+
+.lgbar-tabs {
+  position: relative;
+  flex: 1;
+  max-width: 22rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  height: 4rem;
+  padding: 0.3125rem;
+  border-radius: 999px;
+  pointer-events: auto;
+  /* The glass pieces carry the transition names, not .lgbar: a named
+     ancestor would be a backdrop root and blank out their blur. */
+  view-transition-name: site-tabs;
+  box-shadow:
+    0 18px 40px -18px hsl(var(--chrome-shadow) / 0.45),
+    0 1px 3px hsl(var(--chrome-shadow) / 0.06),
+    inset 0 1px 0 var(--chrome-edge);
+}
+
+.lgbar-tabs.chrome-glass {
+  background: hsl(var(--background) / 0.62);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  backdrop-filter: blur(24px) saturate(190%);
+}
+
+.lgbar-lens {
+  position: absolute;
+  left: 0.3125rem;
+  top: 0.3125rem;
+  bottom: 0.3125rem;
+  width: calc((100% - 0.625rem) / 3);
+  border-radius: 999px;
+  background: var(--chrome-lens);
+  box-shadow:
+    0 6px 16px -8px hsl(var(--chrome-shadow) / 0.35),
+    inset 0 0 0 1px var(--chrome-ring);
+  transform: translateX(calc(var(--lg-index, 0) * 100%));
+  transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.lgbar-tab {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  border-radius: 999px;
+  color: hsl(var(--foreground) / 0.62);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.1;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.3s ease;
+}
+
+.lgbar-tab[aria-current='page'] { color: hsl(var(--foreground)); }
+
+.lgbar-tab svg {
+  width: 1.4375rem;
+  height: 1.4375rem;
+}
+
+.lgbar-tab:focus-visible,
+.lgbar-contact:focus-visible {
+  outline: 2px solid hsl(var(--foreground));
+  outline-offset: 2px;
+}
+
+.lgbar-contact {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border: 0;
+  border-radius: 50%;
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+  pointer-events: auto;
+  cursor: pointer;
+  view-transition-name: site-tabs-contact;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow:
+    0 18px 36px -14px hsl(var(--chrome-shadow) / 0.65),
+    inset 0 1px 0 hsl(0 0% 100% / 0.18);
+}
+
+.lgbar-contact svg {
+  width: 1.5625rem;
+  height: 1.5625rem;
+}
+
+/* The Contacto button holds still across page transitions, like the rest of
+   the chrome (site-nav, site-tabs, site-dock in index.css). */
+::view-transition-group(site-tabs-contact) {
+  z-index: 100;
+  animation: none;
+}
+
+::view-transition-old(site-tabs-contact) { display: none; }
+::view-transition-new(site-tabs-contact) { animation: none; }
+
+/* ═════════ Phones: contact sheet ═════════ */
+
+.csheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  background: hsl(26 15% 11% / 0.32);
+}
+
+.csheet {
+  position: fixed;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  z-index: 140;
+  display: flex;
+  flex-direction: column;
+  max-height: 88svh;
+  overflow-y: auto;
+  padding: 0.625rem 1.125rem 1.375rem;
+  border-radius: 2.5rem;
+  outline: none;
+  font-family: var(--font-marketing);
+  color: hsl(var(--foreground));
+  box-shadow:
+    0 -10px 50px -20px hsl(26 15% 11% / 0.5),
+    inset 0 1px 0 var(--chrome-edge);
+}
+
+.csheet.chrome-glass {
+  background: hsl(var(--background) / 0.8);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  backdrop-filter: blur(30px) saturate(190%);
+}
+
+.csheet-grabber {
+  flex: none;
+  width: 2.375rem;
+  height: 0.3125rem;
+  margin: 0 auto 1rem;
+  border-radius: 3px;
+  background: hsl(var(--foreground) / 0.2);
+}
+
+.csheet-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.csheet-head .chrome-avatar {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.csheet-head-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.csheet-title {
+  margin: 0;
+  font-size: 1.5625rem;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.csheet-sub {
+  margin: 0.25rem 0 0;
+  font-size: 0.9375rem;
+  color: var(--chrome-soft);
+}
+
+.csheet-close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: hsl(var(--foreground) / 0.08);
+  color: inherit;
+}
+
+.csheet-close svg { width: 1rem; height: 1rem; }
+
+.csheet-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.8125rem;
+  min-height: 3.875rem;
+  margin-top: 1.25rem;
+  padding: 0.5rem 1.125rem 0.5rem 0.625rem;
+  border-radius: 1.375rem;
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 14px 28px -18px hsl(var(--chrome-shadow) / 0.8);
+}
+
+.csheet-primary .csheet-primary-tile {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.625rem;
+  height: 2.625rem;
+  border-radius: 0.8125rem;
+  background: var(--chrome-wa);
+  color: #fff;
+}
+
+.csheet-primary-tile svg { width: 1.375rem; height: 1.375rem; }
+
+.csheet-primary-text { flex: 1; min-width: 0; }
+
+.csheet-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.csheet-tile {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 3.625rem;
+  padding: 0.5rem 0.75rem 0.5rem 0.5625rem;
+  border-radius: 1.25rem;
+  background: var(--chrome-tile);
+  box-shadow: inset 0 0 0 1px var(--chrome-ring);
+  color: inherit;
+  text-decoration: none;
+}
+
+.csheet-tile .cdock-tile {
+  width: 2.375rem;
+  height: 2.375rem;
+  border-radius: 0.75rem;
+}
+
+.csheet-tile-text {
+  min-width: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.csheet-tile .chrome-proof { font-size: 0.75rem; }
+
+.csheet-follow {
+  margin: 1.375rem 0 0.75rem 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--chrome-soft);
+}
+
+.csheet-social {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.375rem;
+}
+
+.csheet-social a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.csheet-social-disc {
+  display: grid;
+  place-items: center;
+  width: 3.375rem;
+  height: 3.375rem;
+  border-radius: 50%;
+  background: var(--chrome-tile);
+  box-shadow:
+    inset 0 0 0 1px var(--chrome-ring),
+    0 8px 18px -12px hsl(var(--chrome-shadow) / 0.4);
+}
+
+.csheet-social-disc svg { width: 1.3125rem; height: 1.3125rem; }
+
+.csheet-social-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--chrome-soft);
+}
+
+.csheet-primary:focus-visible,
+.csheet-tile:focus-visible,
+.csheet-social a:focus-visible,
+.csheet-close:focus-visible {
+  outline: 2px solid hsl(var(--foreground));
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cdock-pill,
+  .cdock-panel,
+  .lgbar-lens,
+  .cdock-chev { transition: none; }
+}

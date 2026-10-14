@@ -1,32 +1,41 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
-import {
-  Send,
-  Instagram,
-  Linkedin,
-  Facebook,
-} from 'lucide-react';
 import { useTranslation } from '@/lib/locale-context';
-import { CONTACT_URLS } from '@/lib/contact-channels';
+import { CONTACT_CHANNELS, type ContactChannel, type ContactChannelId } from '@/lib/contact-channels';
+import { SITE_PROOF } from '@/data/site-proof';
 import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
+import ChannelIcon from '@/components/contact/ChannelIcon';
+import '@/styles/app-chrome.css';
 
-const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
-const telegramUrl = import.meta.env.VITE_TELEGRAM_URL ?? 'https://t.me/+573043786101';
-const fiverrUrl = CONTACT_URLS.fiverr;
-const fiverrLogoSrc = '/uploads/fiverr-logo-56.webp';
-const whatsappLogoSrc = '/uploads/whatsapp.png';
-const tiktokLogoSrc = '/uploads/TikTok-Icon-Logo.wine.svg';
-const instagramUrl = import.meta.env.VITE_INSTAGRAM_URL ?? 'https://www.instagram.com/sm_gisela/';
-const tiktokUrl = import.meta.env.VITE_TIKTOK_URL ?? 'https://www.tiktok.com/@giselasaldarriaga';
-const threadsUrl = import.meta.env.VITE_THREADS_URL ?? 'https://www.threads.com/@sm_gisela';
-const linkedinUrl = import.meta.env.VITE_LINKEDIN_URL ?? 'https://www.linkedin.com/in/gisela-saldarriaga-molina-0417b8199/';
-const facebookUrl = import.meta.env.VITE_FACEBOOK_URL ?? 'https://www.facebook.com/gisela.saldarriaga';
+/**
+ * Desktop contact: one glass "Escríbeme" pill (her photo, a WhatsApp badge)
+ * that opens a panel ordered by intent — WhatsApp first, then Telegram and
+ * Fiverr with its rating, then the social profiles as quiet glyphs. Styles in
+ * src/styles/app-chrome.css. Phones use the tab bar's contact sheet instead.
+ *
+ * It slides in once the hero starts leaving the screen and steps back over
+ * the footer, which carries the same links.
+ */
 
-const ThreadsIcon = ({ className }: { className?: string }) => (
-  <span className={className} aria-hidden="true">
-    @
-  </span>
+const AVATAR_SRC = '/uploads/gisela-avatar-160.webp';
+const SOCIAL_IDS: ContactChannelId[] = ['instagram', 'tiktok', 'threads', 'linkedin', 'facebook'];
+const CHANNEL_BY_ID = Object.fromEntries(CONTACT_CHANNELS.map((channel) => [channel.id, channel])) as Record<
+  ContactChannelId,
+  ContactChannel
+>;
+
+const StarIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" />
+  </svg>
+);
+
+const ArrowIcon = () => (
+  <svg className="chrome-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <path d="M7 17 17 7" />
+    <path d="M8 7h9v9" />
+  </svg>
 );
 
 const FloatingContactDock = () => {
@@ -151,143 +160,137 @@ const FloatingContactDock = () => {
     };
   }, []);
 
-  const contactPlatforms = [
-    {
-      id: 'whatsapp',
-      ariaKey: 'floatingContact.whatsappAria',
-      href: whatsappUrl,
-      icon: (
-        <img
-          src={whatsappLogoSrc}
-          alt=""
-          width={56}
-          height={56}
-          loading="lazy"
-          decoding="async"
-          className="h-[22px] w-[22px] rounded-full object-cover shadow-[0_5px_12px_-7px_rgba(0,0,0,0.45)]"
-        />
-      ),
-      toneClass: 'bg-white/72 dark:bg-white/80',
-      hoverToneClass: 'hover:bg-emerald-500/25',
-    },
-    {
-      id: 'telegram',
-      ariaKey: 'floatingContact.telegramAria',
-      href: telegramUrl,
-      icon: <Send className="h-5 w-5 -rotate-12" />,
-      toneClass: 'bg-sky-500/22 text-sky-700 dark:text-sky-200',
-      hoverToneClass: 'hover:bg-sky-500/25',
-    },
-    {
-      id: 'fiverr',
-      ariaKey: 'floatingContact.fiverrAria',
-      href: fiverrUrl,
-      icon: (
-        <img
-          src={fiverrLogoSrc}
-          alt=""
-          width={56}
-          height={56}
-          loading="lazy"
-          decoding="async"
-          className="h-[22px] w-[22px] rounded-full object-cover shadow-[0_5px_12px_-7px_rgba(0,0,0,0.45)]"
-        />
-      ),
-      toneClass: 'bg-white/78 dark:bg-white/88',
-      hoverToneClass: 'hover:bg-emerald-500/25',
-    },
-    {
-      id: 'instagram',
-      ariaKey: 'floatingContact.instagramAria',
-      href: instagramUrl,
-      icon: <Instagram className="h-5 w-5" />,
-      toneClass: 'bg-pink-500/22 text-pink-700 dark:text-pink-200',
-      hoverToneClass: 'hover:bg-pink-500/25',
-    },
-    {
-      id: 'tiktok',
-      ariaKey: 'floatingContact.tiktokAria',
-      href: tiktokUrl,
-      icon: (
-        <img
-          src={tiktokLogoSrc}
-          alt=""
-          width={56}
-          height={56}
-          loading="lazy"
-          decoding="async"
-          className="h-[26px] w-[26px] object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.28)]"
-        />
-      ),
-      toneClass: 'bg-white/78 dark:bg-white/88',
-      hoverToneClass: 'hover:bg-white',
-    },
-    {
-      id: 'threads',
-      ariaKey: 'floatingContact.threadsAria',
-      href: threadsUrl,
-      icon: <ThreadsIcon className="text-[18px] font-black leading-none" />,
-      toneClass: 'bg-zinc-500/22 text-zinc-800 dark:text-zinc-100',
-      hoverToneClass: 'hover:bg-zinc-500/25',
-    },
-    {
-      id: 'linkedin',
-      ariaKey: 'floatingContact.linkedinAria',
-      href: linkedinUrl,
-      icon: <Linkedin className="h-5 w-5" />,
-      toneClass: 'bg-blue-600/22 text-blue-800 dark:text-blue-200',
-      hoverToneClass: 'hover:bg-blue-600/25',
-    },
-    {
-      id: 'facebook',
-      ariaKey: 'floatingContact.facebookAria',
-      href: facebookUrl,
-      icon: <Facebook className="h-5 w-5" />,
-      toneClass: 'bg-indigo-500/22 text-indigo-700 dark:text-indigo-200',
-      hoverToneClass: 'hover:bg-indigo-500/25',
-    },
-  ];
+  const [isOpen, setIsOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const pillRef = useRef<HTMLButtonElement>(null);
+  const isShown = hasEntrance && !isHeroVisible;
 
-  // Portals do not exist in the server-rendered tree. Waiting for the first
-  // client effect keeps SSR and hydration markup identical.
+  // The panel never outlives the pill: it closes when the pill hides at the
+  // top of the page or steps back over the footer.
+  useEffect(() => {
+    if (!isShown || isDesktopDockGhosted) setIsOpen(false);
+  }, [isShown, isDesktopDockGhosted]);
+
+  const close = useCallback((returnFocus: boolean) => {
+    setIsOpen(false);
+    if (returnFocus) pillRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') close(true);
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) close(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('pointerdown', onPointerDown);
+    };
+  }, [isOpen, close]);
+
   if (!isMounted) return null;
 
   // Mobile contact is handled by the app shell's bottom tab bar + contact sheet.
   if (isMobile) return null;
 
+  const whatsapp = CHANNEL_BY_ID.whatsapp;
+  const telegram = CHANNEL_BY_ID.telegram;
+  const fiverr = CHANNEL_BY_ID.fiverr;
+  const panelId = 'contact-dock-panel';
+
   return createPortal(
     <div
-      className={`floating-contact-dock fixed bottom-5 md:bottom-8 right-5 md:right-8 z-[9999] pointer-events-none ${hasEntrance ? 'has-entrance' : ''}`}
-      style={{
-        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-        paddingRight: 'env(safe-area-inset-right, 0px)',
-      }}
+      ref={rootRef}
+      className="cdock"
+      data-visible={isShown}
+      data-ghost={isDesktopDockGhosted}
     >
-      {/* Desktop: horizontal row */}
       <div
-        className={`hidden md:flex dock-breathe items-center gap-3 rounded-full border border-white/40 bg-card/95 px-3 py-2.5 shadow-[0_22px_42px_-28px_hsl(var(--foreground)/0.9)] transition-[opacity,transform] duration-500 ${
-          isHeroVisible
-            ? 'opacity-0 scale-[0.94] translate-y-2 pointer-events-none'
-            : isDesktopDockGhosted
-            ? 'opacity-10 scale-[0.94] translate-y-2 pointer-events-none'
-            : 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
-        }`}
-        style={{ transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)' }}
+        id={panelId}
+        className="cdock-panel chrome-glass chrome-rim"
+        role="dialog"
+        aria-labelledby="contact-dock-title"
+        data-open={isOpen}
       >
-        {contactPlatforms.map((platform, index) => (
+        <div className="cdock-head">
+          <img className="chrome-avatar" src={AVATAR_SRC} alt="" width={160} height={160} loading="lazy" decoding="async" />
+          <div className="cdock-head-text">
+            <p id="contact-dock-title" className="cdock-title">{t('navbar.messageMe')}</p>
+            <p className="cdock-sub">{t('contact.heading')}</p>
+          </div>
+          <button type="button" className="cdock-close" onClick={() => close(true)} aria-label={t('floatingContact.close')}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true" focusable="false">
+              <path d="M6 6l12 12M18 6 6 18" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="cdock-rows">
           <a
-            key={platform.id}
-            href={platform.href}
+            className="cdock-row cdock-row--primary"
+            href={whatsapp.href}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={t(platform.ariaKey)}
-            className={`dock-action inline-flex h-11 w-11 items-center justify-center rounded-full ${platform.toneClass} ${platform.hoverToneClass} transition-[color,background-color,transform,opacity] duration-300`}
-            style={{ transitionDelay: shouldReduceMotion ? '0ms' : `${index * 40}ms` }}
+            aria-label={t(whatsapp.ariaKey)}
           >
-            {platform.icon}
+            <span className="cdock-tile"><ChannelIcon id="whatsapp" /></span>
+            <span className="cdock-row-text">{t(whatsapp.labelKey)}</span>
+            <ArrowIcon />
           </a>
-        ))}
+          <a className="cdock-row" href={telegram.href} target="_blank" rel="noopener noreferrer" aria-label={t(telegram.ariaKey)}>
+            <span className="cdock-tile chrome-tile--telegram"><ChannelIcon id="telegram" /></span>
+            <span className="cdock-row-text">{t(telegram.labelKey)}</span>
+            <ArrowIcon />
+          </a>
+          <a className="cdock-row" href={fiverr.href} target="_blank" rel="noopener noreferrer">
+            <span className="cdock-tile chrome-tile--fiverr"><ChannelIcon id="fiverr" /></span>
+            <span className="cdock-row-text">
+              {t('floatingContact.fiverrAria')}
+              <span className="chrome-proof">
+                {SITE_PROOF.fiverrRating}
+                <StarIcon />
+                · {SITE_PROOF.fiverrReviewCount} {t('hero.feed.reviewsLabel')}
+              </span>
+            </span>
+            <ArrowIcon />
+          </a>
+        </div>
+
+        <p className="cdock-follow">{t('floatingContact.followMe')}</p>
+        <div className="cdock-social">
+          {SOCIAL_IDS.map((id) => {
+            const channel = CHANNEL_BY_ID[id];
+            return (
+              <a key={id} href={channel.href} target="_blank" rel="noopener noreferrer" aria-label={t(channel.ariaKey)}>
+                <ChannelIcon id={id} />
+              </a>
+            );
+          })}
+        </div>
       </div>
+
+      <button
+        ref={pillRef}
+        type="button"
+        className="cdock-pill chrome-glass chrome-rim"
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        aria-label={t(isOpen ? 'floatingContact.toggleCloseAria' : 'floatingContact.toggleOpenAria')}
+        onClick={() => setIsOpen((open) => !open)}
+      >
+        <span className="cdock-pill-face">
+          <img className="chrome-avatar" src={AVATAR_SRC} alt="" width={160} height={160} loading="lazy" decoding="async" />
+          <span className="cdock-pill-badge"><ChannelIcon id="whatsapp" /></span>
+        </span>
+        <span aria-hidden="true">{t('navbar.messageMe')}</span>
+        <svg className="cdock-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+          <path d="m6 15 6-6 6 6" />
+        </svg>
+      </button>
     </div>,
     document.body
   );

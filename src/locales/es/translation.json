@@ -365,6 +365,9 @@
     ]
   },
   "floatingContact": {
+    "whatsappCta": "Escríbeme por WhatsApp",
+    "followMe": "Sígueme",
+    "close": "Cerrar",
     "whatsappLabel": "WhatsApp",
     "telegramLabel": "Telegram",
     "whatsappAria": "Chatear por WhatsApp",

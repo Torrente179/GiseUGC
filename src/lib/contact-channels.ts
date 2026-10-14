@@ -1,8 +1,8 @@
 /**
  * Single source of truth for Gisela's contact channels — URLs, i18n keys, and
  * brand metadata. Shared by the desktop floating dock and the mobile contact
- * sheet so the channel list never drifts between surfaces. (The brand glyph
- * component lives in ContactChannelGlyph.tsx to keep this a pure data module.)
+ * sheet so the channel list never drifts between surfaces. (The glyphs live in
+ * src/components/contact/ChannelIcon.tsx to keep this a pure data module.)
  */
 
 export const FIVERR_PROFILE_URL = 'https://www.fiverr.com/gisela_sm';
@@ -41,10 +41,3 @@ export const CONTACT_CHANNELS: ContactChannel[] = [
   { id: 'linkedin', href: CONTACT_URLS.linkedin, labelKey: 'floatingContact.linkedinLabel', ariaKey: 'floatingContact.linkedinAria', brand: '#0A66C2' },
   { id: 'facebook', href: CONTACT_URLS.facebook, labelKey: 'floatingContact.facebookLabel', ariaKey: 'floatingContact.facebookAria', brand: '#1877F2' },
 ];
-
-/** Channels whose glyph is a full-color logo image (seat on linen, not brand). */
-export const CHANNEL_LOGO_SRC: Partial<Record<ContactChannelId, string>> = {
-  whatsapp: '/uploads/whatsapp.png',
-  fiverr: '/uploads/fiverr-logo-56.webp',
-  tiktok: '/uploads/TikTok-Icon-Logo.wine.svg',
-};
