@@ -18,13 +18,18 @@ describe('hashTargetLooksUnsettled', () => {
 
 describe('shouldRetryHashScroll', () => {
   it('waits out the minimum attempts so view transitions can finish', () => {
-    expect(shouldRetryHashScroll(6400, 7000, 800, 0)).toBe(true);
-    expect(shouldRetryHashScroll(6400, 7000, 800, 7)).toBe(true);
-    expect(shouldRetryHashScroll(6400, 7000, 800, 8)).toBe(false);
+    expect(shouldRetryHashScroll(6400, 7000, 800, 0, 6400)).toBe(true);
+    expect(shouldRetryHashScroll(6400, 7000, 800, 7, 6400)).toBe(true);
+    expect(shouldRetryHashScroll(6400, 7000, 800, 8, 6400)).toBe(false);
   });
 
   it('keeps retrying an unsettled footer after the minimum window', () => {
-    expect(shouldRetryHashScroll(0, 7000, 800, 8)).toBe(true);
-    expect(shouldRetryHashScroll(0, 7000, 800, 25)).toBe(false);
+    expect(shouldRetryHashScroll(0, 7000, 800, 8, 0)).toBe(true);
+    expect(shouldRetryHashScroll(0, 7000, 800, 40, 0)).toBe(false);
+  });
+
+  it('keeps retrying while the measured Y is still moving', () => {
+    expect(shouldRetryHashScroll(5400, 7000, 800, 8, 4800)).toBe(true);
+    expect(shouldRetryHashScroll(6400, 7000, 800, 8, 6400)).toBe(false);
   });
 });

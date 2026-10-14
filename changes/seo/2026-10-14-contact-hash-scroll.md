@@ -9,4 +9,4 @@ The pricing-guide CTAs use `/#contact` and `/en/#contact`. The live target is `i
 - The first load is a React Router `POP`. The restore-scroll branch ran first and jumped to `y=0`, skipping the hash.
 - Even on `PUSH`, the first `rAF` can measure the footer before route layout / view transitions settle, so the computed Y is ~0.
 
-Hash now wins over POP restore. `scrollToSection` waits a minimum of 8 attempts (~640ms) and keeps retrying while a tall page still reports a near-top target. The jump is immediate so a later view-transition cannot cancel it.
+Hash now wins over POP restore. `scrollToSection` waits a minimum of 8 attempts (~640ms), keeps retrying while a tall page still reports a near-top target, and also waits until the measured Y is stable (deferred home sections can still grow after the first jump). The jump is immediate so a later view-transition cannot cancel it.
