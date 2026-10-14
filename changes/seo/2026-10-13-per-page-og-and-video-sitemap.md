@@ -21,7 +21,7 @@ The owner picks the mode. Do not rewrite the strings in the renderer.
 
 `src/lib/og-image-render.ts` runs during `vite build` (`gisela-seo-artifacts`).
 
-- One 1200×630 JPEG per PAGE_REGISTRY route (46, ES+EN)
+- One 1200×630 JPEG per PAGE_REGISTRY route (48, ES+EN, after the 2026-10-14 pricing guide)
 - Filename `/og/<slug>.<content-hash>.jpg`
 - Copy: that page’s H1 + the configured proof line
 - Fonts: bundled TTF at `public/fonts/og/` (Cormorant Garamond + DM Sans). No network fetch. Glyphs include ñ, accented vowels, ¿, and ·

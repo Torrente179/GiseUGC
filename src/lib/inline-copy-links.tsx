@@ -1,23 +1,28 @@
 import { Fragment, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 
-const INLINE_LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const INLINE_TOKEN_RE = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*/g;
 const HAS_MARKDOWN_LINK_RE = /\[[^\]]+\]\([^)\s]+\)/;
 
 export type InlineCopySegment =
   | { type: 'text'; value: string }
-  | { type: 'link'; label: string; href: string };
+  | { type: 'link'; label: string; href: string }
+  | { type: 'bold'; value: string };
 
 export const parseInlineCopy = (text: string): InlineCopySegment[] => {
   const segments: InlineCopySegment[] = [];
   let cursor = 0;
 
-  for (const match of text.matchAll(INLINE_LINK_RE)) {
+  for (const match of text.matchAll(INLINE_TOKEN_RE)) {
     const index = match.index ?? 0;
     if (index > cursor) {
       segments.push({ type: 'text', value: text.slice(cursor, index) });
     }
-    segments.push({ type: 'link', label: match[1], href: match[2] });
+    if (match[3] !== undefined) {
+      segments.push({ type: 'bold', value: match[3] });
+    } else {
+      segments.push({ type: 'link', label: match[1], href: match[2] });
+    }
     cursor = index + match[0].length;
   }
 
@@ -30,7 +35,7 @@ export const parseInlineCopy = (text: string): InlineCopySegment[] => {
 
 export const visibleInlineCopy = (text: string) =>
   parseInlineCopy(text)
-    .map((segment) => (segment.type === 'text' ? segment.value : segment.label))
+    .map((segment) => (segment.type === 'link' ? segment.label : segment.value))
     .join('');
 
 export const inlineCopyHrefs = (text: string) =>
@@ -55,6 +60,10 @@ export const InlineCopy = ({ text }: { text: InlineCopyInput }) => {
   const nodes: ReactNode[] = segments.map((segment, index) => {
     if (segment.type === 'text') {
       return <Fragment key={`t-${index}`}>{segment.value}</Fragment>;
+    }
+
+    if (segment.type === 'bold') {
+      return <strong key={`b-${index}`}>{segment.value}</strong>;
     }
 
     if (isExternalHref(segment.href)) {

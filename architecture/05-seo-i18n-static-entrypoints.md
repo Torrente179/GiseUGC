@@ -20,6 +20,11 @@ Structured data is moved to the end of `<body>` during prerendering so the
 preload scanner reaches visual markup and critical assets earlier without
 reducing schema discoverability.
 
+The bilingual Fiverr pricing guide (`/recursos/cuanto-cobra-creadora-ugc/` and
+`/en/resources/how-much-does-a-ugc-creator-charge/`) is a resource route. It
+emits one FAQPage whose answers match the visible FAQ, and it must not emit
+Offer, Product, or PriceSpecification markup. Prices come from `FIVERR_PRICING`.
+
 ## Page Schema
 Service and vertical factories produce WebPage, BreadcrumbList, Service, FAQPage, and VideoObject nodes. Resource pages produce WebPage, BreadcrumbList, Article, and FAQPage. Legal pages produce WebPage and BreadcrumbList. Hub indexes produce WebPage and BreadcrumbList; WebPage `name` is the hire-intent title from `src/data/hub-pages.ts`, not the bare entity name.
 

@@ -8,6 +8,10 @@ export type { ResourcePageId } from '@/lib/locale-path';
 export type ResourceSection = {
   title: string;
   body: string[];
+  italicLead?: string;
+  bodyBefore?: string[];
+  bullets?: string[];
+  table?: ComparisonTable;
 };
 
 export type ResourceFaq = {
@@ -33,6 +37,8 @@ export type ResourcePageContent = {
   heroTitle: string;
   heroSummary: string;
   heroPoints: string[];
+  leadCtaLabel?: string;
+  leadCtaHref?: string;
   primaryCtaLabel: string;
   primaryCtaHref: string;
   secondaryCtaLabel: string;
@@ -47,6 +53,112 @@ export type ResourcePageContent = {
 };
 
 export { getResourcePath } from '@/lib/locale-path';
+
+/**
+ * Published Fiverr package prices, delivery days, and gig URLs.
+ *
+ * Authority resync: any change to FIVERR_PRICING must be followed by a
+ * re-check on Fiverr and a ping to Authority, the same as the site-proof.ts
+ * rule. Re-check Fiverr monthly, and any time a gig is edited. Update this
+ * constant and the verification date together.
+ */
+export const FIVERR_PRICING = {
+  verifiedOn: '2026-10-14',
+  gigs: {
+    ugc: 'https://www.fiverr.com/gisela_sm/create-spanish-ugc-videos',
+    spokespersonGreenWhite:
+      'https://www.fiverr.com/gisela_sm/spanish-video-spokesperson-on-green-and-white-backgrounds',
+    spokespersonJournalist:
+      'https://www.fiverr.com/gisela_sm/periodista-y-presentadora-de-tv-transforma-tus-ideas-en-narrativas-poderosas',
+    voiceover: 'https://www.fiverr.com/gisela_sm/deliver-a-professional-female-voice-over-in-latin-spanish',
+  },
+  ugc: {
+    basic: { price: 40, deliveryDays: 3 },
+    standard: { price: 70, deliveryDays: 3 },
+    premium: { price: 120, deliveryDays: 5 },
+    rushMin: 15,
+    rushMax: 20,
+  },
+  spokesperson: {
+    words65: { price: 25, words: 65 },
+    words130: { price: 40, wordsApprox: 130 },
+    words260: { price: 75, words: 260 },
+    deliveryMin: 1,
+    deliveryMax: 2,
+  },
+  voiceover: {
+    price: 20,
+    words: 75,
+    deliveryDays: 1,
+  },
+  fiverrRating: SITE_PROOF.fiverrRating,
+  fiverrReviewCount: SITE_PROOF.fiverrReviewCount,
+} as const;
+
+export const FIVERR_PRICING_GIG_URLS = [
+  FIVERR_PRICING.gigs.ugc,
+  FIVERR_PRICING.gigs.spokespersonGreenWhite,
+  FIVERR_PRICING.gigs.spokespersonJournalist,
+  FIVERR_PRICING.gigs.voiceover,
+] as const;
+
+const usd = (amount: number) => `$${amount}`;
+const mdLink = (label: string, href: string) => `[${label}](${href})`;
+const mdPrice = (amount: number, href: string, prefix = '') => mdLink(`${prefix}${usd(amount)}`, href);
+
+const dualSpokespersonPrice = (amount: number) =>
+  `${mdPrice(amount, FIVERR_PRICING.gigs.spokespersonGreenWhite)} · ${mdPrice(amount, FIVERR_PRICING.gigs.spokespersonJournalist)}`;
+
+const verifiedParts = () => {
+  const [year, month, day] = FIVERR_PRICING.verifiedOn.split('-');
+  return { year, month, day };
+};
+
+const verifiedDateEs = () => {
+  const { year, month, day } = verifiedParts();
+  return `${Number(day)}/${month}/${year}`;
+};
+
+const verifiedDateEn = () => {
+  const { year, month, day } = verifiedParts();
+  return `${month}/${day}/${year}`;
+};
+
+const monthYearEs = () => `octubre de ${verifiedParts().year}`;
+const monthYearEn = () => `October ${verifiedParts().year}`;
+const monthEsShort = () => `octubre ${verifiedParts().year}`;
+const monthEnShort = () => `October ${verifiedParts().year}`;
+
+const rushRange = () => `+${usd(FIVERR_PRICING.ugc.rushMin)}–${FIVERR_PRICING.ugc.rushMax}`;
+const spokespersonDelivery = () =>
+  `${FIVERR_PRICING.spokesperson.deliveryMin}–${FIVERR_PRICING.spokesperson.deliveryMax}`;
+
+export const PRICING_GUIDE_HUB = {
+  es: {
+    title: 'Cuánto cobra una creadora UGC',
+    blurb: `Mis paquetes UGC en Fiverr empiezan en ${usd(FIVERR_PRICING.ugc.basic.price)}: qué incluye cada uno, qué cambia el precio y cuándo cotizar directo.`,
+  },
+  en: {
+    title: 'How much a UGC creator charges',
+    blurb: `My UGC packages on Fiverr start at ${usd(FIVERR_PRICING.ugc.basic.price)}: what each one includes, what changes the price, and when to get a direct quote.`,
+  },
+} as const;
+
+export const HIRE_BUDGET_FAQ = {
+  es: {
+    question: '¿Cuánto cuesta contratar una creadora UGC?',
+    answer: `Depende de la duración, del guion, de cuántos videos necesitas, del idioma y de si los vas a pautar. Mis paquetes UGC en Fiverr empiezan en ${usd(FIVERR_PRICING.ugc.basic.price)} por un video en español (precio de ${monthYearEs()}). Los proyectos personalizados o directos se cotizan, igual que las versiones en inglés y la licencia para anuncios pagados. Detalle en [cuánto cobra una creadora UGC](${getResourcePath('how-much-ugc-creator-charge', 'es')}).`,
+  },
+  en: {
+    question: 'How much does it cost to hire a UGC creator?',
+    answer: `It depends on video length, the script, how many videos you need, the language, and whether you'll run them as ads. My UGC packages on Fiverr start at ${usd(FIVERR_PRICING.ugc.basic.price)} for one video in Spanish (${monthYearEn()} price). Custom and direct projects are quoted, and so are English versions and a paid ads license. See the breakdown in [how much a UGC creator charges](${getResourcePath('how-much-ugc-creator-charge', 'en')}).`,
+  },
+} as const;
+
+const PRICING_META = {
+  es: `Mis paquetes UGC en Fiverr empiezan en ${usd(FIVERR_PRICING.ugc.basic.price)}. Precios de videos UGC, portavoz y voz en off en español, qué cambia el precio y cuándo cotizar directo.`,
+  en: `My UGC packages on Fiverr start at ${usd(FIVERR_PRICING.ugc.basic.price)}. Prices for UGC, spokesperson and voiceover in Spanish, what changes the price, and when to get a direct quote.`,
+} as const;
 
 type LocalizedResourcePageMap = Record<
   ResourcePageId,
@@ -331,6 +443,7 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
         {
           title: 'Presupuesto y qué incluye',
           body: [
+            HIRE_BUDGET_FAQ.es.answer,
             'Los precios de UGC cambian mucho según la experiencia de la creadora, lo complejo del brief y la cantidad de videos. En general, un paquete sale más barato que pagar video por video. Un paquete típico puede traer de 3 a 5 videos con distintos ganchos.',
             'Algunas creadoras cobran por video, otras por mes y otras por proyecto. Pregunta siempre qué incluye: ¿cuántas revisiones? ¿Formato vertical y horizontal? ¿Versiones cortas para Stories? ¿Derechos para usar los videos en anuncios pagados?',
             'Los derechos de uso son importantes. Asegúrate de que el acuerdo diga si puedes usar los videos en anuncios pagados. Algunas creadoras lo incluyen y otras lo cobran aparte. En mi caso, el uso orgánico va incluido y la licencia para anuncios pagados se cotiza por separado.',
@@ -355,6 +468,10 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
         },
       ],
       faqs: [
+        {
+          question: HIRE_BUDGET_FAQ.es.question,
+          answer: HIRE_BUDGET_FAQ.es.answer,
+        },
         {
           question: '¿Qué diferencia hay entre una creadora UGC y una influencer?',
           answer: 'La influencer cobra por publicar en sus redes, para su propia audiencia. La creadora UGC hace videos para que la marca los use en sus canales y en sus anuncios. Por eso a una creadora UGC no le hacen falta seguidores: lo que cuenta es que sepa hacer un buen video.',
@@ -439,6 +556,7 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
         {
           title: 'Budget and what’s included',
           body: [
+            HIRE_BUDGET_FAQ.en.answer,
             'UGC rates vary a lot depending on the creator’s experience, how complex the brief is, and how many videos you need. A package usually works out cheaper than paying per video. A typical package might be 3 to 5 videos with different hooks.',
             'Some creators charge per video, some monthly, and some per project. Always ask what’s included. How many revisions? Vertical and horizontal versions? Short cuts for Stories? Rights to use the videos in paid ads?',
             'Usage rights are important. Make sure the agreement says whether you can run the videos as paid ads. Some creators include it and others charge extra. In my case, organic usage is included and a paid ads license is quoted separately.',
@@ -463,6 +581,10 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
         },
       ],
       faqs: [
+        {
+          question: HIRE_BUDGET_FAQ.en.question,
+          answer: HIRE_BUDGET_FAQ.en.answer,
+        },
         {
           question: 'What’s the difference between a UGC creator and an influencer?',
           answer: 'An influencer gets paid to post on their own accounts, to their own audience. A UGC creator makes videos for the brand to use on its own channels and in its ads. That’s why a UGC creator doesn’t need followers. What counts is making a good video.',
@@ -1024,6 +1146,282 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaText: 'Tell me what you sell and where you run ads, and I’ll tell you which formats I’d start with.',
       relatedServiceIds: ['ugc-ads-tiktok-meta', 'ugc-problem-solution', 'spokesperson-videos', 'ugc-product-demo'],
       relatedVerticalIds: ['ecommerce-ugc', 'beauty-ugc', 'tech-saas-ugc'],
+    },
+  },
+
+  /* ═══════════════════════════════════════════════════════════════
+     5. CUÁNTO COBRA / HOW MUCH A UGC CREATOR CHARGES
+     ═══════════════════════════════════════════════════════════════ */
+  'how-much-ugc-creator-charge': {
+    es: {
+      navLabel: 'Cuánto cobra una creadora UGC',
+      metaTitle: 'Cuánto cobra una creadora UGC | Gisela Saldarriaga',
+      metaDescription: PRICING_META.es,
+      breadcrumbLabel: 'Cuánto cobra una creadora UGC',
+      heroEyebrow: 'Guía',
+      heroTitle: 'Cuánto cobra una creadora UGC: mis precios en Fiverr',
+      heroSummary:
+        `Soy Gisela Saldarriaga, creadora UGC bilingüe en Medellín. Si quieres saber cuánto cuesta un video UGC antes de escribirme, aquí tienes mis precios publicados en Fiverr. Mis paquetes UGC en Fiverr empiezan en ${usd(FIVERR_PRICING.ugc.basic.price)} por un video en español. Los proyectos personalizados o directos se cotizan, y las versiones en inglés también. Abajo te explico qué incluye cada paquete y qué hace que el precio suba.`,
+      heroPoints: [],
+      leadCtaLabel: 'Escríbeme directo para cotizar tu proyecto →',
+      leadCtaHref: getHomePath('es', '#contact'),
+      primaryCtaLabel: 'Escríbeme directo con tu brief →',
+      primaryCtaHref: getHomePath('es', '#contact'),
+      secondaryCtaLabel: 'Ver mi trabajo',
+      secondaryCtaHref: getHomePath('es', '#portfolio'),
+      sections: [
+        {
+          title: 'Mis precios en Fiverr',
+          italicLead: `Precios verificados en Fiverr el ${verifiedDateEs()}.`,
+          bodyBefore: [
+            `En dólares (USD). Son los precios de Fiverr a ${monthYearEs()} y pueden cambiar. El precio final se confirma en el checkout de Fiverr, incluida la tarifa de servicio al comprador y los impuestos que apliquen. Todos los servicios de esta tabla son en español. Las versiones en inglés se cotizan aparte.`,
+          ],
+          table: {
+            headers: ['Servicio', 'Paquete', 'Qué incluye', 'Entrega en Fiverr — días naturales', 'Precio'],
+            rows: [
+              [
+                'Video UGC en español',
+                'Basic',
+                '1 video vertical de 30 s: ideación, grabación y subtítulos',
+                String(FIVERR_PRICING.ugc.basic.deliveryDays),
+                mdPrice(FIVERR_PRICING.ugc.basic.price, FIVERR_PRICING.gigs.ugc),
+              ],
+              [
+                'Video UGC en español',
+                'Standard',
+                '1 video de 60 s; suma el guion',
+                String(FIVERR_PRICING.ugc.standard.deliveryDays),
+                mdPrice(FIVERR_PRICING.ugc.standard.price, FIVERR_PRICING.gigs.ugc),
+              ],
+              [
+                'Video UGC en español',
+                'Premium',
+                '2 videos de 60 s con efectos',
+                String(FIVERR_PRICING.ugc.premium.deliveryDays),
+                mdPrice(FIVERR_PRICING.ugc.premium.price, FIVERR_PRICING.gigs.ugc),
+              ],
+              [
+                'Video UGC en español',
+                'Entrega rápida (extra)',
+                `${rushRange()}, según paquete`,
+                '—',
+                mdLink(rushRange(), FIVERR_PRICING.gigs.ugc),
+              ],
+              [
+                'Video de portavoz en español',
+                'Hasta 65 palabras',
+                'Video a cámara',
+                spokespersonDelivery(),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words65.price),
+              ],
+              [
+                'Video de portavoz en español',
+                '~130 palabras',
+                'Video a cámara',
+                spokespersonDelivery(),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words130.price),
+              ],
+              [
+                'Video de portavoz en español',
+                'Hasta 260 palabras',
+                'Video a cámara',
+                spokespersonDelivery(),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words260.price),
+              ],
+              [
+                'Voz en off en español',
+                'Hasta 75 palabras',
+                'Locución',
+                String(FIVERR_PRICING.voiceover.deliveryDays),
+                mdPrice(FIVERR_PRICING.voiceover.price, FIVERR_PRICING.gigs.voiceover),
+              ],
+            ],
+          },
+          body: [
+            'En Fiverr, el plazo empieza a contar cuando envías los requisitos del pedido. En proyectos directos entrego en 3 a 5 días hábiles después de recibir el producto y confirmar el brief. La licencia para anuncios pagados no aparece en Fiverr: el uso orgánico va incluido y la licencia para anuncios pagados se cotiza por separado.',
+          ],
+        },
+        {
+          title: 'Qué cambia el precio',
+          body: [],
+          bullets: [
+            `**Duración:** un video de 60 s cuesta más que uno de 30 s. En portavoz, el precio va por palabras del guion.`,
+            '**Guion:** el paquete Standard suma el guion.',
+            '**Cantidad de videos:** el Premium trae 2 videos de 60 s con efectos.',
+            `**Entrega rápida para videos UGC en Fiverr:** ${rushRange()}, según paquete.`,
+            '**Idioma:** estos precios son para videos en español. Las versiones en inglés se cotizan aparte.',
+            '**Licencia para anuncios:** el uso orgánico va incluido y la licencia para anuncios pagados se cotiza por separado.',
+          ],
+        },
+        {
+          title: 'Fiverr o trabajar conmigo directamente',
+          body: [
+            `Fiverr te sirve si quieres un video puntual en español, con precio cerrado y el pago protegido por la plataforma. Allí trabajo como [gisela_sm](${FIVERR_PROFILE_URL}), con ${FIVERR_PRICING.fiverrRating}/5 en ${FIVERR_PRICING.fiverrReviewCount} reseñas (Fiverr, ${monthEsShort()}). Si necesitas un lote con varios ganchos, versiones en inglés o licencia para anuncios pagados, [escríbeme directo](${getHomePath('es', '#contact')}) y te cotizo el proyecto. En proyectos directos entrego en 3 a 5 días hábiles después de recibir el producto y confirmar el brief.`,
+          ],
+        },
+      ],
+      faqs: [
+        {
+          question: '¿Cuánto cobra Gisela Saldarriaga por un video UGC?',
+          answer: `Mis paquetes UGC en Fiverr empiezan en ${usd(FIVERR_PRICING.ugc.basic.price)} por un video vertical en español de 30 segundos, con ideación, grabación y subtítulos. El Standard de ${usd(FIVERR_PRICING.ugc.standard.price)} es un video de 60 segundos e incluye el guion. El Premium de ${usd(FIVERR_PRICING.ugc.premium.price)} son dos videos de 60 segundos con efectos. Son precios de ${monthYearEs()} y pueden cambiar. Las versiones en inglés se cotizan aparte.`,
+        },
+        {
+          question: '¿Cuánto cuesta un video de portavoz?',
+          answer: `En Fiverr, los videos de portavoz en español se cobran según las palabras del guion: ${usd(FIVERR_PRICING.spokesperson.words65.price)} hasta ${FIVERR_PRICING.spokesperson.words65.words} palabras, ${usd(FIVERR_PRICING.spokesperson.words130.price)} por unas ${FIVERR_PRICING.spokesperson.words130.wordsApprox} y ${usd(FIVERR_PRICING.spokesperson.words260.price)} hasta ${FIVERR_PRICING.spokesperson.words260.words}. Son precios de ${monthYearEs()} en dólares. Si necesitas varios videos o versiones en inglés, te cotizo un proyecto directo.`,
+        },
+        {
+          question: '¿El precio incluye usar los videos en anuncios pagados?',
+          answer:
+            'No. El uso orgánico va incluido y la licencia para anuncios pagados se cotiza por separado. Esa licencia no aparece en mis paquetes de Fiverr. Si piensas pautar los videos en TikTok o Meta, dímelo desde el principio y te cotizo la licencia junto con el proyecto.',
+        },
+        {
+          question: '¿Cuánto tarda la entrega en Fiverr?',
+          answer: `En Fiverr, cada paquete tiene su plazo en días naturales: ${FIVERR_PRICING.ugc.basic.deliveryDays} días para los videos UGC Basic y Standard, ${FIVERR_PRICING.ugc.premium.deliveryDays} para el Premium, ${FIVERR_PRICING.spokesperson.deliveryMin} a ${FIVERR_PRICING.spokesperson.deliveryMax} para portavoz y ${FIVERR_PRICING.voiceover.deliveryDays} para voz en off. El plazo empieza cuando envías los requisitos del pedido. En proyectos directos entrego en 3 a 5 días hábiles después de recibir el producto y confirmar el brief.`,
+        },
+        {
+          question: '¿Es más barato contratarte por Fiverr o directamente?',
+          answer: `Depende de lo que necesites. Mis paquetes UGC en Fiverr empiezan en ${usd(FIVERR_PRICING.ugc.basic.price)} y te sirven para uno o dos videos en español. Si buscas un lote con varios ganchos, videos en inglés o licencia para anuncios pagados, te conviene más un proyecto directo, que cotizo según el brief. En Fiverr tengo ${FIVERR_PRICING.fiverrRating}/5 en ${FIVERR_PRICING.fiverrReviewCount} reseñas (${monthEsShort()}).`,
+        },
+      ],
+      ctaTitle: '¿Quieres cotizar tu proyecto?',
+      ctaText: `Si ya sabes qué necesitas, mira cómo trabajo como [creadora UGC bilingüe](${getServicePath('bilingual-ugc-creator', 'es')}). Si es tu primera vez, empieza por [cómo contratar una creadora UGC](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
+      relatedServiceIds: ['bilingual-ugc-creator', 'spokesperson-videos', 'ugc-ads-tiktok-meta'],
+      relatedVerticalIds: ['ecommerce-ugc', 'beauty-ugc'],
+    },
+    en: {
+      navLabel: 'How much a UGC creator charges',
+      metaTitle: 'How much does a UGC creator charge? | Gisela Saldarriaga',
+      metaDescription: PRICING_META.en,
+      breadcrumbLabel: 'How much a UGC creator charges',
+      heroEyebrow: 'Guide',
+      heroTitle: 'How much does a UGC creator charge? My Fiverr prices',
+      heroSummary:
+        `I'm Gisela Saldarriaga, a bilingual UGC creator based in Medellín. If you want to know what a UGC video costs before you message me, these are my published Fiverr prices. My UGC packages on Fiverr start at ${usd(FIVERR_PRICING.ugc.basic.price)} for one video in Spanish. Custom and direct projects are quoted, and so are English versions. Below, I explain what each package includes and what makes the price go up.`,
+      heroPoints: [],
+      leadCtaLabel: 'Message me directly for a quote →',
+      leadCtaHref: getHomePath('en', '#contact'),
+      primaryCtaLabel: 'Message me directly with your brief →',
+      primaryCtaHref: getHomePath('en', '#contact'),
+      secondaryCtaLabel: 'See my work',
+      secondaryCtaHref: getHomePath('en', '#portfolio'),
+      sections: [
+        {
+          title: 'My Fiverr prices',
+          italicLead: `Prices verified on Fiverr on ${verifiedDateEn()}.`,
+          bodyBefore: [
+            `All prices are in US dollars and are Fiverr prices as of ${monthYearEn()}. They can change. The final price is confirmed at Fiverr checkout, including the buyer service fee and any applicable taxes. Every service in this table is in Spanish. English versions are quoted separately.`,
+          ],
+          table: {
+            headers: ['Service', 'Package', "What's included", 'Fiverr delivery — calendar days', 'Price'],
+            rows: [
+              [
+                'UGC video in Spanish',
+                'Basic',
+                '1 vertical 30s video: ideation, filming, subtitles',
+                String(FIVERR_PRICING.ugc.basic.deliveryDays),
+                mdPrice(FIVERR_PRICING.ugc.basic.price, FIVERR_PRICING.gigs.ugc),
+              ],
+              [
+                'UGC video in Spanish',
+                'Standard',
+                '1 60s video; adds a script',
+                String(FIVERR_PRICING.ugc.standard.deliveryDays),
+                mdPrice(FIVERR_PRICING.ugc.standard.price, FIVERR_PRICING.gigs.ugc),
+              ],
+              [
+                'UGC video in Spanish',
+                'Premium',
+                '2 60s videos with effects',
+                String(FIVERR_PRICING.ugc.premium.deliveryDays),
+                mdPrice(FIVERR_PRICING.ugc.premium.price, FIVERR_PRICING.gigs.ugc),
+              ],
+              [
+                'UGC video in Spanish',
+                'Rush delivery (add-on)',
+                `${rushRange()}, depending on package`,
+                '—',
+                mdLink(rushRange(), FIVERR_PRICING.gigs.ugc),
+              ],
+              [
+                'Spokesperson video in Spanish',
+                'Up to 65 words',
+                'On-camera delivery',
+                spokespersonDelivery(),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words65.price),
+              ],
+              [
+                'Spokesperson video in Spanish',
+                '~130 words',
+                'On-camera delivery',
+                spokespersonDelivery(),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words130.price),
+              ],
+              [
+                'Spokesperson video in Spanish',
+                'Up to 260 words',
+                'On-camera delivery',
+                spokespersonDelivery(),
+                dualSpokespersonPrice(FIVERR_PRICING.spokesperson.words260.price),
+              ],
+              [
+                'Voiceover in Spanish',
+                'Up to 75 words',
+                'Voice recording',
+                String(FIVERR_PRICING.voiceover.deliveryDays),
+                mdPrice(FIVERR_PRICING.voiceover.price, FIVERR_PRICING.gigs.voiceover),
+              ],
+            ],
+          },
+          body: [
+            "On Fiverr, the countdown starts when you submit the order requirements. For direct projects, I deliver in 3 to 5 business days after the product arrives and we confirm the brief. The paid ads license isn't listed on Fiverr: organic usage is included and a paid ads license is quoted separately.",
+          ],
+        },
+        {
+          title: 'What changes the price',
+          body: [],
+          bullets: [
+            '**Length:** a 60s video costs more than a 30s one. Spokesperson videos are priced by script word count.',
+            '**Script:** the Standard package adds a script.',
+            '**Number of videos:** Premium includes two 60s videos with effects.',
+            `**Rush delivery for UGC videos on Fiverr:** ${rushRange()}, depending on the package.`,
+            '**Language:** these prices are for Spanish videos. English versions are quoted separately.',
+            '**Ads license:** organic usage is included and a paid ads license is quoted separately.',
+          ],
+        },
+        {
+          title: 'Fiverr vs. working with me directly',
+          body: [
+            `Fiverr works well if you want a one-off video in Spanish at a fixed price, with payment protected by the platform. I'm [gisela_sm](${FIVERR_PROFILE_URL}) there, with ${FIVERR_PRICING.fiverrRating}/5 from ${FIVERR_PRICING.fiverrReviewCount} reviews (Fiverr, ${monthEnShort()}). If you need a batch with several hooks, English versions, or a paid ads license, [message me directly](${getHomePath('en', '#contact')}) and I'll quote the project. For direct projects, I deliver in 3 to 5 business days after the product arrives and we confirm the brief.`,
+          ],
+        },
+      ],
+      faqs: [
+        {
+          question: 'How much does Gisela Saldarriaga charge for a UGC video?',
+          answer: `My UGC packages on Fiverr start at ${usd(FIVERR_PRICING.ugc.basic.price)} for one vertical 30-second video in Spanish, with ideation, filming, and subtitles. The ${usd(FIVERR_PRICING.ugc.standard.price)} Standard package is one 60-second video and adds a script. The ${usd(FIVERR_PRICING.ugc.premium.price)} Premium package is two 60-second videos with effects. These are ${monthYearEn()} prices and can change. English versions are quoted separately.`,
+        },
+        {
+          question: 'How much does a spokesperson video cost?',
+          answer: `On Fiverr, spokesperson videos in Spanish are priced by script length: ${usd(FIVERR_PRICING.spokesperson.words65.price)} for up to ${FIVERR_PRICING.spokesperson.words65.words} words, ${usd(FIVERR_PRICING.spokesperson.words130.price)} for about ${FIVERR_PRICING.spokesperson.words130.wordsApprox} words, and ${usd(FIVERR_PRICING.spokesperson.words260.price)} for up to ${FIVERR_PRICING.spokesperson.words260.words} words. These are ${monthYearEn()} prices in US dollars. If you need several videos or English versions, I'll quote a direct project.`,
+        },
+        {
+          question: 'Does the price include running the videos as paid ads?',
+          answer:
+            "No. Organic usage is included and a paid ads license is quoted separately. That license isn't part of my Fiverr packages. If you plan to run the videos on TikTok or Meta, tell me at the start and I'll quote the license together with the project.",
+        },
+        {
+          question: 'How long does delivery take on Fiverr?',
+          answer: `On Fiverr, each package has its own timeline in calendar days: ${FIVERR_PRICING.ugc.basic.deliveryDays} days for Basic and Standard UGC videos, ${FIVERR_PRICING.ugc.premium.deliveryDays} for Premium, ${FIVERR_PRICING.spokesperson.deliveryMin} to ${FIVERR_PRICING.spokesperson.deliveryMax} for spokesperson videos, and ${FIVERR_PRICING.voiceover.deliveryDays} for voiceover. The countdown starts when you submit the order requirements. For direct projects, I deliver in 3 to 5 business days after the product arrives and we confirm the brief.`,
+        },
+        {
+          question: 'Is it cheaper to hire you on Fiverr or directly?',
+          answer: `It depends on what you need. My UGC packages on Fiverr start at ${usd(FIVERR_PRICING.ugc.basic.price)} and work well for one or two videos in Spanish. If you want a batch with several hooks, English videos, or a paid ads license, a direct project is the better fit, and I quote it based on your brief. I'm rated ${FIVERR_PRICING.fiverrRating}/5 from ${FIVERR_PRICING.fiverrReviewCount} reviews on Fiverr (${monthEnShort()}).`,
+        },
+      ],
+      ctaTitle: 'Want a quote for your project?',
+      ctaText: `If you already know what you need, see how I work as a [bilingual UGC creator](${getServicePath('bilingual-ugc-creator', 'en')}). If it's your first time, start with [how to hire a UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
+      relatedServiceIds: ['bilingual-ugc-creator', 'spokesperson-videos', 'ugc-ads-tiktok-meta'],
+      relatedVerticalIds: ['ecommerce-ugc', 'beauty-ugc'],
     },
   },
 };

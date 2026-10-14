@@ -17,6 +17,7 @@ export type VerticalPageId =
 export type ResourcePageId =
   | 'what-is-ugc'
   | 'how-to-hire-ugc-creator'
+  | 'how-much-ugc-creator-charge'
   | 'ugc-vs-influencer-marketing'
   | 'ugc-ad-formats-guide';
 export type LegalPageId = 'privacy-policy' | 'terms-content-use';
@@ -93,6 +94,10 @@ const RESOURCE_PATHS: Record<ResourcePageId, Record<SiteLocale, string>> = {
   'how-to-hire-ugc-creator': {
     es: '/recursos/como-contratar-creadora-ugc/',
     en: '/en/resources/how-to-hire-ugc-creator/',
+  },
+  'how-much-ugc-creator-charge': {
+    es: '/recursos/cuanto-cobra-creadora-ugc/',
+    en: '/en/resources/how-much-does-a-ugc-creator-charge/',
   },
   'ugc-vs-influencer-marketing': {
     es: '/recursos/ugc-vs-influencer-marketing/',

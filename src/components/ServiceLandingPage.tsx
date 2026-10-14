@@ -42,12 +42,14 @@ const RESOURCE_LINKS: Record<SiteLocale, { id: ResourcePageId; label: string }[]
   es: [
     { id: 'what-is-ugc', label: 'Qué es UGC' },
     { id: 'how-to-hire-ugc-creator', label: 'Cómo contratar una creadora UGC' },
+    { id: 'how-much-ugc-creator-charge', label: 'Cuánto cobra una creadora UGC' },
     { id: 'ugc-vs-influencer-marketing', label: 'UGC vs influencer marketing' },
     { id: 'ugc-ad-formats-guide', label: 'Formatos de UGC para ads' },
   ],
   en: [
     { id: 'what-is-ugc', label: 'What is UGC' },
     { id: 'how-to-hire-ugc-creator', label: 'How to hire a UGC creator' },
+    { id: 'how-much-ugc-creator-charge', label: 'How much a UGC creator charges' },
     { id: 'ugc-vs-influencer-marketing', label: 'UGC vs influencer marketing' },
     { id: 'ugc-ad-formats-guide', label: 'UGC ad formats guide' },
   ],

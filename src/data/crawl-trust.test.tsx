@@ -179,6 +179,8 @@ describe('Fiverr URLs stay on the canonical profile', () => {
       'en/services/index.html',
       'public/llms.txt',
       'public/llms-full.txt',
+      'recursos/cuanto-cobra-creadora-ugc/index.html',
+      'en/resources/how-much-does-a-ugc-creator-charge/index.html',
     ];
     for (const file of files) {
       expect(read(file), file).not.toContain('source=gig_page');
@@ -323,9 +325,9 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
     expect(read('src/components/VerticalLandingPage.tsx')).toContain('formatLastUpdatedLabel(CONTENT_DATES.verticals');
     expect(read('src/components/ResourcePage.tsx')).toContain('formatLastUpdatedLabel(CONTENT_DATES.resources');
     expect(read('recursos/como-contratar-creadora-ugc/index.html')).not.toContain('24 mar 2026');
-    expect(read('recursos/como-contratar-creadora-ugc/index.html')).toContain('13 oct 2026');
+    expect(read('recursos/como-contratar-creadora-ugc/index.html')).toContain('14 oct 2026');
     expect(read('en/resources/how-to-hire-ugc-creator/index.html')).not.toContain('Mar 24, 2026');
-    expect(read('en/resources/how-to-hire-ugc-creator/index.html')).toContain('Oct 13, 2026');
+    expect(read('en/resources/how-to-hire-ugc-creator/index.html')).toContain('Oct 14, 2026');
   });
 
   it('does not retarget bilingüe or cómo-contratar breadcrumbs onto hub indexes', () => {

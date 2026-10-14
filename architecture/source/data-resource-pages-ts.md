@@ -19,6 +19,10 @@ Content Data Model
 - `getResourcePath`
 - `getResourcePageContent`
 - `getAllResourceIds`
+- `FIVERR_PRICING`
+- `FIVERR_PRICING_GIG_URLS`
+- `PRICING_GUIDE_HUB`
+- `HIRE_BUDGET_FAQ`
 
 ## Local Functions
 - `getResourcePageContent`

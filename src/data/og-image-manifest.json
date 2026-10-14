@@ -303,6 +303,22 @@
     "alt": "How to hire a UGC creator",
     "fallback": false
   },
+  "/recursos/cuanto-cobra-creadora-ugc/": {
+    "path": "/og/es-recursos-cuanto-cobra-creadora-ugc.1622dc2f65.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/es-recursos-cuanto-cobra-creadora-ugc.1622dc2f65.jpg",
+    "width": 1200,
+    "height": 630,
+    "alt": "Cuánto cobra una creadora UGC: mis precios en Fiverr",
+    "fallback": false
+  },
+  "/en/resources/how-much-does-a-ugc-creator-charge/": {
+    "path": "/og/en-resources-how-much-does-a-ugc-creator-charge.0cf53dc948.jpg",
+    "url": "https://www.giselasaldarriaga.com/og/en-resources-how-much-does-a-ugc-creator-charge.0cf53dc948.jpg",
+    "width": 1200,
+    "height": 630,
+    "alt": "How much does a UGC creator charge? My Fiverr prices",
+    "fallback": false
+  },
   "/recursos/ugc-vs-influencer-marketing/": {
     "path": "/og/es-recursos-ugc-vs-influencer-marketing.f7754b1abd.jpg",
     "url": "https://www.giselasaldarriaga.com/og/es-recursos-ugc-vs-influencer-marketing.f7754b1abd.jpg",

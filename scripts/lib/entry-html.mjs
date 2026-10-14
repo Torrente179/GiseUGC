@@ -34,23 +34,28 @@ export const escapeText = (value) =>
 
 export const escapeAttr = (value) => escapeText(value).replaceAll('"', '&quot;');
 
-/* Copy links are written as [label](href) in the data (see src/lib/inline-copy-links.tsx). */
-const INLINE_LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/gu;
+/* Copy links and **bold** are written in the data (see src/lib/inline-copy-links.tsx). */
+const INLINE_TOKEN_RE = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*/gu;
 
-/** Escaped HTML with [label](href) rendered as <a>. */
+/** Escaped HTML with [label](href) as <a> and **bold** as <strong>. */
 export const renderInlineCopy = (text) => {
   let html = '';
   let cursor = 0;
-  for (const match of text.matchAll(INLINE_LINK_RE)) {
+  for (const match of text.matchAll(INLINE_TOKEN_RE)) {
     html += escapeText(text.slice(cursor, match.index));
-    html += `<a href="${escapeAttr(match[2])}">${escapeText(match[1])}</a>`;
+    if (match[3] !== undefined) {
+      html += `<strong>${escapeText(match[3])}</strong>`;
+    } else {
+      html += `<a href="${escapeAttr(match[2])}">${escapeText(match[1])}</a>`;
+    }
     cursor = match.index + match[0].length;
   }
   return html + escapeText(text.slice(cursor));
 };
 
-/** Visible text only (link labels kept, hrefs dropped), like visibleInlineCopy(). */
-export const visibleInlineCopy = (text) => text.replace(INLINE_LINK_RE, '$1');
+/** Visible text only (link labels kept, hrefs and ** dropped), like visibleInlineCopy(). */
+export const visibleInlineCopy = (text) =>
+  text.replace(INLINE_TOKEN_RE, (_all, label, _href, bold) => bold ?? label);
 
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
 

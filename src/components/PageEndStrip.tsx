@@ -15,7 +15,7 @@ const PageEndStrip = () => {
   ] as const;
 
   return (
-    <footer className="page-end-strip border-t border-border/20 bg-background" role="contentinfo">
+    <footer id="contact" className="page-end-strip border-t border-border/20 bg-background" role="contentinfo">
       <div className="studio-container flex flex-col gap-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:gap-6 md:py-9">
         <p className="font-sans text-[10px] font-medium tracking-[0.04em] text-muted-foreground">
           GiselaSaldarriaga.com <span className="text-muted-foreground/70">·</span> {new Date().getFullYear()}

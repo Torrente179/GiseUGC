@@ -3756,6 +3756,21 @@
     color: hsl(var(--foreground) / 0.7);
   }
 
+  .rsc-hero-cta {
+    margin: 1.25rem 0 0;
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    line-height: 1.6;
+  }
+
+  .rsc-hero-cta a {
+    color: hsl(var(--foreground));
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--primary) / 0.45);
+    text-underline-offset: 0.18em;
+  }
+
   .rsc-rule {
     height: 1px;
     width: 100%;
@@ -3897,6 +3912,24 @@
     font-size: 1.02rem;
     line-height: 1.75;
     color: hsl(var(--foreground) / 0.7);
+  }
+
+  .rsc-chapter ul {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+    max-width: 40rem;
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: hsl(var(--foreground) / 0.7);
+  }
+
+  .rsc-chapter li {
+    margin: 0 0 0.65rem;
+  }
+
+  .rsc-chapter li:last-child {
+    margin-bottom: 0;
   }
 
   .rsc-chapter a {

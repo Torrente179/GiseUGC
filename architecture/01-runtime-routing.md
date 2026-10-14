@@ -37,6 +37,10 @@ client navigation.
 Only the current route is mounted. Hidden home media is not preserved behind a
 subroute.
 
+`/#contact` and `/en/#contact` target `id="contact"` on the rendered homepage
+footer (`PageEndStrip` while `SHOW_SITE_FOOTER` is false). App hash navigation
+retries until that element exists, then scrolls to it.
+
 ## Scroll Behavior
 
 `App.tsx` persists scroll positions by React Router `location.key`. On browser back/forward it restores the saved Y position after two animation frames. Hash navigation retries until lazy-mounted sections exist, then clears the hash from the URL.
