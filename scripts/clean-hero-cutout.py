@@ -1,8 +1,14 @@
-"""Refine the edges of a Vision cut-out and export the hero sizes.
+"""Build the home hero's two aligned layers from one photo.
 
 Usage:
   swift scripts/hero-cutout.swift <original.jpg> /tmp/cutout-raw.png
   python3 scripts/clean-hero-cutout.py <original.jpg> /tmp/cutout-raw.png public/uploads
+
+Writes the cut-out of her (gisela-cutout-*.webp/png) and the scene she stood
+in with her removed and lightly blurred (gisela-scene-*.webp), then prints
+where the cut-out sits inside the photo. The hero stacks the two in the same
+frame, so every edge pixel lands on the background it came from; the printed
+fractions are the `--feed-cut-*` values in src/index.css.
 
 Needs Pillow (with AVIF), numpy and scipy.
 
@@ -35,6 +41,11 @@ GUIDE_RADIUS = 5
 GUIDE_EPS = 4e-4
 REFINE_BAND_PX = 14
 WIDTHS = (520, 760)
+SCENE_WIDTHS = (1344, 2016)
+# At the photo's full width; the hero shows it at roughly half that, so this
+# reads as a gentle, lens-like softness rather than a smear.
+SCENE_BLUR_SIGMA = 14
+SCENE_HOLE_MARGIN_PX = 18
 
 
 def luminance(rgb):
@@ -55,7 +66,7 @@ def guided_filter(guide, src, radius, eps):
     return box(a, radius) * guide + box(b, radius)
 
 
-def drop_background_in_hair(colour, alpha, lum):
+def background_in_hair(colour, alpha, lum):
     solid = (alpha > 0.5).astype(np.float32)
     depth = distance_transform_edt(solid)
     band = (depth > 0) & (depth <= EDGE_BAND_PX)
@@ -75,7 +86,40 @@ def drop_background_in_hair(colour, alpha, lum):
         & (np.abs(lum - background_lum) < 0.30)
         & (weight > 0.02)
     )
-    return alpha * (1 - np.clip(gaussian_filter(stray.astype(np.float32), 1.2) * 1.6, 0, 1))
+    return np.clip(gaussian_filter(stray.astype(np.float32), 1.2) * 1.6, 0, 1)
+
+
+def push_pull_fill(colour, known):
+    """Fill unknown pixels from their surroundings with a premultiplied
+    pyramid: each coarser level averages what is known, and each finer level
+    keeps its own known pixels and takes the rest from the level below."""
+    levels = []
+    premult, weight = colour * known[..., None], known.astype(np.float32)
+    while min(weight.shape) > 2:
+        levels.append((premult, weight))
+        h, w = weight.shape
+        ph, pw = h + h % 2, w + w % 2
+        premult = np.pad(premult, ((0, ph - h), (0, pw - w), (0, 0)), mode='edge')
+        weight = np.pad(weight, ((0, ph - h), (0, pw - w)), mode='edge')
+        premult = premult.reshape(ph // 2, 2, pw // 2, 2, 3).mean((1, 3))
+        weight = weight.reshape(ph // 2, 2, pw // 2, 2).mean((1, 3))
+    estimate = premult / np.maximum(weight, 1e-6)[..., None]
+    for premult, weight in reversed(levels):
+        h, w = weight.shape
+        up = estimate.repeat(2, axis=0).repeat(2, axis=1)[:h, :w]
+        up = np.stack([gaussian_filter(up[..., i], 1.0) for i in range(3)], -1)
+        estimate = premult + (1 - weight)[..., None] * up
+    return estimate
+
+
+def build_scene(colour, alpha, out_dir):
+    hole = distance_transform_edt(alpha <= 0.02) <= SCENE_HOLE_MARGIN_PX
+    scene = push_pull_fill(colour, (~hole).astype(np.float32))
+    scene = np.stack([gaussian_filter(scene[..., i], SCENE_BLUR_SIGMA) for i in range(3)], -1)
+    image = Image.fromarray((np.clip(scene, 0, 1) * 255 + 0.5).astype(np.uint8), 'RGB')
+    for target in SCENE_WIDTHS:
+        size = (target, round(image.height * target / image.width))
+        image.resize(size, Image.LANCZOS).save(f'{out_dir}/gisela-scene-{target}.webp', 'WEBP', quality=84, method=6)
 
 
 def main(original_path, raw_cutout_path, out_dir):
@@ -94,22 +138,41 @@ def main(original_path, raw_cutout_path, out_dir):
     light_subject = gaussian_filter((subject_lum >= 0.30).astype(np.float32), 6)
     alpha = np.where(near_edge, refined * light_subject + alpha * (1 - light_subject), alpha)
 
-    # 3) strips of background caught inside the hair outline
-    alpha = drop_background_in_hair(colour, alpha, lum)
+    # 3) strips of background caught inside the hair outline are repainted as
+    #    hair rather than cut out: cut out, the white name behind her shows
+    #    through them as a crack along her hair.
+    stray = background_in_hair(colour, alpha, lum)
 
-    # 2) solid interior, soft edge; the edge borrows colour from her
-    alpha = np.clip((alpha - 0.04) / 0.86, 0, 1)
-    inner = alpha >= 0.98
+    # 2) solid interior, soft edge; the edge borrows colour from her. Around
+    #    hair the falloff is steeper, so the outermost strands read as hair over
+    #    the white letters instead of letting the letters show through.
+    hair_zone = gaussian_filter((subject_lum < 0.30).astype(np.float32), 6)
+    body_alpha = np.clip((alpha - 0.04) / 0.86, 0, 1)
+    hair_alpha = np.clip((alpha - 0.03) / 0.55, 0, 1)
+    alpha = body_alpha * (1 - hair_zone) + hair_alpha * hair_zone
+    inner = (alpha >= 0.98) & (stray < 0.05)
     _, (rows, cols) = distance_transform_edt(~inner, return_indices=True)
     nearest = colour[rows, cols]
-    weight = alpha[..., None]
+    weight = (alpha * (1 - stray))[..., None]
     foreground = np.where(inner[..., None], colour, colour * weight + nearest * (1 - weight))
 
     rgba = np.dstack([foreground, alpha[..., None]])
-    cutout = Image.fromarray((rgba * 255 + 0.5).astype(np.uint8), 'RGBA')
-    cutout = cutout.crop(cutout.getbbox())
+    full = Image.fromarray((rgba * 255 + 0.5).astype(np.uint8), 'RGBA')
+    x0, y0, x1, y1 = full.getbbox()
+    cutout = full.crop((x0, y0, x1, y1))
     width, height = cutout.size
-    print(f'cut-out {width}x{height}')
+    photo_w, photo_h = full.size
+
+    build_scene(colour, alpha, out_dir)
+
+    head = alpha[y0:y0 + round(height * 0.22)] > 0.5
+    head_cx = np.nonzero(head.any(axis=0))[0].mean()
+    print(f'photo {photo_w}x{photo_h}, cut-out {width}x{height} at ({x0}, {y0})')
+    print(f'--feed-cut-left: {x0 / photo_w * 100:.3f}%;')
+    print(f'--feed-cut-top: {y0 / photo_h * 100:.3f}%;')
+    print(f'--feed-cut-width: {width / photo_w * 100:.3f}%;')
+    print(f'--feed-face-x: {head_cx / photo_w:.4f};  /* face centre, fraction of photo width */')
+    print(f'--feed-head-y: {y0 / photo_h:.4f};  /* head top, fraction of photo height */')
 
     # AVIF compresses alpha lossily and steps the outline, so the transparent
     # cut-out ships as WebP: lossy colour, lossless alpha.

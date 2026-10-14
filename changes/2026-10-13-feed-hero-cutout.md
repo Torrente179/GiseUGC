@@ -191,3 +191,46 @@ fixed `nav.site-nav`:
 Verify inner routes against `npm run build` + `npm run preview -- --port 4173`:
 the dev server cannot hydrate them ("Missing prerendered route data"). The
 build rewrites `src/data/nuevos-r2-ready.ts`; restore it before committing.
+
+## 10. The photo frame (second review, same day)
+
+JP: the picture and blend were "very low quality", arm edges fuzzy, she
+looked "like a flying ghost over the frame", and the reel-driven backdrop
+changing colour was wrong — "bring back the background of the actual picture
+and make it a bit blurry". This supersedes the plate and the waist fade from
+sections 1 and 8.
+
+**Root cause.** Any cut-out laid over a *different* background shows every
+imperfect edge pixel against colours that were never behind it, and fading
+her out at the waist on a light ground reads as a ghost. No amount of edge
+filtering fixes that.
+
+**Now.** Two layers from the one photo, in identical frames:
+
+- `gisela-scene-{1344,2016}.webp` — the 4032×2268 scene with her filled in
+  (a premultiplied push-pull fill over her silhouette + 18 px) and blurred
+  (σ 14 at full width). Filling her in matters: blurring the photo with her
+  still in it bleeds a dark halo round her hair and a glow round her arms.
+- `gisela-cutout-*.webp` — her, placed by `--feed-cut-left/top/width` (printed
+  by the script) inside the same frame, so every edge pixel lands on the
+  background it was photographed against.
+- The frame is the photo at ≥128% of the stage height (≥1100 px), with her face
+  at 53% of the width and her head ~90 px down; on phones it is sized from her
+  width (≤330 px) and never shorter than 108% of the stage. She runs off the
+  foot of the hero — no mask.
+- Both frames carry the same scroll animation and the same pointer depth
+  (`data-depth="8"`), so she never slides off her background. Verified: their
+  boxes are identical at 0/300/600 px of scroll with the pointer moved.
+- The scene only fades in once the cut-out has loaded (`.is-ready`), so the
+  filled-in silhouette is never seen on its own.
+- Hair: strips of glass the mask kept between strands are repainted as hair
+  instead of cut out (cut out, the white name showed through as a crack), and
+  the hair edge falls off more steeply so the letters do not show through the
+  outer strands.
+- The stage has an explicit `height`, not `min-height`: it is a size
+  container, and Chrome resolves `cqh` against a size container's min-height
+  as 0. The phone floor dropped from 40rem to 34rem so a 667 px phone fits the
+  buttons above the tab bar.
+
+Known trade-off: on short laptop screens (≤ ~800 px tall) the phone overlaps
+the last letter of the name.

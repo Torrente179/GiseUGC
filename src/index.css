@@ -768,26 +768,37 @@
     --primary-foreground: var(--deep-ebony);
   }
 
-  /* ─── Home hero: cut-out portrait in front of her name ───
-     Layers, back to front: her own photo blurred into a plate, a warm glow,
-     a fade to ground, the name, the cut-out, a caption scrim, then the copy.
-     Every z-index is positive on purpose: the preview pane drops negative
-     z-index layers from screenshots, which reads as a broken hero.
+  /* ─── Home hero: her photo, with her name between her and the scene ───
+     Both photographic layers come from one picture (IMG_8146, 4032×2268) via
+     scripts/clean-hero-cutout.py: the scene with her removed and lightly
+     blurred, and the cut-out of her. They sit in two `.feed-hero__frame`s with
+     identical geometry, so every edge pixel of the cut-out lands on the
+     background it was photographed against — that is what makes the edges
+     disappear. Do not size, move or animate one frame without the other.
 
-     Desktop sizes the name and the figure from one unit, so the head lands on
-     the same letters at every aspect ratio: `--feed-u` follows the width until
-     the height runs out, and stops growing at 20px. */
+     Back to front: scene (0), shade (1), name (2), cut-out (3), caption
+     scrim (4), copy (5). Every z-index is positive on purpose: the preview
+     pane drops negative z-index layers from screenshots.
+
+     The frame is the photo at cover size or larger (at least 128% of the
+     stage height and never under 1100px tall, so her head clears the nav),
+     with her face at 53% of the stage width and her head ~92px from the
+     top. Frames keep 10px of overscan on every side for the pointer depth.
+     The cut-out percentages are printed by the script. */
   .feed-hero {
-    --feed-ground: #1d1916;
+    --feed-ground: #23201d;
     --feed-ink: #f3f2ef;
     --feed-accent: hsl(var(--coastal-teal));
     --feed-on-accent: #0e1114;
     --feed-u: min(1.25vw, 1.6vh, 20px);
     --feed-name-size: calc(var(--feed-u) * 23);
     --feed-name-top: calc(env(safe-area-inset-top, 0px) + 4.25rem + var(--feed-u) * 0.5);
-    --feed-figure-width: calc(var(--feed-u) * 34);
-    --feed-figure-top: calc(var(--feed-name-top) + var(--feed-u) * 4.4);
     --feed-gutter: clamp(1.5rem, 5vw, 4.5rem);
+    --feed-cut-left: 35.169%;
+    --feed-cut-top: 8.642%;
+    --feed-cut-width: 24.578%;
+    --feed-face-x: 0.4756;
+    --feed-head-y: 0.0864;
     position: relative;
     width: 100%;
     overflow: hidden;
@@ -795,76 +806,84 @@
     background: var(--feed-ground);
   }
 
-  /* The cut-out is 991 px wide. On 2x screens the unit stops at 14.5px so
-     her 34-unit width never asks for more than those pixels; the name scales
-     with her, so the composition holds and only gets smaller. */
-  @media (min-resolution: 2dppx) {
-    .feed-hero {
-      --feed-u: min(1.25vw, 1.6vh, 14.5px);
-    }
-  }
-
   .feed-hero__stage {
     position: relative;
     isolation: isolate;
-    min-height: max(43rem, 100svh);
+    container-type: size;
+    /* An explicit height, not min-height: Chrome resolves cqh against a size
+       container's min-height as 0. Everything inside is absolutely positioned,
+       so the content never needs to grow it. */
+    height: max(43rem, 100svh);
     overflow: hidden;
     background: var(--feed-ground);
   }
 
-  .feed-hero__plate-track,
-  .feed-hero__fade,
-  .feed-hero__figure-track,
-  .feed-hero__scrim {
+  .feed-hero__frame {
+    --frame-h: max(128cqh, 56.25cqw, 1100px);
+    --frame-w: calc(var(--frame-h) * 1.77778);
     position: absolute;
-    inset: 0;
+    top: min(-10px, calc(92px - var(--feed-head-y) * var(--frame-h)));
+    left: clamp(
+      calc(100cqw - var(--frame-w) + 10px),
+      calc(53cqw - var(--feed-face-x) * var(--frame-w)),
+      -10px
+    );
+    width: var(--frame-w);
+    height: var(--frame-h);
     pointer-events: none;
   }
 
-  .feed-hero__plate-track { z-index: 0; }
-  .feed-hero__fade { z-index: 1; }
-  .feed-hero__figure-track { z-index: 3; }
-  .feed-hero__scrim { z-index: 4; }
+  .feed-hero__frame--scene { z-index: 0; }
+  .feed-hero__frame--figure { z-index: 3; }
 
-  .feed-hero__plate,
-  .feed-hero__plate-image,
-  .feed-hero__glow {
+  /* The scene waits for her: until the cut-out has loaded, the gap the script
+     filled where she stood would show. The stage ground holds the space. */
+  .feed-hero__frame--scene {
+    opacity: 0;
+    transition: opacity 700ms var(--ease-premium);
+  }
+
+  .feed-hero.is-ready .feed-hero__frame--scene {
+    opacity: 1;
+  }
+
+  .feed-hero__frame-depth,
+  .feed-hero__scene {
     position: absolute;
     inset: 0;
     display: block;
     width: 100%;
     height: 100%;
-  }
-
-  /* Plates are pre-blurred 180px images; upscaling them is the rest of the
-     blur, and costs nothing. */
-  .feed-hero__plate-image {
     max-width: none;
-    object-fit: cover;
   }
 
-  .feed-hero__plate-image--incoming {
-    animation: feed-hero-fade 1.2s var(--ease-premium) both;
+  .feed-hero__figure {
+    position: absolute;
+    top: var(--feed-cut-top);
+    left: var(--feed-cut-left);
+    display: block;
+    width: var(--feed-cut-width);
   }
 
-  .feed-hero__glow {
-    background: radial-gradient(
-      ellipse 36% 48% at 50% 34%,
-      rgb(214 150 112 / 0.32) 0%,
-      rgb(214 150 112 / 0) 100%
-    );
+  .feed-hero__figure img {
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: auto;
   }
 
-  /* A light hand: a little shade under the nav and along the foot, and the
-     rest of the plate left as the clip's own light. */
-  .feed-hero__fade {
+  /* Enough shade under the name for white letters on the bright glass, and
+     nothing else: the scene keeps its own daylight. */
+  .feed-hero__shade {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    pointer-events: none;
     background: linear-gradient(
       180deg,
-      rgb(11 11 13 / 0.32) 0%,
-      rgb(11 11 13 / 0.06) 20%,
-      rgb(11 11 13 / 0) 42%,
-      rgb(11 11 13 / 0.16) 74%,
-      rgb(11 11 13 / 0.42) 100%
+      rgb(11 11 13 / 0.34) 0%,
+      rgb(11 11 13 / 0.14) 32%,
+      rgb(11 11 13 / 0) 55%
     );
   }
 
@@ -889,40 +908,23 @@
     font-weight: 700;
     line-height: 1;
     letter-spacing: -0.05em;
-    color: #edecef;
+    color: #f4f3f1;
     white-space: nowrap;
     user-select: none;
   }
 
-  /* 0.527 is where her face sits across the cut-out's width. */
-  .feed-hero__figure-depth {
-    position: absolute;
-    top: var(--feed-figure-top);
-    left: calc(50% - var(--feed-figure-width) * 0.527);
-    width: var(--feed-figure-width);
-  }
-
-  .feed-hero__figure,
-  .feed-hero__figure img {
-    display: block;
-    width: 100%;
-    max-width: none;
-    height: auto;
-  }
-
-  .feed-hero__figure img {
-    -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 88%);
-    mask-image: linear-gradient(180deg, #000 62%, transparent 88%);
-  }
-
-  /* Shade only where the caption sits, so the white copy reads without
-     darkening the whole foot of the hero. */
+  /* Shade only where the caption sits, so the white copy reads on the bright
+     floor without darkening the rest of the photo. */
   .feed-hero__scrim {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    pointer-events: none;
     background: radial-gradient(
-      ellipse 52% 62% at 0% 100%,
-      rgb(11 11 13 / 0.66) 0%,
-      rgb(11 11 13 / 0.38) 42%,
-      rgb(11 11 13 / 0) 78%
+      ellipse 50% 60% at 0% 100%,
+      rgb(11 11 13 / 0.72) 0%,
+      rgb(11 11 13 / 0.42) 45%,
+      rgb(11 11 13 / 0) 80%
     );
   }
 
@@ -1393,43 +1395,36 @@
     .feed-hero {
       --feed-name-size: 31.5vw;
       --feed-name-top: calc(env(safe-area-inset-top, 0px) + 4.25rem);
-      --feed-figure-width: 92vw;
-      --feed-figure-top: calc(var(--feed-name-top) + var(--feed-name-size) * 0.53);
     }
 
-    /* At 3x, 330px is the widest she renders from 991 source pixels. */
-    @media (min-resolution: 3dppx) {
-      .feed-hero {
-        --feed-figure-width: min(92vw, 330px);
-      }
-    }
-
+    /* The floor is low enough that a 667px phone fits the caption and its
+       buttons above the tab bar. */
     .feed-hero__stage {
-      min-height: max(40rem, calc(100svh - var(--app-dock-clearance)));
+      height: max(34rem, calc(100svh - var(--app-dock-clearance)));
     }
 
-    .feed-hero__glow {
-      background: radial-gradient(
-        ellipse 62% 30% at 50% 24%,
-        rgb(214 150 112 / 0.32) 0%,
-        rgb(214 150 112 / 0) 100%
+    /* Phones size the frame from her width (92% of the screen, 330px at most
+       so 3x screens stay at her native pixels) but never shorter than 108% of
+       the stage, so she always reaches the foot. Her head sits just under the
+       name's baseline, as in the canvas. 2.2886 = 1 / (cut width × 16:9). The
+       top of the frame can start below the stage top; the nav bar covers it. */
+    .feed-hero__frame {
+      --frame-h: max(calc(min(92cqw, 330px) * 2.2886), 108cqh);
+      top: calc(var(--feed-name-top) + var(--feed-name-size) * 0.53 - var(--feed-head-y) * var(--frame-h));
+      left: clamp(
+        calc(100cqw - var(--frame-w)),
+        calc(50cqw - var(--feed-face-x) * var(--frame-w)),
+        0px
       );
     }
 
-    .feed-hero__fade {
+    .feed-hero__shade {
       background: linear-gradient(
         180deg,
-        rgb(11 11 13 / 0.3) 0%,
-        rgb(11 11 13 / 0.04) 14%,
-        rgb(11 11 13 / 0) 44%,
-        rgb(11 11 13 / 0.2) 70%,
-        rgb(11 11 13 / 0.45) 100%
+        rgb(11 11 13 / 0.4) 0%,
+        rgb(11 11 13 / 0.14) 24%,
+        rgb(11 11 13 / 0) 42%
       );
-    }
-
-    .feed-hero__figure img {
-      -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 88%);
-      mask-image: linear-gradient(180deg, #000 62%, transparent 88%);
     }
 
     .feed-hero__scrim {
@@ -1568,23 +1563,15 @@
   }
 
   /* ── Motion, from the reference: one stagger on load, then a scroll timeline
-     that lifts the name and lowers her, so the whole word comes into view.
-     Compositor-only (opacity, translate, scale); no JS involved. The entrance
-     sits on the inner elements and the scroll on their tracks, and the pointer
-     depth writes `transform` on a third element, so none of them collide. */
+     that lifts the name and lowers the photo, so the whole word comes into
+     view. Compositor-only (opacity, translate, scale); no JS involved. Both
+     photo frames run the same animation and carry the same pointer depth, so
+     she never slides off the background she was cut from. The entrance sits on
+     inner elements, the scroll on the tracks/frames, and the pointer depth
+     writes `transform` on a third element, so none of them collide. */
   @media (prefers-reduced-motion: no-preference) {
     .feed-hero-rise {
       animation: feed-hero-rise 1.1s var(--ease-premium) both;
-      animation-delay: var(--enter-delay, 0ms);
-    }
-
-    .feed-hero-settle {
-      animation: feed-hero-settle 1.4s var(--ease-premium) both;
-      animation-delay: var(--enter-delay, 0ms);
-    }
-
-    .feed-hero-fade {
-      animation: feed-hero-fade 1.6s var(--ease-premium) both;
       animation-delay: var(--enter-delay, 0ms);
     }
 
@@ -1595,14 +1582,8 @@
         animation-range: 0 100svh;
       }
 
-      .feed-hero__figure-track {
-        animation: feed-hero-figure-out linear both;
-        animation-timeline: scroll(root);
-        animation-range: 0 100svh;
-      }
-
-      .feed-hero__plate-track {
-        animation: feed-hero-plate-out linear both;
+      .feed-hero__frame {
+        animation: feed-hero-frame-out linear both;
         animation-timeline: scroll(root);
         animation-range: 0 100svh;
       }
@@ -1629,7 +1610,7 @@
     .feed-hero__cta-mark,
     .feed-hero__phone,
     .feed-hero__rail-icon,
-    .feed-hero__plate-image--incoming {
+    .feed-hero__frame--scene {
       transition: none;
       animation: none;
     }
@@ -1651,19 +1632,6 @@
     }
   }
 
-  @keyframes feed-hero-settle {
-    from {
-      opacity: 0;
-      translate: 0 40px;
-      scale: 1.03;
-    }
-    to {
-      opacity: 1;
-      translate: 0 0;
-      scale: 1;
-    }
-  }
-
   @keyframes feed-hero-fade {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -1676,15 +1644,11 @@
     }
   }
 
-  @keyframes feed-hero-figure-out {
+  @keyframes feed-hero-frame-out {
     to {
       translate: 0 9vh;
       scale: 1.035;
     }
-  }
-
-  @keyframes feed-hero-plate-out {
-    to { opacity: 0.25; }
   }
 
   @keyframes feed-hero-progress {

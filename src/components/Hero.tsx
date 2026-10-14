@@ -24,12 +24,12 @@ const HERO_REEL_INTERVAL_MS = 3500;
 // rail takes its place, so nothing reel-related should run there.
 const DESKTOP_HERO_QUERY = '(min-width: 768px)';
 
-// Mirrors `--feed-figure-width` in index.css.
-const HERO_FIGURE_SIZES = '(max-width: 767px) min(92vw, 330px), min(42.5vw, 54.4vh, 680px)';
-
-// The backdrop is the clip the reel card is playing, pre-blurred and
-// brightness-matched by scripts/generate-hero-plates.mjs.
-const heroPlateSrc = (clipId: number) => `/uploads/hero-plates/reel-${clipId}.webp`;
+// Her rendered width, from the frame geometry in index.css: the cut-out is
+// 24.6% of a 16:9 frame at least 128% of the stage tall (desktop), and on
+// phones 92% of the screen up to 330px.
+const HERO_FIGURE_SIZES = '(max-width: 767px) min(92vw, 330px), max(56vh, 25vw, 480px)';
+// The scene frame is ~1.78 × its height wide: well over the viewport.
+const HERO_SCENE_SIZES = '(max-width: 767px) 380vw, max(130vw, 228vh)';
 
 type HeroIntroState = 'idle' | 'loading' | 'playing' | 'complete';
 
@@ -53,11 +53,8 @@ const Hero = () => {
   const [introState, setIntroState] = useState<HeroIntroState>('idle');
   const [isHeroActive, setIsHeroActive] = useState(true);
   const [reelIndex, setReelIndex] = useState(0);
-  // `base` is the backdrop already on screen; `incoming` fades in over it.
-  const [plates, setPlates] = useState<{ base: number; incoming: number | null }>({
-    base: 0,
-    incoming: null,
-  });
+  const [sceneReady, setSceneReady] = useState(false);
+  const figureRef = useRef<HTMLImageElement>(null);
   const loadedIntroClipIds = useRef(new Set<number>());
   const ownsIntroRun = useRef(false);
 
@@ -159,22 +156,23 @@ const Hero = () => {
     return () => window.clearInterval(interval);
   }, [introState, isHeroActive, isMobile, mediaIntent]);
 
+  // The scene behind her has the place where she stood filled in, which only
+  // reads as background once she is drawn over it. Show it after she loads.
   useEffect(() => {
-    setPlates((current) => {
-      const shown = current.incoming ?? current.base;
-      return shown === reelIndex ? current : { base: shown, incoming: reelIndex };
-    });
-  }, [reelIndex]);
-
-  // The plates are ~2 KB each; warming all ten keeps every cross-fade from
-  // fading in an image that has not arrived yet.
-  useEffect(() => {
-    if (isMobile) return;
-    HERO_REEL_CLIPS.forEach((clip) => {
-      const image = new Image();
-      image.src = heroPlateSrc(clip.id);
-    });
-  }, [isMobile]);
+    const figure = figureRef.current;
+    if (!figure) return undefined;
+    const reveal = () => setSceneReady(true);
+    if (figure.complete) {
+      reveal();
+      return undefined;
+    }
+    figure.addEventListener('load', reveal, { once: true });
+    figure.addEventListener('error', reveal, { once: true });
+    return () => {
+      figure.removeEventListener('load', reveal);
+      figure.removeEventListener('error', reveal);
+    };
+  }, []);
 
   useEffect(() => {
     if (introState !== 'loading' && introState !== 'playing') return undefined;
@@ -206,45 +204,34 @@ const Hero = () => {
   const formattedReelIndex = String(reelIndex + 1).padStart(2, '0');
   const formattedReelTotal = String(HERO_REEL_CLIPS.length).padStart(2, '0');
   const introIsRunning = introState === 'loading' || introState === 'playing';
-  const basePlateClip = HERO_REEL_CLIPS[plates.base] ?? HERO_REEL_CLIPS[0];
-  const incomingPlateClip = plates.incoming === null ? null : HERO_REEL_CLIPS[plates.incoming];
 
   return (
     <section
       ref={heroRef}
       id="home"
-      className="feed-hero"
+      className={`feed-hero${sceneReady ? ' is-ready' : ''}`}
       aria-labelledby="feed-hero-title"
     >
       <div className="feed-hero__stage">
-        {/* The reel's current clip, out of focus. Scrolling dims it. */}
-        <div className="feed-hero__plate-track" aria-hidden="true">
-          <div className="feed-hero__plate feed-hero-fade" style={enterDelay(0)}>
+        {/* Her scene, lightly blurred, with her removed. It shares its frame
+            geometry with the cut-out below, so she lands exactly where she
+            stood. */}
+        <div className="feed-hero__frame feed-hero__frame--scene" aria-hidden="true">
+          <div className="feed-hero__frame-depth" data-depth="8">
             <img
-              key={`plate-${basePlateClip.id}`}
-              className="feed-hero__plate-image"
-              src={heroPlateSrc(basePlateClip.id)}
+              className="feed-hero__scene"
+              src="/uploads/gisela-scene-2016.webp"
+              srcSet="/uploads/gisela-scene-1344.webp 1344w, /uploads/gisela-scene-2016.webp 2016w"
+              sizes={HERO_SCENE_SIZES}
               alt=""
-              width="180"
-              height="320"
+              width="2016"
+              height="1134"
               loading="eager"
               decoding="async"
             />
-            {incomingPlateClip && (
-              <img
-                key={`plate-${incomingPlateClip.id}`}
-                className="feed-hero__plate-image feed-hero__plate-image--incoming"
-                src={heroPlateSrc(incomingPlateClip.id)}
-                alt=""
-                width="180"
-                height="320"
-                decoding="async"
-              />
-            )}
           </div>
-          <span className="feed-hero__glow" />
         </div>
-        <div className="feed-hero__fade" aria-hidden="true" />
+        <div className="feed-hero__shade" aria-hidden="true" />
 
         <div className="feed-hero__name-track" aria-hidden="true">
           <div data-depth="-14">
@@ -254,23 +241,23 @@ const Hero = () => {
           </div>
         </div>
 
-        <div className="feed-hero__figure-track">
-          <div className="feed-hero__figure-depth" data-depth="16">
-            <picture className="feed-hero__figure feed-hero-settle" style={enterDelay(140)}>
-              {/* Cut from the 4032×2268 original, where she spans 991×2071 px.
+        <div className="feed-hero__frame feed-hero__frame--figure">
+          <div className="feed-hero__frame-depth" data-depth="8">
+            <picture className="feed-hero__figure">
+              {/* Cut from the 4032×2268 original, where she spans 991×2072 px.
                   WebP only: AVIF compresses alpha lossily and steps the
-                  outline. The stylesheet caps her rendered width on dense
-                  screens so the browser never stretches past those pixels. */}
+                  outline. */}
               <source
                 type="image/webp"
                 srcSet="/uploads/gisela-cutout-520.webp 520w, /uploads/gisela-cutout-760.webp 760w, /uploads/gisela-cutout-991.webp 991w"
                 sizes={HERO_FIGURE_SIZES}
               />
               <img
+                ref={figureRef}
                 src="/uploads/gisela-cutout-640.png"
                 alt={t('hero.imageAlt')}
                 width="991"
-                height="2071"
+                height="2072"
                 loading="eager"
                 decoding="async"
                 {...({ fetchpriority: 'high' } as Record<string, string>)}
