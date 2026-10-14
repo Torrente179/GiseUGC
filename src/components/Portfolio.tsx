@@ -1,41 +1,43 @@
-import { useRef, useState, useCallback, useEffect, useMemo, type TouchEvent } from 'react';
-import { createPortal } from 'react-dom';
-import { useTranslation } from '@/lib/locale-context';
-import { ChevronLeft, ChevronRight, Play, X } from 'lucide-react';
-import SplitTextReveal from '@/components/motion/SplitTextReveal';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { scrollToY } from '@/lib/motion/native-scroll';
-import AdaptiveVideo from '@/components/media/AdaptiveVideo';
-import TheaterVideo from '@/components/media/TheaterVideo';
-import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
-import { createClipPlaybackCandidates } from '@/lib/media-assets';
 import {
-  getBestPosterSrc,
-  LEGACY_REEL_CLIPS,
-  type ReelClip,
-} from '@/data/portfolio-clips';
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEvent,
+} from 'react';
+import { useTranslation } from '@/lib/locale-context';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
+import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
+import { isMobileViewport, toggleContactDock } from '@/lib/contact-dock';
+import AdaptiveVideo from '@/components/media/AdaptiveVideo';
+import ReelPhone from '@/components/media/ReelPhone';
+import { getPosterVariantSrc, LEGACY_REEL_CLIPS, type ReelClip } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
+import { CONTACT_URLS } from '@/lib/contact-channels';
+import { SITE_PROOF } from '@/data/site-proof';
+import '@/styles/reels-feed.css';
 
-type TheaterSwipeGesture = {
-  x: number;
-  y: number;
-  timestamp: number;
-  axis: 'pending' | 'vertical' | 'horizontal';
-};
+/**
+ * "Reels que venden": the portfolio as the feed her ads actually live in.
+ *
+ * Desktop plays the reels inside the hero's iPhone (ReelPhone) as a vertical
+ * feed with category tabs, next to a "now playing" spec card, a WhatsApp CTA
+ * that names the reel, and "up next". Phones get the feed itself, full screen,
+ * swiped up and down like the app. Only the active reel mounts a video; every
+ * other slide is a poster. Styles and both themes: src/styles/reels-feed.css.
+ */
 
-const THEATER_CLOSE_DURATION_MS = 320;
-// One gesture model on every breakpoint: drag sideways to walk the reels,
-// drag up or down to throw the viewer away.
-const THEATER_NAV_SWIPE_DISTANCE_THRESHOLD = 64;
-const THEATER_NAV_SWIPE_VELOCITY_THRESHOLD = 0.32;
-const THEATER_DISMISS_SWIPE_DISTANCE_THRESHOLD = 96;
-const THEATER_DISMISS_SWIPE_VELOCITY_THRESHOLD = 0.4;
-const THEATER_AXIS_LOCK_SLOP_PX = 6;
-const THEATER_MAX_DRAG_DISTANCE = 260;
-const REEL_CARD_TAP_SLOP_PX = 10;
-const THEATER_QUALITY_FALLBACK_MS = 2500;
+type Category = ReelClip['category'];
+type Filter = 'all' | Category;
+
+const FILTERS: Filter[] = ['all', 'fashion', 'beauty', 'tech', 'lifestyle'];
+const AVATAR_SRC = '/uploads/gisela-avatar-160.webp';
+const WHEEL_LOCK_MS = 650;
+const DRAG_THRESHOLD_PX = 50;
 const DAY_MS = 86_400_000;
-const getUtcDayBucket = () => Math.floor(Date.now() / DAY_MS);
 
 const shuffleWithSeed = <T,>(items: T[], seed: number): T[] => {
   const result = [...items];
@@ -57,962 +59,511 @@ const shuffleWithSeed = <T,>(items: T[], seed: number): T[] => {
 
 const ALL_REEL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS];
 
+const formatDuration = (seconds?: number) => {
+  if (!seconds) return '';
+  const m = Math.floor(seconds / 60);
+  const s = String(Math.round(seconds % 60)).padStart(2, '0');
+  return `${m}:${s}`;
+};
+
+const WhatsAppGlyph = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <path d="M20.5 11.7a8.6 8.6 0 0 1-12.7 7.6L3.5 20.5l1.3-4.1a8.6 8.6 0 1 1 15.7-4.7z" />
+    <path
+      d="M9.2 8.4c.3-.4.6-.4.9-.4h.4c.2 0 .4.1.5.4l.6 1.5c.1.2 0 .4-.1.6l-.5.6c-.1.1-.1.3 0 .5.6 1 1.4 1.8 2.4 2.3.2.1.4.1.5 0l.6-.6c.2-.1.4-.2.6-.1l1.5.6c.3.1.4.3.4.5v.4c0 .3-.1.6-.5.9-.6.3-1.3.5-2.1.3-2.3-.6-4.3-2.6-4.9-4.9-.2-.8 0-1.5.3-2.1z"
+      fill="currentColor"
+      stroke="none"
+    />
+  </svg>
+);
+
+const SoundIcon = ({ on }: { on: boolean }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <path d="M11 5 6 9H3v6h3l5 4z" />
+    {on ? <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" /> : <path d="m22 9-6 6M16 9l6 6" />}
+  </svg>
+);
+
+const Chevron = ({ up }: { up: boolean }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <path d={up ? 'm6 15 6-6 6 6' : 'm6 9 6 6 6-6'} />
+  </svg>
+);
+
 const Portfolio = () => {
-  const { t, locale: pageLocale } = useTranslation();
+  const { t, locale } = useTranslation();
   const isMobile = useIsMobile();
+  const reducedMotion = usePrefersReducedMotion();
+  const { handleHashLinkClick } = useHashlessSectionNavigation();
 
-  const [activeReelPreview, setActiveReelPreview] = useState<ReelClip | null>(null);
-  const [activeReelIndex, setActiveReelIndex] = useState<number | null>(null);
-  const [activeMobileReelIndex, setActiveMobileReelIndex] = useState(0);
-  const isTheaterOpen = activeReelPreview !== null;
-  const [theaterDrag, setTheaterDrag] = useState({ x: 0, y: 0 });
-  const [isTheaterDragging, setIsTheaterDragging] = useState(false);
-  const [isTheaterVisible, setIsTheaterVisible] = useState(false);
-  const [isTheaterDismissing, setIsTheaterDismissing] = useState(false);
-  const [theaterDismissDirection, setTheaterDismissDirection] = useState<1 | -1>(1);
-  const [interactionPrewarmClip, setInteractionPrewarmClip] = useState<ReelClip | null>(null);
-  const [utcDayBucket, setUtcDayBucket] = useState(() => getUtcDayBucket());
+  const sectionRef = useRef<HTMLElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const progressRef = useRef<HTMLSpanElement>(null);
+  const wheelLockRef = useRef(0);
+  const dragRef = useRef<{ y: number; moved: boolean } | null>(null);
+  const swallowClickRef = useRef(false);
 
-  const reelScrollRef = useRef<HTMLDivElement>(null);
-  // Desktop "Gallery" chapter: a free-scroll horizontal rail the visitor drives.
-  const galleryViewportRef = useRef<HTMLDivElement>(null);
-  const galleryTrackRef = useRef<HTMLDivElement>(null);
-  const galleryCounterRef = useRef<HTMLSpanElement>(null);
-  const reelScrollStepRef = useRef(212);
-  const reelCardTouchStartRef = useRef<{ x: number; y: number } | null>(null);
-  const reelCardDidDragRef = useRef(false);
-  const theaterSwipeStartRef = useRef<TheaterSwipeGesture | null>(null);
-  const theaterCloseTimerRef = useRef<number | null>(null);
-  const theaterDragFrameRef = useRef<number | null>(null);
-  const theaterPendingDragRef = useRef({ x: 0, y: 0 });
-  const interactionPrewarmTimerRef = useRef<number | null>(null);
-  const showcaseReelClips = useMemo(
-    () => shuffleWithSeed(ALL_REEL_CLIPS, utcDayBucket),
-    [utcDayBucket],
+  const [dayBucket] = useState(() => Math.floor(Date.now() / DAY_MS));
+  const [filter, setFilter] = useState<Filter>('all');
+  const [index, setIndex] = useState(0);
+  const [soundOn, setSoundOn] = useState(false);
+  const [liked, setLiked] = useState<Record<number, boolean>>({});
+  const [touched, setTouched] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [armed, setArmed] = useState(false);
+  const [seen, setSeen] = useState(false);
+  const [ambient, setAmbient] = useState<{ a: string; b: string; showA: boolean }>({ a: '', b: '', showA: true });
+
+  const clips = useMemo(() => shuffleWithSeed(ALL_REEL_CLIPS, dayBucket), [dayBucket]);
+  const list = useMemo(
+    () => (filter === 'all' ? clips : clips.filter((clip) => clip.category === filter)),
+    [clips, filter],
   );
-  const getReelTitle = useCallback(
-    (clip: ReelClip) =>
-      clip.titleKey ? t(clip.titleKey) : clip.localizedTitle?.[pageLocale] ?? clip.title ?? `Clip ${clip.id}`,
-    [pageLocale, t],
-  );
+  const activeIndex = Math.min(index, Math.max(list.length - 1, 0));
+  const clip = list[activeIndex];
 
-  // ── Card metadata (chips + title band) ──
-  const isEs = pageLocale === 'es';
-  const categoryLabel = useCallback(
-    (category: ReelClip['category']) => {
-      const labels: Record<ReelClip['category'], [string, string]> = {
-        fashion: ['moda', 'fashion'],
-        beauty: ['belleza', 'beauty'],
-        tech: ['tech', 'tech'],
-        lifestyle: ['lifestyle', 'lifestyle'],
-      };
-      return labels[category][isEs ? 0 : 1];
+  const titleOf = useCallback(
+    (item: ReelClip) => (item.titleKey ? t(item.titleKey) : item.localizedTitle?.[locale] ?? item.title ?? ''),
+    [locale, t],
+  );
+  const languageOf = (item: ReelClip) =>
+    t(item.language === 'en' ? 'portfolio.feed.languageEn' : 'portfolio.feed.languageEs');
+  const categoryOf = (item: ReelClip) => t(`portfolio.categories.${item.category}`);
+
+  const go = useCallback(
+    (step: number, wrap = false) => {
+      setTouched(true);
+      setIndex((current) => {
+        const next = current + step;
+        if (next < 0) return wrap ? list.length - 1 : 0;
+        if (next >= list.length) return wrap ? 0 : list.length - 1;
+        return next;
+      });
     },
-    [isEs],
-  );
-  const formatClipMeta = useCallback(
-    (clip: ReelClip) => {
-      const parts: string[] = [];
-      if (clip.durationSeconds) {
-        const m = Math.floor(clip.durationSeconds / 60);
-        const s = String(Math.round(clip.durationSeconds % 60)).padStart(2, '0');
-        parts.push(`${m}:${s}`);
-      }
-      parts.push(
-        clip.language === 'en' ? (isEs ? 'inglés' : 'English') : isEs ? 'español' : 'Spanish',
-      );
-      return parts.join(' · ');
-    },
-    [isEs],
+    [list.length],
   );
 
-  // ── Gallery rail (desktop): a free-scroll horizontal strip the visitor
-  // drives — drag with the mouse, the arrows, the trackpad, or a wheel over
-  // the rail. Vertical page scroll passes straight through (no pin, no trap).
-  // The live counter tracks the leftmost visible card via a rAF-throttled
-  // scroll listener (textContent, no React state at 60fps).
-  const showcaseCount = showcaseReelClips.length;
+  const pickFilter = (next: Filter) => {
+    setFilter(next);
+    setIndex(0);
+    scrollerRef.current?.scrollTo({ top: 0 });
+  };
+
+  // In view: drives playback, the progress bar and the title's swash. On
+  // phones it also arms the inner scroller once the feed fills the screen.
   useEffect(() => {
-    if (isMobile) return;
-    const viewport = galleryViewportRef.current;
-    const track = galleryTrackRef.current;
-    if (!viewport || !track) return;
-
-    let raf = 0;
-    const updateCounter = () => {
-      raf = 0;
-      const counter = galleryCounterRef.current;
-      if (!counter || showcaseCount === 0) return;
-      const max = Math.max(1, track.scrollWidth - viewport.clientWidth);
-      const ratio = viewport.scrollLeft / max;
-      const index = Math.min(showcaseCount - 1, Math.round(ratio * (showcaseCount - 1)));
-      counter.textContent = String(index + 1).padStart(2, '0');
-    };
-    const onScroll = () => {
-      if (raf === 0) raf = requestAnimationFrame(updateCounter);
-    };
-    viewport.addEventListener('scroll', onScroll, { passive: true });
-
-    // Pointer drag-to-scroll for mouse users (trackpads already swipe natively).
-    let dragging = false;
-    let startX = 0;
-    let startLeft = 0;
-    let moved = false;
-    const onPointerDown = (event: PointerEvent) => {
-      if (event.pointerType !== 'mouse') return;
-      dragging = true;
-      moved = false;
-      startX = event.clientX;
-      startLeft = viewport.scrollLeft;
-    };
-    const onPointerMove = (event: PointerEvent) => {
-      if (!dragging) return;
-      const dx = event.clientX - startX;
-      if (Math.abs(dx) > 4) {
-        moved = true;
-        viewport.classList.add('is-dragging');
-      }
-      viewport.scrollLeft = startLeft - dx;
-    };
-    const endDrag = () => {
-      dragging = false;
-      viewport.classList.remove('is-dragging');
-    };
-    // Swallow the click that ends a drag so a card doesn't open the theater.
-    const onClickCapture = (event: MouseEvent) => {
-      if (moved) {
-        event.preventDefault();
-        event.stopPropagation();
-        moved = false;
-      }
-    };
-    viewport.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('pointermove', onPointerMove, { passive: true });
-    window.addEventListener('pointerup', endDrag);
-    viewport.addEventListener('click', onClickCapture, true);
-
-    return () => {
-      if (raf) cancelAnimationFrame(raf);
-      viewport.removeEventListener('scroll', onScroll);
-      viewport.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('pointerup', endDrag);
-      viewport.removeEventListener('click', onClickCapture, true);
-    };
-  }, [isMobile, showcaseCount]);
-
-  const scrollGalleryBy = useCallback((direction: 1 | -1) => {
-    const viewport = galleryViewportRef.current;
-    if (!viewport) return;
-    const card = viewport.querySelector<HTMLElement>('[data-reel-card="true"]');
-    const step = card ? card.offsetWidth + 24 : viewport.clientWidth * 0.8;
-    viewport.scrollBy({ left: step * 2 * direction, behavior: 'smooth' });
-  }, []);
-
-  useEffect(() => {
-    const now = Date.now();
-    const nextUtcBoundary = (utcDayBucket + 1) * DAY_MS;
-    const boundaryDelayMs = Math.max(nextUtcBoundary - now, 1000);
-    const timeoutId = window.setTimeout(() => {
-      setUtcDayBucket(getUtcDayBucket());
-    }, boundaryDelayMs + 20);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [utcDayBucket]);
-
-  const clearTheaterCloseTimer = useCallback(() => {
-    if (theaterCloseTimerRef.current !== null) {
-      window.clearTimeout(theaterCloseTimerRef.current);
-      theaterCloseTimerRef.current = null;
+    const section = sectionRef.current;
+    if (!section || typeof IntersectionObserver === 'undefined') {
+      setInView(true);
+      setSeen(true);
+      return undefined;
     }
-  }, []);
-
-  const clearInteractionPrewarm = useCallback(() => {
-    if (interactionPrewarmTimerRef.current !== null) {
-      window.clearTimeout(interactionPrewarmTimerRef.current);
-      interactionPrewarmTimerRef.current = null;
-    }
-    setInteractionPrewarmClip(null);
-  }, []);
-
-  const scheduleInteractionPrewarm = useCallback(
-    (clip: ReelClip) => {
-      if (isMobile) return;
-      setInteractionPrewarmClip((previousClip) => (previousClip?.id === clip.id ? previousClip : clip));
-      if (interactionPrewarmTimerRef.current !== null) {
-        window.clearTimeout(interactionPrewarmTimerRef.current);
-      }
-      interactionPrewarmTimerRef.current = window.setTimeout(() => {
-        setInteractionPrewarmClip(null);
-        interactionPrewarmTimerRef.current = null;
-      }, 2800);
-    },
-    [isMobile],
-  );
-
-  const queueTheaterDrag = useCallback((dragX: number, dragY: number) => {
-    const clamp = (value: number) =>
-      Math.max(-THEATER_MAX_DRAG_DISTANCE, Math.min(THEATER_MAX_DRAG_DISTANCE, value));
-    theaterPendingDragRef.current = { x: clamp(dragX), y: clamp(dragY) };
-
-    if (theaterDragFrameRef.current !== null) return;
-    theaterDragFrameRef.current = window.requestAnimationFrame(() => {
-      setTheaterDrag(theaterPendingDragRef.current);
-      theaterDragFrameRef.current = null;
-    });
-  }, []);
-
-  const finalizeTheaterClose = useCallback(() => {
-    clearTheaterCloseTimer();
-    setActiveReelPreview(null);
-    setActiveReelIndex(null);
-    setIsTheaterDismissing(false);
-    setIsTheaterVisible(false);
-    setIsTheaterDragging(false);
-    setTheaterDismissDirection(1);
-    setTheaterDrag({ x: 0, y: 0 });
-  }, [clearTheaterCloseTimer]);
-
-  const dismissReelPreview = useCallback(
-    (direction: 1 | -1 = 1) => {
-      if (!activeReelPreview || isTheaterDismissing) return;
-      clearTheaterCloseTimer();
-      setIsTheaterDragging(false);
-      theaterSwipeStartRef.current = null;
-      setTheaterDismissDirection(direction);
-      setIsTheaterDismissing(true);
-      setIsTheaterVisible(false);
-      queueTheaterDrag(0, 0);
-      theaterCloseTimerRef.current = window.setTimeout(finalizeTheaterClose, THEATER_CLOSE_DURATION_MS);
-    },
-    [
-      activeReelPreview,
-      clearTheaterCloseTimer,
-      finalizeTheaterClose,
-      isTheaterDismissing,
-      queueTheaterDrag,
-    ],
-  );
-
-  const openReelPreview = useCallback(
-    (clip: ReelClip, index: number) => {
-      clearTheaterCloseTimer();
-      scheduleInteractionPrewarm(clip);
-      theaterSwipeStartRef.current = null;
-      // Reset the entrance bookkeeping in the same urgent pass that mounts the
-      // theater. It used to run inside startTransition, which let React commit
-      // isTheaterVisible=false *after* the open effect's rAF had already set it
-      // true — leaving the card stuck at opacity 0 behind a dimmed backdrop
-      // whenever the main thread was busy enough to defer the transition past a
-      // frame.
-      setTheaterDismissDirection(1);
-      setIsTheaterDismissing(false);
-      setIsTheaterDragging(false);
-      setIsTheaterVisible(false);
-      setTheaterDrag({ x: 0, y: 0 });
-      theaterPendingDragRef.current = { x: 0, y: 0 };
-      // Critical: mount TheaterVideo immediately so video src is assigned ASAP
-      setActiveReelPreview(clip);
-      setActiveReelIndex(index);
-    },
-    [clearTheaterCloseTimer, scheduleInteractionPrewarm],
-  );
-
-  // Walks the order the visitor is actually looking at (the daily shuffle the
-  // rail renders), not the canonical data order.
-  const navigateReelPreview = useCallback(
-    (direction: 1 | -1) => {
-      if (activeReelIndex === null || showcaseReelClips.length === 0) return;
-      const nextIndex =
-        (activeReelIndex + direction + showcaseReelClips.length) % showcaseReelClips.length;
-      const nextClip = showcaseReelClips[nextIndex];
-      if (!nextClip) return;
-      setActiveReelIndex(nextIndex);
-      setActiveReelPreview(nextClip);
-    },
-    [activeReelIndex, showcaseReelClips],
-  );
-
-  const handleTheaterTouchStart = useCallback(
-    (event: TouchEvent<HTMLDivElement>) => {
-      if (isTheaterDismissing) return;
-      const touch = event.touches[0];
-      if (!touch) return;
-
-      theaterSwipeStartRef.current = {
-        x: touch.clientX,
-        y: touch.clientY,
-        timestamp: performance.now(),
-        axis: 'pending',
-      };
-      setIsTheaterDragging(true);
-    },
-    [isTheaterDismissing],
-  );
-
-  // Horizontal drag walks the reels, vertical drag throws the viewer away.
-  // The card tracks the finger on the locked axis so the release is never a
-  // surprise. `touch-action: none` on the stage stops the browser competing
-  // for the gesture — React registers touchmove passively, so preventDefault()
-  // here would do nothing.
-  const handleTheaterTouchMove = useCallback(
-    (event: TouchEvent<HTMLDivElement>) => {
-      const swipeStart = theaterSwipeStartRef.current;
-      if (!swipeStart || isTheaterDismissing) return;
-      const touch = event.touches[0];
-      if (!touch) return;
-
-      const deltaX = touch.clientX - swipeStart.x;
-      const deltaY = touch.clientY - swipeStart.y;
-
-      if (swipeStart.axis === 'pending') {
-        if (
-          Math.abs(deltaX) < THEATER_AXIS_LOCK_SLOP_PX &&
-          Math.abs(deltaY) < THEATER_AXIS_LOCK_SLOP_PX
-        ) {
-          return;
-        }
-        swipeStart.axis = Math.abs(deltaY) > Math.abs(deltaX) ? 'vertical' : 'horizontal';
-      }
-
-      const delta = swipeStart.axis === 'vertical' ? deltaY : deltaX;
-      const resistance = 0.92 - Math.min(Math.abs(delta) / 900, 0.28);
-
-      if (swipeStart.axis === 'vertical') {
-        queueTheaterDrag(0, deltaY * resistance);
-        return;
-      }
-      queueTheaterDrag(deltaX * resistance, 0);
-    },
-    [isTheaterDismissing, queueTheaterDrag],
-  );
-
-  const handleTheaterTouchEnd = useCallback(
-    (event: TouchEvent<HTMLDivElement>) => {
-      const swipeStart = theaterSwipeStartRef.current;
-      theaterSwipeStartRef.current = null;
-      setIsTheaterDragging(false);
-
-      if (!swipeStart) return;
-
-      const touch = event.changedTouches[0];
-      if (!touch) {
-        queueTheaterDrag(0, 0);
-        return;
-      }
-
-      const deltaX = touch.clientX - swipeStart.x;
-      const deltaY = touch.clientY - swipeStart.y;
-      const elapsed = Math.max(1, performance.now() - swipeStart.timestamp);
-      const velocityX = deltaX / elapsed;
-      const velocityY = deltaY / elapsed;
-      const axis =
-        swipeStart.axis !== 'pending'
-          ? swipeStart.axis
-          : Math.abs(deltaY) > Math.abs(deltaX)
-            ? 'vertical'
-            : 'horizontal';
-
-      if (axis === 'horizontal') {
-        const crossed =
-          Math.abs(deltaX) >= THEATER_NAV_SWIPE_DISTANCE_THRESHOLD ||
-          Math.abs(velocityX) >= THEATER_NAV_SWIPE_VELOCITY_THRESHOLD;
-        queueTheaterDrag(0, 0);
-        if (crossed) navigateReelPreview(deltaX < 0 ? 1 : -1);
-        return;
-      }
-
-      const crossed =
-        Math.abs(deltaY) >= THEATER_DISMISS_SWIPE_DISTANCE_THRESHOLD ||
-        Math.abs(velocityY) >= THEATER_DISMISS_SWIPE_VELOCITY_THRESHOLD;
-      if (crossed) {
-        dismissReelPreview(deltaY < 0 ? -1 : 1);
-        return;
-      }
-      queueTheaterDrag(0, 0);
-    },
-    [dismissReelPreview, navigateReelPreview, queueTheaterDrag],
-  );
-
-  const resetTheaterSwipe = useCallback(() => {
-    theaterSwipeStartRef.current = null;
-    setIsTheaterDragging(false);
-    queueTheaterDrag(0, 0);
-  }, [queueTheaterDrag]);
-
-  useEffect(() => {
-    if (!activeReelPreview) {
-      setIsTheaterVisible(false);
-      return;
-    }
-
-    const frameId = window.requestAnimationFrame(() => {
-      setIsTheaterVisible(true);
-    });
-
-    return () => window.cancelAnimationFrame(frameId);
-  }, [activeReelPreview]);
-
-  useEffect(() => {
-    return () => {
-      clearTheaterCloseTimer();
-      if (theaterDragFrameRef.current !== null) {
-        window.cancelAnimationFrame(theaterDragFrameRef.current);
-        theaterDragFrameRef.current = null;
-      }
-    };
-  }, [clearTheaterCloseTimer]);
-
-  useEffect(() => {
-    return () => {
-      if (interactionPrewarmTimerRef.current !== null) {
-        window.clearTimeout(interactionPrewarmTimerRef.current);
-        interactionPrewarmTimerRef.current = null;
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!activeReelPreview) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        dismissReelPreview();
-        return;
-      }
-      if (event.key === 'ArrowRight') {
-        event.preventDefault();
-        navigateReelPreview(1);
-        return;
-      }
-      if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        navigateReelPreview(-1);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeReelPreview, dismissReelPreview, navigateReelPreview]);
-
-  useEffect(() => {
-    if (!isTheaterOpen) return;
-
-    const scrollY = window.scrollY;
-    const htmlElement = document.documentElement;
-    const previousStyles = {
-      position: document.body.style.position,
-      top: document.body.style.top,
-      left: document.body.style.left,
-      right: document.body.style.right,
-      width: document.body.style.width,
-      overflow: document.body.style.overflow,
-      overscrollBehavior: document.body.style.overscrollBehavior,
-    };
-    const previousHtmlStyles = {
-      overflow: htmlElement.style.overflow,
-      overscrollBehavior: htmlElement.style.overscrollBehavior,
-      scrollBehavior: htmlElement.style.scrollBehavior,
-    };
-
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
-    document.body.style.overflow = 'hidden';
-    document.body.style.overscrollBehavior = 'none';
-    htmlElement.style.overflow = 'hidden';
-    htmlElement.style.overscrollBehavior = 'none';
-    htmlElement.dataset.theater = 'open';
-    return () => {
-      delete htmlElement.dataset.theater;
-      document.body.style.position = previousStyles.position;
-      document.body.style.top = previousStyles.top;
-      document.body.style.left = previousStyles.left;
-      document.body.style.right = previousStyles.right;
-      document.body.style.width = previousStyles.width;
-      document.body.style.overflow = previousStyles.overflow;
-      document.body.style.overscrollBehavior = previousStyles.overscrollBehavior;
-      htmlElement.style.overflow = previousHtmlStyles.overflow;
-      htmlElement.style.overscrollBehavior = previousHtmlStyles.overscrollBehavior;
-      htmlElement.style.scrollBehavior = 'auto';
-      scrollToY(scrollY, { immediate: true });
-      htmlElement.style.scrollBehavior = previousHtmlStyles.scrollBehavior;
-    };
-  }, [isTheaterOpen]);
-
-  useEffect(() => {
-    const container = reelScrollRef.current;
-    if (!container) return;
-
-    const measureReelStep = () => {
-      const firstCard = container.querySelector<HTMLElement>('[data-reel-card="true"]');
-      const cardWidth = firstCard?.clientWidth ?? 200;
-      const containerStyles = window.getComputedStyle(container);
-      const gap =
-        Number.parseFloat(containerStyles.columnGap || containerStyles.gap || '0') ||
-        Number.parseFloat(containerStyles.gap || '0') ||
-        12;
-      reelScrollStepRef.current = cardWidth + gap;
-    };
-
-    measureReelStep();
-    window.addEventListener('resize', measureReelStep);
-
-    if (typeof ResizeObserver === 'undefined') {
-      return () => window.removeEventListener('resize', measureReelStep);
-    }
-
-    const resizeObserver = new ResizeObserver(measureReelStep);
-    resizeObserver.observe(container);
-
-    const firstCard = container.querySelector<HTMLElement>('[data-reel-card="true"]');
-    if (firstCard) {
-      resizeObserver.observe(firstCard);
-    }
-
-    return () => {
-      window.removeEventListener('resize', measureReelStep);
-      resizeObserver.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isMobile) return;
-    const container = reelScrollRef.current;
-    if (!container) return;
-
-    let frameId: number | null = null;
-
-    const updateActiveCard = () => {
-      frameId = null;
-      const step = reelScrollStepRef.current;
-      if (!Number.isFinite(step) || step <= 0) return;
-      const closestIndex = Math.round(container.scrollLeft / step);
-      const clampedIndex = Math.max(0, Math.min(showcaseReelClips.length - 1, closestIndex));
-
-      setActiveMobileReelIndex((previousIndex) =>
-        previousIndex === clampedIndex ? previousIndex : clampedIndex,
-      );
-    };
-
-    const queueActiveCardUpdate = () => {
-      if (frameId !== null) return;
-      frameId = window.requestAnimationFrame(updateActiveCard);
-    };
-
-    queueActiveCardUpdate();
-    container.addEventListener('scroll', queueActiveCardUpdate, { passive: true });
-    window.addEventListener('resize', queueActiveCardUpdate);
-
-    return () => {
-      container.removeEventListener('scroll', queueActiveCardUpdate);
-      window.removeEventListener('resize', queueActiveCardUpdate);
-      if (frameId !== null) {
-        window.cancelAnimationFrame(frameId);
-      }
-    };
-  }, [isMobile, showcaseReelClips.length]);
-
-  const handleReelCardTouchStart = useCallback(
-    (event: TouchEvent<HTMLButtonElement>, clip: ReelClip) => {
-      const touch = event.touches[0];
-      if (!touch) return;
-      reelCardTouchStartRef.current = { x: touch.clientX, y: touch.clientY };
-      reelCardDidDragRef.current = false;
-      scheduleInteractionPrewarm(clip);
-    },
-    [scheduleInteractionPrewarm],
-  );
-
-  const handleReelCardTouchMove = useCallback((event: TouchEvent<HTMLButtonElement>) => {
-    const start = reelCardTouchStartRef.current;
-    const touch = event.touches[0];
-    if (!start || !touch) return;
-
-    if (
-      Math.abs(touch.clientX - start.x) > REEL_CARD_TAP_SLOP_PX ||
-      Math.abs(touch.clientY - start.y) > REEL_CARD_TAP_SLOP_PX
-    ) {
-      reelCardDidDragRef.current = true;
-      clearInteractionPrewarm();
-    }
-  }, [clearInteractionPrewarm]);
-
-  const handleReelCardTouchEnd = useCallback(() => {
-    reelCardTouchStartRef.current = null;
-  }, []);
-
-  const handleReelCardClick = useCallback(
-    (clip: ReelClip, index: number) => {
-      if (reelCardDidDragRef.current) {
-        reelCardDidDragRef.current = false;
-        return;
-      }
-      scheduleInteractionPrewarm(clip);
-      openReelPreview(clip, index);
-    },
-    [openReelPreview, scheduleInteractionPrewarm],
-  );
-
-  useEffect(() => {
-    if (!isMobile) return;
-    setInteractionPrewarmClip(null);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = Boolean(entry?.isIntersecting);
+        setInView(visible);
+        if (entry && entry.intersectionRatio > 0.25) setSeen(true);
+        setArmed(Boolean(entry && entry.intersectionRatio >= 0.95));
+      },
+      { threshold: [0, 0.25, 0.5, 0.95, 1] },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
   }, [isMobile]);
 
-  // Only the dismiss axis fades the backdrop — a sideways drag is navigation,
-  // so the room it happens in should stay lit.
-  const theaterDismissProgress = Math.min(
-    Math.abs(theaterDrag.y) / THEATER_MAX_DRAG_DISTANCE,
-    1,
+  // Dark-theme ambient light: crossfade between two blurred, tiny posters.
+  useEffect(() => {
+    if (!clip) return;
+    const src = getPosterVariantSrc(clip, 180, 'webp');
+    setAmbient((current) =>
+      current.showA ? { a: current.a, b: src, showA: false } : { a: src, b: current.b, showA: true },
+    );
+  }, [clip]);
+
+  // Sound follows the toggle across reels; turning it on is a user gesture,
+  // so the browser lets the active reel play with audio.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !soundOn;
+    if (soundOn) void video.play().catch(() => undefined);
+  }, [soundOn, clip]);
+
+  // Desktop: the wheel walks the feed while the pointer is on the phone, and
+  // hands the scroll back to the page at either end.
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage || isMobile) return undefined;
+    const onWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) < 8) return;
+      const step = event.deltaY > 0 ? 1 : -1;
+      const atEdge = (step < 0 && activeIndex === 0) || (step > 0 && activeIndex >= list.length - 1);
+      if (atEdge) return;
+      event.preventDefault();
+      const now = performance.now();
+      if (now - wheelLockRef.current < WHEEL_LOCK_MS) return;
+      wheelLockRef.current = now;
+      go(step);
+    };
+    stage.addEventListener('wheel', onWheel, { passive: false });
+    return () => stage.removeEventListener('wheel', onWheel);
+  }, [activeIndex, go, isMobile, list.length]);
+
+  const handleContact = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>) => {
+      if (isMobileViewport()) {
+        event.preventDefault();
+        toggleContactDock();
+        return;
+      }
+      handleHashLinkClick(event);
+    },
+    [handleHashLinkClick],
   );
-  const theaterNavProgress = Math.min(Math.abs(theaterDrag.x) / THEATER_MAX_DRAG_DISTANCE, 1);
-  const theaterOverlayOpacity =
-    (isTheaterVisible && !isTheaterDismissing ? 1 : 0) * (1 - theaterDismissProgress * 0.5);
-  const theaterCardScale = 1 - theaterDismissProgress * 0.04 - theaterNavProgress * 0.02;
-  const theaterCardRotation = theaterDrag.y * 0.0045 + theaterDrag.x * 0.016;
 
-  const theaterCardTransform = isTheaterDismissing
-    ? `translate3d(0, ${theaterDismissDirection * 112}vh, 0) scale(0.94) rotate(${theaterDismissDirection * 1.25}deg)`
-    : isTheaterVisible
-      ? `translate3d(${theaterDrag.x}px, ${theaterDrag.y}px, 0) scale(${theaterCardScale}) rotate(${theaterCardRotation}deg)`
-      : 'translate3d(0, 18px, 0) scale(0.985)';
+  if (!clip) return null;
 
-  const theaterCardTransition = isTheaterDragging
-    ? 'transform 0ms linear, opacity 120ms linear'
-    : isTheaterDismissing
-      ? `transform ${THEATER_CLOSE_DURATION_MS}ms cubic-bezier(0.3, 0.72, 0.08, 1), opacity 220ms ease`
-      : 'transform 360ms cubic-bezier(0.24, 0.92, 0.38, 1), opacity 240ms ease';
+  const title = titleOf(clip);
+  const poster = getPosterVariantSrc(clip, 720, 'webp');
+  const durationMs = Math.round((clip.durationSeconds ?? 20) * 1000);
+  const isLiked = Boolean(liked[clip.id]);
+  const separator = CONTACT_URLS.whatsapp.includes('?') ? '&' : '?';
+  const whatsappHref = `${CONTACT_URLS.whatsapp}${separator}text=${encodeURIComponent(
+    t('portfolio.feed.whatsappText', { title }),
+  )}`;
+  const playing = inView && !reducedMotion;
+  const handleEnded = () => {
+    if (!reducedMotion) go(1, true);
+  };
 
-  const theaterCandidates = useMemo(
-    () => createClipPlaybackCandidates(activeReelPreview, false),
-    [activeReelPreview],
+  const video = (
+    <AdaptiveVideo
+      key={clip.id}
+      ref={videoRef}
+      src={clip.mobileSrc}
+      hlsSrc={clip.mobileHlsSrc ?? clip.hlsSrc}
+      poster={poster}
+      muted={!soundOn}
+      autoPlay
+      playsInline
+      loop={isMobile}
+      preload="metadata"
+      playbackPriority="preview"
+      rootMargin="200px 0px"
+      onEnded={isMobile ? undefined : handleEnded}
+      onTimeUpdate={(event) => {
+        const target = event.currentTarget;
+        if (progressRef.current && target.duration) {
+          progressRef.current.style.setProperty('--rf-progress', String(target.currentTime / target.duration));
+        }
+      }}
+    />
   );
 
-  // Null during SSR/prerender, where the theater is never open anyway — so the
-  // server and hydration trees stay identical.
-  const theaterPortalTarget = typeof document === 'undefined' ? null : document.body;
-
-  // ── Shared chapter header (mobile rail + desktop pinned gallery) ──
-  const galleryHeader = (
-    <div className="portfolio-content-enter mb-8 md:mb-10 flex flex-row items-end justify-between gap-6">
-      <div>
-        <h2 className="font-serif text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight-serif leading-[1]">
-          <SplitTextReveal text={isEs ? 'Reels que' : 'Reels that'} delay={0.06} />{' '}
-          <span className="italic text-primary">
-            <SplitTextReveal text={isEs ? 'venden' : 'sell'} delay={0.2} />
-          </span>
-        </h2>
-      </div>
-      <div className="text-right shrink-0">
-        {!isMobile && (
-          <div className="font-serif text-2xl tabular-nums text-foreground leading-none">
-            <span ref={galleryCounterRef}>01</span>
-            <span className="text-muted-foreground/60"> / {String(showcaseReelClips.length).padStart(2, '0')}</span>
-          </div>
-        )}
-        <div className="dc-index-meta mt-2 !text-muted-foreground/70">
-          {isMobile ? (isEs ? 'desliza →' : 'swipe →') : isEs ? 'desplázate →' : 'scroll →'}
-        </div>
-      </div>
+  const tabs = (
+    <div className="rf-tabs" role="tablist" aria-label={t('portfolio.feed.feedLabel')}>
+      {FILTERS.map((id) => (
+        <button
+          key={id}
+          type="button"
+          role="tab"
+          className="rf-tab"
+          aria-selected={filter === id}
+          onClick={() => pickFilter(id)}
+        >
+          {t(`portfolio.feed.tabs.${id}`)}
+        </button>
+      ))}
     </div>
   );
 
-  // ── Shared reel card (mobile rail + desktop gallery track) ──
-  const renderReelCard = (clip: ReelClip, index: number) => {
-    const mobileCardDistance = Math.abs(activeMobileReelIndex - index);
-    const isActiveMobileCard = isMobile && mobileCardDistance === 0;
-    const shouldRenderPreview =
-      !isTheaterOpen &&
-      (isActiveMobileCard || (!isMobile && interactionPrewarmClip?.id === clip.id));
-
+  if (isMobile) {
     return (
-      <button
-        type="button"
-        key={clip.id}
-        data-reel-card="true"
-        className={
-          isMobile
-            ? 'portfolio-reel-card-motion group relative shrink-0 w-[70vw] sm:w-[55vw] aspect-[9/16] rounded-2xl overflow-hidden border border-border shadow-sm text-left hover:border-primary/40 transition-[transform,border-color] snap-center touch-manipulation'
-            : 'portfolio-reel-card-motion dc-gallery-card group relative shrink-0 aspect-[9/16] overflow-hidden text-left touch-manipulation'
-        }
-        onMouseEnter={() => scheduleInteractionPrewarm(clip)}
-        onMouseLeave={clearInteractionPrewarm}
-        onPointerDown={() => scheduleInteractionPrewarm(clip)}
-        onFocus={() => scheduleInteractionPrewarm(clip)}
-        onBlur={clearInteractionPrewarm}
-        onTouchStart={(event) => handleReelCardTouchStart(event, clip)}
-        onTouchMove={handleReelCardTouchMove}
-        onTouchEnd={handleReelCardTouchEnd}
-        onTouchCancel={handleReelCardTouchEnd}
-        onClick={() => handleReelCardClick(clip, index)}
-        aria-label={getReelTitle(clip)}
+      <section
+        id="portfolio"
+        ref={sectionRef}
+        className="rf-mob"
+        data-armed={armed}
+        aria-labelledby="portfolio-title"
+        aria-roledescription="carousel"
       >
-        {shouldRenderPreview ? (
-          <AdaptiveVideo
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            src={clip.previewSrc}
-            hlsSrc={clip.previewHlsSrc}
-            poster={getBestPosterSrc(clip)}
-            muted
-            autoPlay
-            loop
-            playsInline
-            preload="metadata"
-            loadStrategy="immediate"
-            pauseOffscreen
-            unloadWhenOffscreen
-            playbackPriority="preview"
-            aria-hidden="true"
-          />
-        ) : (
-          <ResponsivePosterImage
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            clip={clip}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            draggable={false}
-            aria-hidden="true"
-          />
-        )}
-        <span className="dc-reel-chip dc-reel-chip--num" aria-hidden="true">
-          Nº {String(index + 1).padStart(2, '0')}
-        </span>
-        <span className="dc-reel-chip dc-reel-chip--cat" aria-hidden="true">
-          {categoryLabel(clip.category)}
-        </span>
-        <span className="dc-reel-play" aria-hidden="true">
-          <Play className="h-5 w-5 fill-current" />
-        </span>
-        <span className="dc-reel-band" aria-hidden="true">
-          <span className="dc-reel-title">{getReelTitle(clip)}</span>
-          <span className="dc-reel-meta">{formatClipMeta(clip)}</span>
-        </span>
-      </button>
+        <h2 id="portfolio-title" className="sr-only">
+          {t('portfolio.feed.titleLead')} {t('portfolio.feed.titleAccent')}
+        </h2>
+
+        <div
+          ref={scrollerRef}
+          className="rf-mob-scroller"
+          onScroll={(event) => {
+            const el = event.currentTarget;
+            const next = Math.round(el.scrollTop / Math.max(el.clientHeight, 1));
+            if (next !== activeIndex) {
+              setIndex(next);
+              setTouched(true);
+            }
+          }}
+        >
+          {list.map((item, i) => (
+            <div key={item.id} className="rf-mob-slide" aria-hidden={i !== activeIndex}>
+              {Math.abs(i - activeIndex) <= 2 ? (
+                <img src={getPosterVariantSrc(item, 720, 'webp')} alt="" loading="lazy" decoding="async" />
+              ) : null}
+              {i === activeIndex ? video : null}
+            </div>
+          ))}
+        </div>
+
+        <div className="rf-mob-shade" aria-hidden="true" />
+
+        <p className="rf-mob-top" aria-hidden="true">
+          <img src={AVATAR_SRC} alt="" width={160} height={160} />
+          <span>{t('portfolio.feed.titleLead')} {t('portfolio.feed.titleAccent')}</span>
+          <span>
+            {String(activeIndex + 1).padStart(2, '0')}/{String(list.length).padStart(2, '0')}
+          </span>
+        </p>
+
+        {tabs}
+
+        <div className="rf-mob-rail">
+          <button
+            type="button"
+            className="rf-mob-act rf-mob-act--sound"
+            aria-pressed={soundOn}
+            aria-label={t(soundOn ? 'portfolio.feed.soundOff' : 'portfolio.feed.soundOn')}
+            onClick={() => setSoundOn((on) => !on)}
+          >
+            <span className="rf-mob-disc"><SoundIcon on={soundOn} /></span>
+          </button>
+          <button
+            type="button"
+            className="rf-mob-act"
+            aria-pressed={isLiked}
+            aria-label={t('portfolio.feed.like')}
+            onClick={() => setLiked((current) => ({ ...current, [clip.id]: !current[clip.id] }))}
+          >
+            <svg className="rf-heart" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+            </svg>
+            <span>{SITE_PROOF.fiverrRating}</span>
+          </button>
+          <a
+            href="#testimonials"
+            className="rf-mob-act"
+            onClick={handleHashLinkClick}
+            aria-label={t('hero.feed.reviewsAria', { count: SITE_PROOF.fiverrReviewCount })}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg>
+            <span>{SITE_PROOF.fiverrReviewCount}</span>
+          </a>
+          <span className="rf-mob-act" aria-label={t('hero.feed.brandsAria', { count: SITE_PROOF.brandCampaigns })}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" /></svg>
+            <span>{SITE_PROOF.brandCampaigns}+</span>
+          </span>
+        </div>
+
+        <div className="rf-mob-caption" key={clip.id}>
+          <p className="rf-mob-name">Gisela Saldarriaga</p>
+          <p className="rf-mob-title">
+            {title} · {categoryOf(clip)} · {formatDuration(clip.durationSeconds)}
+          </p>
+          <p className="rf-mob-sound-line">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+            {t('hero.feed.soundShort')}
+          </p>
+          <a className="rf-mob-cta" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+            <span className="rf-wa"><WhatsAppGlyph /></span>
+            {t('portfolio.feed.ctaShort')}
+          </a>
+        </div>
+
+        <div className="rf-mob-progress" aria-hidden="true"><span ref={progressRef} /></div>
+
+        <div className="rf-mob-hint" data-hidden={touched} aria-hidden="true">
+          <Chevron up />
+          {t('portfolio.feed.swipe')}
+        </div>
+      </section>
     );
-  };
+  }
+
+  const upNext = Array.from({ length: Math.min(4, list.length - 1) }, (_, k) => (activeIndex + k + 1) % list.length);
 
   return (
     <section
       id="portfolio"
-      className="studio-section bg-secondary/5 pt-20 pb-16"
+      ref={sectionRef}
+      className="rf-desk"
+      data-seen={seen}
+      aria-labelledby="portfolio-title"
     >
-      {isMobile ? (
-      <div className="studio-container">
-        {galleryHeader}
-
-        <div className="studio-rule mb-10 md:mb-12" />
-
-        <div className="portfolio-content-enter mb-12 md:mb-14">
-          <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-secondary/60 via-background to-secondary/60" />
-            <div className="absolute inset-y-0 left-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
-            <div className="absolute inset-y-0 right-0 w-6 sm:w-10 md:w-16 z-20 bg-gradient-to-l from-background via-background/80 to-transparent" />
-
-            <div className="relative z-10 mx-auto px-3 sm:px-6 md:px-10 lg:px-12 py-4 md:py-6">
-              <div
-                ref={reelScrollRef}
-                className="flex gap-3 md:gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-proximity md:snap-none overscroll-x-contain scroll-smooth"
-                style={{ WebkitOverflowScrolling: 'touch' }}
-              >
-                {showcaseReelClips.map(renderReelCard)}
-              </div>
-              {/* Mobile: position counter instead of arrow chrome — swipe and
-                  the peeking next card are the affordance */}
-              <div className="md:hidden flex items-center justify-center gap-2.5 pt-1">
-                <span className="section-label text-muted-foreground tabular-nums">
-                  {String(activeMobileReelIndex + 1).padStart(2, '0')}
-                </span>
-                <span className="h-px w-7 bg-accent/40" />
-                <span className="section-label text-muted-foreground/60 tabular-nums">
-                  {String(showcaseReelClips.length).padStart(2, '0')}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <div className="rf-orbs" aria-hidden="true" />
+      <div className="rf-amb" aria-hidden="true">
+        {ambient.a ? <img src={ambient.a} alt="" data-on={ambient.showA} /> : null}
+        {ambient.b ? <img src={ambient.b} alt="" data-on={!ambient.showA} /> : null}
       </div>
-      ) : (
-        /* ── Desktop Gallery: free-scroll horizontal rail ── */
-        <div className="dc-gallery">
-          <div className="studio-container w-full">
-            {galleryHeader}
-          </div>
-          <div className="dc-gallery-shell">
-            <button
-              type="button"
-              className="dc-gallery-arrow dc-gallery-arrow--prev"
-              onClick={() => scrollGalleryBy(-1)}
-              aria-label={isEs ? 'Reels anteriores' : 'Previous reels'}
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              className="dc-gallery-arrow dc-gallery-arrow--next"
-              onClick={() => scrollGalleryBy(1)}
-              aria-label={isEs ? 'Más reels' : 'More reels'}
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-            <div ref={galleryViewportRef} className="dc-gallery-viewport">
-              <div ref={galleryTrackRef} className="dc-gallery-track">
-                {showcaseReelClips.map((clip, index) => (
-                  <div key={clip.id} className="dc-track-item">
-                    <span className="dc-ghost-num" aria-hidden="true">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    {renderReelCard(clip, index)}
-                  </div>
-                ))}
+      <div className="rf-veil" aria-hidden="true" />
+
+      <div className="rf-grid">
+        <div className="rf-copy">
+          <h2 id="portfolio-title" className="rf-title font-serif">
+            <span className="rf-title-lead">{t('portfolio.feed.titleLead')}</span>
+            <br />
+            <span className="rf-title-accent">{t('portfolio.feed.titleAccent')}</span>
+            <svg className="rf-swash" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <path d="M3 15 C 60 5, 140 2, 297 11" fill="none" strokeWidth="3" strokeLinecap="round" pathLength={1} />
+            </svg>
+          </h2>
+          <p className="rf-sub">{t('portfolio.feed.sub')}</p>
+
+          <div className="rf-card rf-swap" key={clip.id} aria-live="polite">
+            <p className="rf-card-kicker">{t('portfolio.feed.nowPlaying')}</p>
+            <p className="rf-card-title">{title}</p>
+            <dl className="rf-specs">
+              <div>
+                <dt>{t('portfolio.feed.category')}</dt>
+                <dd>{categoryOf(clip)}</dd>
               </div>
+              <div>
+                <dt>{t('portfolio.feed.length')}</dt>
+                <dd>{formatDuration(clip.durationSeconds)}</dd>
+              </div>
+              <div>
+                <dt>{t('portfolio.feed.language')}</dt>
+                <dd>{languageOf(clip)}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <a className="rf-cta" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+            <span className="rf-wa"><WhatsAppGlyph /></span>
+            {t('portfolio.feed.cta')}
+          </a>
+        </div>
+
+        <div
+          ref={stageRef}
+          className="rf-stage"
+          aria-roledescription="carousel"
+          aria-label={t('portfolio.feed.feedLabel')}
+          onPointerDown={(event) => {
+            dragRef.current = { y: event.clientY, moved: false };
+          }}
+          onPointerUp={(event) => {
+            const drag = dragRef.current;
+            dragRef.current = null;
+            if (!drag) return;
+            const dy = event.clientY - drag.y;
+            if (Math.abs(dy) >= DRAG_THRESHOLD_PX) {
+              swallowClickRef.current = true;
+              go(dy < 0 ? 1 : -1);
+              window.setTimeout(() => {
+                swallowClickRef.current = false;
+              }, 0);
+            }
+          }}
+          onClickCapture={(event) => {
+            if (swallowClickRef.current) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          }}
+        >
+          <ReelPhone
+            className="rf-phone"
+            title={title}
+            reelKey={clip.id}
+            playing={playing}
+            clipMs={durationMs}
+            onNavigate={handleHashLinkClick}
+            onContact={handleContact}
+          >
+            <div className="rf-track" style={{ '--rf-i': activeIndex } as CSSProperties}>
+              {list.map((item, i) =>
+                Math.abs(i - activeIndex) <= 1 ? (
+                  <div
+                    key={item.id}
+                    className="rf-slide"
+                    style={{ '--rf-n': i } as CSSProperties}
+                    aria-hidden={i !== activeIndex}
+                  >
+                    <img src={getPosterVariantSrc(item, 720, 'webp')} alt="" decoding="async" />
+                    {i === activeIndex ? video : null}
+                  </div>
+                ) : null,
+              )}
             </div>
+            {tabs}
+          </ReelPhone>
+
+          <div className="rf-ctrls">
+            <button
+              type="button"
+              className="rf-ctrl"
+              aria-label={t('portfolio.feed.prev')}
+              disabled={activeIndex === 0}
+              onClick={() => go(-1)}
+            >
+              <Chevron up />
+            </button>
+            <button
+              type="button"
+              className="rf-ctrl"
+              aria-label={t('portfolio.feed.next')}
+              onClick={() => go(1, true)}
+            >
+              <Chevron up={false} />
+            </button>
+            <button
+              type="button"
+              className="rf-ctrl"
+              aria-pressed={soundOn}
+              aria-label={t(soundOn ? 'portfolio.feed.soundOff' : 'portfolio.feed.soundOn')}
+              onClick={() => setSoundOn((on) => !on)}
+            >
+              <SoundIcon on={soundOn} />
+            </button>
           </div>
         </div>
-      )}
 
-      {/* The theater is portaled to <body> on purpose: this section carries
-          `content-visibility: auto`, which makes it a containing block for
-          fixed descendants — rendered in place, `fixed inset-0` would anchor
-          to the section box and the card would land wherever that box happens
-          to sit, not centred in the viewport. */}
-      {theaterPortalTarget && activeReelPreview
-        ? createPortal(
-            <div
-              className="dc-theater-overlay fixed inset-0 z-[200] flex items-center justify-center"
-              onClick={() => dismissReelPreview()}
-            >
-              <div
-                className="absolute inset-0"
-                style={{
-                  backgroundColor: 'hsl(var(--theater-backdrop) / 0.86)',
-                  opacity: theaterOverlayOpacity,
-                  transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 280ms ease',
-                }}
-              />
-              <div
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  opacity: theaterOverlayOpacity,
-                  transition: isTheaterDragging ? 'opacity 80ms linear' : 'opacity 320ms ease',
-                  background:
-                    'radial-gradient(circle at 20% 14%, hsl(var(--theater-backdrop-glow) / 0.14) 0%, transparent 48%), radial-gradient(circle at 82% 86%, hsl(var(--theater-backdrop-glow) / 0.1) 0%, transparent 56%)',
-                }}
-              />
-              <div
-                className="dc-theater-stage"
-                onTouchStart={handleTheaterTouchStart}
-                onTouchMove={handleTheaterTouchMove}
-                onTouchEnd={handleTheaterTouchEnd}
-                onTouchCancel={resetTheaterSwipe}
-              >
-                {/* Desktop keeps its arrows outside the frame; mobile puts them on
-                    the card itself, where nothing can slide under the navbar. */}
-                {!isMobile && (
-                  <>
-                    <button
-                      type="button"
-                      className="theater-control absolute left-0 top-1/2 -translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        navigateReelPreview(-1);
-                      }}
-                      aria-label={t('portfolio.reelPreviewPrev')}
-                    >
-                      <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
-                    </button>
-                    <button
-                      type="button"
-                      className="theater-control absolute right-0 top-1/2 translate-x-[118%] -translate-y-1/2 z-[220] h-9 w-9 md:h-10 md:w-10"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        navigateReelPreview(1);
-                      }}
-                      aria-label={t('portfolio.reelPreviewNext')}
-                    >
-                      <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
-                    </button>
-                  </>
-                )}
-                <div
-                  className="relative w-full overflow-hidden rounded-[1.45rem] border border-[hsl(var(--theater-edge)/0.88)] bg-black shadow-[0_34px_82px_-38px_rgba(0,0,0,0.78)]"
-                  onClick={(event) => event.stopPropagation()}
-                  style={{
-                    transform: theaterCardTransform,
-                    opacity: isTheaterDismissing ? 0 : isTheaterVisible ? 1 : 0,
-                    transition: theaterCardTransition,
-                  }}
-                >
+        <div className="rf-next">
+          <div className="rf-next-head">
+            <span>{t('portfolio.feed.upNext')}</span>
+            <span>{t('portfolio.feed.count', { count: list.length })}</span>
+          </div>
+          <ul className="rf-next-list">
+            {upNext.map((i) => {
+              const item = list[i];
+              return (
+                <li key={item.id}>
                   <button
                     type="button"
-                    className="theater-control absolute right-3 top-3 z-40 h-10 w-10"
-                    onClick={() => dismissReelPreview()}
-                    aria-label={t('portfolio.reelPreviewClose')}
+                    className="rf-next-item"
+                    onClick={() => {
+                      setTouched(true);
+                      setIndex(i);
+                    }}
                   >
-                    <X className="h-4 w-4" />
+                    <img src={getPosterVariantSrc(item, 360, 'webp')} alt="" loading="lazy" decoding="async" />
+                    <span className="rf-next-text">
+                      <span className="rf-next-title">{titleOf(item)}</span>
+                      <span className="rf-next-meta">
+                        {categoryOf(item)} · {formatDuration(item.durationSeconds)}
+                      </span>
+                    </span>
                   </button>
-
-                  {isMobile && (
-                    <>
-                      <button
-                        type="button"
-                        className="theater-control absolute left-2 top-1/2 z-40 h-10 w-10 -translate-y-1/2 opacity-75"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                          navigateReelPreview(-1);
-                        }}
-                        aria-label={t('portfolio.reelPreviewPrev')}
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </button>
-                      <button
-                        type="button"
-                        className="theater-control absolute right-2 top-1/2 z-40 h-10 w-10 -translate-y-1/2 opacity-75"
-                        onClick={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                          navigateReelPreview(1);
-                        }}
-                        aria-label={t('portfolio.reelPreviewNext')}
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </button>
-                    </>
-                  )}
-
-                  <div className="relative">
-                    <TheaterVideo
-                      candidates={theaterCandidates}
-                      poster={getBestPosterSrc(activeReelPreview)}
-                      enableStartupFallback
-                      startupFallbackMs={THEATER_QUALITY_FALLBACK_MS}
-                    />
-
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
-                      <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
-                      <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
-                        <p className="theater-meta-chip inline-flex max-w-[78%] items-center rounded-full px-2.5 py-1">
-                          {t(`portfolio.categories.${activeReelPreview.category}`)}
-                        </p>
-                        <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">
-                          {getReelTitle(activeReelPreview)}
-                        </h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>,
-            theaterPortalTarget,
-          )
-        : null}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
     </section>
   );
 };

@@ -1,0 +1,774 @@
+/* ═══════════════════════════════════════════════════
+   "Reels que venden": the portfolio as a social feed
+
+   Desktop (≥ 768px): the reels play inside the hero's iPhone (ReelPhone), as
+   a vertical feed with category tabs. The heading, a "now playing" spec card
+   and the WhatsApp CTA sit on the left, and "up next" on the right.
+   - Dark theme: a screening room. The playing reel's poster, heavily blurred,
+     tints the whole section and crossfades as the reel changes.
+   - Light theme: the cream ground with soft teal and sand fields.
+
+   Phones (< 768px): the section *is* the feed. Full-screen reels you swipe
+   up and down, like the app. The inner scroller only takes over once the
+   section fills the screen ([data-armed]), and it chains back to the page at
+   either end, so the page never gets trapped.
+
+   Plain stylesheet (no @layer) so Tailwind can't purge it.
+   ═══════════════════════════════════════════════════ */
+
+/* ═════════ Desktop ═════════ */
+
+.rf-desk {
+  --rf-bg: hsl(var(--background));
+  --rf-ink: hsl(var(--foreground));
+  --rf-muted: hsl(var(--foreground) / 0.72);
+  --rf-card: hsl(0 0% 100% / 0.64);
+  --rf-ring: hsl(33 13% 16% / 0.07);
+  --rf-edge: hsl(0 0% 100% / 0.95);
+  --rf-tile: hsl(33 13% 16% / 0.05);
+  --rf-accent: hsl(193 69% 36%);
+  --rf-cta-bg: hsl(var(--foreground));
+  --rf-cta-ink: hsl(var(--background));
+  --rf-shadow: 33 13% 16%;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--rf-bg);
+  color: var(--rf-ink);
+  font-family: var(--font-marketing);
+}
+
+.dark .rf-desk {
+  --rf-bg: hsl(30 15% 4.5%);
+  --rf-ink: hsl(42 38% 92%);
+  --rf-muted: hsl(42 38% 92% / 0.68);
+  --rf-card: hsl(0 0% 100% / 0.08);
+  --rf-ring: hsl(0 0% 100% / 0.12);
+  --rf-edge: hsl(0 0% 100% / 0.14);
+  --rf-tile: hsl(0 0% 100% / 0.07);
+  --rf-accent: hsl(193 64% 63%);
+  --rf-cta-bg: hsl(42 38% 92%);
+  --rf-cta-ink: hsl(30 15% 6%);
+  --rf-shadow: 0 0% 0%;
+}
+
+/* Light ground: the two soft fields from the C1 board. */
+.rf-orbs {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.rf-orbs::before,
+.rf-orbs::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.rf-orbs::before {
+  left: 50%;
+  top: 50%;
+  width: 56rem;
+  height: 56rem;
+  margin: -28rem 0 0 -28rem;
+  background: radial-gradient(closest-side, hsl(193 64% 48% / 0.2), transparent);
+}
+
+.rf-orbs::after {
+  right: -10%;
+  bottom: -20%;
+  width: 50rem;
+  height: 44rem;
+  background: radial-gradient(closest-side, hsl(37 36% 79% / 0.7), transparent);
+}
+
+/* Dark ground: the playing reel, blurred into light. */
+.rf-amb,
+.rf-veil {
+  display: none;
+}
+
+.dark .rf-orbs { display: none; }
+
+.dark .rf-amb {
+  display: block;
+  position: absolute;
+  inset: -18%;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.rf-amb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(90px) saturate(1.8) brightness(0.95);
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+
+.rf-amb img[data-on='true'] { opacity: 0.85; }
+
+.dark .rf-veil {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 80% at 50% 50%, hsl(30 15% 4.5% / 0.2), hsl(30 15% 4.5% / 0.86)),
+    linear-gradient(to bottom, hsl(30 15% 4.5% / 0.3), transparent 30%, transparent 70%, hsl(30 15% 4.5% / 0.5));
+}
+
+.rf-grid {
+  max-width: 82rem;
+  margin: 0 auto;
+  padding: 6rem 3rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+@media (min-width: 1200px) {
+  .rf-grid {
+    padding: 6rem 4rem;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+}
+
+/* (0,4,1): clears both global heading rules in index.css. */
+.rf-desk .rf-grid .rf-copy h2.rf-title {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: clamp(3.75rem, 1.8rem + 3.2vw, 5.75rem);
+  line-height: 0.9;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--rf-ink);
+}
+
+.rf-title-lead { white-space: nowrap; }
+
+.rf-title-accent {
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--rf-accent);
+}
+
+.rf-swash {
+  display: block;
+  width: 18.75rem;
+  max-width: 100%;
+  height: 1.25rem;
+  margin: -0.25rem 0 0 0.375rem;
+  overflow: visible;
+}
+
+.rf-swash path {
+  stroke: var(--rf-accent);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.rf-desk[data-seen='true'] .rf-swash path {
+  animation: rf-draw 1.5s 0.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes rf-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+.rf-sub {
+  margin: 1.375rem 0 0;
+  max-width: 23rem;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--rf-muted);
+}
+
+.rf-card {
+  margin-top: 1.5rem;
+  max-width: 23rem;
+  padding: 1rem 1.125rem;
+  border-radius: 1.375rem;
+  background: var(--rf-card);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  box-shadow:
+    0 24px 48px -30px hsl(var(--rf-shadow) / 0.5),
+    inset 0 1px 0 var(--rf-edge),
+    inset 0 0 0 1px var(--rf-ring);
+}
+
+.rf-card-kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--rf-muted);
+}
+
+.rf-card-title {
+  margin: 0.1875rem 0 0;
+  font-size: 1.1875rem;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--rf-ink);
+}
+
+.rf-specs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+}
+
+.rf-specs div {
+  padding: 0.5625rem 0.6875rem;
+  border-radius: 0.8125rem;
+  background: var(--rf-tile);
+}
+
+.rf-specs dt {
+  font-size: 0.6875rem;
+  color: var(--rf-muted);
+}
+
+.rf-specs dd {
+  margin: 0.125rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--rf-ink);
+}
+
+.rf-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: 1.25rem;
+  height: 3.375rem;
+  padding: 0 1.375rem 0 0.5rem;
+  border-radius: 999px;
+  background: var(--rf-cta-bg);
+  color: var(--rf-cta-ink);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 18px 36px -20px hsl(var(--rf-shadow) / 0.7);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rf-cta:hover { transform: translateY(-2px); }
+
+.rf-cta:focus-visible,
+.rf-ctrl:focus-visible,
+.rf-next-item:focus-visible,
+.rf-tab:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.rf-wa {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.375rem;
+  height: 2.375rem;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+}
+
+.rf-wa svg { width: 1.25rem; height: 1.25rem; }
+
+/* ── The phone ── */
+.rf-stage {
+  position: relative;
+  touch-action: pan-x;
+}
+
+.rf-phone {
+  --reel-phone-w: clamp(17.5rem, 24vw, 21.5rem);
+  box-shadow:
+    0 70px 120px -40px hsl(var(--rf-shadow) / 0.6),
+    0 20px 40px -24px hsl(var(--rf-shadow) / 0.4);
+}
+
+.rf-track {
+  position: absolute;
+  inset: 0;
+  transform: translateY(calc(var(--rf-i, 0) * -100%));
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rf-slide {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 100%;
+  top: calc(var(--rf-n, 0) * 100%);
+  overflow: hidden;
+  background: #111;
+}
+
+.rf-slide img,
+.rf-slide video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The tabs take the place of the phone's "tap to like" hint. */
+.rf-phone .reel-phone__hint { display: none; }
+
+.rf-tabs {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  top: 10.5%;
+  display: flex;
+  justify-content: center;
+  gap: 4.2cqw;
+  white-space: nowrap;
+}
+
+.rf-tab {
+  position: relative;
+  padding: 0.25rem 0 0.5rem;
+  border: 0;
+  background: transparent;
+  color: hsl(0 0% 100% / 0.72);
+  font: inherit;
+  font-size: 3.9cqw;
+  font-weight: 600;
+  cursor: pointer;
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.45);
+}
+
+.rf-tab[aria-selected='true'] {
+  color: #fff;
+  font-weight: 700;
+}
+
+.rf-tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 1.125rem;
+  height: 2.5px;
+  margin-left: -0.5625rem;
+  border-radius: 2px;
+  background: #fff;
+}
+
+/* Beside the phone from 1200px; under it in the two-column layout, where
+   the phone sits against the edge. */
+.rf-ctrls {
+  position: absolute;
+  top: calc(100% + 1rem);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.625rem;
+}
+
+@media (min-width: 1200px) {
+  .rf-ctrls {
+    top: 50%;
+    left: calc(100% + 1.25rem);
+    transform: translateY(-50%);
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 1199px) {
+  .rf-grid { padding-bottom: 8rem; }
+}
+
+.rf-ctrl {
+  display: grid;
+  place-items: center;
+  width: 2.875rem;
+  height: 2.875rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--rf-card);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  backdrop-filter: blur(20px) saturate(170%);
+  box-shadow: inset 0 0 0 1px var(--rf-ring), 0 12px 26px -16px hsl(var(--rf-shadow) / 0.5);
+  color: var(--rf-ink);
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rf-ctrl:hover { transform: scale(1.06); }
+.rf-ctrl svg { width: 1.125rem; height: 1.125rem; }
+
+/* ── Up next ── */
+.rf-next {
+  display: none;
+  min-width: 0;
+  padding-left: 2.5rem;
+}
+
+@media (min-width: 1200px) {
+  .rf-next { display: block; }
+}
+
+.rf-next-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.rf-next-head span:last-child {
+  font-weight: 500;
+  color: var(--rf-muted);
+}
+
+.rf-next-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin: 0.875rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rf-next-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.875rem 0.5rem 0.5rem;
+  border: 0;
+  border-radius: 1.125rem;
+  background: var(--rf-card);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  backdrop-filter: blur(20px) saturate(170%);
+  box-shadow: inset 0 0 0 1px var(--rf-ring);
+  color: var(--rf-ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.rf-next-item:hover { transform: translateX(-3px); }
+
+.rf-next-item img {
+  flex: none;
+  width: 3.25rem;
+  height: 4.25rem;
+  border-radius: 0.75rem;
+  object-fit: cover;
+}
+
+.rf-next-text { min-width: 0; }
+
+.rf-next-title {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.rf-next-meta {
+  display: block;
+  margin-top: 0.125rem;
+  font-size: 0.75rem;
+  color: var(--rf-muted);
+}
+
+.rf-swap { animation: rf-swap 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes rf-swap {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* ═════════ Phones ═════════ */
+
+/* Lets a page fling settle on the feed instead of flying past it. */
+@media (max-width: 767px) {
+  html:has(.rf-mob) { scroll-snap-type: y proximity; }
+}
+
+.rf-mob {
+  position: relative;
+  height: 100svh;
+  min-height: 34rem;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-marketing);
+  scroll-snap-align: start;
+}
+
+.rf-mob-scroller {
+  position: absolute;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior-y: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rf-mob-scroller::-webkit-scrollbar { display: none; }
+
+.rf-mob[data-armed='true'] .rf-mob-scroller { overflow-y: auto; }
+
+.rf-mob-slide {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background: #111;
+}
+
+.rf-mob-slide img,
+.rf-mob-slide video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rf-mob-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgb(0 0 0 / 0.45), transparent 22%, transparent 40%, rgb(0 0 0 / 0.5) 70%, rgb(0 0 0 / 0.85));
+}
+
+.rf-mob-top {
+  position: absolute;
+  left: 1rem;
+  top: calc(env(safe-area-inset-top, 0px) + 1.125rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.125rem;
+  padding: 0 0.875rem 0 0.375rem;
+  border-radius: 999px;
+  background: hsl(0 0% 100% / 0.18);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  backdrop-filter: blur(20px) saturate(170%);
+  box-shadow: inset 0 0 0 1px hsl(0 0% 100% / 0.25);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.rf-mob-top img {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.rf-mob-top span:last-child {
+  font-weight: 600;
+  opacity: 0.8;
+  font-variant-numeric: tabular-nums;
+}
+
+.rf-mob .rf-tabs {
+  top: calc(env(safe-area-inset-top, 0px) + 4.375rem);
+  gap: 1rem;
+}
+
+.rf-mob .rf-tab { font-size: 0.875rem; }
+
+/* Phones: everything at the bottom sits above the glass tab bar's fade. */
+
+.rf-mob-rail {
+  position: absolute;
+  right: 0.75rem;
+  bottom: calc(var(--app-dock-clearance, 0px) + 10.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.125rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.4);
+}
+
+.rf-mob-act {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1875rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rf-mob-act svg {
+  width: 1.875rem;
+  height: 1.875rem;
+  fill: currentColor;
+}
+
+.rf-mob-act--sound svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: none;
+  stroke: currentColor;
+}
+
+.rf-mob-act--sound .rf-mob-disc {
+  display: grid;
+  place-items: center;
+  width: 2.625rem;
+  height: 2.625rem;
+  border-radius: 50%;
+  background: hsl(0 0% 100% / 0.2);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.rf-mob-act[aria-pressed='true'] .rf-heart { color: #ff3b5c; }
+
+.rf-heart { transition: transform 0.35s cubic-bezier(0.34, 1.6, 0.64, 1), color 0.2s ease; }
+.rf-mob-act:active .rf-heart { transform: scale(0.85); }
+
+.rf-mob-caption {
+  position: absolute;
+  left: 1rem;
+  right: 4.75rem;
+  bottom: calc(var(--app-dock-clearance, 0px) + 2.75rem);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.55), 0 2px 12px rgb(0 0 0 / 0.4);
+}
+
+.rf-mob-top,
+.rf-mob-name,
+.rf-mob-title,
+.rf-mob-sound-line {
+  color: #fff; /* these are <p>s: the global p colour in index.css would win */
+}
+
+.rf-mob-name {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.rf-mob-title {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.rf-mob-sound-line {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0.375rem 0 0;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.rf-mob-sound-line svg { width: 0.75rem; height: 0.75rem; }
+
+.rf-mob-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+  height: 2.375rem;
+  padding: 0 0.875rem 0 0.3125rem;
+  border-radius: 999px;
+  background: hsl(0 0% 100% / 0.94);
+  color: hsl(33 13% 16%);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-shadow: none;
+}
+
+.rf-mob-cta .rf-wa {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.rf-mob-cta .rf-wa svg { width: 0.9375rem; height: 0.9375rem; }
+
+.rf-mob-progress {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: calc(var(--app-dock-clearance, 0px) + 1.5rem);
+  height: 2.5px;
+  border-radius: 2px;
+  background: hsl(0 0% 100% / 0.3);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.rf-mob-progress span {
+  display: block;
+  height: 100%;
+  background: #fff;
+  transform-origin: left center;
+  transform: scaleX(var(--rf-progress, 0));
+}
+
+.rf-mob-hint {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  width: 6.25rem;
+  margin-left: -3.125rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  animation: rf-hint 2.2s ease-in-out infinite;
+}
+
+.rf-mob-hint svg { width: 1.75rem; height: 1.75rem; }
+
+.rf-mob-hint[data-hidden='true'] { opacity: 0; }
+
+@keyframes rf-hint {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rf-track,
+  .rf-amb img { transition: none; }
+
+  .rf-mob-hint { animation: none; }
+  .rf-desk[data-seen='true'] .rf-swash path { animation: none; stroke-dashoffset: 0; }
+}
