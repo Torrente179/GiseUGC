@@ -1,0 +1,370 @@
+/* ═══════════════════════════════════════════════════
+   Chapter 2 — "Hola, soy Gisela" + proof (B · Spatial glass)
+
+   The statement on one side, the four proof figures as frosted-glass
+   cards on the other, floating over three slow colour fields in the
+   palette's teal, sand and khaki so the glass has something to refract.
+
+   Depth comes from two inputs, both written to registered custom
+   properties so the browser interpolates them instead of JS:
+   - scroll: a view timeline on .mf-stage drives --mf-tilt and --mf-sweep,
+     so on phones the cards lean and light sweeps across them as the
+     section passes. No JS, no pointer, no device-motion permission.
+   - pointer (fine pointers only): ManifestoChapter writes --mf-nx/--mf-ny
+     on the stage and --mf-gx/--mf-gy on each card; the transition on the
+     registered properties does the easing.
+
+   Each card's glint is its ::before and its lit rim its ::after, so the
+   <dl> keeps only dt/dd inside each group.
+
+   Plain stylesheet on purpose (no @layer): Tailwind drops @layer rules
+   whose class names it can't find as literals, and these never need it.
+   ═══════════════════════════════════════════════════ */
+
+@property --mf-nx {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --mf-ny {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --mf-tilt {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --mf-sweep {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 28%;
+}
+
+.mf-chapter {
+  --mf-ink: hsl(var(--foreground));
+  --mf-ink-soft: hsl(var(--foreground) / 0.8);
+  --mf-glass: hsl(0 0% 100% / 0.5);
+  --mf-glass-edge: hsl(0 0% 100% / 0.95);
+  --mf-rim-hi: hsl(0 0% 100% / 1);
+  --mf-rim-lo: hsl(0 0% 100% / 0.18);
+  --mf-glint: hsl(0 0% 100% / 0.75);
+  --mf-shadow:
+    0 30px 60px -30px hsl(33 13% 16% / 0.42),
+    0 2px 6px hsl(33 13% 16% / 0.05);
+  --mf-orb-a: hsl(193 64% 48% / 0.4);
+  --mf-orb-b: hsl(37 36% 79% / 0.95);
+  --mf-orb-c: hsl(47 23% 51% / 0.5);
+  --mf-star: hsl(47 23% 51%);
+  position: relative;
+  overflow: hidden;
+  background: hsl(var(--background));
+  color: var(--mf-ink);
+}
+
+.dark .mf-chapter {
+  --mf-glass: hsl(222 24% 14% / 0.5);
+  --mf-glass-edge: hsl(0 0% 100% / 0.16);
+  --mf-rim-hi: hsl(0 0% 100% / 0.4);
+  --mf-rim-lo: hsl(0 0% 100% / 0.06);
+  --mf-glint: hsl(0 0% 100% / 0.12);
+  --mf-shadow: 0 30px 60px -30px hsl(0 0% 0% / 0.75);
+  --mf-orb-a: hsl(191 57% 46% / 0.34);
+  --mf-orb-b: hsl(42 28% 60% / 0.24);
+  --mf-orb-c: hsl(222 40% 42% / 0.4);
+  --mf-star: hsl(42 28% 60%);
+}
+
+.mf-wrap {
+  max-width: 82rem;
+  margin: 0 auto;
+  padding: 4.5rem 1.25rem 5rem;
+}
+
+@media (min-width: 768px) {
+  .mf-wrap { padding: 6.5rem 3rem; }
+}
+
+@media (min-width: 1024px) {
+  .mf-wrap { padding: 7rem 4rem; }
+}
+
+.mf-grid {
+  display: grid;
+  gap: 2.75rem;
+}
+
+@media (min-width: 1024px) {
+  .mf-grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 4.5rem;
+    align-items: center;
+  }
+}
+
+/* (0,4,1): clears the global h2 rule in index.css, which sits at (0,3,1)
+   and would otherwise reset the tracking. Don't touch that rule. */
+.mf-chapter .mf-grid .mf-copy h2.mf-title {
+  margin: 0;
+  font-family: var(--font-marketing);
+  font-size: clamp(2.75rem, 1.75rem + 4vw, 5rem);
+  line-height: 0.98;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  color: var(--mf-ink);
+}
+
+.mf-body {
+  margin: 1.25rem 0 0;
+  max-width: 32rem;
+  font-family: var(--font-marketing);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--mf-ink-soft);
+}
+
+@media (min-width: 768px) {
+  .mf-body {
+    margin-top: 2rem;
+    font-size: 1.25rem;
+  }
+}
+
+/* ── Stage: colour fields + glass cards ── */
+.mf-stage {
+  position: relative;
+  transition:
+    --mf-nx 0.7s cubic-bezier(0.33, 1, 0.68, 1),
+    --mf-ny 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.mf-aura {
+  position: absolute;
+  inset: -14% -10%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.mf-orb {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.mf-orb--a {
+  left: 0;
+  top: 4%;
+  width: 52%;
+  aspect-ratio: 1.15;
+  background: radial-gradient(closest-side, var(--mf-orb-a), transparent);
+}
+
+.mf-orb--b {
+  right: -4%;
+  top: 26%;
+  width: 58%;
+  aspect-ratio: 1.2;
+  background: radial-gradient(closest-side, var(--mf-orb-b), transparent);
+}
+
+.mf-orb--c {
+  left: 26%;
+  bottom: -2%;
+  width: 48%;
+  aspect-ratio: 1.25;
+  background: radial-gradient(closest-side, var(--mf-orb-c), transparent);
+}
+
+.mf-cards {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .mf-cards { gap: 1.25rem; }
+}
+
+.mf-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  min-height: 8.75rem;
+  padding: 1.125rem 1.125rem 1rem;
+  border-radius: 1.5rem;
+  container-type: inline-size;
+  background: var(--mf-glass);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  backdrop-filter: blur(22px) saturate(170%);
+  box-shadow: var(--mf-shadow), inset 0 1px 0 var(--mf-glass-edge);
+  transform:
+    perspective(1100px)
+    rotateX(calc((var(--mf-ny) * -9 + var(--mf-tilt) * 5) * 1deg))
+    rotateY(calc(var(--mf-nx) * 12deg));
+}
+
+@media (min-width: 768px) {
+  .mf-card {
+    min-height: 12.25rem;
+    padding: 1.875rem 1.875rem 1.625rem;
+    border-radius: 1.875rem;
+  }
+}
+
+/* Where backdrop-filter is missing the glass would read as a faint smear
+   over the colour fields; give it enough body to carry the figures. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .mf-card { background: hsl(var(--background) / 0.86); }
+}
+
+.mf-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    16rem circle at var(--mf-gx, 50%) var(--mf-gy, var(--mf-sweep)),
+    var(--mf-glint),
+    transparent 65%
+  );
+}
+
+.mf-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  background: linear-gradient(
+    calc(135deg + var(--mf-nx) * 45deg),
+    var(--mf-rim-hi),
+    var(--mf-rim-lo) 40%,
+    var(--mf-rim-lo) 60%,
+    var(--mf-rim-hi)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+/* dt comes first for the definition-list semantics; the figure leads visually.
+   Flex paints in order-modified order, so order:-1 would put the figure
+   under the card's glint (::before); z-index lifts both texts above it. */
+.mf-value {
+  position: relative;
+  z-index: 1;
+  order: -1;
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-family: var(--font-marketing);
+  font-size: clamp(2.125rem, 1.5rem + 3.2vw, 4.25rem);
+  /* Sized off the card, not the viewport: "ES+EN" is the widest figure at
+     ~2.85em and has to fit a 320px phone's half-width card. */
+  font-size: clamp(2rem, 34cqi, 4.25rem);
+  line-height: 0.9;
+  font-weight: 650;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  color: var(--mf-ink);
+  translate: calc(var(--mf-nx) * 7px) calc(var(--mf-ny) * 5px);
+}
+
+.mf-label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-marketing);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  font-weight: 500;
+  color: var(--mf-ink-soft);
+}
+
+@media (min-width: 768px) {
+  .mf-label { font-size: 0.9375rem; }
+}
+
+.mf-star {
+  flex: none;
+  width: 0.34em;
+  height: 0.34em;
+  margin-top: 0.04em;
+  fill: var(--mf-star);
+}
+
+/* ── Motion ── */
+@media (prefers-reduced-motion: no-preference) {
+  /* The colour fields only drift where there's a fine pointer: on phones a
+     moving backdrop would make all four glass cards re-blur every frame. */
+  @media (hover: hover) and (pointer: fine) {
+    .mf-orb--a { animation: mf-drift-a 14s ease-in-out infinite alternate; }
+    .mf-orb--b { animation: mf-drift-b 17s ease-in-out infinite alternate; }
+    .mf-orb--c { animation: mf-drift-c 12s ease-in-out infinite alternate; }
+  }
+
+  @supports (animation-timeline: view()) {
+    .mf-stage {
+      animation: mf-stage-scroll linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+
+    .mf-card {
+      animation: mf-card-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    .mf-card:nth-child(2) { animation-range: entry 8% entry 78%; }
+    .mf-card:nth-child(3) { animation-range: entry 16% entry 86%; }
+    .mf-card:nth-child(4) { animation-range: entry 24% entry 94%; }
+  }
+}
+
+@keyframes mf-stage-scroll {
+  from {
+    --mf-tilt: 1;
+    --mf-sweep: -10%;
+  }
+  to {
+    --mf-tilt: -1;
+    --mf-sweep: 115%;
+  }
+}
+
+@keyframes mf-card-rise {
+  from {
+    opacity: 0;
+    translate: 0 2.5rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes mf-drift-a {
+  to { transform: translate(18%, 12%) scale(1.15); }
+}
+
+@keyframes mf-drift-b {
+  to { transform: translate(-20%, -8%) scale(0.9); }
+}
+
+@keyframes mf-drift-c {
+  to { transform: translate(10%, -22%) scale(1.2); }
+}
