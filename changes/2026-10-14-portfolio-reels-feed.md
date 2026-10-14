@@ -23,10 +23,21 @@ existing serif style. The rows "round 3" and "the mix" are on
     tints the whole section and crossfades between reels.
   - **Light theme:** the cream ground with the soft teal and sand fields from
     the C1 board.
-- **Phones (< 768px):** the section is the feed. It is 100svh, with full-screen
-  reels swiped up and down, the tabs, a side column (sound, like with the 4.7
-  rating, 177 reviews → `#testimonials`, 28+ brands), and a caption with
-  "Quiero uno así". There is a "Desliza" hint until the first swipe.
+- **Phones (< 768px):** the page shows one reel in a card (`.rf-inline`), on
+  the same theme grounds as desktop: the title, category chips, the playing
+  reel (counter, title, category · length · language, progress) and "Quiero un
+  video así". Swiping sideways on the card changes the reel. Tapping it opens
+  the full-screen feed (`.rf-mob--overlay`, portalled to `<body>`, above the
+  tab bar), which has:
+  - reels swiped up and down;
+  - the tabs;
+  - a side column (sound, like with the 4.7 rating, 177 reviews, 28+ brands);
+  - a caption with "Quiero uno así";
+  - a "Desliza" hint until the first swipe;
+  - a round glass ✕ at the top right.
+
+  The feed opens on the reel the card was showing, with sound on. When it
+  closes (✕ or Escape), the card shows wherever the feed left off.
 - **Title:** "Reels que *venden*" stays in Cormorant, as the user asked. It is
   larger, on two lines, and a brushed underline draws under the italic word the
   first time the section comes into view. EN: "Reels that *sell*".
@@ -44,13 +55,22 @@ existing serif style. The rows "round 3" and "the mix" are on
   and calls `preventDefault`, except at the first and last reel, where the page
   scrolls on. Vertical drags on the phone move through reels too, and the click
   is swallowed so a drag doesn't also "like" the reel.
-- **Phones:** the inner scroller (`scroll-snap-type: y mandatory`) only becomes
-  scrollable once ≥ 95% of the section is on screen (`data-armed`). Its
-  `overscroll-behavior` chains back to the page at either end.
-  `html:has(.rf-mob) { scroll-snap-type: y proximity }` lets a page fling settle
-  on the feed.
+- **Phones:** the first version put the full-screen feed inside the page, and
+  that made the page hard to scroll past (reported by the user). Now the page
+  only holds the card, so it scrolls normally. The vertical feed exists only
+  while the overlay is open. While it's open:
+  - the body is locked (`position: fixed` + `top: -scrollY`, restored on
+    close);
+  - focus goes to the ✕, then back to the card;
+  - the scroller is `overscroll-behavior: contain`.
 
 ## Gotchas
+
+- The card's `<video>` and caption are siblings. Both were keyed
+  `clip.id`, and the duplicate key stopped React removing old videos
+  (one more `<video>` per reel change). The caption is now keyed
+  `caption-${clip.id}`. Only one `<video>` exists at a time: in the card, or in
+  the overlay while it is open.
 
 - The caption lines and the top pill are `<p>`s. The global `p` colour in
   `index.css` turned them dark ink over the video until `color: #fff` was set
@@ -66,6 +86,15 @@ Headless Chrome (puppeteer):
   change the reel without scrolling the page, and the Tech tab filters to
   12 reels.
 - **820px (iPad):** the two-column layout, with the controls under the phone.
-- **390px:** full-screen feed, armed. Scrolling the feed moves to 02/26 with
-  one video mounted.
+- **390px, light and dark:**
+  - the page scrolls past the card;
+  - a sideways swipe moves the card to 02/26;
+  - a tap opens the overlay full screen (z 230), focuses the ✕ and locks the
+    body;
+  - scrolling the feed reaches 04/26 with one video mounted and hides the hint;
+  - the ✕ closes the overlay, restores the scroll position and shows 04/26 on
+    the card;
+  - Escape closes it too.
+- **320px and 430px:** the card fits with no horizontal overflow. Desktop is
+  unchanged.
 - **Checks:** `npm run typecheck`, `npm test` (351 passed), ESLint.

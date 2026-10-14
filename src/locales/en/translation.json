@@ -209,6 +209,7 @@
       "soundOff": "Mute",
       "swipe": "Swipe",
       "like": "Like",
+      "openFull": "Watch full screen",
       "feedLabel": "Gisela's reels",
       "whatsappText": "Hi Gisela, I'd like a video like “{{title}}”."
     },

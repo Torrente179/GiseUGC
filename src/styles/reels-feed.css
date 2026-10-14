@@ -8,17 +8,19 @@
      tints the whole section and crossfades as the reel changes.
    - Light theme: the cream ground with soft teal and sand fields.
 
-   Phones (< 768px): the section *is* the feed. Full-screen reels you swipe
-   up and down, like the app. The inner scroller only takes over once the
-   section fills the screen ([data-armed]), and it chains back to the page at
-   either end, so the page never gets trapped.
+   Phones (< 768px): the page shows one reel in a card (.rf-inline), with
+   the same theme grounds. A sideways swipe changes the reel and a tap opens
+   the full-screen feed (.rf-mob--overlay, portalled to <body>): reels swiped
+   up and down like the app, with a close button. The page never has to
+   scroll through the feed, which is what trapped it before.
 
    Plain stylesheet (no @layer) so Tailwind can't purge it.
    ═══════════════════════════════════════════════════ */
 
 /* ═════════ Desktop ═════════ */
 
-.rf-desk {
+.rf-desk,
+.rf-inline {
   --rf-bg: hsl(var(--background));
   --rf-ink: hsl(var(--foreground));
   --rf-muted: hsl(var(--foreground) / 0.72);
@@ -38,7 +40,8 @@
   font-family: var(--font-marketing);
 }
 
-.dark .rf-desk {
+.dark .rf-desk,
+.dark .rf-inline {
   --rf-bg: hsl(30 15% 4.5%);
   --rf-ink: hsl(42 38% 92%);
   --rf-muted: hsl(42 38% 92% / 0.68);
@@ -504,36 +507,262 @@
 
 /* ═════════ Phones ═════════ */
 
-/* Lets a page fling settle on the feed instead of flying past it. */
-@media (max-width: 767px) {
-  html:has(.rf-mob) { scroll-snap-type: y proximity; }
+/* ── In the page: one reel in a card ── */
+.rf-inline {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 3rem 1.25rem 2.75rem;
+  background: var(--rf-bg);
+  color: var(--rf-ink);
+  font-family: var(--font-marketing);
 }
 
-.rf-mob {
+/* (0,2,1) clears h2.font-serif in index.css (0,1,1). */
+.rf-inline h2.rf-title {
+  margin: 0;
+  font-family: var(--font-brand);
+  font-size: clamp(3rem, 2rem + 4.4vw, 3.75rem);
+  line-height: 0.9;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--rf-ink);
+}
+
+.rf-inline .rf-swash {
+  width: 10.5rem;
+  height: 0.875rem;
+  margin-top: -0.125rem;
+}
+
+.rf-inline[data-seen='true'] .rf-swash path {
+  animation: rf-draw 1.5s 0.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.rf-chips {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem -1.25rem 0;
+  padding: 0 1.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.rf-chips::-webkit-scrollbar { display: none; }
+
+.rf-chip {
+  flex: none;
+  height: 2.25rem;
+  padding: 0 0.9375rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--rf-card);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  box-shadow: inset 0 0 0 1px var(--rf-ring);
+  color: var(--rf-ink);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.rf-chip[aria-selected='true'] {
+  background: var(--rf-cta-bg);
+  color: var(--rf-cta-ink);
+  box-shadow: none;
+}
+
+.rf-reel {
   position: relative;
-  height: 100svh;
-  min-height: 34rem;
+  margin-top: 0.875rem;
+  aspect-ratio: 350 / 452;
+  border-radius: 1.75rem;
+  overflow: hidden;
+  background: #111;
+  color: #fff;
+  box-shadow:
+    0 40px 70px -34px hsl(var(--rf-shadow) / 0.7),
+    0 0 0 1px var(--rf-ring);
+  touch-action: pan-y;
+}
+
+.rf-reel > img,
+.rf-reel video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rf-reel-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgb(0 0 0 / 0.42), transparent 22%, transparent 50%, rgb(0 0 0 / 0.78));
+}
+
+.rf-reel-top {
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  top: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.4);
+}
+
+.rf-reel-top img {
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1.5px #fff;
+}
+
+.rf-reel-top span:last-child {
+  margin-left: auto;
+  margin-right: 2.75rem;
+  font-weight: 600;
+  opacity: 0.85;
+  font-variant-numeric: tabular-nums;
+}
+
+.rf-reel-expand {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.625rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: hsl(0 0% 100% / 0.2);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  color: #fff;
+}
+
+.rf-reel-expand svg { width: 0.9375rem; height: 0.9375rem; }
+
+.rf-reel-caption {
+  position: absolute;
+  left: 0.875rem;
+  right: 0.875rem;
+  bottom: 1.375rem;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.55), 0 2px 12px rgb(0 0 0 / 0.4);
+  animation: rf-swap 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.rf-reel-title {
+  margin: 0;
+  color: #fff;
+  font-size: 1.0625rem;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.rf-reel-meta {
+  margin: 0.1875rem 0 0;
+  color: #fff;
+  font-size: 0.75rem;
+  opacity: 0.88;
+}
+
+.rf-mob-progress.rf-reel-progress {
+  left: 0.875rem;
+  right: 0.875rem;
+  bottom: 0.75rem;
+}
+
+.rf-reel-open {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rf-reel-open:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+  border-radius: inherit;
+}
+
+.rf-cta--block {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.875rem;
+}
+
+/* ── Full screen: the feed itself ── */
+.rf-mob {
+  position: fixed;
+  inset: 0;
+  z-index: 230;
+  height: 100dvh;
   overflow: hidden;
   background: #000;
   color: #fff;
   font-family: var(--font-marketing);
-  scroll-snap-align: start;
+  /* No tab bar under the overlay: the bottom overlays clear the safe area. */
+  --app-dock-clearance: env(safe-area-inset-bottom, 0px);
+  animation: rf-open 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes rf-open {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.rf-mob-close {
+  position: absolute;
+  right: 0.875rem;
+  top: calc(env(safe-area-inset-top, 0px) + 0.875rem);
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: hsl(0 0% 100% / 0.2);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: inset 0 0 0 1px hsl(0 0% 100% / 0.25);
+  color: #fff;
+  cursor: pointer;
+}
+
+.rf-mob-close svg { width: 1.125rem; height: 1.125rem; }
+
+.rf-mob-close:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .rf-mob-scroller {
   position: absolute;
   inset: 0;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
   scroll-snap-type: y mandatory;
-  overscroll-behavior-y: auto;
+  overscroll-behavior: contain;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
 
 .rf-mob-scroller::-webkit-scrollbar { display: none; }
-
-.rf-mob[data-armed='true'] .rf-mob-scroller { overflow-y: auto; }
 
 .rf-mob-slide {
   position: relative;
@@ -770,5 +999,7 @@
   .rf-amb img { transition: none; }
 
   .rf-mob-hint { animation: none; }
-  .rf-desk[data-seen='true'] .rf-swash path { animation: none; stroke-dashoffset: 0; }
+  .rf-desk[data-seen='true'] .rf-swash path,
+  .rf-inline[data-seen='true'] .rf-swash path { animation: none; stroke-dashoffset: 0; }
+  .rf-mob { animation: none; }
 }

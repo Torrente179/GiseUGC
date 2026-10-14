@@ -1,12 +1,14 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
   type CSSProperties,
   type MouseEvent,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from '@/lib/locale-context';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
@@ -25,9 +27,11 @@ import '@/styles/reels-feed.css';
  *
  * Desktop plays the reels inside the hero's iPhone (ReelPhone) as a vertical
  * feed with category tabs, next to a "now playing" spec card, a WhatsApp CTA
- * that names the reel, and "up next". Phones get the feed itself, full screen,
- * swiped up and down like the app. Only the active reel mounts a video; every
- * other slide is a poster. Styles and both themes: src/styles/reels-feed.css.
+ * that names the reel, and "up next". Phones show one reel in a card inside
+ * the page (swipe sideways for the next one), and a tap opens the full-screen
+ * feed, swiped up and down like the app, with a close button. The page itself
+ * never has to scroll through the feed. Only the active reel mounts a video;
+ * every other slide is a poster. Styles and both themes: src/styles/reels-feed.css.
  */
 
 type Category = ReelClip['category'];
@@ -103,16 +107,19 @@ const Portfolio = () => {
   const progressRef = useRef<HTMLSpanElement>(null);
   const wheelLockRef = useRef(0);
   const dragRef = useRef<{ y: number; moved: boolean } | null>(null);
+  const swipeRef = useRef<number | null>(null);
   const swallowClickRef = useRef(false);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const openerRef = useRef<HTMLButtonElement>(null);
 
   const [dayBucket] = useState(() => Math.floor(Date.now() / DAY_MS));
   const [filter, setFilter] = useState<Filter>('all');
   const [index, setIndex] = useState(0);
   const [soundOn, setSoundOn] = useState(false);
   const [liked, setLiked] = useState<Record<number, boolean>>({});
-  const [touched, setTouched] = useState(false);
+  const [feedScrolled, setFeedScrolled] = useState(false);
   const [inView, setInView] = useState(false);
-  const [armed, setArmed] = useState(false);
+  const [open, setOpen] = useState(false);
   const [seen, setSeen] = useState(false);
   const [ambient, setAmbient] = useState<{ a: string; b: string; showA: boolean }>({ a: '', b: '', showA: true });
 
@@ -134,7 +141,6 @@ const Portfolio = () => {
 
   const go = useCallback(
     (step: number, wrap = false) => {
-      setTouched(true);
       setIndex((current) => {
         const next = current + step;
         if (next < 0) return wrap ? list.length - 1 : 0;
@@ -151,8 +157,7 @@ const Portfolio = () => {
     scrollerRef.current?.scrollTo({ top: 0 });
   };
 
-  // In view: drives playback, the progress bar and the title's swash. On
-  // phones it also arms the inner scroller once the feed fills the screen.
+  // In view: drives playback, the progress bar and the title's swash.
   useEffect(() => {
     const section = sectionRef.current;
     if (!section || typeof IntersectionObserver === 'undefined') {
@@ -165,9 +170,8 @@ const Portfolio = () => {
         const visible = Boolean(entry?.isIntersecting);
         setInView(visible);
         if (entry && entry.intersectionRatio > 0.25) setSeen(true);
-        setArmed(Boolean(entry && entry.intersectionRatio >= 0.95));
       },
-      { threshold: [0, 0.25, 0.5, 0.95, 1] },
+      { threshold: [0, 0.25] },
     );
     observer.observe(section);
     return () => observer.disconnect();
@@ -182,14 +186,54 @@ const Portfolio = () => {
     );
   }, [clip]);
 
-  // Sound follows the toggle across reels; turning it on is a user gesture,
-  // so the browser lets the active reel play with audio.
+  // Sound follows the toggle across reels. Turning it on (or opening the
+  // full-screen feed) is a user gesture, so the browser usually allows audio;
+  // when it doesn't, fall back to muted playback rather than a frozen frame.
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
     video.muted = !soundOn;
-    if (soundOn) void video.play().catch(() => undefined);
-  }, [soundOn, clip]);
+    if (!soundOn) return;
+    video.play().catch(() => {
+      video.muted = true;
+      setSoundOn(false);
+      void video.play().catch(() => undefined);
+    });
+  }, [soundOn, clip, open]);
+
+  // Full-screen feed (phones): lock the page behind it, start on the reel the
+  // card was showing, take focus, and close on Escape.
+  useEffect(() => {
+    if (!open) return undefined;
+    const { body } = document;
+    const scrollY = window.scrollY;
+    const previous = { position: body.style.position, top: body.style.top, width: body.style.width };
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.width = '100%';
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    const opener = openerRef.current;
+    closeRef.current?.focus();
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      body.style.position = previous.position;
+      body.style.top = previous.top;
+      body.style.width = previous.width;
+      window.scrollTo(0, scrollY);
+      opener?.focus({ preventScroll: true });
+    };
+  }, [open]);
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    const scroller = scrollerRef.current;
+    if (scroller) scroller.scrollTop = activeIndex * scroller.clientHeight;
+    // Only on opening: afterwards the scroller drives the index.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   // Desktop: the wheel walks the feed while the pointer is on the phone, and
   // hands the scroll back to the page at either end.
@@ -280,115 +324,233 @@ const Portfolio = () => {
   );
 
   if (isMobile) {
+    const openFeed = () => {
+      setFeedScrolled(false);
+      setSoundOn(true);
+      setOpen(true);
+    };
+    const closeFeed = () => {
+      setSoundOn(false);
+      setOpen(false);
+    };
+
+    const feed =
+      open && typeof document !== 'undefined'
+        ? createPortal(
+            <div
+              className="rf-mob rf-mob--overlay"
+              role="dialog"
+              aria-modal="true"
+              aria-label={t('portfolio.feed.feedLabel')}
+            >
+              <div
+                ref={scrollerRef}
+                className="rf-mob-scroller"
+                onScroll={(event) => {
+                  const el = event.currentTarget;
+                  const next = Math.round(el.scrollTop / Math.max(el.clientHeight, 1));
+                  if (next !== activeIndex) {
+                    setIndex(next);
+                    setFeedScrolled(true);
+                  }
+                }}
+              >
+                {list.map((item, i) => (
+                  <div key={item.id} className="rf-mob-slide" aria-hidden={i !== activeIndex}>
+                    {Math.abs(i - activeIndex) <= 2 ? (
+                      <img src={getPosterVariantSrc(item, 720, 'webp')} alt="" loading="lazy" decoding="async" />
+                    ) : null}
+                    {i === activeIndex ? video : null}
+                  </div>
+                ))}
+              </div>
+
+              <div className="rf-mob-shade" aria-hidden="true" />
+
+              <p className="rf-mob-top" aria-hidden="true">
+                <img src={AVATAR_SRC} alt="" width={160} height={160} />
+                <span>{t('portfolio.feed.titleLead')} {t('portfolio.feed.titleAccent')}</span>
+                <span>
+                  {String(activeIndex + 1).padStart(2, '0')}/{String(list.length).padStart(2, '0')}
+                </span>
+              </p>
+
+              <button
+                ref={closeRef}
+                type="button"
+                className="rf-mob-close"
+                aria-label={t('floatingContact.close')}
+                onClick={closeFeed}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden="true" focusable="false">
+                  <path d="M6 6l12 12M18 6 6 18" />
+                </svg>
+              </button>
+
+              {tabs}
+
+              <div className="rf-mob-rail">
+                <button
+                  type="button"
+                  className="rf-mob-act rf-mob-act--sound"
+                  aria-pressed={soundOn}
+                  aria-label={t(soundOn ? 'portfolio.feed.soundOff' : 'portfolio.feed.soundOn')}
+                  onClick={() => setSoundOn((on) => !on)}
+                >
+                  <span className="rf-mob-disc"><SoundIcon on={soundOn} /></span>
+                </button>
+                <button
+                  type="button"
+                  className="rf-mob-act"
+                  aria-pressed={isLiked}
+                  aria-label={t('portfolio.feed.like')}
+                  onClick={() => setLiked((current) => ({ ...current, [clip.id]: !current[clip.id] }))}
+                >
+                  <svg className="rf-heart" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                  </svg>
+                  <span>{SITE_PROOF.fiverrRating}</span>
+                </button>
+                <span className="rf-mob-act">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg>
+                  <span>{SITE_PROOF.fiverrReviewCount}</span>
+                </span>
+                <span className="rf-mob-act">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" /></svg>
+                  <span>{SITE_PROOF.brandCampaigns}+</span>
+                </span>
+              </div>
+
+              <div className="rf-mob-caption" key={clip.id}>
+                <p className="rf-mob-name">Gisela Saldarriaga</p>
+                <p className="rf-mob-title">
+                  {title} · {categoryOf(clip)} · {formatDuration(clip.durationSeconds)}
+                </p>
+                <p className="rf-mob-sound-line">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M9 18V5l12-2v13" />
+                    <circle cx="6" cy="18" r="3" />
+                    <circle cx="18" cy="16" r="3" />
+                  </svg>
+                  {t('hero.feed.soundShort')}
+                </p>
+                <a className="rf-mob-cta" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+                  <span className="rf-wa"><WhatsAppGlyph /></span>
+                  {t('portfolio.feed.ctaShort')}
+                </a>
+              </div>
+
+              <div className="rf-mob-progress" aria-hidden="true"><span ref={progressRef} /></div>
+
+              <div className="rf-mob-hint" data-hidden={feedScrolled} aria-hidden="true">
+                <Chevron up />
+                {t('portfolio.feed.swipe')}
+              </div>
+            </div>,
+            document.body,
+          )
+        : null;
+
     return (
       <section
         id="portfolio"
         ref={sectionRef}
-        className="rf-mob"
-        data-armed={armed}
+        className="rf-inline"
+        data-seen={seen}
         aria-labelledby="portfolio-title"
-        aria-roledescription="carousel"
       >
-        <h2 id="portfolio-title" className="sr-only">
-          {t('portfolio.feed.titleLead')} {t('portfolio.feed.titleAccent')}
+        <div className="rf-orbs" aria-hidden="true" />
+        <div className="rf-amb" aria-hidden="true">
+          {ambient.a ? <img src={ambient.a} alt="" data-on={ambient.showA} /> : null}
+          {ambient.b ? <img src={ambient.b} alt="" data-on={!ambient.showA} /> : null}
+        </div>
+        <div className="rf-veil" aria-hidden="true" />
+
+        <h2 id="portfolio-title" className="rf-title font-serif">
+          <span className="rf-title-lead">{t('portfolio.feed.titleLead')}</span>
+          <br />
+          <span className="rf-title-accent">{t('portfolio.feed.titleAccent')}</span>
+          <svg className="rf-swash" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M3 15 C 60 5, 140 2, 297 11" fill="none" strokeWidth="3.4" strokeLinecap="round" pathLength={1} />
+          </svg>
         </h2>
 
-        <div
-          ref={scrollerRef}
-          className="rf-mob-scroller"
-          onScroll={(event) => {
-            const el = event.currentTarget;
-            const next = Math.round(el.scrollTop / Math.max(el.clientHeight, 1));
-            if (next !== activeIndex) {
-              setIndex(next);
-              setTouched(true);
-            }
-          }}
-        >
-          {list.map((item, i) => (
-            <div key={item.id} className="rf-mob-slide" aria-hidden={i !== activeIndex}>
-              {Math.abs(i - activeIndex) <= 2 ? (
-                <img src={getPosterVariantSrc(item, 720, 'webp')} alt="" loading="lazy" decoding="async" />
-              ) : null}
-              {i === activeIndex ? video : null}
-            </div>
+        <div className="rf-chips" role="tablist" aria-label={t('portfolio.feed.feedLabel')}>
+          {FILTERS.map((id) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              className="rf-chip"
+              aria-selected={filter === id}
+              onClick={() => pickFilter(id)}
+            >
+              {t(`portfolio.feed.tabs.${id}`)}
+            </button>
           ))}
         </div>
 
-        <div className="rf-mob-shade" aria-hidden="true" />
-
-        <p className="rf-mob-top" aria-hidden="true">
-          <img src={AVATAR_SRC} alt="" width={160} height={160} />
-          <span>{t('portfolio.feed.titleLead')} {t('portfolio.feed.titleAccent')}</span>
-          <span>
-            {String(activeIndex + 1).padStart(2, '0')}/{String(list.length).padStart(2, '0')}
-          </span>
-        </p>
-
-        {tabs}
-
-        <div className="rf-mob-rail">
-          <button
-            type="button"
-            className="rf-mob-act rf-mob-act--sound"
-            aria-pressed={soundOn}
-            aria-label={t(soundOn ? 'portfolio.feed.soundOff' : 'portfolio.feed.soundOn')}
-            onClick={() => setSoundOn((on) => !on)}
-          >
-            <span className="rf-mob-disc"><SoundIcon on={soundOn} /></span>
-          </button>
-          <button
-            type="button"
-            className="rf-mob-act"
-            aria-pressed={isLiked}
-            aria-label={t('portfolio.feed.like')}
-            onClick={() => setLiked((current) => ({ ...current, [clip.id]: !current[clip.id] }))}
-          >
-            <svg className="rf-heart" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-            </svg>
-            <span>{SITE_PROOF.fiverrRating}</span>
-          </button>
-          <a
-            href="#testimonials"
-            className="rf-mob-act"
-            onClick={handleHashLinkClick}
-            aria-label={t('hero.feed.reviewsAria', { count: SITE_PROOF.fiverrReviewCount })}
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg>
-            <span>{SITE_PROOF.fiverrReviewCount}</span>
-          </a>
-          <span className="rf-mob-act" aria-label={t('hero.feed.brandsAria', { count: SITE_PROOF.brandCampaigns })}>
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" /></svg>
-            <span>{SITE_PROOF.brandCampaigns}+</span>
-          </span>
-        </div>
-
-        <div className="rf-mob-caption" key={clip.id}>
-          <p className="rf-mob-name">Gisela Saldarriaga</p>
-          <p className="rf-mob-title">
-            {title} · {categoryOf(clip)} · {formatDuration(clip.durationSeconds)}
+        <div
+          className="rf-reel"
+          onPointerDown={(event) => {
+            swipeRef.current = event.clientX;
+          }}
+          onPointerUp={(event) => {
+            const startX = swipeRef.current;
+            swipeRef.current = null;
+            if (startX === null) return;
+            const dx = event.clientX - startX;
+            if (Math.abs(dx) >= 40) {
+              swallowClickRef.current = true;
+              go(dx < 0 ? 1 : -1, true);
+              window.setTimeout(() => {
+                swallowClickRef.current = false;
+              }, 0);
+            }
+          }}
+        >
+          <img src={poster} alt="" decoding="async" />
+          {!open ? video : null}
+          <div className="rf-reel-shade" aria-hidden="true" />
+          <p className="rf-reel-top" aria-hidden="true">
+            <img src={AVATAR_SRC} alt="" width={160} height={160} />
+            <span>Gisela Saldarriaga</span>
+            <span>
+              {String(activeIndex + 1).padStart(2, '0')}/{String(list.length).padStart(2, '0')}
+            </span>
           </p>
-          <p className="rf-mob-sound-line">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
-              <path d="M9 18V5l12-2v13" />
-              <circle cx="6" cy="18" r="3" />
-              <circle cx="18" cy="16" r="3" />
+          <span className="rf-reel-expand" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" focusable="false">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
             </svg>
-            {t('hero.feed.soundShort')}
-          </p>
-          <a className="rf-mob-cta" href={whatsappHref} target="_blank" rel="noopener noreferrer">
-            <span className="rf-wa"><WhatsAppGlyph /></span>
-            {t('portfolio.feed.ctaShort')}
-          </a>
+          </span>
+          <div className="rf-reel-caption" key={`caption-${clip.id}`}>
+            <p className="rf-reel-title">{title}</p>
+            <p className="rf-reel-meta">
+              {categoryOf(clip)} · {formatDuration(clip.durationSeconds)} · {languageOf(clip)}
+            </p>
+          </div>
+          <div className="rf-mob-progress rf-reel-progress" aria-hidden="true">
+            {!open ? <span ref={progressRef} /> : <span />}
+          </div>
+          <button
+            ref={openerRef}
+            type="button"
+            className="rf-reel-open"
+            aria-label={`${title}. ${t('portfolio.feed.openFull')}`}
+            aria-haspopup="dialog"
+            onClick={() => {
+              if (!swallowClickRef.current) openFeed();
+            }}
+          />
         </div>
 
-        <div className="rf-mob-progress" aria-hidden="true"><span ref={progressRef} /></div>
+        <a className="rf-cta rf-cta--block" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+          <span className="rf-wa"><WhatsAppGlyph /></span>
+          {t('portfolio.feed.cta')}
+        </a>
 
-        <div className="rf-mob-hint" data-hidden={touched} aria-hidden="true">
-          <Chevron up />
-          {t('portfolio.feed.swipe')}
-        </div>
+        {feed}
       </section>
     );
   }
@@ -545,10 +707,7 @@ const Portfolio = () => {
                   <button
                     type="button"
                     className="rf-next-item"
-                    onClick={() => {
-                      setTouched(true);
-                      setIndex(i);
-                    }}
+                    onClick={() => setIndex(i)}
                   >
                     <img src={getPosterVariantSrc(item, 360, 'webp')} alt="" loading="lazy" decoding="async" />
                     <span className="rf-next-text">
