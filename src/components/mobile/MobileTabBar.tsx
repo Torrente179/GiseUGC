@@ -54,7 +54,7 @@ const MobileTabBar = ({ contactOpen, onContact, hidden = false }: MobileTabBarPr
   return (
     <nav
       className={`mtabbar${hidden ? ' is-hidden' : ''}`}
-      aria-label={t('navbar.openMenu', { defaultValue: 'Navegación' })}
+      aria-label={t('navbar.mobileNavLabel')}
       aria-hidden={hidden}
     >
       <div className="mtabbar-inner">

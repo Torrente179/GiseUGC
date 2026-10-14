@@ -5,12 +5,11 @@
     "portfolio": "Portafolio",
     "testimonials": "Testimonios",
     "contact": "Contacto",
-    "hireMe": "Contáctame",
-    "studioLabel": "Creadora UGC en Medellín",
     "faq": "Preguntas",
     "messageMe": "Escríbeme",
     "homeAria": "Gisela UGC, inicio",
-    "desktopLabel": "Navegación principal"
+    "desktopLabel": "Navegación principal",
+    "mobileNavLabel": "Navegación"
   },
   "languageSwitcher": {
     "changeLanguage": "Cambiar idioma"

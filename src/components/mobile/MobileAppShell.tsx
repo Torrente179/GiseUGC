@@ -13,9 +13,6 @@ const MobileContactSheet = lazy(() => import('@/components/mobile/MobileContactS
  * mounted once site-wide (App gates it to mobile). Bridges the existing
  * contact-dock event so every "Contactar" CTA opens the contact sheet on mobile
  * (the desktop floating dock handles desktop).
- *
- * The secondary "more" menu remains the navbar's existing swipe-dismissable
- * overlay; converting that to a vaul sheet is a tracked follow-up.
  */
 const MobileAppShell = () => {
   const [contactOpen, setContactOpen] = useState(false);

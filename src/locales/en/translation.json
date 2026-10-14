@@ -5,12 +5,11 @@
     "portfolio": "Portfolio",
     "testimonials": "Testimonials",
     "contact": "Contact",
-    "hireMe": "Contact me",
-    "studioLabel": "UGC creator in Medellín",
     "faq": "FAQ",
     "messageMe": "Message me",
     "homeAria": "Gisela UGC, home",
-    "desktopLabel": "Main navigation"
+    "desktopLabel": "Main navigation",
+    "mobileNavLabel": "Navigation"
   },
   "languageSwitcher": {
     "changeLanguage": "Change language"
