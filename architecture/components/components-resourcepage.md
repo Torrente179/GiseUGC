@@ -3,7 +3,7 @@
 Source: `src/components/ResourcePage.tsx`
 
 ## Role
-Renders editorial resource articles from typed content, related services/verticals, FAQ schema, and CTA links.
+Renders editorial resource articles from typed content, related services/verticals, FAQ schema, and CTA links. Sections may include an italic lead, a markdown-linked table, and bullet lists. FAQPage answers use `visibleInlineCopy` so they match the rendered FAQ. Closing CTAs use `page.primaryCtaHref`. The pricing guide's prices come from `FIVERR_PRICING`.
 
 ## Structural Facts
 - Lines: 467

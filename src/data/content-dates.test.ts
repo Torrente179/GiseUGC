@@ -12,7 +12,7 @@ describe('formatLastUpdatedLabel', () => {
   it('formats the current family dates used on money pages', () => {
     expect(formatLastUpdatedLabel(CONTENT_DATES.services, 'es')).toBe('Última actualización: 13 oct 2026');
     expect(formatLastUpdatedLabel(CONTENT_DATES.services, 'en')).toBe('Last updated: Oct 13, 2026');
-    expect(formatLastUpdatedLabel(CONTENT_DATES.resources, 'es')).toBe('Última actualización: 13 oct 2026');
+    expect(formatLastUpdatedLabel(CONTENT_DATES.resources, 'es')).toBe('Última actualización: 14 oct 2026');
     expect(formatLastUpdatedLabel(CONTENT_DATES.verticals, 'es')).toBe('Última actualización: 13 oct 2026');
   });
 

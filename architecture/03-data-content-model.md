@@ -22,7 +22,7 @@ does not change `PAGE_REGISTRY`.
 `src/data/vertical-pages.ts` follows the same structure for industry verticals such as beauty, fashion, tech/SaaS, ecommerce, and lifestyle/wellness.
 
 ## Resource Pages
-`src/data/resource-pages.ts` defines editorial article pages. It includes sections, optional comparison tables, FAQs, related service ids, and related vertical ids.
+`src/data/resource-pages.ts` defines editorial article pages. It includes sections, optional comparison tables, FAQs, related service ids, and related vertical ids. Published Fiverr package prices, the verification date, and gig URLs live in one exported `FIVERR_PRICING` constant; the pricing guide, its FAQPage, the hire-guide budget FAQ, and the resource-hub cards all read from it. Any change to that constant needs a Fiverr re-check and an Authority ping, same as `site-proof.ts`.
 
 ## Legal Pages
 `src/data/legal-pages.ts` feeds privacy and content usage pages, including alternates, summary chips, sections, contact details, and effective/update labels.

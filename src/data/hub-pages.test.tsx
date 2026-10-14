@@ -40,7 +40,7 @@ const visibleHtml = (html: string) => html.replace(/<script\b[^>]*>[\s\S]*?<\/sc
 
 const expectLeadCopy = (html: string, lead: string) => {
   for (const segment of parseInlineCopy(lead)) {
-    expect(html).toContain(segment.type === 'text' ? segment.value : segment.label);
+    expect(html).toContain(segment.type === 'link' ? segment.label : segment.value);
   }
   for (const href of inlineCopyHrefs(lead)) {
     expect(html).toContain(`href="${href}"`);
@@ -112,7 +112,7 @@ describe('hire-intent hub copy', () => {
     for (const locale of ['es', 'en'] as SiteLocale[]) {
       const page = getHubPageContent('resources', locale);
       expect(page.lead).not.toBe(page.metaDescription);
-      expect(page.lead).toMatch(/cuatro guías|four guides/u);
+      expect(page.lead).toMatch(/cinco guías|five guides/u);
     }
   });
 

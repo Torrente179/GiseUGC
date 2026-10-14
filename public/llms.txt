@@ -47,6 +47,8 @@ Full version: [llms-full.txt](https://www.giselasaldarriaga.com/llms-full.txt)
 - [English "UGC vs influencer marketing" guide](https://www.giselasaldarriaga.com/en/resources/ugc-vs-influencer-marketing/)
 - [Spanish "UGC ad formats" guide](https://www.giselasaldarriaga.com/recursos/formatos-ugc-ads/)
 - [English "UGC ad formats" guide](https://www.giselasaldarriaga.com/en/resources/ugc-ad-formats-guide/)
+- [Spanish "How much a UGC creator charges" guide](https://www.giselasaldarriaga.com/recursos/cuanto-cobra-creadora-ugc/)
+- [English "How much a UGC creator charges" guide](https://www.giselasaldarriaga.com/en/resources/how-much-does-a-ugc-creator-charge/)
 
 ## Primary Service Terms
 - bilingual UGC creator
@@ -75,7 +77,7 @@ Full version: [llms-full.txt](https://www.giselasaldarriaga.com/llms-full.txt)
 - Homepage hero, services, FAQ, and footer copy
 - Service pages dedicated to bilingual UGC, spokesperson videos, UGC ads, testimonials/reviews, product demos, problem-solution, lifestyle UGC, and b-roll footage
 - Vertical pages organized by industry: beauty, fashion, tech/SaaS, e-commerce, lifestyle/wellness
-- Resource articles covering UGC fundamentals, hiring guides, format comparisons, and industry education
+- Resource articles covering UGC fundamentals, hiring guides, published Fiverr prices, format comparisons, and industry education
 - Featured portfolio videos on the homepage
 - Fiverr profile for marketplace proof and reviews
 

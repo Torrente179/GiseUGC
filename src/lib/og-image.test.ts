@@ -74,7 +74,7 @@ describe('per-page OG copy', () => {
   it('covers every PAGE_REGISTRY locale path with a unique slug and locale-correct proof', () => {
     const copies = getAllOgRouteCopy();
     expect(copies).toHaveLength(PAGE_REGISTRY.length * SITE_LOCALES.length);
-    expect(copies).toHaveLength(46);
+    expect(copies).toHaveLength(48);
     const slugs = copies.map((copy) => copy.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
     for (const copy of copies) {
@@ -138,8 +138,8 @@ describe('OG image files', () => {
   it('writes a unique hashed 1200x630 jpg per route and updates entrypoints', async () => {
     const { manifest, layouts } = await writeOgImages(root, { updateEntrypoints: true });
     const urls = Object.values(manifest).map((meta) => meta.url);
-    expect(urls).toHaveLength(46);
-    expect(new Set(urls).size).toBe(46);
+    expect(urls).toHaveLength(PAGE_REGISTRY.length * SITE_LOCALES.length);
+    expect(new Set(urls).size).toBe(PAGE_REGISTRY.length * SITE_LOCALES.length);
 
     for (const { copy, layout, meta } of layouts) {
       expect(meta.fallback).toBe(false);

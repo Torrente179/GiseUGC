@@ -1,4 +1,5 @@
 import { SITE_PROOF } from '@/data/site-proof';
+import { PRICING_GUIDE_HUB } from '@/data/resource-pages';
 import { FIVERR_PROFILE_URL } from '@/lib/contact-channels';
 import {
   getHomeSectionHref,
@@ -82,6 +83,7 @@ export const VERTICAL_HUB_CHILD_ORDER = [
 
 export const RESOURCE_HUB_CHILD_ORDER = [
   'how-to-hire-ugc-creator',
+  'how-much-ugc-creator-charge',
   'ugc-ad-formats-guide',
   'ugc-vs-influencer-marketing',
   'what-is-ugc',
@@ -274,7 +276,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         'Guías para contratar una creadora UGC bilingüe: qué poner en el brief, qué formatos pedir para anuncios y en qué se diferencia el UGC de un influencer.',
       heroTitle: 'Cómo contratar una creadora UGC bilingüe: guías para marcas',
       lead:
-        'Estas cuatro guías son para marcas que van a contratar a una creadora UGC. Te sirven si le vendes al mercado hispano de Estados Unidos, a España o a Latinoamérica, o si tu brief está en inglés. Si es tu primera vez, empieza por cómo contratar. Las demás explican los formatos para anuncios, la diferencia entre UGC e influencer marketing y qué es el UGC.',
+        'Estas cinco guías son para marcas que van a contratar a una creadora UGC. Te sirven si le vendes al mercado hispano de Estados Unidos, a España o a Latinoamérica, o si tu brief está en inglés. Si es tu primera vez, empieza por cómo contratar. Las demás explican los formatos para anuncios, la diferencia entre UGC e influencer marketing y qué es el UGC.',
       childrenTitle: 'Guías para marcas',
       primaryCtaLabel: 'Escríbeme',
       secondaryLinks: [
@@ -285,6 +287,10 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         {
           title: 'Cómo contratar creadora UGC',
           blurb: 'Cómo funciona el proceso, qué poner en el brief y qué preguntar antes de cerrar el trato.',
+        },
+        {
+          title: PRICING_GUIDE_HUB.es.title,
+          blurb: PRICING_GUIDE_HUB.es.blurb,
         },
         {
           title: 'Formatos de UGC para ads',
@@ -307,7 +313,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         'Guides for hiring a bilingual UGC creator: what to put in the brief, which ad formats to ask for, and how UGC differs from influencer marketing.',
       heroTitle: 'How to hire a bilingual UGC creator: guides for brands',
       lead:
-        'These four guides are for brands about to hire a UGC creator. They’re useful if you sell to the US Hispanic market, Spain, or Latin America, or if your brief is in English. If it’s your first time, start with how to hire. The others cover ad formats, how UGC differs from influencer marketing, and what UGC is.',
+        'These five guides are for brands about to hire a UGC creator. They’re useful if you sell to the US Hispanic market, Spain, or Latin America, or if your brief is in English. If it’s your first time, start with how to hire. The others cover ad formats, how UGC differs from influencer marketing, and what UGC is.',
       childrenTitle: 'Guides for brands',
       primaryCtaLabel: 'Message me',
       secondaryLinks: [
@@ -318,6 +324,10 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
         {
           title: 'How to hire a UGC creator',
           blurb: 'How the process works, what goes in the brief, and what to ask before you book.',
+        },
+        {
+          title: PRICING_GUIDE_HUB.en.title,
+          blurb: PRICING_GUIDE_HUB.en.blurb,
         },
         {
           title: 'UGC ad formats guide',

@@ -21,6 +21,7 @@ import {
   Sparkles,
   Sun,
   CirclePlay,
+  CircleDollarSign,
   type LucideIcon,
 } from 'lucide-react';
 import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
@@ -63,6 +64,7 @@ const VERTICAL_ICON: Record<VerticalPageId, LucideIcon> = {
 const RESOURCE_ICON: Record<ResourcePageId, LucideIcon> = {
   'what-is-ugc': Info,
   'how-to-hire-ugc-creator': Briefcase,
+  'how-much-ugc-creator-charge': CircleDollarSign,
   'ugc-vs-influencer-marketing': Repeat,
   'ugc-ad-formats-guide': LayoutGrid,
 };

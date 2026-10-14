@@ -43,9 +43,9 @@ const LABELS = {
 const H2_STYLE = 'font-size:1.3rem;margin-top:2rem;margin-bottom:0.75rem';
 const P_STYLE = 'line-height:1.7;margin-bottom:1rem';
 
-const renderTable = ({ headers, rows }, label) =>
+const renderTable = ({ headers, rows }, { heading } = {}) =>
   [
-    `        <h2 style="${H2_STYLE}">${escapeText(label)}</h2>`,
+    heading ? `        <h2 style="${H2_STYLE}">${escapeText(heading)}</h2>` : '',
     '        <table style="width:100%;border-collapse:collapse;margin-bottom:1rem;font-size:0.95rem">',
     '          <thead>',
     '            <tr style="border-bottom:2px solid #e5e2dd">',
@@ -59,14 +59,16 @@ const renderTable = ({ headers, rows }, label) =>
       '            <tr style="border-bottom:1px solid #f0eeea">',
       ...row.map((cell, index) =>
         index === 0
-          ? `              <td style="padding:0.6rem 0.5rem;font-weight:600">${escapeText(cell)}</td>`
-          : `              <td style="padding:0.6rem 0.5rem">${escapeText(cell)}</td>`,
+          ? `              <td style="padding:0.6rem 0.5rem;font-weight:600">${renderInlineCopy(cell)}</td>`
+          : `              <td style="padding:0.6rem 0.5rem">${renderInlineCopy(cell)}</td>`,
       ),
       '            </tr>',
     ]),
     '          </tbody>',
     '        </table>',
-  ].join('\n');
+  ]
+    .filter(Boolean)
+    .join('\n');
 
 /** Everything from <div id="root"> through the FAQ </noscript>. */
 const renderBody = (page, locale) => {
@@ -75,10 +77,26 @@ const renderBody = (page, locale) => {
   const sections = page.sections.map((section) =>
     [
       `        <h2 style="${H2_STYLE}">${escapeText(section.title)}</h2>`,
+      section.italicLead
+        ? `        <p style="${P_STYLE}"><em>${escapeText(section.italicLead)}</em></p>`
+        : '',
+      ...(section.bodyBefore ?? []).map(
+        (paragraph) => `        <p style="${P_STYLE}">${renderInlineCopy(paragraph)}</p>`,
+      ),
+      section.table ? renderTable(section.table) : '',
       ...section.body.map((paragraph) => `        <p style="${P_STYLE}">${renderInlineCopy(paragraph)}</p>`),
-    ].join('\n'),
+      section.bullets?.length
+        ? [
+            '        <ul style="line-height:1.7;margin-bottom:1rem;padding-left:1.25rem">',
+            ...section.bullets.map((item) => `          <li>${renderInlineCopy(item)}</li>`),
+            '        </ul>',
+          ].join('\n')
+        : '',
+    ]
+      .filter(Boolean)
+      .join('\n'),
   );
-  if (page.comparisonTable) sections.push(renderTable(page.comparisonTable, labels.atAGlance));
+  if (page.comparisonTable) sections.push(renderTable(page.comparisonTable, { heading: labels.atAGlance }));
 
   const faqs = page.faqs.flatMap((faq) => [
     `          <dt>${escapeText(visibleInlineCopy(faq.question))}</dt>`,
@@ -93,6 +111,9 @@ const renderBody = (page, locale) => {
     '        </nav>',
     `        <h1 style="font-size:1.8rem;line-height:1.2;margin-bottom:1rem">${escapeText(page.heroTitle)}</h1>`,
     `        <p style="font-size:1.05rem;line-height:1.7;margin-bottom:1.5rem">${renderInlineCopy(page.heroSummary)}</p>`,
+    page.leadCtaLabel && page.leadCtaHref
+      ? `        <p style="${P_STYLE}"><a href="${escapeAttribute(page.leadCtaHref)}">${escapeText(page.leadCtaLabel)}</a></p>`
+      : '',
     '',
     sections.join('\n\n'),
     '',

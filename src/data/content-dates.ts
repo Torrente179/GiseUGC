@@ -7,13 +7,14 @@
  * first-person voice in ES and EN). Bump a family when its visible copy changes.
  * Home (and therefore llms Last-Updated) moved to 2026-10-14 when the compact
  * AI profile gained the journalism/television line that matches the homepage H1.
+ * Resources and hubs moved to 2026-10-14 with the bilingual Fiverr pricing guide.
  */
 export const CONTENT_DATES = {
   home: '2026-10-14',
-  hubs: '2026-10-13',
+  hubs: '2026-10-14',
   services: '2026-10-13',
   verticals: '2026-10-13',
-  resources: '2026-10-13',
+  resources: '2026-10-14',
   legal: '2026-10-13',
 } as const;
 

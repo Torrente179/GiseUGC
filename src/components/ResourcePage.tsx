@@ -4,18 +4,17 @@ import type { ResourcePageId, SiteLocale } from '@/lib/locale-path';
 import { getHomePath, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
 import type { ResourceLandingRouteData } from '@/data/landing-route-types';
 import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
-import { getAllResourceIds, getResourcePageContent } from '@/data/resource-pages';
+import { getAllResourceIds, getResourcePageContent, type ComparisonTable } from '@/data/resource-pages';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
 import { RevealSection } from '@/components/motion/RevealSection';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
-import { InlineCopy, serializeRouteDataJson } from '@/lib/inline-copy-links';
+import { InlineCopy, serializeRouteDataJson, visibleInlineCopy } from '@/lib/inline-copy-links';
 import '@/styles/templates.css';
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
-const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
 
 type ResourcePageProps = {
@@ -75,6 +74,38 @@ const RESOURCE_DATE_PUBLISHED = '2026-03-24';
 const RESOURCE_DATE_MODIFIED = CONTENT_DATES.resources;
 
 const serializeRouteData = serializeRouteDataJson;
+
+const ResourceTable = ({ table, caption }: { table: ComparisonTable; caption: string }) => (
+  <div className="rsc-table-wrap">
+    <table className="rsc-table">
+      <caption className="sr-only">{caption}</caption>
+      <thead>
+        <tr>
+          {table.headers.map((header) => (
+            <th key={header} scope="col">{header}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {table.rows.map((row, rowIndex) => (
+          <tr key={`${row[0]}-${row[1] ?? rowIndex}`}>
+            {row.map((cell, cellIndex) =>
+              cellIndex === 0 ? (
+                <th key={`${rowIndex}-${cellIndex}`} scope="row" className="is-key">
+                  <InlineCopy text={cell} />
+                </th>
+              ) : (
+                <td key={`${rowIndex}-${cellIndex}`}>
+                  <InlineCopy text={cell} />
+                </td>
+              ),
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
 
 const ResourcePage = ({
   resourceId,
@@ -155,7 +186,7 @@ const ResourcePage = ({
           mainEntity: page.faqs.map((faq) => ({
             '@type': 'Question',
             name: faq.question,
-            acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+            acceptedAnswer: { '@type': 'Answer', text: visibleInlineCopy(faq.answer) },
           })),
         },
       ],
@@ -198,6 +229,11 @@ const ResourcePage = ({
               <p className="st-eyebrow">{page.heroEyebrow}</p>
               <h1 className="rsc-hero-title font-serif">{page.heroTitle}</h1>
               <p className="rsc-hero-lead">{page.heroSummary}</p>
+              {page.leadCtaLabel && page.leadCtaHref ? (
+                <p className="rsc-hero-cta">
+                  <a href={page.leadCtaHref}>{page.leadCtaLabel}</a>
+                </p>
+              ) : null}
               {page.heroPoints.length > 0 && (
                 <>
                   <div className="rsc-rule" aria-hidden="true" />
@@ -259,11 +295,31 @@ const ResourcePage = ({
                       </span>
                     )}
                     <h2 className="rsc-chapter-title font-serif">{section.title}</h2>
+                    {section.italicLead ? (
+                      <p>
+                        <em>{section.italicLead}</em>
+                      </p>
+                    ) : null}
+                    {(section.bodyBefore ?? []).map((paragraph, paragraphIndex) => (
+                      <p key={`before-${paragraphIndex}`}>
+                        <InlineCopy text={paragraph} />
+                      </p>
+                    ))}
+                    {section.table ? <ResourceTable table={section.table} caption={section.title} /> : null}
                     {section.body.map((paragraph, paragraphIndex) => (
                       <p key={paragraphIndex}>
                         <InlineCopy text={paragraph} />
                       </p>
                     ))}
+                    {section.bullets && section.bullets.length > 0 ? (
+                      <ul>
+                        {section.bullets.map((item) => (
+                          <li key={item}>
+                            <InlineCopy text={item} />
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
                   </section>
                 ))}
 
@@ -273,33 +329,7 @@ const ResourcePage = ({
                       {String(page.sections.length + 1).padStart(2, '0')}
                     </span>
                     <h2 className="rsc-chapter-title font-serif">{labels.atAGlance}</h2>
-                    <div className="rsc-table-wrap">
-                      <table className="rsc-table">
-                        <caption className="sr-only">{labels.atAGlance}</caption>
-                        <thead>
-                          <tr>
-                            {page.comparisonTable.headers.map((header) => (
-                              <th key={header} scope="col">{header}</th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {page.comparisonTable.rows.map((row) => (
-                            <tr key={row[0]}>
-                              {row.map((cell, cellIndex) =>
-                                cellIndex === 0 ? (
-                                  <th key={`${row[0]}-${cellIndex}`} scope="row" className="is-key">
-                                    {cell}
-                                  </th>
-                                ) : (
-                                  <td key={`${row[0]}-${cellIndex}`}>{cell}</td>
-                                ),
-                              )}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                    <ResourceTable table={page.comparisonTable} caption={labels.atAGlance} />
                   </section>
                 )}
               </article>
@@ -321,7 +351,9 @@ const ResourcePage = ({
                           <span>{faq.question}</span>
                           <span className="svc-faq-mark" aria-hidden="true" />
                         </summary>
-                        <p>{faq.answer}</p>
+                        <p>
+                          <InlineCopy text={faq.answer} />
+                        </p>
                       </details>
                     ))}
                   </div>
@@ -363,10 +395,18 @@ const ResourcePage = ({
             <div className="st-container svc-inner-close-grid">
               <div>
                 <h2 className="svc-inner-close-title font-serif">{page.ctaTitle}</h2>
-                <p className="svc-inner-close-text">{page.ctaText}</p>
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary st-cta-primary--lg">
+                <a
+                  href={page.primaryCtaHref}
+                  {...(page.primaryCtaHref.startsWith('http')
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                  className="st-cta-primary st-cta-primary--lg"
+                >
                   {page.primaryCtaLabel}
                 </a>
+                <p className="svc-inner-close-text">
+                  <InlineCopy text={page.ctaText} />
+                </p>
                 <p className="svc-inner-updated">{labels.lastUpdated}</p>
               </div>
               {otherGuides.length > 0 && (

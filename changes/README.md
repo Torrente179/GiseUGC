@@ -58,6 +58,10 @@ This folder is organized by subsystem instead of by date.
     `llms.txt` and `llms-full.txt` (`9 years of experience as a journalist
     and comes from television.`). `Last-Updated` / `CONTENT_DATES.home`
     `2026-10-14`. Summary blockquote unchanged.
+  - **Current Fiverr pricing guide:** `seo/2026-10-14-fiverr-pricing-guide.md`
+    — `/recursos/cuanto-cobra-creadora-ugc/` and
+    `/en/resources/how-much-does-a-ugc-creator-charge/`. Prices live in
+    `FIVERR_PRICING`; any change needs a Fiverr re-check and an Authority ping.
 - `deployment/`
   - Hosting, caching, security hardening, and runtime instrumentation.
 
