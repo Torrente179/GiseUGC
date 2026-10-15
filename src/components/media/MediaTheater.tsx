@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import TheaterVideo from '@/components/media/TheaterVideo';
 import type { PlaybackCandidate } from '@/lib/media-assets';
@@ -15,6 +15,8 @@ type MediaTheaterProps = {
   onClose: () => void;
   onPrevious: () => void;
   onNext: () => void;
+  /** Optional call to action under the title, such as a contact pill. */
+  action?: ReactNode;
 };
 
 const EXIT_DURATION_MS = 180;
@@ -31,6 +33,7 @@ const MediaTheater = ({
   onClose,
   onPrevious,
   onNext,
+  action,
 }: MediaTheaterProps) => {
   const [isClosing, setIsClosing] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -179,7 +182,7 @@ const MediaTheater = ({
               startupFallbackMs={2500}
             />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
-              <div className="h-36 bg-gradient-to-t from-black/80 via-black/28 to-transparent" />
+              <div className={`${action ? 'h-52' : 'h-36'} bg-gradient-to-t from-black/80 via-black/28 to-transparent`} />
               <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5">
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="theater-meta-chip inline-flex max-w-[78%] items-center rounded-full px-2.5 py-1">
@@ -194,6 +197,7 @@ const MediaTheater = ({
                 <h4 className="theater-meta-title mt-2 max-w-[88%] text-base leading-snug sm:text-lg">
                   {title}
                 </h4>
+                {action ? <div className="pointer-events-auto mt-3">{action}</div> : null}
               </div>
             </div>
           </div>

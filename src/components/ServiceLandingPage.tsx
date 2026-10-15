@@ -18,6 +18,9 @@ import { useMediaIntent } from '@/hooks/use-media-intent';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
 import ServicePageInner from '@/components/ServicePageInner';
+import ChannelIcon from '@/components/contact/ChannelIcon';
+import { CONTACT_URLS } from '@/lib/contact-channels';
+import { serviceContactMessage, whatsappLinkWithText } from '@/lib/service-contact';
 import { CONTENT_DATES } from '@/data/content-dates';
 import { innerSectionSchema } from '@/lib/service-inner-argument';
 import { serializeRouteDataJson } from '@/lib/inline-copy-links';
@@ -27,7 +30,6 @@ import '@/styles/templates.css';
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
-const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL ?? 'https://wa.me/573043786101';
 
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
 const clipMap = new Map([...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS].map((clip) => [clip.id, clip]));
@@ -65,7 +67,7 @@ const localeLabels = {
   es: {
     home: 'Inicio',
     services: 'Servicios',
-    startProject: 'Empezar proyecto',
+    wantThisService: 'Quiero este servicio',
     openSample: 'Ver muestra',
     theWork: 'El trabajo',
     whatYouGet: 'Lo que recibes',
@@ -85,7 +87,7 @@ const localeLabels = {
   en: {
     home: 'Home',
     services: 'Services',
-    startProject: 'Start a project',
+    wantThisService: 'I want this service',
     openSample: 'View sample',
     theWork: 'The work',
     whatYouGet: 'What you get',
@@ -225,6 +227,16 @@ const ServiceLandingPage = ({
   }, [canonical, homeCanonical, labels.home, labels.services, locale, page.breadcrumbLabel, page.faqs, page.geoFact, page.metaDescription, page.metaTitle, page.navLabel, proofExamples]);
 
   const leadProof = proofExamples[0] ?? null;
+
+  /* "Quiero este servicio": the portfolio's WhatsApp pill, with the message
+     naming this service. Styles: "Service CTA" in templates.css. */
+  const wantHref = whatsappLinkWithText(CONTACT_URLS.whatsapp, serviceContactMessage(locale, page.navLabel));
+  const wantCta = (className: string) => (
+    <a className={className} href={wantHref} target="_blank" rel="noopener noreferrer">
+      <span className="svc-want-wa"><ChannelIcon id="whatsapp" /></span>
+      {labels.wantThisService}
+    </a>
+  );
   const handlePosterError = useCallback(
     (fallbackSrc: string) => (event: SyntheticEvent<HTMLImageElement>) => {
       const image = event.currentTarget;
@@ -340,6 +352,7 @@ const ServiceLandingPage = ({
                   {page.heroTitle}
                 </h1>
                 <p className="stm-hero-hook">{page.heroSummary}</p>
+                {wantCta('svc-want svc-want--block')}
               </div>
 
               {/* SEO breadcrumb — visually hidden on mobile */}
@@ -482,7 +495,7 @@ const ServiceLandingPage = ({
                     <PretextLineReveal text={page.heroTitle} delay={0} stagger={0.1} className="block" />
                   </p>
                   <p className="svc-cine-hero-hook">{page.heroSummary}</p>
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="st-cta-primary">{labels.startProject}</a>
+                  {wantCta('svc-want')}
                 </div>
               </div>
 
@@ -608,6 +621,7 @@ const ServiceLandingPage = ({
             onClose={closeProofTheater}
             onPrevious={() => navigateProofTheater(-1)}
             onNext={() => navigateProofTheater(1)}
+            action={wantCta('svc-want svc-want--sm')}
           />
         )}
 
