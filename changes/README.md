@@ -56,8 +56,12 @@ This folder is organized by subsystem instead of by date.
   - **Current llms journalism/TV line:**
     `seo/2026-10-14-llms-journalism-tv-line.md` — one homepage-H1 line on
     `llms.txt` and `llms-full.txt` (`9 years of experience as a journalist
-    and comes from television.`). `Last-Updated` / `CONTENT_DATES.home`
-    `2026-10-14`. Summary blockquote unchanged.
+    and comes from television.`). Summary blockquote unchanged.
+  - **Current llms 28+ wording:**
+    `seo/2026-10-15-llms-brand-campaigns.md` — `28+ brand campaigns` (no
+    "active") in `llms.txt` and `llms-full.txt`. `Last-Updated` /
+    `CONTENT_DATES.home` `2026-10-15`. GEO prompt baseline:
+    `2026-10-15-geo-prompt-baseline.md`.
   - **Current Fiverr pricing guide:** `seo/2026-10-14-fiverr-pricing-guide.md`
     — `/recursos/cuanto-cobra-creadora-ugc/` and
     `/en/resources/how-much-does-a-ugc-creator-charge/`. Prices live in
