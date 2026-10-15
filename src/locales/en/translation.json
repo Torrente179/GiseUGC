@@ -210,6 +210,8 @@
       "swipe": "Swipe",
       "like": "Like",
       "openFull": "Watch full screen",
+      "play": "Play",
+      "pause": "Pause",
       "feedLabel": "Gisela's reels",
       "whatsappText": "Hi Gisela, I'd like a video like “{{title}}”."
     },

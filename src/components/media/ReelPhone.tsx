@@ -26,6 +26,10 @@ type ReelPhoneProps = {
   clipMs: number;
   onNavigate: (event: MouseEvent<HTMLAnchorElement>) => void;
   onContact: (event: MouseEvent<HTMLAnchorElement>) => void;
+  /** Given, a click on the video opens the reel full screen instead of liking it. */
+  onOpen?: () => void;
+  /** Accessible name of the video when it opens the reel. */
+  openLabel?: string;
   className?: string;
 };
 
@@ -33,14 +37,26 @@ type ReelPhoneProps = {
  * An iPhone 17 Pro Max showing a reel, with the action column a short-video
  * feed puts beside it. Clicking the video (or the heart) likes it: a heart
  * bursts where the click landed and small hearts float up the column. Nothing
- * animates until then. The other actions are real links: reviews, the
- * portfolio, and contact.
+ * animates until then. With `onOpen`, clicking the video opens the reel full
+ * screen instead and only the heart likes it. The other actions are real
+ * links: reviews, the portfolio, and contact.
  *
  * Proportions and radii are in index.css (`.reel-phone`); the parent sets the
  * width with `--reel-phone-w`. Everything on the screen is sized in `cqw` of
  * the screen, so the UI scales with the phone.
  */
-const ReelPhone = ({ children, title, reelKey, playing, clipMs, onNavigate, onContact, className }: ReelPhoneProps) => {
+const ReelPhone = ({
+  children,
+  title,
+  reelKey,
+  playing,
+  clipMs,
+  onNavigate,
+  onContact,
+  onOpen,
+  openLabel,
+  className,
+}: ReelPhoneProps) => {
   const { locale, t } = useTranslation();
   const copy = COPY[locale === 'en' ? 'en' : 'es'];
   const screenRef = useRef<HTMLDivElement>(null);
@@ -80,13 +96,23 @@ const ReelPhone = ({ children, title, reelKey, playing, clipMs, onNavigate, onCo
           {children}
           <span className="reel-phone__shade" aria-hidden="true" />
 
-          <button
-            type="button"
-            className="reel-phone__tap"
-            aria-label={copy.like}
-            aria-pressed={liked}
-            onClick={handleTap}
-          />
+          {onOpen ? (
+            <button
+              type="button"
+              className="reel-phone__tap"
+              aria-label={openLabel}
+              aria-haspopup="dialog"
+              onClick={onOpen}
+            />
+          ) : (
+            <button
+              type="button"
+              className="reel-phone__tap"
+              aria-label={copy.like}
+              aria-pressed={liked}
+              onClick={handleTap}
+            />
+          )}
 
           {burst && (
             <span
@@ -99,7 +125,7 @@ const ReelPhone = ({ children, title, reelKey, playing, clipMs, onNavigate, onCo
             </span>
           )}
 
-          {!liked && (
+          {!liked && !onOpen && (
             <span className="reel-phone__hint" aria-hidden="true">{copy.hint}</span>
           )}
 

@@ -31,7 +31,8 @@ import '@/styles/reels-feed.css';
  *
  * Desktop plays the reels inside the hero's iPhone (ReelPhone) as a vertical
  * feed with category tabs, next to a "now playing" spec card, a WhatsApp CTA
- * that names the reel, and "up next". Phones show one reel in a card inside
+ * that names the reel, and "up next"; a click on the phone opens the theater,
+ * the reel at full height with the same details beside it. Phones show one reel in a card inside
  * the page (swipe sideways for the next one), and a tap opens the full-screen
  * feed, swiped up and down like the app, with a close button. The page itself
  * never has to scroll through the feed. Reels play from the feed encodes
@@ -135,6 +136,7 @@ const Portfolio = () => {
   const [feedScrolled, setFeedScrolled] = useState(false);
   const [inView, setInView] = useState(false);
   const [open, setOpen] = useState(false);
+  const [pausedId, setPausedId] = useState<number | null>(null);
   const [seen, setSeen] = useState(false);
   const [near, setNear] = useState(false);
   const [pool] = useState(() => new FeedPlayerPool());
@@ -254,8 +256,9 @@ const Portfolio = () => {
     });
   }, [soundOn, clip, open]);
 
-  // Full-screen feed (phones): lock the page behind it, start on the reel the
-  // card was showing, take focus, and close on Escape.
+  // Full-screen feed (phones) and theater (desktop): lock the page behind it,
+  // start on the reel the card or phone was showing, take focus, and close on
+  // Escape.
   useEffect(() => {
     if (!open) return undefined;
     const { body } = document;
@@ -265,10 +268,14 @@ const Portfolio = () => {
     body.style.top = `-${scrollY}px`;
     body.style.width = '100%';
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false);
+      if (event.key !== 'Escape') return;
+      setSoundOn(false);
+      setPausedId(null);
+      setOpen(false);
     };
     document.addEventListener('keydown', onKey);
-    const opener = openerRef.current;
+    const opener =
+      openerRef.current ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
     closeRef.current?.focus();
     return () => {
       document.removeEventListener('keydown', onKey);
@@ -307,6 +314,19 @@ const Portfolio = () => {
     stage.addEventListener('wheel', onWheel, { passive: false });
     return () => stage.removeEventListener('wheel', onWheel);
   }, [activeIndex, go, isMobile, list.length]);
+
+  // Desktop theater: the up and down arrows walk the feed.
+  useEffect(() => {
+    if (!open || isMobile) return undefined;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+      event.preventDefault();
+      if (event.key === 'ArrowDown') go(1, true);
+      else go(-1);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [go, isMobile, open]);
 
   const handleContact = useCallback(
     (event: MouseEvent<HTMLAnchorElement>) => {
@@ -352,6 +372,17 @@ const Portfolio = () => {
     setSoundOn(!soundOn);
   };
   const posterOf = (item: ReelClip) => getPosterVariantSrc(item, 720, 'webp');
+  const openFeed = () => {
+    unmuteNow();
+    setFeedScrolled(false);
+    setSoundOn(true);
+    setOpen(true);
+  };
+  const closeFeed = () => {
+    setSoundOn(false);
+    setPausedId(null);
+    setOpen(false);
+  };
 
   const video = (
     <AdaptiveVideo
@@ -395,17 +426,6 @@ const Portfolio = () => {
   );
 
   if (isMobile) {
-    const openFeed = () => {
-      unmuteNow();
-      setFeedScrolled(false);
-      setSoundOn(true);
-      setOpen(true);
-    };
-    const closeFeed = () => {
-      setSoundOn(false);
-      setOpen(false);
-    };
-
     const feed =
       open && typeof document !== 'undefined'
         ? createPortal(
@@ -671,6 +691,246 @@ const Portfolio = () => {
   }
 
   const upNext = Array.from({ length: Math.min(4, list.length - 1) }, (_, k) => (activeIndex + k + 1) % list.length);
+  const paused = open && pausedId === clip.id;
+
+  // The theater: the reel at full height with the feed's action column beside
+  // it, ↑ ↓ at the edge, and a panel with the reel's details, the WhatsApp CTA
+  // and what plays next. Styles: "Desktop theater" in reels-feed.css.
+  const theater =
+    open && typeof document !== 'undefined'
+      ? createPortal(
+          <div className="rt" role="dialog" aria-modal="true" aria-label={t('portfolio.feed.feedLabel')}>
+            <div
+              className="rt-stage"
+              onWheel={(event) => {
+                if (Math.abs(event.deltaY) < 8) return;
+                const now = performance.now();
+                if (now - wheelLockRef.current < WHEEL_LOCK_MS) return;
+                wheelLockRef.current = now;
+                if (event.deltaY > 0) go(1, true);
+                else go(-1);
+              }}
+            >
+              <div className="rt-amb" aria-hidden="true">
+                {ambient.a ? <img src={ambient.a} alt="" data-on={ambient.showA} /> : null}
+                {ambient.b ? <img src={ambient.b} alt="" data-on={!ambient.showA} /> : null}
+              </div>
+              <div className="rt-veil" aria-hidden="true" />
+
+              <button
+                ref={closeRef}
+                type="button"
+                className="rf-ctrl rt-close"
+                aria-label={t('floatingContact.close')}
+                onClick={closeFeed}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden="true" focusable="false">
+                  <path d="M6 6l12 12M18 6 6 18" />
+                </svg>
+              </button>
+
+              <div className="rt-frame">
+                <div className="rt-video">
+                  <div className="rf-track" style={{ '--rf-i': activeIndex } as CSSProperties}>
+                    {list.map((item, i) =>
+                      Math.abs(i - activeIndex) <= 1 ? (
+                        <div
+                          key={item.id}
+                          className="rf-slide"
+                          style={{ '--rf-n': i } as CSSProperties}
+                          aria-hidden={i !== activeIndex}
+                        >
+                          <FeedMedia
+                            pool={pool}
+                            clip={item}
+                            active={i === activeIndex}
+                            playing={slotGranted && !paused}
+                            muted={!soundOn}
+                            loop
+                            fallbackPoster={posterOf(item)}
+                            fallbackVideo={video}
+                            onProgress={setProgress}
+                            onSoundBlocked={muteAfterRefusal}
+                          />
+                        </div>
+                      ) : null,
+                    )}
+                  </div>
+                  <div className="rf-mob-shade" aria-hidden="true" />
+                  <button
+                    type="button"
+                    className="rt-tap"
+                    aria-label={t(paused ? 'portfolio.feed.play' : 'portfolio.feed.pause')}
+                    aria-pressed={paused}
+                    onClick={() => setPausedId(paused ? null : clip.id)}
+                  />
+                  {paused ? (
+                    <span className="rt-paused" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" /></svg>
+                    </span>
+                  ) : null}
+                  {tabs}
+                  <div className="rt-caption" key={clip.id}>
+                    <p className="rt-name">Gisela Saldarriaga</p>
+                    <p className="rt-line">
+                      {title} · {categoryOf(clip)} · {formatDuration(clip.durationSeconds)}
+                    </p>
+                    <p className="rt-sound">
+                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M9 18V5l12-2v13" />
+                        <circle cx="6" cy="18" r="3" />
+                        <circle cx="18" cy="16" r="3" />
+                      </svg>
+                      {t('hero.feed.soundShort')}
+                    </p>
+                    <a className="rf-mob-cta" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+                      <span className="rf-wa"><WhatsAppGlyph /></span>
+                      {t('portfolio.feed.ctaShort')}
+                    </a>
+                  </div>
+                  <div className="rf-mob-progress" aria-hidden="true"><span ref={progressRef} /></div>
+                </div>
+
+                <div className="rt-rail">
+                  <img className="rt-avatar" src={AVATAR_SRC} alt="" width={160} height={160} />
+                  <button
+                    type="button"
+                    className="rt-act rt-act--like"
+                    aria-pressed={isLiked}
+                    aria-label={t('portfolio.feed.like')}
+                    onClick={() => setLiked((current) => ({ ...current, [clip.id]: !current[clip.id] }))}
+                  >
+                    <span className="rt-disc">
+                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                      </svg>
+                    </span>
+                    <span>{SITE_PROOF.fiverrRating}</span>
+                  </button>
+                  <span className="rt-act">
+                    <span className="rt-disc">
+                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg>
+                    </span>
+                    <span>{SITE_PROOF.fiverrReviewCount}</span>
+                  </span>
+                  <span className="rt-act">
+                    <span className="rt-disc">
+                      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" /></svg>
+                    </span>
+                    <span>{SITE_PROOF.brandCampaigns}+</span>
+                  </span>
+                  <button
+                    type="button"
+                    className="rt-act rt-act--sound"
+                    aria-pressed={soundOn}
+                    aria-label={t(soundOn ? 'portfolio.feed.soundOff' : 'portfolio.feed.soundOn')}
+                    onClick={toggleSound}
+                  >
+                    <span className="rt-disc"><SoundIcon on={soundOn} /></span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="rt-ctrls">
+                <button
+                  type="button"
+                  className="rf-ctrl"
+                  aria-label={t('portfolio.feed.prev')}
+                  disabled={activeIndex === 0}
+                  onClick={() => go(-1)}
+                >
+                  <Chevron to="up" />
+                </button>
+                <button
+                  type="button"
+                  className="rf-ctrl"
+                  aria-label={t('portfolio.feed.next')}
+                  onClick={() => go(1, true)}
+                >
+                  <Chevron to="down" />
+                </button>
+              </div>
+            </div>
+
+            <aside className="rt-panel">
+              <div className="rt-who">
+                <img src={AVATAR_SRC} alt="" width={160} height={160} />
+                <span>
+                  <span className="rt-who-name">Gisela Saldarriaga</span>
+                  <span className="rt-muted">{t('hero.feed.role')}</span>
+                </span>
+              </div>
+
+              <ul className="rt-proof">
+                <li>
+                  <strong>{SITE_PROOF.fiverrRating}</strong>
+                  <span className="rt-muted">{t('hero.feed.ratingLabel')}</span>
+                </li>
+                <li>
+                  <strong>{SITE_PROOF.fiverrReviewCount}</strong>
+                  <span className="rt-muted">{t('hero.feed.reviewsLabel')}</span>
+                </li>
+                <li>
+                  <strong>{SITE_PROOF.brandCampaigns}+</strong>
+                  <span className="rt-muted">{t('hero.feed.brandsLabel')}</span>
+                </li>
+              </ul>
+
+              <div className="rt-now rf-swap" key={clip.id} aria-live="polite">
+                <p className="rt-muted">
+                  {t('portfolio.feed.nowPlaying')} · {String(activeIndex + 1).padStart(2, '0')} / {list.length}
+                </p>
+                <p className="rt-now-title">{title}</p>
+                <dl className="rt-specs">
+                  <div>
+                    <dt>{t('portfolio.feed.category')}</dt>
+                    <dd>{categoryOf(clip)}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('portfolio.feed.length')}</dt>
+                    <dd>{formatDuration(clip.durationSeconds)}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('portfolio.feed.language')}</dt>
+                    <dd>{languageOf(clip)}</dd>
+                  </div>
+                </dl>
+              </div>
+
+              <a className="rf-cta" href={whatsappHref} target="_blank" rel="noopener noreferrer">
+                <span className="rf-wa"><WhatsAppGlyph /></span>
+                {t('portfolio.feed.cta')}
+              </a>
+
+              <div className="rt-next">
+                <p className="rt-next-head">
+                  <span>{t('portfolio.feed.upNext')}</span>
+                  <span className="rt-muted">{t('portfolio.feed.count', { count: list.length })}</span>
+                </p>
+                <ul className="rt-next-list">
+                  {upNext.map((i) => {
+                    const item = list[i];
+                    return (
+                      <li key={item.id}>
+                        <button type="button" className="rt-next-item" onClick={() => setIndex(i)}>
+                          <img src={getPosterVariantSrc(item, 360, 'webp')} alt="" loading="lazy" decoding="async" />
+                          <span className="rt-next-text">
+                            <span className="rt-next-title">{titleOf(item)}</span>
+                            <span className="rt-muted">
+                              {categoryOf(item)} · {formatDuration(item.durationSeconds)}
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </aside>
+          </div>,
+          document.body,
+        )
+      : null;
 
   return (
     <section
@@ -761,6 +1021,8 @@ const Portfolio = () => {
             clipMs={durationMs}
             onNavigate={handleHashLinkClick}
             onContact={handleContact}
+            onOpen={openFeed}
+            openLabel={`${title}. ${t('portfolio.feed.openFull')}`}
           >
             <div className="rf-track" style={{ '--rf-i': activeIndex } as CSSProperties}>
               {list.map((item, i) =>
@@ -774,7 +1036,7 @@ const Portfolio = () => {
                     <FeedMedia
                       pool={pool}
                       clip={item}
-                      active={warm && i === activeIndex}
+                      active={warm && i === activeIndex && !open}
                       playing={slotGranted && playing}
                       muted={!soundOn}
                       loop={false}
@@ -818,6 +1080,17 @@ const Portfolio = () => {
             >
               <SoundIcon on={soundOn} />
             </button>
+            <button
+              type="button"
+              className="rf-ctrl"
+              aria-label={t('portfolio.feed.openFull')}
+              aria-haspopup="dialog"
+              onClick={openFeed}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -850,6 +1123,8 @@ const Portfolio = () => {
           </ul>
         </div>
       </div>
+
+      {theater}
     </section>
   );
 };
