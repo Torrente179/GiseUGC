@@ -1963,6 +1963,96 @@ html:not(.dark) .kn--m {
   margin-top: 10px;
 }
 
+/* "Mercados y formatos" on phones: each line on a glass tile over a soft teal
+   and sand glow (the "Hola, soy Gisela" spatial glass), with an icon for what
+   the line is about (MarketIcon.tsx). Desktop keeps the plain list. */
+.kn--m .kn-mkt-tiles {
+  --kn-tile-glass: rgba(255, 255, 255, 0.6);
+  --kn-tile-ring:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(43, 38, 32, 0.06),
+    0 22px 44px -28px rgba(43, 38, 32, 0.4);
+  --kn-glow-a: rgba(44, 166, 200, 0.26);
+  --kn-glow-b: rgba(214, 190, 150, 0.55);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dark .kn--m .kn-mkt-tiles {
+  --kn-tile-glass: rgba(255, 255, 255, 0.06);
+  --kn-tile-ring: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --kn-glow-a: rgba(44, 166, 200, 0.32);
+  --kn-glow-b: rgba(198, 170, 130, 0.22);
+}
+
+/* Gradients rather than blurred shapes: no filter to paint, and they stop at
+   the 20px gutter, so nothing pokes past the screen edge. */
+.kn--m .kn-mkt-tiles::before,
+.kn--m .kn-mkt-tiles::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.kn--m .kn-mkt-tiles::before {
+  top: 0;
+  left: -20px;
+  width: 80%;
+  background: radial-gradient(closest-side, var(--kn-glow-a), transparent);
+}
+
+.kn--m .kn-mkt-tiles::after {
+  right: -20px;
+  bottom: -8%;
+  width: 76%;
+  background: radial-gradient(closest-side, var(--kn-glow-b), transparent);
+}
+
+.kn--m .kn-mkt-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 18px 20px;
+  border-radius: 24px;
+  background: var(--kn-tile-glass);
+  -webkit-backdrop-filter: blur(22px) saturate(165%);
+  backdrop-filter: blur(22px) saturate(165%);
+  box-shadow: var(--kn-tile-ring);
+}
+
+.kn--m .kn-mkt-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #14758f, #2ca6c8);
+  color: #fff;
+}
+
+.kn--m .kn-mkt-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.kn--m .kn-mkt-text {
+  font-size: 18px;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--kn-ink);
+  text-wrap: pretty;
+}
+
 .kn--m .kn-geo {
   margin-top: 22px;
   font-size: 14px;

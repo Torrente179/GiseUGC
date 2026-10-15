@@ -3,6 +3,8 @@ import { buildMobileFicha } from '@/lib/service-inner-argument';
 import { sayTier, splitIntro } from '@/lib/keynote-text';
 import { KEYNOTE_CUTOUTS, SERVICE_IMAGERY } from '@/data/service-page-imagery';
 import { AccentTitle, Highlighted } from './Highlighted';
+import MarketIcon from './MarketIcon';
+import { marketIconFor } from './market-icon';
 import { placeholderSrc, useNearViewport } from './hooks';
 import { overviewTitleClass } from './title-class';
 import type { KeynoteBeatProps } from './types';
@@ -93,11 +95,26 @@ const OverviewBeat = ({ page, locale, variant, kicker, titleId }: KeynoteBeatPro
         {marketsRow ? (
           <div className="kn-row">
             <h3 className="kn-k section-label">{marketsRow.label}</h3>
-            <ul className="kn-mkt">
-              {marketsRow.items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
+            {isMobile ? (
+              // Phones: each line on a glass tile over a teal and sand glow,
+              // with an icon for what the line is about.
+              <ul className="kn-mkt-tiles">
+                {marketsRow.items.map((item, index) => (
+                  <li key={item} className="kn-mkt-tile">
+                    <span className="kn-mkt-icon" aria-hidden="true">
+                      <MarketIcon kind={marketIconFor(item, index)} />
+                    </span>
+                    <span className="kn-mkt-text">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="kn-mkt">
+                {marketsRow.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            )}
           </div>
         ) : null}
       </div>
