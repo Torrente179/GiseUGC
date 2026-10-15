@@ -18,9 +18,7 @@ import { useMediaIntent } from '@/hooks/use-media-intent';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
 import ServicePageInner from '@/components/ServicePageInner';
-import ChannelIcon from '@/components/contact/ChannelIcon';
-import { CONTACT_URLS } from '@/lib/contact-channels';
-import { serviceContactMessage, whatsappLinkWithText } from '@/lib/service-contact';
+import WantCta from '@/components/service-keynote/WantCta';
 import { CONTENT_DATES } from '@/data/content-dates';
 import { innerSectionSchema } from '@/lib/service-inner-argument';
 import { serializeRouteDataJson } from '@/lib/inline-copy-links';
@@ -67,7 +65,6 @@ const localeLabels = {
   es: {
     home: 'Inicio',
     services: 'Servicios',
-    wantThisService: 'Quiero este servicio',
     openSample: 'Ver muestra',
     theWork: 'El trabajo',
     whatYouGet: 'Lo que recibes',
@@ -87,7 +84,6 @@ const localeLabels = {
   en: {
     home: 'Home',
     services: 'Services',
-    wantThisService: 'I want this service',
     openSample: 'View sample',
     theWork: 'The work',
     whatYouGet: 'What you get',
@@ -227,16 +223,6 @@ const ServiceLandingPage = ({
   }, [canonical, homeCanonical, labels.home, labels.services, locale, page.breadcrumbLabel, page.faqs, page.geoFact, page.metaDescription, page.metaTitle, page.navLabel, proofExamples]);
 
   const leadProof = proofExamples[0] ?? null;
-
-  /* "Quiero este servicio": the portfolio's WhatsApp pill, with the message
-     naming this service. Styles: "Service CTA" in templates.css. */
-  const wantHref = whatsappLinkWithText(CONTACT_URLS.whatsapp, serviceContactMessage(locale, page.navLabel));
-  const wantCta = (className: string) => (
-    <a className={className} href={wantHref} target="_blank" rel="noopener noreferrer">
-      <span className="svc-want-wa"><ChannelIcon id="whatsapp" /></span>
-      {labels.wantThisService}
-    </a>
-  );
   const handlePosterError = useCallback(
     (fallbackSrc: string) => (event: SyntheticEvent<HTMLImageElement>) => {
       const image = event.currentTarget;
@@ -352,7 +338,7 @@ const ServiceLandingPage = ({
                   {page.heroTitle}
                 </h1>
                 <p className="stm-hero-hook">{page.heroSummary}</p>
-                {wantCta('svc-want svc-want--block')}
+                <WantCta page={page} locale={locale} className="svc-want svc-want--block" />
               </div>
 
               {/* SEO breadcrumb — visually hidden on mobile */}
@@ -495,7 +481,7 @@ const ServiceLandingPage = ({
                     <PretextLineReveal text={page.heroTitle} delay={0} stagger={0.1} className="block" />
                   </p>
                   <p className="svc-cine-hero-hook">{page.heroSummary}</p>
-                  {wantCta('svc-want')}
+                  <WantCta page={page} locale={locale} className="svc-want" />
                 </div>
               </div>
 
@@ -621,7 +607,7 @@ const ServiceLandingPage = ({
             onClose={closeProofTheater}
             onPrevious={() => navigateProofTheater(-1)}
             onNext={() => navigateProofTheater(1)}
-            action={wantCta('svc-want svc-want--sm')}
+            action={<WantCta page={page} locale={locale} className="svc-want svc-want--sm" />}
           />
         )}
 

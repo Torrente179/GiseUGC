@@ -6,6 +6,7 @@ import { AccentTitle, Highlighted } from './Highlighted';
 import MarketIcon from './MarketIcon';
 import { marketIconFor } from './market-icon';
 import { placeholderSrc, useNearViewport } from './hooks';
+import WantCta from './WantCta';
 import { overviewTitleClass } from './title-class';
 import type { KeynoteBeatProps } from './types';
 
@@ -124,6 +125,10 @@ const OverviewBeat = ({ page, locale, variant, kicker, titleId }: KeynoteBeatPro
           <InlineCopy text={page.geoFact} />
         </p>
       ) : null}
+
+      <div className="kn-want-row">
+        <WantCta page={page} locale={locale} className="svc-want kn-want" />
+      </div>
     </>
   );
 };

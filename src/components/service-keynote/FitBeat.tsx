@@ -5,6 +5,7 @@ import { Highlighted } from './Highlighted';
 import KnStill from './KnStill';
 import SegmentedControl from './SegmentedControl';
 import type { KeynoteBeatProps } from './types';
+import WantCta from './WantCta';
 
 type FitBeatProps = KeynoteBeatProps & { title: string };
 
@@ -86,6 +87,10 @@ const FitBeat = ({ page, locale, variant, kicker, titleId, title }: FitBeatProps
           ))}
         </div>
       )}
+
+      <div className="kn-want-row">
+        <WantCta page={page} locale={locale} className="svc-want kn-want" />
+      </div>
     </>
   );
 };

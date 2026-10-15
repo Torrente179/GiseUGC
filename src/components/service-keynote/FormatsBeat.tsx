@@ -7,6 +7,7 @@ import { sectionTitleClass } from './title-class';
 import KnPhone from './KnPhone';
 import SegmentedControl from './SegmentedControl';
 import type { KeynoteBeatProps } from './types';
+import WantCta from './WantCta';
 
 /**
  * 2 · Formats: a CSS iPhone whose screen plays the clip for the selected
@@ -14,7 +15,7 @@ import type { KeynoteBeatProps } from './types';
  * crossfade; one muted preview plays on top, only while the phone is in view
  * and only in the shell the visitor can actually see.
  */
-const FormatsBeat = ({ page, variant, kicker, titleId }: KeynoteBeatProps) => {
+const FormatsBeat = ({ page, locale, variant, kicker, titleId }: KeynoteBeatProps) => {
   const isMobile = variant === 'mobile';
   const [active, setActive] = useState(0);
   const [playingId, setPlayingId] = useState<number | null>(null);
@@ -97,6 +98,10 @@ const FormatsBeat = ({ page, variant, kicker, titleId }: KeynoteBeatProps) => {
             <p>{item.description}</p>
           </div>
         ))}
+      </div>
+
+      <div className="kn-want-row">
+        <WantCta page={page} locale={locale} className="svc-want kn-want" />
       </div>
     </>
   );

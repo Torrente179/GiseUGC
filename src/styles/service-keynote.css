@@ -34,6 +34,7 @@
   --kn-focus: #14758f;
   --kn-cta-bg: #2b2620;
   --kn-cta-ink: #fdfcfb;
+  --kn-want-sh: 0 18px 36px -20px rgba(43, 38, 32, 0.7);
   --kn-menu-bg: rgba(253, 252, 251, 0.94);
   --kn-menu-sh: 0 0 0 1px rgba(43, 38, 32, 0.08), 0 24px 48px -20px rgba(43, 38, 32, 0.4);
   --kn-spot-main: radial-gradient(
@@ -124,6 +125,7 @@
   --kn-focus: #7cc9df;
   --kn-cta-bg: #f5f5f7;
   --kn-cta-ink: #000;
+  --kn-want-sh: 0 18px 36px -20px rgba(0, 0, 0, 0.7);
   --kn-menu-bg: rgba(24, 22, 20, 0.94);
   --kn-menu-sh: 0 0 0 1px rgba(245, 245, 247, 0.12), 0 24px 48px -20px rgba(0, 0, 0, 0.8);
   --kn-spot-main: radial-gradient(closest-side, rgba(255, 236, 210, 0.17), rgba(255, 236, 210, 0.05) 50%, rgba(255, 236, 210, 0));
@@ -1769,6 +1771,45 @@
   backdrop-filter: blur(14px);
 }
 
+/* ── Service CTA in the beats ──
+   "Quiero este servicio" closes the overview, the formats and the fit. The
+   pill is .svc-want (templates.css); here it takes the section's colours, the
+   way the portfolio's .rf-cta follows its theme: ebony on linen, white on black. */
+.kn .kn-want {
+  background: var(--kn-cta-bg);
+  color: var(--kn-cta-ink);
+  box-shadow: var(--kn-want-sh);
+}
+
+.kn--d .kn-want-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 64px;
+}
+
+/* The overview ends on its spec table, so the pill starts at the table's content column. */
+.kn--d .kn-ov .kn-want-row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  margin-top: 48px;
+}
+
+.kn--d .kn-ov .kn-want {
+  grid-column: 4 / 13;
+  justify-self: start;
+}
+
+.kn--m .kn-want-row {
+  margin-top: 40px;
+}
+
+.kn--m .kn-want {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 @media (max-width: 1199px) {
   .kn--d .kn-rail {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1810,7 +1851,8 @@
   }
 
   .kn--d .kn-req,
-  .kn--d .kn-mkt {
+  .kn--d .kn-mkt,
+  .kn--d .kn-ov .kn-want {
     grid-column: 1 / -1;
   }
 

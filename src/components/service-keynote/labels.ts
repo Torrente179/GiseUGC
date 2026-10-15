@@ -10,6 +10,7 @@ export type KeynoteLabels = {
   explorePages: (count: number) => string;
   featuredCounter: (index: number, total: number) => string;
   seeMoreAria: (title: string) => string;
+  wantThisService: string;
 };
 
 const pad = (value: number) => String(value).padStart(2, '0');
@@ -25,6 +26,7 @@ export const KEYNOTE_LABELS: Record<SiteLocale, KeynoteLabels> = {
     explorePages: (count) => `${count} páginas`,
     featuredCounter: (index, total) => `${pad(index)} / ${pad(total)}`,
     seeMoreAria: (title) => `Ver ${title}`,
+    wantThisService: 'Quiero este servicio',
   },
   en: {
     onThisPage: 'On this page',
@@ -36,5 +38,6 @@ export const KEYNOTE_LABELS: Record<SiteLocale, KeynoteLabels> = {
     explorePages: (count) => `${count} pages`,
     featuredCounter: (index, total) => `${pad(index)} / ${pad(total)}`,
     seeMoreAria: (title) => `View ${title}`,
+    wantThisService: 'I want this service',
   },
 };
