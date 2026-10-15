@@ -1134,6 +1134,7 @@ body:has(> .rt) .cdock { visibility: hidden; }
 }
 
 /* ── The stage ── */
+/* A vertical swipe walks the feed on iPads, so the browser keeps its hands off. */
 .rt-stage {
   position: relative;
   isolation: isolate;
@@ -1141,6 +1142,7 @@ body:has(> .rt) .cdock { visibility: hidden; }
   place-items: center;
   min-width: 0;
   overflow: hidden;
+  touch-action: none;
 }
 
 .rt-amb {
@@ -1199,11 +1201,12 @@ body:has(> .rt) .cdock { visibility: hidden; }
 }
 
 /* The reel: full height, unless the stage is too narrow for it plus the
-   action column and ↑ ↓ on either side. */
+   action column and ↑ ↓ on either side (--rt-side, both sides together). */
 .rt-frame { position: relative; }
 
 .rt-video {
-  --rt-h: min(calc(100dvh - 2.5rem), calc((100vw - var(--rt-panel) - 21rem) * 16 / 9));
+  --rt-side: 21rem;
+  --rt-h: min(calc(100dvh - 2.5rem), calc((100vw - var(--rt-panel) - var(--rt-side)) * 16 / 9));
   position: relative;
   width: calc(var(--rt-h) * 9 / 16);
   height: var(--rt-h);
@@ -1372,7 +1375,11 @@ button.rt-act { cursor: pointer; }
   fill: none;
 }
 
-button.rt-act:hover .rt-disc { transform: scale(1.06); }
+@media (hover: hover) {
+  button.rt-act:hover .rt-disc { transform: scale(1.06); }
+  .rt-next-item:hover { background: hsl(0 0% 100% / 0.1); }
+}
+
 button.rt-act:active .rt-disc { transform: scale(0.9); }
 .rt-act--like[aria-pressed='true'] .rt-disc { color: #ff3b5c; }
 
@@ -1420,28 +1427,6 @@ button.rt-act:active .rt-disc { transform: scale(0.9); }
 
 .rt-who-name {
   font-size: 1rem;
-  font-weight: 700;
-}
-
-.rt-proof {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin: 0;
-  padding: 0.875rem 1rem;
-  border-radius: 1rem;
-  box-shadow: inset 0 0 0 1px hsl(0 0% 100% / 0.1);
-  list-style: none;
-}
-
-.rt-proof li {
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-}
-
-.rt-proof strong {
-  font-size: 1.25rem;
   font-weight: 700;
 }
 
@@ -1514,8 +1499,6 @@ button.rt-act:active .rt-disc { transform: scale(0.9); }
   transition: background 0.2s ease;
 }
 
-.rt-next-item:hover { background: hsl(0 0% 100% / 0.1); }
-
 .rt-next-item img {
   flex: none;
   width: 2.875rem;
@@ -1548,6 +1531,13 @@ button.rt-act:active .rt-disc { transform: scale(0.9); }
   }
 
   .rt-panel { display: none; }
+}
+
+/* Tall screens (iPads held upright): the reel is at least ~970px tall, so the
+   action column (low) and ↑ ↓ (mid-height) clear each other in one column
+   beside it, and the reel grows into the width they free up. */
+@media (min-height: 62rem) and (min-width: 46rem) {
+  .rt-video { --rt-side: 12rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
