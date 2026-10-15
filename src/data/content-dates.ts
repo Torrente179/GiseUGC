@@ -5,12 +5,12 @@
  *
  * Every family moved to 2026-10-13 with the site-wide copy rewrite (plain,
  * first-person voice in ES and EN). Bump a family when its visible copy changes.
- * Home (and therefore llms Last-Updated) moved to 2026-10-14 when the compact
- * AI profile gained the journalism/television line that matches the homepage H1.
+ * Home (and therefore llms Last-Updated) moved to 2026-10-15 when llms.txt
+ * dropped "active" from "28+ brand campaigns" to match the live site proof line.
  * Resources and hubs moved to 2026-10-14 with the bilingual Fiverr pricing guide.
  */
 export const CONTENT_DATES = {
-  home: '2026-10-14',
+  home: '2026-10-15',
   hubs: '2026-10-14',
   services: '2026-10-13',
   verticals: '2026-10-13',

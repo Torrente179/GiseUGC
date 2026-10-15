@@ -132,7 +132,8 @@ describe('sitemap lastmod and llms dates are honest', () => {
       const text = read(file);
       expect(text).toContain(`Last-Updated: ${LLMS_LAST_UPDATED}`);
       expect(text).toContain('9 years of experience as a journalist and comes from television.');
-      expect(text).toContain(`${SITE_PROOF.brandCampaigns}+ active brand campaigns`);
+      expect(text).toContain(`${SITE_PROOF.brandCampaigns}+ brand campaigns`);
+      expect(text).not.toContain('active brand campaigns');
       expect(text).toContain(`${SITE_PROOF.fiverrReviewCount} reviews on Fiverr`);
       expect(text).toContain(`${SITE_PROOF.fiverrRating}/5`);
       expect(text).not.toMatch(/50\+ active brand/u);

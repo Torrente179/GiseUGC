@@ -4,7 +4,7 @@
 
 9 years of experience as a journalist and comes from television.
 
-Last-Updated: 2026-10-14
+Last-Updated: 2026-10-15
 Primary-Language: es
 Secondary-Language: en
 Location: Medellin, Colombia
@@ -68,7 +68,7 @@ Full version: [llms-full.txt](https://www.giselasaldarriaga.com/llms-full.txt)
 - UGC b-roll footage packages
 
 ## Key Proof
-- 28+ active brand campaigns across fashion, beauty, tech, and lifestyle
+- 28+ brand campaigns across fashion, beauty, tech, and lifestyle
 - 177 reviews on Fiverr with a 4.7/5 star rating (marketplace reviews displayed on the homepage)
 - Remote production from Medellin for clients in the US, Spain, and Latin America
 - Videos in Spanish, English, or both: ads, demos, and spokesperson videos
