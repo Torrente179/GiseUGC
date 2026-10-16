@@ -268,7 +268,37 @@
     "ariaDialog": "Visor de testimonios",
     "swipeHint": "Desliza o usa ← → · Esc para cerrar",
     "reviewCount": "{{count}} reseñas",
-    "hoverHint": "Haz clic en una reseña para leerla completa"
+    "hoverHint": "Haz clic en una reseña para leerla completa",
+    "filtersLabel": "Filtrar reseñas",
+    "filterAll": "Todas",
+    "filterVideo": "Con video",
+    "filterEs": "En español",
+    "filterEn": "En inglés",
+    "showMore": "Ver más reseñas",
+    "showing": "{{shown}} de {{total}}",
+    "readMore": "Ver más",
+    "readLess": "Ver menos",
+    "reply": "Mi respuesta",
+    "playVideo": "Ver el video que le entregué a {{user}}",
+    "videoTag": "Video entregado",
+    "ratingAria": "{{rating}} de 5 estrellas",
+    "communication": "Comunicación",
+    "quality": "Calidad",
+    "value": "Valor",
+    "viewProfile": "Ver mi perfil en Fiverr",
+    "videoDialog": "Video entregado a {{user}}",
+    "close": "Cerrar",
+    "inLang": {
+      "es": "En español",
+      "en": "En inglés",
+      "it": "En italiano"
+    },
+    "services": {
+      "spokesperson": "Video de portavoz",
+      "social": "Video para redes",
+      "copywriting": "Copy para redes",
+      "voiceover": "Locución"
+    }
   },
   "contact": {
     "sectionSubtitle": "Ponte en Contacto",

@@ -268,7 +268,37 @@
     "ariaDialog": "Testimonials viewer",
     "swipeHint": "Swipe or use ← → · Esc to close",
     "reviewCount": "{{count}} reviews",
-    "hoverHint": "Click a review to read it in full"
+    "hoverHint": "Click a review to read it in full",
+    "filtersLabel": "Filter reviews",
+    "filterAll": "All",
+    "filterVideo": "With video",
+    "filterEs": "In Spanish",
+    "filterEn": "In English",
+    "showMore": "Show more reviews",
+    "showing": "{{shown}} of {{total}}",
+    "readMore": "Read more",
+    "readLess": "Show less",
+    "reply": "My reply",
+    "playVideo": "Watch the video I delivered to {{user}}",
+    "videoTag": "Delivered video",
+    "ratingAria": "{{rating}} out of 5 stars",
+    "communication": "Communication",
+    "quality": "Quality",
+    "value": "Value",
+    "viewProfile": "See my Fiverr profile",
+    "videoDialog": "Video delivered to {{user}}",
+    "close": "Close",
+    "inLang": {
+      "es": "In Spanish",
+      "en": "In English",
+      "it": "In Italian"
+    },
+    "services": {
+      "spokesperson": "Spokesperson video",
+      "social": "Social media video",
+      "copywriting": "Social media copy",
+      "voiceover": "Voice-over"
+    }
   },
   "contact": {
     "sectionSubtitle": "Get In Touch",
