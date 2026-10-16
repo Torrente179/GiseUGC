@@ -72,7 +72,7 @@ describe('service inner argument stays crawlable', () => {
       expect(html.toLowerCase()).not.toContain('giseugc');
       expect(html).toContain(`<h1`);
       expect(countTag(html, 'h1')).toBe(1);
-      expect(html).toContain(`<h1 class="stm-hero-title stm-hero-title--reveal">${page.heroTitle}</h1>`);
+      expect(html).toContain(`<h1 class="svm-title">${page.heroTitle}</h1>`);
       expect(html).toContain(page.heroTitle);
       expect(html).toContain(`href="${page.path}"`);
       expect(html).toContain(`href="${page.alternatePath}"`);

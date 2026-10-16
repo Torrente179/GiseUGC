@@ -406,7 +406,8 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
   });
 
   it('does not retarget bilingüe or cómo-contratar breadcrumbs onto hub indexes', () => {
-    expect(read('src/components/ServiceLandingPage.tsx')).toContain("getHomeSectionHref(locale, 'services')");
+    expect(read('src/components/service-hero/ServiceHero.tsx')).toContain("getHomeSectionHref(locale, 'services')");
+    expect(read('src/components/service-hero/ServiceHero.tsx')).not.toContain('getHubPath');
     expect(read('src/components/ServiceLandingPage.tsx')).not.toContain('getHubPath');
     expect(read('src/components/ResourcePage.tsx')).not.toContain('getHubPath');
     expect(read('recursos/como-contratar-creadora-ugc/index.html')).not.toContain('href="/recursos/"');

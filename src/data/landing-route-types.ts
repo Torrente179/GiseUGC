@@ -13,11 +13,23 @@ export type VerticalNavLink = {
   navLabel: string;
 };
 
+/** The Fiverr review beside a service hero (src/data/service-hero-reviews.ts), ready to print. */
+export type ServiceHeroReview = {
+  user: string;
+  /** Country, named in the page's language. */
+  countryName: string;
+  rating: number;
+  lang: 'es' | 'en' | 'it';
+  text: string;
+  avatar?: string;
+};
+
 export type ServiceLandingRouteData = {
   page: ServicePageContent;
   relatedPages: RelatedServiceSummary[];
   allOtherServices: ServiceNavLink[];
   relevantVerticals: VerticalNavLink[];
+  heroReview: ServiceHeroReview | null;
 };
 
 export type VerticalLandingRouteData = {

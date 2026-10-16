@@ -176,14 +176,39 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'Un compilado con música, bienes raíces, agro y servicios legales en un solo video.',
         },
         {
+          clipId: 1001,
+          title: 'Anuncio para una agencia de marketing',
+          description: 'Hook directo, lo que ofrece la agencia y un llamado a agendar una cita. Hecho para pauta en redes.',
+        },
+        {
+          clipId: 1010,
+          title: 'Reporte de noticias internacionales',
+          description: 'Elecciones, economía y cifras en formato de noticiero: el oficio que traigo del periodismo.',
+        },
+        {
+          clipId: 4,
+          title: 'Reseña del suplemento Curvella',
+          description: 'Cuento mi experiencia con el producto en primera persona, como se la contaría a una amiga.',
+        },
+        {
+          clipId: 1008,
+          title: 'Demo de un voicebot para un concesionario',
+          description: 'Una conversación real con el bot, grabada para que se vea el producto funcionando.',
+        },
+        {
+          clipId: 1002,
+          title: 'Contenido orgánico desde España',
+          description: 'Un relato de viaje en formato TikTok, contado en primera persona.',
+        },
+        {
+          clipId: 1004,
+          title: 'Reseña de un restaurante colombiano',
+          description: 'Visito Parceros Street Food en Calgary y cuento qué probé y por qué volvería.',
+        },
+        {
           clipId: 6,
           title: 'Presentación como creadora',
           description: 'Me presento, muestro lo que hago y cierro con un llamado a la acción.',
-        },
-        {
-          clipId: 1,
-          title: 'Reseña de ropa de Temu',
-          description: 'Me pruebo varios outfits y doy mi opinión con un tono cercano. Sirve para marcas que venden en redes.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre UGC bilingüe',
@@ -309,14 +334,39 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'A compilation covering music, real estate, agriculture, and legal services in one video.',
         },
         {
+          clipId: 1001,
+          title: 'Ad for a marketing agency',
+          description: 'A direct hook, what the agency offers, and a call to book a meeting. Made for paid social.',
+        },
+        {
+          clipId: 1010,
+          title: 'International news report',
+          description: 'Elections, the economy, and key figures in a newscast format: the craft I bring from journalism.',
+        },
+        {
+          clipId: 4,
+          title: 'Curvella supplement review',
+          description: 'I share my experience with the product in first person, the way I’d tell a friend.',
+        },
+        {
+          clipId: 1008,
+          title: 'Voicebot demo for a car dealership',
+          description: 'A real conversation with the bot, filmed so you see the product working.',
+        },
+        {
+          clipId: 1002,
+          title: 'Organic content from Spain',
+          description: 'A travel story in TikTok format, told in first person.',
+        },
+        {
+          clipId: 1004,
+          title: 'Colombian restaurant review',
+          description: 'I visit Parceros Street Food in Calgary and talk about what I tried and why I’d go back.',
+        },
+        {
           clipId: 6,
           title: 'Introducing myself as a creator',
           description: 'I introduce myself, show what I do, and close with a call to action.',
-        },
-        {
-          clipId: 1,
-          title: 'Temu clothing review',
-          description: 'I try on a few outfits and give my honest take in a relaxed tone. Works well for brands that sell on social.',
         },
       ],
       faqTitle: 'Common questions about bilingual UGC',
@@ -437,19 +487,44 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Videos donde explico una oferta a cámara, de principio a fin.',
       featuredExamples: [
         {
-          clipId: 2,
-          title: 'Portavoz para Agenda Bot',
-          description: 'Hablo directo a cámara: presento la empresa, el problema que resuelve y la solución, y cierro con un llamado a la acción.',
-        },
-        {
           clipId: 1010,
           title: 'Reporte de noticias internacionales',
           description: 'Presento elecciones, economía y cifras en formato de noticiero.',
         },
         {
+          clipId: 2,
+          title: 'Portavoz para Agenda Bot',
+          description: 'Hablo directo a cámara: presento la empresa, el problema que resuelve y la solución, y cierro con un llamado a la acción.',
+        },
+        {
+          clipId: 1001,
+          title: 'Portavoz de una agencia de marketing',
+          description: 'Hablo en nombre de la agencia: el problema de vender poco, lo que ofrecen y cómo agendar una cita.',
+        },
+        {
+          clipId: 5,
+          title: 'Portavoz para una inmobiliaria en Miami',
+          description: 'Presento la empresa, su experiencia y cómo acompaña a quien quiere invertir en Estados Unidos.',
+        },
+        {
+          clipId: 1014,
+          title: 'Venta de lotes en Pensilvania',
+          description: 'Hablo como representante de la empresa y presento un lote, sus comodidades y un llamado a escribir.',
+        },
+        {
+          clipId: 1007,
+          title: 'Presentadora en un noticiero',
+          description: 'Detrás de cámaras en el set de Minuto 30: la cuenta regresiva y el avance informativo en vivo.',
+        },
+        {
           clipId: 1005,
           title: 'Portavoz para un programa financiero',
           description: 'Con pantalla verde, explico los beneficios de un programa de fondos con tono informativo y sentido de urgencia.',
+        },
+        {
+          clipId: 1003,
+          title: 'Portavoz para una empresa de rotulación',
+          description: 'Con pantalla verde, presento el servicio, su ventaja y el llamado a la acción en pocos segundos.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre videos de portavoz',
@@ -563,19 +638,44 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Videos where I explain an offer on camera from start to finish.',
       featuredExamples: [
         {
-          clipId: 2,
-          title: 'Spokesperson for Agenda Bot',
-          description: 'Straight to camera: I introduce the company, the problem it solves, and the solution, then close with a call to action.',
-        },
-        {
           clipId: 1010,
           title: 'International news report',
           description: 'Elections, the economy, and key figures, presented in a newscast format.',
         },
         {
+          clipId: 2,
+          title: 'Spokesperson for Agenda Bot',
+          description: 'Straight to camera: I introduce the company, the problem it solves, and the solution, then close with a call to action.',
+        },
+        {
+          clipId: 1001,
+          title: 'Spokesperson for a marketing agency',
+          description: 'I speak for the agency: the problem of low sales, what they offer, and how to book a call.',
+        },
+        {
+          clipId: 5,
+          title: 'Spokesperson for a Miami real estate firm',
+          description: 'I introduce the company, its experience, and how it guides people who want to invest in the US.',
+        },
+        {
+          clipId: 1014,
+          title: 'Land sales in Pennsylvania',
+          description: 'I speak as the company’s rep and present a lot, its amenities, and a call to get in touch.',
+        },
+        {
+          clipId: 1007,
+          title: 'News presenter on set',
+          description: 'Behind the scenes on the Minuto 30 set: the countdown and the news update, live.',
+        },
+        {
           clipId: 1005,
           title: 'Spokesperson for a financial program',
           description: 'Shot on green screen, I explain the benefits of a fund program in an informative tone with a sense of urgency.',
+        },
+        {
+          clipId: 1003,
+          title: 'Spokesperson for a vehicle wrap company',
+          description: 'On green screen, I present the service, its edge, and the call to action in a few seconds.',
         },
       ],
       faqTitle: 'Common questions about spokesperson videos',
@@ -696,14 +796,39 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'Estructura clásica de anuncio: hook directo, qué ofrece la agencia y CTA. Hecho para pauta en redes.',
         },
         {
+          clipId: 1009,
+          title: 'Anuncio para un bot de ventas por WhatsApp',
+          description: 'Hook que nombra el problema, beneficios rápidos y CTA. Sirve para campañas de conversión en TikTok o Meta.',
+        },
+        {
+          clipId: 4,
+          title: 'Anuncio testimonial de un suplemento',
+          description: 'La reseña de Curvella también funciona como anuncio: experiencia real, beneficios y ganas de probarlo.',
+        },
+        {
+          clipId: 8,
+          title: 'Anuncio de perfumes Chop X',
+          description: 'Un hook con humor (“¿saben cuál es mi pequeño lujo diario?”) y el producto en el día a día.',
+        },
+        {
+          clipId: 7,
+          title: 'Anuncio de automatización con IA',
+          description: 'Muestro cómo sigue funcionando el negocio mientras trabajo en un café, gracias a los bots de Calvotia.',
+        },
+        {
+          clipId: 1015,
+          title: 'Anuncio de una app de domicilios',
+          description: 'Una historia corta (el regalo que olvidé) que termina en la solución: pedir por WhatsApp.',
+        },
+        {
           clipId: 1003,
           title: 'Anuncio de rotulación de vehículos',
           description: 'Video corto con pantalla verde, mensaje claro y cierre en español. Listo para Meta Ads.',
         },
         {
-          clipId: 1009,
-          title: 'Anuncio para un bot de ventas por WhatsApp',
-          description: 'Hook que nombra el problema, beneficios rápidos y CTA. Sirve para campañas de conversión en TikTok o Meta.',
+          clipId: 10,
+          title: 'Hook de 7 segundos',
+          description: 'Una frase directa para frenar el scroll de tu público, lista para probar contra otros hooks.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre UGC Ads',
@@ -822,14 +947,39 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'Classic ad structure: a direct hook, what the agency offers, and a CTA. Made for paid social.',
         },
         {
+          clipId: 1009,
+          title: 'Ad for a WhatsApp sales bot',
+          description: 'A hook that names the problem, quick benefits, and a CTA. Works for conversion campaigns on TikTok or Meta.',
+        },
+        {
+          clipId: 4,
+          title: 'Testimonial ad for a supplement',
+          description: 'The Curvella review doubles as an ad: a real experience, the benefits, and a reason to try it.',
+        },
+        {
+          clipId: 8,
+          title: 'Chop X perfume ad',
+          description: 'A playful hook (“know what my little daily luxury is?”) and the product in everyday life.',
+        },
+        {
+          clipId: 7,
+          title: 'AI automation ad',
+          description: 'I show the business still running while I work from a café, thanks to Calvotia’s bots.',
+        },
+        {
+          clipId: 1015,
+          title: 'Delivery app ad',
+          description: 'A short story (the gift I forgot) that ends with the solution: ordering through WhatsApp.',
+        },
+        {
           clipId: 1003,
           title: 'Vehicle wrap ad',
           description: 'A short green screen video with a clear message and a close in Spanish. Ready for Meta ads.',
         },
         {
-          clipId: 1009,
-          title: 'Ad for a WhatsApp sales bot',
-          description: 'A hook that names the problem, quick benefits, and a CTA. Works for conversion campaigns on TikTok or Meta.',
+          clipId: 10,
+          title: '7-second hook',
+          description: 'One direct line to stop your audience’s scroll, ready to test against other hooks.',
         },
       ],
       faqTitle: 'Common questions about UGC ads',
@@ -950,14 +1100,34 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'Cuento mi experiencia con la creatina y los beneficios que noté, sin que suene a infomercial.',
         },
         {
+          clipId: 1004,
+          title: 'Reseña de un restaurante colombiano',
+          description: 'Reseña de Parceros Street Food en Calgary: los platos, la experiencia y mi recomendación, con un tono espontáneo.',
+        },
+        {
+          clipId: 3,
+          title: 'Reseña de los voicebots de Calvotia',
+          description: 'Cuento cómo cambió mi semana desde que el bot atiende las llamadas, y por qué lo recomiendo.',
+        },
+        {
+          clipId: 8,
+          title: 'Reseña de perfumes Chop X',
+          description: '“Mi pequeño lujo diario”: fragancias en el día a día, con humor y personalidad.',
+        },
+        {
+          clipId: 1,
+          title: 'Reseña de ropa de Temu',
+          description: 'Me pruebo varios outfits y doy mi opinión con un tono cercano. Sirve para marcas que venden en redes.',
+        },
+        {
           clipId: 1013,
           title: 'Testimonial de un método fitness',
           description: 'Reseña corta y directa del método Power Palp Abdomen. Buena opción cuando necesitas una reseña rápida para redes.',
         },
         {
-          clipId: 1004,
-          title: 'Reseña de un restaurante colombiano',
-          description: 'Reseña de Parceros Street Food en Calgary: los platos, la experiencia y mi recomendación, con un tono espontáneo.',
+          clipId: 1012,
+          title: 'Testimonio de un negocio con voicebots',
+          description: 'Antes no podía tomarme un día libre; ahora el bot vende mientras descanso. Contado en primera persona.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre reseñas UGC',
@@ -1076,14 +1246,34 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'I talk about my experience with creatine and the benefits I noticed, without sounding like an infomercial.',
         },
         {
+          clipId: 1004,
+          title: 'Colombian restaurant review',
+          description: 'A review of Parceros Street Food in Calgary: the food, the experience, and my recommendation, in a casual tone.',
+        },
+        {
+          clipId: 3,
+          title: 'Calvotia voicebot review',
+          description: 'I explain how my week changed once the bot started taking calls, and why I recommend it.',
+        },
+        {
+          clipId: 8,
+          title: 'Chop X perfume review',
+          description: '“My little daily luxury”: fragrances in everyday life, with humor and personality.',
+        },
+        {
+          clipId: 1,
+          title: 'Temu clothing review',
+          description: 'I try on a few outfits and give my honest take in a relaxed tone. Works well for brands that sell on social.',
+        },
+        {
           clipId: 1013,
           title: 'Fitness method testimonial',
           description: 'A short, direct review of the Power Palp Abdomen method. Good when you need a quick review for social.',
         },
         {
-          clipId: 1004,
-          title: 'Colombian restaurant review',
-          description: 'A review of Parceros Street Food in Calgary: the food, the experience, and my recommendation, in a casual tone.',
+          clipId: 1012,
+          title: 'Business owner testimonial on voicebots',
+          description: 'I used to never take a day off; now the bot sells while I rest. Told in first person.',
         },
       ],
       faqTitle: 'Common questions about UGC testimonials',
@@ -1199,14 +1389,29 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Demos de software donde se ve el producto funcionando.',
       featuredExamples: [
         {
+          clipId: 1008,
+          title: 'Demo en vivo de un voicebot para un concesionario',
+          description: 'Una conversación real con un bot de Calvotia para un concesionario de autos. Se ve el producto funcionando en tiempo real.',
+        },
+        {
           clipId: 3,
           title: 'Reseña y demo de un voicebot (Calvotia)',
           description: 'Empieza como un testimonial en un café y pasa a explicar el producto y sus beneficios.',
         },
         {
-          clipId: 1008,
-          title: 'Demo en vivo de un voicebot para un concesionario',
-          description: 'Una conversación real con un bot de Calvotia para un concesionario de autos. Se ve el producto funcionando en tiempo real.',
+          clipId: 1009,
+          title: 'Bot de ventas por WhatsApp',
+          description: 'Explico qué hace el bot (responder al instante, todo el día) y cómo pedir una demo.',
+        },
+        {
+          clipId: 7,
+          title: 'Servicios de IA para negocios (Calvotia)',
+          description: 'Presento tres bots en uno: agenda, llamadas y WhatsApp, con el producto en un contexto real.',
+        },
+        {
+          clipId: 1016,
+          title: 'App para una segunda cuenta de WhatsApp',
+          description: 'Explico en pocos segundos qué hace la app y los pasos para empezar a usarla.',
         },
         {
           clipId: 1011,
@@ -1325,14 +1530,29 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Software demos where you can see the product working.',
       featuredExamples: [
         {
+          clipId: 1008,
+          title: 'Live voicebot demo for a car dealership',
+          description: 'A real conversation with a Calvotia bot built for a car dealership. You see the product working in real time.',
+        },
+        {
           clipId: 3,
           title: 'Voicebot review and demo (Calvotia)',
           description: 'Starts as a testimonial in a café and moves into explaining the product and its benefits.',
         },
         {
-          clipId: 1008,
-          title: 'Live voicebot demo for a car dealership',
-          description: 'A real conversation with a Calvotia bot built for a car dealership. You see the product working in real time.',
+          clipId: 1009,
+          title: 'WhatsApp sales bot',
+          description: 'I explain what the bot does (instant replies, around the clock) and how to request a demo.',
+        },
+        {
+          clipId: 7,
+          title: 'AI services for businesses (Calvotia)',
+          description: 'Three bots in one: scheduling, calls, and WhatsApp, with the product shown in a real setting.',
+        },
+        {
+          clipId: 1016,
+          title: 'Second WhatsApp account app',
+          description: 'In a few seconds I explain what the app does and the steps to start using it.',
         },
         {
           clipId: 1011,
@@ -1458,14 +1678,34 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'Hook que nombra el problema (“¿cuántos clientes no reciben respuesta?”), beneficios rápidos y CTA directo.',
         },
         {
+          clipId: 1001,
+          title: 'Marketing: tener redes bonitas no basta → equipo de ventas',
+          description: '“¿Quieres vender más? Los anuncios no bastan.” Hook, problema, solución y CTA para una agencia digital.',
+        },
+        {
+          clipId: 2,
+          title: 'Agenda: el desorden → una imagen profesional',
+          description: '“El desorden genera una mala experiencia desde el primer contacto.” El problema, el producto y el paso a seguir.',
+        },
+        {
           clipId: 5,
           title: 'Bienes raíces: no saber invertir → acompañamiento completo',
           description: '“¿Quieres invertir pero no sabes por dónde empezar?” El problema, la solución de una empresa con 30 años de experiencia y el CTA.',
         },
         {
-          clipId: 1001,
-          title: 'Marketing: tener redes bonitas no basta → equipo de ventas',
-          description: '“¿Quieres vender más? Los anuncios no bastan.” Hook, problema, solución y CTA para una agencia digital.',
+          clipId: 1015,
+          title: 'Domicilios: el regalo olvidado → resuelto en minutos',
+          description: 'Arranco con un problema cotidiano y lo resuelvo con la app, contado como una historia personal.',
+        },
+        {
+          clipId: 3,
+          title: 'Llamadas perdidas → atención 24/7',
+          description: 'Antes estaba pendiente de cada llamada; ahora el voicebot atiende sin esperas ni errores.',
+        },
+        {
+          clipId: 1012,
+          title: 'Sin días libres → ventas mientras descanso',
+          description: 'El antes y el después de un negocio que automatizó sus llamadas, grabado frente al mar.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre UGC problema-solución',
@@ -1584,14 +1824,34 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'A hook that names the problem (“how many customers don’t get a reply?”), quick benefits, and a direct CTA.',
         },
         {
+          clipId: 1001,
+          title: 'Marketing: a pretty feed isn’t enough → sales team',
+          description: '“Want to sell more? Ads aren’t enough.” Hook, problem, solution, and CTA for a digital agency.',
+        },
+        {
+          clipId: 2,
+          title: 'Scheduling: disorder → a professional image',
+          description: '“Disorganization creates a bad experience from the first contact.” The problem, the product, and the next step.',
+        },
+        {
           clipId: 5,
           title: 'Real estate: not knowing how to invest → full guidance',
           description: '“Want to invest but don’t know where to start?” The problem, a solution from a company with 30 years of experience, and the CTA.',
         },
         {
-          clipId: 1001,
-          title: 'Marketing: a pretty feed isn’t enough → sales team',
-          description: '“Want to sell more? Ads aren’t enough.” Hook, problem, solution, and CTA for a digital agency.',
+          clipId: 1015,
+          title: 'Delivery: the forgotten gift → sorted in minutes',
+          description: 'I open with an everyday problem and solve it with the app, told as a personal story.',
+        },
+        {
+          clipId: 3,
+          title: 'Missed calls → 24/7 answering',
+          description: 'I used to chase every call; now the voicebot answers with no waiting and no mistakes.',
+        },
+        {
+          clipId: 1012,
+          title: 'No days off → sales while I rest',
+          description: 'The before and after of a business that automated its calls, filmed by the sea.',
         },
       ],
       faqTitle: 'Common questions about problem-solution UGC',
@@ -1707,19 +1967,39 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Productos y lugares en momentos reales, con un tono natural.',
       featuredExamples: [
         {
-          clipId: 8,
-          title: 'Reseña de perfumes Chop X',
-          description: '“Mi pequeño lujo diario”: fragancias en el día a día, con humor y personalidad.',
-        },
-        {
           clipId: 1002,
           title: 'Contenido orgánico desde España',
           description: 'Un relato de viaje sobre la cultura española en formato TikTok: mi opinión y una historia contada en primera persona.',
         },
         {
+          clipId: 8,
+          title: 'Reseña de perfumes Chop X',
+          description: '“Mi pequeño lujo diario”: fragancias en el día a día, con humor y personalidad.',
+        },
+        {
           clipId: 1,
           title: 'Me pruebo outfits de Temu',
           description: 'Me pruebo la ropa paso a paso y doy mi opinión sincera. Un formato lifestyle clásico para marcas de moda.',
+        },
+        {
+          clipId: 4,
+          title: 'La creatina en mi rutina',
+          description: 'Cómo encaja Curvella en mi día a día: entrenar, tener energía y un hábito que sí mantengo.',
+        },
+        {
+          clipId: 7,
+          title: 'Un día de trabajo desde un café',
+          description: 'El producto aparece en una escena cotidiana, sin forzar la venta.',
+        },
+        {
+          clipId: 9,
+          title: 'Escenas del día con voz en off',
+          description: 'Momentos del día (café, celular, oficina) con la voz en off contando el producto.',
+        },
+        {
+          clipId: 1015,
+          title: 'Una compra de último minuto',
+          description: 'Una situación real del día a día (el cumpleaños de mi suegra) en la que la app me salva.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre UGC lifestyle',
@@ -1833,19 +2113,39 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Products and places in real moments, with a natural tone.',
       featuredExamples: [
         {
-          clipId: 8,
-          title: 'Chop X perfume review',
-          description: '“My little daily luxury”: fragrances in everyday life, with humor and personality.',
-        },
-        {
           clipId: 1002,
           title: 'Organic content from Spain',
           description: 'A travel story about Spanish culture in TikTok format: my own opinions, told in first person.',
         },
         {
+          clipId: 8,
+          title: 'Chop X perfume review',
+          description: '“My little daily luxury”: fragrances in everyday life, with humor and personality.',
+        },
+        {
           clipId: 1,
           title: 'Temu outfit try-on',
           description: 'I try on the clothes one by one and give my honest opinion. A classic lifestyle format for fashion brands.',
+        },
+        {
+          clipId: 4,
+          title: 'Creatine in my routine',
+          description: 'How Curvella fits into my day: training, energy, and a habit I actually keep.',
+        },
+        {
+          clipId: 7,
+          title: 'A workday from a café',
+          description: 'The product shows up in an everyday scene, without forcing the sale.',
+        },
+        {
+          clipId: 9,
+          title: 'Everyday scenes with voiceover',
+          description: 'Moments from the day (coffee, phone, office) with a voiceover telling the product story.',
+        },
+        {
+          clipId: 1015,
+          title: 'A last-minute gift',
+          description: 'A real everyday situation (my mother-in-law’s birthday) where the app saves the day.',
         },
       ],
       faqTitle: 'Common questions about lifestyle UGC',
@@ -1961,19 +2261,29 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'El B-roll se entrega como clips sueltos, pero estos ejemplos te muestran el tipo de tomas, luz y estética que puedes esperar.',
       featuredExamples: [
         {
-          clipId: 10,
-          title: 'Clip lifestyle corto (7s)',
-          description: 'Una toma rápida con encuadre limpio, como los clips sueltos que le entrego a tu equipo.',
-        },
-        {
           clipId: 1002,
           title: 'Escenas de viaje y exteriores',
           description: 'Grabado en España, con varias locaciones, luz natural y movimiento. Sirve como material visual.',
         },
         {
+          clipId: 1006,
+          title: 'Locaciones de un reel multiindustria',
+          description: 'Escenas en exteriores, interiores y estudio que muestran el rango de tomas que puedo grabar.',
+        },
+        {
           clipId: 1007,
           title: 'Detrás de cámaras en un noticiero',
           description: 'Tomas detrás de cámaras en un set de noticias, con la cuenta regresiva incluida.',
+        },
+        {
+          clipId: 9,
+          title: 'Tomas cotidianas para un anuncio',
+          description: 'Café, celular y oficina: las tomas que sostienen una voz en off, como las que le entrego a tu equipo.',
+        },
+        {
+          clipId: 10,
+          title: 'Clip lifestyle corto (7s)',
+          description: 'Una toma rápida con encuadre limpio, como los clips sueltos que le entrego a tu equipo.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre B-roll UGC',
@@ -2087,19 +2397,29 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'B-roll is delivered as loose clips, but these examples show the kind of shots, lighting, and look you can expect.',
       featuredExamples: [
         {
-          clipId: 10,
-          title: 'Short lifestyle clip (7s)',
-          description: 'A quick shot with clean framing, like the standalone clips I hand over to your team.',
-        },
-        {
           clipId: 1002,
           title: 'Travel and outdoor scenes',
           description: 'Filmed in Spain across several locations, with natural light and movement. Useful as visual material.',
         },
         {
+          clipId: 1006,
+          title: 'Locations from a multi-industry reel',
+          description: 'Outdoor, indoor, and studio scenes that show the range of shots I can film.',
+        },
+        {
           clipId: 1007,
           title: 'Newsroom behind the scenes',
           description: 'Behind-the-scenes shots on a news set, countdown included.',
+        },
+        {
+          clipId: 9,
+          title: 'Everyday shots for an ad',
+          description: 'Coffee, phone, and office: the shots that carry a voiceover, like the ones I hand over to your team.',
+        },
+        {
+          clipId: 10,
+          title: 'Short lifestyle clip (7s)',
+          description: 'A quick shot with clean framing, like the standalone clips I hand over to your team.',
         },
       ],
       faqTitle: 'Common questions about UGC b-roll',

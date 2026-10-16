@@ -24,7 +24,7 @@ export type ServiceTailoring = {
  * repeats a clip; the fourth is the closest non-featured clip for the format.
  */
 export const SERVICE_FORMAT_CLIP_IDS: Record<ServicePageId, [number, number, number, number]> = {
-  'bilingual-ugc-creator': [1006, 7, 1, 6],
+  'bilingual-ugc-creator': [1001, 1008, 4, 1006],
   'spokesperson-videos': [1005, 1010, 2, 1008],
   'ugc-ads-tiktok-meta': [1001, 1009, 1003, 4],
   'ugc-testimonials-reviews': [4, 1013, 1, 1004],
