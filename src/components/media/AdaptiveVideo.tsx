@@ -13,7 +13,7 @@ import {
   type MediaPlaybackPriority,
 } from '@/lib/media-playback-scheduler';
 import { useMediaSession } from '@/components/media/MediaSessionProvider';
-import { resolveFeedSource } from '@/lib/feed-media';
+import { feedVideoSrc, resolveFeedSource } from '@/lib/feed-media';
 
 type AdaptiveVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poster'> & {
   src: string;
@@ -310,13 +310,15 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
 
       // Every site video with feed files plays its single, full-quality,
       // fast-start MP4 (src/lib/feed-media.ts) instead of an HLS ladder or the
-      // old 480p preview loop. If that file ever fails, the old source stands.
+      // old 480p preview loop. Those older copies are gone from R2, so if the
+      // HEVC file fails the H.264 one stands in.
       const feed = resolveFeedSource(src, hlsSrc);
       if (feed) {
+        const avcSrc = feedVideoSrc(feed.media, feed.kind, 'avc');
         const handleFeedError = () => {
           if (cancelled || video.getAttribute('src') !== feed.src) return;
           video.removeEventListener('error', handleFeedError);
-          attachFallbackSource(video, src);
+          if (avcSrc !== feed.src) attachFallbackSource(video, avcSrc);
         };
         video.addEventListener('error', handleFeedError);
         attachFallbackSource(video, feed.src);
