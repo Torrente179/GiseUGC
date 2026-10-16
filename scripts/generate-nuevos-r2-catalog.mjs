@@ -86,8 +86,28 @@ function toR2VideoUrl(folder, filename) {
   return `${R2_MEDIA_BASE_URL}/videos/${folder}/${encodeURIComponent(filename)}`;
 }
 
-function toR2HlsUrl(baseName, rendition) {
-  return `${R2_MEDIA_BASE_URL}/videos/hls/${encodeURIComponent(baseName)}/${rendition}/master.m3u8`;
+// What the site actually plays: the feed files (scripts/encode-feed.mjs,
+// src/lib/feed-media.ts). The old mobile/preview/HLS copies were deleted from
+// R2 on 2026-10-16 (changes/2026-10-16-r2-cleanup.md); mobileSrc/previewSrc
+// stay in the data only as the keys the feed resolver maps, so readiness is
+// judged on the master, the poster and the feed files.
+const FEED_VERSION =
+  readFileSync(path.resolve(process.cwd(), 'src/data/feed-renditions.ts'), 'utf8').match(
+    /FEED_MEDIA_VERSION = '([^']+)'/u,
+  )?.[1] ?? 'v1';
+
+/** Same rule as `slugify` in scripts/encode-feed.mjs and `feedSlugFromUrl` in src/lib/feed-media.ts. */
+function feedSlug(filename) {
+  return stripExtension(filename)
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/gu, '-')
+    .replace(/^-|-$/gu, '');
+}
+
+function toR2FeedUrl(filename, file) {
+  return `${R2_MEDIA_BASE_URL}/videos/feed/${FEED_VERSION}/${feedSlug(filename)}/${file}`;
 }
 
 function stripExtension(filename) {
@@ -254,9 +274,8 @@ async function main() {
           preview: toR2VideoUrl('previews', `${baseName}-preview.mp4`),
           poster: toR2VideoUrl('posters', `${baseName}-poster.jpg`),
           highQualityPoster: `/uploads/videos/service-posters/${encodeURIComponent(baseName)}.jpg`,
-          hls: toR2HlsUrl(baseName, 'main'),
-          mobileHls: toR2HlsUrl(baseName, 'mobile'),
-          previewHls: toR2HlsUrl(baseName, 'preview'),
+          feed: toR2FeedUrl(sourceFilename, 'avc.mp4'),
+          feedPreview: toR2FeedUrl(sourceFilename, 'preview.avc.mp4'),
         },
       };
     })
@@ -264,34 +283,20 @@ async function main() {
 
   const statuses = await Promise.all(
     candidates.map(async (candidate) => {
-      const [
-        mainStatus,
-        mobileStatus,
-        previewStatus,
-        posterStatus,
-        hlsStatus,
-        mobileHlsStatus,
-        previewHlsStatus,
-      ] = await Promise.all([
+      const [mainStatus, posterStatus, feedStatus, feedPreviewStatus] = await Promise.all([
         checkUrl(candidate.assets.main, args.timeoutMs),
-        checkUrl(candidate.assets.mobile, args.timeoutMs),
-        checkUrl(candidate.assets.preview, args.timeoutMs),
         checkUrl(candidate.assets.poster, args.timeoutMs),
-        checkUrl(candidate.assets.hls, args.timeoutMs),
-        checkUrl(candidate.assets.mobileHls, args.timeoutMs),
-        checkUrl(candidate.assets.previewHls, args.timeoutMs),
+        checkUrl(candidate.assets.feed, args.timeoutMs),
+        checkUrl(candidate.assets.feedPreview, args.timeoutMs),
       ]);
 
       return {
         candidate,
         statuses: {
           main: mainStatus,
-          mobile: mobileStatus,
-          preview: previewStatus,
           poster: posterStatus,
-          hls: hlsStatus,
-          mobileHls: mobileHlsStatus,
-          previewHls: previewHlsStatus,
+          feed: feedStatus,
+          feedPreview: feedPreviewStatus,
         },
       };
     }),
@@ -300,9 +305,9 @@ async function main() {
   const requiredProbeErrors = statuses.reduce((total, result) => {
     const requiredStatuses = [
       result.statuses.main,
-      result.statuses.mobile,
-      result.statuses.preview,
       result.statuses.poster,
+      result.statuses.feed,
+      result.statuses.feedPreview,
     ];
     return total + requiredStatuses.filter((status) => status === -1).length;
   }, 0);
@@ -317,25 +322,22 @@ async function main() {
   const readyClips = [];
   const missingByAsset = {
     main: 0,
-    mobile: 0,
-    preview: 0,
     poster: 0,
+    feed: 0,
+    feedPreview: 0,
   };
 
   statuses.forEach(({ candidate, statuses: assetStatuses }) => {
     const missing = {
       main: assetStatuses.main !== 200,
-      mobile: assetStatuses.mobile !== 200,
-      preview: assetStatuses.preview !== 200,
       poster: assetStatuses.poster !== 200,
+      feed: assetStatuses.feed !== 200,
+      feedPreview: assetStatuses.feedPreview !== 200,
     };
 
-    if (missing.main) missingByAsset.main += 1;
-    if (missing.mobile) missingByAsset.mobile += 1;
-    if (missing.preview) missingByAsset.preview += 1;
-    if (missing.poster) missingByAsset.poster += 1;
+    for (const key of Object.keys(missing)) if (missing[key]) missingByAsset[key] += 1;
 
-    const isReady = !missing.main && !missing.mobile && !missing.preview && !missing.poster;
+    const isReady = !missing.main && !missing.poster && !missing.feed && !missing.feedPreview;
 
     if (isReady) {
       readyClips.push({
@@ -346,9 +348,6 @@ async function main() {
         mainSrc: candidate.assets.main,
         mobileSrc: candidate.assets.mobile,
         previewSrc: candidate.assets.preview,
-        ...(assetStatuses.hls === 200 ? { hlsSrc: candidate.assets.hls } : {}),
-        ...(assetStatuses.mobileHls === 200 ? { mobileHlsSrc: candidate.assets.mobileHls } : {}),
-        ...(assetStatuses.previewHls === 200 ? { previewHlsSrc: candidate.assets.previewHls } : {}),
         posterSrc: candidate.assets.poster,
         highQualityPosterSrc: candidate.assets.highQualityPoster,
         durationSeconds: Number.isFinite(candidate.durationSeconds) ? candidate.durationSeconds : undefined,
@@ -378,7 +377,7 @@ ${clip.titleEn ? `    localizedTitle: { en: '${escapeSingleQuotes(clip.titleEn)}
     mainSrc: '${escapeSingleQuotes(clip.mainSrc)}',
     mobileSrc: '${escapeSingleQuotes(clip.mobileSrc)}',
     previewSrc: '${escapeSingleQuotes(clip.previewSrc)}',
-${clip.hlsSrc ? `    hlsSrc: '${escapeSingleQuotes(clip.hlsSrc)}',\n` : ''}${clip.mobileHlsSrc ? `    mobileHlsSrc: '${escapeSingleQuotes(clip.mobileHlsSrc)}',\n` : ''}${clip.previewHlsSrc ? `    previewHlsSrc: '${escapeSingleQuotes(clip.previewHlsSrc)}',\n` : ''}    highQualityPosterSrc: '${escapeSingleQuotes(clip.highQualityPosterSrc)}',
+    highQualityPosterSrc: '${escapeSingleQuotes(clip.highQualityPosterSrc)}',
     posterSrc: '${escapeSingleQuotes(clip.posterSrc)}',
     durationSeconds: ${clip.durationSeconds ?? 'undefined'},
     language: '${clip.language}',
@@ -409,9 +408,9 @@ export const NUEVOS_R2_BLOCK_REPORT: {
   blocked: number;
   missingByAsset: {
     main: number;
-    mobile: number;
-    preview: number;
     poster: number;
+    feed: number;
+    feedPreview: number;
   };
 } = {
   totalCandidates: ${blockReport.totalCandidates},
@@ -419,9 +418,9 @@ export const NUEVOS_R2_BLOCK_REPORT: {
   blocked: ${blockReport.blocked},
   missingByAsset: {
     main: ${blockReport.missingByAsset.main},
-    mobile: ${blockReport.missingByAsset.mobile},
-    preview: ${blockReport.missingByAsset.preview},
     poster: ${blockReport.missingByAsset.poster},
+    feed: ${blockReport.missingByAsset.feed},
+    feedPreview: ${blockReport.missingByAsset.feedPreview},
   },
 };
 `;
@@ -434,7 +433,7 @@ export const NUEVOS_R2_BLOCK_REPORT: {
     `R2 readiness: ${blockReport.ready}/${blockReport.totalCandidates} ready, ${blockReport.blocked} blocked`,
   );
   console.log(
-    `Missing by asset: main=${blockReport.missingByAsset.main}, mobile=${blockReport.missingByAsset.mobile}, preview=${blockReport.missingByAsset.preview}, poster=${blockReport.missingByAsset.poster}`,
+    `Missing by asset: main=${blockReport.missingByAsset.main}, poster=${blockReport.missingByAsset.poster}, feed=${blockReport.missingByAsset.feed}, feedPreview=${blockReport.missingByAsset.feedPreview}`,
   );
 }
 
