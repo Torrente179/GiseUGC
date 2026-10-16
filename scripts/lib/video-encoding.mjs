@@ -98,17 +98,30 @@ export const remux = (source, output, codec, { audio = 'aac' } = {}) =>
     ...STRIP, output,
   ]);
 
-export const encode = (source, output, { codec, size, fps, seconds, audio = 'aac' }) => {
+/**
+ * `watermark` ({ file, margin }) burns a transparent PNG into the top-right
+ * corner, `margin` px in from both edges, after scaling.
+ */
+export const encode = (source, output, { codec, size, fps, seconds, audio = 'aac', watermark }) => {
   const filters = [
     `scale=${size.w}:${size.h}:flags=lanczos`,
     `fps=${fps}`,
     'format=yuv420p',
   ].join(',');
+  const picture = watermark
+    ? [
+        '-filter_complex',
+        `[0:v:0]${filters}[base];[1:v]format=rgba[mark];` +
+          `[base][mark]overlay=main_w-overlay_w-${watermark.margin}:${watermark.margin}:format=auto,format=yuv420p[v]`,
+        '-map', '[v]',
+      ]
+    : ['-map', '0:v:0', '-vf', filters];
   const sound = seconds ? ['-an'] : ['-map', '0:a:0?', ...audioArgs(audio)];
   return run('ffmpeg', [
     '-hide_banner', '-loglevel', 'error', '-y', '-i', source,
+    ...(watermark ? ['-i', watermark.file] : []),
     ...(seconds ? ['-t', String(seconds)] : []),
-    '-map', '0:v:0', '-vf', filters,
+    ...picture,
     ...ENCODERS[codec](Math.round(fps) * 2, size.large),
     '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
     ...sound, ...STRIP, output,

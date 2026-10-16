@@ -3208,3 +3208,11 @@
 .title-sequence-hero__a-strokes {
   display: none !important;
 }
+
+/* No iOS long-press menu (Save / Share) on any video: see
+   src/lib/video-download-guard.ts for the rest of the download guard. */
+video {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}

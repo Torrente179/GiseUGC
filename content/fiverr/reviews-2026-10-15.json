@@ -2223,7 +2223,7 @@
   ]
  },
  "selfHosted": {
-  "videoVersion": "v2",
+  "videoVersion": "v3",
   "photoVersion": "v1",
   "videos": {
    "728c1d1bd1f520c558e1f725ec0993f7-1728843514": {

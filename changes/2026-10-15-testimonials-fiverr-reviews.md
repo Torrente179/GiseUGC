@@ -180,3 +180,37 @@ The reviews themselves stay.
   them. Their delivery dates still come from the asset id.
 - **Result:** "Con video" now shows 21 reviews.
 - **R2:** their files are deleted (v1 and v2), and the CDN copies are purged.
+
+## Download block on every video, Fiverr's mark burned into the reviews (2026-10-16)
+
+The user asked to block downloading every video on the site. For the Fiverr
+review videos, anyone who gets past the block should still find Fiverr's
+watermark in the file.
+
+- **Block (all videos):** `src/lib/video-download-guard.ts`, installed at
+  boot in `client-runtime.tsx`.
+  - It listens on the document, so it also covers the pooled feed players
+    created outside React.
+  - No right-click menu ("Save video as…") on any video, and no dragging one
+    out.
+  - `video { -webkit-touch-callout: none }` turns off the iOS long-press menu.
+  - The review player sets `controlsList="nodownload"`; it's the only video
+    with native controls.
+  - It stops casual saving only. A file the browser can play can be fetched
+    from the network panel, which is why the reviews also carry the mark.
+- **Watermark (Fiverr review videos only):** Fiverr's wordmark is burned into
+  the top-right corner.
+  - The mark: `content/fiverr/fiverr-wordmark.svg`, the official 2020 logo
+    from Wikimedia Commons (public domain), in white.
+  - Size: 15 % of the frame's short side, inset 3.5 %, at 88 % opacity with a
+    soft shadow.
+  - Burning it in means encoding, so the HEVC file is no longer the
+    untouched original.
+  - Both files use the site's near-transparent settings (x265 CRF 18, x264
+    CRF 17), with 4K at 1440 on the short side, the same rule as the
+    portfolio.
+  - The poster is cut from the marked file, so it carries the mark too.
+  - `scripts/lib/video-encoding.mjs` gained a `watermark` option for this.
+- **R2:** `videos/reviews/v3/`. On the user's call, the clean v2 originals
+  and the v1 720p copies were deleted from R2 and purged from the CDN once
+  v3 was live.

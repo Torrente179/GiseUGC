@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'next-themes';
 import App, { type AppRouteComponents } from '@/App';
 import { LocaleProvider } from '@/lib/locale-context';
+import { installVideoDownloadGuard } from '@/lib/video-download-guard';
 import '@/index.css';
 
 export const readEmbeddedRouteData = <T,>(): T => {
@@ -87,6 +88,7 @@ export const bootstrapApp = (routeComponents: AppRouteComponents) => {
 
   document.documentElement.classList.remove('boot-home');
   armMotionAfterStyles();
+  installVideoDownloadGuard();
 
   const app = (
     <BrowserRouter>

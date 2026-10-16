@@ -370,11 +370,12 @@ const Testimonials = () => {
                   className="fr-modal-video"
                   poster={playing.video?.poster}
                   controls
+                  controlsList="nodownload"
                   autoPlay
                   playsInline
                   preload="auto"
                 >
-                  {/* The HEVC original where the browser plays it, else the H.264 file. */}
+                  {/* HEVC where the browser plays it, else the H.264 file. */}
                   {playing.video?.hevc ? <source src={playing.video.hevc} type={HEVC_TYPE} /> : null}
                   <source src={playing.video?.src} type="video/mp4" />
                 </video>
