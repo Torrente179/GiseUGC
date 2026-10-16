@@ -37,10 +37,9 @@
  *   node scripts/encode-feed.mjs [--overwrite] [--only <slug,slug>] [--jobs 2] [--upload]
  *   node scripts/encode-feed.mjs --data-only   (rewrite the data file from probes)
  */
-import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import process from 'node:process';
+import { encode, poster, probe, r2, remux, run, sizeFor } from './lib/video-encoding.mjs';
 
 const VERSION = 'v1';
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
@@ -50,28 +49,10 @@ const DATA_PATH = path.join(ROOT, 'src/data/feed-renditions.ts');
 const SOURCE_DIRS = ['media-sources/legacy', 'media-sources/nuevos', 'tmp/feed-sources'].map((dir) =>
   path.join(ROOT, dir),
 );
-const CACHE_CONTROL = 'public, max-age=31536000, immutable';
 
-/** Short side kept as-is up to this; larger masters (the 4K one) go to 1440. */
-const PASSTHROUGH_MAX_SHORT_SIDE = 1080;
-const LARGE_SHORT_SIDE = 1440;
+// Encoder settings, probe, passthrough / encode and posters: ./lib/video-encoding.mjs
 const SM_POSTER_WIDTH = 360;
 const PREVIEW_SECONDS = 6;
-
-// Near-transparent, for the files that have to be encoded. The caps only stop
-// a single scene from spiking; they sit above what these masters need.
-const ENCODERS = {
-  hevc: (gop, large) => [
-    '-c:v', 'libx265', '-preset', 'slow', '-tag:v', 'hvc1', '-profile:v', 'main',
-    '-crf', '18', '-maxrate', large ? '24000k' : '20000k', '-bufsize', large ? '36000k' : '30000k',
-    '-x265-params', `keyint=${gop}:min-keyint=${gop / 2}:no-open-gop=1:aq-mode=3:log-level=error`,
-  ],
-  avc: (gop, large) => [
-    '-c:v', 'libx264', '-preset', 'slow', '-profile:v', 'high', '-level:v', large ? '5.1' : '4.2',
-    '-crf', '17', '-maxrate', large ? '30000k' : '24000k', '-bufsize', large ? '45000k' : '36000k',
-    '-x264-params', `keyint=${gop}:min-keyint=${gop / 2}:aq-mode=3`,
-  ],
-};
 
 const parseArgs = (argv) => {
   const args = { overwrite: false, upload: false, dataOnly: false, only: null, jobs: 2 };
@@ -90,20 +71,6 @@ const parseArgs = (argv) => {
   }
   return args;
 };
-
-const run = (command, commandArgs, { capture = false } = {}) =>
-  new Promise((resolve, reject) => {
-    const child = spawn(command, commandArgs, { stdio: capture ? ['ignore', 'pipe', 'pipe'] : ['ignore', 'ignore', 'pipe'] });
-    let stdout = '';
-    let stderr = '';
-    child.stdout?.on('data', (chunk) => { stdout += chunk; });
-    child.stderr.on('data', (chunk) => { stderr += chunk; });
-    child.on('error', reject);
-    child.on('close', (code) => {
-      if (code === 0) resolve(stdout);
-      else reject(new Error(`${command} exited ${code}: ${stderr.trim().slice(-600)}`));
-    });
-  });
 
 /** Same rule as `feedSlugFromUrl` in src/lib/feed-media.ts. */
 const slugify = (file) =>
@@ -143,76 +110,6 @@ const findSource = (file) => {
     }
   }
   return null;
-};
-
-const probe = async (file) => {
-  const json = JSON.parse(await run('ffprobe', [
-    '-v', 'error', '-select_streams', 'v:0', '-print_format', 'json',
-    '-show_entries', 'stream=codec_name,width,height,r_frame_rate,color_transfer:stream_side_data=rotation:format=duration',
-    file,
-  ], { capture: true }));
-  const stream = json.streams[0];
-  const [num, den] = stream.r_frame_rate.split('/').map(Number);
-  const rotation = Math.abs(stream.side_data_list?.find((d) => d.rotation !== undefined)?.rotation ?? 0);
-  const turned = rotation === 90 || rotation === 270;
-  return {
-    codec: stream.codec_name === 'hevc' ? 'hevc' : 'avc',
-    width: turned ? stream.height : stream.width,
-    height: turned ? stream.width : stream.height,
-    rotated: rotation !== 0,
-    fps: num / (den || 1),
-    hdr: ['arib-std-b67', 'smpte2084'].includes(stream.color_transfer),
-    duration: Number(json.format?.duration) || 1,
-  };
-};
-
-const even = (value) => Math.max(2, Math.round(value / 2) * 2);
-
-/** What gets delivered: the master's own size, or 1440 on the short side for 4K. */
-const sizeFor = ({ width, height }) => {
-  const short = Math.min(width, height);
-  if (short <= PASSTHROUGH_MAX_SHORT_SIDE) return { w: width, h: height, large: false };
-  const scale = LARGE_SHORT_SIDE / short;
-  return { w: even(width * scale), h: even(height * scale), large: true };
-};
-
-const STRIP = ['-map_metadata', '-1', '-map_chapters', '-1', '-movflags', '+faststart'];
-
-/** The master's own streams, repackaged: zero generation loss. */
-const remux = (source, output, codec) =>
-  run('ffmpeg', [
-    '-hide_banner', '-loglevel', 'error', '-y', '-i', source,
-    '-map', '0:v:0', '-map', '0:a:0?', '-c', 'copy',
-    ...(codec === 'hevc' ? ['-tag:v', 'hvc1'] : []),
-    ...STRIP, output,
-  ]);
-
-const encode = (source, output, { codec, size, fps, seconds }) => {
-  const filters = [
-    `scale=${size.w}:${size.h}:flags=lanczos`,
-    `fps=${fps}`,
-    'format=yuv420p',
-  ].join(',');
-  const audio = seconds ? ['-an'] : ['-map', '0:a:0?', '-c:a', 'copy'];
-  return run('ffmpeg', [
-    '-hide_banner', '-loglevel', 'error', '-y', '-i', source,
-    ...(seconds ? ['-t', String(seconds)] : []),
-    '-map', '0:v:0', '-vf', filters,
-    ...ENCODERS[codec](Math.round(fps) * 2, size.large),
-    '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
-    ...audio, ...STRIP, output,
-  ]);
-};
-
-// Homebrew's ffmpeg has no WebP encoder: cut a lossless PNG, then cwebp it.
-const poster = async (video, output, width) => {
-  const frame = `${output}.png`;
-  await run('ffmpeg', [
-    '-hide_banner', '-loglevel', 'error', '-y', '-i', video, '-frames:v', '1',
-    '-vf', `scale=${width}:-2:flags=lanczos`, frame,
-  ]);
-  await run('cwebp', ['-quiet', '-q', '82', '-m', '6', '-sharp_yuv', frame, '-o', output]);
-  rmSync(frame);
 };
 
 const processMaster = async (master, args) => {
@@ -312,41 +209,13 @@ ${body}
 };
 
 const upload = async (renditions) => {
-  const env = Object.fromEntries(
-    readFileSync(path.join(ROOT, '.env'), 'utf8')
-      .split('\n')
-      .filter((line) => /^R2_[A-Z0-9_]+=/u.test(line))
-      .map((line) => [line.slice(0, line.indexOf('=')), line.slice(line.indexOf('=') + 1)]),
-  );
-  const awsEnv = {
-    ...process.env,
-    AWS_ACCESS_KEY_ID: env.R2_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY: env.R2_SECRET_ACCESS_KEY,
-    AWS_DEFAULT_REGION: env.R2_REGION ?? 'auto',
-    AWS_REQUEST_CHECKSUM_CALCULATION: 'when_required',
-    AWS_RESPONSE_CHECKSUM_VALIDATION: 'when_required',
-  };
-  const aws = (awsArgs) =>
-    new Promise((resolve, reject) => {
-      const child = spawn('aws', [...awsArgs, '--endpoint-url', env.R2_ENDPOINT], { env: awsEnv, stdio: ['ignore', 'pipe', 'pipe'] });
-      let out = '';
-      let err = '';
-      child.stdout.on('data', (c) => { out += c; });
-      child.stderr.on('data', (c) => { err += c; });
-      child.on('close', (code) => (code === 0 ? resolve(out) : reject(new Error(err.trim()))));
-    });
-
+  const { put } = r2(ROOT);
   for (const r of renditions) {
     const files = (r.hevc ? ['hevc', 'avc'] : ['avc']).flatMap((codec) => [`${codec}.mp4`, `preview.${codec}.mp4`]);
     for (const name of files) {
       const file = path.join(OUT_DIR, r.slug, name);
       const key = `videos/feed/${VERSION}/${r.slug}/${name}`;
-      const remoteSize = await aws(['s3api', 'head-object', '--bucket', env.R2_BUCKET, '--key', key, '--query', 'ContentLength', '--output', 'text'])
-        .then((out) => Number(out.trim()))
-        .catch(() => -1);
-      if (remoteSize === statSync(file).size) continue;
-      await aws(['s3', 'cp', file, `s3://${env.R2_BUCKET}/${key}`, '--content-type', 'video/mp4', '--cache-control', CACHE_CONTROL, '--no-progress']);
-      console.log(`↑ ${key}`);
+      if (await put(file, key, 'video/mp4', statSync(file).size)) console.log(`↑ ${key}`);
     }
   }
 };

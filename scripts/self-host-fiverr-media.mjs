@@ -1,69 +1,120 @@
 #!/usr/bin/env node
 /**
- * Moves the Testimonios media off Fiverr's CDN and onto Gisela's R2
+ * Moves the Testimonios media off Fiverr and onto Gisela's R2
  * (media.giselasaldarriaga.com), then records it in the capture so
  * scripts/build-fiverr-reviews.mjs points the site at R2.
  *
- *   • delivered videos: Fiverr's HD rendition (already at its true aspect),
- *     repackaged losslessly as fast-start MP4 (no re-encode: it is already
- *     compressed, so encoding again would only lose detail); poster = frame 0
+ *   • delivered videos: the ORIGINAL upload of each delivery (4K / 1080p, no
+ *     Fiverr watermark; Fiverr's own "HD" rendition is a watermarked 720p).
+ *     The master's own stream is served untouched, 4K and rotated ones too:
+ *     these are grainy iPhone masters, and a near-transparent 1440p encode of
+ *     one needs ~24 Mbps against the original's 15–22, so the original is both
+ *     sharper and smaller. Browsers apply the rotation flag themselves. Only
+ *     the other codec is encoded (scripts/lib/video-encoding.mjs, x264 CRF 17,
+ *     4K at 1440 on the short side): an HEVC master gets an H.264 file for
+ *     browsers without HEVC. HDR masters go through Apple's tone mapping and
+ *     are encoded. Poster = frame 0 of the H.264 file, up to 1080 px wide.
  *   • client profile photos: 120 × 120 WebP
  *
  * R2 keys:
- *   videos/reviews/<version>/<asset>.mp4 · .webp   images/reviews/<version>/<user>.webp
+ *   videos/reviews/<videoVersion>/<asset>/{hevc,avc}.mp4 · poster.webp
+ *   images/reviews/<photoVersion>/<user>.webp
  *
- * Usage: node scripts/self-host-fiverr-media.mjs [content/fiverr/reviews-….json] [--upload] [--work=<dir>]
- * Files already in the work folder are reused, so a rerun only fetches what is new.
- * Needs ffmpeg, cwebp, magick, and for --upload the aws CLI with the R2_* keys in .env.
+ * Usage: node scripts/self-host-fiverr-media.mjs [content/fiverr/reviews-….json] [--upload] [--work=<dir>] [--jobs=2]
+ * Files already in the work folder are reused, so a rerun only fetches and
+ * encodes what is new. Needs ffmpeg, cwebp, magick, avconvert (macOS, for HDR
+ * masters), and for --upload the aws CLI with the R2_* keys in .env.
  */
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { encode, poster, probe, r2, remux, run, sizeFor } from './lib/video-encoding.mjs';
 
-const VERSION = 'v1';
+const VIDEO_VERSION = 'v2';
+const PHOTO_VERSION = 'v1';
+const POSTER_MAX_WIDTH = 1080;
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const CDN = 'https://fiverr-res.cloudinary.com';
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36';
-const CACHE_CONTROL = 'public, max-age=31536000, immutable';
 
 const args = process.argv.slice(2);
+const option = (name) => args.find((arg) => arg.startsWith(`--${name}=`))?.slice(name.length + 3);
 const upload = args.includes('--upload');
-const WORK = path.resolve(args.find((arg) => arg.startsWith('--work='))?.slice(7) ?? path.join(os.tmpdir(), 'giseugc-fiverr-media'));
+const jobs = Math.max(1, Number(option('jobs')) || 2);
+const WORK = path.resolve(option('work') ?? path.join(os.tmpdir(), 'giseugc-fiverr-media'));
 const sourceArg = args.find((arg) => !arg.startsWith('--'));
 const source = sourceArg
   ? path.resolve(sourceArg)
   : path.join(ROOT, 'content/fiverr', readdirSync(path.join(ROOT, 'content/fiverr')).filter((f) => f.startsWith('reviews-')).sort().pop());
 const capture = JSON.parse(readFileSync(source, 'utf8'));
 
-const run = (cmd, cmdArgs, opts = {}) => execFileSync(cmd, cmdArgs, { stdio: ['ignore', 'pipe', 'pipe'], ...opts }).toString();
-const fetchTo = (url, out, accept) =>
-  run('curl', ['-sfL', '-A', UA, ...(accept ? ['-H', `Accept: ${accept}`] : []), '-o', out, url]);
+const fetchTo = (url, out, accept) => {
+  execFileSync('curl', ['-sfL', '--retry', '3', '-A', UA, ...(accept ? ['-H', `Accept: ${accept}`] : []), '-o', `${out}.part`, url]);
+  renameSync(`${out}.part`, out);
+};
 
-for (const dir of ['videos', 'avatars']) mkdirSync(path.join(WORK, dir), { recursive: true });
+for (const dir of ['originals', 'videos', 'avatars']) mkdirSync(path.join(WORK, dir), { recursive: true });
+
+const pool = async (items, limit, worker) => {
+  const results = [];
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (next < items.length) {
+      const index = next;
+      next += 1;
+      results[index] = await worker(items[index]);
+    }
+  }));
+  return results;
+};
+
+const processVideo = async (file) => {
+  const asset = file.asset.split('/')[0];
+  const original = path.join(WORK, 'originals', `${asset}.mov`);
+  // fl_attachment serves the file as uploaded; every other URL is a Fiverr rendition.
+  if (!existsSync(original)) fetchTo(`${CDN}/video/upload/fl_attachment/v1/video-attachments/delivery/asset/${file.asset}`, original);
+
+  const info = await probe(original);
+  const size = sizeFor(info);
+  const passthrough = !info.hdr;
+  const hevc = info.codec === 'hevc';
+  const fps = Math.min(60, Math.round(info.fps * 1000) / 1000);
+  let input = original;
+  if (info.hdr) {
+    // Apple's export path tone-maps HLG / PQ to SDR the way Photos does.
+    input = path.join(WORK, 'originals', `${asset}-sdr.mov`);
+    if (!existsSync(input)) await run('avconvert', ['-s', original, '-p', 'PresetHighestQuality', '-o', input, '--replace']);
+  }
+
+  const dir = path.join(WORK, 'videos', asset);
+  mkdirSync(dir, { recursive: true });
+  const codecs = hevc ? ['hevc', 'avc'] : ['avc'];
+  await Promise.all(codecs.map(async (codec) => {
+    const output = path.join(dir, `${codec}.mp4`);
+    if (existsSync(output)) return;
+    const partial = path.join(dir, `${codec}.part.mp4`);
+    if (passthrough && codec === info.codec) await remux(input, partial, codec, { audio: info.audio });
+    else await encode(input, partial, { codec, size, fps, audio: info.audio });
+    renameSync(partial, output);
+  }));
+  const posterFile = path.join(dir, 'poster.webp');
+  if (!existsSync(posterFile)) await poster(path.join(dir, 'avc.mp4'), posterFile, Math.min(size.w, POSTER_MAX_WIDTH));
+
+  const mbps = (name) => ((statSync(path.join(dir, name)).size * 8) / 1e6 / info.duration).toFixed(1);
+  console.log(
+    `✓ ${asset}: ${info.codec} ${info.width}×${info.height}${info.hdr ? ' HDR' : ''}${info.rotated ? ' rotated' : ''}` +
+      ` ${Math.round(info.duration)}s → ${passthrough ? `${info.codec} original + ` : ''}${size.w}×${size.h} encoded` +
+      ` (${codecs.map((codec) => `${codec} ${mbps(`${codec}.mp4`)} Mbps`).join(', ')})`,
+  );
+  // The H.264 file's frame: the page only needs the shape, which every file shares.
+  return [asset, { width: size.w, height: size.h, hevc }];
+};
+
+const playable = capture.files.filter((f) => f.available && f.rating >= 4);
+const videos = Object.fromEntries(await pool(playable, jobs, processVideo));
 
 const keptUsers = new Set(capture.reviews.map((row) => row[1]));
-const videos = {};
-for (const file of capture.files.filter((f) => f.available && f.rating >= 4)) {
-  const asset = file.asset.split('/')[0];
-  const raw = path.join(WORK, 'videos', `${asset}.src.mp4`);
-  const mp4 = path.join(WORK, 'videos', `${asset}.mp4`);
-  const png = path.join(WORK, 'videos', `${asset}.png`);
-  const poster = path.join(WORK, 'videos', `${asset}.webp`);
-  if (!existsSync(mp4)) {
-    fetchTo(`${CDN}/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/${file.asset}`, raw);
-    run('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', raw, '-map', '0:v:0', '-map', '0:a:0?', '-c', 'copy', '-map_metadata', '-1', '-movflags', '+faststart', mp4]);
-    rmSync(raw);
-  }
-  if (!existsSync(poster)) {
-    run('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', mp4, '-frames:v', '1', png]);
-    run('cwebp', ['-quiet', '-q', '82', '-m', '6', '-sharp_yuv', png, '-o', poster]);
-    rmSync(png);
-  }
-  const [width, height] = run('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', mp4]).trim().split(',').map(Number);
-  videos[asset] = { width, height };
-}
-
 const avatars = [];
 for (const [user, url] of Object.entries(capture.avatars ?? {})) {
   if (!keptUsers.has(user)) continue;
@@ -77,8 +128,8 @@ for (const [user, url] of Object.entries(capture.avatars ?? {})) {
       console.warn(`No photo for ${user} (Fiverr no longer serves it); the card keeps the initial.`);
       continue;
     }
-    run('magick', [`${raw}[0]`, '-resize', '120x120^', '-gravity', 'center', '-extent', '120x120', png]);
-    run('cwebp', ['-quiet', '-q', '85', '-m', '6', png, '-o', webp]);
+    await run('magick', [`${raw}[0]`, '-resize', '120x120^', '-gravity', 'center', '-extent', '120x120', png]);
+    await run('cwebp', ['-quiet', '-q', '85', '-m', '6', png, '-o', webp]);
     rmSync(raw);
     rmSync(png);
   }
@@ -86,26 +137,27 @@ for (const [user, url] of Object.entries(capture.avatars ?? {})) {
 }
 
 if (upload) {
-  const env = Object.fromEntries(
-    readFileSync(path.join(ROOT, '.env'), 'utf8').split('\n').filter((l) => /^R2_[A-Z0-9_]+=/u.test(l)).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1)]),
-  );
-  const awsEnv = {
-    ...process.env,
-    AWS_ACCESS_KEY_ID: env.R2_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY: env.R2_SECRET_ACCESS_KEY,
-    AWS_DEFAULT_REGION: env.R2_REGION ?? 'auto',
-    AWS_REQUEST_CHECKSUM_CALCULATION: 'when_required',
-    AWS_RESPONSE_CHECKSUM_VALIDATION: 'when_required',
+  const { put } = r2(ROOT);
+  const send = async (file, key, type) => {
+    if (await put(file, key, type, statSync(file).size)) console.log(`↑ ${key}`);
   };
-  const sync = (from, to, include, type) =>
-    run('aws', ['s3', 'sync', from, `s3://${env.R2_BUCKET}/${to}`, '--endpoint-url', env.R2_ENDPOINT, '--exclude', '*', '--include', include, '--content-type', type, '--cache-control', CACHE_CONTROL, '--no-progress'], { env: awsEnv });
-  sync(path.join(WORK, 'videos'), `videos/reviews/${VERSION}/`, '*.mp4', 'video/mp4');
-  sync(path.join(WORK, 'videos'), `videos/reviews/${VERSION}/`, '*.webp', 'image/webp');
-  sync(path.join(WORK, 'avatars'), `images/reviews/${VERSION}/`, '*.webp', 'image/webp');
+  for (const [asset, { hevc }] of Object.entries(videos)) {
+    const dir = path.join(WORK, 'videos', asset);
+    const prefix = `videos/reviews/${VIDEO_VERSION}/${asset}`;
+    for (const codec of hevc ? ['hevc', 'avc'] : ['avc']) await send(path.join(dir, `${codec}.mp4`), `${prefix}/${codec}.mp4`, 'video/mp4');
+    await send(path.join(dir, 'poster.webp'), `${prefix}/poster.webp`, 'image/webp');
+  }
+  for (const user of avatars) {
+    await send(path.join(WORK, 'avatars', `${user}.webp`), `images/reviews/${PHOTO_VERSION}/${user}.webp`, 'image/webp');
+  }
 }
 
 // Appended as text so the rest of the capture keeps its exact formatting.
-const selfHosted = JSON.stringify({ version: VERSION, videos, avatars: avatars.sort() }, null, 1).replace(/\n/gu, '\n ');
+const selfHosted = JSON.stringify(
+  { videoVersion: VIDEO_VERSION, photoVersion: PHOTO_VERSION, videos, avatars: avatars.sort() },
+  null,
+  1,
+).replace(/\n/gu, '\n ');
 const text = readFileSync(source, 'utf8').replace(/,\n "selfHosted": [\s\S]*$/u, '\n}\n');
 writeFileSync(source, text.replace(/\n\}\s*$/u, `,\n "selfHosted": ${selfHosted}\n}\n`));
-console.log(`${Object.keys(videos).length} videos, ${avatars.length} photos${upload ? ' uploaded to R2' : ''}; capture updated.`);
+console.log(`${Object.keys(videos).length} videos, ${avatars.length} photos${upload ? ' on R2' : ''}; capture updated.`);

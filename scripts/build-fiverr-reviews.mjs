@@ -10,8 +10,10 @@
  *     relative date; reviews with a delivery video use the exact upload date
  *     carried in the Fiverr asset id instead
  *   • the client's Fiverr profile photo, when they have one
- *   • the delivered video, when the review has one Fiverr still serves, with its
- *     size so the card can frame it (portrait or landscape) before it loads
+ *   • the delivered video, when the review has one Fiverr still serves: the
+ *     original upload (H.264, plus the HEVC original when the master is HEVC)
+ *     and its size, so the card can frame it (portrait or landscape) before it
+ *     loads
  *
  * Photos and videos are served from Gisela's R2 (media.giselasaldarriaga.com),
  * copied there by scripts/self-host-fiverr-media.mjs (capture.selfHosted), so
@@ -48,7 +50,7 @@ const source = process.argv[2]
   : path.join(ROOT, 'content/fiverr', readdirSync(path.join(ROOT, 'content/fiverr')).filter((f) => f.startsWith('reviews-')).sort().pop());
 const capture = JSON.parse(readFileSync(source, 'utf8'));
 const hosted = capture.selfHosted;
-if (!hosted) throw new Error('No selfHosted media in the capture: run scripts/self-host-fiverr-media.mjs --upload first');
+if (!hosted?.videoVersion) throw new Error('No selfHosted media in the capture: run scripts/self-host-fiverr-media.mjs --upload first');
 const hostedAvatars = new Set(hosted.avatars);
 
 const monthsBefore = (iso, months) => {
@@ -82,15 +84,19 @@ const videoFor = (row) => {
   );
   if (!file) return null;
   const asset = file.asset.split('/')[0];
-  const size = hosted.videos[asset];
-  if (!size) throw new Error(`Video ${asset} is not self-hosted yet`);
+  const files = hosted.videos[asset];
+  if (!files) throw new Error(`Video ${asset} is not self-hosted yet`);
+  const base = `${MEDIA}/videos/reviews/${hosted.videoVersion}/${asset}`;
   const uploaded = Number(asset.split('-').pop());
   return {
-    src: `${MEDIA}/videos/reviews/${hosted.version}/${asset}.mp4`,
-    poster: `${MEDIA}/videos/reviews/${hosted.version}/${asset}.webp`,
-    width: size.width,
-    height: size.height,
     month: new Date(uploaded * 1000).toISOString().slice(0, 7),
+    files: {
+      src: `${base}/avc.mp4`,
+      ...(files.hevc ? { hevc: `${base}/hevc.mp4` } : {}),
+      poster: `${base}/poster.webp`,
+      width: files.width,
+      height: files.height,
+    },
   };
 };
 
@@ -109,9 +115,9 @@ const reviews = capture.reviews.map((row) => {
     service: SERVICES[service] ?? 'spokesperson',
     lang: langOf(body),
     text: body,
-    ...(hostedAvatars.has(user) ? { avatar: `${MEDIA}/images/reviews/${hosted.version}/${user}.webp` } : {}),
+    ...(hostedAvatars.has(user) ? { avatar: `${MEDIA}/images/reviews/${hosted.photoVersion}/${user}.webp` } : {}),
     ...(reply ? { reply: clean(reply) } : {}),
-    ...(video ? { video: { src: video.src, poster: video.poster, width: video.width, height: video.height } } : {}),
+    ...(video ? { video: video.files } : {}),
   };
 });
 
@@ -148,8 +154,12 @@ export type FiverrReview = {
   avatar?: string;
   /** Gisela's public reply on Fiverr. */
   reply?: string;
-  /** The delivered video (Fiverr's HD rendition, watermarked by Fiverr) and its frame-0 poster. */
-  video?: { src: string; poster: string; width: number; height: number };
+  /**
+   * The delivered video, from the original upload: \`src\` is H.264 (plays
+   * everywhere), \`hevc\` the HEVC original when the master is HEVC. Poster =
+   * frame 0. Size is the delivered frame (4K masters at 1440 on the short side).
+   */
+  video?: { src: string; hevc?: string; poster: string; width: number; height: number };
 };
 
 export const FIVERR_PROFILE_URL = ${JSON.stringify(capture.source)};

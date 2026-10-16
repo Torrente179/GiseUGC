@@ -4,6 +4,7 @@ import { useTranslation } from '@/lib/locale-context';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { useMediaSession } from '@/components/media/MediaSessionProvider';
 import { scrollToY } from '@/lib/motion/native-scroll';
+import { HEVC_TYPE } from '@/lib/feed-media';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 import { SITE_PROOF } from '@/data/site-proof';
 import {
@@ -367,13 +368,16 @@ const Testimonials = () => {
                 <video
                   key={playing.id}
                   className="fr-modal-video"
-                  src={playing.video?.src}
                   poster={playing.video?.poster}
                   controls
                   autoPlay
                   playsInline
                   preload="auto"
-                />
+                >
+                  {/* The HEVC original where the browser plays it, else the H.264 file. */}
+                  {playing.video?.hevc ? <source src={playing.video.hevc} type={HEVC_TYPE} /> : null}
+                  <source src={playing.video?.src} type="video/mp4" />
+                </video>
                 <div className="fr-modal-meta">
                   <Avatar review={playing} />
                   <span className="fr-who">

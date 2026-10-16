@@ -24,8 +24,12 @@ export type FiverrReview = {
   avatar?: string;
   /** Gisela's public reply on Fiverr. */
   reply?: string;
-  /** The delivered video (Fiverr's HD rendition, watermarked by Fiverr) and its frame-0 poster. */
-  video?: { src: string; poster: string; width: number; height: number };
+  /**
+   * The delivered video, from the original upload: `src` is H.264 (plays
+   * everywhere), `hevc` the HEVC original when the master is HEVC. Poster =
+   * frame 0. Size is the delivered frame (4K masters at 1440 on the short side).
+   */
+  video?: { src: string; hevc?: string; poster: string; width: number; height: number };
 };
 
 export const FIVERR_PROFILE_URL = "https://www.fiverr.com/gisela_sm";
@@ -1262,10 +1266,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Muy buen trabajo ahora ya sé cómo trabaja es posible que volvamos a requerir de sus servicios.",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/romeomp.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/728c1d1bd1f520c558e1f725ec0993f7-1728843514.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/728c1d1bd1f520c558e1f725ec0993f7-1728843514.webp",
-      "width": 1280,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/728c1d1bd1f520c558e1f725ec0993f7-1728843514/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/728c1d1bd1f520c558e1f725ec0993f7-1728843514/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/728c1d1bd1f520c558e1f725ec0993f7-1728843514/poster.webp",
+      "width": 2560,
+      "height": 1440
     }
   },
   {
@@ -1290,10 +1295,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "gran trabajo!!",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/kevinportillo03.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/b0b5a774bb6caacf9eb408e536312fc8-1728054493.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/b0b5a774bb6caacf9eb408e536312fc8-1728054493.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/b0b5a774bb6caacf9eb408e536312fc8-1728054493/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/b0b5a774bb6caacf9eb408e536312fc8-1728054493/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/b0b5a774bb6caacf9eb408e536312fc8-1728054493/poster.webp",
+      "width": 1440,
+      "height": 2560
     }
   },
   {
@@ -1307,10 +1313,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Muy profesional Gisela, entregó un trabajo de calidad",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/kevinportillo03.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/a204e09e8a43ac5f13d05efb950d558e-1727988572.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/a204e09e8a43ac5f13d05efb950d558e-1727988572.webp",
-      "width": 1210,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/a204e09e8a43ac5f13d05efb950d558e-1727988572/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/a204e09e8a43ac5f13d05efb950d558e-1727988572/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/a204e09e8a43ac5f13d05efb950d558e-1727988572/poster.webp",
+      "width": 2420,
+      "height": 1440
     }
   },
   {
@@ -1324,10 +1331,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Nice sellet! Thanks!",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/jessien.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/2eef255dbf0a2648c661d338ee573a0a-1727463332.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/2eef255dbf0a2648c661d338ee573a0a-1727463332.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/2eef255dbf0a2648c661d338ee573a0a-1727463332/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/2eef255dbf0a2648c661d338ee573a0a-1727463332/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/2eef255dbf0a2648c661d338ee573a0a-1727463332/poster.webp",
+      "width": 1440,
+      "height": 2560
     }
   },
   {
@@ -1351,10 +1359,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Es una experiencia súper positiva trabajar con Gisela. Es realmente rápida y comprometida",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/delgauriel.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/53588e0ff8bfe257c4c5f83610cb4aea-1726506879.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/53588e0ff8bfe257c4c5f83610cb4aea-1726506879.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/53588e0ff8bfe257c4c5f83610cb4aea-1726506879/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/53588e0ff8bfe257c4c5f83610cb4aea-1726506879/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/53588e0ff8bfe257c4c5f83610cb4aea-1726506879/poster.webp",
+      "width": 1440,
+      "height": 2560
     }
   },
   {
@@ -1388,10 +1397,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "Communication is key; Gisela asked the right questions and was engaged making suggetions and delivering on time",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/2699df2183b13dfefb5e522521689d74-1725629669.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/2699df2183b13dfefb5e522521689d74-1725629669.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/2699df2183b13dfefb5e522521689d74-1725629669/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/2699df2183b13dfefb5e522521689d74-1725629669/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/2699df2183b13dfefb5e522521689d74-1725629669/poster.webp",
+      "width": 1440,
+      "height": 2560
     }
   },
   {
@@ -1415,10 +1425,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "Amazing work.",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/fd738200f71f85853904604647d7ddb9-1724778252.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/fd738200f71f85853904604647d7ddb9-1724778252.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/fd738200f71f85853904604647d7ddb9-1724778252/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/fd738200f71f85853904604647d7ddb9-1724778252/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/fd738200f71f85853904604647d7ddb9-1724778252/poster.webp",
+      "width": 1440,
+      "height": 2560
     }
   },
   {
@@ -1431,10 +1442,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "This KOL’s expressiveness is truly impeccable, handling every detail flawlessly. She not only perfectly showcases the product features but also adjusts and reshoots according to my requirements, demonstrating a high level of dedication. Her professional attitude and outstanding performance are truly impressive, making her the best choice for collaboration!",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127/poster.webp",
+      "width": 1440,
+      "height": 2560
     }
   },
   {
@@ -1447,10 +1459,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "es",
     "text": "gracias 🥰 me encantó",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540/poster.webp",
+      "width": 1440,
+      "height": 2560
     }
   },
   {
@@ -1483,10 +1496,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "She’s awesome",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/4f4e0b517f7dc7e33176c2b46823d9d6-1723315783.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/4f4e0b517f7dc7e33176c2b46823d9d6-1723315783.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/4f4e0b517f7dc7e33176c2b46823d9d6-1723315783/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/4f4e0b517f7dc7e33176c2b46823d9d6-1723315783/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/4f4e0b517f7dc7e33176c2b46823d9d6-1723315783/poster.webp",
+      "width": 1440,
+      "height": 2560
     }
   },
   {
@@ -1519,10 +1533,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "Gisela is very professional and has done great work for my prodoct. Thank you very much.",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/0f573485b33a04974bdac2fe7f4894a1-1722972095.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/0f573485b33a04974bdac2fe7f4894a1-1722972095.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/0f573485b33a04974bdac2fe7f4894a1-1722972095/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/0f573485b33a04974bdac2fe7f4894a1-1722972095/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/0f573485b33a04974bdac2fe7f4894a1-1722972095/poster.webp",
+      "width": 1080,
+      "height": 1920
     }
   },
   {
@@ -1536,10 +1551,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Excelente trabajo, muy profesional y rapida entrega",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/felixsegovia525.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/89cd986722074e9d8a79bd2294ab0654-1722876531.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/89cd986722074e9d8a79bd2294ab0654-1722876531.webp",
-      "width": 420,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/89cd986722074e9d8a79bd2294ab0654-1722876531/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/89cd986722074e9d8a79bd2294ab0654-1722876531/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/89cd986722074e9d8a79bd2294ab0654-1722876531/poster.webp",
+      "width": 1440,
+      "height": 2462
     }
   },
   {
@@ -1574,10 +1590,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "excelente, gracias por todo gisela, lograste lo que queria para mi proyecto, el video quedo espectacular gracias.",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/josegaravito5.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/6da58872952ed834adf449c95bef1d53-1721666641.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/6da58872952ed834adf449c95bef1d53-1721666641.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/6da58872952ed834adf449c95bef1d53-1721666641/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/6da58872952ed834adf449c95bef1d53-1721666641/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/6da58872952ed834adf449c95bef1d53-1721666641/poster.webp",
+      "width": 1440,
+      "height": 2560
     }
   },
   {
@@ -1590,10 +1607,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "es",
     "text": "Profesional, muy rápida y cumplió todas las directrices",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/d48415acd3a27258f7d6edc774f25811-1721684424.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/d48415acd3a27258f7d6edc774f25811-1721684424.webp",
-      "width": 1280,
-      "height": 704
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/d48415acd3a27258f7d6edc774f25811-1721684424/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/d48415acd3a27258f7d6edc774f25811-1721684424/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/d48415acd3a27258f7d6edc774f25811-1721684424/poster.webp",
+      "width": 2618,
+      "height": 1440
     }
   },
   {
@@ -1607,10 +1625,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "excelente video, Gracias por el trabajo gisela, estaremos en contacto para proximos videos",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/josegaravito5.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/3451cf2988b6df639427e161b5b418cf-1721422662.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/3451cf2988b6df639427e161b5b418cf-1721422662.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/3451cf2988b6df639427e161b5b418cf-1721422662/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/3451cf2988b6df639427e161b5b418cf-1721422662/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/3451cf2988b6df639427e161b5b418cf-1721422662/poster.webp",
+      "width": 1440,
+      "height": 2560
     }
   },
   {
@@ -1624,10 +1643,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Great Video, appreciate the work!",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/boombiz.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/bb9566df0093515f68b637c99eab7291-1721510584.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/bb9566df0093515f68b637c99eab7291-1721510584.webp",
-      "width": 1014,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/bb9566df0093515f68b637c99eab7291-1721510584/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/bb9566df0093515f68b637c99eab7291-1721510584/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/bb9566df0093515f68b637c99eab7291-1721510584/poster.webp",
+      "width": 2032,
+      "height": 1440
     }
   },
   {
@@ -1651,10 +1671,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "great experience",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/get1web.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/f10370e560cca763f493f3f52a5cb07e-1721236122.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/f10370e560cca763f493f3f52a5cb07e-1721236122.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/f10370e560cca763f493f3f52a5cb07e-1721236122/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/f10370e560cca763f493f3f52a5cb07e-1721236122/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/f10370e560cca763f493f3f52a5cb07e-1721236122/poster.webp",
+      "width": 1080,
+      "height": 1920
     }
   },
   {
@@ -1668,10 +1689,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Es la segunda vez que hacemos videos y estoy super contento, muy profesional",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/felixsegovia525.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/92c2f4d4cd2b09b62d6355eb42714f37-1720540935.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/92c2f4d4cd2b09b62d6355eb42714f37-1720540935.webp",
-      "width": 414,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/92c2f4d4cd2b09b62d6355eb42714f37-1720540935/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/92c2f4d4cd2b09b62d6355eb42714f37-1720540935/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/92c2f4d4cd2b09b62d6355eb42714f37-1720540935/poster.webp",
+      "width": 1080,
+      "height": 1878
     }
   },
   {
@@ -1695,10 +1717,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "highly recommend",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/a28a61fae616d44a8d558dbfb1839045-1719873892.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/a28a61fae616d44a8d558dbfb1839045-1719873892.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/a28a61fae616d44a8d558dbfb1839045-1719873892/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/a28a61fae616d44a8d558dbfb1839045-1719873892/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/a28a61fae616d44a8d558dbfb1839045-1719873892/poster.webp",
+      "width": 1080,
+      "height": 1920
     }
   },
   {
@@ -1733,10 +1756,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "es",
     "text": "Exceletnte trabajo! Muy recomendable y profesional",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/6efca1642cf10832a04f26c217f614aa-1719139017.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/6efca1642cf10832a04f26c217f614aa-1719139017.webp",
-      "width": 1280,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/6efca1642cf10832a04f26c217f614aa-1719139017/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/6efca1642cf10832a04f26c217f614aa-1719139017/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/6efca1642cf10832a04f26c217f614aa-1719139017/poster.webp",
+      "width": 1920,
+      "height": 1080
     }
   },
   {
@@ -1760,10 +1784,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Great seller! She has a wonderful charisma for speaking to the camera with a very nice professional presentation. I recommend her for any of your advertising requirements. I plan on using her again in future needs. Thank you so much for a job well done.",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/willyramos.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/09658f7a1ba397ab5f5654c2ba53971f-1718802540.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/09658f7a1ba397ab5f5654c2ba53971f-1718802540.webp",
-      "width": 1280,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/09658f7a1ba397ab5f5654c2ba53971f-1718802540/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/09658f7a1ba397ab5f5654c2ba53971f-1718802540/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/09658f7a1ba397ab5f5654c2ba53971f-1718802540/poster.webp",
+      "width": 1920,
+      "height": 1080
     }
   },
   {
@@ -1819,10 +1844,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "Gisela went beyond my expectations. Clear voice, well dressed and fast delivery. Highly recommended A+++++",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793.webp",
-      "width": 1280,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793/poster.webp",
+      "width": 1920,
+      "height": 1080
     }
   },
   {
@@ -1836,10 +1862,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Gisela has demonstrated exceptional professionalism, unparalleled cooperation, and a deep understanding of the task, exceeding our expectations. Throughout the project, Gisela has been highly proactive, responsive, and reliable, consistently delivering outstanding results with the utmost quality and efficiency. Her ability to communicate effectively and collaborate seamlessly with the team has been instrumental in achieving our goals and setting new standards for excellence.",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/ricardopinzon.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/2f643394927cbebb18eb883ffa0393ad-1715605327.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/2f643394927cbebb18eb883ffa0393ad-1715605327.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/2f643394927cbebb18eb883ffa0393ad-1715605327/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/2f643394927cbebb18eb883ffa0393ad-1715605327/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/2f643394927cbebb18eb883ffa0393ad-1715605327/poster.webp",
+      "width": 1080,
+      "height": 1920
     }
   },
   {
@@ -1875,10 +1902,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Another wonderful experience, excellent and professional video. Thank you.",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/radiostreamlive.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/622e711f4167168330253ee930890b38-1714749148.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/622e711f4167168330253ee930890b38-1714749148.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/622e711f4167168330253ee930890b38-1714749148/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/622e711f4167168330253ee930890b38-1714749148/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/622e711f4167168330253ee930890b38-1714749148/poster.webp",
+      "width": 1080,
+      "height": 1920
     }
   },
   {
@@ -1892,10 +1920,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "Totalmente recomendada, es la primera vez que quedo tan contento con un servicio. Siempre tuvo la mejor disposición a realizar los ajustes. Me encantó.",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/andresrincon77.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/41858216af46770dcbdbade186a25eef-1714214393.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/41858216af46770dcbdbade186a25eef-1714214393.webp",
-      "width": 1280,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/41858216af46770dcbdbade186a25eef-1714214393/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/41858216af46770dcbdbade186a25eef-1714214393/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/41858216af46770dcbdbade186a25eef-1714214393/poster.webp",
+      "width": 1920,
+      "height": 1080
     }
   },
   {
@@ -1909,10 +1938,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "It was a great experience! The final product outcome is highly professional. We want to thank Gisela for her kindness and availability. We'll definitely be back soon to purchase more of her gigs.",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/radiostreamlive.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/9a6219abaecdf974a4ea91510220ad7e-1714060793.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/9a6219abaecdf974a4ea91510220ad7e-1714060793.webp",
-      "width": 404,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/9a6219abaecdf974a4ea91510220ad7e-1714060793/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/9a6219abaecdf974a4ea91510220ad7e-1714060793/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/9a6219abaecdf974a4ea91510220ad7e-1714060793/poster.webp",
+      "width": 1080,
+      "height": 1920
     }
   },
   {
@@ -1925,10 +1955,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "es",
     "text": "\"Trabajar con Gisela ha sido una experiencia excepcional. Desde el principio, quedó claro que ella es una verdadera profesional en su campo. No solo captó la esencia de lo que tenía en mente con asombrosa precisión, sino que también trajo mi visión a la realidad de manera impecable. Lo que más impresiona de Gisela, además de su habilidad y competencia, es su capacidad para mantener una comunicación fluida y efectiva, lo cual facilitó enormemente el proceso de colaboración. Todo esto, combinado con su impresionante capacidad para entregar resultados en tiempos récord, hace que recomendar sus servicios sea un placer absoluto. Sin duda, Gisela superó todas las expectativas, y estoy inmensamente agradecido por su dedicación y excelente trabajo.\"",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/d810bc168aae2276b6f29c2a7accd412-1712946722.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/d810bc168aae2276b6f29c2a7accd412-1712946722.webp",
-      "width": 1280,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/d810bc168aae2276b6f29c2a7accd412-1712946722/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/d810bc168aae2276b6f29c2a7accd412-1712946722/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/d810bc168aae2276b6f29c2a7accd412-1712946722/poster.webp",
+      "width": 1920,
+      "height": 1080
     }
   },
   {
@@ -1964,10 +1995,11 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "text": "She does an excellent job, I am delighted to work with her. thank you",
     "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/romeros9.webp",
     "video": {
-      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/f70f6aee119262119ddefb63612783fb-1711564954.mp4",
-      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/f70f6aee119262119ddefb63612783fb-1711564954.webp",
-      "width": 1280,
-      "height": 720
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v2/f70f6aee119262119ddefb63612783fb-1711564954/avc.mp4",
+      "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v2/f70f6aee119262119ddefb63612783fb-1711564954/hevc.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v2/f70f6aee119262119ddefb63612783fb-1711564954/poster.webp",
+      "width": 2560,
+      "height": 1440
     }
   }
 ];

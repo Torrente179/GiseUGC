@@ -28,7 +28,7 @@ export type FeedKind = 'full' | 'preview';
 export type FeedMedia = FeedRendition & { slug: string };
 
 // Main@5.0 covers the 1440 × 2560 master; every HEVC-capable phone decodes it.
-const HEVC_TYPE = 'video/mp4; codecs="hvc1.1.6.L150.B0"';
+export const HEVC_TYPE = 'video/mp4; codecs="hvc1.1.6.L150.B0"';
 /** Active reel + the next + the previous, and one spare for the hand-over. */
 const POOL_SIZE = 4;
 const WARM_LIMIT = 3;

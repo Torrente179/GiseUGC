@@ -120,13 +120,45 @@ videos. Nothing in Testimonios loads from Fiverr now, and
     so a reel doesn't make the card a page long.
   - The player sizes itself to the video, so vertical deliveries play
     full-height instead of inside a 16:9 box.
-- **Quality caveat:** these are Fiverr's 720p renditions, with Fiverr's
-  watermark burned in. The original uploads (4K / 1080p, no watermark) are
-  still on Fiverr. Moving to them is a separate step that needs the user's
-  go-ahead for a ~2.3 GB download.
+- **Quality caveat:** these were Fiverr's 720p renditions, with Fiverr's
+  watermark burned in. The original uploads replaced them the same day (next
+  section).
 - **Verified:** headless Chrome at 1440 and 390 with the "Con video" filter.
   - All posters and photos load from `media.giselasaldarriaga.com`.
   - A vertical video plays at 0.561 and a landscape one at 1.778, with no
     overflow.
   - Zero requests to Fiverr.
   - typecheck, ESLint, 404 tests.
+
+## The original uploads, not Fiverr's 720p (2026-10-16)
+
+The user asked for maximum quality. Fiverr's "HD" rendition (`t_fiverr_hd`)
+was a 720p copy (404×720 for the vertical ones) with Fiverr's watermark
+burned in. The file as uploaded is still served (`fl_attachment`). For all
+28 it is an iPhone HEVC master:
+- 9 at 4K, 3 just under 4K, 16 at 1080p;
+- 7.8–23 Mbps;
+- no watermark.
+
+The user approved the ~2.3 GB download.
+
+- **What plays:** the HEVC original itself, repackaged as fast-start MP4
+  with no re-encode, 4K and rotated ones included.
+  - Browsers apply the rotation flag themselves.
+  - A "transparent" 1440p re-encode of these grainy 4K masters came out at
+    24–30 Mbps against the original's ~15. So the original is both sharper
+    and smaller, and here it beats the portfolio rule of 4K → 1440.
+- **Fallback:** browsers without HEVC get an H.264 file.
+  - x264 CRF 17, from `scripts/lib/video-encoding.mjs`.
+  - 4K is delivered at 1440 on the short side.
+  - The player lists the HEVC file first with its codec type, so each
+    browser picks the one it can play.
+- **Posters:** frame 0 of the H.264 file, up to 1080 px wide (were 404 px).
+- **R2:** `videos/reviews/v2/<asset>/{hevc,avc}.mp4` and `poster.webp`.
+  - HEVC 2.1 GB, H.264 3.0 GB.
+  - A video loads only when someone presses play.
+  - The v1 720p files stay on R2, unused.
+- **Shared module:** the encoder settings, probe and R2 upload moved into
+  `scripts/lib/video-encoding.mjs`, shared with `scripts/encode-feed.mjs`.
+  `encode-feed.mjs --data-only` reproduces `feed-renditions.ts` byte for
+  byte after the move.

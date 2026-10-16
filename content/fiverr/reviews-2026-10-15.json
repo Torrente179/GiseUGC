@@ -2211,119 +2211,148 @@
  },
  "avatarsCapturedAt": "2026-10-16",
  "selfHosted": {
-  "version": "v1",
+  "videoVersion": "v2",
+  "photoVersion": "v1",
   "videos": {
    "728c1d1bd1f520c558e1f725ec0993f7-1728843514": {
-    "width": 1280,
-    "height": 720
+    "width": 2560,
+    "height": 1440,
+    "hevc": true
    },
    "b0b5a774bb6caacf9eb408e536312fc8-1728054493": {
-    "width": 404,
-    "height": 720
+    "width": 1440,
+    "height": 2560,
+    "hevc": true
    },
    "a204e09e8a43ac5f13d05efb950d558e-1727988572": {
-    "width": 1210,
-    "height": 720
+    "width": 2420,
+    "height": 1440,
+    "hevc": true
    },
    "2eef255dbf0a2648c661d338ee573a0a-1727463332": {
-    "width": 404,
-    "height": 720
+    "width": 1440,
+    "height": 2560,
+    "hevc": true
    },
    "53588e0ff8bfe257c4c5f83610cb4aea-1726506879": {
-    "width": 404,
-    "height": 720
+    "width": 1440,
+    "height": 2560,
+    "hevc": true
    },
    "2699df2183b13dfefb5e522521689d74-1725629669": {
-    "width": 404,
-    "height": 720
+    "width": 1440,
+    "height": 2560,
+    "hevc": true
    },
    "fd738200f71f85853904604647d7ddb9-1724778252": {
-    "width": 404,
-    "height": 720
+    "width": 1440,
+    "height": 2560,
+    "hevc": true
    },
    "7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127": {
-    "width": 404,
-    "height": 720
+    "width": 1440,
+    "height": 2560,
+    "hevc": true
    },
    "1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540": {
-    "width": 404,
-    "height": 720
+    "width": 1440,
+    "height": 2560,
+    "hevc": true
    },
    "4f4e0b517f7dc7e33176c2b46823d9d6-1723315783": {
-    "width": 404,
-    "height": 720
+    "width": 1440,
+    "height": 2560,
+    "hevc": true
    },
    "0f573485b33a04974bdac2fe7f4894a1-1722972095": {
-    "width": 404,
-    "height": 720
+    "width": 1080,
+    "height": 1920,
+    "hevc": true
    },
    "89cd986722074e9d8a79bd2294ab0654-1722876531": {
-    "width": 420,
-    "height": 720
+    "width": 1440,
+    "height": 2462,
+    "hevc": true
    },
    "6da58872952ed834adf449c95bef1d53-1721666641": {
-    "width": 404,
-    "height": 720
+    "width": 1440,
+    "height": 2560,
+    "hevc": true
    },
    "d48415acd3a27258f7d6edc774f25811-1721684424": {
-    "width": 1280,
-    "height": 704
+    "width": 2618,
+    "height": 1440,
+    "hevc": true
    },
    "3451cf2988b6df639427e161b5b418cf-1721422662": {
-    "width": 404,
-    "height": 720
+    "width": 1440,
+    "height": 2560,
+    "hevc": true
    },
    "bb9566df0093515f68b637c99eab7291-1721510584": {
-    "width": 1014,
-    "height": 720
+    "width": 2032,
+    "height": 1440,
+    "hevc": true
    },
    "f10370e560cca763f493f3f52a5cb07e-1721236122": {
-    "width": 404,
-    "height": 720
+    "width": 1080,
+    "height": 1920,
+    "hevc": true
    },
    "92c2f4d4cd2b09b62d6355eb42714f37-1720540935": {
-    "width": 414,
-    "height": 720
+    "width": 1080,
+    "height": 1878,
+    "hevc": true
    },
    "a28a61fae616d44a8d558dbfb1839045-1719873892": {
-    "width": 404,
-    "height": 720
+    "width": 1080,
+    "height": 1920,
+    "hevc": true
    },
    "6efca1642cf10832a04f26c217f614aa-1719139017": {
-    "width": 1280,
-    "height": 720
+    "width": 1920,
+    "height": 1080,
+    "hevc": true
    },
    "09658f7a1ba397ab5f5654c2ba53971f-1718802540": {
-    "width": 1280,
-    "height": 720
+    "width": 1920,
+    "height": 1080,
+    "hevc": true
    },
    "cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793": {
-    "width": 1280,
-    "height": 720
+    "width": 1920,
+    "height": 1080,
+    "hevc": true
    },
    "2f643394927cbebb18eb883ffa0393ad-1715605327": {
-    "width": 404,
-    "height": 720
+    "width": 1080,
+    "height": 1920,
+    "hevc": true
    },
    "622e711f4167168330253ee930890b38-1714749148": {
-    "width": 404,
-    "height": 720
+    "width": 1080,
+    "height": 1920,
+    "hevc": true
    },
    "41858216af46770dcbdbade186a25eef-1714214393": {
-    "width": 1280,
-    "height": 720
+    "width": 1920,
+    "height": 1080,
+    "hevc": true
    },
    "9a6219abaecdf974a4ea91510220ad7e-1714060793": {
-    "width": 404,
-    "height": 720
+    "width": 1080,
+    "height": 1920,
+    "hevc": true
    },
    "d810bc168aae2276b6f29c2a7accd412-1712946722": {
-    "width": 1280,
-    "height": 720
+    "width": 1920,
+    "height": 1080,
+    "hevc": true
    },
    "f70f6aee119262119ddefb63612783fb-1711564954": {
-    "width": 1280,
-    "height": 720
+    "width": 2560,
+    "height": 1440,
+    "hevc": true
    }
   },
   "avatars": [
