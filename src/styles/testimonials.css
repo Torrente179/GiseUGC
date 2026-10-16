@@ -309,7 +309,8 @@
   cursor: pointer;
 }
 
-/* The delivered video: Fiverr's own poster, play on demand. */
+/* The delivered video: its first frame, play on demand. The component sets
+   the aspect ratio from the video (vertical ones cropped to 4:5). */
 .fr-video {
   position: relative;
   display: block;
@@ -327,6 +328,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 30%;
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -453,12 +455,16 @@
   cursor: pointer;
 }
 
+/* --fr-ratio is the playing video's width / height: the card is as wide as the
+   video can be at 66vh, so a vertical delivery plays at its own shape. */
 .fr-modal-card {
+  --fr-ratio: 1.7778;
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: min(960px, 100%);
+  width: min(960px, 100%, calc(66vh * var(--fr-ratio)));
+  min-width: min(22rem, 100%);
   max-height: 100%;
   animation: fr-rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -471,9 +477,9 @@
 }
 
 .fr-modal-video {
-  width: 100%;
-  max-height: 70vh;
-  aspect-ratio: 16 / 9;
+  align-self: center;
+  width: min(100%, calc(66vh * var(--fr-ratio)));
+  aspect-ratio: var(--fr-ratio);
   border-radius: 1.25rem;
   background: #000;
 }
@@ -521,11 +527,16 @@
   .fr-modal { padding: 0; place-items: stretch; }
   .fr-modal-scrim { background: rgba(8, 8, 10, 0.97); }
   .fr-modal-card {
+    width: 100%;
+    min-width: 0;
     justify-content: center;
     padding: calc(env(safe-area-inset-top, 0px) + 4.5rem) 1rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
   }
   .fr-modal-close { top: calc(env(safe-area-inset-top, 0px) + 1rem); right: 1rem; }
-  .fr-modal-video { border-radius: 1rem; }
+  .fr-modal-video {
+    width: min(100%, calc((100svh - 19rem) * var(--fr-ratio)));
+    border-radius: 1rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

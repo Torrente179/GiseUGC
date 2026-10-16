@@ -20,12 +20,12 @@ export type FiverrReview = {
   service: FiverrService;
   lang: 'es' | 'en' | 'it';
   text: string;
-  /** The client's Fiverr profile photo (small), when they have one. */
+  /** The client's Fiverr profile photo (120 × 120 WebP), when they have one. */
   avatar?: string;
   /** Gisela's public reply on Fiverr. */
   reply?: string;
-  /** The delivered video, served by Fiverr's media CDN (HD, watermarked by Fiverr). */
-  video?: { src: string; poster: string };
+  /** The delivered video (Fiverr's HD rendition, watermarked by Fiverr) and its frame-0 poster. */
+  video?: { src: string; poster: string; width: number; height: number };
 };
 
 export const FIVERR_PROFILE_URL = "https://www.fiverr.com/gisela_sm";
@@ -54,7 +54,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "social",
     "lang": "en",
     "text": "Very professional!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/cac73072ed8c40541534c4caa1437b13-1741110522694/22af82d1-fcdf-4921-a9f5-d585c9deb6a5.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/christina_mc.webp"
   },
   {
     "id": "yoslanqv-4",
@@ -65,7 +65,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Excellent job. Very pleased with the results. I highly recommend her.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/profile/photos/65035287/original/photo.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/yoslanqv.webp"
   },
   {
     "id": "scalewealth-5",
@@ -76,7 +76,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Very professional",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/6102b8756338078736bca1808456d953-1765827174693/7f7e9b41-7499-48cd-8ba2-1f4134708d53.jpeg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/scalewealth.webp"
   },
   {
     "id": "philipbraham185-6",
@@ -147,7 +147,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Very professional!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/6102b8756338078736bca1808456d953-1765827174693/7f7e9b41-7499-48cd-8ba2-1f4134708d53.jpeg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/scalewealth.webp"
   },
   {
     "id": "christina_mc-13",
@@ -158,7 +158,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "social",
     "lang": "en",
     "text": "Very professional!!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/cac73072ed8c40541534c4caa1437b13-1741110522694/22af82d1-fcdf-4921-a9f5-d585c9deb6a5.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/christina_mc.webp"
   },
   {
     "id": "mizarmx-15",
@@ -179,7 +179,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "social",
     "lang": "en",
     "text": "Very professional!!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/cac73072ed8c40541534c4caa1437b13-1741110522694/22af82d1-fcdf-4921-a9f5-d585c9deb6a5.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/christina_mc.webp"
   },
   {
     "id": "mizarmx-17",
@@ -210,7 +210,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "social",
     "lang": "es",
     "text": "muy bien! gracias",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/ea7f79578da55cb15c11933895d8ac8d-2032789411748454902628/JPEG_20250528_195501_6731074104156458973.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/martinbp95.webp"
   },
   {
     "id": "mizuarukari-20",
@@ -231,7 +231,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "social",
     "lang": "en",
     "text": "Understand the scope of work. Great video",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/cac73072ed8c40541534c4caa1437b13-1741110522694/22af82d1-fcdf-4921-a9f5-d585c9deb6a5.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/christina_mc.webp"
   },
   {
     "id": "geovanedasil155-22",
@@ -242,7 +242,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "social",
     "lang": "es",
     "text": "Gisela es excelente. Me entregó todo correctamente y corrigió los detalles del video con mucho cuidado. La recomiendo al 100% y sin duda la contrataré nuevamente para otros servicios. Realmente estamos encantados con su trabajo.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/7dcb00f325bd6ecfc1789e15d545266a-1763927631582/2a839cb5-3310-4a71-b066-f6d1d6b7bc45.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/geovanedasil155.webp"
   },
   {
     "id": "fazilfb-24",
@@ -273,7 +273,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "social",
     "lang": "es",
     "text": "una genia !!!!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/efc23296e9eedadfac0474977b094433-1767349108095/e65fb61e-5502-4c52-8004-3bfd83b0277a.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/rasecazimuth.webp"
   },
   {
     "id": "vmachado05-28",
@@ -284,7 +284,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Gisela es muy buena y profesional. La recomiendo bastante.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/profile/photos/24746540/original/KB1_0619.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/vmachado05.webp"
   },
   {
     "id": "philipbraham185-29",
@@ -335,7 +335,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "great job love it",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/ed85abf7c74f5ee62fc76b3056a27659-1587224231742/cf007c49-de9e-45ff-b898-427449606ea9.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/vidadr.webp"
   },
   {
     "id": "mizarmx-34",
@@ -376,7 +376,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Always great! Thank you again!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/cac73072ed8c40541534c4caa1437b13-1741110522694/22af82d1-fcdf-4921-a9f5-d585c9deb6a5.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/christina_mc.webp"
   },
   {
     "id": "mizuarukari-38",
@@ -397,7 +397,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Great job, will definitely use Gisela again, fast delivery and great quality of work.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/9d25b117ac8229143f312c3c62e3abd4-1655584987363/9fc7d8e2-fac7-41dd-840f-b1c18c9894d6.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/akjoel89.webp"
   },
   {
     "id": "stangt2000-40",
@@ -408,7 +408,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Muy buen trabajado cumplió con las expectativas. Gracias",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/c5833aeb007db2959b0d195b3aabfd4f-350383051755039849.838128/5CA3DCB8-6A56-46DE-A544-EE54C5AE9E33"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/stangt2000.webp"
   },
   {
     "id": "yoitsoz-41",
@@ -439,7 +439,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "social",
     "lang": "es",
     "text": "todo genia Gisela, gracias :)",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/ea7f79578da55cb15c11933895d8ac8d-2032789411748454902628/JPEG_20250528_195501_6731074104156458973.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/martinbp95.webp"
   },
   {
     "id": "bartolomeolops-44",
@@ -450,7 +450,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Muy buen trabajo Gisela, muchas gracias.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/f581084143f3169c5a61eca4e4e48298-1654165054342/b90495e5-7610-4637-b170-5d4216d72af8.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/bartolomeolops.webp"
   },
   {
     "id": "tophatmedia-45",
@@ -461,7 +461,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Gisela is outstanding! 🎙️ Her professionalism, presence, and storytelling ability are next-level. She transformed our brief into a powerful and captivating narrative — with the tone, flow, and delivery of a seasoned TV presenter. Her voice, articulation, and screen presence are incredibly polished, and you can tell she brings real journalistic experience to the table. Communication was smooth, revisions weren’t needed, and the final result far exceeded expectations. If you want your message delivered with impact and authority, Gisela is the one. Truly world-class! 🌟🎥👏",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/945bf7293425b183af63aa4b3088239e-1763967702365/6339f738-5a47-455a-ba91-233e74d9cea5.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/tophatmedia.webp"
   },
   {
     "id": "mobilelize-46",
@@ -482,7 +482,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Bravo muy bien hecho muchas gracias",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/ed85abf7c74f5ee62fc76b3056a27659-1587224231742/cf007c49-de9e-45ff-b898-427449606ea9.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/vidadr.webp"
   },
   {
     "id": "nexum7-48",
@@ -503,7 +503,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Seller always delivered great gig. Thanks",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/profile/photos/333025/original/3m43pf3l55T25P25R09aab897de12982d1fd2.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/choirboy.webp"
   },
   {
     "id": "choirboy-51",
@@ -514,7 +514,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Gisela delivered great gig. We recommend her service.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/profile/photos/333025/original/3m43pf3l55T25P25R09aab897de12982d1fd2.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/choirboy.webp"
   },
   {
     "id": "edgardomvazquez-52",
@@ -545,7 +545,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Working with Gisela was a fantastic experience. She was professional, attentive to detail, and delivered high-quality work exactly as promised. Communication was smooth from start to finish, and she truly went above and beyond to make sure everything was just right. I highly recommend her services to anyone looking for reliable, top-notch results.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/31b8a358cffd18818a21a7a119d56e22-159790111752051346.022013/ABD6B100-1EB0-435D-B2F3-05400BA3D09A"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/marioraw.webp"
   },
   {
     "id": "lesjusino89-55",
@@ -576,7 +576,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "2nd time working with Gisela and A+ results first time, no revisions needed. Highly recommended!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/9d25b117ac8229143f312c3c62e3abd4-1655584987363/9fc7d8e2-fac7-41dd-840f-b1c18c9894d6.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/akjoel89.webp"
   },
   {
     "id": "mizuarukari-58",
@@ -597,7 +597,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Super contento como siempre. Gracias 😊",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/ea7f79578da55cb15c11933895d8ac8d-2032789411748454902628/JPEG_20250528_195501_6731074104156458973.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/martinbp95.webp"
   },
   {
     "id": "dolivierp-60",
@@ -628,7 +628,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Gracias como siempre, un gusto!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/ea7f79578da55cb15c11933895d8ac8d-2032789411748454902628/JPEG_20250528_195501_6731074104156458973.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/martinbp95.webp"
   },
   {
     "id": "martinbp95-63",
@@ -639,7 +639,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "NICE JOB GISELA",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/ea7f79578da55cb15c11933895d8ac8d-2032789411748454902628/JPEG_20250528_195501_6731074104156458973.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/martinbp95.webp"
   },
   {
     "id": "jacobstarkdig-64",
@@ -650,7 +650,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "This is our second project with Gisela and the deliverable are always top quality. She's great to work with and delivered exactly to the vision we had. We will continue to work with her for our videos and social media ads.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/f3bfde43e014ebe2004a03e6e284eae4-1787714044369/d782e1a6-6ca5-474b-adaa-fc022c26e495.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/jacobstarkdig.webp"
   },
   {
     "id": "gusmancilla-65",
@@ -661,7 +661,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Gisela was very helpful and her delivery was super nice! We hope to work with here more in the future. How about this week?",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/440d181f85c7bbaf85537e551fe7d092-1633575700160/4b700993-5926-4c60-afe6-5e7fbf28a55a.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/gusmancilla.webp"
   },
   {
     "id": "shimiohayon-66",
@@ -672,7 +672,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "thanks you we will meet again soon :)",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/1106390663a16a0c7efa7141f3c8da5c-1680799007575/0b9d017a-69c4-4904-8927-ab5bd06886b7.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/shimiohayon.webp"
   },
   {
     "id": "jacobstarkdig-67",
@@ -683,7 +683,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "It was such a pleasure to work with a talented and very gifted actor like Gisela. I literally submitted this order in the late evening yesterday and had it waiting for me in the morning. She was professional, communicated great and OMG the final delivery exceeded our expectations. We're glad we found her on Fiverr and look forward to working on future projects together.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/f3bfde43e014ebe2004a03e6e284eae4-1787714044369/d782e1a6-6ca5-474b-adaa-fc022c26e495.png",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/jacobstarkdig.webp",
     "reply": "Thank you so much for trusting my work! The result was excellent thanks to the client’s clear instructions. It’s a pleasure to work together again on new projects."
   },
   {
@@ -695,7 +695,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Espectacular! super profesional y rápida haciendo su trabajo. Muy recomendable, gracias Gisela.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/ea7f79578da55cb15c11933895d8ac8d-2032789411748454902628/JPEG_20250528_195501_6731074104156458973.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/martinbp95.webp"
   },
   {
     "id": "arisonzorrilla-69",
@@ -706,7 +706,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Excelente. Muy profesional todo súper bien.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/65a45c387dde44d462f36561a658401c-1525719331938/fe7d3b14-1fc4-4115-8a36-0fb4ec01567b.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/arisonzorrilla.webp"
   },
   {
     "id": "salguero1983-70",
@@ -737,7 +737,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Great as always thank you!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/cac73072ed8c40541534c4caa1437b13-1741110522694/22af82d1-fcdf-4921-a9f5-d585c9deb6a5.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/christina_mc.webp"
   },
   {
     "id": "lluiscarreras-73",
@@ -758,7 +758,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Brilliant service and fast delivery, highly recommended!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/9d25b117ac8229143f312c3c62e3abd4-1655584987363/9fc7d8e2-fac7-41dd-840f-b1c18c9894d6.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/akjoel89.webp"
   },
   {
     "id": "mohamed151984-75",
@@ -779,7 +779,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Great work .",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/6af252833aeecb4c68f68251034d1c0f-962363841762659539.686194/7B091808-31B6-4334-A678-0550D16B0EAD"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/tapeit12.webp"
   },
   {
     "id": "shupxofficial-77",
@@ -790,7 +790,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "that's my second time i have worked with her on a project. She 💯 delivered.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/43a32e1729e95b3b97db45fba08e4f80-1074107551778814259.612558/CC2B8FF6-47EA-4695-91D6-5AA7CA4FD2F7"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/shupxofficial.webp"
   },
   {
     "id": "alexgutierre913-78",
@@ -811,7 +811,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Gisela is a very eloquent and helpful presenter. It has been a pleasure working with her, and appreciate the attention to detail. We will definitely work with her again. Thank you for the patience with the order as well",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/2b0852b8bbb6dc77f96c94fc185ec5fa-1665103783163/1776b3db-1c75-4d74-8774-00702d678e9c.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/alec5767.webp"
   },
   {
     "id": "randybarth-80",
@@ -822,7 +822,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Gisela did an EXCELLENT job delivering a spokesperson video! Her professionalism, attention to detail, and creativity truly stood out, and working with her was a breeze thanks to her quick responsiveness and proactive communication. Highly recommended! ¡Gisela hizo un trabajo EXCELENTE al grabar el video como portavoz! Su profesionalismo, atención al detalle y creatividad realmente destacaron, y fue un placer trabajar con ella gracias a su rápida respuesta y comunicación proactiva. ¡Altamente recomendada!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/fc7bc6d24c6bdc63513e93c6f1610473-1572533969694/8082ae8d-9f61-45ba-ae13-82e4c0da32f1.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/randybarth.webp"
   },
   {
     "id": "vidalex-81",
@@ -853,7 +853,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "can't wait to work with her again. Great content",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/43a32e1729e95b3b97db45fba08e4f80-1074107551778814259.612558/CC2B8FF6-47EA-4695-91D6-5AA7CA4FD2F7"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/shupxofficial.webp"
   },
   {
     "id": "zotello-84",
@@ -864,7 +864,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "She is amazing! I highly recommend her!!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/7f10e71b8d83c031724ee3e6ffca310d-1693255967182/284224c3-52cc-4ad7-9295-cedcc237051f.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/zotello.webp"
   },
   {
     "id": "fvives6-85",
@@ -935,7 +935,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Great quality of work",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/e20b4fc647a4379b88bd164a1d582fe4-1714944444451/dd09a3d2-4bf7-4b06-808f-4e153ce374c7.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/priscigon.webp"
   },
   {
     "id": "saootoya-92",
@@ -956,7 +956,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "\"Gisela's video testimonial service delivers exactly what my business was looking for—authentic, polished customer stories that build trust. Her streamlined process makes it easy to capture genuine testimonials, while her professional editing ensures each video looks outstanding. We saw increased engagement and conversions after adding their testimonials to our site. A fantastic investment for any company looking to strengthen their social proof!\"",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/6ae46ad91f8560da04248110cfeae89d-1739805359924/907412ed-f150-49fa-bdee-8d9eb301f7e7.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/randyleedailey.webp"
   },
   {
     "id": "saootoya-94",
@@ -977,7 +977,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Excellent work. Gisela delivered exactly what I requested. Good pronunciation, presence, and she also chose how to present her image to align with the service we offer. I will definitely consider her for future projects and recommend her work to anyone looking for someone like her for their advertising in Spanish.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/a9e583c9dd35e495e9f7a67aa72ce372-1633459913711/201809f9-5310-473d-8213-5cd7ad11a20b.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/borisvillon.webp"
   },
   {
     "id": "ihsan_mahbub-96",
@@ -988,7 +988,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Great communication. Timely replies. Attention to detail with great creativity",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/c487f857602219fd4cc64d748f620270-1785415317990/bc21be27-a245-4f16-b174-52d199c508d9.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/ihsan_mahbub.webp"
   },
   {
     "id": "ppapisimo-97",
@@ -1039,7 +1039,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Thank you so much! Perfect job!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/cac73072ed8c40541534c4caa1437b13-1741110522694/22af82d1-fcdf-4921-a9f5-d585c9deb6a5.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/christina_mc.webp"
   },
   {
     "id": "macieljuniornun-102",
@@ -1050,7 +1050,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Todo perfecto, mucha fluidez y profesionalismo. ¡Felicitaciones por el trabajo!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/48beb4e75311651b95a38775eac83c9f-1747341006425/0eace428-5092-4ecd-8878-cb77f23134e7.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/macieljuniornun.webp"
   },
   {
     "id": "bogdanpatrut980-103",
@@ -1091,7 +1091,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Muy bien. Esxclente, seguirmos trabajando juntos.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/78e4f205efdade9dd33f432a202b8237-1743361577595/bb2b4100-15c6-4873-86ca-900b4ea3ca5d.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/pty507.webp"
   },
   {
     "id": "allitzvania-107",
@@ -1102,7 +1102,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Excelente video, muy profesional",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/84cb4cfb8bfcce587b0d30403e6b7811-1227046341734980774.8615541/003C6ECB-828B-4006-9509-5E1774C25521"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/allitzvania.webp"
   },
   {
     "id": "salomon_garza-108",
@@ -1143,7 +1143,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Excelente trabajo!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/0256c3d69955931ea0f0035f58b114bb-479695711732586647.424259/4076C143-957B-4E65-9739-EA40603DB53E"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/fcarusop.webp"
   },
   {
     "id": "lead_gen_team_1-112",
@@ -1184,7 +1184,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Great to work with.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/f44b5c53ad7e83ac3572710c481f1512-1401063701703439793.386529/F7EFE867-14CF-4DB8-8359-3A73499DB814"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/clomoney949.webp"
   },
   {
     "id": "donbachy-116",
@@ -1205,7 +1205,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "⭐️⭐️⭐️⭐️⭐️ I couldn’t be happier with the results! Gisela delivered a natural and engaging performance that elevated my brand’s message. She was professional, followed my instructions perfectly, and even added a warm, personal touch that made the video feel authentic and relatable. The turnaround time was incredibly fast, and the final video quality exceeded my expectations. I highly recommend this gig to anyone looking for a reliable and talented spokesperson. I’ll definitely be coming back for more!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/979ea7f3e5091922e6a94bf012699d20-1695100929050/c5f536fe-95f7-4ec7-bf79-006f957b2f8b.jpeg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/elcarteltv.webp"
   },
   {
     "id": "jaime2618-119",
@@ -1216,7 +1216,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Excellent job - great video - thank you",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/1b5cc199569e33954a05705c14ea062a-1651874110705/bd38d28c-6050-408e-a1c0-368deb456ffa.jpeg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/jaime2618.webp"
   },
   {
     "id": "hamzaghazal210-120",
@@ -1227,7 +1227,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "amazing video",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/cf6ddabf261606a45df0e7afaf42e3b1-1761914168100/26b3a245-fcd8-4434-94cf-b9aa17073cbd.jpeg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/hamzaghazal210.webp"
   },
   {
     "id": "elcarteltv-121",
@@ -1238,7 +1238,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "The seller was professional, responsive, and delivered on time, even exceeding my expectations. Highly recommend this service for anyone looking to elevate their multimedia projects. Will definitely be coming back for more! ⭐⭐⭐⭐⭐\"",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/979ea7f3e5091922e6a94bf012699d20-1695100929050/c5f536fe-95f7-4ec7-bf79-006f957b2f8b.jpeg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/elcarteltv.webp"
   },
   {
     "id": "felixsegovia525-122",
@@ -1249,7 +1249,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Excelente profesional, recomendada 100%",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/2088b28dc4cafec8151406e4485f1a10-1701284913910/add5e9bd-10af-48eb-a8cc-212ff39f097f.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/felixsegovia525.webp"
   },
   {
     "id": "romeomp-123",
@@ -1260,10 +1260,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Muy buen trabajo ahora ya sé cómo trabaja es posible que volvamos a requerir de sus servicios.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/d4052b2f063dea362c26b7f87be58fde-1260849241728428928.919664/C4D4B442-BF00-440D-BA8A-91796D4C1BD3",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/romeomp.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/728c1d1bd1f520c558e1f725ec0993f7-1728843514/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/728c1d1bd1f520c558e1f725ec0993f7-1728843514/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/728c1d1bd1f520c558e1f725ec0993f7-1728843514.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/728c1d1bd1f520c558e1f725ec0993f7-1728843514.webp",
+      "width": 1280,
+      "height": 720
     }
   },
   {
@@ -1275,7 +1277,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "It was amazing working with Gisela; she delivered far beyond expectations and paid great attention to all the details, in addition to providing assistance throughout the process. We are looking forward to working together again!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/59b2273a9f58963f9a326bdb8513b46b-1726495224457/3b1729ca-505f-4be2-ad81-de2a8ad756a0.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/begrowth_comm.webp"
   },
   {
     "id": "kevinportillo03-125",
@@ -1286,10 +1288,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "gran trabajo!!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/16554aaa70f4c9b5dccb1c0bf578dd08-269718261727801711395/JPEG_20241001_105510_2156307426416170235.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/kevinportillo03.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/b0b5a774bb6caacf9eb408e536312fc8-1728054493/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/b0b5a774bb6caacf9eb408e536312fc8-1728054493/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/b0b5a774bb6caacf9eb408e536312fc8-1728054493.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/b0b5a774bb6caacf9eb408e536312fc8-1728054493.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1301,10 +1305,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Muy profesional Gisela, entregó un trabajo de calidad",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/16554aaa70f4c9b5dccb1c0bf578dd08-269718261727801711395/JPEG_20241001_105510_2156307426416170235.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/kevinportillo03.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/a204e09e8a43ac5f13d05efb950d558e-1727988572/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/a204e09e8a43ac5f13d05efb950d558e-1727988572/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/a204e09e8a43ac5f13d05efb950d558e-1727988572.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/a204e09e8a43ac5f13d05efb950d558e-1727988572.webp",
+      "width": 1210,
+      "height": 720
     }
   },
   {
@@ -1316,10 +1322,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Nice sellet! Thanks!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/5eb91e142d1396232c5644b1bb24788b-1580121675820/06588e33-0efc-4afd-8276-50bf6a4604af.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/jessien.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/2eef255dbf0a2648c661d338ee573a0a-1727463332/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/2eef255dbf0a2648c661d338ee573a0a-1727463332/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/2eef255dbf0a2648c661d338ee573a0a-1727463332.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/2eef255dbf0a2648c661d338ee573a0a-1727463332.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1341,10 +1349,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Es una experiencia súper positiva trabajar con Gisela. Es realmente rápida y comprometida",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/2285ad2a20c2caa9cdb5702844fccdda-1722389657391/a3b8638f-8f53-4152-9c11-2ab3d5369bdf.png",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/delgauriel.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/53588e0ff8bfe257c4c5f83610cb4aea-1726506879/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/53588e0ff8bfe257c4c5f83610cb4aea-1726506879/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/53588e0ff8bfe257c4c5f83610cb4aea-1726506879.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/53588e0ff8bfe257c4c5f83610cb4aea-1726506879.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1366,7 +1376,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Great work on every order",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/320ce4a46e588407ef019721309b7cd5-1603209615743/6e58a57a-7b1e-48f6-8955-123839920bbc.jpeg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/boombiz.webp"
   },
   {
     "id": "ppapisimo-133",
@@ -1378,8 +1388,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "Communication is key; Gisela asked the right questions and was engaged making suggetions and delivering on time",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/2699df2183b13dfefb5e522521689d74-1725629669/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/2699df2183b13dfefb5e522521689d74-1725629669/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/2699df2183b13dfefb5e522521689d74-1725629669.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/2699df2183b13dfefb5e522521689d74-1725629669.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1391,7 +1403,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Awesome result! Thank you",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/82479657c811ef123469018e04156534-1727419058379/62658674-49b7-4f9f-8226-df5f3981bd2d.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/wprofit.webp"
   },
   {
     "id": "anataylor143-135",
@@ -1403,8 +1415,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "Amazing work.",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/fd738200f71f85853904604647d7ddb9-1724778252/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/fd738200f71f85853904604647d7ddb9-1724778252/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/fd738200f71f85853904604647d7ddb9-1724778252.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/fd738200f71f85853904604647d7ddb9-1724778252.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1417,8 +1431,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "This KOL’s expressiveness is truly impeccable, handling every detail flawlessly. She not only perfectly showcases the product features but also adjusts and reshoots according to my requirements, demonstrating a high level of dedication. Her professional attitude and outstanding performance are truly impressive, making her the best choice for collaboration!",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1431,8 +1447,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "es",
     "text": "gracias 🥰 me encantó",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540/IMG_7332",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540/IMG_7332.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1465,8 +1483,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "She’s awesome",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/4f4e0b517f7dc7e33176c2b46823d9d6-1723315783/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/4f4e0b517f7dc7e33176c2b46823d9d6-1723315783/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/4f4e0b517f7dc7e33176c2b46823d9d6-1723315783.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/4f4e0b517f7dc7e33176c2b46823d9d6-1723315783.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1499,8 +1519,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "Gisela is very professional and has done great work for my prodoct. Thank you very much.",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/0f573485b33a04974bdac2fe7f4894a1-1722972095/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/0f573485b33a04974bdac2fe7f4894a1-1722972095/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/0f573485b33a04974bdac2fe7f4894a1-1722972095.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/0f573485b33a04974bdac2fe7f4894a1-1722972095.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1512,10 +1534,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Excelente trabajo, muy profesional y rapida entrega",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/2088b28dc4cafec8151406e4485f1a10-1701284913910/add5e9bd-10af-48eb-a8cc-212ff39f097f.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/felixsegovia525.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/89cd986722074e9d8a79bd2294ab0654-1722876531/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/89cd986722074e9d8a79bd2294ab0654-1722876531/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/89cd986722074e9d8a79bd2294ab0654-1722876531.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/89cd986722074e9d8a79bd2294ab0654-1722876531.webp",
+      "width": 420,
+      "height": 720
     }
   },
   {
@@ -1527,7 +1551,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Gisela did an outstanding job with our spokesperson video! Her storytelling was captivating, the visuals were stunning, and she maintained a high level of professionalism throughout. Plus, working with her was a breeze—she was incredibly cooperative, fluent, and always quick to respond. Highly recommend! 😊",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/34eea67da05fa10e2b78fd936703eec3-1722782676023/4b51723a-9b1a-4593-8c70-5944ceae5703.jpeg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/germur.webp"
   },
   {
     "id": "fintechlexin-146",
@@ -1548,10 +1572,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "excelente, gracias por todo gisela, lograste lo que queria para mi proyecto, el video quedo espectacular gracias.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/profile/photos/34648481/original/13230290_10157181800290019_8605357567642538156_n.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/josegaravito5.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/6da58872952ed834adf449c95bef1d53-1721666641/IMG_6722",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/6da58872952ed834adf449c95bef1d53-1721666641/IMG_6722.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/6da58872952ed834adf449c95bef1d53-1721666641.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/6da58872952ed834adf449c95bef1d53-1721666641.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1564,8 +1590,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "es",
     "text": "Profesional, muy rápida y cumplió todas las directrices",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/d48415acd3a27258f7d6edc774f25811-1721684424/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/d48415acd3a27258f7d6edc774f25811-1721684424/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/d48415acd3a27258f7d6edc774f25811-1721684424.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/d48415acd3a27258f7d6edc774f25811-1721684424.webp",
+      "width": 1280,
+      "height": 704
     }
   },
   {
@@ -1577,10 +1605,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "excelente video, Gracias por el trabajo gisela, estaremos en contacto para proximos videos",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/profile/photos/34648481/original/13230290_10157181800290019_8605357567642538156_n.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/josegaravito5.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/3451cf2988b6df639427e161b5b418cf-1721422662/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/3451cf2988b6df639427e161b5b418cf-1721422662/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/3451cf2988b6df639427e161b5b418cf-1721422662.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/3451cf2988b6df639427e161b5b418cf-1721422662.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1592,10 +1622,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Great Video, appreciate the work!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/320ce4a46e588407ef019721309b7cd5-1603209615743/6e58a57a-7b1e-48f6-8955-123839920bbc.jpeg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/boombiz.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/bb9566df0093515f68b637c99eab7291-1721510584/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/bb9566df0093515f68b637c99eab7291-1721510584/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/bb9566df0093515f68b637c99eab7291-1721510584.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/bb9566df0093515f68b637c99eab7291-1721510584.webp",
+      "width": 1014,
+      "height": 720
     }
   },
   {
@@ -1617,10 +1649,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "voiceover",
     "lang": "en",
     "text": "great experience",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/8cee81c5c289c66f109538e6dfb97df7-1761602073791/7cd4fff2-c11c-447c-a43b-48affac87d4a.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/get1web.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/f10370e560cca763f493f3f52a5cb07e-1721236122/IMG_6676",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/f10370e560cca763f493f3f52a5cb07e-1721236122/IMG_6676.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/f10370e560cca763f493f3f52a5cb07e-1721236122.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/f10370e560cca763f493f3f52a5cb07e-1721236122.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1632,10 +1666,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Es la segunda vez que hacemos videos y estoy super contento, muy profesional",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/2088b28dc4cafec8151406e4485f1a10-1701284913910/add5e9bd-10af-48eb-a8cc-212ff39f097f.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/felixsegovia525.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/92c2f4d4cd2b09b62d6355eb42714f37-1720540935/FullSizeRender",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/92c2f4d4cd2b09b62d6355eb42714f37-1720540935/FullSizeRender.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/92c2f4d4cd2b09b62d6355eb42714f37-1720540935.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/92c2f4d4cd2b09b62d6355eb42714f37-1720540935.webp",
+      "width": 414,
+      "height": 720
     }
   },
   {
@@ -1647,7 +1683,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "it",
     "text": "Molto brava, gentile e paziente!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/e4ab54856dbc257a6a0f0fc39e2525df-1463387061679866029.8545098/DE3E2276-8204-41E6-A9BC-76E97FB3E6DF"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/davidecolafato_.webp"
   },
   {
     "id": "chmuhammad384-155",
@@ -1659,8 +1695,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "highly recommend",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/a28a61fae616d44a8d558dbfb1839045-1719873892/IMG_6320",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/a28a61fae616d44a8d558dbfb1839045-1719873892/IMG_6320.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/a28a61fae616d44a8d558dbfb1839045-1719873892.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/a28a61fae616d44a8d558dbfb1839045-1719873892.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1672,7 +1710,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "great work , keep it up",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/profile/photos/41028477/original/Untitled-1.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/utsavchocoboy.webp"
   },
   {
     "id": "davidecolafato_-157",
@@ -1683,7 +1721,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "it",
     "text": "Ottimo lavoro! super consigliata!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/e4ab54856dbc257a6a0f0fc39e2525df-1463387061679866029.8545098/DE3E2276-8204-41E6-A9BC-76E97FB3E6DF"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/davidecolafato_.webp"
   },
   {
     "id": "alexgutierre913-158",
@@ -1695,8 +1733,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "es",
     "text": "Exceletnte trabajo! Muy recomendable y profesional",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/6efca1642cf10832a04f26c217f614aa-1719139017/IMG_6187",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/6efca1642cf10832a04f26c217f614aa-1719139017/IMG_6187.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/6efca1642cf10832a04f26c217f614aa-1719139017.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/6efca1642cf10832a04f26c217f614aa-1719139017.webp",
+      "width": 1280,
+      "height": 720
     }
   },
   {
@@ -1718,10 +1758,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Great seller! She has a wonderful charisma for speaking to the camera with a very nice professional presentation. I recommend her for any of your advertising requirements. I plan on using her again in future needs. Thank you so much for a job well done.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/cfe35d68025ab3cfd717cb4e76c3e1ce-1717682783369/38a7be6a-8d96-4a1e-ad87-2f7390113904.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/willyramos.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/09658f7a1ba397ab5f5654c2ba53971f-1718802540/IMG_6136",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/09658f7a1ba397ab5f5654c2ba53971f-1718802540/IMG_6136.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/09658f7a1ba397ab5f5654c2ba53971f-1718802540.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/09658f7a1ba397ab5f5654c2ba53971f-1718802540.webp",
+      "width": 1280,
+      "height": 720
     }
   },
   {
@@ -1733,7 +1775,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Quality of videos just perfect! And excellent performance🔥Thanks, it was really nice to work with you, hope to come back again with new projects",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/70e6319b89dd253973e488f6471d918c-1714748491712/0224ad74-7c10-48e5-bb82-bea6a3b84763.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/advexcorp.webp"
   },
   {
     "id": "mike8878-162",
@@ -1754,7 +1796,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Excelente servicio, el sonido impecable, micrófono profesional, no usa el sonido del celular como en otros agentes. Muy recomendada!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/profile/photos/48984091/original/1478534914005_facebook20161107-20799-1n61ux.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/dannycortesv.webp"
   },
   {
     "id": "cihanuysal132-165",
@@ -1765,7 +1807,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "she's fast and very good. We enjoyed working with him",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/3d96f5bfcc45b375ae9366dc2bc659f3-1715759825406/1c2b47ca-920e-459b-a8d3-af5482b3fb24.JPG"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/cihanuysal132.webp"
   },
   {
     "id": "favianfredes-166",
@@ -1777,8 +1819,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "en",
     "text": "Gisela went beyond my expectations. Clear voice, well dressed and fast delivery. Highly recommended A+++++",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793/IMG_5276",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793/IMG_5276.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793.webp",
+      "width": 1280,
+      "height": 720
     }
   },
   {
@@ -1790,10 +1834,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Gisela has demonstrated exceptional professionalism, unparalleled cooperation, and a deep understanding of the task, exceeding our expectations. Throughout the project, Gisela has been highly proactive, responsive, and reliable, consistently delivering outstanding results with the utmost quality and efficiency. Her ability to communicate effectively and collaborate seamlessly with the team has been instrumental in achieving our goals and setting new standards for excellence.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/b849a3bc3ae68cb23a4fd6632c617ca8-1753489116642/293e0444-5572-457a-866d-4af9ae5be8e3.JPG",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/ricardopinzon.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/2f643394927cbebb18eb883ffa0393ad-1715605327/IMG_5158",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/2f643394927cbebb18eb883ffa0393ad-1715605327/IMG_5158.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/2f643394927cbebb18eb883ffa0393ad-1715605327.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/2f643394927cbebb18eb883ffa0393ad-1715605327.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1805,7 +1851,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Thanks for your great work.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/profile/photos/2302937/original/fiverr.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/celinabaily.webp"
   },
   {
     "id": "andresrincon77-169",
@@ -1816,7 +1862,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Es excepcional, cada vez me gusta más su trabajo. 100% recomendada.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/05208f6974149b36b0bba5143f69ec2c-1754520224310/a80e76b9-8c13-4450-a290-9c6261a381e4.jpeg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/andresrincon77.webp"
   },
   {
     "id": "radiostreamlive-170",
@@ -1827,10 +1873,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "Another wonderful experience, excellent and professional video. Thank you.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/46857e25588a68344c5f481f83b788cb-1558625679243/070719fb-187e-47f0-b97f-df6853ef5865.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/radiostreamlive.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/622e711f4167168330253ee930890b38-1714749148/IMG_4788",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/622e711f4167168330253ee930890b38-1714749148/IMG_4788.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/622e711f4167168330253ee930890b38-1714749148.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/622e711f4167168330253ee930890b38-1714749148.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1842,10 +1890,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Totalmente recomendada, es la primera vez que quedo tan contento con un servicio. Siempre tuvo la mejor disposición a realizar los ajustes. Me encantó.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/05208f6974149b36b0bba5143f69ec2c-1754520224310/a80e76b9-8c13-4450-a290-9c6261a381e4.jpeg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/andresrincon77.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/41858216af46770dcbdbade186a25eef-1714214393/IMG_4786",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/41858216af46770dcbdbade186a25eef-1714214393/IMG_4786.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/41858216af46770dcbdbade186a25eef-1714214393.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/41858216af46770dcbdbade186a25eef-1714214393.webp",
+      "width": 1280,
+      "height": 720
     }
   },
   {
@@ -1857,10 +1907,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "It was a great experience! The final product outcome is highly professional. We want to thank Gisela for her kindness and availability. We'll definitely be back soon to purchase more of her gigs.",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/46857e25588a68344c5f481f83b788cb-1558625679243/070719fb-187e-47f0-b97f-df6853ef5865.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/radiostreamlive.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/9a6219abaecdf974a4ea91510220ad7e-1714060793/IMG_4732",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/9a6219abaecdf974a4ea91510220ad7e-1714060793/IMG_4732.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/9a6219abaecdf974a4ea91510220ad7e-1714060793.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/9a6219abaecdf974a4ea91510220ad7e-1714060793.webp",
+      "width": 404,
+      "height": 720
     }
   },
   {
@@ -1873,8 +1925,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "lang": "es",
     "text": "\"Trabajar con Gisela ha sido una experiencia excepcional. Desde el principio, quedó claro que ella es una verdadera profesional en su campo. No solo captó la esencia de lo que tenía en mente con asombrosa precisión, sino que también trajo mi visión a la realidad de manera impecable. Lo que más impresiona de Gisela, además de su habilidad y competencia, es su capacidad para mantener una comunicación fluida y efectiva, lo cual facilitó enormemente el proceso de colaboración. Todo esto, combinado con su impresionante capacidad para entregar resultados en tiempos récord, hace que recomendar sus servicios sea un placer absoluto. Sin duda, Gisela superó todas las expectativas, y estoy inmensamente agradecido por su dedicación y excelente trabajo.\"",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/d810bc168aae2276b6f29c2a7accd412-1712946722/IMG_4244",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/d810bc168aae2276b6f29c2a7accd412-1712946722/IMG_4244.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/d810bc168aae2276b6f29c2a7accd412-1712946722.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/d810bc168aae2276b6f29c2a7accd412-1712946722.webp",
+      "width": 1280,
+      "height": 720
     }
   },
   {
@@ -1886,7 +1940,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "It has been an amazing experience. Very attentive and willing to do the job in an incredibly professional way. If you need a UGC, it's her. 5 STARS!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/8629371c41ec4c52d3c8559e0bbfd15e-1542125683010/feb792a3-f8e3-4d11-b523-4d5728911cc5.jpg"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/jesus10win.webp"
   },
   {
     "id": "pumuky79-175",
@@ -1897,7 +1951,7 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "es",
     "text": "Ha sido un trabajo muy fácil y fluido gracias a Gisela. Sin duda tiene una capacidad de comunicación atractiva y que transmite energía. Muy satisfecho!",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/2197cc57fadd587eea886e364aff8bca-1639264203452/8d8aba65-f0be-42d6-888c-5d105c4d5fa5.png"
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/pumuky79.webp"
   },
   {
     "id": "romeros9-176",
@@ -1908,10 +1962,12 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
     "service": "spokesperson",
     "lang": "en",
     "text": "She does an excellent job, I am delighted to work with her. thank you",
-    "avatar": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/95bb0e18160b589457ce7766377e00ee-1120565321736964037526/JPEG_20250115_150034_2578878190773695564.jpg",
+    "avatar": "https://media.giselasaldarriaga.com/images/reviews/v1/romeros9.webp",
     "video": {
-      "src": "https://fiverr-res.cloudinary.com/video/upload/t_fiverr_hd/v1/video-attachments/delivery/asset/f70f6aee119262119ddefb63612783fb-1711564954/IMG_3631",
-      "poster": "https://fiverr-res.cloudinary.com/video/upload/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/f70f6aee119262119ddefb63612783fb-1711564954/IMG_3631.png"
+      "src": "https://media.giselasaldarriaga.com/videos/reviews/v1/f70f6aee119262119ddefb63612783fb-1711564954.mp4",
+      "poster": "https://media.giselasaldarriaga.com/videos/reviews/v1/f70f6aee119262119ddefb63612783fb-1711564954.webp",
+      "width": 1280,
+      "height": 720
     }
   }
 ];

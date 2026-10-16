@@ -9,9 +9,13 @@
  *   • "3 months ago" → an approximate YYYY-MM, so the page never shows a stale
  *     relative date; reviews with a delivery video use the exact upload date
  *     carried in the Fiverr asset id instead
- *   • the client's Fiverr profile photo, when they have one (capture.avatars)
- *   • the delivered video, when the review has one Fiverr still serves: the HD
- *     rendition plays from Fiverr's own media CDN on demand, never on page load
+ *   • the client's Fiverr profile photo, when they have one
+ *   • the delivered video, when the review has one Fiverr still serves, with its
+ *     size so the card can frame it (portrait or landscape) before it loads
+ *
+ * Photos and videos are served from Gisela's R2 (media.giselasaldarriaga.com),
+ * copied there by scripts/self-host-fiverr-media.mjs (capture.selfHosted), so
+ * the page loads nothing from Fiverr.
  *
  * Usage: node scripts/build-fiverr-reviews.mjs [content/fiverr/reviews-2026-10-15.json]
  */
@@ -20,7 +24,7 @@ import path from 'node:path';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const OUT = path.join(ROOT, 'src/data/fiverr-reviews.ts');
-const CDN = 'https://fiverr-res.cloudinary.com/video/upload';
+const MEDIA = 'https://media.giselasaldarriaga.com';
 
 const COUNTRIES = {
   'United States': 'US', 'United Kingdom': 'GB', 'North Macedonia': 'MK', Mexico: 'MX', Spain: 'ES',
@@ -43,6 +47,9 @@ const source = process.argv[2]
   ? path.resolve(process.argv[2])
   : path.join(ROOT, 'content/fiverr', readdirSync(path.join(ROOT, 'content/fiverr')).filter((f) => f.startsWith('reviews-')).sort().pop());
 const capture = JSON.parse(readFileSync(source, 'utf8'));
+const hosted = capture.selfHosted;
+if (!hosted) throw new Error('No selfHosted media in the capture: run scripts/self-host-fiverr-media.mjs --upload first');
+const hostedAvatars = new Set(hosted.avatars);
 
 const monthsBefore = (iso, months) => {
   const [y, m] = iso.split('-').map(Number);
@@ -74,10 +81,15 @@ const videoFor = (row) => {
     (f) => f.available && f.user === user && f.rating === rating && clean(text).startsWith(f.textStart),
   );
   if (!file) return null;
-  const uploaded = Number(file.asset.split('/')[0].split('-').pop());
+  const asset = file.asset.split('/')[0];
+  const size = hosted.videos[asset];
+  if (!size) throw new Error(`Video ${asset} is not self-hosted yet`);
+  const uploaded = Number(asset.split('-').pop());
   return {
-    src: `${CDN}/t_fiverr_hd/v1/video-attachments/delivery/asset/${file.asset}`,
-    poster: `${CDN}/f_auto,q_auto,t_smartwm/t_delivery_large/v1/video-attachments/delivery/asset/${file.asset}.png`,
+    src: `${MEDIA}/videos/reviews/${hosted.version}/${asset}.mp4`,
+    poster: `${MEDIA}/videos/reviews/${hosted.version}/${asset}.webp`,
+    width: size.width,
+    height: size.height,
     month: new Date(uploaded * 1000).toISOString().slice(0, 7),
   };
 };
@@ -97,9 +109,9 @@ const reviews = capture.reviews.map((row) => {
     service: SERVICES[service] ?? 'spokesperson',
     lang: langOf(body),
     text: body,
-    ...(capture.avatars?.[user] ? { avatar: capture.avatars[user] } : {}),
+    ...(hostedAvatars.has(user) ? { avatar: `${MEDIA}/images/reviews/${hosted.version}/${user}.webp` } : {}),
     ...(reply ? { reply: clean(reply) } : {}),
-    ...(video ? { video: { src: video.src, poster: video.poster } } : {}),
+    ...(video ? { video: { src: video.src, poster: video.poster, width: video.width, height: video.height } } : {}),
   };
 });
 
@@ -132,12 +144,12 @@ export type FiverrReview = {
   service: FiverrService;
   lang: 'es' | 'en' | 'it';
   text: string;
-  /** The client's Fiverr profile photo (small), when they have one. */
+  /** The client's Fiverr profile photo (120 × 120 WebP), when they have one. */
   avatar?: string;
   /** Gisela's public reply on Fiverr. */
   reply?: string;
-  /** The delivered video, served by Fiverr's media CDN (HD, watermarked by Fiverr). */
-  video?: { src: string; poster: string };
+  /** The delivered video (Fiverr's HD rendition, watermarked by Fiverr) and its frame-0 poster. */
+  video?: { src: string; poster: string; width: number; height: number };
 };
 
 export const FIVERR_PROFILE_URL = ${JSON.stringify(capture.source)};

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from '@/lib/locale-context';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
@@ -19,9 +19,9 @@ import '@/styles/testimonials.css';
  * (src/data/fiverr-reviews.ts, built from a capture of the live profile),
  * shown the way Fiverr shows them: the client, their country, the stars, the
  * date, the service and the review in its own language, plus Gisela's reply
- * and the delivered video when the review has one. The video plays from
- * Fiverr's media CDN only when someone presses play. Styles:
- * src/styles/testimonials.css.
+ * and the delivered video when the review has one. Photos and videos are
+ * copies on Gisela's R2 (scripts/self-host-fiverr-media.mjs); a video loads
+ * only when someone presses play. Styles: src/styles/testimonials.css.
  */
 
 type Filter = 'all' | 'video' | 'es' | 'en';
@@ -63,13 +63,15 @@ const Avatar = ({ review }: { review: FiverrReview }) =>
       height={40}
       loading="lazy"
       decoding="async"
-      referrerPolicy="no-referrer"
     />
   ) : (
     <span className="fr-avatar" style={{ background: toneOf(review.user) }} aria-hidden="true">
       {review.user.charAt(0).toUpperCase()}
     </span>
   );
+
+/** Vertical deliveries are cropped to 4:5 on the card so a reel doesn't make it a page long. */
+const tileRatio = ({ width, height }: { width: number; height: number }) => Math.max(width / height, 4 / 5);
 
 const Star = ({ size = 14 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
@@ -159,10 +161,18 @@ const ReviewCard = ({ review, locale, countryName, ago, onPlay }: CardProps) => 
         <button
           type="button"
           className="fr-video"
+          style={{ aspectRatio: tileRatio(review.video) }}
           aria-label={t('testimonials.playVideo', { user: review.user })}
           onClick={(event) => onPlay(review, event.currentTarget)}
         >
-          <img src={review.video.poster} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" />
+          <img
+            src={review.video.poster}
+            alt=""
+            width={review.video.width}
+            height={review.video.height}
+            loading="lazy"
+            decoding="async"
+          />
           <span className="fr-play" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5.6v12.8L18.4 12z" /></svg>
           </span>
@@ -345,7 +355,10 @@ const Testimonials = () => {
         ? createPortal(
             <div className="fr-modal" role="dialog" aria-modal="true" aria-label={t('testimonials.videoDialog', { user: playing.user })}>
               <button type="button" className="fr-modal-scrim" aria-label={t('testimonials.close')} onClick={closeVideo} />
-              <div className="fr-modal-card">
+              <div
+                className="fr-modal-card"
+                style={playing.video ? ({ '--fr-ratio': playing.video.width / playing.video.height } as CSSProperties) : undefined}
+              >
                 <button ref={closeRef} type="button" className="fr-modal-close" aria-label={t('testimonials.close')} onClick={closeVideo}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden="true" focusable="false">
                     <path d="M6 6l12 12M18 6 6 18" />

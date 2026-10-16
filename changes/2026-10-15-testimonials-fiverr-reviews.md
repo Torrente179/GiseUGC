@@ -97,3 +97,36 @@ clients, covering 86 of the 168 reviews. The build script adds it as `avatar`,
 and the card and player show it. Clients with no photo on Fiverr keep their
 initial. The photos also come from `fiverr-res.cloudinary.com`, which the CSP
 now allows.
+
+## Self-hosted on R2 (2026-10-16)
+
+The user asked for the review media on Gisela's own CDN, like the portfolio
+videos. Nothing in Testimonios loads from Fiverr now, and
+`https://fiverr-res.cloudinary.com` is out of the CSP again.
+
+- **Script:** `scripts/self-host-fiverr-media.mjs [--upload]`.
+  - Fetches each playable delivered video (Fiverr's HD rendition) and repackages
+    it as fast-start MP4 with no re-encode.
+  - Cuts a frame-0 WebP poster.
+  - Makes a 120 × 120 WebP of every kept client's photo (59).
+  - Uploads to R2: `videos/reviews/v1/<asset>.mp4` and `.webp`, and
+    `images/reviews/v1/<user>.webp`.
+  - Records sizes in the capture's `selfHosted` block.
+- **Build script:** `build-fiverr-reviews.mjs` reads that block. It fails if a
+  matched video isn't self-hosted.
+- **Video shape:** each video carries its width and height.
+  - 20 of the 28 are vertical (404×720).
+  - The card tile uses the video's own ratio. Vertical ones are cropped to 4:5,
+    so a reel doesn't make the card a page long.
+  - The player sizes itself to the video, so vertical deliveries play
+    full-height instead of inside a 16:9 box.
+- **Quality caveat:** these are Fiverr's 720p renditions, with Fiverr's
+  watermark burned in. The original uploads (4K / 1080p, no watermark) are
+  still on Fiverr. Moving to them is a separate step that needs the user's
+  go-ahead for a ~2.3 GB download.
+- **Verified:** headless Chrome at 1440 and 390 with the "Con video" filter.
+  - All posters and photos load from `media.giselasaldarriaga.com`.
+  - A vertical video plays at 0.561 and a landscape one at 1.778, with no
+    overflow.
+  - Zero requests to Fiverr.
+  - typecheck, ESLint, 404 tests.
