@@ -13,11 +13,12 @@
  *     site's near-transparent settings (scripts/lib/video-encoding.mjs:
  *     x265 CRF 18 + x264 CRF 17 for browsers without HEVC, 4K at 1440 on
  *     the short side). HDR masters go through Apple's tone mapping first.
- *     Poster = frame 0 of the H.264 file, up to 1080 px wide.
+ *     Poster = frame 0 of the H.264 file, up to 1080 px wide, plus a thumbnail
+ *     (200 px on the short side) for the strip of client videos.
  *   • client profile photos: 120 × 120 WebP
  *
  * R2 keys:
- *   videos/reviews/<videoVersion>/<asset>/{hevc,avc}.mp4 · poster.webp
+ *   videos/reviews/<videoVersion>/<asset>/{hevc,avc}.mp4 · poster.webp · thumb.webp
  *   images/reviews/<photoVersion>/<user>.webp
  *
  * Usage: node scripts/self-host-fiverr-media.mjs [content/fiverr/reviews-….json] [--upload] [--work=<dir>] [--jobs=2]
@@ -34,6 +35,7 @@ import { encode, poster, probe, r2, run, sizeFor } from './lib/video-encoding.mj
 const VIDEO_VERSION = 'v3';
 const PHOTO_VERSION = 'v1';
 const POSTER_MAX_WIDTH = 1080;
+const THUMB_SHORT_SIDE = 200;
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const WORDMARK = path.join(ROOT, 'content/fiverr/fiverr-wordmark.svg');
 /** The mark's width and its inset from the top and right edges, as shares of the frame's short side. */
@@ -125,6 +127,8 @@ const processVideo = async (file) => {
   }));
   const posterFile = path.join(dir, 'poster.webp');
   if (!existsSync(posterFile)) await poster(path.join(dir, 'avc.mp4'), posterFile, Math.min(size.w, POSTER_MAX_WIDTH));
+  const thumbFile = path.join(dir, 'thumb.webp');
+  if (!existsSync(thumbFile)) await run('magick', [posterFile, '-resize', `${THUMB_SHORT_SIDE}x${THUMB_SHORT_SIDE}^`, '-quality', '80', thumbFile]);
 
   const mbps = (name) => ((statSync(path.join(dir, name)).size * 8) / 1e6 / info.duration).toFixed(1);
   console.log(
@@ -132,7 +136,7 @@ const processVideo = async (file) => {
       ` ${Math.round(info.duration)}s → ${size.w}×${size.h} with the mark` +
       ` (${codecs.map((codec) => `${codec} ${mbps(`${codec}.mp4`)} Mbps`).join(', ')})`,
   );
-  return [asset, { width: size.w, height: size.h, hevc }];
+  return [asset, { width: size.w, height: size.h, hevc, duration: Math.round(info.duration) }];
 };
 
 // capture.videosRemoved: deliveries the owner chose not to show (the review stays, without its video).
@@ -172,6 +176,7 @@ if (upload) {
     const prefix = `videos/reviews/${VIDEO_VERSION}/${asset}`;
     for (const codec of hevc ? ['hevc', 'avc'] : ['avc']) await send(path.join(dir, `${codec}.mp4`), `${prefix}/${codec}.mp4`, 'video/mp4');
     await send(path.join(dir, 'poster.webp'), `${prefix}/poster.webp`, 'image/webp');
+    await send(path.join(dir, 'thumb.webp'), `${prefix}/thumb.webp`, 'image/webp');
   }
   for (const user of avatars) {
     await send(path.join(WORK, 'avatars', `${user}.webp`), `images/reviews/${PHOTO_VERSION}/${user}.webp`, 'image/webp');

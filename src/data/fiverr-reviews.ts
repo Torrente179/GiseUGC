@@ -25,11 +25,12 @@ export type FiverrReview = {
   /** Gisela's public reply on Fiverr. */
   reply?: string;
   /**
-   * The delivered video, from the original upload: `src` is H.264 (plays
-   * everywhere), `hevc` the HEVC original when the master is HEVC. Poster =
-   * frame 0. Size is the delivered frame (4K masters at 1440 on the short side).
+   * The delivered video, made from the original upload with Fiverr's mark
+   * burned in: `src` is H.264 (plays everywhere), `hevc` HEVC. Poster =
+   * frame 0, thumb the same frame at 200 px on the short side. Size is the
+   * delivered frame (4K masters at 1440 on the short side); duration in seconds.
    */
-  video?: { src: string; hevc?: string; poster: string; width: number; height: number };
+  video?: { src: string; hevc?: string; poster: string; thumb: string; width: number; height: number; duration: number };
 };
 
 export const FIVERR_PROFILE_URL = "https://www.fiverr.com/gisela_sm";
@@ -1269,8 +1270,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/728c1d1bd1f520c558e1f725ec0993f7-1728843514/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/728c1d1bd1f520c558e1f725ec0993f7-1728843514/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/728c1d1bd1f520c558e1f725ec0993f7-1728843514/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/728c1d1bd1f520c558e1f725ec0993f7-1728843514/thumb.webp",
       "width": 2560,
-      "height": 1440
+      "height": 1440,
+      "duration": 53
     }
   },
   {
@@ -1298,8 +1301,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/b0b5a774bb6caacf9eb408e536312fc8-1728054493/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/b0b5a774bb6caacf9eb408e536312fc8-1728054493/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/b0b5a774bb6caacf9eb408e536312fc8-1728054493/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/b0b5a774bb6caacf9eb408e536312fc8-1728054493/thumb.webp",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
+      "duration": 28
     }
   },
   {
@@ -1316,8 +1321,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/a204e09e8a43ac5f13d05efb950d558e-1727988572/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/a204e09e8a43ac5f13d05efb950d558e-1727988572/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/a204e09e8a43ac5f13d05efb950d558e-1727988572/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/a204e09e8a43ac5f13d05efb950d558e-1727988572/thumb.webp",
       "width": 2420,
-      "height": 1440
+      "height": 1440,
+      "duration": 27
     }
   },
   {
@@ -1355,8 +1362,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/53588e0ff8bfe257c4c5f83610cb4aea-1726506879/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/53588e0ff8bfe257c4c5f83610cb4aea-1726506879/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/53588e0ff8bfe257c4c5f83610cb4aea-1726506879/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/53588e0ff8bfe257c4c5f83610cb4aea-1726506879/thumb.webp",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
+      "duration": 63
     }
   },
   {
@@ -1393,8 +1402,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/2699df2183b13dfefb5e522521689d74-1725629669/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/2699df2183b13dfefb5e522521689d74-1725629669/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/2699df2183b13dfefb5e522521689d74-1725629669/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/2699df2183b13dfefb5e522521689d74-1725629669/thumb.webp",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
+      "duration": 21
     }
   },
   {
@@ -1421,8 +1432,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/fd738200f71f85853904604647d7ddb9-1724778252/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/fd738200f71f85853904604647d7ddb9-1724778252/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/fd738200f71f85853904604647d7ddb9-1724778252/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/fd738200f71f85853904604647d7ddb9-1724778252/thumb.webp",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
+      "duration": 26
     }
   },
   {
@@ -1438,8 +1451,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/7cab8fb6f7a31604bb3395fa9e47d1aa-1723900127/thumb.webp",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
+      "duration": 40
     }
   },
   {
@@ -1455,8 +1470,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/1e4f8e7f7839e658bbc9dbe13a9661ae-1723904540/thumb.webp",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
+      "duration": 68
     }
   },
   {
@@ -1522,8 +1539,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/0f573485b33a04974bdac2fe7f4894a1-1722972095/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/0f573485b33a04974bdac2fe7f4894a1-1722972095/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/0f573485b33a04974bdac2fe7f4894a1-1722972095/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/0f573485b33a04974bdac2fe7f4894a1-1722972095/thumb.webp",
       "width": 1080,
-      "height": 1920
+      "height": 1920,
+      "duration": 3
     }
   },
   {
@@ -1572,8 +1591,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/6da58872952ed834adf449c95bef1d53-1721666641/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/6da58872952ed834adf449c95bef1d53-1721666641/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/6da58872952ed834adf449c95bef1d53-1721666641/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/6da58872952ed834adf449c95bef1d53-1721666641/thumb.webp",
       "width": 1440,
-      "height": 2560
+      "height": 2560,
+      "duration": 32
     }
   },
   {
@@ -1589,8 +1610,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/d48415acd3a27258f7d6edc774f25811-1721684424/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/d48415acd3a27258f7d6edc774f25811-1721684424/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/d48415acd3a27258f7d6edc774f25811-1721684424/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/d48415acd3a27258f7d6edc774f25811-1721684424/thumb.webp",
       "width": 2618,
-      "height": 1440
+      "height": 1440,
+      "duration": 69
     }
   },
   {
@@ -1650,8 +1673,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/92c2f4d4cd2b09b62d6355eb42714f37-1720540935/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/92c2f4d4cd2b09b62d6355eb42714f37-1720540935/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/92c2f4d4cd2b09b62d6355eb42714f37-1720540935/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/92c2f4d4cd2b09b62d6355eb42714f37-1720540935/thumb.webp",
       "width": 1080,
-      "height": 1878
+      "height": 1878,
+      "duration": 29
     }
   },
   {
@@ -1710,8 +1735,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/6efca1642cf10832a04f26c217f614aa-1719139017/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/6efca1642cf10832a04f26c217f614aa-1719139017/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/6efca1642cf10832a04f26c217f614aa-1719139017/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/6efca1642cf10832a04f26c217f614aa-1719139017/thumb.webp",
       "width": 1920,
-      "height": 1080
+      "height": 1080,
+      "duration": 185
     }
   },
   {
@@ -1738,8 +1765,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/09658f7a1ba397ab5f5654c2ba53971f-1718802540/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/09658f7a1ba397ab5f5654c2ba53971f-1718802540/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/09658f7a1ba397ab5f5654c2ba53971f-1718802540/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/09658f7a1ba397ab5f5654c2ba53971f-1718802540/thumb.webp",
       "width": 1920,
-      "height": 1080
+      "height": 1080,
+      "duration": 39
     }
   },
   {
@@ -1798,8 +1827,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/cd9d7ae8a88dbafcf7ed2f0e95d4bdae-1715777793/thumb.webp",
       "width": 1920,
-      "height": 1080
+      "height": 1080,
+      "duration": 21
     }
   },
   {
@@ -1816,8 +1847,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/2f643394927cbebb18eb883ffa0393ad-1715605327/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/2f643394927cbebb18eb883ffa0393ad-1715605327/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/2f643394927cbebb18eb883ffa0393ad-1715605327/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/2f643394927cbebb18eb883ffa0393ad-1715605327/thumb.webp",
       "width": 1080,
-      "height": 1920
+      "height": 1920,
+      "duration": 74
     }
   },
   {
@@ -1856,8 +1889,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/622e711f4167168330253ee930890b38-1714749148/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/622e711f4167168330253ee930890b38-1714749148/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/622e711f4167168330253ee930890b38-1714749148/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/622e711f4167168330253ee930890b38-1714749148/thumb.webp",
       "width": 1080,
-      "height": 1920
+      "height": 1920,
+      "duration": 38
     }
   },
   {
@@ -1874,8 +1909,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/41858216af46770dcbdbade186a25eef-1714214393/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/41858216af46770dcbdbade186a25eef-1714214393/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/41858216af46770dcbdbade186a25eef-1714214393/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/41858216af46770dcbdbade186a25eef-1714214393/thumb.webp",
       "width": 1920,
-      "height": 1080
+      "height": 1080,
+      "duration": 22
     }
   },
   {
@@ -1892,8 +1929,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/9a6219abaecdf974a4ea91510220ad7e-1714060793/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/9a6219abaecdf974a4ea91510220ad7e-1714060793/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/9a6219abaecdf974a4ea91510220ad7e-1714060793/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/9a6219abaecdf974a4ea91510220ad7e-1714060793/thumb.webp",
       "width": 1080,
-      "height": 1920
+      "height": 1920,
+      "duration": 34
     }
   },
   {
@@ -1909,8 +1948,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/d810bc168aae2276b6f29c2a7accd412-1712946722/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/d810bc168aae2276b6f29c2a7accd412-1712946722/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/d810bc168aae2276b6f29c2a7accd412-1712946722/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/d810bc168aae2276b6f29c2a7accd412-1712946722/thumb.webp",
       "width": 1920,
-      "height": 1080
+      "height": 1080,
+      "duration": 57
     }
   },
   {
@@ -1949,8 +1990,10 @@ export const FIVERR_REVIEWS: readonly FiverrReview[] = [
       "src": "https://media.giselasaldarriaga.com/videos/reviews/v3/f70f6aee119262119ddefb63612783fb-1711564954/avc.mp4",
       "hevc": "https://media.giselasaldarriaga.com/videos/reviews/v3/f70f6aee119262119ddefb63612783fb-1711564954/hevc.mp4",
       "poster": "https://media.giselasaldarriaga.com/videos/reviews/v3/f70f6aee119262119ddefb63612783fb-1711564954/poster.webp",
+      "thumb": "https://media.giselasaldarriaga.com/videos/reviews/v3/f70f6aee119262119ddefb63612783fb-1711564954/thumb.webp",
       "width": 2560,
-      "height": 1440
+      "height": 1440,
+      "duration": 82
     }
   }
 ];

@@ -19,15 +19,18 @@ import '@/styles/testimonials.css';
  * Testimonios: every 4- and 5-star review from Gisela's Fiverr profile
  * (src/data/fiverr-reviews.ts, built from a capture of the live profile),
  * shown the way Fiverr shows them: the client, their country, the stars, the
- * date, the service and the review in its own language, plus Gisela's reply
- * and the delivered video when the review has one. Photos and videos are
- * copies on Gisela's R2 (scripts/self-host-fiverr-media.mjs); a video loads
- * only when someone presses play. Styles: src/styles/testimonials.css.
+ * date, the service and the review in its own language, plus Gisela's reply.
+ *
+ * Layout (the canvas's "R1 · Featured video + review wall"): one delivered
+ * video featured with its client's review, a strip of every client video to
+ * switch it, and the review wall beside it with its filters. Photos and videos
+ * are on Gisela's R2 (scripts/self-host-fiverr-media.mjs); a video loads only
+ * when someone presses play. Styles: src/styles/testimonials.css.
  */
 
 type Filter = 'all' | 'video' | 'es' | 'en';
 
-const PAGE = 9;
+const PAGE = 8;
 const LONG_TEXT = 260;
 const AVATAR_SRC = '/uploads/gisela-avatar-160.webp';
 const TONES = ['#14758f', '#9a6b3c', '#4f6a5a', '#7a5470', '#3f5f8a', '#a0574a', '#5b6b2f', '#6a4f8a'];
@@ -45,6 +48,13 @@ const flagOf = (code: string) =>
 const ORDERED = [...FIVERR_REVIEWS].sort(
   (a, b) => b.rating - a.rating || b.text.length - a.text.length,
 );
+
+/** The reviews that come with the video Gisela delivered, in the same order. */
+const VIDEO_REVIEWS = ORDERED.filter((review) => review.video);
+/** The section opens on the first vertical delivery: it fills the 4:5 frame. */
+const FIRST_FEATURED = Math.max(0, VIDEO_REVIEWS.findIndex(({ video }) => video!.height > video!.width));
+
+const lengthOf = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 
 const FILTERS: Array<{ id: Filter; key: string; test: (review: FiverrReview) => boolean }> = [
   { id: 'all', key: 'testimonials.filterAll', test: () => true },
@@ -71,9 +81,6 @@ const Avatar = ({ review }: { review: FiverrReview }) =>
     </span>
   );
 
-/** Vertical deliveries are cropped to 4:5 on the card so a reel doesn't make it a page long. */
-const tileRatio = ({ width, height }: { width: number; height: number }) => Math.max(width / height, 4 / 5);
-
 const Star = ({ size = 14 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
     <path d="m12 2.8 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" />
@@ -94,20 +101,15 @@ const useMonthNow = () => {
   return now;
 };
 
-/** 1 column on phones, 2 on tablets, 3 on desktop; items fill round-robin so "show more" only appends. */
+/** 1 lane on phones, 2 from 640 px (beside the featured video on desktop); cards fill round-robin so "show more" only appends. */
 const useColumnCount = () => {
   const [count, setCount] = useState(1);
   useEffect(() => {
-    const wide = window.matchMedia('(min-width: 1024px)');
     const medium = window.matchMedia('(min-width: 640px)');
-    const sync = () => setCount(wide.matches ? 3 : medium.matches ? 2 : 1);
+    const sync = () => setCount(medium.matches ? 2 : 1);
     sync();
-    wide.addEventListener('change', sync);
     medium.addEventListener('change', sync);
-    return () => {
-      wide.removeEventListener('change', sync);
-      medium.removeEventListener('change', sync);
-    };
+    return () => medium.removeEventListener('change', sync);
   }, []);
   return count;
 };
@@ -161,23 +163,20 @@ const ReviewCard = ({ review, locale, countryName, ago, onPlay }: CardProps) => 
       {review.video ? (
         <button
           type="button"
-          className="fr-video"
-          style={{ aspectRatio: tileRatio(review.video) }}
+          className="fr-card-video"
           aria-label={t('testimonials.playVideo', { user: review.user })}
           onClick={(event) => onPlay(review, event.currentTarget)}
         >
-          <img
-            src={review.video.poster}
-            alt=""
-            width={review.video.width}
-            height={review.video.height}
-            loading="lazy"
-            decoding="async"
-          />
-          <span className="fr-play" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5.6v12.8L18.4 12z" /></svg>
+          <span className="fr-card-video-thumb">
+            <img src={review.video.thumb} alt="" loading="lazy" decoding="async" />
+            <span className="fr-card-video-play" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5.6v12.8L18.4 12z" /></svg>
+            </span>
           </span>
-          <span className="fr-video-tag">{t('testimonials.videoTag')}</span>
+          <span className="fr-card-video-label">
+            {t('testimonials.videoTag')}
+            <span className="fr-card-video-length">{lengthOf(review.video.duration)}</span>
+          </span>
         </button>
       ) : null}
 
@@ -194,6 +193,83 @@ const ReviewCard = ({ review, locale, countryName, ago, onPlay }: CardProps) => 
   );
 };
 
+type FeatureProps = {
+  active: number;
+  onPick: (index: number) => void;
+  countryName: (code: string) => string;
+  ago: (month: string) => string;
+  onPlay: (review: FiverrReview, opener: HTMLButtonElement) => void;
+};
+
+/**
+ * One delivered video with its client's review, and a strip of every client
+ * video to switch it. The big frame opens the player; the strip only switches.
+ */
+const FeaturedVideo = ({ active, onPick, countryName, ago, onPlay }: FeatureProps) => {
+  const { t } = useTranslation();
+  const review = VIDEO_REVIEWS[active];
+  const video = review.video!;
+  const rating = review.rating % 1 ? review.rating.toFixed(1) : String(review.rating);
+  const when = ago(review.date);
+
+  return (
+    <aside className="fr-feature" aria-label={t('testimonials.clientVideos', { count: VIDEO_REVIEWS.length })}>
+      <div key={review.id} className="fr-feature-main">
+        <button
+          type="button"
+          className="fr-feature-tile"
+          aria-label={t('testimonials.playVideo', { user: review.user })}
+          onClick={(event) => onPlay(review, event.currentTarget)}
+        >
+          <img src={video.poster} alt="" width={video.width} height={video.height} decoding="async" />
+          <span className="fr-play fr-play--large" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5.6v12.8L18.4 12z" /></svg>
+          </span>
+          <span className="fr-video-tag">
+            {t('testimonials.videoTag')} · {lengthOf(video.duration)}
+          </span>
+        </button>
+        <div className="fr-feature-info">
+          <div className="fr-head">
+            <Avatar review={review} />
+            <span className="fr-who">
+              <span className="fr-name">{review.user}</span>
+              <span className="fr-country">
+                <span className="fr-flag" aria-hidden="true">{flagOf(review.country)}</span>
+                {countryName(review.country)}
+                {when ? <span className="fr-feature-when">· {when}</span> : null}
+              </span>
+            </span>
+            <span className="fr-rating" aria-label={t('testimonials.ratingAria', { rating })}>
+              <Star />
+              {rating}
+            </span>
+          </div>
+          <p className="fr-feature-quote" lang={review.lang}>{review.text}</p>
+        </div>
+      </div>
+
+      <div className="fr-feature-strip-wrap">
+        <p className="fr-feature-count">{t('testimonials.clientVideos', { count: VIDEO_REVIEWS.length })}</p>
+        <div className="fr-feature-strip" role="group" aria-label={t('testimonials.clientVideos', { count: VIDEO_REVIEWS.length })}>
+          {VIDEO_REVIEWS.map((item, index) => (
+            <button
+              key={item.id}
+              type="button"
+              className="fr-thumb"
+              aria-pressed={index === active}
+              aria-label={t('testimonials.featureVideo', { user: item.user })}
+              onClick={() => onPick(index)}
+            >
+              <img src={item.video!.thumb} alt="" loading="lazy" decoding="async" />
+            </button>
+          ))}
+        </div>
+      </div>
+    </aside>
+  );
+};
+
 const Testimonials = () => {
   const { t, locale } = useTranslation();
   const mediaSession = useMediaSession();
@@ -204,6 +280,7 @@ const Testimonials = () => {
 
   const [filter, setFilter] = useState<Filter>('all');
   const [shown, setShown] = useState(PAGE);
+  const [featured, setFeatured] = useState(FIRST_FEATURED);
   const [playing, setPlaying] = useState<FiverrReview | null>(null);
 
   const regionNames = useMemo(() => {
@@ -308,47 +385,53 @@ const Testimonials = () => {
           </div>
         </div>
 
-        <div className="fr-filters" role="group" aria-label={t('testimonials.filtersLabel')}>
-          {FILTERS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className="fr-chip"
-              aria-pressed={filter === item.id}
-              onClick={() => pickFilter(item.id)}
-            >
-              {t(item.key)}
-              <span className="fr-chip-count">{counts[item.id]}</span>
-            </button>
-          ))}
-        </div>
+        <div className="fr-body">
+          <FeaturedVideo active={featured} onPick={setFeatured} countryName={countryName} ago={ago} onPlay={openVideo} />
 
-        <div className="fr-grid" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
-          {lanes.map((lane, laneIndex) => (
-            <div key={laneIndex} className="fr-lane">
-              {lane.map((review) => (
-                <ReviewCard
-                  key={review.id}
-                  review={review}
-                  locale={pageLocale}
-                  countryName={countryName}
-                  ago={ago}
-                  onPlay={openVideo}
-                />
+          <div className="fr-wall">
+            <div className="fr-filters" role="group" aria-label={t('testimonials.filtersLabel')}>
+              {FILTERS.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="fr-chip"
+                  aria-pressed={filter === item.id}
+                  onClick={() => pickFilter(item.id)}
+                >
+                  {t(item.key)}
+                  <span className="fr-chip-count">{counts[item.id]}</span>
+                </button>
               ))}
             </div>
-          ))}
-        </div>
 
-        <div className="fr-footer">
-          <p className="fr-showing" aria-live="polite">
-            {t('testimonials.showing', { shown: visible.length, total: list.length })}
-          </p>
-          {visible.length < list.length ? (
-            <button type="button" className="fr-load" onClick={() => setShown((count) => count + PAGE)}>
-              {t('testimonials.showMore')}
-            </button>
-          ) : null}
+            <div className="fr-grid" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
+              {lanes.map((lane, laneIndex) => (
+                <div key={laneIndex} className="fr-lane">
+                  {lane.map((review) => (
+                    <ReviewCard
+                      key={review.id}
+                      review={review}
+                      locale={pageLocale}
+                      countryName={countryName}
+                      ago={ago}
+                      onPlay={openVideo}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            <div className="fr-footer">
+              <p className="fr-showing" aria-live="polite">
+                {t('testimonials.showing', { shown: visible.length, total: list.length })}
+              </p>
+              {visible.length < list.length ? (
+                <button type="button" className="fr-load" onClick={() => setShown((count) => count + PAGE)}>
+                  {t('testimonials.showMore')}
+                </button>
+              ) : null}
+            </div>
+          </div>
         </div>
       </div>
 

@@ -214,3 +214,40 @@ watermark in the file.
 - **R2:** `videos/reviews/v3/`. On the user's call, the clean v2 originals
   and the v1 720p copies were deleted from R2 and purged from the CDN once
   v3 was live.
+
+## Layout: featured client video + review wall (2026-10-16)
+
+The user picked "R1 · Featured video + review wall" from the canvas (round 3)
+and it is now the section.
+
+- **Desktop (≥ 1120 px):** two columns.
+  - **Left:** a glass panel, sticky under the nav while the wall scrolls. It
+    holds one delivered video in a 4:5 frame ("Video entregado · 0:40",
+    play), its client and review, and a strip of all 21 client videos to
+    switch it.
+  - **Right:** the filters and the reviews in two lanes, 8 at a time.
+  - The section gets the soft teal and sand glows the panel's glass needs.
+- **Tablet (700–1119 px):** the frame sits beside the review, the strip under
+  both, and the wall below in two lanes.
+- **Phone:** everything stacks, with the wall in one lane.
+- **Featured video:** the section opens on the first vertical delivery, since
+  a vertical video fills the 4:5 frame.
+  - The big frame opens the player.
+  - The strip only switches the video (`aria-pressed` on the current one).
+- **Cards:** a review with a video now shows a compact chip (thumbnail,
+  "Video entregado", length) that opens the player, instead of the big tile.
+- **Data:** each video now carries `thumb` (200 px on the short side, so the
+  strip doesn't load 21 full covers) and `duration`. Both come from
+  `scripts/self-host-fiverr-media.mjs`, with thumbnails uploaded to
+  `videos/reviews/v3/<asset>/thumb.webp`.
+- **New strings:** `testimonials.clientVideos` and
+  `testimonials.featureVideo` (ES/EN).
+- **Verified:** headless Chrome at 1440 (light and dark), 1024 and 390.
+  - The panel and wall fit their columns, with no horizontal overflow.
+  - The strip switches the video, and the panel stays at 104 px while the
+    wall scrolls.
+  - The player opens from both the frame and a card chip, with
+    `nodownload`, and focus returns on close.
+  - 410 tests pass.
+  - The review videos run at up to ~24 Mbps. On a slow link (~8 Mbps, as
+    measured during this check) the player buffers before it starts.

@@ -281,6 +281,8 @@
     "reply": "Mi respuesta",
     "playVideo": "Ver el video que le entregué a {{user}}",
     "videoTag": "Video entregado",
+    "clientVideos": "{{count}} videos de clientes",
+    "featureVideo": "Mostrar el video de {{user}}",
     "ratingAria": "{{rating}} de 5 estrellas",
     "communication": "Comunicación",
     "quality": "Calidad",

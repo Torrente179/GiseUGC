@@ -281,6 +281,8 @@
     "reply": "My reply",
     "playVideo": "Watch the video I delivered to {{user}}",
     "videoTag": "Delivered video",
+    "clientVideos": "{{count}} client videos",
+    "featureVideo": "Show {{user}}’s video",
     "ratingAria": "{{rating}} out of 5 stars",
     "communication": "Communication",
     "quality": "Quality",

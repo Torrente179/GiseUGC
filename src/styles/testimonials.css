@@ -17,7 +17,15 @@
   --fr-star: #e39b2e;
   --fr-accent: hsl(193 69% 34%);
   --fr-reply: hsl(var(--foreground) / 0.04);
-  background: hsl(var(--background));
+  --fr-panel: rgba(255, 255, 255, 0.62);
+  --fr-panel-ring: inset 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 0 1px rgba(43, 38, 32, 0.06),
+    0 50px 90px -46px rgba(43, 38, 32, 0.45);
+  --fr-glow-a: rgba(44, 166, 200, 0.12);
+  --fr-glow-b: rgba(214, 190, 150, 0.32);
+  background:
+    radial-gradient(44rem 44rem at 6% 42%, var(--fr-glow-a), transparent 70%),
+    radial-gradient(52rem 52rem at 100% 100%, var(--fr-glow-b), transparent 70%),
+    hsl(var(--background));
   color: var(--fr-ink);
   font-family: var(--font-marketing);
 }
@@ -29,6 +37,10 @@
   --fr-star: #f2b14a;
   --fr-accent: hsl(193 64% 63%);
   --fr-reply: rgba(255, 255, 255, 0.05);
+  --fr-panel: rgba(255, 255, 255, 0.05);
+  --fr-panel-ring: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 50px 90px -46px rgba(0, 0, 0, 0.8);
+  --fr-glow-a: rgba(44, 166, 200, 0.14);
+  --fr-glow-b: rgba(198, 170, 130, 0.1);
 }
 
 /* ── Header: title, the score and the three sub-ratings ── */
@@ -157,10 +169,182 @@
 .fr-chip:focus-visible,
 .fr-more:focus-visible,
 .fr-load:focus-visible,
-.fr-video:focus-visible,
+.fr-feature-tile:focus-visible,
+.fr-thumb:focus-visible,
+.fr-card-video:focus-visible,
 .fr-profile:focus-visible {
   outline: 2px solid var(--fr-accent);
   outline-offset: 3px;
+}
+
+/* ── Layout: the featured client video beside the review wall ── */
+.fr-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+/* min-width 0: the strip of client videos scrolls instead of widening the column. */
+.fr-feature,
+.fr-wall { min-width: 0; }
+
+@media (min-width: 1120px) {
+  .fr-body {
+    grid-template-columns: minmax(0, 28rem) minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+
+  .fr-feature {
+    position: sticky;
+    top: 6.5rem;
+  }
+}
+
+/* ── The featured video: frame, client, review, and the strip to switch it ── */
+.fr-feature {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+  padding: 0.875rem;
+  border-radius: 2rem;
+  background: var(--fr-panel);
+  box-shadow: var(--fr-panel-ring);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
+  backdrop-filter: blur(26px) saturate(170%);
+}
+
+.fr-feature-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+  animation: fr-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.fr-feature-tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  border: 0;
+  border-radius: 1.375rem;
+  overflow: hidden;
+  background: #111;
+  cursor: pointer;
+}
+
+.fr-feature-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 28%;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fr-feature-tile:hover img { transform: scale(1.03); }
+
+.fr-feature-tile .fr-video-tag {
+  left: 0.875rem;
+  bottom: 0.875rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.fr-feature-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 0.5rem;
+}
+
+.fr-feature-info .fr-avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.fr-feature-when { color: var(--fr-faint); }
+
+.fr-section .fr-feature-quote {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--fr-ink);
+  overflow-wrap: anywhere;
+}
+
+.fr-feature-strip-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0 0.5rem 0.25rem;
+}
+
+.fr-section .fr-feature-count {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--fr-faint);
+}
+
+.fr-feature-strip {
+  display: flex;
+  gap: 0.5rem;
+  margin: -4px;
+  padding: 4px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.fr-feature-strip::-webkit-scrollbar { display: none; }
+
+.fr-thumb {
+  flex: none;
+  width: 3.5rem;
+  height: 4.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0.875rem;
+  overflow: hidden;
+  background: #111;
+  cursor: pointer;
+  opacity: 0.6;
+  scroll-snap-align: start;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+}
+
+.fr-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 25%;
+}
+
+.fr-thumb:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.fr-thumb[aria-pressed='true'] {
+  opacity: 1;
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px var(--fr-accent);
+}
+
+/* Tablets: the frame beside the review, the strip under both. */
+@media (min-width: 700px) and (max-width: 1119.98px) {
+  .fr-feature-main {
+    display: grid;
+    grid-template-columns: 16rem minmax(0, 1fr);
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .fr-section .fr-feature-quote { -webkit-line-clamp: 7; }
 }
 
 /* ── Cards, in lanes so "show more" only ever appends ── */
@@ -309,30 +493,66 @@
   cursor: pointer;
 }
 
-/* The delivered video: its first frame, play on demand. The component sets
-   the aspect ratio from the video (vertical ones cropped to 4:5). */
-.fr-video {
-  position: relative;
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  padding: 0;
+/* A review with a delivered video: a compact chip that opens the player. */
+.fr-card-video {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem 0.5rem 0.5rem;
   border: 0;
   border-radius: 1rem;
-  overflow: hidden;
-  background: #111;
+  background: var(--fr-reply);
+  color: var(--fr-ink);
+  font: inherit;
+  text-align: left;
   cursor: pointer;
+  transition: background-color 0.25s ease;
 }
 
-.fr-video img {
+.fr-card-video:hover { background: var(--fr-chip); }
+
+.fr-card-video-thumb {
+  position: relative;
+  flex: none;
+  width: 2.75rem;
+  height: 3.5rem;
+  border-radius: 0.625rem;
+  overflow: hidden;
+  background: #111;
+}
+
+.fr-card-video-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 30%;
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  object-position: 50% 25%;
 }
 
-.fr-video:hover img { transform: scale(1.03); }
+.fr-card-video-play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+
+.fr-card-video-play svg { width: 0.875rem; height: 0.875rem; margin-left: 1px; }
+
+.fr-card-video-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.fr-card-video-length {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fr-faint);
+  font-variant-numeric: tabular-nums;
+}
 
 .fr-play {
   position: absolute;
@@ -352,6 +572,14 @@
 }
 
 .fr-play svg { width: 1.375rem; height: 1.375rem; margin-left: 2px; }
+
+.fr-play--large {
+  width: 4.25rem;
+  height: 4.25rem;
+  margin: -2.125rem 0 0 -2.125rem;
+}
+
+.fr-play--large svg { width: 1.625rem; height: 1.625rem; margin-left: 3px; }
 
 .fr-video-tag {
   position: absolute;
@@ -541,7 +769,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .fr-card,
+  .fr-feature-main,
   .fr-modal,
   .fr-modal-card { animation: none; }
-  .fr-video img { transition: none; }
+  .fr-feature-tile img,
+  .fr-thumb { transition: none; }
 }

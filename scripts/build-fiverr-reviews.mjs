@@ -10,10 +10,10 @@
  *     relative date; reviews with a delivery video use the exact upload date
  *     carried in the Fiverr asset id instead
  *   • the client's Fiverr profile photo, when they have one
- *   • the delivered video, when the review has one Fiverr still serves: the
- *     original upload (H.264, plus the HEVC original when the master is HEVC)
- *     and its size, so the card can frame it (portrait or landscape) before it
- *     loads
+ *   • the delivered video, when the review has one Fiverr still serves (and the
+ *     owner kept it): made from the original upload with Fiverr's mark burned
+ *     in (H.264 + HEVC), with its size and length, so the page can frame it
+ *     (portrait or landscape) before it loads
  *
  * Photos and videos are served from Gisela's R2 (media.giselasaldarriaga.com),
  * copied there by scripts/self-host-fiverr-media.mjs (capture.selfHosted), so
@@ -98,8 +98,10 @@ const videoFor = (row) => {
       src: `${base}/avc.mp4`,
       ...(files.hevc ? { hevc: `${base}/hevc.mp4` } : {}),
       poster: `${base}/poster.webp`,
+      thumb: `${base}/thumb.webp`,
       width: files.width,
       height: files.height,
+      duration: files.duration,
     },
   };
 };
@@ -159,11 +161,12 @@ export type FiverrReview = {
   /** Gisela's public reply on Fiverr. */
   reply?: string;
   /**
-   * The delivered video, from the original upload: \`src\` is H.264 (plays
-   * everywhere), \`hevc\` the HEVC original when the master is HEVC. Poster =
-   * frame 0. Size is the delivered frame (4K masters at 1440 on the short side).
+   * The delivered video, made from the original upload with Fiverr's mark
+   * burned in: \`src\` is H.264 (plays everywhere), \`hevc\` HEVC. Poster =
+   * frame 0, thumb the same frame at 200 px on the short side. Size is the
+   * delivered frame (4K masters at 1440 on the short side); duration in seconds.
    */
-  video?: { src: string; hevc?: string; poster: string; width: number; height: number };
+  video?: { src: string; hevc?: string; poster: string; thumb: string; width: number; height: number; duration: number };
 };
 
 export const FIVERR_PROFILE_URL = ${JSON.stringify(capture.source)};
