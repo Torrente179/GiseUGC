@@ -9,6 +9,7 @@
  *   • "3 months ago" → an approximate YYYY-MM, so the page never shows a stale
  *     relative date; reviews with a delivery video use the exact upload date
  *     carried in the Fiverr asset id instead
+ *   • the client's Fiverr profile photo, when they have one (capture.avatars)
  *   • the delivered video, when the review has one Fiverr still serves: the HD
  *     rendition plays from Fiverr's own media CDN on demand, never on page load
  *
@@ -96,6 +97,7 @@ const reviews = capture.reviews.map((row) => {
     service: SERVICES[service] ?? 'spokesperson',
     lang: langOf(body),
     text: body,
+    ...(capture.avatars?.[user] ? { avatar: capture.avatars[user] } : {}),
     ...(reply ? { reply: clean(reply) } : {}),
     ...(video ? { video: { src: video.src, poster: video.poster } } : {}),
   };
@@ -130,6 +132,8 @@ export type FiverrReview = {
   service: FiverrService;
   lang: 'es' | 'en' | 'it';
   text: string;
+  /** The client's Fiverr profile photo (small), when they have one. */
+  avatar?: string;
   /** Gisela's public reply on Fiverr. */
   reply?: string;
   /** The delivered video, served by Fiverr's media CDN (HD, watermarked by Fiverr). */

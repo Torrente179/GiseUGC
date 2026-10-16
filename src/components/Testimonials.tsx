@@ -52,6 +52,25 @@ const FILTERS: Array<{ id: Filter; key: string; test: (review: FiverrReview) => 
   { id: 'en', key: 'testimonials.filterEn', test: (review) => review.lang === 'en' },
 ];
 
+/** The client's Fiverr photo, or their initial on a colour when they have none. */
+const Avatar = ({ review }: { review: FiverrReview }) =>
+  review.avatar ? (
+    <img
+      className="fr-avatar fr-avatar--photo"
+      src={review.avatar}
+      alt=""
+      width={40}
+      height={40}
+      loading="lazy"
+      decoding="async"
+      referrerPolicy="no-referrer"
+    />
+  ) : (
+    <span className="fr-avatar" style={{ background: toneOf(review.user) }} aria-hidden="true">
+      {review.user.charAt(0).toUpperCase()}
+    </span>
+  );
+
 const Star = ({ size = 14 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
     <path d="m12 2.8 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" />
@@ -107,9 +126,7 @@ const ReviewCard = ({ review, locale, countryName, ago, onPlay }: CardProps) => 
   return (
     <article className="fr-card">
       <header className="fr-head">
-        <span className="fr-avatar" style={{ background: toneOf(review.user) }} aria-hidden="true">
-          {review.user.charAt(0).toUpperCase()}
-        </span>
+        <Avatar review={review} />
         <span className="fr-who">
           <span className="fr-name">{review.user}</span>
           <span className="fr-country">
@@ -345,9 +362,7 @@ const Testimonials = () => {
                   preload="auto"
                 />
                 <div className="fr-modal-meta">
-                  <span className="fr-avatar" style={{ background: toneOf(playing.user) }} aria-hidden="true">
-                    {playing.user.charAt(0).toUpperCase()}
-                  </span>
+                  <Avatar review={playing} />
                   <span className="fr-who">
                     <span className="fr-name">{playing.user}</span>
                     <span className="fr-country">

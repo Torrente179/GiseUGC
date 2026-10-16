@@ -88,3 +88,12 @@ media from the site's own domains, so the browser refused everything from
 The dev server sends no CSP, which is why the local checks passed.
 `https://fiverr-res.cloudinary.com` is now in `img-src` and `media-src` only,
 with no script, connect or frame permissions.
+
+## Client photos (2026-10-16)
+
+The cards showed initials only. The capture now carries `avatars`: the Fiverr
+profile photo (small rendition) of every reviewer who has one. That is 64
+clients, covering 86 of the 168 reviews. The build script adds it as `avatar`,
+and the card and player show it. Clients with no photo on Fiverr keep their
+initial. The photos also come from `fiverr-res.cloudinary.com`, which the CSP
+now allows.

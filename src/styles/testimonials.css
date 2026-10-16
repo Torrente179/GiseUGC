@@ -213,6 +213,12 @@
   font-weight: 700;
 }
 
+.fr-avatar--photo {
+  object-fit: cover;
+  background: var(--fr-chip);
+  box-shadow: 0 0 0 1px hsl(var(--foreground) / 0.08);
+}
+
 .fr-who {
   flex: 1;
   min-width: 0;
