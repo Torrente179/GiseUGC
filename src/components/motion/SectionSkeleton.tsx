@@ -1,21 +1,30 @@
+import type { ReactNode } from 'react';
+
 interface SectionSkeletonProps {
   id?: string;
   minHeightClass?: string;
   /** Visual variant — determines the skeleton shape */
   variant?: 'default' | 'cards' | 'hero-intro' | 'testimonial' | 'footer';
+  /** Real crawlable content. When present the section is not aria-hidden. */
+  children?: ReactNode;
 }
 
 const SectionSkeleton = ({
   id,
   minHeightClass = 'min-h-[240px]',
   variant = 'default',
+  children,
 }: SectionSkeletonProps) => (
   <section
     id={id}
-    aria-hidden="true"
+    aria-hidden={children ? undefined : true}
     className={`${minHeightClass} relative overflow-hidden`}
   >
-    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8">
+    {children}
+    <div
+      className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8"
+      aria-hidden={children ? true : undefined}
+    >
       {variant === 'cards' && (
         <div className="w-full max-w-5xl grid grid-cols-2 md:grid-cols-3 gap-4">
           {[...Array(6)].map((_, i) => (

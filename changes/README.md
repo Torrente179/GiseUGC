@@ -33,6 +33,10 @@ This folder is organized by subsystem instead of by date.
   - **Current crawl-trust / hub indexes:** `seo/seo-crawl-trust.md` —
     honest homepage proof (28+/177/4.7/ES+EN), CONTENT_DATES, Fiverr canonical
     without `?source=gig_page`, and Person `alternateName`.
+    **Homepage review quotes in the first HTML:**
+    `seo/2026-10-16-testimonials-prerender-text.md` — `#testimonials`
+    placeholder on `/` and `/en/` carries the Fiverr quotes; videos stay lazy;
+    no per-review schema.
     **Current hub index copy:** `seo/2026-09-01-hire-intent-hub-copy.md` —
     hire-intent title/H1/body on the six existing hub routes. Read both
     before touching `/servicios/` `/verticales/` `/recursos/` (and EN twins).

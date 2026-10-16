@@ -9,6 +9,7 @@ import FloatingContactDockSection from '@/components/FloatingContactDock';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { clearUrlHash } from '@/hooks/use-hashless-section-navigation';
 import SectionSkeleton from '@/components/motion/SectionSkeleton';
+import TestimonialsReviewQuotes from '@/components/TestimonialsReviewQuotes';
 import FadeInOnMount from '@/components/motion/FadeInOnMount';
 import { useDeferredMount } from '@/hooks/use-deferred-mount';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -149,7 +150,11 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
           mountId="testimonials"
           rootMargin="850px 0px"
           queueDelayMs={100}
-          skeleton={<SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial" />}
+          skeleton={
+            <SectionSkeleton id="testimonials" minHeightClass="min-h-[500px]" variant="testimonial">
+              <TestimonialsReviewQuotes locale={locale} />
+            </SectionSkeleton>
+          }
         >
           <TestimonialsSection />
         </DeferredSection>

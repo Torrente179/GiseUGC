@@ -28,6 +28,12 @@ Portfolio, testimonials, and the services marquee own separate JavaScript chunks
 Services, creator advantage, FAQ, and the footer remain complete in the
 prerendered document.
 
+The testimonials placeholder is the exception to "deferred means invisible to
+crawlers": it renders every Fiverr review quote (handle, country, rating, text)
+from `src/data/fiverr-reviews.ts` via `TestimonialsReviewQuotes`, without
+`aria-hidden`, while videos and photos stay in the lazy chunk. See
+`changes/seo/2026-10-16-testimonials-prerender-text.md`.
+
 ## Responsive Behavior
 
 The section narrative is shared across breakpoints. Individual sections may use
