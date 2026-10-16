@@ -27,7 +27,8 @@ The homepage uses the same narrative order across breakpoints:
 4. Deferred `Portfolio`
 5. `Services`
 6. `CreatorAdvantage`
-7. Deferred `Testimonials`
+7. Deferred `Testimonials` (prerendered placeholder includes the Fiverr
+   review text from `src/data/fiverr-reviews.ts`; videos stay lazy)
 8. `FAQ`
 9. Deferred `ServicesMarquee`
 10. `SiteFooter`
@@ -53,7 +54,11 @@ than reordering the entire document after hydration.
    - `src/pages/Index.tsx`
    - `src/hooks/use-deferred-mount.tsx`
    - `src/components/motion/SectionSkeleton.tsx`
+   - `src/components/TestimonialsReviewQuotes.tsx`
    - Media-heavy below-the-fold sections mount with root-margin-based deferral.
+     The testimonials placeholder keeps the review quotes in the first HTML
+     (`changes/seo/2026-10-16-testimonials-prerender-text.md`); only the cards
+     and media wait for intersection.
 4. Video runtime:
    - `src/components/media/`
    - `src/lib/media-assets.ts`

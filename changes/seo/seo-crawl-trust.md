@@ -29,7 +29,7 @@ directories paste pack, owned by the Authority team).
 
 Canonical Fiverr proof is **seller overall** on `https://www.fiverr.com/gisela_sm` (no `?source=`). Ignore gig-level ratings (one gig can still show 4.8).
 
-`ManifestoChapter` emits those values in the first HTML snapshot (no animated zeros for Googlebot). Homepage JSON-LD keeps `AggregateRating` 4.7/177 with `worstRating: "1"` and **does not** invent `Review` / `reviewBody` nodes.
+`ManifestoChapter` emits those values in the first HTML snapshot (no animated zeros for Googlebot). Homepage JSON-LD keeps `AggregateRating` 4.7/177 with `worstRating: "1"` and **does not** invent `Review` / `reviewBody` nodes. The homepage `#testimonials` placeholder now also emits the real Fiverr review quotes in that first HTML (handle, country, rating, text) so lazy-loaded cards do not hide them from crawlers. Still no per-review schema. See `2026-10-16-testimonials-prerender-text.md`.
 
 The same marketplace `AggregateRating` (no `Review` / `reviewBody`) is restored on:
 

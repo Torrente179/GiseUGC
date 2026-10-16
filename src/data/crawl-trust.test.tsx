@@ -5,6 +5,9 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import { LocaleProvider } from '@/lib/locale-context';
 import ManifestoChapter from '@/components/chapters/ManifestoChapter';
+import TestimonialsReviewQuotes from '@/components/TestimonialsReviewQuotes';
+import Index from '@/pages/Index';
+import { FIVERR_REVIEWS } from '@/data/fiverr-reviews';
 import { CONTENT_DATES, LLMS_LAST_UPDATED } from '@/data/content-dates';
 import { getHubChildLinks } from '@/data/hub-child-links';
 import HubPage from '@/components/HubPage';
@@ -45,6 +48,77 @@ describe('site proof figures stay internally consistent', () => {
   it('Fiverr star buckets add up to the advertised review count', () => {
     const total = FIVERR_RATING_DISTRIBUTION.reduce((sum, row) => sum + row.count, 0);
     expect(total).toBe(SITE_PROOF.fiverrReviewCount);
+  });
+});
+
+const renderHome = (path: string, locale: SiteLocale) =>
+  renderToStaticMarkup(
+    <StaticRouter location={path}>
+      <LocaleProvider>
+        <Index locale={locale} />
+      </LocaleProvider>
+    </StaticRouter>,
+  );
+
+const renderReviewQuotes = (path: string, locale: SiteLocale) =>
+  renderToStaticMarkup(
+    <StaticRouter location={path}>
+      <LocaleProvider>
+        <TestimonialsReviewQuotes locale={locale} />
+      </LocaleProvider>
+    </StaticRouter>,
+  );
+
+const decodeMarkup = (html: string) =>
+  html
+    .replace(/&quot;/gu, '"')
+    .replace(/&#x27;/gu, "'")
+    .replace(/&amp;/gu, '&')
+    .replace(/&lt;/gu, '<')
+    .replace(/&gt;/gu, '>');
+
+describe('homepage testimonials placeholder emits real Fiverr review text', () => {
+  it.each([
+    ['/', 'es' as SiteLocale],
+    ['/en/', 'en' as SiteLocale],
+  ])('%s includes every review quote, handle, rating, and country, without hiding the section', (path, locale) => {
+    const quotes = decodeMarkup(renderReviewQuotes(path, locale));
+    const home = decodeMarkup(renderHome(path, locale));
+    const testimonialsOpen = home.match(/<section[^>]*id="testimonials"[^>]*>/u)?.[0];
+
+    expect(testimonialsOpen).toBeTruthy();
+    expect(testimonialsOpen).not.toContain('aria-hidden');
+    expect(home).toContain('id="testimonials"');
+    expect(quotes).not.toMatch(/GiseUGC/iu);
+    expect(home).not.toMatch(/GiseUGC/iu);
+    expect(quotes).not.toContain('videos/reviews/');
+    expect(quotes).not.toContain('reviewBody');
+    expect(quotes).not.toContain('"@type":"Review"');
+
+    for (const review of FIVERR_REVIEWS) {
+      expect(quotes).toContain(review.user);
+      expect(quotes).toContain(review.text);
+      expect(home).toContain(review.text);
+      const rating = review.rating % 1 ? review.rating.toFixed(1) : String(review.rating);
+      expect(quotes).toContain(`${rating}/5`);
+    }
+
+    const regionNames = new Intl.DisplayNames([locale], { type: 'region' });
+    expect(quotes).toContain(regionNames.of('US'));
+    expect(quotes).toContain(regionNames.of('MX'));
+    expect(quotes).toContain(regionNames.of('GB'));
+  });
+
+  it('homepage JSON-LD stays AggregateRating-only after the quotes land in HTML', () => {
+    const graph = extractJsonLd(read('index.html'));
+    const business = graph['@graph'].find((node) => node['@type'] === 'ProfessionalService');
+    expect(business?.review).toBeUndefined();
+    expect(JSON.stringify(business)).not.toContain('reviewBody');
+    expect(business?.aggregateRating).toMatchObject({
+      '@type': 'AggregateRating',
+      ratingValue: '4.7',
+      reviewCount: '177',
+    });
   });
 });
 
