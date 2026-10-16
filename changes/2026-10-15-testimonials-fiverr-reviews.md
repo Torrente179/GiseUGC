@@ -79,3 +79,12 @@ Headless Chrome against the dev server:
 - **Player:** a delivered video plays from Fiverr (1280×720, 4 s in after
   5 s), the body is locked, Escape closes it, and focus returns to the card.
 - **Checks:** typecheck, ESLint, 404 tests.
+
+## Fix: videos and posters were blocked in production (2026-10-16)
+
+The production Content-Security-Policy (`vercel.json`) only allowed images and
+media from the site's own domains, so the browser refused everything from
+`fiverr-res.cloudinary.com`: posters didn't load and the videos couldn't play.
+The dev server sends no CSP, which is why the local checks passed.
+`https://fiverr-res.cloudinary.com` is now in `img-src` and `media-src` only,
+with no script, connect or frame permissions.
