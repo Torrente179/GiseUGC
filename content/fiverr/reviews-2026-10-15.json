@@ -2210,6 +2210,18 @@
   "romeros9": "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_small/v1/attachments/profile/photo/95bb0e18160b589457ce7766377e00ee-1120565321736964037526/JPEG_20250115_150034_2578878190773695564.jpg"
  },
  "avatarsCapturedAt": "2026-10-16",
+ "videosRemoved": {
+  "at": "2026-10-16",
+  "assets": [
+   "3451cf2988b6df639427e161b5b418cf-1721422662",
+   "2eef255dbf0a2648c661d338ee573a0a-1727463332",
+   "89cd986722074e9d8a79bd2294ab0654-1722876531",
+   "a28a61fae616d44a8d558dbfb1839045-1719873892",
+   "bb9566df0093515f68b637c99eab7291-1721510584",
+   "4f4e0b517f7dc7e33176c2b46823d9d6-1723315783",
+   "f10370e560cca763f493f3f52a5cb07e-1721236122"
+  ]
+ },
  "selfHosted": {
   "videoVersion": "v2",
   "photoVersion": "v1",
@@ -2227,11 +2239,6 @@
    "a204e09e8a43ac5f13d05efb950d558e-1727988572": {
     "width": 2420,
     "height": 1440,
-    "hevc": true
-   },
-   "2eef255dbf0a2648c661d338ee573a0a-1727463332": {
-    "width": 1440,
-    "height": 2560,
     "hevc": true
    },
    "53588e0ff8bfe257c4c5f83610cb4aea-1726506879": {
@@ -2259,19 +2266,9 @@
     "height": 2560,
     "hevc": true
    },
-   "4f4e0b517f7dc7e33176c2b46823d9d6-1723315783": {
-    "width": 1440,
-    "height": 2560,
-    "hevc": true
-   },
    "0f573485b33a04974bdac2fe7f4894a1-1722972095": {
     "width": 1080,
     "height": 1920,
-    "hevc": true
-   },
-   "89cd986722074e9d8a79bd2294ab0654-1722876531": {
-    "width": 1440,
-    "height": 2462,
     "hevc": true
    },
    "6da58872952ed834adf449c95bef1d53-1721666641": {
@@ -2284,29 +2281,9 @@
     "height": 1440,
     "hevc": true
    },
-   "3451cf2988b6df639427e161b5b418cf-1721422662": {
-    "width": 1440,
-    "height": 2560,
-    "hevc": true
-   },
-   "bb9566df0093515f68b637c99eab7291-1721510584": {
-    "width": 2032,
-    "height": 1440,
-    "hevc": true
-   },
-   "f10370e560cca763f493f3f52a5cb07e-1721236122": {
-    "width": 1080,
-    "height": 1920,
-    "hevc": true
-   },
    "92c2f4d4cd2b09b62d6355eb42714f37-1720540935": {
     "width": 1080,
     "height": 1878,
-    "hevc": true
-   },
-   "a28a61fae616d44a8d558dbfb1839045-1719873892": {
-    "width": 1080,
-    "height": 1920,
     "hevc": true
    },
    "6efca1642cf10832a04f26c217f614aa-1719139017": {

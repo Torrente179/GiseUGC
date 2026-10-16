@@ -111,7 +111,9 @@ const processVideo = async (file) => {
   return [asset, { width: size.w, height: size.h, hevc }];
 };
 
-const playable = capture.files.filter((f) => f.available && f.rating >= 4);
+// capture.videosRemoved: deliveries the owner chose not to show (the review stays, without its video).
+const removed = new Set(capture.videosRemoved?.assets ?? []);
+const playable = capture.files.filter((f) => f.available && f.rating >= 4 && !removed.has(f.asset.split('/')[0]));
 const videos = Object.fromEntries(await pool(playable, jobs, processVideo));
 
 const keptUsers = new Set(capture.reviews.map((row) => row[1]));

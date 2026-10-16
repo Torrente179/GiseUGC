@@ -52,6 +52,8 @@ const capture = JSON.parse(readFileSync(source, 'utf8'));
 const hosted = capture.selfHosted;
 if (!hosted?.videoVersion) throw new Error('No selfHosted media in the capture: run scripts/self-host-fiverr-media.mjs --upload first');
 const hostedAvatars = new Set(hosted.avatars);
+/** Deliveries the owner chose not to show: the review stays, without its video. */
+const removedVideos = new Set(capture.videosRemoved?.assets ?? []);
 
 const monthsBefore = (iso, months) => {
   const [y, m] = iso.split('-').map(Number);
@@ -84,12 +86,14 @@ const videoFor = (row) => {
   );
   if (!file) return null;
   const asset = file.asset.split('/')[0];
+  // The asset id carries the delivery date, kept even when the video is not shown.
+  const month = new Date(Number(asset.split('-').pop()) * 1000).toISOString().slice(0, 7);
+  if (removedVideos.has(asset)) return { month, files: null };
   const files = hosted.videos[asset];
   if (!files) throw new Error(`Video ${asset} is not self-hosted yet`);
   const base = `${MEDIA}/videos/reviews/${hosted.videoVersion}/${asset}`;
-  const uploaded = Number(asset.split('-').pop());
   return {
-    month: new Date(uploaded * 1000).toISOString().slice(0, 7),
+    month,
     files: {
       src: `${base}/avc.mp4`,
       ...(files.hevc ? { hevc: `${base}/hevc.mp4` } : {}),
@@ -117,12 +121,12 @@ const reviews = capture.reviews.map((row) => {
     text: body,
     ...(hostedAvatars.has(user) ? { avatar: `${MEDIA}/images/reviews/${hosted.photoVersion}/${user}.webp` } : {}),
     ...(reply ? { reply: clean(reply) } : {}),
-    ...(video ? { video: video.files } : {}),
+    ...(video?.files ? { video: video.files } : {}),
   };
 });
 
 const withVideo = reviews.filter((r) => r.video).length;
-const expected = capture.files.filter((f) => f.available && f.rating >= 4).length;
+const expected = capture.files.filter((f) => f.available && f.rating >= 4 && !removedVideos.has(f.asset.split('/')[0])).length;
 if (withVideo !== expected) throw new Error(`Matched ${withVideo} videos, expected ${expected}`);
 
 const { summary } = capture;

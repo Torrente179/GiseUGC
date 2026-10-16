@@ -162,3 +162,21 @@ The user approved the ~2.3 GB download.
   `scripts/lib/video-encoding.mjs`, shared with `scripts/encode-feed.mjs`.
   `encode-feed.mjs --data-only` reproduces `feed-renditions.ts` byte for
   byte after the move.
+
+## Seven videos taken off (2026-10-16)
+
+On the user's call, these reviews no longer show their video:
+- josegaravito5 (4.3, "excelente video, Gracias por el trabajo…")
+- jessien
+- felixsegovia525 ("Excelente trabajo, muy profesional…")
+- chmuhammad384
+- boombiz
+- corneliamatilda
+- get1web
+
+The reviews themselves stay.
+
+- **How:** the capture lists them in `videosRemoved`, and both scripts skip
+  them. Their delivery dates still come from the asset id.
+- **Result:** "Con video" now shows 21 reviews.
+- **R2:** their files are deleted (v1 and v2), and the CDN copies are purged.
