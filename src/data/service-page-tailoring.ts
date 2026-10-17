@@ -31,7 +31,7 @@ export const SERVICE_FORMAT_CLIP_IDS: Record<ServicePageId, [number, number, num
   'ugc-product-demo': [1008, 1011, 3, 7],
   'ugc-problem-solution': [1009, 1001, 5, 1012],
   'ugc-lifestyle': [8, 1002, 1, 10],
-  'ugc-broll-footage': [10, 4, 1002, 1007],
+  'ugc-broll-footage': [4, 9, 7, 1],
 };
 
 export const SERVICE_TAILORING: Record<ServicePageId, Record<SiteLocale, ServiceTailoring>> = {

@@ -31,7 +31,7 @@ where one fits, and never a raw green-screen take or a sub-500 px clip.
 | Demos de producto | 1008, 3, 1009, 7, 1016, 1011 |
 | Problema-solución | 1009, 1001, 2, 5, 1015, 3, 1012 |
 | Lifestyle | 1002, 8, 1, 4, 7, 9, 1015 |
-| B-roll | 1002, 1006, 1007, 9, 10 |
+| B-roll | 9, 7, 4, 1 (see the follow-up below; was 1002, 1006, 1007, 9, 10) |
 
 All 26 clips are used. The transcripts changed some earlier calls:
 
@@ -125,3 +125,27 @@ On desktop (`.kn--d`, `src/styles/service-keynote.css`):
   (`src/styles/service-hero.css`), so the two meet without a line.
 
 Phones are unchanged. Their hero stays dark.
+
+## Follow-up: B-roll shows only B-roll
+
+The B-roll page sells footage with no one talking to camera: product
+close-ups, product in use, ambient shots. Three of its five clips were
+talking-to-camera pieces (1002 Contenido TikTok, 10 a hook line), a
+multi-brand spokesperson reel (1006) and a newscast (1007). They all stay on
+their other pages.
+
+Checked against six frames from each of the 26 clips and the transcripts:
+
+- **9** (café, phone) and **7** (laptop among plants) are voice-over over
+  footage of her using a product, never facing the camera.
+- **4** has the tub, scoop and mix up close, and **1** the fabric, buttons and
+  pockets up close, then each outfit worn, though she talks to camera in
+  parts.
+
+Examples (and hero rail): 9, 7, 4, 1. Format phones: close-ups 4, in use 9,
+ambient 7, vertical and horizontal 1. New titles and descriptions for 7, 4 and
+1 in both languages; 9 keeps its copy. No clip in the catalog is horizontal
+B-roll. The three silent clothing showcases would fit best, but they exist
+only as 480p mains on R2, with no mobile or preview renditions, so they are
+not in the catalog.
+

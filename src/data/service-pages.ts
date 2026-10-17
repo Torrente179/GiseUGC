@@ -2261,29 +2261,24 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'El B-roll se entrega como clips sueltos, pero estos ejemplos te muestran el tipo de tomas, luz y estética que puedes esperar.',
       featuredExamples: [
         {
-          clipId: 1002,
-          title: 'Escenas de viaje y exteriores',
-          description: 'Grabado en España, con varias locaciones, luz natural y movimiento. Sirve como material visual.',
-        },
-        {
-          clipId: 1006,
-          title: 'Locaciones de un reel multiindustria',
-          description: 'Escenas en exteriores, interiores y estudio que muestran el rango de tomas que puedo grabar.',
-        },
-        {
-          clipId: 1007,
-          title: 'Detrás de cámaras en un noticiero',
-          description: 'Tomas detrás de cámaras en un set de noticias, con la cuenta regresiva incluida.',
-        },
-        {
           clipId: 9,
           title: 'Tomas cotidianas para un anuncio',
           description: 'Café, celular y oficina: las tomas que sostienen una voz en off, como las que le entrego a tu equipo.',
         },
         {
-          clipId: 10,
-          title: 'Clip lifestyle corto (7s)',
-          description: 'Una toma rápida con encuadre limpio, como los clips sueltos que le entrego a tu equipo.',
+          clipId: 7,
+          title: 'Tomas de ambiente en un café',
+          description: 'Yo trabajando en el laptop entre plantas y luz natural, sin mirar a cámara. Tomas de contexto que le dan profundidad a la edición.',
+        },
+        {
+          clipId: 4,
+          title: 'Primeros planos del producto',
+          description: 'El empaque, el scoop y la mezcla, grabados de cerca y con buena luz, para que tu editor tenga detalle de sobra.',
+        },
+        {
+          clipId: 1,
+          title: 'Ropa en uso: texturas y outfits',
+          description: 'La tela, los botones y los bolsillos de cerca, y después cada outfit puesto de cuerpo entero.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre B-roll UGC',
@@ -2397,29 +2392,24 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'B-roll is delivered as loose clips, but these examples show the kind of shots, lighting, and look you can expect.',
       featuredExamples: [
         {
-          clipId: 1002,
-          title: 'Travel and outdoor scenes',
-          description: 'Filmed in Spain across several locations, with natural light and movement. Useful as visual material.',
-        },
-        {
-          clipId: 1006,
-          title: 'Locations from a multi-industry reel',
-          description: 'Outdoor, indoor, and studio scenes that show the range of shots I can film.',
-        },
-        {
-          clipId: 1007,
-          title: 'Newsroom behind the scenes',
-          description: 'Behind-the-scenes shots on a news set, countdown included.',
-        },
-        {
           clipId: 9,
           title: 'Everyday shots for an ad',
           description: 'Coffee, phone, and office: the shots that carry a voiceover, like the ones I hand over to your team.',
         },
         {
-          clipId: 10,
-          title: 'Short lifestyle clip (7s)',
-          description: 'A quick shot with clean framing, like the standalone clips I hand over to your team.',
+          clipId: 7,
+          title: 'Ambient shots in a café',
+          description: 'Me working on a laptop among plants and natural light, never looking at the camera. Context shots that give the edit depth.',
+        },
+        {
+          clipId: 4,
+          title: 'Product close-ups',
+          description: 'The tub, the scoop, and the mix, filmed up close in good light, so your editor has plenty of detail.',
+        },
+        {
+          clipId: 1,
+          title: 'Clothes in use: textures and outfits',
+          description: 'Fabric, buttons, and pockets up close, then each outfit worn head to toe.',
         },
       ],
       faqTitle: 'Common questions about UGC b-roll',
