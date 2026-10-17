@@ -4,7 +4,7 @@ import type { ServicePageId, SiteLocale } from '@/lib/locale-path';
  * Stills used by the keynote sections below the service-page hero.
  *
  * Everything here is an existing poster (public/uploads/videos/service-posters)
- * and its variants, or one of the three transparent cut-outs of Gisela. The
+ * and its variants, or one of the transparent cut-outs of Gisela. The
  * catalog describes what each frame shows so the alt text is honest in both
  * languages; each service then picks the frames that suit it.
  */
@@ -214,7 +214,7 @@ export const KEYNOTE_STILLS: Record<KeynoteStillId, KeynoteStill> = {
   },
 };
 
-export type KeynoteCutoutId = 'open' | 'vest' | 'denim';
+export type KeynoteCutoutId = 'open' | 'vest' | 'denim' | 'denim-ok' | 'vest-home' | 'perfume' | 'mic';
 
 export const KEYNOTE_CUTOUTS: Record<
   KeynoteCutoutId,
@@ -247,6 +247,42 @@ export const KEYNOTE_CUTOUTS: Record<
       en: 'Gisela in a denim jacket, eyes closed, hands together',
     },
   },
+  'denim-ok': {
+    src: '/uploads/service-cutout-denim-ok.webp',
+    width: 777,
+    height: 1400,
+    alt: {
+      es: 'Gisela con chaqueta de jean, hablando a cámara y haciendo el gesto de OK con las dos manos',
+      en: 'Gisela in a denim jacket, talking to camera and making an OK sign with both hands',
+    },
+  },
+  'vest-home': {
+    src: '/uploads/service-cutout-vest-home.webp',
+    width: 720,
+    height: 1183,
+    alt: {
+      es: 'Gisela con chaleco beige, sonriendo con las dos manos abiertas',
+      en: 'Gisela in a beige vest, smiling with both hands open',
+    },
+  },
+  perfume: {
+    src: '/uploads/service-cutout-perfume.webp',
+    width: 720,
+    height: 1120,
+    alt: {
+      es: 'Gisela con blusa blanca de un hombro, sonriendo con un micrófono y un perfume en las manos',
+      en: 'Gisela in a white one-shoulder top, smiling, holding a microphone and a bottle of perfume',
+    },
+  },
+  mic: {
+    src: '/uploads/service-cutout-mic.webp',
+    width: 700,
+    height: 1166,
+    alt: {
+      es: 'Gisela con blusa blanca sin hombros, sonriendo y sosteniendo un micrófono',
+      en: 'Gisela in a white off-the-shoulder top, smiling and holding a microphone',
+    },
+  },
 };
 
 /** One frame placed in a frame: which still, where to anchor the crop, how far to zoom. */
@@ -268,10 +304,11 @@ export type ServiceImagery = {
 };
 
 /**
- * The cut-outs rotate (denim, vest, open, denim, vest, open, denim, vest) so
- * neighbouring services never repeat. Process stills follow the four beats of
- * every service (brief, script, filming, delivery); the fit photo sets the
- * mood of the page.
+ * Testimonials, spokesperson, problem-solution and lifestyle have their own
+ * cut-out, from frames picked for them; the others share denim, open and vest,
+ * never the same one on neighbouring services. Process stills follow the four
+ * beats of every service (brief, script, filming, delivery); the fit photo
+ * sets the mood of the page.
  */
 export const SERVICE_IMAGERY: Record<ServicePageId, ServiceImagery> = {
   'bilingual-ugc-creator': {
@@ -285,7 +322,7 @@ export const SERVICE_IMAGERY: Record<ServicePageId, ServiceImagery> = {
     ],
   },
   'spokesperson-videos': {
-    cutout: 'vest',
+    cutout: 'mic',
     fit: { id: 'studio', position: '50% 38%' },
     process: [
       { id: 'blazer', position: '50% 16%' },
@@ -305,7 +342,7 @@ export const SERVICE_IMAGERY: Record<ServicePageId, ServiceImagery> = {
     ],
   },
   'ugc-testimonials-reviews': {
-    cutout: 'denim',
+    cutout: 'denim-ok',
     fit: { id: 'vestroom', position: '50% 20%' },
     process: [
       { id: 'tub', position: '50% 26%' },
@@ -325,7 +362,7 @@ export const SERVICE_IMAGERY: Record<ServicePageId, ServiceImagery> = {
     ],
   },
   'ugc-problem-solution': {
-    cutout: 'open',
+    cutout: 'vest-home',
     fit: { id: 'rooftop', position: '50% 38%' },
     process: [
       { id: 'couch', position: '50% 24%' },
@@ -335,7 +372,7 @@ export const SERVICE_IMAGERY: Record<ServicePageId, ServiceImagery> = {
     ],
   },
   'ugc-lifestyle': {
-    cutout: 'denim',
+    cutout: 'perfume',
     fit: { id: 'hotel', position: '50% 27%' },
     process: [
       { id: 'rooftop', position: '50% 26%' },
