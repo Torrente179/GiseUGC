@@ -16,7 +16,7 @@ import '@/styles/service-hero.css';
  * The service page hero, picked on the design canvas: "S2 · Glass proof panel"
  * on desktop and "S1 · Phone stage" on phones. Both play the page's own
  * examples (featuredExamples, mapped per service from the video transcripts);
- * the player with sound is the page's MediaTheater. Styles:
+ * the player with sound is the home page's (ReelTheater). Styles:
  * src/styles/service-hero.css.
  */
 

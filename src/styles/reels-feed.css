@@ -16,6 +16,10 @@
    up and down like the app, with a close button. The page never has to
    scroll through the feed, which is what trapped it before.
 
+   The theater and the full-screen feed are the site's player with sound, on
+   the service pages too (src/components/media/ReelTheater.tsx). A tap on the
+   video pauses and plays it in both.
+
    Plain stylesheet (no @layer) so Tailwind can't purge it.
    ═══════════════════════════════════════════════════ */
 
@@ -872,6 +876,26 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* A tap on the reel pauses and plays it (the paused badge is .rt-paused). It
+   sits inside the slide, so a swipe that starts on it still scrolls the feed. */
+.rf-mob-tap {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rf-mob-tap:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
 }
 
 .rf-mob-shade {

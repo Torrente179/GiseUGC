@@ -19,11 +19,11 @@ This folder is organized by subsystem instead of by date.
   - Hero, navbar, footer, contact flows, FAQ, rating cards, motion polish, and visual evolution.
   - **Current live hero:** `../2026-10-13-feed-hero-cutout.md` — cut-out portrait in front of a giant “Gisela”, caption laid out like a post, reel card at iPhone 17 Pro Max scale on desktop, proof rail on phones, and a CSS scroll timeline that lifts the name as the hero leaves. Read §2 before replacing the photo and §5 before touching any hero motion. The portrait hero, “CHAPTER 00” title sequence, “Muro de trabajo,” and earlier experiments are historical rather than current.
   - **Current service INNER (below hero):** `ui/service-page-showroom-redesign.md` — read the last two entries (`2026-09-02` "A · Ritmo" beats and `2026-09-02b` Empezar) before touching `.stm-*`. Source of truth for the live ficha argument on all eight ES+EN service pages. The inner is not an app layout: it is the desktop document, given one full-bleed surface per beat, closing on a contained ink card. Three things there are deliberate and easy to re-break: beat modifier class names must be **literal** strings or Tailwind purges the rules silently; headings on the ink card need **(0,4,1)** to clear the global `h2:not(...)` rule; and service inner mobile has **no sticky CTA bar** — the global `.mtabbar` is the navigation on these pages, so do not re-add `body:has(...) .mtabbar { display: none }`.
-  - **Current full-screen viewers:** both the video theater (Portfolio, service
-    pages) and the testimonial viewer share one stage language — `--theater-*`
-    tokens, the `media-theater-*` keyframes, and `.theater-control`. Changing one
-    without the other splits them again. See
-    `../2026-03-24-testimonials-marquee-redesign.md` (2026-09-01 entry).
+  - **Current video player:** the home page and the service pages share one
+    player, `src/components/media/ReelTheater.tsx` (desktop theater `.rt`, phone
+    full-screen feed `.rf-mob--overlay`, styles in `src/styles/reels-feed.css`).
+    See `../2026-10-16-service-video-player.md`. The old `MediaTheater` is gone;
+    the `media-theater-*` / `.theater-control` CSS in `index.css` is unused.
 - `carousel-functionality/`
   - Services marquee, swipe behavior, loop logic, resize stability, and regression guidance.
 - `video-functionality/`

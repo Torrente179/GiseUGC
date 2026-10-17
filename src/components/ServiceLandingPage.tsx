@@ -1,20 +1,24 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState, type SyntheticEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type SyntheticEvent } from 'react';
 import type { ServicePageId, SiteLocale, ResourcePageId } from '@/lib/locale-path';
 import { getHomePath, getHubPath, getServicePath } from '@/lib/locale-path';
 import type { ServiceLandingRouteData } from '@/data/landing-route-types';
-import { LEGACY_REEL_CLIPS, servicePosterSrcFromMain } from '@/data/portfolio-clips';
+import { LEGACY_REEL_CLIPS } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import Navbar from '@/components/Navbar';
 import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
-import MediaTheater from '@/components/media/MediaTheater';
+import ReelTheater, { useTheaterWide } from '@/components/media/ReelTheater';
+import { FeedPoolSync } from '@/components/media/FeedMedia';
 import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
-import { createClipPlaybackCandidates } from '@/lib/media-assets';
+import { FeedPlayerPool, getClipFeedMedia } from '@/lib/feed-media';
 import { useMediaIntent } from '@/hooks/use-media-intent';
+import { useMediaPlaybackSlot } from '@/hooks/use-media-playback-slot';
+import { CONTACT_URLS } from '@/lib/contact-channels';
+import { serviceContactMessage, whatsappLinkWithText } from '@/lib/service-contact';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
 import ServicePageInner from '@/components/ServicePageInner';
-import WantCta from '@/components/service-keynote/WantCta';
+import { KEYNOTE_LABELS } from '@/components/service-keynote/labels';
 import { ServiceHeroDesktop, ServiceHeroMobile } from '@/components/service-hero/ServiceHero';
 import { CONTENT_DATES } from '@/data/content-dates';
 import { HUB_LABELS } from '@/data/hub-labels';
@@ -23,14 +27,11 @@ import { serializeRouteDataJson } from '@/lib/inline-copy-links';
 import { FIVERR_AGGREGATE_RATING } from '@/data/site-proof';
 import '@/styles/templates.css';
 
-const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
-
 const SITE_URL = 'https://www.giselasaldarriaga.com';
 
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
 const clipMap = new Map([...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLIPS].map((clip) => [clip.id, clip]));
 const formatDuration = (seconds?: number) => (seconds ? `${Math.round(seconds)}s` : null);
-const getHighQualityServicePosterSrc = servicePosterSrcFromMain;
 const armProofRailSnap = (event: SyntheticEvent<HTMLDivElement>) => {
   event.currentTarget.dataset.snapReady = 'true';
 };
@@ -74,9 +75,6 @@ const localeLabels = {
     resources: 'Recursos',
     explore: 'Seguir explorando',
     exploreKicker: 'Explorar',
-    previewClose: 'Cerrar vista previa',
-    previewPrev: 'Clip anterior',
-    previewNext: 'Siguiente clip',
     show: 'Mostrar',
     reviewSource: 'reseña en Fiverr',
     fiverrReviews: 'reseñas en Fiverr',
@@ -96,9 +94,6 @@ const localeLabels = {
     resources: 'Resources',
     explore: 'Keep exploring',
     exploreKicker: 'Explore',
-    previewClose: 'Close preview',
-    previewPrev: 'Previous clip',
-    previewNext: 'Next clip',
     show: 'Show',
     reviewSource: 'review on Fiverr',
     fiverrReviews: 'reviews on Fiverr',
@@ -140,53 +135,52 @@ const ServiceLandingPage = ({
     [page.featuredExamples],
   );
 
-  /* ── Theater state ── */
+  /* ── Theater: the home page's player (ReelTheater) on the page's examples ── */
   const [activeProofIndex, setActiveProofIndex] = useState<number | null>(null);
-  const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const [soundOn, setSoundOn] = useState(false);
+  const [pool] = useState(() => new FeedPlayerPool());
+  const theaterWide = useTheaterWide();
 
-  const activeProofItem = useMemo(
-    () => (activeProofIndex === null ? null : proofExamples[activeProofIndex] ?? null),
-    [activeProofIndex, proofExamples],
-  );
-  const isProofTheaterOpen = activeProofItem !== null;
+  const isProofTheaterOpen = activeProofIndex !== null;
   const mediaIntent = useMediaIntent({ autoStart: true });
+  const slotGranted = useMediaPlaybackSlot(isProofTheaterOpen, 'theater');
+
+  const theaterItems = useMemo(
+    () => proofExamples.map(({ example, clip }) => ({ clip, title: example.title })),
+    [proofExamples],
+  );
+
+  // The reel on screen, the next one buffering and the previous one's first
+  // frame; the pool lets everything go while the theater is closed.
+  const count = proofExamples.length;
+  const slugAt = (offset: number) =>
+    activeProofIndex === null || count === 0
+      ? undefined
+      : getClipFeedMedia(proofExamples[(activeProofIndex + offset + count) % count].clip)?.slug;
+  const activeSlug = slugAt(0);
+  const nextSlug = count > 1 ? slugAt(1) : undefined;
+  const previousSlug = count > 2 ? slugAt(-1) : undefined;
+  const keepSlugs = useMemo(
+    () => [activeSlug, nextSlug, previousSlug].filter((slug): slug is string => Boolean(slug)),
+    [activeSlug, nextSlug, previousSlug],
+  );
+
+  useEffect(() => () => pool.destroy(), [pool]);
 
   const openProofClip = useCallback(
     (index: number) => {
       if (index < 0 || index >= proofExamples.length) return;
+      // The theater opens with sound. iOS allows it only for a video a tap has
+      // started, so the tap that opens it blesses the pool's players.
+      pool.bless();
+      setSoundOn(true);
       setActiveProofIndex(index);
     },
-    [proofExamples.length],
+    [pool, proofExamples.length],
   );
-  const closeProofTheater = useCallback(() => setActiveProofIndex(null), []);
-  const navigateProofTheater = useCallback(
-    (direction: 1 | -1) => {
-      if (proofExamples.length === 0) return;
-      setActiveProofIndex((prev) => {
-        if (prev === null) return prev;
-        return (prev + direction + proofExamples.length) % proofExamples.length;
-      });
-    },
-    [proofExamples.length],
-  );
-
-  const theaterCandidates = useMemo(
-    () => createClipPlaybackCandidates(activeProofItem?.clip, isMobileViewport),
-    [activeProofItem, isMobileViewport],
-  );
-
-  /* ── Viewport listener ── */
-  useIsomorphicLayoutEffect(() => {
-    if (typeof window === 'undefined') return;
-    const mq = window.matchMedia('(max-width: 767px)');
-    const update = () => setIsMobileViewport(mq.matches);
-    update();
-    if (typeof mq.addEventListener === 'function') {
-      mq.addEventListener('change', update);
-      return () => mq.removeEventListener('change', update);
-    }
-    mq.addListener(update);
-    return () => mq.removeListener(update);
+  const closeProofTheater = useCallback(() => {
+    setSoundOn(false);
+    setActiveProofIndex(null);
   }, []);
 
   useEffect(() => {
@@ -368,20 +362,25 @@ const ServiceLandingPage = ({
           <DeferredServicesMarquee liteMobile />
         </main>
 
-        {activeProofItem && (
-          <MediaTheater
-            candidates={theaterCandidates}
-            poster={getHighQualityServicePosterSrc(activeProofItem.clip.mainSrc, activeProofItem.clip.posterSrc)}
-            category={page.navLabel}
-            title={activeProofItem.example.title}
-            duration={formatDuration(activeProofItem.clip.durationSeconds)}
-            closeLabel={labels.previewClose}
-            previousLabel={labels.previewPrev}
-            nextLabel={labels.previewNext}
+        <FeedPoolSync pool={pool} keep={keepSlugs} next={nextSlug} previous={previousSlug} />
+        {activeProofIndex !== null && (
+          <ReelTheater
+            view={theaterWide ? 'theater' : 'feed'}
+            items={theaterItems}
+            index={activeProofIndex}
+            onIndexChange={setActiveProofIndex}
+            pool={pool}
+            playing={slotGranted}
+            soundOn={soundOn}
+            onToggleSound={() => setSoundOn((on) => !on)}
+            onSoundBlocked={() => setSoundOn(false)}
             onClose={closeProofTheater}
-            onPrevious={() => navigateProofTheater(-1)}
-            onNext={() => navigateProofTheater(1)}
-            action={<WantCta page={page} locale={locale} className="svc-want svc-want--sm" />}
+            label={labels.theWork}
+            feedTitle={labels.theWork}
+            ctaHref={whatsappLinkWithText(CONTACT_URLS.whatsapp, serviceContactMessage(locale, page.navLabel))}
+            ctaLabel={KEYNOTE_LABELS[locale].wantThisService}
+            ctaShortLabel={KEYNOTE_LABELS[locale].wantThisService}
+            showRating={Boolean(page.geoFact)}
           />
         )}
 

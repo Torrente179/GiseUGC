@@ -1,3 +1,7 @@
+> **Superseded 2026-10-16:** the service pages now use the home page's player
+> (`ReelTheater`). `TheaterVideo` and `MediaTheater` were removed. See
+> `../2026-10-16-service-video-player.md`.
+
 ## 2026-03-18 service-page video behavior parity with portfolio
 
 ### Runtime touchpoints
