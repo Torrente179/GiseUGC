@@ -33,17 +33,26 @@ export const parseInlineCopy = (text: string): InlineCopySegment[] => {
   return segments.length > 0 ? segments : [{ type: 'text', value: text }];
 };
 
-export const visibleInlineCopy = (text: string) =>
-  parseInlineCopy(text)
+export type InlineCopyInput = string | InlineCopySegment[];
+
+/**
+ * In the browser, copy read from #route-data is already segments:
+ * serializeRouteDataJson splits every "[label](href)" string before it ships.
+ * Every helper takes either shape, so a field typed `string` in the data
+ * modules cannot crash hydration when it carries a link.
+ */
+const toSegments = (text: InlineCopyInput): InlineCopySegment[] =>
+  typeof text === 'string' ? parseInlineCopy(text) : text;
+
+export const visibleInlineCopy = (text: InlineCopyInput) =>
+  toSegments(text)
     .map((segment) => (segment.type === 'link' ? segment.label : segment.value))
     .join('');
 
-export const inlineCopyHrefs = (text: string) =>
-  parseInlineCopy(text)
+export const inlineCopyHrefs = (text: InlineCopyInput) =>
+  toSegments(text)
     .filter((segment): segment is Extract<InlineCopySegment, { type: 'link' }> => segment.type === 'link')
     .map((segment) => segment.href);
-
-export type InlineCopyInput = string | InlineCopySegment[];
 
 export const serializeRouteDataJson = (data: unknown) =>
   JSON.stringify(data, (_key, value) => {
@@ -56,7 +65,7 @@ export const serializeRouteDataJson = (data: unknown) =>
 const isExternalHref = (href: string) => /^https?:\/\//i.test(href);
 
 export const InlineCopy = ({ text }: { text: InlineCopyInput }) => {
-  const segments = typeof text === 'string' ? parseInlineCopy(text) : text;
+  const segments = toSegments(text);
   const nodes: ReactNode[] = segments.map((segment, index) => {
     if (segment.type === 'text') {
       return <Fragment key={`t-${index}`}>{segment.value}</Fragment>;
