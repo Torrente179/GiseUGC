@@ -131,6 +131,18 @@ const withVideo = reviews.filter((r) => r.video).length;
 const expected = capture.files.filter((f) => f.available && f.rating >= 4 && !removedVideos.has(f.asset.split('/')[0])).length;
 if (withVideo !== expected) throw new Error(`Matched ${withVideo} videos, expected ${expected}`);
 
+// Each reviewer's country, named once here (Node's ICU, the same one the
+// prerender uses) instead of with Intl.DisplayNames at render. Safari names
+// some regions differently (CN is "China continental" there), and a name the
+// browser renders differently from the prerendered HTML breaks hydration.
+const countryNames = Object.fromEntries(
+  ['es', 'en'].map((locale) => {
+    const names = new Intl.DisplayNames([locale], { type: 'region' });
+    const codes = [...new Set(reviews.map((r) => r.country))].sort();
+    return [locale, Object.fromEntries(codes.map((code) => [code, names.of(code) ?? code]))];
+  }),
+);
+
 const { summary } = capture;
 writeFileSync(
   OUT,
@@ -176,6 +188,13 @@ export const FIVERR_REVIEWS_CAPTURED_AT = ${JSON.stringify(capture.capturedAt)};
 export const FIVERR_SUMMARY = ${JSON.stringify({ communication: summary.communication, quality: summary.quality, value: summary.value })} as const;
 
 export const FIVERR_REVIEWS: readonly FiverrReview[] = ${JSON.stringify(reviews, null, 2)};
+
+/**
+ * Every reviewer's country, named in each site language at generation time.
+ * Render these, never Intl.DisplayNames: Safari's names differ from the
+ * prerender's for some regions, which breaks hydration.
+ */
+export const FIVERR_COUNTRY_NAMES: Readonly<Record<'es' | 'en', Readonly<Record<string, string>>>> = ${JSON.stringify(countryNames, null, 2)};
 `,
 );
 console.log(`${reviews.length} reviews, ${withVideo} with video → ${path.relative(ROOT, OUT)}`);

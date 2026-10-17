@@ -23,8 +23,9 @@ playable from the card. On their call, reviews under 4 stars are left out.
   value 4.7.
 - **Generated data:** `scripts/build-fiverr-reviews.mjs` writes
   `src/data/fiverr-reviews.ts`:
-  - ISO country codes (38 countries), so names render in either language via
-    `Intl.DisplayNames`;
+  - ISO country codes (38 countries), named in both languages by the
+    generator (`FIVERR_COUNTRY_NAMES`; was `Intl.DisplayNames` at render
+    until 2026-10-17, see below);
   - service;
   - language: es 63 · en 103 · it 2;
   - Gisela's reply where she wrote one;
@@ -251,3 +252,22 @@ and it is now the section.
   - 410 tests pass.
   - The review videos run at up to ~24 Mbps. On a slow link (~8 Mbps, as
     measured during this check) the player buffers before it starts.
+
+## 2026-10-17 — country names no longer break the home page's hydration
+
+- **Problem:** in Safari (iPhone and Mac), React threw away the home page's
+  prerendered HTML on every load and rendered it again on the client: errors
+  #425, #418 and #423, in both languages.
+- **Cause:** `TestimonialsReviewQuotes` named each reviewer's country with
+  `Intl.DisplayNames` during render. Node (the prerender) calls `CN` "China",
+  but Safari calls it "China continental" / "China mainland". It was the only
+  text on the page that differed (diff of the server text against the client
+  render, WebKit and Chromium). The other 37 countries match.
+- **Fix:** `scripts/build-fiverr-reviews.mjs` now writes `FIVERR_COUNTRY_NAMES`
+  (es/en, from Node's ICU) into `src/data/fiverr-reviews.ts`. Regenerating
+  changed nothing else in the file.
+  - The review quotes, the testimonials wall and the service hero review
+    (`landing-route-data.server.ts`) all render those names. Nothing calls
+    `Intl.DisplayNames` at runtime any more.
+  - `data-integrity.test.ts` fails if a reviewer's country has no name, for
+    example after a new capture.

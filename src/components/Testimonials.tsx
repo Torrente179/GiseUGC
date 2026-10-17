@@ -9,6 +9,7 @@ import { releaseVideo } from '@/lib/video-lifecycle';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 import { SITE_PROOF } from '@/data/site-proof';
 import {
+  FIVERR_COUNTRY_NAMES,
   FIVERR_PROFILE_URL,
   FIVERR_REVIEWS,
   FIVERR_SUMMARY,
@@ -318,14 +319,7 @@ const Testimonials = () => {
   const [featured, setFeatured] = useState(0);
   const [playing, setPlaying] = useState<FiverrReview | null>(null);
 
-  const regionNames = useMemo(() => {
-    try {
-      return new Intl.DisplayNames([locale], { type: 'region' });
-    } catch {
-      return null;
-    }
-  }, [locale]);
-  const countryName = useCallback((code: string) => regionNames?.of(code) ?? code, [regionNames]);
+  const countryName = useCallback((code: string) => FIVERR_COUNTRY_NAMES[locale][code] ?? code, [locale]);
   const monthNow = useMonthNow();
   const relative = useMemo(() => new Intl.RelativeTimeFormat(locale, { numeric: 'always' }), [locale]);
   const ago = useCallback(

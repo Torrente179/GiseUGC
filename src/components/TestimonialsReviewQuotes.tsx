@@ -1,4 +1,4 @@
-import { FIVERR_REVIEWS } from '@/data/fiverr-reviews';
+import { FIVERR_COUNTRY_NAMES, FIVERR_REVIEWS } from '@/data/fiverr-reviews';
 import type { SiteLocale } from '@/lib/locale-path';
 
 /**
@@ -8,16 +8,7 @@ import type { SiteLocale } from '@/lib/locale-path';
  */
 const formatRating = (rating: number) => (rating % 1 ? rating.toFixed(1) : String(rating));
 
-const regionNamesFor = (locale: SiteLocale) => {
-  try {
-    return new Intl.DisplayNames([locale], { type: 'region' });
-  } catch {
-    return null;
-  }
-};
-
 const TestimonialsReviewQuotes = ({ locale }: { locale: SiteLocale }) => {
-  const regionNames = regionNamesFor(locale);
   const title = locale === 'en' ? 'Testimonials' : 'Testimonios';
 
   return (
@@ -25,8 +16,10 @@ const TestimonialsReviewQuotes = ({ locale }: { locale: SiteLocale }) => {
       <h2>{title}</h2>
       <ol>
         {FIVERR_REVIEWS.map((review) => {
+          // Named at generation time: Intl names some regions differently in
+          // Safari than in the prerender, which broke the home page's hydration.
           const country = review.country
-            ? regionNames?.of(review.country) ?? review.country
+            ? FIVERR_COUNTRY_NAMES[locale][review.country] ?? review.country
             : '';
           return (
             <li key={review.id}>

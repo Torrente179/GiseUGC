@@ -4,7 +4,7 @@ import {
   getServicePageContent,
 } from '@/data/service-pages';
 import { SERVICE_HERO_REVIEW_ID } from '@/data/service-hero-reviews';
-import { FIVERR_REVIEWS } from '@/data/fiverr-reviews';
+import { FIVERR_COUNTRY_NAMES, FIVERR_REVIEWS } from '@/data/fiverr-reviews';
 import { getResourcePageContent } from '@/data/resource-pages';
 import type {
   ResourceLandingRouteData,
@@ -44,12 +44,7 @@ export const buildResourceLandingRouteData = (
 const buildHeroReview = (serviceId: ServicePageId, locale: SiteLocale): ServiceHeroReview | null => {
   const review = FIVERR_REVIEWS.find((item) => item.id === SERVICE_HERO_REVIEW_ID[serviceId]);
   if (!review) return null;
-  let countryName = review.country;
-  try {
-    countryName = new Intl.DisplayNames([locale], { type: 'region' }).of(review.country) ?? review.country;
-  } catch {
-    // Keep the ISO code.
-  }
+  const countryName = FIVERR_COUNTRY_NAMES[locale][review.country] ?? review.country;
   const text = review.text
     .replace(/\p{Extended_Pictographic}\uFE0F?/gu, '')
     .replace(/\s{2,}/gu, ' ')
