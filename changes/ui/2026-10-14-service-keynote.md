@@ -76,7 +76,12 @@ named at the top of the card.
   neighbours differ), the Fit photo, and one still per process step, all from
   existing posters and their variants. Alt text is written for both languages.
 - `RelatedServiceSummary` now carries `id` and `leadClipId`.
-- The three cut-outs live in `public/uploads/service-cutout-*.webp`.
+- The three cut-outs live in `public/uploads/service-cutout-*.webp`. Each is
+  the 1.2 s poster frame of one green-screen clip (`Croma Key`, `Croma key
+  sobrepuesto`, `Croma key plano cerrado`) with the green keyed out.
+  `scripts/chroma-cutout.py` rebuilds them from those posters (same matte and
+  crop) and cuts a new one from any frame of the clips in
+  `media-sources/nuevos/`.
 
 ## Code and styles
 
