@@ -3,7 +3,7 @@ import { useTranslation } from '@/lib/locale-context';
 import { useLocation } from 'react-router-dom';
 import NavbarControls from '@/components/NavbarControls';
 import { useActiveSection } from '@/hooks/use-active-section';
-import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
+import { CONTACT_SECTION_ID, useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import {
   getHomeSectionHref,
   getLocaleFromPath,
@@ -104,12 +104,15 @@ const Navbar = () => {
               </a>
             );
           })}
+          {/* Opens the contact panel in place on every route (see
+              useHashlessSectionNavigation). The href stays on this page: a
+              link to /#contact is a cross-document load the runtime starts
+              before this handler runs, and it landed on the homepage's
+              page-end strip, which has no contact channels. */}
           <a
-            href={homeSectionHref('contact')}
+            href={`#${CONTACT_SECTION_ID}`}
             className="site-nav-pill__cta"
-            onClick={(event) => {
-              if (onHomePage) handleHashLinkClick(event);
-            }}
+            onClick={handleHashLinkClick}
           >
             {t('navbar.messageMe')}
           </a>

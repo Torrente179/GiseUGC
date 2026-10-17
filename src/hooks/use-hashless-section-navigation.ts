@@ -1,5 +1,8 @@
 import { useCallback } from 'react';
 import type { MouseEvent } from 'react';
+import { hasContactDockListener, openContactDock } from '@/lib/contact-dock';
+
+export const CONTACT_SECTION_ID = 'contact';
 
 let activeScrollFrameId: number | null = null;
 
@@ -76,6 +79,15 @@ export const useHashlessSectionNavigation = () => {
   const navigateToSection = useCallback((targetId: string) => {
     if (!targetId) {
       return false;
+    }
+
+    // `#contact` is the page-end strip, which carries no contact channels while
+    // the full footer is off (SHOW_SITE_FOOTER). Open the contact panel (desktop
+    // dock or mobile sheet) in place instead, wherever one is mounted.
+    if (targetId === CONTACT_SECTION_ID && hasContactDockListener()) {
+      openContactDock();
+      stripHashFromUrl();
+      return true;
     }
 
     const targetElement = document.getElementById(targetId);

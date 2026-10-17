@@ -24,6 +24,13 @@ export const toggleContactDock = () => {
   dispatchContactDockAction('toggle');
 };
 
+// Mounted contact surfaces: the desktop FloatingContactDock and the mobile app
+// shell's contact sheet. Routes without one (legal pages on desktop) fall back
+// to scrolling to the page-end strip.
+let listenerCount = 0;
+
+export const hasContactDockListener = () => listenerCount > 0;
+
 export const onContactDockAction = (callback: (action: ContactDockAction) => void) => {
   if (typeof window === 'undefined') {
     return () => undefined;
@@ -34,9 +41,11 @@ export const onContactDockAction = (callback: (action: ContactDockAction) => voi
     callback(customEvent.detail ?? 'open');
   };
   window.addEventListener(CONTACT_DOCK_ACTION_EVENT, handleAction);
+  listenerCount += 1;
 
   return () => {
     window.removeEventListener(CONTACT_DOCK_ACTION_EVENT, handleAction);
+    listenerCount -= 1;
   };
 };
 

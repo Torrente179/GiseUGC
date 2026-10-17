@@ -37,6 +37,7 @@ import {
   shouldRetryHashScroll,
 } from '@/lib/hash-section-scroll';
 import { scrollToY } from '@/lib/motion/native-scroll';
+import { openContactDock } from '@/lib/contact-dock';
 
 const MobileAppShell = lazy(() => import('@/components/mobile/MobileAppShell'));
 
@@ -262,6 +263,10 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
       // scrolls to the target instead of jumping to y=0.
       jumpToY(0);
       requestAnimationFrame(() => scrollToSection(location.hash.slice(1)));
+      // `#contact` is the page-end strip, which has no contact channels; also
+      // open the contact panel (desktop dock or mobile sheet). The request is
+      // kept as pending on <body> for whichever surface mounts after this.
+      if (location.hash === '#contact') openContactDock();
     } else if (navigationType === 'POP') {
       // Browser back / forward — restore exact saved scroll position.
       // Two rAF hops let the browser finish route layout before restoring scroll,

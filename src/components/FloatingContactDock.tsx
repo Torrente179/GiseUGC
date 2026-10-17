@@ -6,6 +6,7 @@ import { CONTACT_CHANNELS, type ContactChannel, type ContactChannelId } from '@/
 import { SITE_PROOF } from '@/data/site-proof';
 import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 import ChannelIcon from '@/components/contact/ChannelIcon';
+import { consumePendingContactDockAction, isMobileViewport, onContactDockAction } from '@/lib/contact-dock';
 import '@/styles/app-chrome.css';
 
 /**
@@ -15,7 +16,9 @@ import '@/styles/app-chrome.css';
  * src/styles/app-chrome.css. Phones use the tab bar's contact sheet instead.
  *
  * It slides in once the hero starts leaving the screen and steps back over
- * the footer, which carries the same links.
+ * the footer. Any contact CTA (the navbar's "Escríbeme", `#contact` links)
+ * opens the panel through src/lib/contact-dock.ts; a panel opened that way
+ * shows the dock even over the hero or the footer, until it is closed.
  */
 
 const AVATAR_SRC = '/uploads/gisela-avatar-160.webp';
@@ -161,15 +164,47 @@ const FloatingContactDock = () => {
   }, []);
 
   const [isOpen, setIsOpen] = useState(false);
+  // Opened from another control (navbar "Escríbeme", a #contact CTA) rather
+  // than from the pill: show the dock wherever the page is scrolled.
+  const [isRequested, setIsRequested] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const pillRef = useRef<HTMLButtonElement>(null);
-  const isShown = hasEntrance && !isHeroVisible;
+  const primaryRowRef = useRef<HTMLAnchorElement>(null);
+  const isShown = isRequested || (hasEntrance && !isHeroVisible);
+  const isGhosted = isDesktopDockGhosted && !isRequested;
 
   // The panel never outlives the pill: it closes when the pill hides at the
   // top of the page or steps back over the footer.
   useEffect(() => {
-    if (!isShown || isDesktopDockGhosted) setIsOpen(false);
-  }, [isShown, isDesktopDockGhosted]);
+    if (!isShown || isGhosted) setIsOpen(false);
+  }, [isShown, isGhosted]);
+
+  useEffect(() => {
+    if (!isOpen) setIsRequested(false);
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handle = (action: 'open' | 'toggle') => {
+      // Phones answer with the app shell's contact sheet.
+      if (isMobileViewport()) return;
+      consumePendingContactDockAction();
+      setIsRequested(true);
+      setIsOpen((open) => (action === 'toggle' ? !open : true));
+    };
+    const unsubscribe = onContactDockAction(handle);
+    // On phones the pending request belongs to the lazily mounted contact sheet.
+    if (!isMobileViewport()) {
+      const pending = consumePendingContactDockAction();
+      if (pending) handle(pending);
+    }
+    return unsubscribe;
+  }, []);
+
+  // A request comes from a control elsewhere on the page, so move focus into
+  // the panel (WhatsApp first) for keyboard users.
+  useEffect(() => {
+    if (isOpen && isRequested) primaryRowRef.current?.focus({ preventScroll: true });
+  }, [isOpen, isRequested]);
 
   const close = useCallback((returnFocus: boolean) => {
     setIsOpen(false);
@@ -182,7 +217,12 @@ const FloatingContactDock = () => {
       if (event.key === 'Escape') close(true);
     };
     const onPointerDown = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) close(false);
+      const target = event.target as Element | null;
+      if (rootRef.current?.contains(target)) return;
+      // A contact CTA reopens the panel on click; closing it here first would
+      // make the panel flicker shut and open again.
+      if (target?.closest?.('a[href$="#contact"]')) return;
+      close(false);
     };
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('pointerdown', onPointerDown);
@@ -207,7 +247,7 @@ const FloatingContactDock = () => {
       ref={rootRef}
       className="cdock"
       data-visible={isShown}
-      data-ghost={isDesktopDockGhosted}
+      data-ghost={isGhosted}
     >
       <div
         id={panelId}
@@ -231,6 +271,7 @@ const FloatingContactDock = () => {
 
         <div className="cdock-rows">
           <a
+            ref={primaryRowRef}
             className="cdock-row cdock-row--primary"
             href={whatsapp.href}
             target="_blank"
