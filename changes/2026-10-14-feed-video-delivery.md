@@ -91,13 +91,19 @@ reels plus the three clothing cuts):
 - **Codec choice:** HEVC only when the master is HEVC *and* the browser
   decodes it (`canPlayType`, Main@5.0). Everything else gets H.264.
 - **Hero:** plays the reels' 6 s loops; it rotates every 3.5 s. Cards and the
-  reel stack load the next video ahead of time with `warmFeedVideo`:
-  - Chrome shares a URL's buffered media between elements of the same CORS
-    mode, so the real player starts from data that's already there;
-  - at most 3 videos warm at once.
+  reel stack load the next loop ahead of time with `warmFeedVideo`
+  (updated 2026-10-17, see `2026-10-17-mobile-video-memory.md`):
+  - it fetches the whole loop once and keeps it as a `blob:` URL, which
+    `AdaptiveVideo` plays at once on the next turn;
+  - up to 64 MB of loops are kept; the oldest unused one goes first;
+  - the old warm-up (a hidden `<video>` on the same URL) only helped Chrome.
+    Safari never caches a video's range requests, so there it downloaded every
+    loop twice.
 - **Portfolio feed** (`FeedPlayerPool`, `FeedMedia`):
-  - **Element pool:** up to 4 `<video>` elements are reused. The next reel is
-    buffering (`preload=auto`) and the previous one has loaded its first frame.
+  - **Element pool:** up to 4 `<video>` elements are reused. The next reel and
+    the previous one load their first frame. The next one buffers in full only
+    once the reel on screen can play through (`FeedPoolSync`). A reel that
+    leaves the screen drops what it had buffered.
   - **Full-screen hand-over:** opening the full-screen feed moves the playing
     element from the card into the overlay within one React commit, so it
     keeps playing. Closing moves it back.

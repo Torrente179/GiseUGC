@@ -28,6 +28,10 @@ This folder is organized by subsystem instead of by date.
   - Services marquee, swipe behavior, loop logic, resize stability, and regression guidance.
 - `video-functionality/`
   - Portfolio theater, reel catalog, R2 gating, transcript-driven naming, and the encoding pipeline.
+  - **Video memory on phones:** `2026-10-17-mobile-video-memory.md`. Every
+    player frees its stream when it is done with it (`src/lib/video-lifecycle.ts`).
+    Rotating cards play preview loops warmed into memory. The feed pool fully
+    buffers one reel at a time. Read it before adding a `<video>` anywhere.
 - `seo/`
   - Canonicals, metadata, schema, crawlability, and language-routing behavior.
   - **Current crawl-trust / hub indexes:** `seo/seo-crawl-trust.md` —

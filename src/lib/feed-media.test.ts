@@ -149,11 +149,91 @@ describe('feed media', () => {
     expect(play).toHaveBeenCalledTimes(3);
   });
 
-  it('keeps at most three videos warming', async () => {
-    const { warmFeedVideo } = await loadFeedMedia(false);
+  it('drops what a reel buffered once it becomes the previous one', async () => {
+    const { FeedPlayerPool } = await loadFeedMedia(false);
     const load = vi.mocked(HTMLMediaElement.prototype.load);
-    ['a', 'b', 'c', 'c', 'd'].forEach((name) => warmFeedVideo(`${BASE}/${name}.mp4`));
-    // Four distinct URLs, one repeat: only the oldest is let go.
+    const pool = new FeedPlayerPool();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const watched = pool.acquire(slugA, 'auto')!;
+    host.appendChild(watched);
+
+    // Still on screen (mid hand-over): nothing is dropped.
+    pool.acquire(slugA, 'metadata');
+    expect(watched.preload).toBe('auto');
+    expect(load).not.toHaveBeenCalled();
+
+    watched.remove();
+    expect(pool.acquire(slugA, 'metadata')).toBe(watched);
+    expect(watched.preload).toBe('metadata');
+    expect(watched.src).toBe(`${BASE}/${slugA}/avc.mp4`);
     expect(load).toHaveBeenCalledTimes(1);
+    host.remove();
+  });
+
+  describe('warming preview loops', () => {
+    const preview = (slug: string) => `${BASE}/${slug}/preview.avc.mp4`;
+    let fetchMock: ReturnType<typeof vi.fn>;
+    let revoke: ReturnType<typeof vi.fn<(url: string) => void>>;
+    let made = 0;
+
+    beforeEach(() => {
+      made = 0;
+      fetchMock = vi.fn(async () => ({ ok: true, blob: async () => new Blob([new Uint8Array(30 * 1024 * 1024)]) }));
+      vi.stubGlobal('fetch', fetchMock);
+      revoke = vi.fn<(url: string) => void>();
+      URL.createObjectURL = vi.fn(() => `blob:loop-${(made += 1)}`);
+      URL.revokeObjectURL = revoke;
+    });
+
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it('downloads a loop once and plays it from memory', async () => {
+      const { warmFeedVideo, holdFeedPreview, pendingFeedPreview } = await loadFeedMedia(false);
+      warmFeedVideo(preview(slugA));
+      warmFeedVideo(preview(slugA));
+      expect(holdFeedPreview(preview(slugA))).toBeNull();
+      await pendingFeedPreview(preview(slugA));
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(holdFeedPreview(preview(slugA))).toBe('blob:loop-1');
+    });
+
+    it('only warms preview loops, never whole reels', async () => {
+      const { warmFeedVideo } = await loadFeedMedia(false);
+      warmFeedVideo(`${BASE}/${slugA}/avc.mp4`);
+      warmFeedVideo(undefined);
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('lets the oldest unused loop go past the budget, never one on screen', async () => {
+      const { warmFeedVideo, holdFeedPreview, releaseFeedPreview, pendingFeedPreview } = await loadFeedMedia(false);
+      warmFeedVideo(preview(slugA));
+      await pendingFeedPreview(preview(slugA));
+      expect(holdFeedPreview(preview(slugA))).toBe('blob:loop-1');
+
+      warmFeedVideo(preview(slugB));
+      await pendingFeedPreview(preview(slugB));
+      warmFeedVideo(preview(slugC));
+      await pendingFeedPreview(preview(slugC));
+      // 90 MB against a 64 MB budget: A is on screen, so B goes.
+      expect(revoke).toHaveBeenCalledWith('blob:loop-2');
+      expect(revoke).not.toHaveBeenCalledWith('blob:loop-1');
+
+      releaseFeedPreview(preview(slugA));
+      warmFeedVideo(preview(slugD));
+      await pendingFeedPreview(preview(slugD));
+      expect(revoke).toHaveBeenCalledWith('blob:loop-1');
+    });
+
+    it('forgets a loop that failed to download, so it can stream', async () => {
+      fetchMock.mockImplementationOnce(async () => ({ ok: false, status: 404 }));
+      const { warmFeedVideo, holdFeedPreview, pendingFeedPreview } = await loadFeedMedia(false);
+      warmFeedVideo(preview(slugA));
+      await pendingFeedPreview(preview(slugA));
+      expect(holdFeedPreview(preview(slugA))).toBeNull();
+      expect(pendingFeedPreview(preview(slugA))).toBeNull();
+    });
   });
 });

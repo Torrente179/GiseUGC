@@ -1,5 +1,12 @@
 import { R2_MEDIA_BASE_URL } from '@/data/portfolio-clips';
 import { FEED_MEDIA, FEED_MEDIA_VERSION, type FeedRendition } from '@/data/feed-renditions';
+import { getConnectionProfile } from '@/lib/media-playback-scheduler';
+import {
+  onVideosSuspended,
+  releaseVideo,
+  trackOffPageVideo,
+  untrackOffPageVideo,
+} from '@/lib/video-lifecycle';
 
 /**
  * The site's video files (encoded by scripts/encode-feed.mjs): one
@@ -15,11 +22,16 @@ import { FEED_MEDIA, FEED_MEDIA_VERSION, type FeedRendition } from '@/data/feed-
  * here, which is how AdaptiveVideo upgrades every player at once.
  *
  * The portfolio feed adds a small pool of reused <video> elements:
- *   • the next and previous reels are already loading before a swipe lands;
+ *   • the next reel is already loading before a swipe lands, and the previous
+ *     one has its first frame;
  *   • a reel's element moves between the in-page card and the full-screen
  *     feed, so opening it does not restart or reload the video;
  *   • iOS lets an element play with sound only once a tap has "blessed" it, so
  *     a tap blesses the whole pool and sound survives every swipe after it.
+ *
+ * Phones hold little decoded video at once, so the pool keeps three players at
+ * most and only one of them buffers a whole reel: the one on screen, then the
+ * next once the one on screen can play through.
  */
 
 export type FeedCodec = 'hevc' | 'avc';
@@ -31,7 +43,12 @@ export type FeedMedia = FeedRendition & { slug: string };
 export const HEVC_TYPE = 'video/mp4; codecs="hvc1.1.6.L150.B0"';
 /** Active reel + the next + the previous, and one spare for the hand-over. */
 const POOL_SIZE = 4;
-const WARM_LIMIT = 3;
+/**
+ * Preview loops held in memory for the next turn of a rotating card (each is a
+ * 6 s file of 3–20 MB). Four of the largest fit; the oldest unused one goes.
+ */
+const PREVIEW_CACHE_BYTES = 64 * 1024 * 1024;
+const PREVIEW_PATH = /\/preview\.(?:hevc|avc)\.mp4$/u;
 
 /** Same rule as `slugify` in scripts/encode-feed.mjs. */
 export const slugifyMediaName = (name: string) =>
@@ -77,7 +94,8 @@ export const isLandscapeRendition = (media: FeedRendition) => media.width > medi
 
 let hevcSupport: boolean | null = null;
 
-const canPlayHevc = () => {
+/** Whether this browser decodes `HEVC_TYPE` (cached per page). */
+export const canPlayHevc = () => {
   if (hevcSupport !== null) return hevcSupport;
   if (typeof document === 'undefined') return false;
   hevcSupport = document.createElement('video').canPlayType(HEVC_TYPE) !== '';
@@ -105,28 +123,95 @@ export const resolveFeedSource = (src?: string, hlsSrc?: string) => {
   return { media, kind: parsed.kind, src: feedVideoSrc(media, parsed.kind) };
 };
 
-const warm = new Map<string, HTMLVideoElement>();
+type PreviewEntry = {
+  /** The loop as a blob: URL once it has downloaded. */
+  objectUrl?: string;
+  bytes: number;
+  pending?: Promise<void>;
+  /** Players showing it right now; an entry in use is never revoked. */
+  users: number;
+  usedAt: number;
+};
 
-/**
- * Starts buffering a video that is about to play (the hero's next reel, the
- * next cut in a deck). Chrome shares a URL's buffered media between elements
- * of the same CORS mode, so the real player starts from data already here.
- */
-export const warmFeedVideo = (url: string | null | undefined) => {
-  if (!url || typeof document === 'undefined' || warm.has(url)) return;
-  const video = document.createElement('video');
-  video.crossOrigin = 'anonymous';
-  video.muted = true;
-  video.preload = 'auto';
-  video.src = url;
-  warm.set(url, video);
-  while (warm.size > WARM_LIMIT) {
-    const [oldest, element] = warm.entries().next().value as [string, HTMLVideoElement];
-    element.removeAttribute('src');
-    element.load();
-    warm.delete(oldest);
+const previews = new Map<string, PreviewEntry>();
+
+const trimPreviews = (budget = PREVIEW_CACHE_BYTES) => {
+  let total = 0;
+  previews.forEach((entry) => {
+    total += entry.bytes;
+  });
+  const oldestFirst = [...previews.entries()].sort(([, a], [, b]) => a.usedAt - b.usedAt);
+  for (const [url, entry] of oldestFirst) {
+    if (total <= budget) break;
+    if (entry.users > 0 || !entry.objectUrl) continue;
+    URL.revokeObjectURL(entry.objectUrl);
+    previews.delete(url);
+    total -= entry.bytes;
   }
 };
+
+/**
+ * Downloads the preview loop a rotating card shows next (the hero's next reel,
+ * the next cut in a deck, the next story), once, and keeps it in memory so the
+ * turn plays at once and every later turn costs nothing.
+ *
+ * Safari never caches the range requests a <video> makes, so the old warm-up,
+ * a hidden <video> buffering the same URL, downloaded every loop twice there
+ * and gave the real player nothing (measured in WebKit). A whole-file fetch is
+ * one download that every browser can play from.
+ */
+export const warmFeedVideo = (url: string | null | undefined) => {
+  if (!url || !PREVIEW_PATH.test(url) || typeof window === 'undefined' || typeof fetch === 'undefined') return;
+  const existing = previews.get(url);
+  if (existing) {
+    existing.usedAt = performance.now();
+    return;
+  }
+  if (getConnectionProfile().constrained) return;
+  const entry: PreviewEntry = { bytes: 0, users: 0, usedAt: performance.now() };
+  previews.set(url, entry);
+  entry.pending = fetch(url, { mode: 'cors', credentials: 'omit' })
+    .then((response) => (response.ok ? response.blob() : Promise.reject(new Error(String(response.status)))))
+    .then((blob) => {
+      if (previews.get(url) !== entry) return;
+      entry.objectUrl = URL.createObjectURL(blob);
+      entry.bytes = blob.size;
+      trimPreviews();
+    })
+    .catch(() => {
+      if (previews.get(url) === entry) previews.delete(url);
+    })
+    .finally(() => {
+      entry.pending = undefined;
+    });
+};
+
+/**
+ * The downloaded loop for a preview URL, held for one player until
+ * `releaseFeedPreview`. `null` if it has not been warmed.
+ */
+export const holdFeedPreview = (url: string) => {
+  const entry = previews.get(url);
+  if (!entry?.objectUrl) return null;
+  entry.users += 1;
+  entry.usedAt = performance.now();
+  return entry.objectUrl;
+};
+
+export const releaseFeedPreview = (url: string) => {
+  const entry = previews.get(url);
+  if (!entry) return;
+  entry.users = Math.max(0, entry.users - 1);
+  trimPreviews();
+};
+
+/** Settles when a warm-up of this URL that is still downloading is done. */
+export const pendingFeedPreview = (url: string) => previews.get(url)?.pending ?? null;
+
+if (typeof window !== 'undefined') {
+  // A page going into the back/forward cache keeps only the loops on screen.
+  onVideosSuspended(() => trimPreviews(0));
+}
 
 const createVideo = () => {
   const video = document.createElement('video');
@@ -145,6 +230,7 @@ const createVideo = () => {
   video.addEventListener('emptied', () => {
     delete video.dataset.ready;
   });
+  trackOffPageVideo(video);
   return video;
 };
 
@@ -154,11 +240,23 @@ export class FeedPlayerPool {
   private readonly free: HTMLVideoElement[] = [];
   private blessed = false;
 
-  /** The reel's element, loading. `null` when the reel has no feed files. */
+  /**
+   * The reel's element, loading. `null` when the reel has no feed files.
+   * `metadata` loads the first frame only. Asked of a reel that has left the
+   * screen, it also drops what that reel had buffered, so the element going
+   * back to "previous" does not hold a whole reel in memory.
+   */
   acquire(slug: string, preload: 'auto' | 'metadata' = 'auto'): HTMLVideoElement | null {
     const existing = this.assigned.get(slug);
     if (existing) {
-      if (preload === 'auto') existing.preload = 'auto';
+      if (preload === 'auto') {
+        existing.preload = 'auto';
+      } else if (existing.preload === 'auto' && !existing.isConnected) {
+        const src = existing.getAttribute('src');
+        releaseVideo(existing);
+        existing.preload = 'metadata';
+        if (src) existing.src = src;
+      }
       return existing;
     }
     const media = getFeedMedia(slug);
@@ -182,11 +280,10 @@ export class FeedPlayerPool {
     this.assigned.forEach((video, slug) => {
       if (keep.has(slug)) return;
       this.assigned.delete(slug);
-      video.pause();
-      video.removeAttribute('src');
-      video.load();
+      releaseVideo(video);
       video.remove();
       if (this.free.length < POOL_SIZE) this.free.push(video);
+      else untrackOffPageVideo(video);
     });
   }
 
@@ -210,6 +307,7 @@ export class FeedPlayerPool {
 
   destroy() {
     this.retain([]);
+    this.free.forEach(untrackOffPageVideo);
     this.free.length = 0;
   }
 }

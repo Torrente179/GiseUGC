@@ -127,19 +127,26 @@ export const FeedMedia = ({
   );
 };
 
+/** How long the reel on screen gets the connection to itself at most. */
+const NEXT_BUFFER_DELAY_MS = 4000;
+
 /**
- * Keeps the pool on the reels around the active one: the next starts buffering,
- * the previous loads its first frame, everything else goes back to the pool.
+ * Keeps the pool on the reels around the active one: the next and the previous
+ * load their first frame, everything else goes back to the pool. Once the
+ * active reel can play through, the next one buffers too, so a swipe lands on
+ * a reel that is ready without the two downloads slowing each other's start.
  * Render it before the reels: its layout effect then runs first, so the
  * elements it frees are the ones the reels pick up in the same commit.
  */
 export const FeedPoolSync = ({
   pool,
+  active,
   next,
   previous,
   keep,
 }: {
   pool: FeedPlayerPool;
+  active?: string;
   next?: string;
   previous?: string;
   /** Every reel slug that stays loaded; empty releases the pool. */
@@ -147,9 +154,27 @@ export const FeedPoolSync = ({
 }) => {
   useLayoutEffect(() => {
     pool.retain(keep);
-    if (next !== undefined && keep.includes(next)) pool.acquire(next, 'auto');
     if (previous !== undefined && keep.includes(previous)) pool.acquire(previous, 'metadata');
-  }, [keep, next, pool, previous]);
+    if (next === undefined || !keep.includes(next)) return undefined;
+    // A next reel already in the pool keeps what it has (a swipe back makes
+    // the reel just left the next one, still buffered).
+    if (!pool.peek(next)) pool.acquire(next, 'metadata');
+
+    const onScreen = active !== undefined && keep.includes(active) ? pool.acquire(active, 'auto') : null;
+    const bufferNext = () => {
+      if (pool.peek(next)) pool.acquire(next, 'auto');
+    };
+    if (!onScreen || onScreen.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
+      bufferNext();
+      return undefined;
+    }
+    onScreen.addEventListener('canplaythrough', bufferNext, { once: true });
+    const fallback = window.setTimeout(bufferNext, NEXT_BUFFER_DELAY_MS);
+    return () => {
+      onScreen.removeEventListener('canplaythrough', bufferNext);
+      window.clearTimeout(fallback);
+    };
+  }, [active, keep, next, pool, previous]);
   return null;
 };
 

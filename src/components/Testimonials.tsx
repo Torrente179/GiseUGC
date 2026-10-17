@@ -4,7 +4,8 @@ import { useTranslation } from '@/lib/locale-context';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { useMediaSession } from '@/components/media/MediaSessionProvider';
 import { scrollToY } from '@/lib/motion/native-scroll';
-import { HEVC_TYPE } from '@/lib/feed-media';
+import { canPlayHevc } from '@/lib/feed-media';
+import { releaseVideo } from '@/lib/video-lifecycle';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 import { SITE_PROOF } from '@/data/site-proof';
 import {
@@ -268,6 +269,42 @@ const FeaturedVideo = ({ active, onPick, countryName, ago, onPlay }: FeatureProp
   );
 };
 
+type ReviewVideoFile = NonNullable<FiverrReview['video']>;
+
+/**
+ * A review's video: HEVC where the browser plays it, else the H.264 file. It
+ * frees its stream as soon as the dialog closes, rather than whenever the
+ * element is garbage-collected (src/lib/video-lifecycle.ts).
+ */
+const ReviewVideo = ({ video }: { video: ReviewVideoFile }) => {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [src, setSrc] = useState(() => (video.hevc && canPlayHevc() ? video.hevc : video.src));
+
+  useEffect(() => {
+    const element = ref.current;
+    return () => {
+      if (element) releaseVideo(element);
+    };
+  }, []);
+
+  return (
+    <video
+      ref={ref}
+      className="fr-modal-video"
+      src={src}
+      poster={video.poster}
+      controls
+      controlsList="nodownload"
+      autoPlay
+      playsInline
+      preload="auto"
+      onError={() => {
+        if (src !== video.src) setSrc(video.src);
+      }}
+    />
+  );
+};
+
 const Testimonials = () => {
   const { t, locale } = useTranslation();
   const mediaSession = useMediaSession();
@@ -446,20 +483,7 @@ const Testimonials = () => {
                     <path d="M6 6l12 12M18 6 6 18" />
                   </svg>
                 </button>
-                <video
-                  key={playing.id}
-                  className="fr-modal-video"
-                  poster={playing.video?.poster}
-                  controls
-                  controlsList="nodownload"
-                  autoPlay
-                  playsInline
-                  preload="auto"
-                >
-                  {/* HEVC where the browser plays it, else the H.264 file. */}
-                  {playing.video?.hevc ? <source src={playing.video.hevc} type={HEVC_TYPE} /> : null}
-                  <source src={playing.video?.src} type="video/mp4" />
-                </video>
+                {playing.video ? <ReviewVideo key={playing.id} video={playing.video} /> : null}
                 <div className="fr-modal-meta">
                   <Avatar review={playing} />
                   <span className="fr-who">

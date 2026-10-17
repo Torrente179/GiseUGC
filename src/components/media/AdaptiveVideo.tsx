@@ -13,7 +13,14 @@ import {
   type MediaPlaybackPriority,
 } from '@/lib/media-playback-scheduler';
 import { useMediaSession } from '@/components/media/MediaSessionProvider';
-import { feedVideoSrc, resolveFeedSource } from '@/lib/feed-media';
+import {
+  feedVideoSrc,
+  holdFeedPreview,
+  pendingFeedPreview,
+  releaseFeedPreview,
+  resolveFeedSource,
+} from '@/lib/feed-media';
+import { releaseVideo } from '@/lib/video-lifecycle';
 
 type AdaptiveVideoProps = Omit<VideoHTMLAttributes<HTMLVideoElement>, 'src' | 'poster'> & {
   src: string;
@@ -225,6 +232,15 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
 
     useImperativeHandle(forwardedRef, () => videoRef.current as HTMLVideoElement, []);
 
+    // Unmounting does not free a video; letting go of its source does. Cards
+    // that swap reels remount this every few seconds (see video-lifecycle.ts).
+    useEffect(() => {
+      const video = videoRef.current;
+      return () => {
+        if (video) releaseVideo(video);
+      };
+    }, []);
+
     useEffect(() => {
       if (!activationQuery) {
         setIsActivationMatch(true);
@@ -311,20 +327,50 @@ const AdaptiveVideo = forwardRef<HTMLVideoElement, AdaptiveVideoProps>(
       // Every site video with feed files plays its single, full-quality,
       // fast-start MP4 (src/lib/feed-media.ts) instead of an HLS ladder or the
       // old 480p preview loop. Those older copies are gone from R2, so if the
-      // HEVC file fails the H.264 one stands in.
+      // HEVC file fails the H.264 one stands in. A preview loop a rotating card
+      // warmed ahead plays from memory, at once and without a second download.
       const feed = resolveFeedSource(src, hlsSrc);
       if (feed) {
         const avcSrc = feedVideoSrc(feed.media, feed.kind, 'avc');
+        let attached = feed.src;
+        let heldPreview = false;
+        const attach = (url: string) => {
+          attached = url;
+          attachFallbackSource(video, url);
+        };
+        const attachPreview = () => {
+          const local = holdFeedPreview(feed.src);
+          heldPreview = local !== null;
+          attach(local ?? feed.src);
+        };
         const handleFeedError = () => {
-          if (cancelled || video.getAttribute('src') !== feed.src) return;
+          if (cancelled || video.getAttribute('src') !== attached) return;
+          if (heldPreview) {
+            heldPreview = false;
+            releaseFeedPreview(feed.src);
+            attach(feed.src);
+            return;
+          }
           video.removeEventListener('error', handleFeedError);
-          if (avcSrc !== feed.src) attachFallbackSource(video, avcSrc);
+          if (avcSrc !== attached) attach(avcSrc);
         };
         video.addEventListener('error', handleFeedError);
-        attachFallbackSource(video, feed.src);
+        const warming = feed.kind === 'preview' ? pendingFeedPreview(feed.src) : null;
+        if (feed.kind !== 'preview') {
+          attach(feed.src);
+        } else if (warming) {
+          // Its download is already under way; streaming it as well would
+          // fetch the same file twice.
+          void warming.then(() => {
+            if (!cancelled) attachPreview();
+          });
+        } else {
+          attachPreview();
+        }
         return () => {
           cancelled = true;
           video.removeEventListener('error', handleFeedError);
+          if (heldPreview) releaseFeedPreview(feed.src);
         };
       }
 

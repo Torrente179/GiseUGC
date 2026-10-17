@@ -362,7 +362,7 @@ const Portfolio = () => {
         data-seen={seen}
         aria-labelledby="portfolio-title"
       >
-        <FeedPoolSync pool={pool} keep={keepSlugs} next={nextSlug} previous={previousSlug} />
+        <FeedPoolSync pool={pool} keep={keepSlugs} active={activeSlug} next={nextSlug} previous={previousSlug} />
         <div className="rf-orbs" aria-hidden="true" />
         <div className="rf-amb" aria-hidden="true">
           {ambient.a ? <img src={ambient.a} alt="" data-on={ambient.showA} /> : null}
@@ -498,7 +498,7 @@ const Portfolio = () => {
       data-seen={seen}
       aria-labelledby="portfolio-title"
     >
-      <FeedPoolSync pool={pool} keep={keepSlugs} next={nextSlug} previous={previousSlug} />
+      <FeedPoolSync pool={pool} keep={keepSlugs} active={activeSlug} next={nextSlug} previous={previousSlug} />
       <div className="rf-orbs" aria-hidden="true" />
       <div className="rf-amb" aria-hidden="true">
         {ambient.a ? <img src={ambient.a} alt="" data-on={ambient.showA} /> : null}

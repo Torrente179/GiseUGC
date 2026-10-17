@@ -362,7 +362,7 @@ const ServiceLandingPage = ({
           <DeferredServicesMarquee liteMobile />
         </main>
 
-        <FeedPoolSync pool={pool} keep={keepSlugs} next={nextSlug} previous={previousSlug} />
+        <FeedPoolSync pool={pool} keep={keepSlugs} active={activeSlug} next={nextSlug} previous={previousSlug} />
         {activeProofIndex !== null && (
           <ReelTheater
             view={theaterWide ? 'theater' : 'feed'}
