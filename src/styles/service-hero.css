@@ -28,7 +28,10 @@
   align-items: center;
   min-height: 100svh;
   padding: 7.5rem 0 4rem;
+  /* The glows fade out before the bottom edge, so the section below starts on
+     the same plain ground (service-keynote.css, ".kn--d"). */
   background:
+    linear-gradient(to bottom, transparent 68%, hsl(var(--background)) 100%),
     radial-gradient(48rem 48rem at 4% 46%, var(--svh-glow-a), transparent 70%),
     radial-gradient(56rem 56rem at 100% 100%, var(--svh-glow-b), transparent 70%),
     hsl(var(--background));

@@ -107,3 +107,21 @@ headless Chrome:
 - **Player:** it opens on the right clip from both heroes, and the hero
   preview pauses.
 - **Checks:** typecheck, ESLint, 418 tests.
+
+## Follow-up: the dark band under the desktop hero
+
+The service sections (`ServicePageInner`, `.kn`) open with a dark strip and a
+rising rounded sheet, `.kn-handoff` and `.kn-ease`. They were drawn to take
+over from the old dark hero. On desktop the new hero follows the site theme,
+so in light theme a black band sat between it and the section nav, and the
+nav's dark text sat on black.
+
+On desktop (`.kn--d`, `src/styles/service-keynote.css`):
+
+- The strip and sheet are hidden.
+- The section starts on the hero's ground: linen in light theme, and in dark
+  theme the site background easing into the section's near-black.
+- The hero's glows fade out before its bottom edge
+  (`src/styles/service-hero.css`), so the two meet without a line.
+
+Phones are unchanged. Their hero stays dark.

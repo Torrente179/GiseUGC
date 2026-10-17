@@ -294,6 +294,18 @@
   pointer-events: none;
 }
 
+/* Desktop: the hero above ("S2 · Glass proof panel",
+   src/components/service-hero/ServiceHero.tsx) sits on the page ground, so
+   there is no dark plate to hand off from. Phones keep the hand-off: their
+   hero stays dark. */
+.kn--d .kn-handoff,
+.kn--d .kn-ease { display: none; }
+
+/* …and the section starts on the hero's own ground: linen in light; in dark,
+   the site background easing into this section's near-black. */
+html:not(.dark) .kn--d { --kn-page: #fdfcfb; }
+.dark .kn--d { --kn-page: linear-gradient(180deg, hsl(var(--background)) 0, #0a0a0b 420px, #0a0a0b 100%); }
+
 .kn-beat {
   position: relative;
   scroll-margin-top: 6.5rem;
