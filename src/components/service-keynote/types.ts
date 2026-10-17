@@ -19,7 +19,6 @@ export type KeynoteBeatProps = {
 export type KeynoteLabelProps = {
   alsoOffered: string;
   moreServices: string;
-  byIndustry: string;
   resources: string;
   explore: string;
   isThisForYou: string;

@@ -71,7 +71,6 @@ const localeLabels = {
     faq: 'Preguntas',
     alsoOffered: 'También ofrezco',
     moreServices: 'Más servicios',
-    byIndustry: 'Por industria',
     resources: 'Recursos',
     explore: 'Seguir explorando',
     exploreKicker: 'Explorar',
@@ -94,7 +93,6 @@ const localeLabels = {
     faq: 'Questions',
     alsoOffered: 'Also offered',
     moreServices: 'More services',
-    byIndustry: 'By industry',
     resources: 'Resources',
     explore: 'Keep exploring',
     exploreKicker: 'Explore',
@@ -124,7 +122,6 @@ const ServiceLandingPage = ({
   const {
     page,
     relatedPages,
-    relevantVerticals,
     allOtherServices,
     heroReview,
   } = routeData;
@@ -327,7 +324,6 @@ const ServiceLandingPage = ({
               page={page}
               labels={labels}
               locale={locale}
-              relevantVerticals={relevantVerticals}
               resourceLinks={resourceLinks}
               relatedPages={relatedPages}
               allOtherServices={allOtherServices}
@@ -359,7 +355,6 @@ const ServiceLandingPage = ({
               page={page}
               labels={labels}
               locale={locale}
-              relevantVerticals={relevantVerticals}
               resourceLinks={resourceLinks}
               relatedPages={relatedPages}
               allOtherServices={allOtherServices}

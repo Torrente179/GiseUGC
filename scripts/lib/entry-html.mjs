@@ -1,6 +1,6 @@
 /**
  * Helpers for rewriting copy inside the committed static entry HTML files
- * (servicios/<slug>/index.html, verticales/<slug>/index.html, legal shells...).
+ * (servicios/<slug>/index.html, recursos/<slug>/index.html, legal shells...).
  *
  * Every helper is a pure string -> string transform that rewrites one known
  * element in place and leaves the surrounding markup byte-for-byte alone, so
@@ -141,8 +141,8 @@ export const setLastBreadcrumbName = (schema, name) => {
 };
 
 /**
- * Point the middle breadcrumb item at the family hub (/servicios/, /verticales/,
- * /recursos/ and EN twins), so the trail is Home › hub › page, matching the
+ * Point the middle breadcrumb item at the family hub (/servicios/, /recursos/
+ * and EN twins), so the trail is Home › hub › page, matching the
  * visible breadcrumb that PageSeo's BreadcrumbList describes.
  */
 export const setHubBreadcrumb = (schema, { name, item }) => {
@@ -213,7 +213,7 @@ export const setBootSummary = (html, text) =>
 export const setBootPoints = (html, points) =>
   setListItems(html, /<ul class="boot-points"[^>]*>/u, points, '<li class="boot-point">', 'ul.boot-points');
 
-/** Aside "formats" list (services/verticals). */
+/** Aside "formats" list (services). */
 export const setBootPanelList = (html, items) =>
   setListItems(html, /<ul class="boot-list">/u, items, '<li>', 'ul.boot-list');
 
@@ -256,7 +256,7 @@ export const setBootAction = (html, className, { href, label }) =>
 const NOSCRIPT_LEAD =
   /(<article class="boot-noscript">\s*<h2>)[^<]*(<\/h2>\s*<p>)[^<]*(<\/p>)/u;
 
-/** First <h2> + <p> of the noscript article (services/verticals: hero title + summary). */
+/** First <h2> + <p> of the noscript article (services: hero title + summary). */
 export const setNoscriptLead = (html, { title, summary }) =>
   replaceRequired(
     html,

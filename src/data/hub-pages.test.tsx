@@ -10,7 +10,6 @@ import {
   getHubPageContent,
   RESOURCE_HUB_CHILD_ORDER,
   SERVICE_HUB_CHILD_ORDER,
-  VERTICAL_HUB_CHILD_ORDER,
 } from '@/data/hub-pages';
 import { SITE_PROOF } from '@/data/site-proof';
 import { FIVERR_PROFILE_URL } from '@/lib/contact-channels';
@@ -19,7 +18,6 @@ import {
   getHubPageRouteEntries,
   getResourcePath,
   getServicePath,
-  getVerticalPath,
   type HubPageId,
   type SiteLocale,
 } from '@/lib/locale-path';
@@ -30,8 +28,6 @@ const read = (relative: string) => readFileSync(resolve(root, relative), 'utf8')
 const HUB_ENTRYPOINTS = [
   { file: 'servicios/index.html', locale: 'es' as SiteLocale, hubId: 'services' as const },
   { file: 'en/services/index.html', locale: 'en' as SiteLocale, hubId: 'services' as const },
-  { file: 'verticales/index.html', locale: 'es' as SiteLocale, hubId: 'verticals' as const },
-  { file: 'en/verticals/index.html', locale: 'en' as SiteLocale, hubId: 'verticals' as const },
   { file: 'recursos/index.html', locale: 'es' as SiteLocale, hubId: 'resources' as const },
   { file: 'en/resources/index.html', locale: 'en' as SiteLocale, hubId: 'resources' as const },
 ] as const;
@@ -62,9 +58,6 @@ describe('hire-intent hub copy', () => {
       expect(getHubPageContent('services', locale).children.map((child) => child.href)).toEqual(
         SERVICE_HUB_CHILD_ORDER.map((id) => getServicePath(id, locale)),
       );
-      expect(getHubPageContent('verticals', locale).children.map((child) => child.href)).toEqual(
-        VERTICAL_HUB_CHILD_ORDER.map((id) => getVerticalPath(id, locale)),
-      );
       expect(getHubPageContent('resources', locale).children.map((child) => child.href)).toEqual(
         RESOURCE_HUB_CHILD_ORDER.map((id) => getResourcePath(id, locale)),
       );
@@ -79,8 +72,6 @@ describe('hire-intent hub copy', () => {
     expect(visibleInlineCopy(es.proof ?? '')).toContain(String(SITE_PROOF.fiverrReviewCount));
     expect(inlineCopyHrefs(es.proof ?? '')).toEqual([FIVERR_PROFILE_URL]);
     expect(inlineCopyHrefs(en.proof ?? '')).toEqual([FIVERR_PROFILE_URL]);
-    expect(getHubPageContent('verticals', 'es').proof).toBeUndefined();
-    expect(getHubPageContent('verticals', 'en').proof).toBeUndefined();
     expect(getHubPageContent('resources', 'es').proof).toBeUndefined();
     expect(getHubPageContent('resources', 'en').proof).toBeUndefined();
   });

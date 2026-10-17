@@ -66,6 +66,136 @@
       "source": "/en/hire/",
       "destination": "/en/resources/how-to-hire-ugc-creator/",
       "statusCode": 301
+    },
+    {
+      "source": "/verticales/ugc-beauty",
+      "destination": "/servicios/testimoniales-resenas-ugc/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/ugc-beauty/",
+      "destination": "/servicios/testimoniales-resenas-ugc/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/beauty-ugc-creator",
+      "destination": "/en/services/ugc-testimonials-reviews/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/beauty-ugc-creator/",
+      "destination": "/en/services/ugc-testimonials-reviews/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/ugc-moda",
+      "destination": "/servicios/ugc-lifestyle/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/ugc-moda/",
+      "destination": "/servicios/ugc-lifestyle/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/fashion-ugc-creator",
+      "destination": "/en/services/lifestyle-ugc-organic-content/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/fashion-ugc-creator/",
+      "destination": "/en/services/lifestyle-ugc-organic-content/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/ugc-tech-saas",
+      "destination": "/servicios/demo-producto-ugc/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/ugc-tech-saas/",
+      "destination": "/servicios/demo-producto-ugc/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/tech-saas-ugc-creator",
+      "destination": "/en/services/ugc-product-demo/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/tech-saas-ugc-creator/",
+      "destination": "/en/services/ugc-product-demo/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/ugc-ecommerce",
+      "destination": "/servicios/testimoniales-resenas-ugc/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/ugc-ecommerce/",
+      "destination": "/servicios/testimoniales-resenas-ugc/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/ecommerce-ugc-creator",
+      "destination": "/en/services/ugc-testimonials-reviews/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/ecommerce-ugc-creator/",
+      "destination": "/en/services/ugc-testimonials-reviews/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/ugc-lifestyle-bienestar",
+      "destination": "/servicios/ugc-lifestyle/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/ugc-lifestyle-bienestar/",
+      "destination": "/servicios/ugc-lifestyle/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/lifestyle-wellness-ugc-creator",
+      "destination": "/en/services/lifestyle-ugc-organic-content/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/lifestyle-wellness-ugc-creator/",
+      "destination": "/en/services/lifestyle-ugc-organic-content/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales",
+      "destination": "/servicios/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/",
+      "destination": "/servicios/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals",
+      "destination": "/en/services/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/",
+      "destination": "/en/services/",
+      "statusCode": 301
+    },
+    {
+      "source": "/verticales/:path*",
+      "destination": "/servicios/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/:path*",
+      "destination": "/en/services/",
+      "statusCode": 301
     }
   ],
   "headers": [

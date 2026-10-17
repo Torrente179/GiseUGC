@@ -192,3 +192,48 @@ internal href outside `PAGE_REGISTRY`, and the committed shells on the same
 trail. It replaces the old "does not retarget … onto hub indexes" test in
 `crawl-trust.test.tsx`.
 
+## 2026-10-16 — industry (vertical) pages removed
+
+The user decided to drop all five industry pages and their hub. Removed:
+`/verticales/` + `/en/verticals/` and the ten children (beauty, fashion,
+tech/SaaS, ecommerce, lifestyle & wellness, ES + EN) — 12 URLs, so the
+registry, sitemap and prerender now cover 36 routes.
+
+- **301s** (`vercel.json`, both slash forms) to the closest service, taken from
+  each page's own first `relatedServiceIds`: beauty and ecommerce → testimonials
+  & reviews; fashion and lifestyle & wellness → lifestyle UGC; tech/SaaS →
+  product demos; the hub → the services hub. `/verticales/:path*` and
+  `/en/verticals/:path*` catch anything else. Destinations stay in-locale.
+- **Gone from code:** `VerticalPageId` / `VERTICAL_PATHS` / `getVerticalPath`
+  and the `vertical` page family; `VerticalLandingPage`, `vertical-pages.ts`,
+  `service-vertical-links.ts`, `entry-vertical.tsx`,
+  `sync-vertical-entrypoints.mjs` (and its prebuild step), the committed
+  shells, their OG JPEGs and manifest entries, `CONTENT_DATES.verticals`.
+- **Gone from pages:** the "By industry" column on service pages (desktop
+  index and mobile tab), the "By industry" list on guides, the industries hub
+  link on the other hubs, and the Industrias pill in the page-end rail.
+- **llms:** industry URLs removed. `llms-full.txt` keeps the industry facts
+  under "Industries" with no links, and the notes for AI systems point industry
+  questions at the matching service. `CONTENT_DATES.home` / llms Last-Updated →
+  `2026-10-16`.
+
+Guard: `src/data/internal-link-map.test.tsx` checks every removed URL is out of
+`PAGE_REGISTRY` and 301s, in its own locale, to a registered page.
+
+## 2026-10-16 — service close index: More services first
+
+The desktop close index on service pages now reads More services (01), Also
+offered tiles (02), Resources (03); the mobile explore tabs open on More
+services. At the 1100px two-column breakpoint More services spans the row and
+splits its list in two (`.knc-col--services`). Test:
+`internal-link-map.test.tsx`.
+
+## 2026-10-16 — how-to-hire guides crashed on load (fixed, fd478d9)
+
+Both how-to-hire guides showed the error boundary in production since
+2026-10-14: route data ships `[label](href)` strings as segment arrays
+(`serializeRouteDataJson`), and the FAQPage schema ran `visibleInlineCopy` on
+one. The inline-copy helpers now take strings or segments.
+`src/data/route-data-hydration.test.tsx` renders every guide and service page
+from the round-tripped route data the browser receives.
+

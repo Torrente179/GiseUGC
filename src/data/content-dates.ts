@@ -8,12 +8,12 @@
  * Home (and therefore llms Last-Updated) moved to 2026-10-15 when llms.txt
  * dropped "active" from "28+ brand campaigns" to match the live site proof line.
  * Resources and hubs moved to 2026-10-14 with the bilingual Fiverr pricing guide.
+ * Home moved to 2026-10-16 when the industry pages were removed from llms.txt.
  */
 export const CONTENT_DATES = {
-  home: '2026-10-15',
+  home: '2026-10-16',
   hubs: '2026-10-14',
   services: '2026-10-13',
-  verticals: '2026-10-13',
   resources: '2026-10-14',
   legal: '2026-10-13',
 } as const;

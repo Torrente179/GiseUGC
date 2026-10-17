@@ -7,20 +7,17 @@ import { LocaleProvider } from '@/lib/locale-context';
 import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
 import ServiceLandingPage from '@/components/ServiceLandingPage';
-import VerticalLandingPage from '@/components/VerticalLandingPage';
 import ResourcePage from '@/components/ResourcePage';
 import LegalPage from '@/components/LegalPage';
 import HubPage from '@/components/HubPage';
 import {
   buildResourceLandingRouteData,
   buildServiceLandingRouteData,
-  buildVerticalLandingRouteData,
 } from '@/data/landing-route-data.server';
 import type {
   ServicePageId,
   ResourcePageId,
   SiteLocale,
-  VerticalPageId,
 } from '@/lib/locale-path';
 
 const ServerResourcePage = ({
@@ -51,26 +48,11 @@ const ServerServiceLandingPage = ({
   />
 );
 
-const ServerVerticalLandingPage = ({
-  verticalId,
-  locale,
-}: {
-  verticalId: VerticalPageId;
-  locale: SiteLocale;
-}) => (
-  <VerticalLandingPage
-    verticalId={verticalId}
-    locale={locale}
-    routeData={buildVerticalLandingRouteData(verticalId, locale)}
-  />
-);
-
 const routeComponents: AppRouteComponents = {
   Index,
   NotFound,
   HubPage,
   ServiceLandingPage: ServerServiceLandingPage,
-  VerticalLandingPage: ServerVerticalLandingPage,
   ResourcePage: ServerResourcePage,
   LegalPage,
 };

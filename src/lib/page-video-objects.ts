@@ -8,7 +8,6 @@
 import { LEGACY_REEL_CLIPS, type ReelClip } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
 import { getServicePageContent } from '@/data/service-pages';
-import { getVerticalPageContent } from '@/data/vertical-pages';
 import {
   PAGE_REGISTRY,
   SITE_LOCALES,
@@ -125,9 +124,6 @@ export const collectRegistryVideoObjects = (): PageVideoObject[] => {
       if (entry.family === 'service') {
         const page = getServicePageContent(entry.id as Parameters<typeof getServicePageContent>[0], locale);
         videos.push(...buildFeaturedVideoObjects(pagePath, locale, 'service', page.featuredExamples));
-      } else if (entry.family === 'vertical') {
-        const page = getVerticalPageContent(entry.id as Parameters<typeof getVerticalPageContent>[0], locale);
-        videos.push(...buildFeaturedVideoObjects(pagePath, locale, 'vertical', page.featuredExamples));
       }
     }
   }

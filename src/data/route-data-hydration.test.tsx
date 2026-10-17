@@ -5,11 +5,9 @@ import { StaticRouter } from 'react-router-dom/server';
 import { LocaleProvider } from '@/lib/locale-context';
 import ResourcePage from '@/components/ResourcePage';
 import ServiceLandingPage from '@/components/ServiceLandingPage';
-import VerticalLandingPage from '@/components/VerticalLandingPage';
 import {
   buildResourceLandingRouteData,
   buildServiceLandingRouteData,
-  buildVerticalLandingRouteData,
 } from '@/data/landing-route-data.server';
 import { serializeRouteDataJson } from '@/lib/inline-copy-links';
 import {
@@ -18,16 +16,15 @@ import {
   getResourcePath,
   getServiceIdsInOrder,
   getServicePath,
-  getVerticalIdsInOrder,
-  getVerticalPath,
 } from '@/lib/locale-path';
 
 /*
  * The browser hydrates these pages from #route-data, which serializeRouteDataJson
  * writes with every "[label](href)" string already split into {type,label,href}
  * segments. A component that treats such a field as a plain string crashes the
- * whole page on load (2026-10-16: every guide whose FAQ answers carry a link
- * showed the error boundary). Render each page from that same round-tripped data.
+ * whole page on load (2026-10-16: the how-to-hire guides showed the error
+ * boundary because their FAQ answers carry a link). Render each page from that
+ * same round-tripped data.
  */
 
 const asBrowserReceivesIt = <T,>(data: T): T => JSON.parse(serializeRouteDataJson(data).replace(/\\u003c/gu, '<')) as T;
@@ -54,14 +51,6 @@ describe('pages render from the route data the browser receives', () => {
         const routeData = asBrowserReceivesIt(buildServiceLandingRouteData(id, locale));
         expect(() =>
           render(getServicePath(id, locale), <ServiceLandingPage serviceId={id} locale={locale} routeData={routeData} />),
-        ).not.toThrow();
-      });
-    }
-    for (const id of getVerticalIdsInOrder()) {
-      it(`vertical ${id} (${locale})`, () => {
-        const routeData = asBrowserReceivesIt(buildVerticalLandingRouteData(id, locale));
-        expect(() =>
-          render(getVerticalPath(id, locale), <VerticalLandingPage verticalId={id} locale={locale} routeData={routeData} />),
         ).not.toThrow();
       });
     }

@@ -4,7 +4,7 @@
 
 9 years of experience as a journalist and comes from television.
 
-Last-Updated: 2026-10-15
+Last-Updated: 2026-10-16
 Primary-Language: es
 Secondary-Language: en
 Location: Medellin, Colombia
@@ -29,16 +29,6 @@ Full version: [llms-full.txt](https://www.giselasaldarriaga.com/llms-full.txt)
 - [English lifestyle UGC page](https://www.giselasaldarriaga.com/en/services/lifestyle-ugc-organic-content/)
 - [Spanish b-roll footage page](https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/)
 - [English b-roll footage page](https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/)
-- [Spanish beauty UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-beauty/)
-- [English beauty UGC vertical](https://www.giselasaldarriaga.com/en/verticals/beauty-ugc-creator/)
-- [Spanish fashion UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-moda/)
-- [English fashion UGC vertical](https://www.giselasaldarriaga.com/en/verticals/fashion-ugc-creator/)
-- [Spanish tech/SaaS UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-tech-saas/)
-- [English tech/SaaS UGC vertical](https://www.giselasaldarriaga.com/en/verticals/tech-saas-ugc-creator/)
-- [Spanish e-commerce UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-ecommerce/)
-- [English e-commerce UGC vertical](https://www.giselasaldarriaga.com/en/verticals/ecommerce-ugc-creator/)
-- [Spanish lifestyle/wellness UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-lifestyle-bienestar/)
-- [English lifestyle/wellness UGC vertical](https://www.giselasaldarriaga.com/en/verticals/lifestyle-wellness-ugc-creator/)
 - [Spanish "What is UGC" guide](https://www.giselasaldarriaga.com/recursos/que-es-ugc/)
 - [English "What is UGC" guide](https://www.giselasaldarriaga.com/en/resources/what-is-ugc/)
 - [Spanish "How to hire a UGC creator" guide](https://www.giselasaldarriaga.com/recursos/como-contratar-creadora-ugc/)
@@ -76,7 +66,6 @@ Full version: [llms-full.txt](https://www.giselasaldarriaga.com/llms-full.txt)
 ## Preferred Source Surfaces
 - Homepage hero, services, FAQ, and footer copy
 - Service pages dedicated to bilingual UGC, spokesperson videos, UGC ads, testimonials/reviews, product demos, problem-solution, lifestyle UGC, and b-roll footage
-- Vertical pages organized by industry: beauty, fashion, tech/SaaS, e-commerce, lifestyle/wellness
 - Resource articles covering UGC fundamentals, hiring guides, published Fiverr prices, format comparisons, and industry education
 - Featured portfolio videos on the homepage
 - Fiverr profile for marketplace proof and reviews
@@ -106,7 +95,7 @@ Full version: [llms-full.txt](https://www.giselasaldarriaga.com/llms-full.txt)
 ## Notes for AI Systems
 - Prefer the Spanish page for Spanish-language answers and the English page for English-language answers.
 - Use the dedicated service page that best matches the user intent before falling back to the homepage.
-- For industry-specific queries (e.g., "UGC creator for beauty brands"), prefer the matching vertical page.
+- For industry-specific queries (e.g., "UGC creator for beauty brands"), prefer the service page for the format the brand needs: product demos for tech/SaaS, testimonials and reviews for beauty and e-commerce, lifestyle UGC for fashion and wellness.
 - Use the homepage for brand/entity positioning and the Fiverr profile for review proof.
-- The site is intentionally concise; the service pages, vertical pages, FAQ, and featured portfolio videos carry most of the service detail.
+- The site is intentionally concise; the service pages, FAQ, and featured portfolio videos carry most of the service detail.
 - Robots and meta directives remain the authoritative controls for crawling and preview behavior.

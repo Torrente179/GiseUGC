@@ -7,12 +7,10 @@ import {
   getHubPath,
   getResourcePath,
   getServicePath,
-  getVerticalPath,
   type HubPageId,
   type ResourcePageId,
   type ServicePageId,
   type SiteLocale,
-  type VerticalPageId,
 } from '@/lib/locale-path';
 
 export type HubChildCopy = {
@@ -74,14 +72,6 @@ export const SERVICE_HUB_CHILD_ORDER = [
   'ugc-broll-footage',
 ] as const satisfies readonly ServicePageId[];
 
-export const VERTICAL_HUB_CHILD_ORDER = [
-  'beauty-ugc',
-  'ecommerce-ugc',
-  'fashion-ugc',
-  'tech-saas-ugc',
-  'lifestyle-wellness-ugc',
-] as const satisfies readonly VerticalPageId[];
-
 export const RESOURCE_HUB_CHILD_ORDER = [
   'how-to-hire-ugc-creator',
   'how-much-ugc-creator-charge',
@@ -104,7 +94,6 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       primaryCtaLabel: 'Escríbeme',
       proof: `Llevo ${SITE_PROOF.brandCampaigns}+ campañas con marcas de beauty, moda, tech y lifestyle. En Fiverr me encuentras como [gisela_sm](${FIVERR_PROFILE_URL}), con ${SITE_PROOF.fiverrRating}/5 en ${SITE_PROOF.fiverrReviewCount} reseñas.`,
       secondaryLinks: [
-        { hubId: 'verticals', label: 'UGC por industria' },
         { hubId: 'resources', label: 'Guías para contratar' },
       ],
       children: [
@@ -154,7 +143,6 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       primaryCtaLabel: 'Message me',
       proof: `I’ve done ${SITE_PROOF.brandCampaigns}+ brand campaigns in beauty, fashion, tech, and lifestyle. On Fiverr I’m [gisela_sm](${FIVERR_PROFILE_URL}), rated ${SITE_PROOF.fiverrRating}/5 from ${SITE_PROOF.fiverrReviewCount} reviews.`,
       secondaryLinks: [
-        { hubId: 'verticals', label: 'UGC by industry' },
         { hubId: 'resources', label: 'Hiring guides' },
       ],
       children: [
@@ -193,82 +181,6 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       ],
     },
   },
-  verticals: {
-    es: {
-      breadcrumbLabel: HUB_LABELS.verticals.es,
-      metaTitle: 'Creadora UGC para beauty y ecommerce | Gisela Saldarriaga',
-      metaDescription:
-        'UGC en español e inglés para marcas de beauty, ecommerce, moda, tech y bienestar. Soy creadora en Medellín y grabo para EE. UU., España y LatAm.',
-      heroTitle: 'UGC por industria: beauty, ecommerce, moda, tech y bienestar',
-      lead:
-        `Grabo UGC en español e inglés para marcas de beauty, ecommerce, moda, tech/SaaS y bienestar. Estoy en Medellín y trabajo con equipos de Estados Unidos (incluido el mercado hispano), España y Latinoamérica. Tratas directamente conmigo, sin agencia, y los videos se entregan a tu marca. Puedes [contratar una creadora UGC bilingüe](${getServicePath('bilingual-ugc-creator', 'es')}) o leer [cómo contratar una creadora UGC](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
-      childrenTitle: 'Por industria',
-      primaryCtaLabel: 'Escríbeme',
-      secondaryLinks: [
-        { hubId: 'services', label: 'Qué puedes contratar' },
-        { hubId: 'resources', label: 'Guías para contratar' },
-      ],
-      children: [
-        {
-          title: 'UGC para beauty',
-          blurb: 'Skincare, maquillaje y cuidado personal aplicados en piel real, para anuncios y páginas de producto.',
-        },
-        {
-          title: 'UGC para ecommerce',
-          blurb: 'Una persona real mostrando tu producto, para tiendas online, marcas DTC y páginas de producto.',
-        },
-        {
-          title: 'UGC para moda',
-          blurb: 'Ropa puesta en un cuerpo real, con estilo del día a día y no de sesión de estudio.',
-        },
-        {
-          title: 'UGC para tech y SaaS',
-          blurb: 'Software, apps y servicios explicados en palabras sencillas, sin sonar a demo corporativa.',
-        },
-        {
-          title: 'UGC para lifestyle y bienestar',
-          blurb: 'Tu producto dentro de una rutina de todos los días, hablando a cámara con naturalidad.',
-        },
-      ],
-    },
-    en: {
-      breadcrumbLabel: HUB_LABELS.verticals.en,
-      metaTitle: 'Beauty and ecommerce UGC creator | Gisela Saldarriaga',
-      metaDescription:
-        'UGC in Spanish and English for beauty, ecommerce, fashion, tech, and wellness brands. I’m a creator in Medellín and film for the US, Spain, and LatAm.',
-      heroTitle: 'UGC by industry: beauty, ecommerce, fashion, tech, and wellness',
-      lead:
-        `I make UGC in Spanish and English for beauty, ecommerce, fashion, tech/SaaS, and wellness brands. I’m based in Medellín and work with teams in the US (including the US Hispanic market), Spain, and Latin America. You deal with me directly, no agency, and the videos are delivered to your brand. You can [hire a bilingual UGC creator](${getServicePath('bilingual-ugc-creator', 'en')}) or read [how to hire a UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
-      childrenTitle: 'By industry',
-      primaryCtaLabel: 'Message me',
-      secondaryLinks: [
-        { hubId: 'services', label: 'What you can hire me for' },
-        { hubId: 'resources', label: 'Hiring guides' },
-      ],
-      children: [
-        {
-          title: 'Beauty UGC',
-          blurb: 'Skincare, makeup, and personal care, tried on real skin for your ads and product pages.',
-        },
-        {
-          title: 'Ecommerce UGC',
-          blurb: 'A real person showing your product, for online stores, DTC brands, and product pages.',
-        },
-        {
-          title: 'Fashion UGC',
-          blurb: 'Clothes worn on a real body, styled for everyday life rather than a studio shoot.',
-        },
-        {
-          title: 'Tech and SaaS UGC',
-          blurb: 'Software, apps, and services explained in plain words, without sounding like a corporate demo.',
-        },
-        {
-          title: 'Lifestyle and wellness UGC',
-          blurb: 'Your product as part of an everyday routine, with me talking to camera in a relaxed way.',
-        },
-      ],
-    },
-  },
   resources: {
     es: {
       breadcrumbLabel: HUB_LABELS.resources.es,
@@ -282,7 +194,6 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       primaryCtaLabel: 'Escríbeme',
       secondaryLinks: [
         { hubId: 'services', label: 'Qué puedes contratar' },
-        { hubId: 'verticals', label: 'UGC por industria' },
       ],
       children: [
         {
@@ -319,7 +230,6 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       primaryCtaLabel: 'Message me',
       secondaryLinks: [
         { hubId: 'services', label: 'What you can hire me for' },
-        { hubId: 'verticals', label: 'UGC by industry' },
       ],
       children: [
         {
@@ -350,9 +260,6 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
 const resolveChildHref = (hubId: HubPageId, locale: SiteLocale, index: number): string => {
   if (hubId === 'services') {
     return getServicePath(SERVICE_HUB_CHILD_ORDER[index], locale);
-  }
-  if (hubId === 'verticals') {
-    return getVerticalPath(VERTICAL_HUB_CHILD_ORDER[index], locale);
   }
   return getResourcePath(RESOURCE_HUB_CHILD_ORDER[index], locale);
 };

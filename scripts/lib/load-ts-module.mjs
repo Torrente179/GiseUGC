@@ -2,7 +2,7 @@
  * Load a TypeScript module from src/ inside a plain Node script.
  *
  * The entrypoint sync scripts (enrich-service-entrypoints, expand-boot-shells,
- * sync-hub-entrypoints, sync-vertical-entrypoints, sync-resource-entrypoint-meta)
+ * sync-hub-entrypoints, sync-resource-entrypoint-meta)
  * used to carry hand-copied string literals that mirrored src/data/*.ts. They
  * now import the real data modules through this loader, so the static HTML
  * can never drift from the copy React renders.

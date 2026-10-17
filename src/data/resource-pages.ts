@@ -1,4 +1,4 @@
-import type { ServicePageId, VerticalPageId, SiteLocale, ResourcePageId } from '@/lib/locale-path';
+import type { ServicePageId, SiteLocale, ResourcePageId } from '@/lib/locale-path';
 import { getHomePath, getResourcePath, getServicePath } from '@/lib/locale-path';
 import { FIVERR_PROFILE_URL } from '@/lib/contact-channels';
 import { SITE_PROOF } from '@/data/site-proof';
@@ -49,7 +49,6 @@ export type ResourcePageContent = {
   ctaTitle: string;
   ctaText: string;
   relatedServiceIds: ServicePageId[];
-  relatedVerticalIds: VerticalPageId[];
 };
 
 export { getResourcePath } from '@/lib/locale-path';
@@ -279,7 +278,6 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaTitle: '¿Quieres empezar con UGC?',
       ctaText: 'Cuéntame qué vendes y dónde, y te propongo qué videos grabar primero.',
       relatedServiceIds: ['bilingual-ugc-creator', 'ugc-ads-tiktok-meta', 'ugc-testimonials-reviews'],
-      relatedVerticalIds: ['ecommerce-ugc', 'beauty-ugc'],
     },
     en: {
       navLabel: 'What is UGC',
@@ -382,7 +380,6 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaTitle: 'Want to get started with UGC?',
       ctaText: 'Tell me what you sell and where, and I’ll suggest which videos to film first.',
       relatedServiceIds: ['bilingual-ugc-creator', 'ugc-ads-tiktok-meta', 'ugc-testimonials-reviews'],
-      relatedVerticalIds: ['ecommerce-ugc', 'beauty-ugc'],
     },
   },
 
@@ -501,7 +498,6 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaTitle: '¿Buscas una creadora UGC?',
       ctaText: 'Cuéntame qué vendes y qué videos necesitas. Si mi perfil no es el indicado para tu proyecto, te lo digo.',
       relatedServiceIds: ['bilingual-ugc-creator', 'spokesperson-videos', 'ugc-product-demo'],
-      relatedVerticalIds: ['beauty-ugc', 'ecommerce-ugc', 'tech-saas-ugc'],
     },
     en: {
       navLabel: 'How to hire a UGC creator',
@@ -614,7 +610,6 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaTitle: 'Looking for a UGC creator?',
       ctaText: 'Tell me what you sell and what videos you need. If I’m not the right fit for your project, I’ll tell you.',
       relatedServiceIds: ['bilingual-ugc-creator', 'spokesperson-videos', 'ugc-product-demo'],
-      relatedVerticalIds: ['beauty-ugc', 'ecommerce-ugc', 'tech-saas-ugc'],
     },
   },
 
@@ -738,7 +733,6 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaTitle: '¿Estás decidiendo entre UGC e influencers?',
       ctaText: 'Cuéntame qué vendes y qué quieres lograr, y te digo con sinceridad si el UGC te conviene ahora.',
       relatedServiceIds: ['ugc-ads-tiktok-meta', 'bilingual-ugc-creator', 'ugc-testimonials-reviews'],
-      relatedVerticalIds: ['ecommerce-ugc', 'fashion-ugc', 'beauty-ugc'],
     },
     en: {
       navLabel: 'UGC vs influencer marketing',
@@ -856,7 +850,6 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaTitle: 'Deciding between UGC and influencers?',
       ctaText: 'Tell me what you sell and what you want to achieve, and I’ll give you an honest take on whether UGC makes sense for you right now.',
       relatedServiceIds: ['ugc-ads-tiktok-meta', 'bilingual-ugc-creator', 'ugc-testimonials-reviews'],
-      relatedVerticalIds: ['ecommerce-ugc', 'fashion-ugc', 'beauty-ugc'],
     },
   },
 
@@ -1006,7 +999,6 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaTitle: '¿Necesitas UGC ads para tu marca?',
       ctaText: 'Cuéntame qué vendes y en qué plataformas pautas, y te digo con qué formatos empezaría.',
       relatedServiceIds: ['ugc-ads-tiktok-meta', 'ugc-problem-solution', 'spokesperson-videos', 'ugc-product-demo'],
-      relatedVerticalIds: ['ecommerce-ugc', 'beauty-ugc', 'tech-saas-ugc'],
     },
     en: {
       navLabel: 'UGC ad formats guide',
@@ -1150,7 +1142,6 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaTitle: 'Need UGC ads for your brand?',
       ctaText: 'Tell me what you sell and where you run ads, and I’ll tell you which formats I’d start with.',
       relatedServiceIds: ['ugc-ads-tiktok-meta', 'ugc-problem-solution', 'spokesperson-videos', 'ugc-product-demo'],
-      relatedVerticalIds: ['ecommerce-ugc', 'beauty-ugc', 'tech-saas-ugc'],
     },
   },
 
@@ -1291,7 +1282,6 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaTitle: '¿Quieres cotizar tu proyecto?',
       ctaText: `Si ya sabes qué necesitas, mira cómo trabajo como [creadora UGC bilingüe](${getServicePath('bilingual-ugc-creator', 'es')}). Si es tu primera vez, empieza por [cómo contratar una creadora UGC](${getResourcePath('how-to-hire-ugc-creator', 'es')}).`,
       relatedServiceIds: ['bilingual-ugc-creator', 'spokesperson-videos', 'ugc-ads-tiktok-meta'],
-      relatedVerticalIds: ['ecommerce-ugc', 'beauty-ugc'],
     },
     en: {
       navLabel: 'How much a UGC creator charges',
@@ -1426,7 +1416,6 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       ctaTitle: 'Want a quote for your project?',
       ctaText: `If you already know what you need, see how I work as a [bilingual UGC creator](${getServicePath('bilingual-ugc-creator', 'en')}). If it's your first time, start with [how to hire a UGC creator](${getResourcePath('how-to-hire-ugc-creator', 'en')}).`,
       relatedServiceIds: ['bilingual-ugc-creator', 'spokesperson-videos', 'ugc-ads-tiktok-meta'],
-      relatedVerticalIds: ['ecommerce-ugc', 'beauty-ugc'],
     },
   },
 };

@@ -13,9 +13,8 @@ import {
   VIDEO_SITEMAP_CURATED_CLIP_IDS,
 } from '@/data/video-sitemap-curated';
 import { getServicePageContent } from '@/data/service-pages';
-import { getVerticalPageContent } from '@/data/vertical-pages';
 import { escapeXml, SITEMAP_ORIGIN } from '@/lib/sitemap';
-import { SITE_LOCALES, getServiceIdsInOrder, getVerticalIdsInOrder } from '@/lib/locale-path';
+import { SITE_LOCALES, getServiceIdsInOrder } from '@/lib/locale-path';
 import { parseHomeVideoObjects, VIDEO_SITE_ORIGIN, type PageVideoObject } from '@/lib/page-video-objects';
 
 export const VIDEO_SITEMAP_RELATIVE = 'public/sitemap-video.xml';
@@ -95,17 +94,6 @@ export const collectExcludedVideos = (root = process.cwd()): ExcludedVideo[] => 
   for (const locale of SITE_LOCALES) {
     for (const serviceId of getServiceIdsInOrder()) {
       const page = getServicePageContent(serviceId, locale);
-      for (const example of page.featuredExamples) {
-        if (CURATED.has(example.clipId)) continue;
-        excluded.push({
-          clipId: example.clipId,
-          name: example.title,
-          reason: `serviceVerticalProof:${page.path}`,
-        });
-      }
-    }
-    for (const verticalId of getVerticalIdsInOrder()) {
-      const page = getVerticalPageContent(verticalId, locale);
       for (const example of page.featuredExamples) {
         if (CURATED.has(example.clipId)) continue;
         excluded.push({

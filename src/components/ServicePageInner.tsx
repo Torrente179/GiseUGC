@@ -29,13 +29,11 @@ type ServicePageInnerProps = {
   labels: {
     alsoOffered: string;
     moreServices: string;
-    byIndustry: string;
     resources: string;
     explore: string;
     isThisForYou: string;
   };
   locale: SiteLocale;
-  relevantVerticals: ServiceLandingRouteData['relevantVerticals'];
   resourceLinks: { id: ResourcePageId; label: string }[];
   relatedPages: ServiceLandingRouteData['relatedPages'];
   allOtherServices: ServiceLandingRouteData['allOtherServices'];
@@ -74,7 +72,6 @@ const ServicePageInner = ({
   page,
   labels,
   locale,
-  relevantVerticals,
   resourceLinks,
   relatedPages,
   allOtherServices,
@@ -125,7 +122,6 @@ const ServicePageInner = ({
           {...beatProps('empezar')}
           labels={labels}
           updated={updated}
-          relevantVerticals={relevantVerticals}
           resourceLinks={resourceLinks}
           relatedPages={relatedPages}
           allOtherServices={allOtherServices}

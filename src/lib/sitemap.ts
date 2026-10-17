@@ -19,7 +19,6 @@ const FAMILY_TO_DATES: Record<PageFamily, ContentFamily> = {
   home: 'home',
   hub: 'hubs',
   service: 'services',
-  vertical: 'verticals',
   resource: 'resources',
   legal: 'legal',
 };
@@ -31,7 +30,6 @@ const FAMILY_SITEMAP_META: Record<
   home: { changefreq: 'weekly', priority: (locale) => (locale === 'es' ? '1.0' : '0.9') },
   hub: { changefreq: 'weekly', priority: () => '0.5' },
   service: { changefreq: 'weekly', priority: () => '0.8' },
-  vertical: { changefreq: 'weekly', priority: () => '0.75' },
   resource: { changefreq: 'monthly', priority: () => '0.70' },
   legal: { changefreq: 'monthly', priority: () => '0.35' },
 };

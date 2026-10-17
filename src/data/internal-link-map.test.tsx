@@ -8,13 +8,11 @@ import { LocaleProvider } from '@/lib/locale-context';
 import HubPage from '@/components/HubPage';
 import ResourcePage from '@/components/ResourcePage';
 import ServiceLandingPage from '@/components/ServiceLandingPage';
-import VerticalLandingPage from '@/components/VerticalLandingPage';
 import Index from '@/pages/Index';
 import { HUB_LABELS } from '@/data/hub-labels';
 import {
   buildResourceLandingRouteData,
   buildServiceLandingRouteData,
-  buildVerticalLandingRouteData,
 } from '@/data/landing-route-data.server';
 import {
   PAGE_REGISTRY,
@@ -26,16 +24,14 @@ import {
   getResourcePath,
   getServiceIdsInOrder,
   getServicePath,
-  getVerticalIdsInOrder,
-  getVerticalPath,
   type HubPageId,
   type SiteLocale,
 } from '@/lib/locale-path';
 
 /*
- * The internal link map: Home › hub › page. Every service, industry and guide page
+ * The internal link map: Home › hub › page. Every service and guide page
  * names its hub in the middle breadcrumb (visible trail and BreadcrumbList), every
- * page links to the three hubs from the page-end strip, and no internal href points
+ * page links to the hubs from the page-end strip, and no internal href points
  * at a URL the page registry does not serve.
  */
 
@@ -62,15 +58,6 @@ const childPages: ChildPage[] = SITE_LOCALES.flatMap((locale) => [
       path,
       locale,
       html: render(path, <ServiceLandingPage serviceId={id} locale={locale} routeData={buildServiceLandingRouteData(id, locale)} />),
-    };
-  }),
-  ...getVerticalIdsInOrder().map((id) => {
-    const path = getVerticalPath(id, locale);
-    return {
-      family: 'verticals' as const,
-      path,
-      locale,
-      html: render(path, <VerticalLandingPage verticalId={id} locale={locale} routeData={buildVerticalLandingRouteData(id, locale)} />),
     };
   }),
   ...getResourceIdsInOrder().map((id) => {
@@ -142,7 +129,7 @@ describe('internal link map', () => {
     }
   });
 
-  it('links every page to the three hubs of its locale from the page-end strip', () => {
+  it('links every page to the hubs of its locale from the page-end strip', () => {
     const home = SITE_LOCALES.map((locale) => ({
       path: getHomePath(locale),
       locale,
@@ -166,8 +153,42 @@ describe('internal link map', () => {
     }
   });
 
-  it('keeps the committed service and vertical shells on the same trail', () => {
-    for (const page of childPages.filter((item) => item.family !== 'resources')) {
+  it('opens the service close index with More services, then the Also offered tiles', () => {
+    for (const page of childPages.filter((item) => item.family === 'services')) {
+      const index = page.html.match(/<nav class="knc-index"[\s\S]*?<\/nav>/u)?.[0] ?? '';
+      const labels = [...index.matchAll(/<p class="knc-label"><b>(\d\d)<\/b>([^<]+)<\/p>/gu)].map(
+        (match) => `${match[1]} ${match[2]}`,
+      );
+      const more = page.locale === 'es' ? 'Más servicios' : 'More services';
+      const also = page.locale === 'es' ? 'También ofrezco' : 'Also offered';
+      expect(labels.slice(0, 2), page.path).toEqual([`01 ${more}`, `02 ${also}`]);
+    }
+  });
+
+  it('301s every removed industry URL to a page that still exists', () => {
+    // The five industry pages and their hub were removed on 2026-10-16.
+    const removed = [
+      '/verticales/', '/en/verticals/',
+      '/verticales/ugc-beauty/', '/en/verticals/beauty-ugc-creator/',
+      '/verticales/ugc-moda/', '/en/verticals/fashion-ugc-creator/',
+      '/verticales/ugc-tech-saas/', '/en/verticals/tech-saas-ugc-creator/',
+      '/verticales/ugc-ecommerce/', '/en/verticals/ecommerce-ugc-creator/',
+      '/verticales/ugc-lifestyle-bienestar/', '/en/verticals/lifestyle-wellness-ugc-creator/',
+    ];
+    const redirects = (JSON.parse(read('vercel.json')) as { redirects: Array<{ source: string; destination: string; statusCode?: number }> }).redirects;
+    for (const path of removed) {
+      expect(REGISTERED_PATHS.has(path), path).toBe(false);
+      for (const source of [path, path.replace(/\/$/u, '')]) {
+        const rule = redirects.find((item) => item.source === source);
+        expect(rule?.statusCode, source).toBe(301);
+        expect(REGISTERED_PATHS.has(rule?.destination ?? ''), `${source} → ${rule?.destination}`).toBe(true);
+        expect(rule?.destination.startsWith('/en/'), source).toBe(source.startsWith('/en/'));
+      }
+    }
+  });
+
+  it('keeps the committed service shells on the same trail', () => {
+    for (const page of childPages.filter((item) => item.family === 'services')) {
       const shell = read(`${page.path.replace(/^\/|\/$/gu, '')}/index.html`);
       expect(shell, page.path).toContain(
         `{"@type":"ListItem","position":2,"name":"${HUB_LABELS[page.family][page.locale]}","item":"${SITE_URL}${getHubPath(page.family, page.locale)}"}`,

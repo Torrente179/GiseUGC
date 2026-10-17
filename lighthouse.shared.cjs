@@ -3,8 +3,6 @@ const urls = [
   'http://127.0.0.1:4174/en/',
   'http://127.0.0.1:4174/servicios/ugc-ads-tiktok-meta/',
   'http://127.0.0.1:4174/en/services/ugc-ads-tiktok-meta/',
-  'http://127.0.0.1:4174/verticales/ugc-beauty/',
-  'http://127.0.0.1:4174/en/verticals/beauty-ugc-creator/',
   'http://127.0.0.1:4174/recursos/que-es-ugc/',
   'http://127.0.0.1:4174/en/resources/what-is-ugc/',
   'http://127.0.0.1:4174/politica-de-privacidad/',

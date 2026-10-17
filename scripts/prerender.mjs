@@ -82,16 +82,14 @@ for (const htmlPath of htmlFiles) {
   root.innerHTML = markup;
   root.dataset.prerendered = 'true';
 
-  const isHubRoute = /^(?:\/servicios|\/verticales|\/recursos|\/en\/services|\/en\/verticals|\/en\/resources)\/$/u.test(
+  const isHubRoute = /^(?:\/servicios|\/recursos|\/en\/services|\/en\/resources)\/$/u.test(
     route,
   );
   const routeModule = isHubRoute
     ? null
     : route.includes('/servicios/') || route.includes('/services/')
       ? 'src/components/ServiceLandingPage.tsx'
-      : route.includes('/verticales/') || route.includes('/verticals/')
-        ? 'src/components/VerticalLandingPage.tsx'
-        : route.includes('/recursos/') || route.includes('/resources/')
+      : route.includes('/recursos/') || route.includes('/resources/')
           ? 'src/components/ResourcePage.tsx'
           : null;
   const routeCssFiles = routeModule
@@ -121,7 +119,7 @@ for (const htmlPath of htmlFiles) {
   }
 
   // PageSeo already renders FAQPage from page.faqs. Boot-shell graphs used to
-  // keep a second copy, so every service/vertical route emitted FAQPage twice.
+  // keep a second copy, so every service route emitted FAQPage twice.
   // The same goes for BreadcrumbList: two lists under one @id, with different
   // hub names, is a conflicting trail. Keep the PageSeo block (data-route-schema)
   // and strip FAQPage, plus BreadcrumbList when PageSeo has one, from the rest.
@@ -266,8 +264,7 @@ for (const htmlPath of htmlFiles) {
     withHeroPreloads = inlinedDom.serialize();
   }
   const routeCriticalStyles =
-    routeModule === 'src/components/ServiceLandingPage.tsx' ||
-    routeModule === 'src/components/VerticalLandingPage.tsx'
+    routeModule === 'src/components/ServiceLandingPage.tsx'
       ? `<style data-critical-template>${criticalTemplateStyles}</style>`
       : '';
   const routeCriticalFontFaces = route === '/' || route === '/en/'

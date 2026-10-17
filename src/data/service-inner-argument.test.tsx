@@ -256,9 +256,9 @@ describe('service inner presentation locks', () => {
     expect(mobile).toContain('class="kn-tog"');
     expect((mobile.match(/class="kn-list"/gu) ?? []).length).toBe(2);
     expect((mobile.match(/class="kn-list" hidden=""/gu) ?? []).length).toBe(1);
-    // Explore: three tabs over three panels, all links in the DOM.
+    // Explore: two tabs (More services first, then guides) over two panels, all links in the DOM.
     expect(mobile).toContain('class="knc-seg"');
-    expect((mobile.match(/class="knc-panel"/gu) ?? []).length).toBe(3);
+    expect((mobile.match(/class="knc-panel"/gu) ?? []).length).toBe(2);
     expect(mobile).toContain('class="knc-rail"');
     for (const relatedId of page.relatedServiceIds) {
       expect(mobile).toContain(getServicePath(relatedId, 'es'));

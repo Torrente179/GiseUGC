@@ -8,12 +8,6 @@ export type ServicePageId =
   | 'ugc-problem-solution'
   | 'ugc-lifestyle'
   | 'ugc-broll-footage';
-export type VerticalPageId =
-  | 'beauty-ugc'
-  | 'fashion-ugc'
-  | 'tech-saas-ugc'
-  | 'ecommerce-ugc'
-  | 'lifestyle-wellness-ugc';
 export type ResourcePageId =
   | 'what-is-ugc'
   | 'how-to-hire-ugc-creator'
@@ -21,7 +15,7 @@ export type ResourcePageId =
   | 'ugc-vs-influencer-marketing'
   | 'ugc-ad-formats-guide';
 export type LegalPageId = 'privacy-policy' | 'terms-content-use';
-export type HubPageId = 'services' | 'verticals' | 'resources';
+export type HubPageId = 'services' | 'resources';
 
 const HOME_PATHS: Record<SiteLocale, string> = {
   es: '/',
@@ -60,29 +54,6 @@ const SERVICE_PATHS: Record<ServicePageId, Record<SiteLocale, string>> = {
   'ugc-broll-footage': {
     es: '/servicios/b-roll-footage-ugc/',
     en: '/en/services/ugc-b-roll-footage/',
-  },
-};
-
-const VERTICAL_PATHS: Record<VerticalPageId, Record<SiteLocale, string>> = {
-  'beauty-ugc': {
-    es: '/verticales/ugc-beauty/',
-    en: '/en/verticals/beauty-ugc-creator/',
-  },
-  'fashion-ugc': {
-    es: '/verticales/ugc-moda/',
-    en: '/en/verticals/fashion-ugc-creator/',
-  },
-  'tech-saas-ugc': {
-    es: '/verticales/ugc-tech-saas/',
-    en: '/en/verticals/tech-saas-ugc-creator/',
-  },
-  'ecommerce-ugc': {
-    es: '/verticales/ugc-ecommerce/',
-    en: '/en/verticals/ecommerce-ugc-creator/',
-  },
-  'lifestyle-wellness-ugc': {
-    es: '/verticales/ugc-lifestyle-bienestar/',
-    en: '/en/verticals/lifestyle-wellness-ugc-creator/',
   },
 };
 
@@ -125,10 +96,6 @@ const HUB_PATHS: Record<HubPageId, Record<SiteLocale, string>> = {
     es: '/servicios/',
     en: '/en/services/',
   },
-  verticals: {
-    es: '/verticales/',
-    en: '/en/verticals/',
-  },
   resources: {
     es: '/recursos/',
     en: '/en/resources/',
@@ -167,7 +134,6 @@ export const getCanonicalLocaleHref = (locale: SiteLocale, hash = ''): string =>
 export const getHomeSectionHref = (locale: SiteLocale, sectionId: string) => getHomePath(locale, `#${sectionId}`);
 
 export const getServicePath = (serviceId: ServicePageId, locale: SiteLocale): string => SERVICE_PATHS[serviceId][locale];
-export const getVerticalPath = (verticalId: VerticalPageId, locale: SiteLocale): string => VERTICAL_PATHS[verticalId][locale];
 export const getResourcePath = (resourceId: ResourcePageId, locale: SiteLocale): string => RESOURCE_PATHS[resourceId][locale];
 export const getLegalPath = (pageId: LegalPageId, locale: SiteLocale): string => LEGAL_PATHS[pageId][locale];
 export const getHubPath = (hubId: HubPageId, locale: SiteLocale): string => HUB_PATHS[hubId][locale];
@@ -190,9 +156,6 @@ const getPageIdFromPath = <TPageId extends string>(
 
 export const getServicePageIdFromPath = (pathname: string): ServicePageId | null =>
   getPageIdFromPath(pathname, SERVICE_PATHS);
-
-export const getVerticalPageIdFromPath = (pathname: string): VerticalPageId | null =>
-  getPageIdFromPath(pathname, VERTICAL_PATHS);
 
 export const getResourcePageIdFromPath = (pathname: string): ResourcePageId | null =>
   getPageIdFromPath(pathname, RESOURCE_PATHS);
@@ -218,11 +181,6 @@ export const getLocalizedPathForCurrentRoute = (
     return `${getServicePath(serviceId, targetLocale)}${normalizeHash(hash)}`;
   }
 
-  const verticalId = getVerticalPageIdFromPath(pathname);
-  if (verticalId) {
-    return `${getVerticalPath(verticalId, targetLocale)}${normalizeHash(hash)}`;
-  }
-
   const resourceId = getResourcePageIdFromPath(pathname);
   if (resourceId) {
     return `${getResourcePath(resourceId, targetLocale)}${normalizeHash(hash)}`;
@@ -237,7 +195,6 @@ export const getLocalizedPathForCurrentRoute = (
 };
 
 export const getAllServicePaths = () => SERVICE_PATHS;
-export const getAllVerticalPaths = () => VERTICAL_PATHS;
 export const getAllResourcePaths = () => RESOURCE_PATHS;
 export const getAllLegalPaths = () => LEGAL_PATHS;
 export const getAllHubPaths = () => HUB_PATHS;
@@ -247,14 +204,6 @@ export const getServicePageRouteEntries = () => {
   return serviceIds.flatMap((serviceId) => [
     { serviceId, locale: 'es' as SiteLocale, path: SERVICE_PATHS[serviceId].es },
     { serviceId, locale: 'en' as SiteLocale, path: SERVICE_PATHS[serviceId].en },
-  ]);
-};
-
-export const getVerticalPageRouteEntries = () => {
-  const verticalIds = Object.keys(VERTICAL_PATHS) as VerticalPageId[];
-  return verticalIds.flatMap((verticalId) => [
-    { verticalId, locale: 'es' as SiteLocale, path: VERTICAL_PATHS[verticalId].es },
-    { verticalId, locale: 'en' as SiteLocale, path: VERTICAL_PATHS[verticalId].en },
   ]);
 };
 
@@ -292,7 +241,7 @@ export const getHubPageRouteEntries = () => {
    — vite.config.ts and the scripts/ generators — can import it directly.
    ════════════════════════════════════════════════════════════════════ */
 
-export type PageFamily = 'home' | 'hub' | 'service' | 'vertical' | 'resource' | 'legal';
+export type PageFamily = 'home' | 'hub' | 'service' | 'resource' | 'legal';
 
 export type PageRegistryEntry = {
   family: PageFamily;
@@ -313,9 +262,7 @@ export const PAGE_REGISTRY: PageRegistryEntry[] = [
   { family: 'home', id: 'home', order: 0, paths: HOME_PATHS },
   { family: 'hub', id: 'services', order: 0, paths: HUB_PATHS.services },
   ...buildFamilyEntries('service', SERVICE_PATHS),
-  { family: 'hub', id: 'verticals', order: 1, paths: HUB_PATHS.verticals },
-  ...buildFamilyEntries('vertical', VERTICAL_PATHS),
-  { family: 'hub', id: 'resources', order: 2, paths: HUB_PATHS.resources },
+  { family: 'hub', id: 'resources', order: 1, paths: HUB_PATHS.resources },
   ...buildFamilyEntries('resource', RESOURCE_PATHS),
   ...buildFamilyEntries('legal', LEGAL_PATHS),
 ];
@@ -352,7 +299,6 @@ const getFamilyIdsInOrder = (family: PageFamily): string[] =>
 
 /** Service ids in canonical registry order. Replaces hand-listed arrays in nav/footer. */
 export const getServiceIdsInOrder = (): ServicePageId[] => getFamilyIdsInOrder('service') as ServicePageId[];
-export const getVerticalIdsInOrder = (): VerticalPageId[] => getFamilyIdsInOrder('vertical') as VerticalPageId[];
 export const getResourceIdsInOrder = (): ResourcePageId[] => getFamilyIdsInOrder('resource') as ResourcePageId[];
 export const getLegalIdsInOrder = (): LegalPageId[] => getFamilyIdsInOrder('legal') as LegalPageId[];
 export const getHubIdsInOrder = (): HubPageId[] => getFamilyIdsInOrder('hub') as HubPageId[];

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import type { ResourcePageId, SiteLocale } from '@/lib/locale-path';
-import { getHomePath, getHubPath, getResourcePath, getServicePath, getVerticalPath } from '@/lib/locale-path';
+import { getHomePath, getHubPath, getResourcePath, getServicePath } from '@/lib/locale-path';
 import type { ResourceLandingRouteData } from '@/data/landing-route-types';
 import { CONTENT_DATES, formatLastUpdatedLabel } from '@/data/content-dates';
 import { HUB_LABELS } from '@/data/hub-labels';
@@ -31,7 +31,6 @@ const localeLabels = {
     faq: 'Preguntas frecuentes',
     faqKicker: 'Preguntas',
     relatedServices: 'Servicios relacionados',
-    relatedVerticals: 'Por industria',
     otherGuides: 'Otras guías',
     inThisArticle: 'En este artículo',
     atAGlance: 'De un vistazo',
@@ -43,7 +42,6 @@ const localeLabels = {
     faq: 'Frequently asked questions',
     faqKicker: 'Questions',
     relatedServices: 'Related services',
-    relatedVerticals: 'By industry',
     otherGuides: 'Other guides',
     inThisArticle: 'In this article',
     atAGlance: 'At a glance',
@@ -113,7 +111,7 @@ const ResourcePage = ({
   locale,
   routeData,
 }: ResourcePageProps) => {
-  const { page, relatedServices, relatedVerticals } = routeData;
+  const { page, relatedServices } = routeData;
   const labels = {
     ...localeLabels[locale],
     lastUpdated: formatLastUpdatedLabel(CONTENT_DATES.resources, locale),
@@ -363,7 +361,7 @@ const ResourcePage = ({
             </RevealSection>
           )}
 
-          {(relatedServices.length > 0 || relatedVerticals.length > 0) && (
+          {relatedServices.length > 0 && (
             <RevealSection className="rsc-block">
               <div className="st-container rsc-related">
                 {relatedServices.length > 0 && (
@@ -372,17 +370,6 @@ const ResourcePage = ({
                     {relatedServices.map((service) => (
                       <Link key={service.id} to={getServicePath(service.id, locale)} className="st-related-row group">
                         <span className="st-related-title">{service.navLabel}</span>
-                        <span className="st-related-arrow">→</span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                {relatedVerticals.length > 0 && (
-                  <div>
-                    <p className="st-eyebrow">{labels.relatedVerticals}</p>
-                    {relatedVerticals.map((vertical) => (
-                      <Link key={vertical.id} to={getVerticalPath(vertical.id, locale)} className="st-related-row group">
-                        <span className="st-related-title">{vertical.navLabel}</span>
                         <span className="st-related-arrow">→</span>
                       </Link>
                     ))}

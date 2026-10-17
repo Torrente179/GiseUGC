@@ -7,7 +7,6 @@ import { getHubPageContent } from '@/data/hub-pages';
 import { getLegalPageContent } from '@/data/legal-pages';
 import { getResourcePageContent } from '@/data/resource-pages';
 import { getServicePageContent } from '@/data/service-pages';
-import { getVerticalPageContent } from '@/data/vertical-pages';
 import esHome from '@/locales/es/translation.json';
 import enHome from '@/locales/en/translation.json';
 import {
@@ -16,7 +15,6 @@ import {
   getLocaleFromPath,
   getResourcePageIdFromPath,
   getServicePageIdFromPath,
-  getVerticalPageIdFromPath,
   isHomePath,
   PAGE_REGISTRY,
   SITE_LOCALES,
@@ -69,12 +67,10 @@ export const getOgRouteCopy = (localePath: string, locale: SiteLocale = getLocal
   } else {
     const hubId = getHubPageIdFromPath(localePath);
     const serviceId = getServicePageIdFromPath(localePath);
-    const verticalId = getVerticalPageIdFromPath(localePath);
     const resourceId = getResourcePageIdFromPath(localePath);
     const legalId = getLegalPageIdFromPath(localePath);
     if (hubId) h1 = getHubPageContent(hubId, locale).heroTitle;
     else if (serviceId) h1 = getServicePageContent(serviceId, locale).heroTitle;
-    else if (verticalId) h1 = getVerticalPageContent(verticalId, locale).heroTitle;
     else if (resourceId) h1 = getResourcePageContent(resourceId, locale).heroTitle;
     else if (legalId) h1 = getLegalPageContent(legalId, locale).title;
   }

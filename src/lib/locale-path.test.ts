@@ -5,12 +5,10 @@ import {
   isHomePath,
   getLocalizedPathForCurrentRoute,
   getServicePageRouteEntries,
-  getVerticalPageRouteEntries,
   getResourcePageRouteEntries,
   getLegalPageRouteEntries,
   getHubPageRouteEntries,
   getServicePageIdFromPath,
-  getVerticalPageIdFromPath,
   getResourcePageIdFromPath,
   getLegalPageIdFromPath,
   getHubPageIdFromPath,
@@ -69,7 +67,6 @@ describe('isHomePath', () => {
 const allRouteEntries = [
   ...getHubPageRouteEntries(),
   ...getServicePageRouteEntries(),
-  ...getVerticalPageRouteEntries(),
   ...getResourcePageRouteEntries(),
   ...getLegalPageRouteEntries(),
 ];
@@ -80,7 +77,6 @@ describe('route entries', () => {
       expect(getHubPageIdFromPath(entry.path)).toBe(entry.hubId);
       expect(getLocaleFromPath(entry.path)).toBe(entry.locale);
       expect(getServicePageIdFromPath(entry.path)).toBeNull();
-      expect(getVerticalPageIdFromPath(entry.path)).toBeNull();
       expect(getResourcePageIdFromPath(entry.path)).toBeNull();
     }
   });
@@ -88,13 +84,6 @@ describe('route entries', () => {
   it('every service route entry resolves back to its id', () => {
     for (const entry of getServicePageRouteEntries()) {
       expect(getServicePageIdFromPath(entry.path)).toBe(entry.serviceId);
-      expect(getLocaleFromPath(entry.path)).toBe(entry.locale);
-    }
-  });
-
-  it('every vertical route entry resolves back to its id', () => {
-    for (const entry of getVerticalPageRouteEntries()) {
-      expect(getVerticalPageIdFromPath(entry.path)).toBe(entry.verticalId);
       expect(getLocaleFromPath(entry.path)).toBe(entry.locale);
     }
   });
@@ -122,7 +111,7 @@ describe('route entries', () => {
 describe('getLocalizedPathForCurrentRoute', () => {
   it('round-trips a hub path to its counterpart in the other locale', () => {
     expect(getLocalizedPathForCurrentRoute('/servicios/', 'en')).toBe('/en/services/');
-    expect(getLocalizedPathForCurrentRoute('/en/verticals/', 'es')).toBe('/verticales/');
+    expect(getLocalizedPathForCurrentRoute('/en/resources/', 'es')).toBe('/recursos/');
     expect(getLocalizedPathForCurrentRoute('/recursos/', 'en')).toBe('/en/resources/');
   });
 

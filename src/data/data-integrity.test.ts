@@ -5,7 +5,6 @@ import {
 } from './portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from './nuevos-r2-ready';
 import { getAllServiceIds, getServicePageContent } from './service-pages';
-import { getAllVerticalIds, getVerticalPageContent } from './vertical-pages';
 import type { SiteLocale } from '@/lib/locale-path';
 
 // The canonical merged clip set, mirroring Portfolio.tsx's ALL_REEL_CLIPS.
@@ -32,22 +31,6 @@ describe('service pages reference real data', () => {
     for (const locale of LOCALES) {
       it(`${serviceId} (${locale}): featured clips + related services resolve`, () => {
         const content = getServicePageContent(serviceId, locale);
-        for (const example of content.featuredExamples) {
-          expect(CLIP_IDS.has(example.clipId)).toBe(true);
-        }
-        for (const relatedId of content.relatedServiceIds) {
-          expect(SERVICE_IDS.has(relatedId)).toBe(true);
-        }
-      });
-    }
-  }
-});
-
-describe('vertical pages reference real data', () => {
-  for (const verticalId of getAllVerticalIds()) {
-    for (const locale of LOCALES) {
-      it(`${verticalId} (${locale}): featured clips + related services resolve`, () => {
-        const content = getVerticalPageContent(verticalId, locale);
         for (const example of content.featuredExamples) {
           expect(CLIP_IDS.has(example.clipId)).toBe(true);
         }

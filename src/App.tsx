@@ -19,13 +19,11 @@ import {
   type ResourcePageId,
   type ServicePageId,
   type SiteLocale,
-  type VerticalPageId,
   getHubPageRouteEntries,
   getLocaleFromPath,
   getLegalPageRouteEntries,
   getResourcePageRouteEntries,
   getServicePageRouteEntries,
-  getVerticalPageRouteEntries,
   isHomePath,
   normalizePathname,
 } from '@/lib/locale-path';
@@ -160,7 +158,6 @@ const ClientInsights = () => {
 // All route entries — computed once at module level
 const hubRouteEntries = getHubPageRouteEntries();
 const serviceRouteEntries = getServicePageRouteEntries();
-const verticalRouteEntries = getVerticalPageRouteEntries();
 const resourceRouteEntries = getResourcePageRouteEntries();
 const legalRouteEntries = getLegalPageRouteEntries();
 
@@ -169,7 +166,6 @@ export type AppRouteComponents = {
   NotFound?: ComponentType;
   HubPage?: ComponentType<{ hubId: HubPageId; locale: SiteLocale }>;
   ServiceLandingPage?: ComponentType<{ serviceId: ServicePageId; locale: SiteLocale }>;
-  VerticalLandingPage?: ComponentType<{ verticalId: VerticalPageId; locale: SiteLocale }>;
   ResourcePage?: ComponentType<{ resourceId: ResourcePageId; locale: SiteLocale }>;
   LegalPage?: ComponentType<{ pageId: LegalPageId; locale: SiteLocale }>;
 };
@@ -216,12 +212,6 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
     return serviceRouteEntries.find(e => normalizePathname(e.path) === normalized) ?? null;
   }, [location.pathname, onHome]);
 
-  const currentVerticalEntry = useMemo(() => {
-    if (onHome) return null;
-    const normalized = normalizePathname(location.pathname);
-    return verticalRouteEntries.find(e => normalizePathname(e.path) === normalized) ?? null;
-  }, [location.pathname, onHome]);
-
   const currentResourceEntry = useMemo(() => {
     if (onHome) return null;
     const normalized = normalizePathname(location.pathname);
@@ -240,13 +230,12 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
     return hubRouteEntries.find((entry) => normalizePathname(entry.path) === normalized) ?? null;
   }, [location.pathname, onHome]);
 
-  const isKnownRoute = onHome || currentHubEntry !== null || currentServiceEntry !== null || currentVerticalEntry !== null || currentResourceEntry !== null || currentLegalEntry !== null;
+  const isKnownRoute = onHome || currentHubEntry !== null || currentServiceEntry !== null || currentResourceEntry !== null || currentLegalEntry !== null;
   const {
     Index,
     NotFound,
     HubPage,
     ServiceLandingPage,
-    VerticalLandingPage,
     ResourcePage,
     LegalPage,
   } = routeComponents;
@@ -305,15 +294,6 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
             <ServiceLandingPage
               serviceId={currentServiceEntry.serviceId}
               locale={currentServiceEntry.locale}
-            />
-          </div>
-      )}
-
-      {currentVerticalEntry && VerticalLandingPage && (
-          <div key={location.pathname} className="page-enter">
-            <VerticalLandingPage
-              verticalId={currentVerticalEntry.verticalId}
-              locale={currentVerticalEntry.locale}
             />
           </div>
       )}

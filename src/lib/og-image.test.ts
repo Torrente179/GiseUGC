@@ -74,7 +74,7 @@ describe('per-page OG copy', () => {
   it('covers every PAGE_REGISTRY locale path with a unique slug and locale-correct proof', () => {
     const copies = getAllOgRouteCopy();
     expect(copies).toHaveLength(PAGE_REGISTRY.length * SITE_LOCALES.length);
-    expect(copies).toHaveLength(48);
+    expect(copies).toHaveLength(36);
     const slugs = copies.map((copy) => copy.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
     for (const copy of copies) {

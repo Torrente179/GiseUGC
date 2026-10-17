@@ -12,13 +12,11 @@ import { CONTENT_DATES, LLMS_LAST_UPDATED } from '@/data/content-dates';
 import { getHubChildLinks } from '@/data/hub-child-links';
 import HubPage from '@/components/HubPage';
 import { getServicePageContent } from '@/data/service-pages';
-import { getVerticalPageContent } from '@/data/vertical-pages';
 import { getResourcePageContent } from '@/data/resource-pages';
 import {
   getHubPageRouteEntries,
   getResourceIdsInOrder,
   getServiceIdsInOrder,
-  getVerticalIdsInOrder,
   type SiteLocale,
 } from '@/lib/locale-path';
 import {
@@ -181,14 +179,11 @@ describe('sitemap lastmod and llms dates are honest', () => {
       const hubUrls = new Set([
         'https://www.giselasaldarriaga.com/servicios/',
         'https://www.giselasaldarriaga.com/en/services/',
-        'https://www.giselasaldarriaga.com/verticales/',
-        'https://www.giselasaldarriaga.com/en/verticals/',
         'https://www.giselasaldarriaga.com/recursos/',
         'https://www.giselasaldarriaga.com/en/resources/',
       ]);
       if (hubUrls.has(loc)) return CONTENT_DATES.hubs;
       if (loc.includes('/servicios/') || loc.includes('/services/')) return CONTENT_DATES.services;
-      if (loc.includes('/verticales/') || loc.includes('/verticals/')) return CONTENT_DATES.verticals;
       if (loc.includes('/recursos/') || loc.includes('/resources/')) return CONTENT_DATES.resources;
       return CONTENT_DATES.legal;
     };
@@ -226,13 +221,11 @@ describe('IndexNow ping list includes resource URLs', () => {
     );
   });
 
-  it('sitemap still lists the six hub index URLs as their own entries', () => {
+  it('sitemap still lists the four hub index URLs as their own entries', () => {
     const xml = read('public/sitemap.xml');
     for (const path of [
       '/servicios/',
       '/en/services/',
-      '/verticales/',
-      '/en/verticals/',
       '/recursos/',
       '/en/resources/',
     ]) {
@@ -280,8 +273,6 @@ describe('Person schema carries the studio mark as alternateName', () => {
 const HUB_ENTRYPOINTS = [
   { file: 'servicios/index.html', locale: 'es' as SiteLocale, hubId: 'services' as const, contact: '/#contact' },
   { file: 'en/services/index.html', locale: 'en' as SiteLocale, hubId: 'services' as const, contact: '/en/#contact' },
-  { file: 'verticales/index.html', locale: 'es' as SiteLocale, hubId: 'verticals' as const, contact: '/#contact' },
-  { file: 'en/verticals/index.html', locale: 'en' as SiteLocale, hubId: 'verticals' as const, contact: '/en/#contact' },
   { file: 'recursos/index.html', locale: 'es' as SiteLocale, hubId: 'resources' as const, contact: '/#contact' },
   { file: 'en/resources/index.html', locale: 'en' as SiteLocale, hubId: 'resources' as const, contact: '/en/#contact' },
 ] as const;
@@ -301,7 +292,8 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
     expect(xml.indexOf('/servicios/</loc>')).toBeGreaterThan(-1);
     expect(xml.indexOf('/en/services/</loc>')).toBeGreaterThan(-1);
     expect(xml.indexOf('/servicios/</loc>')).toBeLessThan(xml.indexOf('/servicios/creadora-ugc-bilingue/'));
-    expect(xml.indexOf('/verticales/</loc>')).toBeLessThan(xml.indexOf('/verticales/ugc-beauty/'));
+    expect(xml).not.toContain('/verticales/');
+    expect(xml).not.toContain('/en/verticals/');
     expect(xml.indexOf('/recursos/</loc>')).toBeLessThan(xml.indexOf('/recursos/que-es-ugc/'));
   });
 
@@ -339,8 +331,6 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
     const expected = {
       'servicios/index.html': 'https://www.giselasaldarriaga.com/servicios/',
       'en/services/index.html': 'https://www.giselasaldarriaga.com/servicios/',
-      'verticales/index.html': 'https://www.giselasaldarriaga.com/verticales/',
-      'en/verticals/index.html': 'https://www.giselasaldarriaga.com/verticales/',
       'recursos/index.html': 'https://www.giselasaldarriaga.com/recursos/',
       'en/resources/index.html': 'https://www.giselasaldarriaga.com/recursos/',
     } as const;
@@ -372,19 +362,14 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
   it('every existing money page is linked from its hub and hubs invent no extra URLs', () => {
     for (const locale of ['es', 'en'] as SiteLocale[]) {
       const serviceHrefs = new Set(getHubChildLinks('services', locale).map((item) => item.href));
-      const verticalHrefs = new Set(getHubChildLinks('verticals', locale).map((item) => item.href));
       const resourceHrefs = new Set(getHubChildLinks('resources', locale).map((item) => item.href));
       for (const id of getServiceIdsInOrder()) {
         expect(serviceHrefs.has(getServicePageContent(id, locale).path)).toBe(true);
-      }
-      for (const id of getVerticalIdsInOrder()) {
-        expect(verticalHrefs.has(getVerticalPageContent(id, locale).path)).toBe(true);
       }
       for (const id of getResourceIdsInOrder()) {
         expect(resourceHrefs.has(getResourcePageContent(id, locale).path)).toBe(true);
       }
       expect(serviceHrefs.size).toBe(getServiceIdsInOrder().length);
-      expect(verticalHrefs.size).toBe(getVerticalIdsInOrder().length);
       expect(resourceHrefs.size).toBe(getResourceIdsInOrder().length);
     }
   });
@@ -394,10 +379,8 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
     expect(read('src/components/ServiceLandingPage.tsx')).not.toContain('Mar 24, 2026');
     expect(read('src/components/ServicePageInner.tsx')).not.toContain('24 mar 2026');
     expect(read('src/components/ServicePageInner.tsx')).not.toContain('Mar 24, 2026');
-    expect(read('src/components/VerticalLandingPage.tsx')).not.toContain('24 mar 2026');
     expect(read('src/components/ResourcePage.tsx')).not.toContain('29 jul 2026');
     expect(read('src/components/ServicePageInner.tsx')).toContain('formatLastUpdatedLabel(CONTENT_DATES.services');
-    expect(read('src/components/VerticalLandingPage.tsx')).toContain('formatLastUpdatedLabel(CONTENT_DATES.verticals');
     expect(read('src/components/ResourcePage.tsx')).toContain('formatLastUpdatedLabel(CONTENT_DATES.resources');
     expect(read('recursos/como-contratar-creadora-ugc/index.html')).not.toContain('24 mar 2026');
     expect(read('recursos/como-contratar-creadora-ugc/index.html')).toContain('14 oct 2026');

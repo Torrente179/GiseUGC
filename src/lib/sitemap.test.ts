@@ -32,7 +32,6 @@ describe('sitemap generator', () => {
     expect(lastmodForFamily('home')).toBe(CONTENT_DATES.home);
     expect(lastmodForFamily('hub')).toBe(CONTENT_DATES.hubs);
     expect(lastmodForFamily('service')).toBe(CONTENT_DATES.services);
-    expect(lastmodForFamily('vertical')).toBe(CONTENT_DATES.verticals);
     expect(lastmodForFamily('resource')).toBe(CONTENT_DATES.resources);
     expect(lastmodForFamily('legal')).toBe(CONTENT_DATES.legal);
   });

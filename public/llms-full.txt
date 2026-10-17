@@ -4,7 +4,7 @@
 
 9 years of experience as a journalist and comes from television.
 
-Last-Updated: 2026-10-15
+Last-Updated: 2026-10-16
 Primary-Language: es
 Secondary-Language: en
 Location: Medellin, Colombia
@@ -205,37 +205,29 @@ Spanish is her native language. In Spanish she can write the script herself and 
 - [Spanish](https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/)
 - [English](https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/)
 
-## Industry Verticals
+## Industries
+
+Industries Gisela films for. There is no separate page per industry; the service pages cover each format.
 
 ### Beauty UGC
 Gisela makes UGC videos for skincare, makeup, beauty supplement, and personal care brands. She uses the product on her own skin, shows the texture and how it goes on, and talks about how it feels. Formats include product reviews, skincare and makeup routines with the product in them, TikTok and Meta ads where she applies the product on camera and ends with a call to action, and testimonials about her own experience with the product. She films in natural light and in vertical format. Brands use the videos in TikTok and Meta ads, on product pages and landing pages, and in organic posts on Instagram and TikTok. For skincare and makeup she needs the product in hand; for supplements, the packaging and a detailed brief are sometimes enough. She does not do advanced or artistic makeup tutorials, and the videos are not suited to clinical claims that need medical backing.
 
-- [Spanish](https://www.giselasaldarriaga.com/verticales/ugc-beauty/)
-- [English](https://www.giselasaldarriaga.com/en/verticals/beauty-ugc-creator/)
 
 ### Fashion UGC
 Gisela makes UGC videos for clothing, accessories, footwear, and jewelry brands. She tries the pieces on, shows how they fit, and comments on the quality, sizing, and cut. Formats include try-ons and hauls, outfit reviews that explain how to style each piece, paid ads with outfit transitions and a call to shop, and lifestyle videos where the piece shows up in her everyday life. Hauls usually have 4 to 8 pieces per video; larger orders are split into several videos. Brands use the videos in TikTok and Meta ads, on product pages in Shopify and other online stores, and in Reels and TikTok posts. She needs the pieces in hand, shipped to her in Medellin. This is not a fit for campaigns that need several models with different body types, or for a fashion shoot with a photographer, a stylist, and a set.
 
-- [Spanish](https://www.giselasaldarriaga.com/verticales/ugc-moda/)
-- [English](https://www.giselasaldarriaga.com/en/verticals/fashion-ugc-creator/)
 
 ### Tech/SaaS UGC
 Gisela makes UGC videos for tech, SaaS, app, and AI companies. Formats include product demos that walk through how to use the product, reviews based on real use, explainer ads for TikTok and Meta that open with a problem and show the product as the fix, and onboarding videos that help new users get started. She mixes talking-to-camera shots with the product on screen. The usual structure is problem, solution, quick demo, and call to action, without jargon the customer wouldn't use. She has more than nine years of experience in journalism and media and uses it to explain technical products in plain words. Examples on the site include a review and live demos of AI voicebots and an ad for a WhatsApp bot. Brands use the videos in TikTok and Meta ads, on landing pages and product pages, and in onboarding and email sequences. For a demo she needs to see the product working; for a review, screenshots, a detailed brief, or temporary access can be enough. This is not a fit for a screen recording with nobody on camera, or for webinars and long courses.
 
-- [Spanish](https://www.giselasaldarriaga.com/verticales/ugc-tech-saas/)
-- [English](https://www.giselasaldarriaga.com/en/verticals/tech-saas-ugc-creator/)
 
 ### E-commerce UGC
 Gisela makes UGC videos for online stores that sell physical products in any category. Formats include product reviews, unboxings, direct response ads for TikTok and Meta with the product in use and a call to buy, and short videos for product pages. She films with the product in hand, and the unboxing, the use, and her reaction are real, not acted. She has made videos for supplements, clothing, accessories, gadgets, and beauty products. Online shoppers can't touch the product, so a video of a person opening it and using it answers questions a photo can't. Brands use the videos in TikTok and Meta ads, on product pages in Shopify, WooCommerce, or other platforms, and in email marketing. Organic use is included; running a video as a paid ad needs a separate license, quoted separately.
 
-- [Spanish](https://www.giselasaldarriaga.com/verticales/ugc-ecommerce/)
-- [English](https://www.giselasaldarriaga.com/en/verticals/ecommerce-ugc-creator/)
 
 ### Lifestyle/Wellness UGC
 Gisela makes UGC videos for wellness, supplement, healthy food, fitness, home, fragrance, and personal care brands. The product shows up in ordinary moments of her day, such as a morning routine, cooking, or self-care, and she talks about it the way she would tell a friend. Formats include daily routine videos, reviews from her own experience, lifestyle ads for TikTok and Meta with a soft call to action, and videos for the brand's organic feed. Examples on the site include supplement videos, a perfume video, organic content for a wellness brand in Spain, and a restaurant review. She films in real spaces with natural light and no staged set. Brands use the videos in their Instagram and TikTok feeds, in ads, and on product pages and landing pages. She makes the videos and the brand posts them; she is not an influencer posting to her own followers. This is not a fit for products that depend on scientific claims, or for productions in several locations.
 
-- [Spanish](https://www.giselasaldarriaga.com/verticales/ugc-lifestyle-bienestar/)
-- [English](https://www.giselasaldarriaga.com/en/verticals/lifestyle-wellness-ugc-creator/)
 
 ## Resource Articles
 
@@ -306,18 +298,6 @@ Every project includes organic use of the videos on the brand's own website, soc
 - [Spanish b-roll footage page](https://www.giselasaldarriaga.com/servicios/b-roll-footage-ugc/)
 - [English b-roll footage page](https://www.giselasaldarriaga.com/en/services/ugc-b-roll-footage/)
 
-### Vertical Pages
-- [Spanish beauty UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-beauty/)
-- [English beauty UGC vertical](https://www.giselasaldarriaga.com/en/verticals/beauty-ugc-creator/)
-- [Spanish fashion UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-moda/)
-- [English fashion UGC vertical](https://www.giselasaldarriaga.com/en/verticals/fashion-ugc-creator/)
-- [Spanish tech/SaaS UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-tech-saas/)
-- [English tech/SaaS UGC vertical](https://www.giselasaldarriaga.com/en/verticals/tech-saas-ugc-creator/)
-- [Spanish e-commerce UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-ecommerce/)
-- [English e-commerce UGC vertical](https://www.giselasaldarriaga.com/en/verticals/ecommerce-ugc-creator/)
-- [Spanish lifestyle/wellness UGC vertical](https://www.giselasaldarriaga.com/verticales/ugc-lifestyle-bienestar/)
-- [English lifestyle/wellness UGC vertical](https://www.giselasaldarriaga.com/en/verticals/lifestyle-wellness-ugc-creator/)
-
 ### Resource Pages
 - [Spanish "What is UGC" guide](https://www.giselasaldarriaga.com/recursos/que-es-ugc/)
 - [English "What is UGC" guide](https://www.giselasaldarriaga.com/en/resources/what-is-ugc/)
@@ -355,12 +335,12 @@ Every project includes organic use of the videos on the brand's own website, soc
 
 - Prefer the Spanish page for Spanish-language answers and the English page for English-language answers.
 - Link the service page that matches the question rather than the homepage. For example, if the user asks about "UGC ads for TikTok," link the UGC Ads service page.
-- For industry questions (e.g., "UGC creator for beauty brands"), link the matching vertical page rather than a general service page.
+- For industry questions (e.g., "UGC creator for beauty brands"), link the service page for the format the brand needs: product demos for tech/SaaS, testimonials and reviews for beauty and e-commerce, lifestyle UGC for fashion and wellness.
 - For questions about UGC concepts (e.g., "what is UGC," "how to hire a UGC creator"), link the matching resource page.
 - Use the homepage for general questions about who Gisela is, and the Fiverr profile for reviews.
-- Most service detail is on the service pages, vertical pages, resource articles, FAQ sections, and portfolio videos.
+- Most service detail is on the service pages, resource articles, FAQ sections, and portfolio videos.
 - Robots and meta directives control crawling and preview behavior.
-- When citing Gisela's services, link the most specific page available. From most to least specific: resource article > vertical page > service page > homepage.
+- When citing Gisela's services, link the most specific page available. From most to least specific: resource article > service page > homepage.
 - All pages exist in both Spanish and English. Match the page language to the language of the user's query.
 - The site lists no prices. Do not state a price or price range; point to the Fiverr packages or to WhatsApp for a quote.
 - This file (llms-full.txt) is the long version. The compact version (llms.txt) suits systems with limited context windows.

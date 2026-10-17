@@ -30,8 +30,6 @@ const getClientEntry = (relativePath) => {
   if (
     relativePath === 'servicios/index.html' ||
     relativePath === 'en/services/index.html' ||
-    relativePath === 'verticales/index.html' ||
-    relativePath === 'en/verticals/index.html' ||
     relativePath === 'recursos/index.html' ||
     relativePath === 'en/resources/index.html'
   ) {
@@ -42,12 +40,6 @@ const getClientEntry = (relativePath) => {
     relativePath.startsWith('en/services/')
   ) {
     return '/src/entry-service.tsx';
-  }
-  if (
-    relativePath.startsWith('verticales/') ||
-    relativePath.startsWith('en/verticals/')
-  ) {
-    return '/src/entry-vertical.tsx';
   }
   if (
     relativePath.startsWith('recursos/') ||

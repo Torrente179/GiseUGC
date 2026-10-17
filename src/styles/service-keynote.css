@@ -1740,6 +1740,20 @@ html:not(.dark) .kn--d { --kn-page: #fdfcfb; }
   .kn--d .knc-span {
     grid-column: 1 / -1;
   }
+
+  /* More services leads the index; at two columns it takes the full row and
+     splits its list in two, so it does not leave a hole beside it. */
+  .kn--d .knc-col--services {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+    align-content: start;
+  }
+
+  .kn--d .knc-col--services .knc-gh {
+    grid-column: 1 / -1;
+  }
 }
 
 /* ═════════════ Phone shell ═════════════ */

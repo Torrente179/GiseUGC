@@ -5,8 +5,6 @@ import {
   Briefcase,
   ChevronRight,
   Clapperboard,
-  Cpu,
-  Heart,
   Info,
   Languages,
   LayoutGrid,
@@ -16,9 +14,6 @@ import {
   Mic,
   Play,
   Repeat,
-  ShoppingBag,
-  Shirt,
-  Sparkles,
   Sun,
   CirclePlay,
   CircleDollarSign,
@@ -29,9 +24,7 @@ import type { ServiceLandingRouteData } from '@/data/landing-route-types';
 import {
   getResourcePath,
   getServicePath,
-  getVerticalPath,
   type ServicePageId,
-  type VerticalPageId,
   type ResourcePageId,
 } from '@/lib/locale-path';
 import { getClipById } from '@/lib/service-clips';
@@ -45,21 +38,12 @@ import type { KeynoteBeatProps, KeynoteLabelProps, KeynoteResourceLink } from '.
 type CloseBeatProps = KeynoteBeatProps & {
   labels: KeynoteLabelProps;
   updated: string;
-  relevantVerticals: ServiceLandingRouteData['relevantVerticals'];
   resourceLinks: KeynoteResourceLink[];
   relatedPages: ServiceLandingRouteData['relatedPages'];
   allOtherServices: ServiceLandingRouteData['allOtherServices'];
 };
 
 const pad = (value: number) => String(value).padStart(2, '0');
-
-const VERTICAL_ICON: Record<VerticalPageId, LucideIcon> = {
-  'beauty-ugc': Sparkles,
-  'fashion-ugc': Shirt,
-  'tech-saas-ugc': Cpu,
-  'ecommerce-ugc': ShoppingBag,
-  'lifestyle-wellness-ugc': Heart,
-};
 
 const RESOURCE_ICON: Record<ResourcePageId, LucideIcon> = {
   'what-is-ugc': Info,
@@ -83,39 +67,18 @@ const SERVICE_ICON: Record<ServicePageId, LucideIcon> = {
 type ExploreItem = { key: string; href: string; title: string; Icon: LucideIcon };
 type ExploreColumn = { key: string; label: string; items: ExploreItem[] };
 
-/** The three link lists. A service already shown as an "Also offered" tile is not listed again. */
+/** The link lists, More services first. A service already shown as an "Also offered" tile is not listed again. */
 const buildExploreColumns = ({
   labels,
   locale,
-  relevantVerticals,
   resourceLinks,
   allOtherServices,
   alsoOfferedIds,
-}: Pick<CloseBeatProps, 'labels' | 'relevantVerticals' | 'resourceLinks' | 'allOtherServices'> & {
+}: Pick<CloseBeatProps, 'labels' | 'resourceLinks' | 'allOtherServices'> & {
   locale: KeynoteBeatProps['locale'];
   alsoOfferedIds: ServicePageId[];
 }): ExploreColumn[] => {
   const columns: (ExploreColumn | false)[] = [
-    relevantVerticals.length > 0 && {
-      key: 'industry',
-      label: labels.byIndustry,
-      items: relevantVerticals.map((vertical) => ({
-        key: vertical.id,
-        href: getVerticalPath(vertical.id, locale),
-        title: vertical.navLabel,
-        Icon: VERTICAL_ICON[vertical.id],
-      })),
-    },
-    resourceLinks.length > 0 && {
-      key: 'resources',
-      label: labels.resources,
-      items: resourceLinks.map((resource) => ({
-        key: resource.id,
-        href: getResourcePath(resource.id, locale),
-        title: resource.label,
-        Icon: RESOURCE_ICON[resource.id],
-      })),
-    },
     (() => {
       const services = allOtherServices.filter((service) => !alsoOfferedIds.includes(service.id));
       return (
@@ -131,6 +94,16 @@ const buildExploreColumns = ({
         }
       );
     })(),
+    resourceLinks.length > 0 && {
+      key: 'resources',
+      label: labels.resources,
+      items: resourceLinks.map((resource) => ({
+        key: resource.id,
+        href: getResourcePath(resource.id, locale),
+        title: resource.label,
+        Icon: RESOURCE_ICON[resource.id],
+      })),
+    },
   ];
   return columns.filter((column): column is ExploreColumn => Boolean(column));
 };
@@ -201,7 +174,6 @@ const CloseBeat = ({
   titleId,
   labels,
   updated,
-  relevantVerticals,
   resourceLinks,
   relatedPages,
   allOtherServices,
@@ -222,12 +194,20 @@ const CloseBeat = ({
   const exploreColumns = buildExploreColumns({
     labels,
     locale,
-    relevantVerticals,
     resourceLinks,
     allOtherServices,
     alsoOfferedIds: related.map((item) => item.id),
   });
   const exploreTotal = exploreColumns.reduce((sum, column) => sum + column.items.length, 0);
+
+  // Desktop index order: More services, then the "Also offered" tiles, then the other lists.
+  const [firstColumn, ...otherColumns] = exploreColumns;
+  const leadsWithServices = firstColumn?.key === 'services';
+  const indexBlocks: ({ kind: 'also' } | { kind: 'column'; column: ExploreColumn })[] = [
+    ...(leadsWithServices ? [{ kind: 'column' as const, column: firstColumn }] : []),
+    ...(related.length > 0 ? [{ kind: 'also' as const }] : []),
+    ...(leadsWithServices ? otherColumns : exploreColumns).map((column) => ({ kind: 'column' as const, column })),
+  ];
 
   // The CTA opens the same "Escríbeme" choice as the rest of the site (WhatsApp, Telegram),
   // with the service named in the message. Without scripts it is still a link to the footer's contact block.
@@ -357,35 +337,36 @@ const CloseBeat = ({
             </div>
 
             <nav className="knc-index" aria-label={labels.explore}>
-              {related.length > 0 ? (
-                <div className={related.length > 1 ? 'knc-span' : 'knc-span knc-span--one'}>
-                  <div className="knc-gh">
-                    <p className="knc-label">
-                      <b>01</b>
-                      {labels.alsoOffered}
-                    </p>
-                    <span className="knc-count">{pad(related.length)}</span>
+              {indexBlocks.map((block, index) =>
+                block.kind === 'also' ? (
+                  <div key="also" className={related.length > 1 ? 'knc-span' : 'knc-span knc-span--one'}>
+                    <div className="knc-gh">
+                      <p className="knc-label">
+                        <b>{pad(index + 1)}</b>
+                        {labels.alsoOffered}
+                      </p>
+                      <span className="knc-count">{pad(related.length)}</span>
+                    </div>
+                    {related.map(tile)}
                   </div>
-                  {related.map(tile)}
-                </div>
-              ) : null}
-              {exploreColumns.map((column, index) => (
-                <div key={column.key}>
-                  <div className="knc-gh">
-                    <p className="knc-label">
-                      <b>{pad(index + 2)}</b>
-                      {column.label}
-                    </p>
-                    <span className="knc-count">{pad(column.items.length)}</span>
+                ) : (
+                  <div key={block.column.key} className={block.column.key === 'services' ? 'knc-col--services' : undefined}>
+                    <div className="knc-gh">
+                      <p className="knc-label">
+                        <b>{pad(index + 1)}</b>
+                        {block.column.label}
+                      </p>
+                      <span className="knc-count">{pad(block.column.items.length)}</span>
+                    </div>
+                    {block.column.items.map(({ key, href, title }) => (
+                      <Link key={key} to={href} className="knc-row">
+                        <span>{title}</span>
+                        <ArrowRight aria-hidden="true" />
+                      </Link>
+                    ))}
                   </div>
-                  {column.items.map(({ key, href, title }) => (
-                    <Link key={key} to={href} className="knc-row">
-                      <span>{title}</span>
-                      <ArrowRight aria-hidden="true" />
-                    </Link>
-                  ))}
-                </div>
-              ))}
+                ),
+              )}
             </nav>
           </>
         )}
