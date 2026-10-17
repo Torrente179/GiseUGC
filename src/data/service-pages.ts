@@ -487,14 +487,14 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Videos donde explico una oferta a cámara, de principio a fin.',
       featuredExamples: [
         {
-          clipId: 1010,
-          title: 'Reporte de noticias internacionales',
-          description: 'Presento elecciones, economía y cifras en formato de noticiero.',
-        },
-        {
           clipId: 2,
           title: 'Portavoz para Agenda Bot',
           description: 'Hablo directo a cámara: presento la empresa, el problema que resuelve y la solución, y cierro con un llamado a la acción.',
+        },
+        {
+          clipId: 1006,
+          title: 'Reel de portavoz para varias marcas',
+          description: 'Hablo en nombre de un canal de música, una inmobiliaria, una empresa agrícola y una asesoría para abrir empresas en Estados Unidos.',
         },
         {
           clipId: 1001,
@@ -510,11 +510,6 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           clipId: 1014,
           title: 'Venta de lotes en Pensilvania',
           description: 'Hablo como representante de la empresa y presento un lote, sus comodidades y un llamado a escribir.',
-        },
-        {
-          clipId: 1007,
-          title: 'Presentadora en un noticiero',
-          description: 'Detrás de cámaras en el set de Minuto 30: la cuenta regresiva y el avance informativo en vivo.',
         },
         {
           clipId: 1005,
@@ -638,14 +633,14 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Videos where I explain an offer on camera from start to finish.',
       featuredExamples: [
         {
-          clipId: 1010,
-          title: 'International news report',
-          description: 'Elections, the economy, and key figures, presented in a newscast format.',
-        },
-        {
           clipId: 2,
           title: 'Spokesperson for Agenda Bot',
           description: 'Straight to camera: I introduce the company, the problem it solves, and the solution, then close with a call to action.',
+        },
+        {
+          clipId: 1006,
+          title: 'Spokesperson reel for several brands',
+          description: 'I speak for a music channel, a real estate firm, an agriculture company, and a firm that helps you open a US company.',
         },
         {
           clipId: 1001,
@@ -661,11 +656,6 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           clipId: 1014,
           title: 'Land sales in Pennsylvania',
           description: 'I speak as the company’s rep and present a lot, its amenities, and a call to get in touch.',
-        },
-        {
-          clipId: 1007,
-          title: 'News presenter on set',
-          description: 'Behind the scenes on the Minuto 30 set: the countdown and the news update, live.',
         },
         {
           clipId: 1005,
@@ -821,9 +811,9 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'Una historia corta (el regalo que olvidé) que termina en la solución: pedir por WhatsApp.',
         },
         {
-          clipId: 1003,
-          title: 'Anuncio de rotulación de vehículos',
-          description: 'Video corto con pantalla verde, mensaje claro y cierre en español. Listo para Meta Ads.',
+          clipId: 1016,
+          title: 'Anuncio de una app para tener dos WhatsApp',
+          description: 'Hook con una pregunta, lo que resuelve la app y un CTA para descargarla. Grabado tipo selfie, en formato nativo.',
         },
         {
           clipId: 10,
@@ -972,9 +962,9 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'A short story (the gift I forgot) that ends with the solution: ordering through WhatsApp.',
         },
         {
-          clipId: 1003,
-          title: 'Vehicle wrap ad',
-          description: 'A short green screen video with a clear message and a close in Spanish. Ready for Meta ads.',
+          clipId: 1016,
+          title: 'Ad for a second WhatsApp account app',
+          description: 'A question as the hook, what the app solves, and a CTA to download it. Shot selfie-style, in native format.',
         },
         {
           clipId: 10,
@@ -1100,11 +1090,6 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'Cuento mi experiencia con la creatina y los beneficios que noté, sin que suene a infomercial.',
         },
         {
-          clipId: 1004,
-          title: 'Reseña de un restaurante colombiano',
-          description: 'Reseña de Parceros Street Food en Calgary: los platos, la experiencia y mi recomendación, con un tono espontáneo.',
-        },
-        {
           clipId: 3,
           title: 'Reseña de los voicebots de Calvotia',
           description: 'Cuento cómo cambió mi semana desde que el bot atiende las llamadas, y por qué lo recomiendo.',
@@ -1118,6 +1103,11 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           clipId: 1,
           title: 'Reseña de ropa de Temu',
           description: 'Me pruebo varios outfits y doy mi opinión con un tono cercano. Sirve para marcas que venden en redes.',
+        },
+        {
+          clipId: 1015,
+          title: 'Testimonio de una app de domicilios',
+          description: 'Cuento cómo la app me salvó el día que olvidé el regalo de mi suegra, y por qué la recomiendo.',
         },
         {
           clipId: 1013,
@@ -1246,11 +1236,6 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'I talk about my experience with creatine and the benefits I noticed, without sounding like an infomercial.',
         },
         {
-          clipId: 1004,
-          title: 'Colombian restaurant review',
-          description: 'A review of Parceros Street Food in Calgary: the food, the experience, and my recommendation, in a casual tone.',
-        },
-        {
           clipId: 3,
           title: 'Calvotia voicebot review',
           description: 'I explain how my week changed once the bot started taking calls, and why I recommend it.',
@@ -1264,6 +1249,11 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           clipId: 1,
           title: 'Temu clothing review',
           description: 'I try on a few outfits and give my honest take in a relaxed tone. Works well for brands that sell on social.',
+        },
+        {
+          clipId: 1015,
+          title: 'Delivery app testimonial',
+          description: 'I tell how the app saved me the day I forgot my mother-in-law’s gift, and why I recommend it.',
         },
         {
           clipId: 1013,
@@ -1394,24 +1384,9 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'Una conversación real con un bot de Calvotia para un concesionario de autos. Se ve el producto funcionando en tiempo real.',
         },
         {
-          clipId: 3,
-          title: 'Reseña y demo de un voicebot (Calvotia)',
-          description: 'Empieza como un testimonial en un café y pasa a explicar el producto y sus beneficios.',
-        },
-        {
-          clipId: 1009,
-          title: 'Bot de ventas por WhatsApp',
-          description: 'Explico qué hace el bot (responder al instante, todo el día) y cómo pedir una demo.',
-        },
-        {
-          clipId: 7,
-          title: 'Servicios de IA para negocios (Calvotia)',
-          description: 'Presento tres bots en uno: agenda, llamadas y WhatsApp, con el producto en un contexto real.',
-        },
-        {
-          clipId: 1016,
-          title: 'App para una segunda cuenta de WhatsApp',
-          description: 'Explico en pocos segundos qué hace la app y los pasos para empezar a usarla.',
+          clipId: 9,
+          title: 'Los bots de Calvotia, en la pantalla',
+          description: 'Mientras la voz en off cuenta qué hace cada bot, se ve la app en mi celular mientras la uso.',
         },
         {
           clipId: 1011,
@@ -1535,24 +1510,9 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           description: 'A real conversation with a Calvotia bot built for a car dealership. You see the product working in real time.',
         },
         {
-          clipId: 3,
-          title: 'Voicebot review and demo (Calvotia)',
-          description: 'Starts as a testimonial in a café and moves into explaining the product and its benefits.',
-        },
-        {
-          clipId: 1009,
-          title: 'WhatsApp sales bot',
-          description: 'I explain what the bot does (instant replies, around the clock) and how to request a demo.',
-        },
-        {
-          clipId: 7,
-          title: 'AI services for businesses (Calvotia)',
-          description: 'Three bots in one: scheduling, calls, and WhatsApp, with the product shown in a real setting.',
-        },
-        {
-          clipId: 1016,
-          title: 'Second WhatsApp account app',
-          description: 'In a few seconds I explain what the app does and the steps to start using it.',
+          clipId: 9,
+          title: 'Calvotia’s bots, on screen',
+          description: 'While the voiceover explains what each bot does, you see the app on my phone as I use it.',
         },
         {
           clipId: 1011,
@@ -1967,11 +1927,6 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Productos y lugares en momentos reales, con un tono natural.',
       featuredExamples: [
         {
-          clipId: 1002,
-          title: 'Contenido orgánico desde España',
-          description: 'Un relato de viaje sobre la cultura española en formato TikTok: mi opinión y una historia contada en primera persona.',
-        },
-        {
           clipId: 8,
           title: 'Reseña de perfumes Chop X',
           description: '“Mi pequeño lujo diario”: fragancias en el día a día, con humor y personalidad.',
@@ -2000,6 +1955,11 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           clipId: 1015,
           title: 'Una compra de último minuto',
           description: 'Una situación real del día a día (el cumpleaños de mi suegra) en la que la app me salva.',
+        },
+        {
+          clipId: 1002,
+          title: 'Contenido orgánico desde España',
+          description: 'Un relato de viaje sobre la cultura española en formato TikTok: mi opinión y una historia contada en primera persona.',
         },
       ],
       faqTitle: 'Preguntas frecuentes sobre UGC lifestyle',
@@ -2113,11 +2073,6 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
       featuredIntro: 'Products and places in real moments, with a natural tone.',
       featuredExamples: [
         {
-          clipId: 1002,
-          title: 'Organic content from Spain',
-          description: 'A travel story about Spanish culture in TikTok format: my own opinions, told in first person.',
-        },
-        {
           clipId: 8,
           title: 'Chop X perfume review',
           description: '“My little daily luxury”: fragrances in everyday life, with humor and personality.',
@@ -2146,6 +2101,11 @@ const SERVICE_PAGE_CONTENT: LocalizedServicePageMap = {
           clipId: 1015,
           title: 'A last-minute gift',
           description: 'A real everyday situation (my mother-in-law’s birthday) where the app saves the day.',
+        },
+        {
+          clipId: 1002,
+          title: 'Organic content from Spain',
+          description: 'A travel story about Spanish culture in TikTok format: my own opinions, told in first person.',
         },
       ],
       faqTitle: 'Common questions about lifestyle UGC',

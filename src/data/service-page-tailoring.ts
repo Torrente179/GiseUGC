@@ -25,12 +25,12 @@ export type ServiceTailoring = {
  */
 export const SERVICE_FORMAT_CLIP_IDS: Record<ServicePageId, [number, number, number, number]> = {
   'bilingual-ugc-creator': [1001, 1008, 4, 1006],
-  'spokesperson-videos': [1005, 1010, 2, 1008],
-  'ugc-ads-tiktok-meta': [1001, 1009, 1003, 4],
-  'ugc-testimonials-reviews': [4, 1013, 1, 1004],
-  'ugc-product-demo': [1008, 1011, 3, 7],
-  'ugc-problem-solution': [1009, 1001, 5, 1012],
-  'ugc-lifestyle': [8, 1002, 1, 10],
+  'spokesperson-videos': [1005, 1014, 2, 1008],
+  'ugc-ads-tiktok-meta': [1001, 1009, 1008, 4],
+  'ugc-testimonials-reviews': [4, 1013, 1, 3],
+  'ugc-product-demo': [1008, 9, 1011, 4],
+  'ugc-problem-solution': [1009, 1001, 4, 1012],
+  'ugc-lifestyle': [8, 9, 1, 1002],
   'ugc-broll-footage': [4, 9, 7, 1],
 };
 

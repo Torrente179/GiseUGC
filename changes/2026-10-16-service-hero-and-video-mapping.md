@@ -25,15 +25,16 @@ where one fits, and never a raw green-screen take or a sub-500 px clip.
 | Service | Clips, hero first |
 |---|---|
 | Creadora UGC bilingüe | 1006, 1001, 1010, 4, 1008, 1002, 1004, 6 |
-| Videos de portavoz | 1010, 2, 1001, 5, 1014, 1007, 1005, 1003 |
-| UGC Ads TikTok y Meta | 1001, 1009, 4, 8, 7, 1015, 1003, 10 |
-| Testimoniales y reseñas | 4, 1004, 3, 8, 1, 1013, 1012 |
-| Demos de producto | 1008, 3, 1009, 7, 1016, 1011 |
+| Videos de portavoz | 2, 1006, 1001, 5, 1014, 1005, 1003 (see the follow-ups below; was 1010, 2, 1001, 5, 1014, 1007, 1005, 1003) |
+| UGC Ads TikTok y Meta | 1001, 1009, 4, 8, 7, 1015, 1016, 10 (was 1003 in place of 1016) |
+| Testimoniales y reseñas | 4, 3, 8, 1, 1015, 1013, 1012 (was 4, 1004, 3, 8, 1, 1013, 1012) |
+| Demos de producto | 1008, 9, 1011 (was 1008, 3, 1009, 7, 1016, 1011) |
 | Problema-solución | 1009, 1001, 2, 5, 1015, 3, 1012 |
-| Lifestyle | 1002, 8, 1, 4, 7, 9, 1015 |
-| B-roll | 9, 7, 4, 1 (see the follow-up below; was 1002, 1006, 1007, 9, 10) |
+| Lifestyle | 8, 1, 4, 7, 9, 1015, 1002 (was 1002 first) |
+| B-roll | 9, 7, 4, 1 (was 1002, 1006, 1007, 9, 10) |
 
-All 26 clips are used. The transcripts changed some earlier calls:
+All 26 clips were used in this first mapping; since the audit below, 1007 is
+on no service page. The transcripts changed some earlier calls:
 
 - **1007 (Minuto 30):** a full newscast, so it went to spokesperson.
 - **10 (7 s):** a hook line, so it went to ads.
@@ -149,3 +150,79 @@ B-roll. The three silent clothing showcases would fit best, but they exist
 only as 480p mains on R2, with no mobile or preview renditions, so they are
 not in the catalog.
 
+
+## Follow-up: the other seven pages, checked against the footage
+
+**Date:** 2026-10-17
+
+The first mapping came from transcripts. This pass checked each clip against
+six to twelve frames as well, then compared it with its page's own promise
+(hero title, deliverables, "Te conviene si" and "No te conviene si"). Only
+clear mismatches changed. The user approved the table before the edit.
+
+What the frames showed that the transcripts did not:
+
+- **3, 1009, 1015 and 1016** are talking to camera. The product is never on
+  screen.
+- **7** is her typing on a laptop. The screen is never visible.
+- **9** shows the bots' app on her phone screen.
+- **1003, 1004 and 1005** are raw green-screen takes. 1004 is a restaurant
+  host segment, not a visit.
+- **1010 and 1007** are newscasts, with no brand and no offer.
+- **1001**'s original on R2 is 4K and **1008**'s is 1080p (probed with
+  ffprobe).
+
+The changes, by page:
+
+- **Videos de portavoz** (the page sells a brand's offer explained to
+  camera):
+  - The newscasts 1010 and 1007 are out. 1010 stays on the bilingual page.
+    1007 is now on no service page.
+  - The new hero is 2 (Agenda Bot). It is 720p. The 1080p clips that fit,
+    1006 and 1009, already open other pages, and the close's "More services"
+    tiles show each page's hero poster, so the heroes stay distinct.
+  - 1006 (spokesperson reel for four brands) is added.
+- **UGC Ads:** 1003 is out. It is a raw green-screen take, but its copy said
+  "Listo para Meta Ads". 1016 (an app-install ad: question hook, benefit,
+  download CTA) is added from the demo page.
+- **Testimoniales y reseñas:** 1004 is out. Nothing is used or tried on
+  camera, but the page promises "Uso tu producto… natural, no actuado". 1015
+  (Tenky, told in first person) is added.
+- **Demos de producto:** the intro promises the product working on screen.
+  - 3, 1009, 7 and 1016 are out.
+  - 9 is added.
+  - The page now shows 1008, 9 and 1011, the only real demos in the catalog.
+- **Lifestyle:** the hero changes from 1002 to 8. 1002 has no product, and
+  the page promises "Tu producto en escenas reales". 1002 moves to the end.
+  No 1080p lifestyle clip shows a product.
+- **Problema-solución** and **Creadora UGC bilingüe:** the examples are
+  unchanged.
+
+The Formats phones (`SERVICE_FORMAT_CLIP_IDS`), in deliverable order:
+
+| Page | Phones | Changed |
+|---|---|---|
+| Videos de portavoz | 1005, 1014, 2, 1008 | 1010 → 1014 |
+| UGC Ads | 1001, 1009, 1008, 4 | 1003 → 1008 on "Anuncios con demo" |
+| Testimoniales | 4, 1013, 1, 3 | 1004 → 3 on "Reseña comparativa" (3 is a before/after story) |
+| Demos de producto | 1008, 9, 1011, 4 | was 1008, 1011, 3, 7 |
+| Problema-solución | 1009, 1001, 4, 1012 | 5 → 4 on "Problema-solución con demo" |
+| Lifestyle | 8, 9, 1, 1002 | 1002 → 9 on "Escenas del día a día", 10 → 1002 on "Contenido para el feed" |
+
+Clip 4 shows on a phone without being in that page's examples on the ads,
+demo and problem-solution pages. On the demo page, that is because the test
+needs four distinct phones and only three clips are real demos. Clip 4 is a
+supplement on a tech page, but the product is used on camera.
+
+New ES/EN titles and descriptions:
+
+- 1006 on spokesperson.
+- 1016 on ads.
+- 1015 on testimonials.
+- 9 on demo.
+
+Every clip that stayed on a page kept its copy. The video sitemap and
+VideoObject schema follow the examples lists.
+
+Still open: every clip in the catalog is in Spanish. The bilingual page has no
+English example to show.
