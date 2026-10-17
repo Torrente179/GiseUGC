@@ -1,12 +1,17 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Mail } from 'lucide-react';
+import { ArrowRight, Mail } from 'lucide-react';
 import SiteFooter from '@/components/SiteFooter';
 import Navbar from '@/components/Navbar';
 import PageSeo from '@/components/PageSeo';
+import { RevealSection } from '@/components/motion/RevealSection';
 import { getLegalPageContent } from '@/data/legal-pages';
 import { getHomePath, type LegalPageId, type SiteLocale } from '@/lib/locale-path';
 import { CONTENT_DATES } from '@/data/content-dates';
+import { useActiveSection } from '@/hooks/use-active-section';
+import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
+import '@/styles/templates.css';
+import '@/styles/guide.css';
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
@@ -24,7 +29,6 @@ const localeLabels = {
     emailCta: 'Enviar un correo',
     counterpart: 'Página relacionada',
     audience: 'Mercado principal',
-    summary: 'Resumen',
     breadcrumbs: 'Ruta de navegación',
   },
   en: {
@@ -34,14 +38,28 @@ const localeLabels = {
     emailCta: 'Send an email',
     counterpart: 'Related page',
     audience: 'Primary market',
-    summary: 'Summary',
     breadcrumbs: 'Breadcrumbs',
   },
 } as const;
 
+const pad = (value: number) => String(value).padStart(2, '0');
+
+/* The chapter number is drawn on its own, so "1. Alcance" reads "Alcance". */
+const sectionTitle = (title: string) => title.replace(/^\d+\.\s*/u, '');
+
+/**
+ * Privacy policy and terms (ES + EN) in the guide template's language: hero,
+ * sticky contents panel, numbered chapters and the close card. Styles:
+ * src/styles/guide.css.
+ */
 const LegalPage = ({ pageId, locale }: LegalPageProps) => {
   const page = getLegalPageContent(pageId, locale);
   const labels = localeLabels[locale];
+  const { handleHashLinkClick } = useHashlessSectionNavigation();
+  const activeSection = useActiveSection(
+    page.sections.map((section) => section.id),
+    true,
+  );
   const canonical = buildUrl(page.path);
   const alternate = buildUrl(page.alternatePath);
   const homeCanonical = buildUrl(getHomePath(locale));
@@ -108,192 +126,128 @@ const LegalPage = ({ pageId, locale }: LegalPageProps) => {
       />
       <Navbar />
 
-      <main className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[32rem] bg-[radial-gradient(circle_at_top_left,hsla(var(--primary)/0.16),transparent_45%),radial-gradient(circle_at_top_right,hsla(var(--accent)/0.14),transparent_40%)]" />
+      <main className="gd">
+        <RevealSection className="gd-hero">
+          <div className="gd-wrap">
+            <nav className="gd-crumbs" aria-label={labels.breadcrumbs}>
+              <Link to={getHomePath(locale)}>{labels.home}</Link>
+              <span aria-hidden="true">/</span>
+              <span aria-current="page">{page.breadcrumbLabel}</span>
+            </nav>
+            <div className="gd-hero-head">
+              <p className="gd-pill">
+                <span className="gd-dot" aria-hidden="true" />
+                {page.eyebrow}
+              </p>
+              <h1 className="gd-h1 gd-h1--long section-label">{page.title}</h1>
+              <p className="gd-lead">{page.intro}</p>
+              <p className="gd-updated">
+                {page.updatedDateLabel}
+                <span aria-hidden="true"> · </span>
+                {page.effectiveDateLabel}
+              </p>
+            </div>
+            <ul className="gd-points gd-points--pairs">
+              {page.summaryItems.map((item, index) => (
+                <li key={item}>
+                  <span className="gd-k">{pad(index + 1)}</span>
+                  <span className="gd-point">{item}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="gd-note gd-note--wide">
+              <p className="gd-k gd-k--teal">{labels.audience}</p>
+              <p className="gd-p">{page.audienceNote}</p>
+            </div>
+          </div>
+        </RevealSection>
 
-        <section className="studio-section pt-28 md:pt-32 lg:pt-36">
-          <div className="studio-container">
-            <nav
-              aria-label={labels.breadcrumbs}
-              className="mb-8 flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground"
-            >
-              <Link to={getHomePath(locale)} className="transition-colors hover:text-primary">
-                {labels.home}
-              </Link>
-              <span>/</span>
-              <span className="text-foreground/70">{page.breadcrumbLabel}</span>
+        <div className="gd-wrap gd-body gd-body--toc">
+          <nav className="gd-toc" aria-label={page.tocTitle}>
+            <p className="gd-k">{labels.contents}</p>
+            <ol>
+              {page.sections.map((section, index) => (
+                <li key={section.id}>
+                  <a
+                    href={`#${section.id}`}
+                    onClick={handleHashLinkClick}
+                    aria-current={section.id === activeSection ? 'true' : undefined}
+                  >
+                    <span>{pad(index + 1)}</span>
+                    {sectionTitle(section.title)}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+
+          <article className="gd-article">
+            {page.sections.map((section, index) => (
+              <RevealSection key={section.id} className="gd-ch" id={section.id}>
+                <span className="gd-k gd-k--teal" aria-hidden="true">
+                  {pad(index + 1)}
+                </span>
+                <h2 className="gd-h2 section-label">{sectionTitle(section.title)}</h2>
+                {(section.paragraphs ?? []).map((paragraph) => (
+                  <p key={paragraph} className="gd-p">
+                    {paragraph}
+                  </p>
+                ))}
+                {section.bullets?.length ? (
+                  <ul className="gd-list">
+                    {section.bullets.map((bullet) => (
+                      <li key={bullet}>{bullet}</li>
+                    ))}
+                  </ul>
+                ) : null}
+                {section.note ? (
+                  <div className="gd-note">
+                    <p className="gd-p">{section.note}</p>
+                  </div>
+                ) : null}
+              </RevealSection>
+            ))}
+          </article>
+        </div>
+
+        <RevealSection className="gd-close">
+          <div className="gd-orb gd-orb--a" aria-hidden="true" />
+          <div className="gd-orb gd-orb--b" aria-hidden="true" />
+          <div className="gd-wrap">
+            <div className="gd-close-top">
+              <p className="gd-pill">
+                <span className="gd-dot" aria-hidden="true" />
+                {labels.contact}
+              </p>
+              <h2 className="gd-h2 gd-h2--xl section-label">{page.contactTitle}</h2>
+              <p className="gd-lead">{page.contactBody}</p>
+              <div className="gd-close-actions">
+                <a className="gd-cta" href={`mailto:${page.contactEmail}`}>
+                  {labels.emailCta}
+                  <i aria-hidden="true">
+                    <Mail />
+                  </i>
+                </a>
+                <p className="gd-updated">{page.contactEmail}</p>
+              </div>
+            </div>
+
+            <nav className="gd-index gd-index--single" aria-label={labels.counterpart}>
+              <div>
+                <div className="gd-gh">
+                  <p className="gd-k">{labels.counterpart}</p>
+                  <span className="gd-k">01</span>
+                </div>
+                <Link to={page.counterpartPath} className="gd-row">
+                  <span>{page.counterpartLabel}</span>
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              </div>
             </nav>
 
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.64fr)_minmax(320px,0.36fr)] lg:gap-10">
-              <div className="space-y-6">
-                <p className="section-label text-muted-foreground">{page.eyebrow}</p>
-                <h1 className="route-title-accent type-marketing-display max-w-[26ch] text-[1.75rem] font-semibold leading-[1.14] tracking-tight-marketing md:text-[2rem] lg:text-[2.25rem]">
-                  {page.title}
-                </h1>
-                <p className="max-w-3xl text-base font-light leading-[1.9] text-foreground/78 md:text-[1.04rem]">
-                  {page.intro}
-                </p>
-                <div className="rounded-[1.5rem] border border-border/70 bg-card/70 px-5 py-4 shadow-[0_24px_48px_-40px_hsl(var(--foreground)/0.55)] backdrop-blur-sm">
-                  <p className="section-label mb-2 text-muted-foreground">{labels.audience}</p>
-                  <p className="text-sm font-light leading-[1.85] text-foreground/78 md:text-[0.98rem]">
-                    {page.audienceNote}
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-2.5">
-                  {page.summaryItems.map((item) => (
-                    <span
-                      key={item}
-                      className="inline-flex rounded-full border border-border/70 bg-background/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground/72 shadow-[0_10px_30px_-24px_hsl(var(--foreground)/0.5)]"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <aside className="studio-panel h-fit p-6 md:p-7 lg:sticky lg:top-28">
-                <div className="space-y-6">
-                  <div>
-                    <p className="section-label mb-3 text-muted-foreground">{labels.contents}</p>
-                    <nav aria-label={page.tocTitle}>
-                      <ul className="space-y-3">
-                        {page.sections.map((section) => (
-                          <li key={section.id}>
-                            <a
-                              href={`#${section.id}`}
-                              className="block text-sm font-medium leading-[1.55] text-foreground/76 transition-colors hover:text-primary"
-                            >
-                              {section.title}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </nav>
-                  </div>
-
-                  <div className="rounded-[1.4rem] border border-border/70 bg-background/72 p-5">
-                    <p className="section-label mb-3 text-muted-foreground">{labels.contact}</p>
-                    <h2 className="type-marketing-display text-[1.65rem] font-semibold leading-[1.1] tracking-tight-marketing">
-                      {page.contactTitle}
-                    </h2>
-                    <p className="mt-3 text-sm font-light leading-[1.85] text-foreground/75">
-                      {page.contactBody}
-                    </p>
-                    <a
-                      href={`mailto:${page.contactEmail}`}
-                      className="btn-primary-nordic btn-primary-nordic--lg mt-5"
-                    >
-                      {labels.emailCta}
-                      <Mail className="h-4 w-4" />
-                    </a>
-                  </div>
-
-                  <div className="rounded-[1.4rem] border border-border/70 bg-background/52 p-5">
-                    <p className="section-label mb-3 text-muted-foreground">{labels.counterpart}</p>
-                    <Link
-                      to={page.counterpartPath}
-                      className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-primary transition-colors hover:text-foreground"
-                    >
-                      {page.counterpartLabel}
-                      <ArrowUpRight className="h-4 w-4" />
-                    </Link>
-                    <p className="mt-4 text-xs font-light leading-[1.75] text-muted-foreground">
-                      {page.updatedDateLabel}
-                      <br />
-                      {page.effectiveDateLabel}
-                    </p>
-                  </div>
-                </div>
-              </aside>
-            </div>
+            <p className="gd-fine">{page.disclaimer}</p>
           </div>
-        </section>
-
-        <section className="studio-section-tight pb-8 md:pb-10">
-          <div className="studio-container">
-            <div className="space-y-6">
-              {page.sections.map((section, index) => (
-                <section
-                  key={section.id}
-                  id={section.id}
-                  className="studio-panel scroll-mt-28 p-6 md:p-8 lg:p-10"
-                >
-                  <div className="grid gap-6 lg:grid-cols-[minmax(0,0.2fr)_minmax(0,0.8fr)] lg:gap-10">
-                    <div className="lg:pt-1">
-                      <p className="section-label mb-2 text-muted-foreground">
-                        {String(index + 1).padStart(2, '0')}
-                      </p>
-                      <div className="signature-line w-20" />
-                    </div>
-
-                    <div>
-                      <h2 className="type-marketing-display text-[1.5rem] font-semibold leading-[1.14] tracking-tight-marketing md:text-[1.75rem]">
-                        {section.title}
-                      </h2>
-
-                      {section.paragraphs?.length ? (
-                        <div className="mt-5 space-y-4 text-sm font-light leading-[1.92] text-foreground/80 md:text-[1rem]">
-                          {section.paragraphs.map((paragraph) => (
-                            <p key={paragraph}>{paragraph}</p>
-                          ))}
-                        </div>
-                      ) : null}
-
-                      {section.bullets?.length ? (
-                        <ul className="mt-5 space-y-3 pl-5 text-sm font-light leading-[1.85] text-foreground/80 marker:text-primary md:text-[0.98rem]">
-                          {section.bullets.map((bullet) => (
-                            <li key={bullet}>{bullet}</li>
-                          ))}
-                        </ul>
-                      ) : null}
-
-                      {section.note ? (
-                        <div className="mt-6 rounded-[1.35rem] border border-primary/20 bg-primary/6 px-5 py-4 text-sm font-light leading-[1.8] text-foreground/78">
-                          {section.note}
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                </section>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="studio-section-tight pb-16 md:pb-20">
-          <div className="studio-container">
-            <div className="studio-panel overflow-hidden p-6 md:p-8 lg:p-10">
-              <div className="grid gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(220px,0.3fr)] lg:items-end">
-                <div>
-                  <p className="section-label mb-3 text-muted-foreground">{labels.summary}</p>
-                  <h2 className="type-marketing-display max-w-[24ch] text-[1.5rem] font-semibold leading-[1.14] tracking-tight-marketing md:text-[1.75rem]">
-                    {page.contactTitle}
-                  </h2>
-                  <p className="mt-4 max-w-3xl text-sm font-light leading-[1.9] text-foreground/76 md:text-[1rem]">
-                    {page.disclaimer}
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-3 lg:items-end">
-                  <a
-                    href={`mailto:${page.contactEmail}`}
-                    className="btn-primary-nordic btn-primary-nordic--lg"
-                  >
-                    {page.contactEmail}
-                    <Mail className="h-4 w-4" />
-                  </a>
-                  <Link
-                    to={page.counterpartPath}
-                    className="btn-secondary-nordic btn-surface-nordic--lg"
-                  >
-                    {page.counterpartLabel}
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        </RevealSection>
       </main>
 
       <SiteFooter />

@@ -2,7 +2,8 @@
  * Guides (/recursos/*, /en/resources/*): the service pages' language applied
  * to a long read. Same tokens as src/styles/service-keynote.css (linen ground,
  * ebony ink, warm "say" grey, the teal gradient), DM Sans only, the close card
- * and its index rows. Component: src/components/ResourcePage.tsx.
+ * and its index rows. Components: src/components/ResourcePage.tsx, and the
+ * same pieces on the hub indexes (HubPage.tsx) and legal pages (LegalPage.tsx).
  *
  * Plain CSS with literal class names, outside @layer, so Tailwind's purge
  * cannot drop a rule. Headings carry `section-label` only as a hook that takes
@@ -264,13 +265,6 @@
   box-shadow: var(--gd-cta-sh);
 }
 
-.gd .gd-cta i {
-  width: 44px;
-  height: 44px;
-  background: #0e1114;
-  color: #fdfcfb;
-}
-
 .gd .gd-want i,
 .gd .gd-cta i {
   display: grid;
@@ -279,6 +273,14 @@
   height: 38px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.16);
+}
+
+/* After the shared rule, so the close keeps the service close's dark disc. */
+.gd .gd-cta i {
+  width: 44px;
+  height: 44px;
+  background: #0e1114;
+  color: #fdfcfb;
 }
 
 .gd .gd-want svg,
@@ -720,6 +722,124 @@
   }
 }
 
+/* ── Hub indexes (/servicios/, /recursos/ + EN) ───────────────────── */
+/* The child list is the close's index rows at full width: one header across
+   both columns, each row a number, the title, its blurb and the arrow. */
+.gd-hub {
+  padding: 8px 0 120px;
+}
+
+.gd-hub-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+}
+
+.gd .gd-row--hub {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 20px;
+  align-items: start;
+  gap: 14px;
+  height: 100%;
+  min-height: 0;
+  padding: 26px 0 28px;
+}
+
+.gd-row--hub > .gd-k { padding-top: 6px; }
+.gd .gd-row--hub svg { margin-top: 3px; }
+
+.gd-row-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.gd .gd-row-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: var(--gd-ink);
+}
+
+.gd .gd-row-blurb {
+  max-width: 34rem;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+  color: var(--gd-body);
+  text-wrap: pretty;
+}
+
+/* The services hub's close leads with the Fiverr proof line as a "say" line. */
+.gd .gd-proof {
+  max-width: 40rem;
+}
+
+.gd .gd-proof a {
+  color: var(--gd-ink);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--gd-teal) 55%, transparent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.16em;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.gd .gd-proof a:hover { text-decoration-color: var(--gd-teal); }
+
+.gd-index--single {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 620px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* ── Legal pages (privacy, terms + EN) ────────────────────────────── */
+.gd .gd-h1--long {
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.gd-hero-head .gd-h1--long { max-width: 20ch; }
+
+.gd-points--pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.gd-points--pairs .gd-point { min-width: 0; overflow-wrap: anywhere; }
+
+.gd-note {
+  padding: 22px 26px;
+  border-radius: 20px;
+  background: var(--gd-card);
+  box-shadow: var(--gd-card-edge);
+}
+
+.gd .gd-note .gd-p {
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.gd-note--wide {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 24px;
+  margin-top: 16px;
+  padding: 26px;
+  border-radius: 24px;
+}
+
+.gd .gd-fine {
+  max-width: 44rem;
+  margin: 56px auto 0;
+  font-size: 13px;
+  line-height: 1.65;
+  text-align: center;
+  color: color-mix(in srgb, var(--gd-body) 80%, transparent);
+  text-wrap: pretty;
+}
+
 /* ── Tablet ───────────────────────────────────────────────────────── */
 @media (max-width: 1100px) {
   .gd-body--toc { grid-template-columns: 250px minmax(0, 1fr); }
@@ -774,6 +894,8 @@
 
   .gd-article { max-width: 1120px; margin: 0 auto; }
   .gd-ch > :not(.gd-table-wrap) { margin-right: auto; margin-left: auto; }
+
+  .gd-hub-list { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ── Phones ───────────────────────────────────────────────────────── */
@@ -807,6 +929,19 @@
   .gd-close { padding: 80px 0 72px; border-radius: 32px 32px 0 0; }
   .gd-index { grid-template-columns: minmax(0, 1fr); margin-top: 56px; }
   .gd .gd-row { min-height: 60px; font-size: 17px; }
+
+  .gd-hub { padding-bottom: 80px; }
+  .gd .gd-row--hub { grid-template-columns: 28px minmax(0, 1fr) 18px; gap: 12px; padding: 20px 0 22px; }
+  .gd .gd-row-title { font-size: 18px; }
+  .gd .gd-row-blurb { font-size: 14.5px; }
+
+  .gd .gd-h1--long { font-size: clamp(32px, 9vw, 42px); letter-spacing: -0.04em; }
+  /* Number above the text, so a full email address fits on one line. */
+  .gd-points--pairs { grid-template-columns: minmax(0, 1fr); }
+  .gd-points--pairs li { flex-direction: column; gap: 10px; }
+  .gd-note { padding: 20px 22px; }
+  .gd-note--wide { grid-template-columns: minmax(0, 1fr); gap: 12px; margin-top: 10px; border-radius: 20px; }
+  .gd .gd-fine { margin-top: 40px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

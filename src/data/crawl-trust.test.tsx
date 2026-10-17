@@ -348,7 +348,7 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
         expect(html).toContain(child.href);
         expect(html).toContain(child.label);
       }
-      expect(html).toContain(entry.locale === 'es' ? '/#contact' : '/en/#contact');
+      expect(html).toContain('<a class="gd-cta" href="#contact">');
       expect(html.toLowerCase()).toContain('<h1');
       expect(html).not.toContain('reviewBody');
       if (entry.hubId === 'services') {

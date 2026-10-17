@@ -83,7 +83,10 @@ describe('hire-intent hub copy', () => {
       expect(html).toContain(`<h1`);
       expect(html).toContain(page.heroTitle);
       expectLeadCopy(html, page.lead);
-      expect(html).toContain(page.primaryCtaHref);
+      // The contact CTA opens the contact panel in place, like the guides' and
+      // the navbar's; the data's "/#contact" would load the homepage strip.
+      expect(page.primaryCtaHref).toMatch(/#contact$/u);
+      expect(html).toContain('<a class="gd-cta" href="#contact">');
       expect(html).toContain(page.primaryCtaLabel);
       for (const child of page.children) {
         expect(html).toContain(child.href);

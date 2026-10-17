@@ -43,6 +43,6 @@ rules; `guide.css` resets it first, the same trick as `service-keynote.css`.
 
 ## Not changed
 
-The hubs still use the `rsc-*` hero/block classes in `templates.css`. The
-"Everything I can film for your brand" marquee under the close is the shared
-homepage component.
+The "Everything I can film for your brand" marquee under the close is the
+shared homepage component. The hubs and legal pages followed the same day
+(`2026-10-16-hub-legal-template.md`).
