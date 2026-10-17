@@ -51,8 +51,6 @@ const ORDERED = [...FIVERR_REVIEWS].sort(
 
 /** The reviews that come with the video Gisela delivered, in the same order. */
 const VIDEO_REVIEWS = ORDERED.filter((review) => review.video);
-/** The section opens on the first vertical delivery: it fills the 4:5 frame. */
-const FIRST_FEATURED = Math.max(0, VIDEO_REVIEWS.findIndex(({ video }) => video!.height > video!.width));
 
 const lengthOf = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
 
@@ -280,7 +278,7 @@ const Testimonials = () => {
 
   const [filter, setFilter] = useState<Filter>('all');
   const [shown, setShown] = useState(PAGE);
-  const [featured, setFeatured] = useState(FIRST_FEATURED);
+  const [featured, setFeatured] = useState(0);
   const [playing, setPlaying] = useState<FiverrReview | null>(null);
 
   const regionNames = useMemo(() => {
