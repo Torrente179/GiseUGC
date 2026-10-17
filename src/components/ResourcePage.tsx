@@ -13,7 +13,11 @@ import { RevealSection } from '@/components/motion/RevealSection';
 import FloatingContactDock from '@/components/FloatingContactDock';
 import DeferredServicesMarquee from '@/components/DeferredServicesMarquee';
 import { InlineCopy, serializeRouteDataJson, visibleInlineCopy } from '@/lib/inline-copy-links';
+import { ArrowRight } from 'lucide-react';
+import { useActiveSection } from '@/hooks/use-active-section';
+import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import '@/styles/templates.css';
+import '@/styles/guide.css';
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
@@ -32,6 +36,7 @@ const localeLabels = {
     faqKicker: 'Preguntas',
     relatedServices: 'Servicios relacionados',
     otherGuides: 'Otras guías',
+    keepReading: 'Seguir leyendo',
     inThisArticle: 'En este artículo',
     atAGlance: 'De un vistazo',
     startProject: 'Empezar proyecto',
@@ -43,6 +48,7 @@ const localeLabels = {
     faqKicker: 'Questions',
     relatedServices: 'Related services',
     otherGuides: 'Other guides',
+    keepReading: 'Keep reading',
     inThisArticle: 'In this article',
     atAGlance: 'At a glance',
     startProject: 'Start a project',
@@ -59,11 +65,12 @@ const sectionId = (title: string) =>
     .slice(0, 72);
 
 const tocLabel = (title: string) => title.replace(/^\d+\.\s*/, '');
-const hasOwnNumber = (title: string) => /^\d+\.\s*/.test(title);
 
 
 /* ════════════════════════════════════════════════════════════════════
-   RESOURCE PAGE — Editorial article layout
+   RESOURCE PAGE — guide template in the service pages' language
+   (DM Sans, linen ground, glass panels, the close card). Styles:
+   src/styles/guide.css.
    ════════════════════════════════════════════════════════════════════ */
 
 /* Article dates. Visible "last updated" and JSON-LD dateModified both read
@@ -75,8 +82,8 @@ const RESOURCE_DATE_MODIFIED = CONTENT_DATES.resources;
 const serializeRouteData = serializeRouteDataJson;
 
 const ResourceTable = ({ table, caption }: { table: ComparisonTable; caption: string }) => (
-  <div className="rsc-table-wrap">
-    <table className="rsc-table">
+  <div className="gd-table-wrap">
+    <table className="gd-table">
       <caption className="sr-only">{caption}</caption>
       <thead>
         <tr>
@@ -106,6 +113,15 @@ const ResourceTable = ({ table, caption }: { table: ComparisonTable; caption: st
   </div>
 );
 
+const pad = (value: number) => String(value).padStart(2, '0');
+
+/* Copy arrows ("Escríbeme directo →") are drawn as the pill's icon instead. */
+const ctaLabel = (label: string) => label.replace(/\s*→\s*$/u, '');
+
+/* A contact CTA opens the contact panel in place (useHashlessSectionNavigation);
+   "/#contact" would be a cross-document load to the homepage strip. */
+const isContactHref = (href: string) => /#contact$/u.test(href);
+
 const ResourcePage = ({
   resourceId,
   locale,
@@ -123,6 +139,26 @@ const ResourcePage = ({
         .map((id) => ({ id, label: getResourcePageContent(id, locale).navLabel })),
     [locale, resourceId],
   );
+
+  const { handleHashLinkClick } = useHashlessSectionNavigation();
+  const chapters = useMemo(
+    () => [
+      ...page.sections.map((section) => ({ id: sectionId(section.title), label: tocLabel(section.title) })),
+      ...(page.comparisonTable ? [{ id: sectionId(labels.atAGlance), label: labels.atAGlance }] : []),
+      ...(page.faqs.length > 0 ? [{ id: 'faq', label: labels.faq }] : []),
+    ],
+    [labels.atAGlance, labels.faq, page.comparisonTable, page.faqs.length, page.sections],
+  );
+  const showToc = page.sections.length > 3;
+  const activeChapter = useActiveSection(
+    chapters.map((chapter) => chapter.id),
+    showToc,
+  );
+
+  const contactLink = (href: string) =>
+    isContactHref(href)
+      ? { href: '#contact', onClick: handleHashLinkClick }
+      : { href, ...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}) };
 
   const canonical = buildUrl(page.path);
   const homeCanonical = buildUrl(getHomePath(locale));
@@ -215,198 +251,196 @@ const ResourcePage = ({
       <div className="min-h-screen bg-background">
         <Navbar />
 
-        <main className="rsc-page">
-          <RevealSection className="rsc-hero">
-            <div className="st-container">
-              <nav className="st-breadcrumb" aria-label="Breadcrumb">
+        <main className="gd">
+          <RevealSection className="gd-hero">
+            <div className="gd-wrap">
+              <nav className="gd-crumbs" aria-label="Breadcrumb">
                 <Link to={getHomePath(locale)}>{labels.home}</Link>
                 <span aria-hidden="true">/</span>
                 <Link to={getHubPath('resources', locale)}>{labels.resources}</Link>
                 <span aria-hidden="true">/</span>
-                <span>{page.breadcrumbLabel}</span>
+                <span aria-current="page">{page.breadcrumbLabel}</span>
               </nav>
-              <p className="st-eyebrow">{page.heroEyebrow}</p>
-              <h1 className="rsc-hero-title font-serif">{page.heroTitle}</h1>
-              <p className="rsc-hero-lead">{page.heroSummary}</p>
-              {page.leadCtaLabel && page.leadCtaHref ? (
-                <p className="rsc-hero-cta">
-                  <a href={page.leadCtaHref}>{page.leadCtaLabel}</a>
+              <div className="gd-hero-head">
+                <p className="gd-pill">
+                  <span className="gd-dot" aria-hidden="true" />
+                  {page.heroEyebrow}
                 </p>
-              ) : null}
+                <h1 className="gd-h1 section-label">{page.heroTitle}</h1>
+                <p className="gd-lead">{page.heroSummary}</p>
+                {page.leadCtaLabel && page.leadCtaHref ? (
+                  <a className="gd-want" {...contactLink(page.leadCtaHref)}>
+                    {ctaLabel(page.leadCtaLabel)}
+                    <i aria-hidden="true">
+                      <ArrowRight />
+                    </i>
+                  </a>
+                ) : null}
+              </div>
               {page.heroPoints.length > 0 && (
-                <>
-                  <div className="rsc-rule" aria-hidden="true" />
-                  <ul className="rsc-points">
-                    {page.heroPoints.map((point, index) => (
-                      <li key={point}>
-                        <span className="rsc-points-num">{String(index + 1).padStart(2, '0')}</span>
-                        <span>{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </>
+                <ul className="gd-points">
+                  {page.heroPoints.map((point, index) => (
+                    <li key={point}>
+                      <span className="gd-k">{pad(index + 1)}</span>
+                      <span className="gd-point">{point}</span>
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
           </RevealSection>
 
-          <RevealSection className="rsc-article">
-            <div className={`st-container rsc-article-grid${page.sections.length > 3 ? ' rsc-article-grid--toc' : ''}`}>
-              {page.sections.length > 3 && (
-                <aside className="rsc-toc" aria-label={labels.inThisArticle}>
-                  <p className="st-eyebrow">{labels.inThisArticle}</p>
-                  <ol>
-                    {page.sections.map((section, index) => (
-                      <li key={section.title}>
-                        <a href={`#${sectionId(section.title)}`}>
-                          <span>{String(index + 1).padStart(2, '0')}</span>
-                          {tocLabel(section.title)}
-                        </a>
-                      </li>
-                    ))}
-                    {page.comparisonTable && (
-                      <li>
-                        <a href={`#${sectionId(labels.atAGlance)}`}>
-                          <span>{String(page.sections.length + 1).padStart(2, '0')}</span>
-                          {labels.atAGlance}
-                        </a>
-                      </li>
-                    )}
-                    {page.faqs.length > 0 && (
-                      <li>
-                        <a href="#faq">
-                          <span>
-                            {String(page.sections.length + (page.comparisonTable ? 2 : 1)).padStart(2, '0')}
-                          </span>
-                          {labels.faq}
-                        </a>
-                      </li>
-                    )}
-                  </ol>
-                </aside>
+          <div className={`gd-wrap gd-body${showToc ? ' gd-body--toc' : ''}`}>
+            {showToc && (
+              <nav className="gd-toc" aria-label={labels.inThisArticle}>
+                <p className="gd-k">{labels.inThisArticle}</p>
+                <ol>
+                  {chapters.map((chapter, index) => (
+                    <li key={chapter.id}>
+                      <a
+                        href={`#${chapter.id}`}
+                        onClick={handleHashLinkClick}
+                        aria-current={chapter.id === activeChapter ? 'true' : undefined}
+                      >
+                        <span>{pad(index + 1)}</span>
+                        {chapter.label}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+
+            <article className="gd-article">
+              {page.sections.map((section, index) => (
+                <RevealSection key={section.title} className="gd-ch" id={sectionId(section.title)}>
+                  <span className="gd-k gd-k--teal" aria-hidden="true">
+                    {pad(index + 1)}
+                  </span>
+                  <h2 className="gd-h2 section-label">{tocLabel(section.title)}</h2>
+                  {section.italicLead ? <p className="gd-say">{section.italicLead}</p> : null}
+                  {(section.bodyBefore ?? []).map((paragraph, paragraphIndex) => (
+                    <p key={`before-${paragraphIndex}`} className="gd-p">
+                      <InlineCopy text={paragraph} />
+                    </p>
+                  ))}
+                  {section.table ? <ResourceTable table={section.table} caption={section.title} /> : null}
+                  {section.body.map((paragraph, paragraphIndex) => (
+                    <p key={paragraphIndex} className="gd-p">
+                      <InlineCopy text={paragraph} />
+                    </p>
+                  ))}
+                  {section.bullets && section.bullets.length > 0 ? (
+                    <ul className="gd-list">
+                      {section.bullets.map((item) => (
+                        <li key={item}>
+                          <InlineCopy text={item} />
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </RevealSection>
+              ))}
+
+              {page.comparisonTable && (
+                <RevealSection className="gd-ch" id={sectionId(labels.atAGlance)}>
+                  <span className="gd-k gd-k--teal" aria-hidden="true">
+                    {pad(page.sections.length + 1)}
+                  </span>
+                  <h2 className="gd-h2 section-label">{labels.atAGlance}</h2>
+                  <ResourceTable table={page.comparisonTable} caption={labels.atAGlance} />
+                </RevealSection>
               )}
-
-              <article>
-                {page.sections.map((section, index) => (
-                  <section key={section.title} className="rsc-chapter" id={sectionId(section.title)}>
-                    {!hasOwnNumber(section.title) && (
-                      <span className="rsc-chapter-num" aria-hidden="true">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                    )}
-                    <h2 className="rsc-chapter-title font-serif">{section.title}</h2>
-                    {section.italicLead ? (
-                      <p>
-                        <em>{section.italicLead}</em>
-                      </p>
-                    ) : null}
-                    {(section.bodyBefore ?? []).map((paragraph, paragraphIndex) => (
-                      <p key={`before-${paragraphIndex}`}>
-                        <InlineCopy text={paragraph} />
-                      </p>
-                    ))}
-                    {section.table ? <ResourceTable table={section.table} caption={section.title} /> : null}
-                    {section.body.map((paragraph, paragraphIndex) => (
-                      <p key={paragraphIndex}>
-                        <InlineCopy text={paragraph} />
-                      </p>
-                    ))}
-                    {section.bullets && section.bullets.length > 0 ? (
-                      <ul>
-                        {section.bullets.map((item) => (
-                          <li key={item}>
-                            <InlineCopy text={item} />
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
-                  </section>
-                ))}
-
-                {page.comparisonTable && (
-                  <section className="rsc-chapter" id={sectionId(labels.atAGlance)}>
-                    <span className="rsc-chapter-num" aria-hidden="true">
-                      {String(page.sections.length + 1).padStart(2, '0')}
-                    </span>
-                    <h2 className="rsc-chapter-title font-serif">{labels.atAGlance}</h2>
-                    <ResourceTable table={page.comparisonTable} caption={labels.atAGlance} />
-                  </section>
-                )}
-              </article>
-            </div>
-          </RevealSection>
+            </article>
+          </div>
 
           {page.faqs.length > 0 && (
-            <RevealSection className="rsc-block" id="faq">
-              <div className="st-container">
-                <div className="rsc-faq-layout">
-                  <div>
-                    <p className="st-eyebrow">{labels.faqKicker}</p>
-                    <h2 className="rsc-block-title font-serif">{labels.faq}</h2>
-                  </div>
-                  <div className="svc-faq-list">
-                    {page.faqs.map((faq, index) => (
-                      <details key={faq.question} className="svc-faq-item" {...(index === 0 ? { open: true } : {})}>
-                        <summary>
-                          <span>{faq.question}</span>
-                          <span className="svc-faq-mark" aria-hidden="true" />
-                        </summary>
-                        <p>
-                          <InlineCopy text={faq.answer} />
-                        </p>
-                      </details>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </RevealSection>
-          )}
-
-          {relatedServices.length > 0 && (
-            <RevealSection className="rsc-block">
-              <div className="st-container rsc-related">
-                {relatedServices.length > 0 && (
-                  <div>
-                    <p className="st-eyebrow">{labels.relatedServices}</p>
-                    {relatedServices.map((service) => (
-                      <Link key={service.id} to={getServicePath(service.id, locale)} className="st-related-row group">
-                        <span className="st-related-title">{service.navLabel}</span>
-                        <span className="st-related-arrow">→</span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </RevealSection>
-          )}
-
-          <RevealSection className="svc-inner-close">
-            <div className="st-container svc-inner-close-grid">
-              <div>
-                <h2 className="svc-inner-close-title font-serif">{page.ctaTitle}</h2>
-                <a
-                  href={page.primaryCtaHref}
-                  {...(page.primaryCtaHref.startsWith('http')
-                    ? { target: '_blank', rel: 'noopener noreferrer' }
-                    : {})}
-                  className="st-cta-primary st-cta-primary--lg"
-                >
-                  {page.primaryCtaLabel}
-                </a>
-                <p className="svc-inner-close-text">
-                  <InlineCopy text={page.ctaText} />
-                </p>
-                <p className="svc-inner-updated">{labels.lastUpdated}</p>
-              </div>
-              {otherGuides.length > 0 && (
-                <div>
-                  <p className="st-eyebrow mb-5">{labels.otherGuides}</p>
-                  {otherGuides.map((guide) => (
-                    <Link key={guide.id} to={getResourcePath(guide.id, locale)} className="st-related-row group">
-                      <span className="st-related-title">{guide.label}</span>
-                      <span className="st-related-arrow">→</span>
-                    </Link>
+            <RevealSection className="gd-faq" id="faq">
+              <div className="gd-wrap">
+                <p className="gd-k gd-k--center">{labels.faqKicker}</p>
+                <h2 className="gd-h2 gd-h2--xl section-label">{labels.faq}</h2>
+                <div className="gd-faq-list">
+                  {page.faqs.map((faq, index) => (
+                    <details key={faq.question} className="gd-q" {...(index === 0 ? { open: true } : {})}>
+                      <summary>
+                        <span>{faq.question}</span>
+                        <i className="gd-q-mark" aria-hidden="true" />
+                      </summary>
+                      <p className="gd-p">
+                        <InlineCopy text={faq.answer} />
+                      </p>
+                    </details>
                   ))}
                 </div>
+              </div>
+            </RevealSection>
+          )}
+
+          <RevealSection className="gd-close">
+            <div className="gd-orb gd-orb--a" aria-hidden="true" />
+            <div className="gd-orb gd-orb--b" aria-hidden="true" />
+            <div className="gd-wrap">
+              <div className="gd-close-top">
+                <p className="gd-pill">
+                  <span className="gd-dot" aria-hidden="true" />
+                  {labels.startProject}
+                </p>
+                <h2 className="gd-h2 gd-h2--xl section-label">{page.ctaTitle}</h2>
+                <p className="gd-lead">
+                  <InlineCopy text={page.ctaText} />
+                </p>
+                <div className="gd-close-actions">
+                  <a className="gd-cta" {...contactLink(page.primaryCtaHref)}>
+                    {page.primaryCtaLabel}
+                    <i aria-hidden="true">
+                      <ArrowRight />
+                    </i>
+                  </a>
+                  <p className="gd-updated">{labels.lastUpdated}</p>
+                </div>
+              </div>
+
+              {(relatedServices.length > 0 || otherGuides.length > 0) && (
+                <nav className="gd-index" aria-label={labels.keepReading}>
+                  {[
+                    {
+                      key: 'services',
+                      label: labels.relatedServices,
+                      items: relatedServices.map((service) => ({
+                        key: service.id,
+                        href: getServicePath(service.id, locale),
+                        title: service.navLabel,
+                      })),
+                    },
+                    {
+                      key: 'guides',
+                      label: labels.otherGuides,
+                      items: otherGuides.map((guide) => ({
+                        key: guide.id,
+                        href: getResourcePath(guide.id, locale),
+                        title: guide.label,
+                      })),
+                    },
+                  ]
+                    .filter((column) => column.items.length > 0)
+                    .map((column, index) => (
+                      <div key={column.key}>
+                        <div className="gd-gh">
+                          <p className="gd-k">
+                            <b>{pad(index + 1)}</b>
+                            {column.label}
+                          </p>
+                          <span className="gd-k">{pad(column.items.length)}</span>
+                        </div>
+                        {column.items.map((item) => (
+                          <Link key={item.key} to={item.href} className="gd-row">
+                            <span>{item.title}</span>
+                            <ArrowRight aria-hidden="true" />
+                          </Link>
+                        ))}
+                      </div>
+                    ))}
+                </nav>
               )}
             </div>
           </RevealSection>
