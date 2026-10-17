@@ -7,8 +7,6 @@ export type InnerBeat = {
   id: InnerBeatId;
   num: string;
   kicker: string;
-  chip: string;
-  spine: string;
 };
 
 export type FichaRow = {
@@ -19,20 +17,20 @@ export type FichaRow = {
 
 const BEATS: Record<SiteLocale, InnerBeat[]> = {
   es: [
-    { id: 'ficha', num: '1', kicker: 'Resumen', chip: 'Resumen', spine: 'Resumen' },
-    { id: 'recibes', num: '2', kicker: 'Formatos', chip: 'Formatos', spine: 'Formatos' },
-    { id: 'como-corre', num: '3', kicker: 'Proceso', chip: 'Proceso', spine: 'Proceso' },
-    { id: 'encaja', num: '4', kicker: 'Para quién', chip: 'Para quién', spine: 'Para quién' },
-    { id: 'faq', num: '5', kicker: 'Preguntas', chip: 'Preguntas', spine: 'Preguntas' },
-    { id: 'empezar', num: '6', kicker: 'Empezar', chip: 'Empezar', spine: 'Empezar' },
+    { id: 'ficha', num: '1', kicker: 'Resumen' },
+    { id: 'recibes', num: '2', kicker: 'Formatos' },
+    { id: 'como-corre', num: '3', kicker: 'Proceso' },
+    { id: 'encaja', num: '4', kicker: 'Para quién' },
+    { id: 'faq', num: '5', kicker: 'Preguntas' },
+    { id: 'empezar', num: '6', kicker: 'Empezar' },
   ],
   en: [
-    { id: 'ficha', num: '1', kicker: 'Overview', chip: 'Overview', spine: 'Overview' },
-    { id: 'recibes', num: '2', kicker: 'Formats', chip: 'Formats', spine: 'Formats' },
-    { id: 'como-corre', num: '3', kicker: 'Process', chip: 'Process', spine: 'Process' },
-    { id: 'encaja', num: '4', kicker: 'Fit', chip: 'Fit', spine: 'Fit' },
-    { id: 'faq', num: '5', kicker: 'Questions', chip: 'Questions', spine: 'Questions' },
-    { id: 'empezar', num: '6', kicker: 'Get started', chip: 'Start', spine: 'Get started' },
+    { id: 'ficha', num: '1', kicker: 'Overview' },
+    { id: 'recibes', num: '2', kicker: 'Formats' },
+    { id: 'como-corre', num: '3', kicker: 'Process' },
+    { id: 'encaja', num: '4', kicker: 'Fit' },
+    { id: 'faq', num: '5', kicker: 'Questions' },
+    { id: 'empezar', num: '6', kicker: 'Get started' },
   ],
 };
 

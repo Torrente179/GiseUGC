@@ -12,7 +12,8 @@ The six beats keep their ids and order (`ficha`, `recibes`, `como-corre`,
 `encaja`, `faq`, `empezar`), so the `WebPageElement` schema, the FAQPage and
 Service schema, and deep links are unchanged.
 
-0. Local nav: the page name, then Overview / Formats / Process / Fit /
+0. Local nav (removed 2026-10-16, see the last section): the page name, then
+   Overview / Formats / Process / Fit /
    Questions, the current one marked by the beat spy. On phones the names fold
    into a "current section" menu. Links use `useHashlessSectionNavigation`
    (a bare `#hash` link is a history entry to the app's router, which restores
@@ -39,7 +40,7 @@ Service schema, and deep links are unchanged.
 
 Every service page has a clear way to message Gisela about that service: a
 compact pill at the right end of the local nav (an icon-only 44px circle on
-phones) and the close's teal CTA. Both open the same two-channel choice the
+phones; removed with the nav on 2026-10-16) and the close's teal CTA. Both open the same two-channel choice the
 site's contact pill offers, WhatsApp first, then Telegram, with the service
 named at the top of the card.
 
@@ -164,3 +165,31 @@ prerender. On the build, all 16 service routes at 1920, 1440, 1280, 1200, 1199,
 name overflowing its card, no horizontal page scroll, phone rail still scrolls.
 Before/after shots (1440, 1024, 390, light and dark, two pages) are in
 `_mockups/service-keynote/shots/process-grid/` at the repo's parent.
+
+## 2026-10-16: the local nav is removed
+
+The user asked whether the strip under the new service hero was worth keeping,
+and chose to remove it on desktop and phones. The page now goes from the hero
+straight into "Resumen" / "Overview".
+
+Why it went:
+
+- Its page name repeated the H1 just above it.
+- Its "Escríbeme" was a third contact button on screen, next to the hero's
+  "Quiero este servicio" and the floating contact pill.
+- It was drawn once at rest, so its section links only helped at the top of
+  the page.
+
+What changed:
+
+- `LocalNav.tsx` is deleted. The beat spy that marked the current section
+  (`useBeatSpy`) is no longer called, and its labels (`onThisPage`,
+  `sectionsMenu`) and the beats' `chip` / `spine` names are gone. All `.kn-lnav`
+  styles and the menu tokens (`--kn-menu-bg`, `--kn-menu-sh`) are gone too.
+- The beat ids are unchanged, so deep links and the page schema still work.
+- Contact for the service is unchanged in substance:
+  - "Quiero este servicio" in the hero (desktop and phone) opens WhatsApp with
+    a message that names the service.
+  - The close's CTA still opens the WhatsApp / Telegram choice.
+- `service-inner-argument.test.tsx` now locks the absence: no `kn-lnav` in
+  either shell or in the stylesheet.

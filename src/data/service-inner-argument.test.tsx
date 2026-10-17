@@ -194,14 +194,14 @@ describe('service boot shells keep crawlable first HTML', () => {
 });
 
 describe('service inner presentation locks', () => {
-  it('draws the desktop shell as the keynote: local nav, tablists, rail, fit columns, close index', () => {
+  it('draws the desktop shell as the keynote: tablists, rail, fit columns, close index', () => {
     const { html, text, page } = renderService('ugc-ads-tiktok-meta', 'en');
     const desktop = html.slice(html.indexOf('kn kn--d'));
 
-    // Local nav: the page name and the five section names, linking to the beat ids.
-    expect(desktop).toContain('class="kn-lnav"');
+    // No section nav: the hero leads straight into the overview. The beats keep their ids for deep links.
+    expect(desktop).not.toContain('kn-lnav');
     for (const id of ['ficha', 'recibes', 'como-corre', 'encaja', 'faq']) {
-      expect(desktop).toContain(`href="#${id}"`);
+      expect(desktop).toContain(`id="${id}"`);
     }
     expect(desktop).not.toContain('svc-spine');
 
@@ -233,24 +233,20 @@ describe('service inner presentation locks', () => {
     expect(desktop).toContain('class="knc-tile"');
     expect(desktop).toContain('class="knc-index"');
 
-    // Contact: the nav pill and the close CTA both open the Escríbeme choice. Until scripts run
-    // they are links to this page's own contact block, never to another path (the runtime would
-    // turn that into a page load before the panel could open).
-    expect((desktop.match(/aria-haspopup="dialog"/gu) ?? []).length).toBe(2);
-    expect(desktop).toContain('class="kn-lnav-cta"');
-    expect(desktop).toContain('aria-label="Message me: UGC ads for TikTok and Meta"');
-    expect((desktop.match(new RegExp(`href="${page.path}#contact"`, 'gu')) ?? []).length).toBe(2);
+    // Contact: the close CTA opens the Escríbeme choice. Until scripts run it is a link to this
+    // page's own contact block, never to another path (the runtime would turn that into a page
+    // load before the panel could open).
+    expect((desktop.match(/aria-haspopup="dialog"/gu) ?? []).length).toBe(1);
+    expect((desktop.match(new RegExp(`href="${page.path}#contact"`, 'gu')) ?? []).length).toBe(1);
   });
 
-  it('ships the phone shell as an app: section menu, 2x2 formats, toggle, both fit lists, explore tabs', () => {
+  it('ships the phone shell as an app: 2x2 formats, toggle, both fit lists, explore tabs', () => {
     const { html, page } = renderService('ugc-ads-tiktok-meta', 'es');
     const mobile = html.slice(html.indexOf('kn kn--m'), html.indexOf('kn kn--d'));
 
-    expect(mobile).toContain('class="kn-lnav-btn"');
-    expect(mobile).toContain('aria-expanded="false"');
-    expect(mobile).toContain('class="kn-lnav-menu"');
+    expect(mobile).not.toContain('kn-lnav');
     for (const id of ['ficha-m', 'recibes-m', 'como-corre-m', 'encaja-m', 'faq-m']) {
-      expect(mobile).toContain(`href="#${id}"`);
+      expect(mobile).toContain(`id="${id}"`);
     }
     expect(mobile).toContain('id="kn-fm-mobile-tab-0"');
     // Process keeps the swipe rail on phones: a focusable scroller, no arrow buttons.
@@ -301,15 +297,15 @@ describe('service inner presentation locks', () => {
     expect(css).toContain('--kn-ink: #f5f5f7');
     expect(css).toContain('--kn-body: #6a5c50');
     expect(css).toContain('--kn-page: linear-gradient(180deg, #121212 0, #121212 116px, #fdfcfb 116px)');
-    // Targets and motion: 44px tap size, reduced motion honoured, no sticky nav over the site pills.
+    // Targets and motion: 44px tap size, reduced motion honoured, no section nav.
     expect(css).toContain('min-height: 44px');
     expect(css).toContain('prefers-reduced-motion: reduce');
-    expect(css).not.toMatch(/\.kn-lnav\s*\{[^}]*position:\s*sticky/u);
+    expect(css).not.toContain('kn-lnav');
   });
 
   it('retired the old inner markup from the page component', () => {
     const source = readFileSync(resolve(root, 'src/components/ServicePageInner.tsx'), 'utf8');
-    for (const retired of ['svc-spine', 'stm-beat', 'svc-ficha', 'stm-stepper', 'stm-close']) {
+    for (const retired of ['svc-spine', 'stm-beat', 'svc-ficha', 'stm-stepper', 'stm-close', 'LocalNav']) {
       expect(source).not.toContain(retired);
     }
   });

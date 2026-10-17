@@ -11,19 +11,17 @@ import {
 import CloseBeat from '@/components/service-keynote/CloseBeat';
 import FitBeat from '@/components/service-keynote/FitBeat';
 import FormatsBeat from '@/components/service-keynote/FormatsBeat';
-import LocalNav from '@/components/service-keynote/LocalNav';
 import OverviewBeat from '@/components/service-keynote/OverviewBeat';
 import ProcessBeat from '@/components/service-keynote/ProcessBeat';
 import QuestionsBeat from '@/components/service-keynote/QuestionsBeat';
-import { useBeatSpy } from '@/components/service-keynote/hooks';
 import '@/styles/service-keynote.css';
 
 /*
  * Everything below the service hero. Six beats keep their ids (ficha,
- * recibes, como-corre, encaja, faq, empezar), so the page schema, the local
- * nav, and the deep links stay as they were; what changed is how each beat is
- * drawn. The styles live in service-keynote.css as plain CSS with literal
- * class names, so Tailwind's purge has nothing to drop.
+ * recibes, como-corre, encaja, faq, empezar), so the page schema and the deep
+ * links stay as they were; what changed is how each beat is drawn. The styles
+ * live in service-keynote.css as plain CSS with literal class names, so
+ * Tailwind's purge has nothing to drop.
  */
 
 type ServicePageInnerProps = {
@@ -87,10 +85,6 @@ const ServicePageInner = ({
   const beats = getInnerBeats(locale);
   const isMobile = variant === 'mobile';
   const idFor = (id: InnerBeatId) => beatDomId(id, variant);
-  const activeId = useBeatSpy(
-    beats.map((beat) => idFor(beat.id)),
-    true,
-  );
 
   const beatProps = (id: InnerBeatId) => {
     const beat = beats.find((item) => item.id === id);
@@ -117,15 +111,6 @@ const ServicePageInner = ({
     <div className={isMobile ? 'kn kn--m' : 'kn kn--d'}>
       <div className="kn-handoff" aria-hidden="true" />
       <div className="kn-ease" aria-hidden="true" />
-
-      <LocalNav
-        page={page}
-        locale={locale}
-        variant={variant}
-        beats={beats.filter((beat) => beat.id !== 'empezar')}
-        idFor={idFor}
-        activeId={activeId}
-      />
 
       {shell('ficha', 'kn-ov', <OverviewBeat {...beatProps('ficha')} />)}
       {shell('recibes', 'kn-fm', <FormatsBeat {...beatProps('recibes')} />)}

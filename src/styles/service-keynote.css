@@ -35,8 +35,6 @@
   --kn-cta-bg: #2b2620;
   --kn-cta-ink: #fdfcfb;
   --kn-want-sh: 0 18px 36px -20px rgba(43, 38, 32, 0.7);
-  --kn-menu-bg: rgba(253, 252, 251, 0.94);
-  --kn-menu-sh: 0 0 0 1px rgba(43, 38, 32, 0.08), 0 24px 48px -20px rgba(43, 38, 32, 0.4);
   --kn-spot-main: radial-gradient(
     closest-side,
     rgba(234, 223, 202, 0.6),
@@ -126,8 +124,6 @@
   --kn-cta-bg: #f5f5f7;
   --kn-cta-ink: #000;
   --kn-want-sh: 0 18px 36px -20px rgba(0, 0, 0, 0.7);
-  --kn-menu-bg: rgba(24, 22, 20, 0.94);
-  --kn-menu-sh: 0 0 0 1px rgba(245, 245, 247, 0.12), 0 24px 48px -20px rgba(0, 0, 0, 0.8);
   --kn-spot-main: radial-gradient(closest-side, rgba(255, 236, 210, 0.17), rgba(255, 236, 210, 0.05) 50%, rgba(255, 236, 210, 0));
   --kn-spot-dev: radial-gradient(closest-side, rgba(255, 236, 210, 0.12), rgba(255, 236, 210, 0.035) 55%, rgba(255, 236, 210, 0));
   --kn-shadow-bg: radial-gradient(closest-side, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0));
@@ -345,144 +341,6 @@ html:not(.dark) .kn--d { --kn-page: #fdfcfb; }
   color: transparent;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
-}
-
-/* ── Local nav ────────────────────────────────────────────────────── */
-.kn-lnav {
-  position: relative;
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  height: 52px;
-  border-bottom: 1px solid var(--kn-hair);
-}
-
-.kn-lnav-t {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 21px;
-  font-weight: 600;
-  letter-spacing: -0.022em;
-}
-
-.kn-lnav-end {
-  display: flex;
-  flex: none;
-  align-items: center;
-}
-
-.kn-lnav-list {
-  display: flex;
-  gap: 34px;
-}
-
-/* "Escríbeme" for this service: a compact pill at the right end of the nav. */
-.kn .kn-lnav-cta {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 38px;
-  margin-left: 30px;
-  padding: 0 16px 0 14px;
-  border-radius: 999px;
-  background: var(--kn-cta-bg);
-  color: var(--kn-cta-ink);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.005em;
-  transition: opacity 0.25s, transform 0.3s var(--kn-ease-out);
-}
-
-.kn .kn-lnav-cta:hover {
-  opacity: 0.88;
-}
-
-.kn .kn-lnav-cta:active {
-  transform: scale(0.97);
-}
-
-.kn-lnav-cta svg {
-  width: 16px;
-  height: 16px;
-}
-
-.kn-lnav-list a {
-  display: flex;
-  align-items: center;
-  height: 44px;
-  font-size: 12px;
-  letter-spacing: 0.01em;
-  color: var(--kn-body);
-  transition: color 0.3s;
-}
-
-.kn-lnav-list a:hover,
-.kn-lnav-list a[aria-current],
-.kn-lnav-menu a[aria-current] {
-  color: var(--kn-ink);
-}
-
-.kn-lnav-btn {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: 7px;
-  height: 44px;
-  margin-right: -4px;
-  padding: 0 4px;
-  border: 0;
-  background: none;
-  font-size: 12px;
-  color: var(--kn-ink);
-  cursor: pointer;
-}
-
-.kn-lnav-btn svg {
-  width: 11px;
-  height: 11px;
-  color: var(--kn-body);
-  transition: transform 0.3s var(--kn-ease-out);
-}
-
-.kn-lnav-btn svg.is-open {
-  transform: rotate(180deg);
-}
-
-.kn-lnav-menu {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
-  z-index: 6;
-  min-width: 208px;
-  padding: 6px;
-  border-radius: 22px;
-  background: var(--kn-menu-bg);
-  box-shadow: var(--kn-menu-sh);
-  -webkit-backdrop-filter: blur(24px) saturate(1.3);
-  backdrop-filter: blur(24px) saturate(1.3);
-}
-
-.kn-lnav-menu a {
-  display: flex;
-  align-items: center;
-  min-height: 46px;
-  padding: 0 16px;
-  border-radius: 16px;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--kn-body);
-}
-
-.kn-lnav-menu a[aria-current] {
-  background: var(--kn-seg-bg);
 }
 
 /* ── Shared: segmented controls ───────────────────────────────────── */
@@ -1306,10 +1164,6 @@ html:not(.dark) .kn--d { --kn-page: #fdfcfb; }
 }
 
 /* ═════════════ Desktop shell ═════════════ */
-.kn--d .kn-lnav {
-  margin: 0 var(--kn-pad);
-}
-
 .kn--d .kn-ov {
   padding: 120px var(--kn-pad) 0;
 }
@@ -1911,41 +1765,6 @@ html:not(.dark) .kn--m {
 .kn--m .kn-h {
   letter-spacing: -0.048em;
   line-height: 0.98;
-}
-
-.kn--m .kn-lnav {
-  margin: 0 20px;
-}
-
-.kn--m .kn-lnav-t {
-  font-size: 17px;
-  letter-spacing: -0.02em;
-}
-
-.kn--m .kn-lnav-end {
-  gap: 2px;
-}
-
-.kn--m .kn-lnav-cta {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  margin: 0 -6px 0 2px;
-  padding: 0;
-}
-
-.kn--m .kn-lnav-cta svg {
-  width: 20px;
-  height: 20px;
-}
-
-.kn--m .kn-lnav-cta span {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
 }
 
 .kn--m .kn-ov {
@@ -2701,7 +2520,6 @@ html:not(.dark) .kn--m {
   .kn-vid,
   .kn-cap > div,
   .kn-plus::after,
-  .kn-lnav-btn svg,
   .kn .knc-row svg,
   .kn--m .kn-list,
   .kn--m .knc-panel {
