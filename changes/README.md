@@ -33,6 +33,9 @@ This folder is organized by subsystem instead of by date.
   - **Current crawl-trust / hub indexes:** `seo/seo-crawl-trust.md` —
     honest homepage proof (28+/177/4.7/ES+EN), CONTENT_DATES, Fiverr canonical
     without `?source=gig_page`, and Person `alternateName`.
+    **Internal link map (2026-10-16):** same file, last entry — breadcrumbs
+    are Home › hub › page, hubs carry the site chrome, and the page-end strip
+    links every page to the three hubs (`src/data/internal-link-map.test.tsx`).
     **Homepage review quotes in the first HTML:**
     `seo/2026-10-16-testimonials-prerender-text.md` — `#testimonials`
     placeholder on `/` and `/en/` carries the Fiverr quotes; videos stay lazy;

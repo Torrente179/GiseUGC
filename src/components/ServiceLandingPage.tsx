@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState, type SyntheticEvent } from 'react';
 import type { ServicePageId, SiteLocale, ResourcePageId } from '@/lib/locale-path';
-import { getHomePath, getServicePath } from '@/lib/locale-path';
+import { getHomePath, getHubPath, getServicePath } from '@/lib/locale-path';
 import type { ServiceLandingRouteData } from '@/data/landing-route-types';
 import { LEGACY_REEL_CLIPS, servicePosterSrcFromMain } from '@/data/portfolio-clips';
 import { NUEVOS_R2_READY_CLIPS } from '@/data/nuevos-r2-ready';
@@ -17,6 +17,7 @@ import ServicePageInner from '@/components/ServicePageInner';
 import WantCta from '@/components/service-keynote/WantCta';
 import { ServiceHeroDesktop, ServiceHeroMobile } from '@/components/service-hero/ServiceHero';
 import { CONTENT_DATES } from '@/data/content-dates';
+import { HUB_LABELS } from '@/data/hub-labels';
 import { innerSectionSchema } from '@/lib/service-inner-argument';
 import { serializeRouteDataJson } from '@/lib/inline-copy-links';
 import { FIVERR_AGGREGATE_RATING } from '@/data/site-proof';
@@ -61,7 +62,7 @@ type ServiceLandingPageProps = {
 const localeLabels = {
   es: {
     home: 'Inicio',
-    services: 'Servicios',
+    services: HUB_LABELS.services.es,
     openSample: 'Ver muestra',
     theWork: 'El trabajo',
     whatYouGet: 'Lo que recibes',
@@ -84,7 +85,7 @@ const localeLabels = {
   },
   en: {
     home: 'Home',
-    services: 'Services',
+    services: HUB_LABELS.services.en,
     openSample: 'View sample',
     theWork: 'The work',
     whatYouGet: 'What you get',
@@ -201,7 +202,7 @@ const ServiceLandingPage = ({
   const schema = useMemo(() => {
     const breadcrumbItems = [
       { '@type': 'ListItem', position: 1, name: labels.home, item: homeCanonical },
-      { '@type': 'ListItem', position: 2, name: labels.services, item: homeCanonical },
+      { '@type': 'ListItem', position: 2, name: labels.services, item: buildUrl(getHubPath('services', locale)) },
       { '@type': 'ListItem', position: 3, name: page.breadcrumbLabel, item: canonical },
     ];
     const videoObjects = proofExamples.map(({ example, clip }) => ({

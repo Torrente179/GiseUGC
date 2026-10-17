@@ -141,6 +141,19 @@ export const setLastBreadcrumbName = (schema, name) => {
 };
 
 /**
+ * Point the middle breadcrumb item at the family hub (/servicios/, /verticales/,
+ * /recursos/ and EN twins), so the trail is Home › hub › page, matching the
+ * visible breadcrumb that PageSeo's BreadcrumbList describes.
+ */
+export const setHubBreadcrumb = (schema, { name, item }) => {
+  const list = findGraphNode(schema, 'BreadcrumbList');
+  const elements = Array.isArray(list?.itemListElement) ? list.itemListElement : [];
+  if (elements.length !== 3) throw new Error('Expected a three-level BreadcrumbList (home, hub, page)');
+  elements[1].name = name;
+  elements[1].item = item;
+};
+
+/**
  * Re-render list items inside an existing <ul>, keeping its layout: items on
  * one line stay on one line, items on their own lines keep their indentation.
  */
@@ -178,6 +191,15 @@ export const setBootBreadcrumbCurrent = (html, label) =>
     /(<span>)[^<]*(<\/span>\s*<\/nav>)/u,
     (_match, open, close) => `${open}${escapeText(label)}${close}`,
     'boot breadcrumb current item',
+  );
+
+/** Boot shell: the middle (hub) item of a Home / hub / page breadcrumb. */
+export const setBootBreadcrumbHub = (html, label) =>
+  replaceRequired(
+    html,
+    /(<nav class="boot-breadcrumbs"[^>]*>\s*<span>[^<]*<\/span>\s*<span>\/<\/span>\s*<span>)[^<]*(<\/span>)/u,
+    (_match, open, close) => `${open}${escapeText(label)}${close}`,
+    'boot breadcrumb hub item',
   );
 
 export const setBootLabel = (html, text) => setLeafText(html, /<p class="boot-label">/u, '</p>', text, 'p.boot-label');

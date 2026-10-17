@@ -1,4 +1,5 @@
 import { SITE_PROOF } from '@/data/site-proof';
+import { HUB_LABELS } from '@/data/hub-labels';
 import { PRICING_GUIDE_HUB } from '@/data/resource-pages';
 import { FIVERR_PROFILE_URL } from '@/lib/contact-channels';
 import {
@@ -92,7 +93,7 @@ export const RESOURCE_HUB_CHILD_ORDER = [
 const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
   services: {
     es: {
-      breadcrumbLabel: 'Servicios',
+      breadcrumbLabel: HUB_LABELS.services.es,
       metaTitle: 'Servicios de contenido UGC en español e inglés | Gisela Saldarriaga',
       metaDescription:
         'Contrata a tu creadora UGC bilingüe en Medellín. Grabo anuncios, demos, reseñas y videos de portavoz en español e inglés para EE. UU., España y LatAm.',
@@ -142,7 +143,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       ],
     },
     en: {
-      breadcrumbLabel: 'Services',
+      breadcrumbLabel: HUB_LABELS.services.en,
       metaTitle: 'UGC content services in Spanish and English | Gisela Saldarriaga',
       metaDescription:
         'Hire me as your bilingual UGC creator in Medellín. I make ads, demos, reviews, and spokesperson videos in Spanish and English for the US, Spain, and LatAm.',
@@ -194,7 +195,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
   },
   verticals: {
     es: {
-      breadcrumbLabel: 'Industrias',
+      breadcrumbLabel: HUB_LABELS.verticals.es,
       metaTitle: 'Creadora UGC para beauty y ecommerce | Gisela Saldarriaga',
       metaDescription:
         'UGC en español e inglés para marcas de beauty, ecommerce, moda, tech y bienestar. Soy creadora en Medellín y grabo para EE. UU., España y LatAm.',
@@ -231,7 +232,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       ],
     },
     en: {
-      breadcrumbLabel: 'Industries',
+      breadcrumbLabel: HUB_LABELS.verticals.en,
       metaTitle: 'Beauty and ecommerce UGC creator | Gisela Saldarriaga',
       metaDescription:
         'UGC in Spanish and English for beauty, ecommerce, fashion, tech, and wellness brands. I’m a creator in Medellín and film for the US, Spain, and LatAm.',
@@ -270,7 +271,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
   },
   resources: {
     es: {
-      breadcrumbLabel: 'Recursos',
+      breadcrumbLabel: HUB_LABELS.resources.es,
       metaTitle: 'Cómo contratar una creadora UGC bilingüe | Gisela Saldarriaga',
       metaDescription:
         'Guías para contratar una creadora UGC bilingüe: qué poner en el brief, qué formatos pedir para anuncios y en qué se diferencia el UGC de un influencer.',
@@ -307,7 +308,7 @@ const HUB_DRAFTS: Record<HubPageId, Record<SiteLocale, LocalizedHubDraft>> = {
       ],
     },
     en: {
-      breadcrumbLabel: 'Resources',
+      breadcrumbLabel: HUB_LABELS.resources.en,
       metaTitle: 'How to hire a bilingual UGC creator | Gisela Saldarriaga',
       metaDescription:
         'Guides for hiring a bilingual UGC creator: what to put in the brief, which ad formats to ask for, and how UGC differs from influencer marketing.',

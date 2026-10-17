@@ -73,7 +73,7 @@ Rules:
 - Hire-intent title, meta, H1, and body now live on these routes — see
   `2026-09-01-hire-intent-hub-copy.md`. Do not invent new URLs.
 - Fiverr 4.7/177 proof is services-hub only. Those two hub shells (and `HubPage` SSR) include `AggregateRating` 4.7/177; verticals and resources hubs do not.
-- Do not retarget bilingüe (`/servicios/creadora-ugc-bilingue/`) or cómo-contratar (`/recursos/como-contratar-creadora-ugc/`) breadcrumbs onto these hubs.
+- Child-page breadcrumbs point at these hubs (Home › hub › page) since 2026-10-16 — see that entry below. The earlier rule that kept bilingüe and cómo-contratar breadcrumbs off the hubs is retired.
 
 Routing trap: `scripts/normalize-client-entrypoints.mjs` must map the **exact** hub `index.html` files to `src/entry-hub.tsx` *before* the `servicios/*` → `entry-service.tsx` prefix match. Otherwise the hub hydrates `ServiceLandingPage` and React 404s.
 
@@ -143,3 +143,52 @@ Synced:
 - Tests: crawl-trust, geo-copy, hub-pages, service-inner-argument.
 
 Gig-level 4.8(139) is ignored. Public brand remains Gisela Saldarriaga / Gisela.UGC.
+
+## 2026-10-16 — internal link map: Home › hub › page
+
+A crawl of all 48 prerendered routes showed the hubs were orphans and the
+breadcrumbs skipped them:
+
+- Every service, vertical and resource page put its middle crumb
+  ("Servicios" / "Industrias" / "Recursos") on the **homepage URL** in
+  `BreadcrumbList`, so positions 1 and 2 were the same item. The visible
+  service crumb went to `/#services`; vertical and resource crumbs were
+  plain text. The resource shells linked "Recursos" to `/#services`.
+- Each hub had inbound links from the two sibling hubs only.
+- Every prerendered page shipped **two** `BreadcrumbList` nodes under one
+  `@id` (boot shell + PageSeo). On vertical pages they disagreed on the hub
+  name ("Verticales" vs "Industrias").
+- Hubs rendered without the navbar, language pill or page-end strip.
+
+The user chose to point breadcrumbs at the hubs and add a hub rail to the
+page-end strip. What shipped:
+
+- **One label source:** `src/data/hub-labels.ts` (`HUB_LABELS`) names the
+  hubs for the hub's own breadcrumb, the child-page middle crumb (visible +
+  JSON-LD), and the page-end rail.
+- **Breadcrumbs:** `ServiceHero` (desktop trail, sr-only trail, mobile back
+  chip), `VerticalLandingPage` (both trails), `ResourcePage`, and their
+  `BreadcrumbList` position 2 now use `getHubPath(family, locale)`.
+- **Boot shells:** `setHubBreadcrumb` / `setBootBreadcrumbHub` in
+  `scripts/lib/entry-html.mjs`, called from the service and vertical sync
+  scripts; the resource shell breadcrumb links to `getHubPath('resources')`.
+- **One BreadcrumbList per page:** `scripts/prerender.mjs` strips
+  `BreadcrumbList` from non-PageSeo graphs when PageSeo has one (same as
+  FAQPage). The boot `WebPage` → `#breadcrumb` reference still resolves.
+  `WebPage` / `Service` duplicates are unchanged (see
+  `2026-10-13-vertical-h1-llms-titles.md` §5).
+- **Hub pages:** `HubPage` now renders `Navbar`, a visible breadcrumb,
+  `SiteFooter` and `FloatingContactDock`, and lists children as
+  `st-related-row` rows with their blurbs (styles under "HUB INDEXES" in
+  `src/styles/templates.css`). Copy, titles, schema and the services-hub
+  rating are unchanged.
+- **Page-end strip:** `PageEndStrip` adds a Servicios · Industrias ·
+  Recursos rail beside the legal rail on every page; the current page's
+  pill carries `aria-current="page"`.
+
+Guard: `src/data/internal-link-map.test.tsx` — hub in every child
+BreadcrumbList and visible trail, hub chrome, hub rail on every page, no
+internal href outside `PAGE_REGISTRY`, and the committed shells on the same
+trail. It replaces the old "does not retarget … onto hub indexes" test in
+`crawl-trust.test.tsx`.
+

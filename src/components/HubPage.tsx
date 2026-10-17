@@ -1,6 +1,9 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
+import SiteFooter from '@/components/SiteFooter';
 import PageSeo from '@/components/PageSeo';
+import FloatingContactDock from '@/components/FloatingContactDock';
 import { CONTENT_DATES } from '@/data/content-dates';
 import { getHubPageContent } from '@/data/hub-pages';
 import { FIVERR_AGGREGATE_RATING } from '@/data/site-proof';
@@ -11,6 +14,7 @@ import {
   type HubPageId,
   type SiteLocale,
 } from '@/lib/locale-path';
+import '@/styles/templates.css';
 
 const SITE_URL = 'https://www.giselasaldarriaga.com';
 const buildUrl = (pathname: string) => new URL(pathname, SITE_URL).toString();
@@ -23,16 +27,22 @@ type HubPageProps = {
 const chrome = {
   es: {
     home: 'Inicio',
-    alternate: 'English',
     links: 'Enlaces',
+    siblings: 'Otras secciones',
   },
   en: {
     home: 'Home',
-    alternate: 'Español',
     links: 'Links',
+    siblings: 'Other sections',
   },
 } as const;
 
+/**
+ * Hub index (/servicios/, /verticales/, /recursos/ and EN twins). Same chrome as
+ * the pages it lists — navbar, breadcrumb, page-end strip, contact dock — and the
+ * guide template's hero and arrow rows (src/styles/templates.css), so a hub reads
+ * as the parent of its child pages rather than a separate site.
+ */
 const HubPage = ({ hubId, locale }: HubPageProps) => {
   const labels = chrome[locale];
   const page = getHubPageContent(hubId, locale);
@@ -101,7 +111,7 @@ const HubPage = ({ hubId, locale }: HubPageProps) => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
       <PageSeo
         title={page.metaTitle}
         description={page.metaDescription}
@@ -115,71 +125,71 @@ const HubPage = ({ hubId, locale }: HubPageProps) => {
         structuredData={schema}
       />
 
-      <main className="studio-container py-16 md:py-20">
-        <h1 className="route-title-accent type-marketing-display max-w-[28ch] text-[1.75rem] font-semibold leading-[1.14] tracking-tight-marketing md:text-[2rem] lg:text-[2.25rem]">
-          {page.heroTitle}
-        </h1>
-        <p className="mt-6 max-w-3xl text-base font-light leading-[1.9] text-foreground/78 md:text-[1.04rem] [&_a]:underline [&_a]:underline-offset-4">
-          <InlineCopy text={page.lead} />
-        </p>
+      <div className="min-h-screen bg-background">
+        <Navbar />
 
-        <section className="mt-12">
-          <h2 className="section-label text-muted-foreground">{page.childrenTitle}</h2>
-          <nav aria-label={labels.links} className="mt-6">
-            <ul className="flex flex-col gap-5">
-              {page.children.map((child) => (
-                <li key={child.href}>
-                  <Link
-                    to={child.href}
-                    className="font-sans text-sm font-semibold text-foreground underline-offset-4 hover:underline"
-                  >
-                    {child.title}
+        <main className="rsc-page">
+          <section className="rsc-hero">
+            <div className="st-container">
+              <nav className="st-breadcrumb" aria-label="Breadcrumb">
+                <Link to={homePath}>{labels.home}</Link>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">{page.breadcrumbLabel}</span>
+              </nav>
+              <h1 className="route-title-accent type-marketing-display max-w-[28ch] text-[1.75rem] font-semibold leading-[1.14] tracking-tight-marketing md:text-[2rem] lg:text-[2.25rem]">
+                {page.heroTitle}
+              </h1>
+              <p className="rsc-hero-lead hub-lead">
+                <InlineCopy text={page.lead} />
+              </p>
+            </div>
+          </section>
+
+          <section className="rsc-block">
+            <div className="st-container">
+              <h2 className="st-eyebrow hub-children-title">{page.childrenTitle}</h2>
+              <nav aria-label={labels.links} className="hub-children">
+                {page.children.map((child) => (
+                  <Link key={child.href} to={child.href} className="st-related-row group">
+                    <span className="hub-child-copy">
+                      <span className="st-related-title">{child.title}</span>
+                      {child.blurb ? <span className="hub-child-blurb">{child.blurb}</span> : null}
+                    </span>
+                    <span className="st-related-arrow" aria-hidden="true">→</span>
                   </Link>
-                  {child.blurb ? (
-                    <p className="mt-1 max-w-2xl font-sans text-sm font-light leading-[1.7] text-foreground/70">
-                      {child.blurb}
-                    </p>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </section>
+                ))}
+              </nav>
+            </div>
+          </section>
 
-        {page.proof ? (
-          <p className="mt-10 max-w-3xl font-sans text-sm font-light leading-[1.8] text-foreground/78 [&_a]:underline [&_a]:underline-offset-4">
-            <InlineCopy text={page.proof} />
-          </p>
-        ) : null}
+          <section className="rsc-block">
+            <div className="st-container hub-close">
+              <div>
+                {page.proof ? (
+                  <p className="hub-proof">
+                    <InlineCopy text={page.proof} />
+                  </p>
+                ) : null}
+                <a href={page.primaryCtaHref} className="st-cta-primary">
+                  {page.primaryCtaLabel}
+                </a>
+              </div>
+              <nav aria-label={labels.siblings} className="hub-siblings">
+                {page.secondaryLinks.map((link) => (
+                  <Link key={link.href} to={link.href} className="st-related-row group">
+                    <span className="st-related-title">{link.label}</span>
+                    <span className="st-related-arrow" aria-hidden="true">→</span>
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          </section>
+        </main>
 
-        <p className="mt-10 font-sans text-sm">
-          <a href={page.primaryCtaHref} className="font-semibold underline-offset-4 hover:underline">
-            {page.primaryCtaLabel}
-          </a>
-        </p>
-
-        <p className="mt-4 font-sans text-sm text-muted-foreground">
-          {page.secondaryLinks.map((link, index) => (
-            <span key={link.href}>
-              {index > 0 ? ' · ' : null}
-              <Link to={link.href} className="underline-offset-4 hover:underline">
-                {link.label}
-              </Link>
-            </span>
-          ))}
-        </p>
-
-        <p className="mt-4 font-sans text-sm text-muted-foreground">
-          <Link to={homePath} className="underline-offset-4 hover:underline">
-            {labels.home}
-          </Link>
-          {' · '}
-          <Link to={page.alternatePath} className="underline-offset-4 hover:underline">
-            {labels.alternate}
-          </Link>
-        </p>
-      </main>
-    </div>
+        <SiteFooter />
+        <FloatingContactDock />
+      </div>
+    </>
   );
 };
 

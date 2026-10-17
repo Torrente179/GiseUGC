@@ -4,7 +4,7 @@ import type { FeaturedExample, ServicePageContent } from '@/data/service-pages';
 import type { ServiceHeroReview } from '@/data/landing-route-types';
 import { getPosterVariantSrc, type ReelClip } from '@/data/portfolio-clips';
 import { SITE_PROOF } from '@/data/site-proof';
-import { getHomePath, getHomeSectionHref, type SiteLocale } from '@/lib/locale-path';
+import { getHomePath, getHubPath, type SiteLocale } from '@/lib/locale-path';
 import { resolveFeedSource, warmFeedVideo } from '@/lib/feed-media';
 import PretextLineReveal from '@/components/motion/PretextLineReveal';
 import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
@@ -88,7 +88,7 @@ export const ServiceHeroDesktop = ({ page, locale, labels, examples, review, med
           <nav className="st-breadcrumb svh-breadcrumb" aria-label="Breadcrumb">
             <Link to={getHomePath(locale)}>{labels.home}</Link>
             <span aria-hidden="true">/</span>
-            <Link to={getHomeSectionHref(locale, 'services')}>{labels.services}</Link>
+            <Link to={getHubPath('services', locale)}>{labels.services}</Link>
             <span aria-hidden="true">/</span>
             <span>{page.breadcrumbLabel}</span>
           </nav>
@@ -283,7 +283,7 @@ export const ServiceHeroMobile = ({ page, locale, labels, examples, mediaIntent,
               ))}
             </div>
           ) : null}
-          <Link className="svm-back" to={getHomeSectionHref(locale, 'services')}>
+          <Link className="svm-back" to={getHubPath('services', locale)}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
               <path d="M15 5l-7 7 7 7" />
             </svg>
@@ -326,7 +326,7 @@ export const ServiceHeroMobile = ({ page, locale, labels, examples, mediaIntent,
       <nav className="sr-only" aria-label="Breadcrumb">
         <Link to={getHomePath(locale)}>{labels.home}</Link>
         <span>/</span>
-        <Link to={getHomeSectionHref(locale, 'services')}>{labels.services}</Link>
+        <Link to={getHubPath('services', locale)}>{labels.services}</Link>
         <span>/</span>
         <span>{page.breadcrumbLabel}</span>
       </nav>

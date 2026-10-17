@@ -28,6 +28,7 @@ import {
   removeBootSignature,
   setBootAction,
   setBootBreadcrumbCurrent,
+  setBootBreadcrumbHub,
   setBootLabel,
   setBootPanelList,
   setBootPanelIntro,
@@ -35,6 +36,7 @@ import {
   setBootSummary,
   setBootTitle,
   setHeadMeta,
+  setHubBreadcrumb,
   setLastBreadcrumbName,
   setNoscriptLead,
   setNoscriptLeadList,
@@ -47,6 +49,8 @@ import {
 const { getAllServiceIds, getServicePageContent } = await loadTsModule('src/data/service-pages.ts');
 const { CONTENT_DATES } = await loadTsModule('src/data/content-dates.ts');
 const { FIVERR_AGGREGATE_RATING } = await loadTsModule('src/data/site-proof.ts');
+const { HUB_LABELS } = await loadTsModule('src/data/hub-labels.ts');
+const { getHubPath } = await loadTsModule('src/lib/locale-path.ts');
 
 const LOCALES = ['es', 'en'];
 
@@ -80,8 +84,6 @@ const bootNoScriptStyles = `      .boot-noscript h2,
 const syncSchema = (source, page, canonical) =>
   updateJsonLd(source, (schema) => {
     const graph = Array.isArray(schema['@graph']) ? schema['@graph'] : [];
-    const homeUrl = `${SITE_URL}${page.locale === 'en' ? '/en/' : '/'}`;
-
     for (const item of graph) {
       if (item['@type'] === 'WebPage') {
         item.name = page.metaTitle;
@@ -90,10 +92,6 @@ const syncSchema = (source, page, canonical) =>
         item.isPartOf = { '@id': `${SITE_URL}/#website` };
         item.breadcrumb = { '@id': `${canonical}#breadcrumb` };
         item.mainEntity = { '@id': `${canonical}#service` };
-      }
-
-      if (item['@type'] === 'BreadcrumbList' && Array.isArray(item.itemListElement) && item.itemListElement[1]) {
-        item.itemListElement[1].item = homeUrl;
       }
 
       if (item['@type'] === 'Service') {
@@ -106,6 +104,10 @@ const syncSchema = (source, page, canonical) =>
         }
       }
     }
+    setHubBreadcrumb(schema, {
+      name: HUB_LABELS.services[page.locale],
+      item: `${SITE_URL}${getHubPath('services', page.locale)}`,
+    });
     setLastBreadcrumbName(schema, page.breadcrumbLabel);
 
     // FAQPage lives only in PageSeo (page.faqs). A second copy here made every
@@ -122,6 +124,7 @@ const syncSchema = (source, page, canonical) =>
 
 const syncBootShell = (source, page) => {
   let next = setBootBreadcrumbCurrent(source, page.breadcrumbLabel);
+  next = setBootBreadcrumbHub(next, HUB_LABELS.services[page.locale]);
   next = setBootLabel(next, page.heroEyebrow);
   next = setBootTitle(next, page.heroTitle);
   next = setBootSummary(next, page.heroSummary);

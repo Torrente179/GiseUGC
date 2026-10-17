@@ -405,13 +405,6 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
     expect(read('en/resources/how-to-hire-ugc-creator/index.html')).toContain('Oct 14, 2026');
   });
 
-  it('does not retarget bilingüe or cómo-contratar breadcrumbs onto hub indexes', () => {
-    expect(read('src/components/service-hero/ServiceHero.tsx')).toContain("getHomeSectionHref(locale, 'services')");
-    expect(read('src/components/service-hero/ServiceHero.tsx')).not.toContain('getHubPath');
-    expect(read('src/components/ServiceLandingPage.tsx')).not.toContain('getHubPath');
-    expect(read('src/components/ResourcePage.tsx')).not.toContain('getHubPath');
-    expect(read('recursos/como-contratar-creadora-ugc/index.html')).not.toContain('href="/recursos/"');
-    expect(read('servicios/creadora-ugc-bilingue/index.html')).not.toContain('href="/servicios/"');
-  });
+  // Breadcrumbs now point at the hub indexes: see src/data/internal-link-map.test.tsx.
 });
 

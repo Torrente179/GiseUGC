@@ -29,6 +29,7 @@ import {
   removeBootSignature,
   setBootAction,
   setBootBreadcrumbCurrent,
+  setBootBreadcrumbHub,
   setBootLabel,
   setBootPanelList,
   setBootPanelIntro,
@@ -36,10 +37,12 @@ import {
   setBootSummary,
   setBootTitle,
   setHeadMeta,
+  setHubBreadcrumb,
   setLastBreadcrumbName,
   setNoscriptLead,
   setNoscriptLeadList,
   setNoscriptLeadListTitle,
+  SITE_URL,
   updateJsonLd,
   withFileContext,
   writeEntryIfChanged,
@@ -47,6 +50,8 @@ import {
 
 const { getAllVerticalIds, getVerticalPageContent } = await loadTsModule('src/data/vertical-pages.ts');
 const { CONTENT_DATES } = await loadTsModule('src/data/content-dates.ts');
+const { HUB_LABELS } = await loadTsModule('src/data/hub-labels.ts');
+const { getHubPath } = await loadTsModule('src/lib/locale-path.ts');
 
 const LOCALES = ['es', 'en'];
 
@@ -58,6 +63,10 @@ const syncSchema = (source, page) =>
     webPage.description = page.metaDescription;
     webPage.dateModified = CONTENT_DATES.verticals;
 
+    setHubBreadcrumb(schema, {
+      name: HUB_LABELS.verticals[page.locale],
+      item: `${SITE_URL}${getHubPath('verticals', page.locale)}`,
+    });
     setLastBreadcrumbName(schema, page.breadcrumbLabel);
 
     const service = findGraphNode(schema, 'Service');
@@ -88,6 +97,7 @@ const syncNoscriptFaq = (source, page) =>
 
 const syncBootShell = (source, page) => {
   let next = setBootBreadcrumbCurrent(source, page.breadcrumbLabel);
+  next = setBootBreadcrumbHub(next, HUB_LABELS.verticals[page.locale]);
   next = setBootLabel(next, page.heroEyebrow);
   next = setBootTitle(next, page.heroTitle);
   next = setBootSummary(next, page.heroSummary);

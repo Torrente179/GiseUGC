@@ -32,12 +32,13 @@ import {
 
 const { getAllResourceIds, getResourcePageContent } = await loadTsModule('src/data/resource-pages.ts');
 const { CONTENT_DATES, formatLastUpdatedLabel } = await loadTsModule('src/data/content-dates.ts');
-const { getHomePath } = await loadTsModule('src/lib/locale-path.ts');
+const { getHomePath, getHubPath } = await loadTsModule('src/lib/locale-path.ts');
+const { HUB_LABELS } = await loadTsModule('src/data/hub-labels.ts');
 
 /* Mirrors the chrome labels in ResourcePage.tsx. */
 const LABELS = {
-  es: { home: 'Inicio', resources: 'Recursos', faq: 'Preguntas frecuentes', atAGlance: 'De un vistazo' },
-  en: { home: 'Home', resources: 'Resources', faq: 'Frequently asked questions', atAGlance: 'At a glance' },
+  es: { home: 'Inicio', resources: HUB_LABELS.resources.es, faq: 'Preguntas frecuentes', atAGlance: 'De un vistazo' },
+  en: { home: 'Home', resources: HUB_LABELS.resources.en, faq: 'Frequently asked questions', atAGlance: 'At a glance' },
 };
 
 const H2_STYLE = 'font-size:1.3rem;margin-top:2rem;margin-bottom:0.75rem';
@@ -107,7 +108,7 @@ const renderBody = (page, locale) => {
     '<div id="root">',
     '      <div style="max-width:56rem;margin:0 auto;padding:2rem 1.5rem">',
     '        <nav aria-label="Breadcrumb" style="font-size:0.85rem;margin-bottom:1.5rem">',
-    `          <a href="${homePath}">${labels.home}</a> / <a href="${homePath}#services">${labels.resources}</a> / <span>${escapeText(page.breadcrumbLabel)}</span>`,
+    `          <a href="${homePath}">${labels.home}</a> / <a href="${getHubPath('resources', locale)}">${labels.resources}</a> / <span>${escapeText(page.breadcrumbLabel)}</span>`,
     '        </nav>',
     `        <h1 style="font-size:1.8rem;line-height:1.2;margin-bottom:1rem">${escapeText(page.heroTitle)}</h1>`,
     `        <p style="font-size:1.05rem;line-height:1.7;margin-bottom:1.5rem">${renderInlineCopy(page.heroSummary)}</p>`,

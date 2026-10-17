@@ -122,11 +122,21 @@ for (const htmlPath of htmlFiles) {
 
   // PageSeo already renders FAQPage from page.faqs. Boot-shell graphs used to
   // keep a second copy, so every service/vertical route emitted FAQPage twice.
-  // Keep the PageSeo block (data-route-schema) and strip FAQPage from the rest.
+  // The same goes for BreadcrumbList: two lists under one @id, with different
+  // hub names, is a conflicting trail. Keep the PageSeo block (data-route-schema)
+  // and strip FAQPage, plus BreadcrumbList when PageSeo has one, from the rest.
   const routeSchema = dom.window.document.querySelector(
     'script[data-route-schema][type="application/ld+json"]',
   );
   if (routeSchema) {
+    const ownedTypes = new Set(['FAQPage']);
+    try {
+      const routeData = JSON.parse(routeSchema.textContent ?? '');
+      const routeGraph = Array.isArray(routeData['@graph']) ? routeData['@graph'] : [routeData];
+      if (routeGraph.some((node) => node['@type'] === 'BreadcrumbList')) ownedTypes.add('BreadcrumbList');
+    } catch {
+      // Malformed route schema: only FAQPage is treated as owned.
+    }
     for (const script of dom.window.document.querySelectorAll(
       'script[type="application/ld+json"]',
     )) {
@@ -135,7 +145,7 @@ for (const htmlPath of htmlFiles) {
         const data = JSON.parse(script.textContent ?? '');
         const graph = Array.isArray(data['@graph']) ? data['@graph'] : null;
         if (!graph) continue;
-        const next = graph.filter((node) => node['@type'] !== 'FAQPage');
+        const next = graph.filter((node) => !ownedTypes.has(node['@type']));
         if (next.length === graph.length) continue;
         if (next.length === 0) {
           script.remove();

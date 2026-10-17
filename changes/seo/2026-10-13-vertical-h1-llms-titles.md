@@ -98,6 +98,10 @@ Not collapsed in this pass. The two graphs are **not** identical: boot
 VideoObjects. Dropping either block would change schema content. The existing
 FAQPage strip in `scripts/prerender.mjs` stays.
 
+2026-10-16: the `#breadcrumb` overlap is gone — prerender now strips the boot
+`BreadcrumbList` too (both lists were Home › hub › page by then). `#webpage`
+and `#service` still overlap. See `seo-crawl-trust.md`.
+
 Asserted in `faq-schema-and-links.test.tsx`: each PageSeo graph has unique
 `@id`s; the boot graph’s `@id`s are a subset of the route graph.
 

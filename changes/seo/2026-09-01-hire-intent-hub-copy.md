@@ -36,8 +36,8 @@ not retarget `PAGE_REGISTRY` / sitemap child order. Hrefs still come from
 `getServicePath` / `getVerticalPath` / `getResourcePath`.
 
 Hreflang es↔en and x-default → the ES hub are unchanged. Contact CTAs stay
-`/#contact` and `/en/#contact`. Money-page breadcrumbs are still not pointed
-at these hubs.
+`/#contact` and `/en/#contact`. Money-page breadcrumbs point at these hubs since
+2026-10-16 (`seo-crawl-trust.md`).
 
 `CONTENT_DATES.hubs` is `2026-09-01`. Sitemap lastmod for the six hub locs
 follows that date.

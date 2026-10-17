@@ -4125,4 +4125,88 @@
     }
   }
 
+  /* ═══════════════════════════════════════════════════
+     HUB INDEXES — /servicios/, /verticales/, /recursos/ (+ EN)
+     Reuse the guide hero and the st-related arrow rows; these
+     rules only add the child blurb and the closing CTA row.
+     ═══════════════════════════════════════════════════ */
+  .hub-lead {
+    margin-top: 1.5rem;
+  }
+
+  .hub-lead a,
+  .hub-proof a {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* The global h2:not(...) rule in index.css is (0,3,1); restore the eyebrow
+     type at (0,4,1) rather than extending its :not() chain. */
+  .rsc-block .st-container h2.st-eyebrow.hub-children-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    color: hsl(var(--accent));
+  }
+
+  .hub-children {
+    margin-top: 1.5rem;
+  }
+
+  .hub-children .st-related-row {
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.1rem 0;
+  }
+
+  .hub-child-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+  }
+
+  .hub-children .st-related-title,
+  .hub-siblings .st-related-title {
+    color: hsl(var(--foreground) / 0.85);
+  }
+
+  .hub-children .st-related-row:hover .st-related-title,
+  .hub-siblings .st-related-row:hover .st-related-title {
+    color: hsl(var(--primary));
+  }
+
+  .hub-child-blurb {
+    max-width: 40rem;
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: hsl(var(--foreground) / 0.65);
+  }
+
+  .hub-close {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .hub-close {
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+  }
+
+  .hub-proof {
+    margin: 0 0 1.5rem;
+    max-width: 36rem;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: hsl(var(--foreground) / 0.75);
+  }
+
 }
