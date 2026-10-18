@@ -37,6 +37,21 @@ export const untrackOffPageVideo = (video: HTMLVideoElement) => {
   offPageVideos.delete(video);
 };
 
+/**
+ * Videos fed through Media Source (the feed's streams). Their owner suspends
+ * and restores them itself (`onVideosSuspended` / `onVideosResumed`): a
+ * Media Source URL cannot simply be put back.
+ */
+const managedVideos = new WeakSet<HTMLVideoElement>();
+
+export const markManagedVideo = (video: HTMLVideoElement) => {
+  managedVideos.add(video);
+};
+
+export const unmarkManagedVideo = (video: HTMLVideoElement) => {
+  managedVideos.delete(video);
+};
+
 type Suspended = {
   src: string;
   preload: HTMLVideoElement['preload'];
@@ -46,21 +61,27 @@ type Suspended = {
 
 const suspended = new Map<HTMLVideoElement, Suspended>();
 const suspendHooks = new Set<() => void>();
+const resumeHooks = new Set<() => void>();
 
-/** Runs after every video has been released for `pagehide`. */
-export const onVideosSuspended = (hook: () => void) => {
-  suspendHooks.add(hook);
+const addHook = (hooks: Set<() => void>, hook: () => void) => {
+  hooks.add(hook);
   return () => {
-    suspendHooks.delete(hook);
+    hooks.delete(hook);
   };
 };
+
+/** Runs after every video has been released for `pagehide`. */
+export const onVideosSuspended = (hook: () => void) => addHook(suspendHooks, hook);
+
+/** Runs when a page restored from the back/forward cache gets its videos back. */
+export const onVideosResumed = (hook: () => void) => addHook(resumeHooks, hook);
 
 const suspendAll = () => {
   const videos = new Set<HTMLVideoElement>(offPageVideos);
   document.querySelectorAll('video').forEach((video) => videos.add(video));
   videos.forEach((video) => {
     const src = video.getAttribute('src');
-    if (!src) return;
+    if (!src || managedVideos.has(video)) return;
     suspended.set(video, {
       src,
       preload: video.preload,
@@ -70,6 +91,15 @@ const suspendAll = () => {
     releaseVideo(video);
   });
   suspendHooks.forEach((hook) => hook());
+};
+
+/** Plays a restored video, muted if the browser wants a fresh tap for sound. */
+export const playAfterRestore = (video: HTMLVideoElement) => {
+  video.play().catch(() => {
+    if (video.muted) return;
+    video.muted = true;
+    void video.play().catch(() => undefined);
+  });
 };
 
 const resumeAll = () => {
@@ -87,15 +117,10 @@ const resumeAll = () => {
         { once: true },
       );
     }
-    if (!state.playing) return;
-    video.play().catch(() => {
-      if (video.muted) return;
-      // Sound needs a fresh tap after a restore; carry on muted meanwhile.
-      video.muted = true;
-      void video.play().catch(() => undefined);
-    });
+    if (state.playing) playAfterRestore(video);
   });
   suspended.clear();
+  resumeHooks.forEach((hook) => hook());
 };
 
 let installed = false;

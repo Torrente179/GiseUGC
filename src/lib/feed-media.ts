@@ -2,9 +2,21 @@ import { R2_MEDIA_BASE_URL } from '@/data/portfolio-clips';
 import { FEED_MEDIA, FEED_MEDIA_VERSION, type FeedRendition } from '@/data/feed-renditions';
 import { getConnectionProfile } from '@/lib/media-playback-scheduler';
 import {
+  FeedStream,
+  feedStreamSrc,
+  loadHls,
+  markStreamFailed,
+  streamCodecFor,
+  type HlsConstructor,
+} from '@/lib/feed-stream';
+import {
+  markManagedVideo,
+  onVideosResumed,
   onVideosSuspended,
+  playAfterRestore,
   releaseVideo,
   trackOffPageVideo,
+  unmarkManagedVideo,
   untrackOffPageVideo,
 } from '@/lib/video-lifecycle';
 
@@ -32,6 +44,12 @@ import {
  * Phones hold little decoded video at once, so the pool keeps three players at
  * most and only one of them buffers a whole reel: the one on screen, then the
  * next once the one on screen can play through.
+ *
+ * Where the browser has Media Source, the pool plays each reel's stream
+ * (src/lib/feed-stream.ts) instead of its MP4: same bytes, but the first
+ * seconds of the reels around the one on screen are loaded ahead, so a swipe
+ * or the first view starts at once, iPhone included. The MP4 stands in
+ * wherever streams are missing or fail.
  */
 
 export type FeedCodec = 'hevc' | 'avc';
@@ -234,17 +252,45 @@ const createVideo = () => {
   return video;
 };
 
+type Suspended = { slug: string; time: number; playing: boolean };
+
+const livePools = new Set<FeedPlayerPool>();
+
+if (typeof window !== 'undefined') {
+  onVideosSuspended(() => livePools.forEach((pool) => pool.suspend()));
+  onVideosResumed(() => livePools.forEach((pool) => pool.resume()));
+}
+
 /** The portfolio feed's reused <video> elements, keyed by master slug. */
 export class FeedPlayerPool {
   private readonly assigned = new Map<string, HTMLVideoElement>();
   private readonly free: HTMLVideoElement[] = [];
+  private readonly streams = new Map<HTMLVideoElement, FeedStream>();
+  private Hls: HlsConstructor | null = null;
+  private hlsSettled = false;
+  private scheduler: number | null = null;
+  private suspended: Suspended[] = [];
   private blessed = false;
+
+  constructor() {
+    if (typeof window === 'undefined') return;
+    livePools.add(this);
+    void loadHls().then((Hls) => {
+      this.Hls = Hls;
+      this.hlsSettled = true;
+      // Reels acquired while hls.js was loading get their source now.
+      this.assigned.forEach((video, slug) => {
+        if (!this.streams.has(video) && !video.hasAttribute('src')) this.attach(slug, video);
+      });
+    });
+  }
 
   /**
    * The reel's element, loading. `null` when the reel has no feed files.
-   * `metadata` loads the first frame only. Asked of a reel that has left the
-   * screen, it also drops what that reel had buffered, so the element going
-   * back to "previous" does not hold a whole reel in memory.
+   * `metadata` loads the first frame only (a stream: its first seconds).
+   * Asked of a reel that has left the screen, it also drops what that reel had
+   * buffered, so the element going back to "previous" does not hold a whole
+   * reel in memory.
    */
   acquire(slug: string, preload: 'auto' | 'metadata' = 'auto'): HTMLVideoElement | null {
     const existing = this.assigned.get(slug);
@@ -252,26 +298,77 @@ export class FeedPlayerPool {
       if (preload === 'auto') {
         existing.preload = 'auto';
       } else if (existing.preload === 'auto' && !existing.isConnected) {
-        const src = existing.getAttribute('src');
-        releaseVideo(existing);
+        this.detach(existing);
         existing.preload = 'metadata';
-        if (src) existing.src = src;
+        this.attach(slug, existing);
       }
       return existing;
     }
-    const media = getFeedMedia(slug);
-    if (!media || typeof document === 'undefined') return null;
+    if (!getFeedMedia(slug) || typeof document === 'undefined') return null;
 
     const video = this.free.pop() ?? createVideo();
     video.preload = preload;
     video.muted = true;
-    video.src = feedVideoSrc(media);
     this.assigned.set(slug, video);
+    this.attach(slug, video);
     return video;
   }
 
   peek(slug: string) {
     return this.assigned.get(slug) ?? null;
+  }
+
+  /** Gives the element its source: the reel's stream, else its MP4. */
+  private attach(slug: string, video: HTMLVideoElement) {
+    const media = getFeedMedia(slug);
+    if (!media) return;
+    const codec = streamCodecFor(slug);
+    if (codec && !this.hlsSettled) return; // attached once hls.js is in
+    if (codec && this.Hls) {
+      markManagedVideo(video);
+      this.streams.set(video, new FeedStream(this.Hls, video, feedStreamSrc(slug, codec), () => this.fallBack(slug, video)));
+      this.prioritise();
+      return;
+    }
+    video.src = feedVideoSrc(media);
+  }
+
+  /** Takes the source away: the stream torn down, or the MP4 released. */
+  private detach(video: HTMLVideoElement) {
+    const stream = this.streams.get(video);
+    if (stream) {
+      stream.destroy();
+      this.streams.delete(video);
+      unmarkManagedVideo(video);
+    }
+    releaseVideo(video);
+  }
+
+  /**
+   * The reel that plays comes first: while it has little buffered ahead, the
+   * reels around it hold their loading, so it never starves for a head that
+   * may never be watched. Checked twice a second while streams exist.
+   */
+  private readonly prioritise = () => {
+    const streams = [...this.streams.values()];
+    const hungry = streams.some((stream) => stream.hungry);
+    streams.forEach((stream) => stream.setLoading(stream.playing || !hungry));
+    if (streams.length && this.scheduler === null) {
+      this.scheduler = window.setInterval(this.prioritise, 500);
+    } else if (!streams.length && this.scheduler !== null) {
+      window.clearInterval(this.scheduler);
+      this.scheduler = null;
+    }
+  };
+
+  /** A stream failed: this reel plays its MP4 for the rest of the visit. */
+  private fallBack(slug: string, video: HTMLVideoElement) {
+    markStreamFailed(slug);
+    if (this.assigned.get(slug) !== video) return;
+    const playing = !video.paused;
+    this.detach(video);
+    this.attach(slug, video);
+    if (playing) void video.play().catch(() => undefined);
   }
 
   /** Keeps these reels loaded and returns every other element to the pool. */
@@ -280,11 +377,40 @@ export class FeedPlayerPool {
     this.assigned.forEach((video, slug) => {
       if (keep.has(slug)) return;
       this.assigned.delete(slug);
-      releaseVideo(video);
+      this.detach(video);
       video.remove();
       if (this.free.length < POOL_SIZE) this.free.push(video);
       else untrackOffPageVideo(video);
     });
+  }
+
+  /**
+   * `pagehide`: streams let go of their Media Source (the MP4 elements are
+   * released by video-lifecycle.ts), remembering where they were.
+   */
+  suspend() {
+    this.suspended = [];
+    this.assigned.forEach((video, slug) => {
+      if (!this.streams.has(video)) return;
+      this.suspended.push({ slug, time: video.currentTime, playing: !video.paused });
+      this.detach(video);
+    });
+  }
+
+  /** A restore from the back/forward cache: streams pick up where they were. */
+  resume() {
+    this.suspended.forEach(({ slug, time, playing }) => {
+      const video = this.assigned.get(slug);
+      if (!video || this.streams.has(video)) return;
+      this.attach(slug, video);
+      if (time > 0) {
+        video.addEventListener('loadedmetadata', () => {
+          video.currentTime = time;
+        }, { once: true });
+      }
+      if (playing) playAfterRestore(video);
+    });
+    this.suspended = [];
   }
 
   /**
@@ -307,7 +433,9 @@ export class FeedPlayerPool {
 
   destroy() {
     this.retain([]);
+    this.prioritise();
     this.free.forEach(untrackOffPageVideo);
     this.free.length = 0;
+    livePools.delete(this);
   }
 }

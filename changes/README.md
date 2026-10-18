@@ -32,6 +32,12 @@ This folder is organized by subsystem instead of by date.
     player frees its stream when it is done with it (`src/lib/video-lifecycle.ts`).
     Rotating cards play preview loops warmed into memory. The feed pool fully
     buffers one reel at a time. Read it before adding a `<video>` anywhere.
+  - **Feed reels stream through Media Source:** `2026-10-17-feed-streams.md`.
+    The pool plays bit-identical fragmented copies of the feed MP4s with
+    hls.js, so the next reels' first seconds load ahead, even on iPhone. A new
+    master needs `npm run video:streams -- --upload` after `encode-feed`. The
+    media host caches a 404 for 31 days, so never list a stream before it is
+    uploaded.
 - `seo/`
   - Canonicals, metadata, schema, crawlability, and language-routing behavior.
   - **Current crawl-trust / hub indexes:** `seo/seo-crawl-trust.md` —
