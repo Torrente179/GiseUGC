@@ -131,7 +131,19 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
           mountId="portfolio"
           rootMargin={isMobile ? '320px 0px' : '520px 0px'}
           queueDelayMs={80}
-          skeleton={<SectionSkeleton id="portfolio" minHeightClass="min-h-[760px]" variant="cards" />}
+          // As tall as the mounted section (src/styles/reels-feed.css), so
+          // nothing below it moves when it mounts: services used to jump
+          // 73px on an iPhone 15 Plus and 495px on an iPad mini. Phones:
+          // the 350:452 card at full width less 40px, the two-line title,
+          // and 238px of chips, padding and CTA. Desktop: the grid's padding
+          // and the phone (2.092 × its width, clamp(17.5rem, 24vw, 21.5rem)).
+          skeleton={
+            <SectionSkeleton
+              id="portfolio"
+              minHeightClass="min-h-[calc(1.2914*(100vw_-_40px)_+_238px_+_1.8*clamp(48px,32px_+_4.4vw,60px))] md:min-h-[calc(225px_+_2.092*clamp(280px,24vw,344px))] min-[1200px]:min-h-[calc(193px_+_2.092*clamp(280px,24vw,344px))]"
+              variant="cards"
+            />
+          }
         >
           <PortfolioSection />
         </DeferredSection>

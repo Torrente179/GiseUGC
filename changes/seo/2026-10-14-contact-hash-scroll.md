@@ -1,6 +1,6 @@
 # `/#contact` must scroll on a cold load
 
-**Status:** Current
+**Status:** Superseded on 2026-10-17 by `../2026-10-17-scroll-landing-no-freeze.md`
 **Implemented:** 2026-10-14
 **Scope:** Hash-section scroll in `App.tsx`
 

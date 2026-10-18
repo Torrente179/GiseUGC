@@ -30,9 +30,12 @@ import {
 import { getChatGptReferralContext } from '@/lib/referral-attribution';
 import { startMobileMediaPressureObserver } from '@/lib/perf-debug';
 import {
-  HASH_SCROLL_MAX_ATTEMPTS,
   HASH_SCROLL_NAV_OFFSET,
-  shouldRetryHashScroll,
+  findScrollAnchor,
+  isRestoredNavigation,
+  pinElementInView,
+  readScrollAnchor,
+  saveScrollAnchor,
 } from '@/lib/hash-section-scroll';
 import { scrollToY } from '@/lib/motion/native-scroll';
 import { openContactDock } from '@/lib/contact-dock';
@@ -47,6 +50,11 @@ let hasTrackedChatGptLanding = false;
 let latestScrollY = 0;
 if (typeof window !== 'undefined') {
   window.addEventListener('scroll', () => { latestScrollY = window.scrollY; }, { passive: true });
+  // Leaving the document: remember which section was on screen, so Back can
+  // hold it in place while the page mounts again (see hash-section-scroll.ts).
+  window.addEventListener('pagehide', () => {
+    saveScrollAnchor(window.location.pathname, findScrollAnchor());
+  });
 }
 
 const DeferredEditorialFonts = () => {
@@ -175,28 +183,6 @@ const jumpToY = (y: number) => {
   scrollToY(y, { immediate: true });
 };
 
-// Smooth-scroll to a section element by ID, retrying until it appears in the DOM.
-// Required because some sections are lazily mounted and may not exist yet.
-const scrollToSection = (sectionId: string, attempts = 0, previousY: number | null = null) => {
-  const element = document.getElementById(sectionId);
-  if (element) {
-    const y = element.getBoundingClientRect().top + window.scrollY - HASH_SCROLL_NAV_OFFSET;
-    if (shouldRetryHashScroll(y, document.documentElement.scrollHeight, window.innerHeight, attempts, previousY)) {
-      setTimeout(() => scrollToSection(sectionId, attempts + 1, y), 80);
-      return;
-    }
-    // Immediate: a later view-transition or POP restore must not cancel this.
-    scrollToY(Math.max(0, y), { immediate: true });
-    // Clear the hash from the URL without triggering a React Router navigation
-    const cleanPath = window.location.pathname + window.location.search;
-    window.history.replaceState(null, '', cleanPath);
-    return;
-  }
-  if (attempts < HASH_SCROLL_MAX_ATTEMPTS) {
-    setTimeout(() => scrollToSection(sectionId, attempts + 1), 80);
-  }
-};
-
 const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents }) => {
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -241,23 +227,48 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
   } = routeComponents;
 
   useEffect(() => {
+    const previousKey = prevLocationKeyRef.current;
     // Save the scroll position of the page we're leaving before updating the ref
-    if (prevLocationKeyRef.current !== null && prevLocationKeyRef.current !== location.key) {
-      scrollPositions.set(prevLocationKeyRef.current, latestScrollY);
+    if (previousKey !== null && previousKey !== location.key) {
+      scrollPositions.set(previousKey, latestScrollY);
     }
     prevLocationKeyRef.current = location.key;
 
     if (location.hash) {
-      // Hash wins over POP restore so a cold load of /#contact (or /en/#contact)
-      // scrolls to the target instead of jumping to y=0.
-      jumpToY(0);
-      requestAnimationFrame(() => scrollToSection(location.hash.slice(1)));
+      // A section link from another page (/#services, /#contact). Land on it
+      // at once and hold it while the deferred sections around it mount; the
+      // visitor's first touch, wheel, click or key hands the scroll back.
+      let sectionId = location.hash.slice(1);
+      try {
+        sectionId = decodeURIComponent(sectionId);
+      } catch {
+        // A malformed escape: look the raw id up instead.
+      }
       // `#contact` is the page-end strip, which has no contact channels; also
       // open the contact panel (desktop dock or mobile sheet). The request is
       // kept as pending on <body> for whichever surface mounts after this.
       if (location.hash === '#contact') openContactDock();
-    } else if (navigationType === 'POP') {
-      // Browser back / forward — restore exact saved scroll position.
+      // Clear the hash from the URL without triggering a React Router navigation
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      return pinElementInView({
+        find: () => document.getElementById(sectionId),
+        offset: HASH_SCROLL_NAV_OFFSET,
+      });
+    }
+
+    if (previousKey === null || previousKey === location.key) {
+      // The document's first render. The browser restores the scroll position
+      // on Back, Forward and reload; it must not be reset here (every document
+      // load is a router POP with nothing saved, which used to send it to y=0).
+      // Only hold the section the visitor was reading while sections above it
+      // mount and change height.
+      const anchor = isRestoredNavigation() ? readScrollAnchor(location.pathname) : null;
+      if (!anchor) return undefined;
+      return pinElementInView({ find: () => document.getElementById(anchor.id), offset: anchor.offset });
+    }
+
+    if (navigationType === 'POP') {
+      // Back / forward within this document — restore the saved scroll position.
       // Two rAF hops let the browser finish route layout before restoring scroll,
       // preventing main-thread contention on media-heavy pages.
       const savedY = scrollPositions.get(location.key) ?? 0;
@@ -270,6 +281,7 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
       // Normal forward navigation — start at the top
       jumpToY(0);
     }
+    return undefined;
   }, [location, navigationType]);
 
   return (

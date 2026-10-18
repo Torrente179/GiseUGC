@@ -81,9 +81,11 @@ This folder is organized by subsystem instead of by date.
     `FIVERR_PRICING`; any change needs a Fiverr re-check and an Authority ping.
     Spokesperson cells show the amount once plus two labelled gig links:
     `seo/2026-10-14-pricing-guide-table-faq.md`. One FAQ block (no noscript `<dl>`).
-  - **Current `/#contact` scroll:** `seo/2026-10-14-contact-hash-scroll.md` —
-    hash wins over POP restore; `scrollToSection` retries until the footer Y
-    has settled, then jumps immediately.
+  - **Current landing scroll (`/#contact`, `/#services`, Back):**
+    `2026-10-17-scroll-landing-no-freeze.md`. The page lands on the section at
+    once and holds it while deferred sections mount. The visitor's first
+    touch, wheel, click or key hands the scroll back. It replaces the retry
+    loop in `seo/2026-10-14-contact-hash-scroll.md`.
 - `deployment/`
   - Hosting, caching, security hardening, and runtime instrumentation.
 

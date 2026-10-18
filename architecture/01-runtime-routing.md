@@ -38,13 +38,27 @@ Only the current route is mounted. Hidden home media is not preserved behind a
 subroute.
 
 `/#contact` and `/en/#contact` target `id="contact"` on the rendered homepage
-footer (`PageEndStrip` while `SHOW_SITE_FOOTER` is false). Hash navigation wins
-over POP restore (a cold load is a `POP`). `scrollToSection` waits until the
-measured Y has settled, then jumps immediately and clears the hash.
+footer (`PageEndStrip` while `SHOW_SITE_FOOTER` is false).
 
 ## Scroll Behavior
 
-`App.tsx` persists scroll positions by React Router `location.key`. On browser back/forward without a hash it restores the saved Y position after two animation frames. A hash in the URL is handled first so `/#contact` does not get reset to `y=0`. Hash navigation retries until the target's layout has settled, then clears the hash from the URL.
+Every document load is a React Router `POP` with nothing saved, so `App.tsx`
+does not set the scroll on a document's first render. The browser restores it
+on Back, Forward and reload. See `changes/2026-10-17-scroll-landing-no-freeze.md`.
+
+- **Hash in the URL** (`/#services`, `/#contact`): `pinElementInView`
+  (`src/lib/hash-section-scroll.ts`) lands on the section at once, 80 px below
+  the top. It then holds it there every frame while deferred sections mount,
+  for up to 3.2 s. It lets go on the visitor's first touch, wheel, click or
+  key. The hash is cleared from the URL.
+- **Back or reload into a scrolled page:** on `pagehide` the page stores the
+  section on screen and its offset (`sessionStorage`, per path). On return the
+  same pin holds that section while the page mounts again.
+- **In-page section links** (`useHashlessSectionNavigation`): an eased JS
+  scroll. It re-measures the target every frame, and the visitor's touch,
+  wheel, click or key stops it.
+- In-document location changes (rare: nearly every link is a document
+  navigation) still restore positions saved by `location.key`.
 
 ## Locale Behavior
 

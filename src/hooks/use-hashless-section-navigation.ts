@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { hasContactDockListener, openContactDock } from '@/lib/contact-dock';
+import { USER_SCROLL_INPUTS } from '@/lib/hash-section-scroll';
 
 export const CONTACT_SECTION_ID = 'contact';
 
@@ -20,6 +21,7 @@ export const clearUrlHash = () => {
 };
 
 const cancelActiveScroll = () => {
+  USER_SCROLL_INPUTS.forEach((type) => window.removeEventListener(type, cancelActiveScroll, true));
   if (activeScrollFrameId === null) return;
   cancelAnimationFrame(activeScrollFrameId);
   activeScrollFrameId = null;
@@ -37,22 +39,27 @@ const premiumEaseScroll = (t: number): number => {
 };
 
 /**
- * JS-powered smooth scroll using a premium easing curve (interruptible via rAF).
+ * JS-powered smooth scroll using a premium easing curve. The visitor's touch,
+ * wheel, click or key stops it where it is: it never scrolls against a finger.
+ * The target is measured every frame, so a deferred section mounting above it
+ * on the way does not make it land short.
  */
 const smoothScrollTo = (targetElement: HTMLElement, duration = 900) => {
-  const targetY = targetElement.getBoundingClientRect().top + window.scrollY;
+  const targetY = () => targetElement.getBoundingClientRect().top + window.scrollY;
   const startY = window.scrollY;
-  const distance = targetY - startY;
-  const absoluteDistance = Math.abs(distance);
+  const absoluteDistance = Math.abs(targetY() - startY);
 
   if (absoluteDistance < 1) return;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    window.scrollTo(0, targetY);
+    window.scrollTo(0, targetY());
     return;
   }
 
   cancelActiveScroll();
+  USER_SCROLL_INPUTS.forEach((type) =>
+    window.addEventListener(type, cancelActiveScroll, { capture: true, passive: true }),
+  );
   const resolvedDuration = Math.min(1080, Math.max(700, Math.max(duration, absoluteDistance * 0.42)));
   let startTime: number | null = null;
 
@@ -62,7 +69,7 @@ const smoothScrollTo = (targetElement: HTMLElement, duration = 900) => {
     const progress = Math.min(elapsed / resolvedDuration, 1);
     const eased = premiumEaseScroll(progress);
 
-    window.scrollTo(0, startY + distance * eased);
+    window.scrollTo(0, startY + (targetY() - startY) * eased);
 
     if (progress < 1) {
       activeScrollFrameId = requestAnimationFrame(step);
@@ -70,6 +77,7 @@ const smoothScrollTo = (targetElement: HTMLElement, duration = 900) => {
     }
 
     activeScrollFrameId = null;
+    cancelActiveScroll();
   };
 
   activeScrollFrameId = requestAnimationFrame(step);

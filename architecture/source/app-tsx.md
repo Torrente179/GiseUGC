@@ -19,7 +19,6 @@ Bootstrap and Providers
 
 ## Local Functions
 - `jumpToY`
-- `scrollToSection`
 - `AppRoutes`
 - `App`
 
