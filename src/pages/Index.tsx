@@ -129,7 +129,10 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
         <DeferredSection
           enabled
           mountId="portfolio"
-          rootMargin={isMobile ? '320px 0px' : '520px 0px'}
+          // Phones mount it ~1.5 screens ahead: the feed pool lives inside it
+          // and buffers the first reel's opening (src/lib/feed-stream.ts), so
+          // it has to exist before the card scrolls into view.
+          rootMargin={isMobile ? '1400px 0px' : '520px 0px'}
           queueDelayMs={80}
           // As tall as the mounted section (src/styles/reels-feed.css), so
           // nothing below it moves when it mounts: services used to jump
