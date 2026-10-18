@@ -178,6 +178,29 @@ describe('feed streams', () => {
     expect(instances[1].config.maxBufferLength).toBe(2);
   });
 
+  it('lets streams go on the tap that leaves the page, and still restores them after pagehide', async () => {
+    withMediaSource(true);
+    const { stream, media } = await load();
+    const lifecycle = await import('@/lib/video-lifecycle');
+    lifecycle.installVideoPageLifecycle();
+    const pool = new media.FeedPlayerPool();
+    pool.acquire(avcSlug);
+    await settle(stream);
+
+    lifecycle.releaseStreamsForNavigation();
+    expect(instances[0].destroyed).toBe(true);
+    const pageEvent = (type: string, persisted: boolean) => {
+      const event = new Event(type);
+      Object.defineProperty(event, 'persisted', { value: persisted });
+      window.dispatchEvent(event);
+    };
+    pageEvent('pagehide', true);
+    pageEvent('pageshow', true);
+    expect(instances).toHaveLength(2);
+    expect(instances[1].destroyed).toBe(false);
+    pool.destroy();
+  });
+
   it('lets streams go on pagehide and picks them up on a back/forward restore', async () => {
     withMediaSource(true);
     const { stream, media } = await load();

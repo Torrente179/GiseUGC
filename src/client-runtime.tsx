@@ -4,7 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import App, { type AppRouteComponents } from '@/App';
 import { LocaleProvider } from '@/lib/locale-context';
 import { installVideoDownloadGuard } from '@/lib/video-download-guard';
-import { installVideoPageLifecycle } from '@/lib/video-lifecycle';
+import { installVideoPageLifecycle, releaseStreamsForNavigation } from '@/lib/video-lifecycle';
 import '@/index.css';
 
 export const readEmbeddedRouteData = <T,>(): T => {
@@ -45,6 +45,7 @@ document.addEventListener(
       return;
     }
     event.preventDefault();
+    releaseStreamsForNavigation();
     window.location.assign(destination.href);
   },
   { capture: true },

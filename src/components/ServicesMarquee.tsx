@@ -571,10 +571,16 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
         container.addEventListener('mousedown', handleMouseDown);
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
+        // Touch listeners stay on the rail. A touch's moves and end go to the
+        // element it started on, so the drag works the same, but only the
+        // rail waits for this handler before scrolling. On the window, the
+        // non-passive touchmove made iOS run JavaScript before every swipe
+        // anywhere on the page: the home page stopped scrolling whenever the
+        // main thread was busy, as it is right after you arrive.
         container.addEventListener('touchstart', handleTouchStart, { passive: true });
-        window.addEventListener('touchmove', handleTouchMove, { passive: false });
-        window.addEventListener('touchend', handleTouchEnd);
-        window.addEventListener('touchcancel', handleTouchEnd);
+        container.addEventListener('touchmove', handleTouchMove, { passive: false });
+        container.addEventListener('touchend', handleTouchEnd, { passive: true });
+        container.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
         return () => {
             wakeAnimationRef.current = () => {};
@@ -591,9 +597,9 @@ const ServicesMarquee = ({ sectionId, liteMobile = false }: ServicesMarqueeProps
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
             container.removeEventListener('touchstart', handleTouchStart);
-            window.removeEventListener('touchmove', handleTouchMove);
-            window.removeEventListener('touchend', handleTouchEnd);
-            window.removeEventListener('touchcancel', handleTouchEnd);
+            container.removeEventListener('touchmove', handleTouchMove);
+            container.removeEventListener('touchend', handleTouchEnd);
+            container.removeEventListener('touchcancel', handleTouchEnd);
         };
     }, [isLiteMobileMode]);
 

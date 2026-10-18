@@ -123,6 +123,16 @@ const resumeAll = () => {
   resumeHooks.forEach((hook) => hook());
 };
 
+/**
+ * A link tap that leaves the page. Media Source players (the feed's streams)
+ * let go now, before the browser decides whether to keep this page in its
+ * back/forward cache, so a page holding streams can still come back instantly
+ * on Back. They are put back if the page is restored (`onVideosResumed`).
+ */
+export const releaseStreamsForNavigation = () => {
+  suspendHooks.forEach((hook) => hook());
+};
+
 let installed = false;
 
 export const installVideoPageLifecycle = () => {

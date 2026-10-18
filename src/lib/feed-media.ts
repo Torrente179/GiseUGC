@@ -389,7 +389,8 @@ export class FeedPlayerPool {
    * released by video-lifecycle.ts), remembering where they were.
    */
   suspend() {
-    this.suspended = [];
+    // Called on the tap that leaves the page and again on pagehide: the
+    // second call finds nothing streaming and keeps what the first saved.
     this.assigned.forEach((video, slug) => {
       if (!this.streams.has(video)) return;
       this.suspended.push({ slug, time: video.currentTime, playing: !video.paused });
