@@ -76,7 +76,9 @@ const ALL_REEL_CLIPS: ReelClip[] = [...LEGACY_REEL_CLIPS, ...NUEVOS_R2_READY_CLI
 
 const Portfolio = () => {
   const { t, locale } = useTranslation();
-  const isMobile = useIsMobile();
+  // Mounted only after load (a deferred section), so it can start at the
+  // real width: no desktop-sized first frame on phones.
+  const isMobile = useIsMobile({ fromViewport: true });
   const theaterWide = useTheaterWide();
   const theaterView = !isMobile || theaterWide;
   const reducedMotion = usePrefersReducedMotion();

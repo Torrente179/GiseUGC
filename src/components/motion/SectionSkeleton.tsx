@@ -19,6 +19,12 @@ const SectionSkeleton = ({
     id={id}
     aria-hidden={children ? undefined : true}
     className={`${minHeightClass} relative overflow-hidden`}
+    // Its height must be exactly its min-height, the height of the section it
+    // stands in for. As a Suspense fallback it sits right under <main>, where
+    // index.css gives sections `content-visibility: auto` with a 900px
+    // intrinsic size: off screen it then measured 900px, and the page jumped
+    // 833 → 900 → 833 px on phones while the portfolio loaded.
+    style={{ contentVisibility: 'visible' }}
   >
     {children}
     <div

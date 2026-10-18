@@ -8,8 +8,15 @@ const getIsMobile = () =>
 const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? React.useEffect : React.useLayoutEffect
 
-export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState(false)
+/**
+ * Phone width (< 768px). Starts false, matching the prerendered desktop
+ * markup, so a hydrated component renders what the server did, then follows
+ * the viewport. Pass `fromViewport` in a component that never renders during
+ * hydration (a lazy section mounted after load): it then starts at the real
+ * width instead of painting one desktop frame first.
+ */
+export function useIsMobile({ fromViewport = false }: { fromViewport?: boolean } = {}) {
+  const [isMobile, setIsMobile] = React.useState(() => (fromViewport ? getIsMobile() : false))
 
   useIsomorphicLayoutEffect(() => {
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
