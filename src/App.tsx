@@ -35,6 +35,7 @@ import {
   isRestoredNavigation,
   pinElementInView,
   readScrollAnchor,
+  resolveScrollAnchor,
   saveScrollAnchor,
 } from '@/lib/hash-section-scroll';
 import { scrollToY } from '@/lib/motion/native-scroll';
@@ -264,7 +265,7 @@ const AppRoutes = ({ routeComponents }: { routeComponents: AppRouteComponents })
       // mount and change height.
       const anchor = isRestoredNavigation() ? readScrollAnchor(location.pathname) : null;
       if (!anchor) return undefined;
-      return pinElementInView({ find: () => document.getElementById(anchor.id), offset: anchor.offset });
+      return pinElementInView({ find: () => resolveScrollAnchor(anchor), offset: anchor.offset });
     }
 
     if (navigationType === 'POP') {

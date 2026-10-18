@@ -31,6 +31,26 @@ export const pinnedScrollY = (
   viewportHeight: number,
 ): number => Math.max(0, Math.min(elementTop + scrollY - offset, pageHeight - viewportHeight));
 
+/**
+ * Draws the sections above a landing at their real height. Off screen they
+ * use `content-visibility: auto` (src/index.css) and stand in at 900 px, so a
+ * page that lands mid-way and is then scrolled up would jump as each one drew:
+ * 239 px at the manifesto and 180 px at services on an iPhone, which Safari's
+ * scroll anchoring did not absorb. Sections below keep skipping their
+ * rendering until they are reached.
+ */
+export const revealSectionsAbove = (element: HTMLElement) => {
+  const landingTop = element.getBoundingClientRect().top;
+  document.querySelectorAll<HTMLElement>('section').forEach((section) => {
+    // A section that ends where the landing starts is above it too, give or
+    // take sub-pixel layout.
+    if (section.contains(element) || section.getBoundingClientRect().bottom > landingTop + 1) return;
+    if (getComputedStyle(section).getPropertyValue('content-visibility') === 'auto') {
+      section.style.setProperty('content-visibility', 'visible');
+    }
+  });
+};
+
 type PinOptions = {
   /** Looked up every frame: the element may not be mounted yet. */
   find: () => HTMLElement | null;
@@ -47,6 +67,7 @@ export const pinElementInView = ({ find, offset, maxMs = SCROLL_PIN_MAX_MS }: Pi
   const start = performance.now();
   let frame = 0;
   let released = false;
+  let revealed = false;
 
   const release = () => {
     if (released) return;
@@ -60,6 +81,10 @@ export const pinElementInView = ({ find, offset, maxMs = SCROLL_PIN_MAX_MS }: Pi
     if (released) return;
     const element = find();
     if (element) {
+      if (!revealed) {
+        revealed = true;
+        revealSectionsAbove(element);
+      }
       const y = pinnedScrollY(
         element.getBoundingClientRect().top,
         window.scrollY,
@@ -83,26 +108,48 @@ export const pinElementInView = ({ find, offset, maxMs = SCROLL_PIN_MAX_MS }: Pi
 
 const ANCHOR_KEY_PREFIX = 'gisela:scroll-anchor:';
 
-export type ScrollAnchor = { id: string; offset: number };
+/**
+ * A section, named so the same one can be found after the page reloads: its
+ * id, or else its first class and its place among the sections sharing it
+ * (the method section has no id). `offset` is where its top sat on screen.
+ */
+export type ScrollAnchor = { id?: string; className?: string; index?: number; offset: number };
+
+const sectionsByClass = (doc: Document, className: string) =>
+  Array.from(doc.querySelectorAll<HTMLElement>('section')).filter((section) => section.classList[0] === className);
+
+/** The section a stored anchor names, or `null` if this page has no such section. */
+export const resolveScrollAnchor = (anchor: ScrollAnchor, doc: Document = document): HTMLElement | null => {
+  if (anchor.id) return doc.getElementById(anchor.id);
+  if (!anchor.className) return null;
+  return sectionsByClass(doc, anchor.className)[anchor.index ?? 0] ?? null;
+};
 
 /**
- * The section at the top of the screen, and how far its top sits from the top
- * of the viewport. `null` at the top of the page, where there is nothing to
- * hold.
+ * The section under the nav, and how far its top sits from the top of the
+ * viewport. It is the one being read, so it has been drawn at its real height
+ * (sections off screen stand in at 900 px), which keeps the offset true on
+ * return. `null` at the top of the page, where there is nothing to hold.
  */
 export const findScrollAnchor = (doc: Document = document): ScrollAnchor | null => {
   // At the top there is nothing to hold, unless an open dialog has locked the
   // page (position: fixed and a negative top keep its place, scrollY reads 0).
   if ((doc.defaultView?.scrollY ?? 0) < 1 && !doc.body.style.top) return null;
-  let best: ScrollAnchor | null = null;
-  for (const section of Array.from(doc.querySelectorAll<HTMLElement>('section[id]'))) {
-    // A duplicate id (a hidden shell) would not be the one found on return.
-    if (doc.getElementById(section.id) !== section) continue;
+  let best: { section: HTMLElement; top: number } | null = null;
+  for (const section of Array.from(doc.querySelectorAll<HTMLElement>('section'))) {
     const { top, bottom } = section.getBoundingClientRect();
     if (bottom - top < 1 || top > HASH_SCROLL_NAV_OFFSET || bottom <= HASH_SCROLL_NAV_OFFSET) continue;
-    if (!best || top > best.offset) best = { id: section.id, offset: Math.round(top) };
+    // The innermost one wins: a nested section starts at or below its parent.
+    if (!best || top >= best.top) best = { section, top };
   }
-  return best;
+  if (!best) return null;
+  const { section, top } = best;
+  const offset = Math.round(top);
+  // A duplicate id (a hidden shell) would not be the one found on return.
+  if (section.id && doc.getElementById(section.id) === section) return { id: section.id, offset };
+  const className = section.classList[0];
+  if (!className) return null;
+  return { className, index: sectionsByClass(doc, className).indexOf(section), offset };
 };
 
 export const saveScrollAnchor = (pathname: string, anchor: ScrollAnchor | null) => {
@@ -117,7 +164,8 @@ export const saveScrollAnchor = (pathname: string, anchor: ScrollAnchor | null) 
 export const readScrollAnchor = (pathname: string): ScrollAnchor | null => {
   try {
     const stored = JSON.parse(sessionStorage.getItem(ANCHOR_KEY_PREFIX + pathname) ?? 'null') as ScrollAnchor | null;
-    return stored && typeof stored.id === 'string' && Number.isFinite(stored.offset) ? stored : null;
+    if (!stored || !Number.isFinite(stored.offset)) return null;
+    return typeof stored.id === 'string' || typeof stored.className === 'string' ? stored : null;
   } catch {
     return null;
   }

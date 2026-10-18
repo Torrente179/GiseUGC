@@ -4,6 +4,8 @@ import {
   pinElementInView,
   pinnedScrollY,
   readScrollAnchor,
+  resolveScrollAnchor,
+  revealSectionsAbove,
   saveScrollAnchor,
   SCROLL_PIN_MAX_MS,
 } from '@/lib/hash-section-scroll';
@@ -136,6 +138,29 @@ describe('scroll anchor for Back', () => {
     expect(findScrollAnchor()).toEqual({ id: 'services', offset: -260 });
   });
 
+  it('names a section without an id by its class and place, and finds it again', () => {
+    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(4061);
+    section('services', -1912, 1012);
+    const card = section('', -3000, 200);
+    card.className = 'ca-section';
+    const method = section('', -661, 1438);
+    method.className = 'ca-section studio-section';
+    section('testimonials', 777, 1012);
+    const anchor = findScrollAnchor();
+    expect(anchor).toEqual({ className: 'ca-section', index: 1, offset: -661 });
+    expect(resolveScrollAnchor(anchor!)).toBe(method);
+  });
+
+  it('prefers the innermost section under the nav', () => {
+    vi.spyOn(window, 'scrollY', 'get').mockReturnValue(2400);
+    const outer = section('outer', -400, 2000);
+    const inner = document.createElement('section');
+    inner.id = 'inner';
+    inner.getBoundingClientRect = () => rect(-100, 600);
+    outer.appendChild(inner);
+    expect(findScrollAnchor()).toEqual({ id: 'inner', offset: -100 });
+  });
+
   it('has nothing to hold at the top of the page', () => {
     vi.spyOn(window, 'scrollY', 'get').mockReturnValue(0);
     section('home', 0, 900);
@@ -164,10 +189,54 @@ describe('scroll anchor for Back', () => {
     expect(readScrollAnchor('/')).toBeNull();
   });
 
+  it('remembers a class-named anchor too', () => {
+    saveScrollAnchor('/', { className: 'ca-section', index: 0, offset: -661 });
+    expect(readScrollAnchor('/')).toEqual({ className: 'ca-section', index: 0, offset: -661 });
+  });
+
   it('ignores a stored value it cannot use', () => {
-    sessionStorage.setItem('gisela:scroll-anchor:/', '{"id":3}');
+    sessionStorage.setItem('gisela:scroll-anchor:/', '{"id":3,"offset":0}');
+    expect(readScrollAnchor('/')).toBeNull();
+    sessionStorage.setItem('gisela:scroll-anchor:/', '{"id":"services"}');
     expect(readScrollAnchor('/')).toBeNull();
     sessionStorage.setItem('gisela:scroll-anchor:/', 'not json');
     expect(readScrollAnchor('/')).toBeNull();
+  });
+});
+
+describe('revealSectionsAbove', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+    vi.restoreAllMocks();
+  });
+
+  const section = (id: string, top: number, height: number) => {
+    const element = document.createElement('section');
+    element.id = id;
+    element.getBoundingClientRect = () => rect(top, height);
+    document.body.appendChild(element);
+    return element;
+  };
+
+  it('draws the sections above a landing at their real height, and only those', () => {
+    vi.spyOn(window, 'getComputedStyle').mockImplementation(
+      () => ({ getPropertyValue: (name: string) => (name === 'content-visibility' ? 'auto' : '') }) as CSSStyleDeclaration,
+    );
+    const manifesto = section('manifesto', -1700, 900);
+    const portfolio = section('portfolio', -800, 880.4); // ends at 80.4, a hair past the landing
+    const services = section('services', 80, 832);
+    const method = section('method', 912, 900);
+    revealSectionsAbove(services);
+    expect(manifesto.style.getPropertyValue('content-visibility')).toBe('visible');
+    expect(portfolio.style.getPropertyValue('content-visibility')).toBe('visible');
+    expect(services.style.getPropertyValue('content-visibility')).toBe('');
+    expect(method.style.getPropertyValue('content-visibility')).toBe('');
+  });
+
+  it('leaves sections that never skip their rendering alone', () => {
+    const plain = section('plain', -1700, 900);
+    const services = section('services', 80, 832);
+    revealSectionsAbove(services);
+    expect(plain.style.getPropertyValue('content-visibility')).toBe('');
   });
 });

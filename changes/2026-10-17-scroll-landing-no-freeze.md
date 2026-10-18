@@ -90,6 +90,35 @@ Production build (`vite preview`) against the live site, same scripts.
   before its phone layout; the pin follows it, so the section stays put.
 - The cross-document view transition is unchanged.
 
+## Follow-up (2026-10-18): scrolling up after a mid-page landing
+
+- **Problem:** after Back to a page left deep down (Testimonials), scrolling
+  up jumped twice on an iPhone: 239 px at the manifesto and 180 px at
+  services. Safari's scroll anchoring did not absorb it.
+- **Cause:** sections off screen skip their rendering
+  (`content-visibility: auto`, index.css) and stand in at 900 px plus their
+  padding. They drew at their real height (manifesto 661 px, services 832 px)
+  only when scrolled into view.
+- **Also:** leaving from a section without an id (the method section,
+  `ca-section`) stored no anchor at all, so Back fell back to the browser's
+  pixel restore. That was off as well, because of the same stand-in heights.
+- **Fix:**
+  - The anchor is now the section being read, named by its id, or else by
+    its first class and its place among those sections (`resolveScrollAnchor`).
+    It is on screen, so it has been drawn and its offset is true.
+  - When the pin finds its section, `revealSectionsAbove` sets
+    `content-visibility: visible` on the sections above it. They draw at their
+    real height while the pin holds the landing, so scrolling up has nothing
+    left to resize. Sections below keep skipping their rendering.
+- **Result** (production build, WebKit as an iPhone 15 Plus):
+  - Back to the method section lands at -899 px on screen. It was at
+    -900 px when the visitor left.
+  - The manifesto and services draw at 661 and 832 px.
+  - Scrolling up 250 px at a time moves the page exactly 250 px each step;
+    the live site jumped twice.
+  - The finger test (Chromium, phone CPU) is still respected on all three
+    paths.
+
 ## Not changed
 
 - Where the in-page eased scroll lands (the section's top, no nav offset).
