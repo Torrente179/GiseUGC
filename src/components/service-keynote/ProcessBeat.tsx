@@ -1,4 +1,5 @@
 import { SERVICE_IMAGERY } from '@/data/service-page-imagery';
+import BeatHeading from './BeatHeading';
 import { sectionTitleClass } from './title-class';
 import { KEYNOTE_LABELS } from './labels';
 import KnStill from './KnStill';
@@ -20,9 +21,13 @@ const ProcessBeat = ({ page, locale, variant, kicker, titleId }: KeynoteBeatProp
       <div className="kn-pr-head">
         <div>
           <p className="kn-k">{kicker}</p>
-          <h2 id={titleId} className={sectionTitleClass(page.processTitle)}>
+          <BeatHeading
+            id={titleId}
+            className={sectionTitleClass(page.processTitle)}
+            semantic={!isMobile}
+          >
             {page.processTitle}
-          </h2>
+          </BeatHeading>
         </div>
       </div>
 

@@ -41,6 +41,13 @@ from `getAllEntrypointPaths()` in `src/lib/locale-path.ts`.
 `scripts/prerender.mjs` turns each shell into a complete HTML page and embeds
 the typed route data required by its route-family hydrator.
 
+Service landings keep both viewport shells in that prerendered `#root` so
+hydration never swaps the whole page at the mobile breakpoint. CSS still
+shows exactly one layout. Only the desktop shell emits section `<h2>` tags
+(canonical beat ids `ficha`, `recibes`, … used by `WebPageElement` urls).
+Mobile titles use the same classes on a `<p>`, matching the existing single
+H1 on `h1.svm-title`. Homepage, guides, and hubs do not use this dual shell.
+
 ## Alignment Rule
 
 When adding or renaming a route, update all of these together:

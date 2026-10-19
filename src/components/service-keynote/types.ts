@@ -12,7 +12,7 @@ export type KeynoteBeatProps = {
   variant: KeynoteVariant;
   /** "2 · Formats": the beat number and name, as the schema and local nav spell it. */
   kicker: string;
-  /** DOM id of the beat's H2, referenced by the section's `aria-labelledby`. */
+  /** DOM id of the beat title, referenced by the section's `aria-labelledby`. */
   titleId: string;
 };
 

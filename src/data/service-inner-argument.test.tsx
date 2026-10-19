@@ -35,6 +35,14 @@ const plainText = (html: string) =>
 const countTag = (html: string, tag: 'h1' | 'h2') =>
   (html.match(new RegExp(`<${tag}\\b`, 'giu')) ?? []).length;
 
+const headingTexts = (html: string, tag: 'h1' | 'h2') =>
+  [...html.matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)</${tag}>`, 'giu'))].map((match) =>
+    (match[1] ?? '')
+      .replace(/<[^>]+>/gu, '')
+      .replace(/\s+/gu, ' ')
+      .trim(),
+  );
+
 const renderService = (serviceId: ReturnType<typeof getAllServiceIds>[number], locale: SiteLocale) => {
   const page = getServicePageContent(serviceId, locale);
   const raw = renderToStaticMarkup(
@@ -72,6 +80,9 @@ describe('service inner argument stays crawlable', () => {
       expect(html.toLowerCase()).not.toContain('giseugc');
       expect(html).toContain(`<h1`);
       expect(countTag(html, 'h1')).toBe(1);
+      const h2s = headingTexts(html, 'h2');
+      expect(h2s.length).toBeGreaterThan(0);
+      expect(new Set(h2s).size).toBe(h2s.length);
       expect(html).toContain(`<h1 class="svm-title">${page.heroTitle}</h1>`);
       expect(html).toContain(page.heroTitle);
       expect(html).toContain(`href="${page.path}"`);
@@ -193,6 +204,26 @@ describe('service boot shells keep crawlable first HTML', () => {
   });
 });
 
+describe('prerendered service pages have unique heading texts', () => {
+  it.each(getAllServiceIds().flatMap((id) => (['es', 'en'] as const).map((locale) => [id, locale] as const)))(
+    '%s (%s) has exactly one H1 and no duplicate H2 text',
+    (serviceId, locale) => {
+      const { html, page } = renderService(serviceId, locale);
+      expect(countTag(html, 'h1')).toBe(1);
+      expect(headingTexts(html, 'h1')).toEqual([page.heroTitle]);
+
+      const h2s = headingTexts(html, 'h2');
+      expect(h2s).toContain(page.featuredTitle);
+      expect(h2s).toContain(page.sectionIntroTitle);
+      expect(h2s).toContain(page.deliverablesTitle);
+      expect(h2s).toContain(page.processTitle);
+      expect(h2s).toContain(page.faqTitle);
+      expect(h2s).toContain(page.ctaTitle);
+      expect(new Set(h2s).size).toBe(h2s.length);
+    },
+  );
+});
+
 describe('service inner presentation locks', () => {
   it('draws the desktop shell as the keynote: tablists, rail, fit columns, close index', () => {
     const { html, text, page } = renderService('ugc-ads-tiktok-meta', 'en');
@@ -200,6 +231,7 @@ describe('service inner presentation locks', () => {
 
     // No section nav: the hero leads straight into the overview. The beats keep their ids for deep links.
     expect(desktop).not.toContain('kn-lnav');
+    expect(desktop).toContain('<h2 id="ficha-title"');
     for (const id of ['ficha', 'recibes', 'como-corre', 'encaja', 'faq']) {
       expect(desktop).toContain(`id="${id}"`);
     }
@@ -242,9 +274,14 @@ describe('service inner presentation locks', () => {
 
   it('ships the phone shell as an app: 2x2 formats, toggle, both fit lists, explore tabs', () => {
     const { html, page } = renderService('ugc-ads-tiktok-meta', 'es');
-    const mobile = html.slice(html.indexOf('kn kn--m'), html.indexOf('kn kn--d'));
+    const mobile = html.slice(
+      html.indexOf('class="kn kn--m"'),
+      html.indexOf('viewport-layout viewport-layout--desktop'),
+    );
 
     expect(mobile).not.toContain('kn-lnav');
+    expect(mobile).not.toMatch(/<h2\b/u);
+    expect(mobile).toContain('<p id="ficha-m-title"');
     for (const id of ['ficha-m', 'recibes-m', 'como-corre-m', 'encaja-m', 'faq-m']) {
       expect(mobile).toContain(`id="${id}"`);
     }

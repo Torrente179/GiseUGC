@@ -28,6 +28,7 @@ import {
   type ResourcePageId,
 } from '@/lib/locale-path';
 import { getClipById } from '@/lib/service-clips';
+import BeatHeading from './BeatHeading';
 import ContactChoice from './ContactChoice';
 import { KEYNOTE_LABELS } from './labels';
 import { useRail } from './hooks';
@@ -254,9 +255,9 @@ const CloseBeat = ({
               <span className="knc-dot" />
               {kicker}
             </p>
-            <h2 id={titleId} className="knc-title section-label">
+            <BeatHeading id={titleId} className="knc-title section-label" semantic={false}>
               {page.ctaTitle}
-            </h2>
+            </BeatHeading>
             <PhoneFan page={page} locale={locale} shellQuery={shellQuery} isMobile />
             <p className="knc-lead">{page.ctaText}</p>
             {cta}
@@ -324,9 +325,9 @@ const CloseBeat = ({
                   <span className="knc-dot" />
                   {kicker}
                 </p>
-                <h2 id={titleId} className="knc-title section-label">
+                <BeatHeading id={titleId} className="knc-title section-label" semantic>
                   {page.ctaTitle}
-                </h2>
+                </BeatHeading>
                 <p className="knc-lead">{page.ctaText}</p>
                 <div className="knc-actions">
                   {cta}

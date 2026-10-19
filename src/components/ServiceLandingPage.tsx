@@ -246,7 +246,9 @@ const ServiceLandingPage = ({
         <main>
           {/* Both route shells stay mounted so hydration never replaces the
               complete page at the mobile breakpoint. CSS exposes exactly one
-              layout; hidden videos remain source-free through IO + scheduler. */}
+              layout; hidden videos remain source-free through IO + scheduler.
+              Only the desktop shell emits section H2s; mobile titles are the
+              same classes on a p, matching the single mobile H1. */}
           <div className="viewport-layout viewport-layout--mobile">
             {/* ╔══════════════════════════════════════════════════════════╗
                 ║  MOBILE — App-like experience (< 768px)                ║
@@ -268,7 +270,7 @@ const ServiceLandingPage = ({
             {proofExamples.length > 0 && (
               <section className="stm-reel">
                 <p className="st-eyebrow px-5 mb-4">{labels.theWork}</p>
-                <h2 className="sr-only">{page.featuredTitle}</h2>
+                <p className="sr-only">{page.featuredTitle}</p>
                 <div
                   className="stm-reel-track scrollbar-hide"
                   onPointerDown={armProofRailSnap}
