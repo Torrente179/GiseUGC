@@ -7,6 +7,7 @@ import MarketIcon from './MarketIcon';
 import { marketIconFor } from './market-icon';
 import { placeholderSrc, useNearViewport } from './hooks';
 import WantCta from './WantCta';
+import BeatHeading from './BeatHeading';
 import { overviewTitleClass } from './title-class';
 import type { KeynoteBeatProps } from './types';
 
@@ -51,9 +52,13 @@ const OverviewBeat = ({ page, locale, variant, kicker, titleId }: KeynoteBeatPro
   return (
     <>
       <p className="kn-k">{kicker}</p>
-      <h2 id={titleId} className={overviewTitleClass(page.sectionIntroTitle)}>
+      <BeatHeading
+        id={titleId}
+        className={overviewTitleClass(page.sectionIntroTitle)}
+        semantic={!isMobile}
+      >
         <AccentTitle title={page.sectionIntroTitle} accent={page.sectionIntroTitleAccent} />
-      </h2>
+      </BeatHeading>
 
       {isMobile ? (
         <>

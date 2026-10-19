@@ -3,6 +3,7 @@ import AutoplayPreviewVideo from '@/components/media/AutoplayPreviewVideo';
 import ResponsivePosterImage from '@/components/media/ResponsivePosterImage';
 import { useMediaIntent } from '@/hooks/use-media-intent';
 import { getClipById } from '@/lib/service-clips';
+import BeatHeading from './BeatHeading';
 import { sectionTitleClass } from './title-class';
 import KnPhone from './KnPhone';
 import SegmentedControl from './SegmentedControl';
@@ -32,9 +33,13 @@ const FormatsBeat = ({ page, locale, variant, kicker, titleId }: KeynoteBeatProp
   return (
     <>
       <p className="kn-k">{kicker}</p>
-      <h2 id={titleId} className={sectionTitleClass(page.deliverablesTitle)}>
+      <BeatHeading
+        id={titleId}
+        className={sectionTitleClass(page.deliverablesTitle)}
+        semantic={!isMobile}
+      >
         {page.deliverablesTitle}
-      </h2>
+      </BeatHeading>
 
       <div className="kn-dev">
         <div className="kn-spot" aria-hidden="true" />

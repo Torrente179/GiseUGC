@@ -252,6 +252,7 @@ A manual IndexNow ping was sent on 2026-10-19 02:04 (America/Bogota, UTC-5) to
 api.indexnow.org with key file `bc6e18cf87bf49fcc1ad22e759c161ac.txt`, 48 URLs
 = the 36 sitemap URLs (which include the 301 targets) + the 12 removed
 industry URLs, HTTP 200 accepted.
+A second manual IndexNow ping was sent 2026-10-19 02:48 (America/Bogota) for /, /en/ and the four hire/pricing guides (HTTP 200).
 
 Search Console sitemap resubmission is on hold because the Ryze connector now
 requires a paid plan.

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { SERVICE_IMAGERY } from '@/data/service-page-imagery';
+import BeatHeading from './BeatHeading';
 import { sectionTitleClass } from './title-class';
 import { Highlighted } from './Highlighted';
 import KnStill from './KnStill';
@@ -28,9 +29,9 @@ const FitBeat = ({ page, locale, variant, kicker, titleId, title }: FitBeatProps
   return (
     <>
       <p className="kn-k">{kicker}</p>
-      <h2 id={titleId} className={sectionTitleClass(title)}>
+      <BeatHeading id={titleId} className={sectionTitleClass(title)} semantic={!isMobile}>
         {title}
-      </h2>
+      </BeatHeading>
 
       <div className="kn-plate">
         <KnStill
