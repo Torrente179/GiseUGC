@@ -7,7 +7,7 @@
         {
           "type": "header",
           "key": "referer",
-          "value": "(https://(www\\.)?giselasaldarriaga\\.com|https://gise-[a-z0-9-]+-torrente179s-projects\\.vercel\\.app)/.*"
+          "value": "^(https://(www\\.)?giselasaldarriaga\\.com|https://gise-[a-z0-9-]+-torrente179s-projects\\.vercel\\.app)/.*$"
         }
       ],
       "destination": "/",
