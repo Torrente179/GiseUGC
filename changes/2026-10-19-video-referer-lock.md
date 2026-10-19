@@ -36,9 +36,12 @@ file's URL could still open or download it directly.
   `gise-` through (flagged by the commit security review). Previews play no
   media-host video; production is where the site is tested.
 - **`vercel.json`**: a request for `/uploads/videos/startups/*` whose Referer is
-  not the site or one of its previews (anchored regex) is redirected to `/`.
-  The main site is on Vercel, not behind Cloudflare, so the WAF rule does not
-  reach these files.
+  not the site or one of its previews is redirected to `/`. The main site is on
+  Vercel, not behind Cloudflare, so the WAF rule does not reach these files.
+  Vercel matches the `missing` value against the whole header (measured: a
+  foreign Referer carrying the site's address in its query string is
+  redirected). Do not add `^`/`$` to it: with them, the site's own Referer
+  was redirected too (1f10311, reverted in the next commit).
 - **Build checks send the site's Referer**: `scripts/generate-nuevos-r2-catalog.mjs`
   (runs in `prebuild`, on Vercel too) and the video sitemap probes in
   `src/lib/video-sitemap.ts`. Without that, the catalog would have seen every
