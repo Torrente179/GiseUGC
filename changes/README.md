@@ -81,6 +81,10 @@ This folder is organized by subsystem instead of by date.
     "active") in `llms.txt` and `llms-full.txt`. `Last-Updated` /
     `CONTENT_DATES.home` `2026-10-15`. GEO prompt baseline:
     `2026-10-15-geo-prompt-baseline.md`.
+  - **Current GEO / LLM prompt baseline:**
+    `seo/2026-10-19-geo-prompt-baseline.md` — 2026-10-19 run after industry
+    pages were removed. Supersedes `2026-10-15-geo-prompt-baseline.md`
+    (kept for history).
   - **Current Fiverr pricing guide:** `seo/2026-10-14-fiverr-pricing-guide.md`
     — `/recursos/cuanto-cobra-creadora-ugc/` and
     `/en/resources/how-much-does-a-ugc-creator-charge/`. Prices live in
