@@ -85,6 +85,13 @@ This folder is organized by subsystem instead of by date.
     `seo/2026-10-19-geo-prompt-baseline.md` — 2026-10-19 run after industry
     pages were removed. Supersedes `2026-10-15-geo-prompt-baseline.md`
     (kept for history).
+  - **Current guide answer blocks + homepage FAQ links:**
+    `seo/2026-10-19-guide-answer-blocks-and-home-faq-links.md` —
+    one paragraph under the H1 on the four hire/pricing guides
+    (`FIVERR_PRICING` + `SITE_PROOF`); homepage `#faq` process/cost
+    answers append the guide links (cost also names the $40 Fiverr
+    start). Homepage FAQPage `acceptedAnswer.text` matches the visible
+    answer, including those sentences.
   - **Current Fiverr pricing guide:** `seo/2026-10-14-fiverr-pricing-guide.md`
     — `/recursos/cuanto-cobra-creadora-ugc/` and
     `/en/resources/how-much-does-a-ugc-creator-charge/`. Prices live in

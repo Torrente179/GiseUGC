@@ -8,7 +8,7 @@ import ManifestoChapter from '@/components/chapters/ManifestoChapter';
 import TestimonialsReviewQuotes from '@/components/TestimonialsReviewQuotes';
 import Index from '@/pages/Index';
 import { FIVERR_REVIEWS } from '@/data/fiverr-reviews';
-import { CONTENT_DATES, LLMS_LAST_UPDATED } from '@/data/content-dates';
+import { CONTENT_DATES, LLMS_LAST_UPDATED, formatLastUpdatedLabel } from '@/data/content-dates';
 import { getHubChildLinks } from '@/data/hub-child-links';
 import HubPage from '@/components/HubPage';
 import { getServicePageContent } from '@/data/service-pages';
@@ -383,9 +383,13 @@ describe('hub index routes stay registered 200 documents with hire-intent copy',
     expect(read('src/components/ServicePageInner.tsx')).toContain('formatLastUpdatedLabel(CONTENT_DATES.services');
     expect(read('src/components/ResourcePage.tsx')).toContain('formatLastUpdatedLabel(CONTENT_DATES.resources');
     expect(read('recursos/como-contratar-creadora-ugc/index.html')).not.toContain('24 mar 2026');
-    expect(read('recursos/como-contratar-creadora-ugc/index.html')).toContain('14 oct 2026');
+    expect(read('recursos/como-contratar-creadora-ugc/index.html')).toContain(
+      formatLastUpdatedLabel(CONTENT_DATES.resources, 'es'),
+    );
     expect(read('en/resources/how-to-hire-ugc-creator/index.html')).not.toContain('Mar 24, 2026');
-    expect(read('en/resources/how-to-hire-ugc-creator/index.html')).toContain('Oct 14, 2026');
+    expect(read('en/resources/how-to-hire-ugc-creator/index.html')).toContain(
+      formatLastUpdatedLabel(CONTENT_DATES.resources, 'en'),
+    );
   });
 
   // Breadcrumbs now point at the hub indexes: see src/data/internal-link-map.test.tsx.

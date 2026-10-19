@@ -3,18 +3,15 @@ import { ChevronDown } from 'lucide-react';
 import SplitTextReveal from '@/components/motion/SplitTextReveal';
 import { useHashlessSectionNavigation } from '@/hooks/use-hashless-section-navigation';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
-
-interface FAQItem {
-  question: string;
-  answer: string;
-}
+import { getHomepageFaqItems } from '@/data/homepage-faq';
+import { InlineCopy } from '@/lib/inline-copy-links';
 
 const FAQ = () => {
   const { t, locale } = useTranslation();
   const { handleHashLinkClick } = useHashlessSectionNavigation();
   const revealRef = useScrollReveal<HTMLDivElement>();
 
-  const items = t('faq.items', { returnObjects: true }) as FAQItem[];
+  const items = getHomepageFaqItems(locale);
 
   const stillQuestion = locale === 'es' ? '¿Tienes otra pregunta?' : 'Have another question?';
   const talkLabel = locale === 'es' ? 'Escríbeme' : 'Message me';
@@ -60,8 +57,8 @@ const FAQ = () => {
                       </summary>
                       <div className="faq-native__answer-grid">
                         <div className="overflow-hidden">
-                          <p className="max-w-2xl pb-6 font-sans text-[0.95rem] leading-[1.7] text-foreground/75 md:text-base">
-                            {item.answer}
+                          <p className="max-w-2xl pb-6 font-sans text-[0.95rem] leading-[1.7] text-foreground/75 md:text-base [&_a]:font-semibold [&_a]:text-foreground [&_a]:underline [&_a]:underline-offset-2">
+                            <InlineCopy text={item.answer} />
                           </p>
                         </div>
                       </div>

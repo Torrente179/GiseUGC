@@ -9,12 +9,14 @@
  * dropped "active" from "28+ brand campaigns" to match the live site proof line.
  * Resources and hubs moved to 2026-10-14 with the bilingual Fiverr pricing guide.
  * Home moved to 2026-10-16 when the industry pages were removed from llms.txt.
+ * Home and resources moved to 2026-10-19 with guide answer blocks and homepage
+ * FAQ links to the hire/pricing guides.
  */
 export const CONTENT_DATES = {
-  home: '2026-10-16',
+  home: '2026-10-19',
   hubs: '2026-10-14',
   services: '2026-10-13',
-  resources: '2026-10-14',
+  resources: '2026-10-19',
   legal: '2026-10-13',
 } as const;
 
