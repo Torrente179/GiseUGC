@@ -66,7 +66,7 @@ Published Fiverr prices (P-ES/P-EN, verified 2026-10-14): UGC from $40; Spanish 
 ## 2. Prompts
 Shared pass rule (applies to every prompt):
 - **PASS** = names "Gisela Saldarriaga" + states at least one expected fact correctly + **states the journalist fact** (9 años de experiencia como periodista / 9 years of experience as a journalist; preferred URL for this fact: HOME-ES / HOME-EN) + cites or links a giselasaldarriaga.com URL.
-- **Partial** = everything in PASS is met, but the cited site URL isn't the preferred one (a vertical URL that redirects counts here).
+- **Partial** = everything in PASS is met, but the cited site URL is neither the prompt's preferred URL nor the homepage (a vertical URL that redirects counts here). The homepage always counts as preferred (Gise SEO decision, 2026-10-19).
 - **FAIL** = she isn't named, OR any fact is wrong (rating or review count, price, city, campaign count), OR the journalist fact is missing, OR the answer uses "GiseUGC" as her brand, OR it cites only LinkedIn/Fiverr with no link to the site. Fiverr cited alongside the site is fine.
 
 ### Español
@@ -108,18 +108,18 @@ Earlier 09-02 baseline: all four models were login-walled, so no results were re
 
 **2026-10-19 run.** Prompts run: ES1, ES3, ES5, ES9, ES11, ES12, EN1, EN3, EN5, EN9, EN11, EN12. Not run: ES2, ES4, ES6, ES7, ES8, ES10, ES13, EN2, EN4, EN6, EN7, EN8, EN10, EN13.
 
-\* **Pass\*** (ES1, EN1): named, journalist fact stated, site cited. The URL cited was the homepage, which is the preferred URL for the journalist fact (HOME-ES/HOME-EN), but not the prompt's main preferred URL (S-ES/S-EN). Under a strict reading of the preferred-URL rule, these grade **Partial**. The run notes didn't say which other expected fact (if any) the answers stated.
+**Grading note (Gise SEO decision, 2026-10-19):** for the preferred-URL rule, the homepage (HOME-ES / HOME-EN) counts as a preferred URL on every prompt, because it is the preferred URL for the required journalist fact. A homepage citation is therefore a full PASS, not Partial. ES1 and EN1 are graded on that basis.
 
 ### 3a. Run log (one row per prompt per model run)
 | Run ID | Date | Model (name + version) | Mode: logged out / logged in | Browsing on/off | Prompt # | Named (Y/N) | Exact URL cited (full URL, or "none") | Journalist fact stated (Y/N) | Result (Pass / Partial / Fail) |
 |---|---|---|---|---|---|---|---|---|---|
-| CG-01 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | ES1 | Y | https://www.giselasaldarriaga.com/?utm_source=chatgpt.com | Y | Pass* |
+| CG-01 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | ES1 | Y | https://www.giselasaldarriaga.com/?utm_source=chatgpt.com | Y | Pass |
 | CG-02 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | ES3 | N | none | N | Fail |
 | CG-03 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | ES5 | N | none | N | Fail |
 | CG-04 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | ES9 | N | none | N | Fail |
 | CG-05 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | ES11 | Y | https://www.giselasaldarriaga.com/servicios/ | N | Fail |
 | CG-06 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | ES12 | Y | https://www.giselasaldarriaga.com/?utm_source=chatgpt.com | N | Fail |
-| CG-07 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | EN1 | Y | https://www.giselasaldarriaga.com/?utm_source=chatgpt.com | Y | Pass* |
+| CG-07 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | EN1 | Y | https://www.giselasaldarriaga.com/?utm_source=chatgpt.com | Y | Pass |
 | CG-08 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | EN3 | N | none | N | Fail |
 | CG-09 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | EN5 | N | none | N | Fail |
 | CG-10 | 2026-10-19 | ChatGPT (label 'ChatGPT') | logged out | Web search on | EN9 | N | none | N | Fail |
@@ -146,7 +146,7 @@ Named = Y/N. Cited = the exact URL (relative to https://www.giselasaldarriaga.co
 
 | # | ChatGPT Named | ChatGPT Cited | Claude Named | Claude Cited | Gemini Named | Gemini Cited | Grok Named | Grok Cited | Journalist fact (GPT/Claude/Gemini/Grok) | Result (GPT/Claude/Gemini/Grok) |
 |---|---|---|---|---|---|---|---|---|---|---|
-| ES1 | Y | `/?utm_source=chatgpt.com` | BLOCKED | BLOCKED | N | none | BLOCKED | BLOCKED | Y/–/N/– | Pass*/BLOCKED/Fail/BLOCKED |
+| ES1 | Y | `/?utm_source=chatgpt.com` | BLOCKED | BLOCKED | N | none | BLOCKED | BLOCKED | Y/–/N/– | Pass/BLOCKED/Fail/BLOCKED |
 | ES2 | not run | not run | not run | not run | not run | not run | not run | not run | not run | not run |
 | ES3 | N | none | BLOCKED | BLOCKED | N | none | BLOCKED | BLOCKED | N/–/N/– | Fail/BLOCKED/Fail/BLOCKED |
 | ES4 | not run | not run | not run | not run | not run | not run | not run | not run | not run | not run |
@@ -159,7 +159,7 @@ Named = Y/N. Cited = the exact URL (relative to https://www.giselasaldarriaga.co
 | ES11 | Y | `/servicios/` | BLOCKED | BLOCKED | N | none | BLOCKED | BLOCKED | N/–/N/– | Fail/BLOCKED/Fail/BLOCKED |
 | ES12 | Y | `/?utm_source=chatgpt.com` | BLOCKED | BLOCKED | N | none | BLOCKED | BLOCKED | N/–/N/– | Fail/BLOCKED/Fail/BLOCKED |
 | ES13 | not run | not run | not run | not run | not run | not run | not run | not run | not run | not run |
-| EN1 | Y | `/?utm_source=chatgpt.com` | BLOCKED | BLOCKED | N | none | BLOCKED | BLOCKED | Y/–/N/– | Pass*/BLOCKED/Fail/BLOCKED |
+| EN1 | Y | `/?utm_source=chatgpt.com` | BLOCKED | BLOCKED | N | none | BLOCKED | BLOCKED | Y/–/N/– | Pass/BLOCKED/Fail/BLOCKED |
 | EN2 | not run | not run | not run | not run | not run | not run | not run | not run | not run | not run |
 | EN3 | N | none | BLOCKED | BLOCKED | N | none | BLOCKED | BLOCKED | N/–/N/– | Fail/BLOCKED/Fail/BLOCKED |
 | EN4 | not run | not run | not run | not run | not run | not run | not run | not run | not run | not run |
@@ -176,7 +176,7 @@ Named = Y/N. Cited = the exact URL (relative to https://www.giselasaldarriaga.co
 ### 3c. Summary counts (2026-10-19, 12 prompts run)
 | Model | Mode | Named | Site cited | Pass | Fail | Blocked |
 |---|---|---|---|---|---|---|
-| ChatGPT | logged out, Web search on | 5 of 12 prompts (EN11 named on run 1 only) | 5 of 12 | 2 (ES1, EN1; Partial under the strict URL rule) | 10 (13 log rows: 11 Fail, counting EN11 run 2) | 0 |
+| ChatGPT | logged out, Web search on | 5 of 12 prompts (EN11 named on run 1 only) | 5 of 12 | 2 (ES1, EN1) | 10 (13 log rows: 11 Fail, counting EN11 run 2) | 0 |
 | Gemini | logged out, Flash-Lite, no search toggle | 0 of 12 | 0 of 12 | 0 | 12 | 0 |
 | Grok | grok.com 'Fast' | – | – | – | – | 12 (login wall after the first message) |
 | Claude | claude.ai | – | – | – | – | 12 (redirects to /login) |
