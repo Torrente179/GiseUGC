@@ -1175,7 +1175,7 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       heroEyebrow: 'Guía',
       heroTitle: 'Cuánto cobra una creadora UGC: mis precios en Fiverr',
       heroSummary:
-        `Si quieres saber cuánto cuesta un video UGC antes de escribirme, aquí tienes mis precios publicados en Fiverr. Mis paquetes UGC en Fiverr empiezan en ${usd(FIVERR_PRICING.ugc.basic.price)} por un video en español. Los proyectos personalizados o directos se cotizan, y las versiones en inglés también. Abajo te explico qué incluye cada paquete y qué hace que el precio suba.`,
+        `Si quieres saber cuánto cuesta un video UGC antes de escribirme, aquí tienes mis precios publicados en Fiverr. Los proyectos personalizados o directos se cotizan, y las versiones en inglés también. Abajo te explico qué incluye cada paquete y qué hace que el precio suba.`,
       heroPoints: [],
       leadCtaLabel: 'Escríbeme directo para cotizar tu proyecto →',
       leadCtaHref: getHomePath('es', '#contact'),
@@ -1309,7 +1309,7 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       heroEyebrow: 'Guide',
       heroTitle: 'How much does a UGC creator charge? My Fiverr prices',
       heroSummary:
-        `If you want to know what a UGC video costs before you message me, these are my published Fiverr prices. My UGC packages on Fiverr start at ${usd(FIVERR_PRICING.ugc.basic.price)} for one video in Spanish. Custom and direct projects are quoted, and so are English versions. Below, I explain what each package includes and what makes the price go up.`,
+        `If you want to know what a UGC video costs before you message me, these are my published Fiverr prices. Custom and direct projects are quoted, and so are English versions. Below, I explain what each package includes and what makes the price go up.`,
       heroPoints: [],
       leadCtaLabel: 'Message me directly for a quote →',
       leadCtaHref: getHomePath('en', '#contact'),

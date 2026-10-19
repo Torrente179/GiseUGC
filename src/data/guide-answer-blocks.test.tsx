@@ -223,16 +223,22 @@ describe('guide pages prerender the answer block under the H1, not in JSON-LD', 
   });
 });
 
-describe('pricing guide leads drop the opening name clause only', () => {
-  it('ES and EN leads start at the next clause and keep the rest', () => {
+describe('pricing guide leads drop the name clause and the $40 sentence', () => {
+  it('ES and EN leads start at the next clause and no longer name the $40 start', () => {
     const es = getResourcePageContent('how-much-ugc-creator-charge', 'es');
     const en = getResourcePageContent('how-much-ugc-creator-charge', 'en');
     expect(es.heroSummary.startsWith('Si quieres saber cuánto cuesta un video UGC antes de escribirme')).toBe(true);
     expect(en.heroSummary.startsWith('If you want to know what a UGC video costs before you message me')).toBe(true);
     expect(es.heroSummary).not.toMatch(/^Soy Gisela Saldarriaga/u);
     expect(en.heroSummary).not.toMatch(/^I'm Gisela Saldarriaga/u);
-    expect(es.heroSummary).toContain(`Mis paquetes UGC en Fiverr empiezan en $${FIVERR_PRICING.ugc.basic.price}`);
-    expect(en.heroSummary).toContain(`My UGC packages on Fiverr start at $${FIVERR_PRICING.ugc.basic.price}`);
+    expect(es.heroSummary).not.toContain(
+      `Mis paquetes UGC en Fiverr empiezan en $${FIVERR_PRICING.ugc.basic.price} por un video en español.`,
+    );
+    expect(en.heroSummary).not.toContain(
+      `My UGC packages on Fiverr start at $${FIVERR_PRICING.ugc.basic.price} for one video in Spanish.`,
+    );
+    expect(es.heroSummary).toContain('Los proyectos personalizados o directos se cotizan');
+    expect(en.heroSummary).toContain('Custom and direct projects are quoted');
     expect(es.metaDescription).not.toContain('Soy Gisela Saldarriaga, creadora UGC bilingüe en Medellín');
     expect(en.metaDescription).not.toContain("I'm Gisela Saldarriaga, a bilingual UGC creator based in Medellín");
   });

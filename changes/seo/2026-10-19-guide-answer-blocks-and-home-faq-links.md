@@ -68,6 +68,15 @@ The opening identification clause is removed; the next clause is already capital
 
 Grammatically intact, so the cut shipped. That opening clause did **not** appear in the pricing FAQ, FAQPage JSON-LD, or meta descriptions (`PRICING_META` still starts with "Mis paquetes UGC en Fiverr empiezan en $40" / "My UGC packages on Fiverr start at $40"). Those surfaces were left alone. The name still appears in the new answer block directly above the lead.
 
+**Content-owner edit (same day):** drop the remaining $40 sentence from the two pricing leads only.
+
+- ES removed: `Mis paquetes UGC en Fiverr empiezan en $40 por un video en español.`
+- EN removed: `My UGC packages on Fiverr start at $40 for one video in Spanish.`
+
+Leads now start `Si quieres saber cuánto cuesta un video UGC antes de escribirme, aquí tienes mis precios publicados en Fiverr. Los proyectos personalizados…` / `If you want to know what a UGC video costs before you message me, these are my published Fiverr prices. Custom and direct projects…`
+
+The exact sentences do not appear in pricing FAQ, FAQPage JSON-LD, or meta. Close relatives were left alone: `PRICING_META` (`…empiezan en $40.` / `…start at $40.`), the pricing-page FAQ (`…por un video vertical en español de 30 segundos` / `…for one vertical 30-second video in Spanish`), and the hire-guide budget FAQ (`…por un video en español (precio de octubre de 2026)` / `…for one video in Spanish (October 2026 price)`). The answer blocks above the H1 still name the $40 start.
+
 ## Dates
 
 Visible copy changed on the homepage FAQ and the resource guides, so `CONTENT_DATES.home` and `CONTENT_DATES.resources` moved to `2026-10-19`. Sitemap lastmod and llms `Last-Updated` follow those constants (sitemap via `writeSitemapFile` during `vite build`; llms `Last-Updated` is locked to `CONTENT_DATES.home`). Dates were not hand-edited independently of `CONTENT_DATES`.
