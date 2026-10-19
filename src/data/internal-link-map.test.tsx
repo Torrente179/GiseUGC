@@ -176,6 +176,9 @@ describe('internal link map', () => {
       '/verticales/ugc-lifestyle-bienestar/', '/en/verticals/lifestyle-wellness-ugc-creator/',
     ];
     const redirects = (JSON.parse(read('vercel.json')) as { redirects: Array<{ source: string; destination: string; statusCode?: number }> }).redirects;
+    const lastSpecificIndex = Math.max(
+      ...removed.flatMap((path) => [path, path.replace(/\/$/u, '')]).map((source) => redirects.findIndex((item) => item.source === source)),
+    );
     for (const path of removed) {
       expect(REGISTERED_PATHS.has(path), path).toBe(false);
       for (const source of [path, path.replace(/\/$/u, '')]) {
@@ -185,6 +188,45 @@ describe('internal link map', () => {
         expect(rule?.destination.startsWith('/en/'), source).toBe(source.startsWith('/en/'));
       }
     }
+
+    const catchAlls = [
+      { source: '/verticales/:path*', destination: '/servicios/' },
+      { source: '/verticales/:path*/', destination: '/servicios/' },
+      { source: '/en/verticals/:path*', destination: '/en/services/' },
+      { source: '/en/verticals/:path*/', destination: '/en/services/' },
+    ];
+    for (const { source, destination } of catchAlls) {
+      const index = redirects.findIndex((item) => item.source === source);
+      expect(index, source).toBeGreaterThan(lastSpecificIndex);
+      expect(redirects[index]?.statusCode, source).toBe(301);
+      expect(redirects[index]?.destination, source).toBe(destination);
+    }
+
+    const matchRedirect = (pathname: string) => {
+      const toRegex = (source: string) => {
+        const withSplat = source.replace(/:path\*/g, '\0SPLAT\0');
+        const escaped = withSplat.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
+        return new RegExp(`^${escaped.replace(/\0SPLAT\0/g, '[^/]+(?:/[^/]+)*')}$`);
+      };
+      return redirects.find((item) => toRegex(item.source).test(pathname));
+    };
+
+    const unknownChildren = [
+      { path: '/verticales/foo', destination: '/servicios/' },
+      { path: '/verticales/foo/', destination: '/servicios/' },
+      { path: '/verticales/ugc-beauty/extra/', destination: '/servicios/' },
+      { path: '/en/verticals/foo', destination: '/en/services/' },
+      { path: '/en/verticals/foo/', destination: '/en/services/' },
+      { path: '/en/verticals/tech-saas-ugc-creator/extra/', destination: '/en/services/' },
+    ];
+    for (const { path, destination } of unknownChildren) {
+      const rule = matchRedirect(path);
+      expect(rule?.statusCode, path).toBe(301);
+      expect(rule?.destination, path).toBe(destination);
+    }
+
+    expect(matchRedirect('/verticales/ugc-beauty/')?.destination).toBe('/servicios/testimoniales-resenas-ugc/');
+    expect(matchRedirect('/en/verticals/tech-saas-ugc-creator/')?.destination).toBe('/en/services/ugc-product-demo/');
   });
 
   it('keeps the committed service shells on the same trail', () => {

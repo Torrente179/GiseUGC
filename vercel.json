@@ -193,7 +193,17 @@
       "statusCode": 301
     },
     {
+      "source": "/verticales/:path*/",
+      "destination": "/servicios/",
+      "statusCode": 301
+    },
+    {
       "source": "/en/verticals/:path*",
+      "destination": "/en/services/",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/verticals/:path*/",
       "destination": "/en/services/",
       "statusCode": 301
     }

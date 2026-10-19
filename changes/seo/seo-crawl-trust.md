@@ -202,8 +202,9 @@ registry, sitemap and prerender now cover 36 routes.
 - **301s** (`vercel.json`, both slash forms) to the closest service, taken from
   each page's own first `relatedServiceIds`: beauty and ecommerce → testimonials
   & reviews; fashion and lifestyle & wellness → lifestyle UGC; tech/SaaS →
-  product demos; the hub → the services hub. `/verticales/:path*` and
-  `/en/verticals/:path*` catch anything else. Destinations stay in-locale.
+  product demos; the hub → the services hub. `/verticales/:path*` /
+  `/verticales/:path*/` and `/en/verticals/:path*` / `/en/verticals/:path*/`
+  catch anything else (both slash forms). Destinations stay in-locale.
 - **Gone from code:** `VerticalPageId` / `VERTICAL_PATHS` / `getVerticalPath`
   and the `vertical` page family; `VerticalLandingPage`, `vertical-pages.ts`,
   `service-vertical-links.ts`, `entry-vertical.tsx`,
@@ -218,7 +219,9 @@ registry, sitemap and prerender now cover 36 routes.
   `2026-10-16`.
 
 Guard: `src/data/internal-link-map.test.tsx` checks every removed URL is out of
-`PAGE_REGISTRY` and 301s, in its own locale, to a registered page.
+`PAGE_REGISTRY` and 301s, in its own locale, to a registered page. Unknown
+children (`/verticales/foo`, `/verticales/foo/`, EN twins) 301 in-locale to
+the services hub.
 
 ## 2026-10-16 — service close index: More services first
 
@@ -236,4 +239,20 @@ Both how-to-hire guides showed the error boundary in production since
 one. The inline-copy helpers now take strings or segments.
 `src/data/route-data-hydration.test.tsx` renders every guide and service page
 from the round-tripped route data the browser receives.
+
+## 2026-10-19 — industry catch-all trailing slash + IndexNow ping
+
+The catch-alls previously only matched the no-slash form, so
+`/verticales/<unknown>/` and `/en/verticals/<unknown>/` 404'd. Both forms now
+301 in-locale to the services hub (`/servicios/` / `/en/services/`). Explicit
+per-page 301s are unchanged and still win because they sit above the
+catch-alls.
+
+A manual IndexNow ping was sent on 2026-10-19 02:04 (America/Bogota, UTC-5) to
+api.indexnow.org with key file `bc6e18cf87bf49fcc1ad22e759c161ac.txt`, 48 URLs
+= the 36 sitemap URLs (which include the 301 targets) + the 12 removed
+industry URLs, HTTP 200 accepted.
+
+Search Console sitemap resubmission is on hold because the Ryze connector now
+requires a paid plan.
 

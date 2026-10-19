@@ -87,3 +87,12 @@ existing how-to-hire guides:
 Those targets stay in `PAGE_REGISTRY` and the sitemap. The aliases do not.
 Do not add React Router redirects or in-page links for the aliases; a
 parallel PR owns FAQ schema and page links.
+
+## Industry (vertical) 301s
+
+The industry hub and its children are gone. Production (`vercel.json`) 301s
+the old paths, in-locale, onto the services hub or the closest service.
+Catch-alls cover both slash forms and sit after the explicit per-page 301s:
+
+- `/verticales/:path*` and `/verticales/:path*/` → `/servicios/`
+- `/en/verticals/:path*` and `/en/verticals/:path*/` → `/en/services/`
