@@ -17,6 +17,7 @@ import { mark, measure, startLongTaskObserver } from '@/lib/perf-debug';
 import PageSeo from '@/components/PageSeo';
 import ScrollProgressHairline from '@/components/motion/ScrollProgressHairline';
 import { getHomePath, type SiteLocale } from '@/lib/locale-path';
+import { buildHomepageFaqGraph } from '@/data/homepage-faq';
 import SiteFooter from '@/components/SiteFooter';
 
 const PortfolioSection = lazy(() => import('@/components/Portfolio'));
@@ -94,6 +95,8 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
   const homeSeo = homeSeoByLocale[locale];
   const siteUrl = 'https://www.giselasaldarriaga.com';
   const buildUrl = (pathname: string) => new URL(pathname, siteUrl).toString();
+  const canonical = buildUrl(getHomePath(locale));
+  const faqSchema = buildHomepageFaqGraph(locale, canonical);
 
   useEffect(() => {
     clearUrlHash();
@@ -106,13 +109,14 @@ const Index = memo(({ locale }: { locale: SiteLocale }) => {
       <PageSeo
         title={homeSeo.title}
         description={homeSeo.description}
-        canonical={buildUrl(getHomePath(locale))}
+        canonical={canonical}
         locale={locale}
         alternates={{
           es: buildUrl(getHomePath('es')),
           en: buildUrl(getHomePath('en')),
           xDefault: buildUrl(getHomePath('es')),
         }}
+        structuredData={faqSchema}
       />
       <Navbar />
       <ScrollProgressHairline />

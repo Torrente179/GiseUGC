@@ -345,6 +345,13 @@
 }
 
 .gd-hero-head .gd-h1 { max-width: 15ch; }
+.gd-hero-head .gd-answer {
+  max-width: 40rem;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--gd-body);
+  text-wrap: pretty;
+}
 .gd-hero-head .gd-lead { max-width: 40rem; }
 
 .gd-points {

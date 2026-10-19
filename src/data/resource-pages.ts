@@ -36,6 +36,8 @@ export type ResourcePageContent = {
   heroEyebrow: string;
   heroTitle: string;
   heroSummary: string;
+  /** Direct-answer paragraph under the H1 on the hire and pricing guides. Body copy only — not in FAQPage or any other JSON-LD. */
+  answerBlock?: string;
   heroPoints: string[];
   leadCtaLabel?: string;
   leadCtaHref?: string;
@@ -103,6 +105,22 @@ export const FIVERR_PRICING_GIG_URLS = [
 
 const usd = (amount: number) => `$${amount}`;
 const mdLink = (label: string, href: string) => `[${label}](${href})`;
+
+/**
+ * Answer blocks for the hire and pricing guides. Prices read from
+ * FIVERR_PRICING; rating/review count from SITE_PROOF (same source as
+ * AggregateRating). Injected under the H1 by getResourcePageContent.
+ */
+export const GUIDE_ANSWER_BLOCKS = {
+  'how-to-hire-ugc-creator': {
+    es: `Para contratar una creadora UGC, define qué videos necesitas y revisa su portafolio y sus reseñas. Soy Gisela Saldarriaga, creadora UGC bilingüe con 9 años de experiencia como periodista: puedes escribirme directo o contratarme en Fiverr como gisela_sm (${SITE_PROOF.fiverrRating}/5 en ${SITE_PROOF.fiverrReviewCount} reseñas). Mis paquetes UGC en Fiverr empiezan en ${usd(FIVERR_PRICING.ugc.basic.price)}; los proyectos directos se cotizan aparte.`,
+    en: `To hire a UGC creator, decide which videos you need, then check their portfolio and reviews. I'm Gisela Saldarriaga, a bilingual UGC creator with 9 years of experience as a journalist: message me directly or hire me on Fiverr as gisela_sm (${SITE_PROOF.fiverrRating}/5 from ${SITE_PROOF.fiverrReviewCount} reviews). My UGC packages on Fiverr start at ${usd(FIVERR_PRICING.ugc.basic.price)}; direct projects are quoted separately.`,
+  },
+  'how-much-ugc-creator-charge': {
+    es: `Mis paquetes UGC en Fiverr empiezan en ${usd(FIVERR_PRICING.ugc.basic.price)} y llegan a ${usd(FIVERR_PRICING.ugc.premium.price)}; un video de portavoz en español cuesta de ${usd(FIVERR_PRICING.spokesperson.words65.price)} a ${usd(FIVERR_PRICING.spokesperson.words260.price)} y una voz en off, ${usd(FIVERR_PRICING.voiceover.price)}. Soy Gisela Saldarriaga, creadora UGC con 9 años de experiencia como periodista. Los proyectos directos, las versiones en inglés y la licencia para anuncios pagados se cotizan aparte.`,
+    en: `My UGC packages on Fiverr start at ${usd(FIVERR_PRICING.ugc.basic.price)} and go up to ${usd(FIVERR_PRICING.ugc.premium.price)}; a Spanish spokesperson video costs ${usd(FIVERR_PRICING.spokesperson.words65.price)} to ${usd(FIVERR_PRICING.spokesperson.words260.price)}, and a Spanish voiceover is ${usd(FIVERR_PRICING.voiceover.price)}. I'm Gisela Saldarriaga, a UGC creator with 9 years of experience as a journalist. Direct projects, English versions, and paid ads licenses are quoted separately.`,
+  },
+} as const;
 const mdPrice = (amount: number, href: string, prefix = '') => mdLink(`${prefix}${usd(amount)}`, href);
 
 const dualSpokespersonPrice = (amount: number, locale: SiteLocale) => {
@@ -1157,7 +1175,7 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       heroEyebrow: 'Guía',
       heroTitle: 'Cuánto cobra una creadora UGC: mis precios en Fiverr',
       heroSummary:
-        `Soy Gisela Saldarriaga, creadora UGC bilingüe en Medellín. Si quieres saber cuánto cuesta un video UGC antes de escribirme, aquí tienes mis precios publicados en Fiverr. Mis paquetes UGC en Fiverr empiezan en ${usd(FIVERR_PRICING.ugc.basic.price)} por un video en español. Los proyectos personalizados o directos se cotizan, y las versiones en inglés también. Abajo te explico qué incluye cada paquete y qué hace que el precio suba.`,
+        `Si quieres saber cuánto cuesta un video UGC antes de escribirme, aquí tienes mis precios publicados en Fiverr. Los proyectos personalizados o directos se cotizan, y las versiones en inglés también. Abajo te explico qué incluye cada paquete y qué hace que el precio suba.`,
       heroPoints: [],
       leadCtaLabel: 'Escríbeme directo para cotizar tu proyecto →',
       leadCtaHref: getHomePath('es', '#contact'),
@@ -1291,7 +1309,7 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
       heroEyebrow: 'Guide',
       heroTitle: 'How much does a UGC creator charge? My Fiverr prices',
       heroSummary:
-        `I'm Gisela Saldarriaga, a bilingual UGC creator based in Medellín. If you want to know what a UGC video costs before you message me, these are my published Fiverr prices. My UGC packages on Fiverr start at ${usd(FIVERR_PRICING.ugc.basic.price)} for one video in Spanish. Custom and direct projects are quoted, and so are English versions. Below, I explain what each package includes and what makes the price go up.`,
+        `If you want to know what a UGC video costs before you message me, these are my published Fiverr prices. Custom and direct projects are quoted, and so are English versions. Below, I explain what each package includes and what makes the price go up.`,
       heroPoints: [],
       leadCtaLabel: 'Message me directly for a quote →',
       leadCtaHref: getHomePath('en', '#contact'),
@@ -1424,6 +1442,10 @@ const RESOURCE_PAGE_CONTENT: LocalizedResourcePageMap = {
 
 export const getResourcePageContent = (resourceId: ResourcePageId, locale: SiteLocale): ResourcePageContent => {
   const localized = RESOURCE_PAGE_CONTENT[resourceId][locale];
+  const answerBlock =
+    resourceId === 'how-to-hire-ugc-creator' || resourceId === 'how-much-ugc-creator-charge'
+      ? GUIDE_ANSWER_BLOCKS[resourceId][locale]
+      : undefined;
 
   return {
     ...localized,
@@ -1431,6 +1453,7 @@ export const getResourcePageContent = (resourceId: ResourcePageId, locale: SiteL
     locale,
     path: getResourcePath(resourceId, locale),
     alternatePath: getResourcePath(resourceId, locale === 'es' ? 'en' : 'es'),
+    ...(answerBlock ? { answerBlock } : {}),
   };
 };
 

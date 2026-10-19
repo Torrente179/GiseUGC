@@ -267,6 +267,7 @@ const ResourcePage = ({
                   {page.heroEyebrow}
                 </p>
                 <h1 className="gd-h1 section-label">{page.heroTitle}</h1>
+                {page.answerBlock ? <p className="gd-answer">{page.answerBlock}</p> : null}
                 <p className="gd-lead">{page.heroSummary}</p>
                 {page.leadCtaLabel && page.leadCtaHref ? (
                   <a className="gd-want" {...contactLink(page.leadCtaHref)}>

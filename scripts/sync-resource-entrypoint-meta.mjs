@@ -111,6 +111,9 @@ const renderBody = (page, locale) => {
     `          <a href="${homePath}">${labels.home}</a> / <a href="${getHubPath('resources', locale)}">${labels.resources}</a> / <span>${escapeText(page.breadcrumbLabel)}</span>`,
     '        </nav>',
     `        <h1 style="font-size:1.8rem;line-height:1.2;margin-bottom:1rem">${escapeText(page.heroTitle)}</h1>`,
+    page.answerBlock
+      ? `        <p class="gd-answer" style="font-size:1.05rem;line-height:1.7;margin-bottom:1rem">${escapeText(page.answerBlock)}</p>`
+      : '',
     `        <p style="font-size:1.05rem;line-height:1.7;margin-bottom:1.5rem">${renderInlineCopy(page.heroSummary)}</p>`,
     page.leadCtaLabel && page.leadCtaHref
       ? `        <p style="${P_STYLE}"><a href="${escapeAttribute(page.leadCtaHref)}">${escapeText(page.leadCtaLabel)}</a></p>`
