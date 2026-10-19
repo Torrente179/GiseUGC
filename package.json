@@ -34,6 +34,7 @@
     "video:responsive-posters": "bash scripts/generate-responsive-posters.sh",
     "video:startups": "node scripts/generate-startup-videos.mjs",
     "video:catalog": "node scripts/generate-nuevos-r2-catalog.mjs",
+    "video:lock": "node scripts/cloudflare-video-lock.mjs",
     "video:streams": "node scripts/stream-feed.mjs",
     "indexnow": "bash scripts/indexnow-ping.sh",
     "seo:check-video-urls": "node scripts/check-video-sitemap-urls.mjs"

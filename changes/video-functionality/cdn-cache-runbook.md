@@ -1,5 +1,11 @@
 # CDN Edge-Cache + R2 Upload Runbook
 
+> **Since 2026-10-19 the media host serves video files only to the site.** A
+> `curl` of a video (`.mp4`, `.mov`, `.m3u8`, …) without the site's Referer gets
+> Cloudflare's `403`. Add `-H "Referer: https://www.giselasaldarriaga.com/"` to
+> the checks below. Posters and other images are not affected. See
+> `changes/2026-10-19-video-referer-lock.md`.
+
 ## ✅ Status (2026-06): RESOLVED — caching is live
 
 Edge caching, CORS, and adaptive HLS are all working in production:
@@ -196,7 +202,7 @@ for u in \
   videos/posters/ugc-lifestyle-review-poster.jpg \
   videos/hls/IMG_8435/main/master.m3u8 ; do
   echo "== $u =="
-  curl -sI "https://media.giselasaldarriaga.com/$u" \
+  curl -sI -H "Referer: https://www.giselasaldarriaga.com/" "https://media.giselasaldarriaga.com/$u" \
     | grep -iE 'http/|content-type|cache-control|cf-cache-status|age'
 done
 ```

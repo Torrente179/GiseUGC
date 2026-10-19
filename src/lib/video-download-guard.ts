@@ -7,8 +7,12 @@
  * the iOS long-press menu (src/index.css).
  *
  * This stops casual saving only: a file the browser can play can be fetched.
- * The Fiverr review videos also carry Fiverr's watermark in the picture, for
- * anyone who gets past this (scripts/self-host-fiverr-media.mjs).
+ * Behind it, the media host serves a video only to the site's own pages, so a
+ * copied video URL opened anywhere else gets a 403
+ * (scripts/cloudflare-video-lock.mjs; vercel.json does the same for the
+ * startup clips the site serves itself). The Fiverr review videos also carry
+ * Fiverr's watermark in the picture, for anyone who gets past both
+ * (scripts/self-host-fiverr-media.mjs).
  */
 
 const isVideoTarget = (target: EventTarget | null) =>

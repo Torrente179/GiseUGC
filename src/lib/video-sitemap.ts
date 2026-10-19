@@ -228,12 +228,19 @@ const probeUrl = async (
   };
 };
 
+/**
+ * The media host serves video only to the site's pages and to crawlers
+ * Cloudflare has verified, such as the real Googlebot
+ * (scripts/cloudflare-video-lock.mjs). A probe from this machine is neither, so
+ * it says it comes from the site.
+ */
+const SITE_REFERER = `${SITEMAP_ORIGIN}/`;
+
 export const assertVideoUrlsReachable = async (entries: VideoSitemapEntry[]): Promise<void> => {
   const urls = [...new Set(entries.flatMap((entry) => [entry.contentLoc, entry.thumbnailLoc]))];
   const failures: string[] = [];
   const probes: Array<{ ua: string; referer?: string }> = [
-    { ua: 'Googlebot' },
-    { ua: 'Googlebot', referer: 'https://www.google.com/' },
+    { ua: 'Googlebot', referer: SITE_REFERER },
   ];
   for (const url of urls) {
     for (const probe of probes) {
@@ -282,7 +289,7 @@ export const assertR2AllowsGooglebot = async (sampleUrl?: string): Promise<void>
     if (error instanceof Error && error.message.startsWith('R2')) throw error;
   }
   if (!sampleUrl) return;
-  const { status, robotsTag } = await probeUrl(sampleUrl, 'Googlebot');
+  const { status, robotsTag } = await probeUrl(sampleUrl, 'Googlebot', SITE_REFERER);
   if (status === 403 || status === 401) {
     throw new Error(`R2 hotlink or auth block for Googlebot: ${status} ${sampleUrl}`);
   }

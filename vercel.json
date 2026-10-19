@@ -2,6 +2,18 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
     {
+      "source": "/uploads/videos/startups/(.*)",
+      "missing": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": "(https://(www\\.)?giselasaldarriaga\\.com|https://gise-[a-z0-9-]+-torrente179s-projects\\.vercel\\.app)/.*"
+        }
+      ],
+      "destination": "/",
+      "permanent": false
+    },
+    {
       "source": "/",
       "has": [
         {

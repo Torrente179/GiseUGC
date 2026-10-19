@@ -4,6 +4,9 @@ import path from 'node:path';
 import process from 'node:process';
 
 const R2_MEDIA_BASE_URL = 'https://media.giselasaldarriaga.com';
+// The media host refuses video requests that do not come from the site
+// (scripts/cloudflare-video-lock.mjs), so the readiness checks say they do.
+const SITE_REFERER = 'https://www.giselasaldarriaga.com/';
 const DEFAULT_MANIFEST_PATH = 'media-sources/nuevos/manifest.csv';
 const DEFAULT_OUTPUT_PATH = 'src/data/nuevos-r2-ready.ts';
 const DEFAULT_SEO_OVERRIDES_PATH = 'scripts/nuevos-seo-overrides.json';
@@ -201,6 +204,7 @@ async function checkUrlOnce(url, timeoutMs) {
   try {
     const response = await fetch(url, {
       method: 'HEAD',
+      headers: { Referer: SITE_REFERER },
       signal: controller.signal,
       redirect: 'follow',
       cache: 'no-store',
