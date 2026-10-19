@@ -27,14 +27,18 @@ file's URL could still open or download it directly.
   video extension (`mp4 m4v mov webm m4s m3u8 ts`) unless one of these is true:
   - the Referer starts with `https://www.giselasaldarriaga.com/` or
     `https://giselasaldarriaga.com/`;
-  - the Referer is a Vercel preview, `https://gise-…-torrente179s-projects.vercel.app/`;
   - the Referer is a local dev server (`http://localhost:`, `http://127.0.0.1:`);
   - Cloudflare has verified the client as a known crawler (`cf.client.bot`:
     Googlebot, Bingbot…), so video indexing keeps working.
   Posters and every other image stay open (link previews, image search).
+  Vercel previews are not allowed: the free plan has no regex, and the
+  prefix + `contains` test first used here let any site whose name starts with
+  `gise-` through (flagged by the commit security review). Previews play no
+  media-host video; production is where the site is tested.
 - **`vercel.json`**: a request for `/uploads/videos/startups/*` whose Referer is
-  not the site or a preview is redirected to `/`. The main site is on Vercel,
-  not behind Cloudflare, so the WAF rule does not reach these files.
+  not the site or one of its previews (anchored regex) is redirected to `/`.
+  The main site is on Vercel, not behind Cloudflare, so the WAF rule does not
+  reach these files.
 - **Build checks send the site's Referer**: `scripts/generate-nuevos-r2-catalog.mjs`
   (runs in `prebuild`, on Vercel too) and the video sitemap probes in
   `src/lib/video-sitemap.ts`. Without that, the catalog would have seen every

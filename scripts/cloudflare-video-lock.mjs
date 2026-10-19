@@ -29,16 +29,19 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RULE_REF = 'gise_video_referer_lock';
 const MEDIA_HOST = 'media.giselasaldarriaga.com';
 const VIDEO_EXTENSIONS = ['mp4', 'm4v', 'mov', 'webm', 'm4s', 'm3u8', 'ts'];
-/** Pages allowed to play the videos: production, local dev servers. */
+/**
+ * Pages allowed to play the videos: production and local dev servers. Each
+ * prefix ends at the host, so no other site's address can start with it.
+ * Vercel previews are left out: the free plan has no regex to match their
+ * hostnames exactly, and a looser test (prefix + contains) lets any site whose
+ * name starts with "gise-" through. Previews play no media-host video.
+ */
 const ALLOWED_REFERER_PREFIXES = [
   'https://www.giselasaldarriaga.com/',
   'https://giselasaldarriaga.com/',
   'http://localhost:',
   'http://127.0.0.1:',
 ];
-/** Vercel previews: gise-<hash>-torrente179s-projects.vercel.app (and gise-git-<branch>-…). */
-const PREVIEW_PREFIX = 'https://gise-';
-const PREVIEW_SUFFIX = '-torrente179s-projects.vercel.app/';
 
 const quote = (value) => JSON.stringify(value);
 
@@ -48,7 +51,6 @@ const lockExpression = () =>
     `http.request.uri.path.extension in {${VIDEO_EXTENSIONS.map(quote).join(' ')}}`,
     'not cf.client.bot',
     ...ALLOWED_REFERER_PREFIXES.map((prefix) => `not starts_with(http.referer, ${quote(prefix)})`),
-    `not (starts_with(http.referer, ${quote(PREVIEW_PREFIX)}) and http.referer contains ${quote(PREVIEW_SUFFIX)})`,
   ].join('\n  and ');
 
 const env = Object.fromEntries(
