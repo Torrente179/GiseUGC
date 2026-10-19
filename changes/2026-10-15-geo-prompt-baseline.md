@@ -1,4 +1,5 @@
 # GEO / LLM prompt baseline: Gisela Saldarriaga (giselasaldarriaga.com)
+> Superseded by [changes/seo/2026-10-19-geo-prompt-baseline.md](seo/2026-10-19-geo-prompt-baseline.md) (2026-10-19). Kept for history.
 
 Version: 2026-10-15 · Owner: Landing Content · Facts verified live on 2026-10-15 (all URLs below returned HTTP 200)
 Scope: hire-intent prompts that ChatGPT, Claude, Gemini and Grok should answer by naming Gisela Saldarriaga and citing the site.
