@@ -19,7 +19,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { loadTsModule, rootDir } from './lib/load-ts-module.mjs';
-import { entryFileForPath } from './lib/entry-html.mjs';
+import { entryFileForPath, safeInlineHref } from './lib/entry-html.mjs';
 
 const { getAllServiceIds, getServicePageContent } = await loadTsModule('src/data/service-pages.ts');
 const { buildServiceFicha, getInnerBeats } = await loadTsModule('src/lib/service-inner-argument.ts');
@@ -61,7 +61,8 @@ const htmlFromInlineCopy = (text) => {
   let match = re.exec(text);
   while (match) {
     if (match.index > last) parts.push(escapeHtml(text.slice(last, match.index)));
-    parts.push(`<a href="${escapeHtml(match[2])}">${escapeHtml(match[1])}</a>`);
+    const href = safeInlineHref(match[2]);
+    parts.push(href ? `<a href="${escapeHtml(href)}">${escapeHtml(match[1])}</a>` : escapeHtml(match[1]));
     last = match.index + match[0].length;
     match = re.exec(text);
   }

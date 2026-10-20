@@ -4,6 +4,22 @@ import { Link } from 'react-router-dom';
 const INLINE_TOKEN_RE = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*/g;
 const HAS_MARKDOWN_LINK_RE = /\[[^\]]+\]\([^)\s]+\)/;
 
+// Copy is currently authored in the repo, but it is also serialized into
+// prerendered route data. Keep future data sources from turning a copy link
+// into a javascript:, data:, or protocol-relative navigation.
+const safeInlineHref = (href: string): string | null => {
+  if (href.includes('\\') || [...href].some((char) => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127)) return null;
+  if (href.startsWith('/') && !href.startsWith('//')) return href;
+  if (href.startsWith('#') && /^#[a-z][a-z0-9_-]*$/iu.test(href)) return href;
+  if (!href.startsWith('https://')) return null;
+  try {
+    const url = new URL(href);
+    return url.protocol === 'https:' && url.hostname && !url.username && !url.password ? href : null;
+  } catch {
+    return null;
+  }
+};
+
 export type InlineCopySegment =
   | { type: 'text'; value: string }
   | { type: 'link'; label: string; href: string }
@@ -52,7 +68,8 @@ export const visibleInlineCopy = (text: InlineCopyInput) =>
 export const inlineCopyHrefs = (text: InlineCopyInput) =>
   toSegments(text)
     .filter((segment): segment is Extract<InlineCopySegment, { type: 'link' }> => segment.type === 'link')
-    .map((segment) => segment.href);
+    .map((segment) => safeInlineHref(segment.href))
+    .filter((href): href is string => href !== null);
 
 export const serializeRouteDataJson = (data: unknown) =>
   JSON.stringify(data, (_key, value) => {
@@ -75,16 +92,19 @@ export const InlineCopy = ({ text }: { text: InlineCopyInput }) => {
       return <strong key={`b-${index}`}>{segment.value}</strong>;
     }
 
-    if (isExternalHref(segment.href)) {
+    const href = safeInlineHref(segment.href);
+    if (!href) return <Fragment key={`t-${index}`}>{segment.label}</Fragment>;
+
+    if (isExternalHref(href)) {
       return (
-        <a key={`a-${index}`} href={segment.href} target="_blank" rel="noopener noreferrer">
+        <a key={`a-${index}`} href={href} target="_blank" rel="noopener noreferrer">
           {segment.label}
         </a>
       );
     }
 
     return (
-      <Link key={`l-${index}`} to={segment.href}>
+      <Link key={`l-${index}`} to={href}>
         {segment.label}
       </Link>
     );

@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { createHash } from 'node:crypto';
 import Beasties from 'beasties';
 import { JSDOM } from 'jsdom';
 
@@ -18,6 +19,15 @@ const collectHtmlFiles = async (directory, files = []) => {
 };
 
 const distRoot = path.join(projectRoot, 'dist');
+const deploymentConfig = JSON.parse(await fs.readFile(path.join(projectRoot, 'vercel.json'), 'utf8'));
+const csp = deploymentConfig.headers
+  .find((entry) => entry.source === '/(.*)')?.headers
+  .find((header) => header.key.toLowerCase() === 'content-security-policy')?.value;
+const scriptAttrPolicy = csp?.split(';').map((directive) => directive.trim())
+  .find((directive) => directive.startsWith('script-src-attr '));
+if (!scriptAttrPolicy?.includes("'unsafe-hashes'")) {
+  throw new Error('Production CSP must explicitly hash generated inline event handlers');
+}
 const htmlFiles = await collectHtmlFiles(distRoot);
 const manifest = JSON.parse(
   await fs.readFile(path.join(distRoot, '.vite', 'manifest.json'), 'utf8'),
@@ -274,6 +284,19 @@ for (const htmlPath of htmlFiles) {
     '</head>',
     `<style data-critical-fonts>${routeCriticalFontFaces}</style>${routeCriticalStyles}<style data-critical-theme>${criticalDarkTokens}</style></head>`,
   );
+  // Beasties uses an onload handler to activate deferred stylesheets. Fail the
+  // build if its output ever changes without a matching, reviewed CSP hash.
+  const finalDom = new JSDOM(withCriticalTheme);
+  for (const element of finalDom.window.document.querySelectorAll('*')) {
+    for (const attribute of element.attributes) {
+      if (!/^on[a-z]+$/iu.test(attribute.name)) continue;
+      const hash = `sha256-${createHash('sha256').update(attribute.value).digest('base64')}`;
+      if (!scriptAttrPolicy.includes(`'${hash}'`)) {
+        throw new Error(`CSP does not allow ${attribute.name} handler ${hash} in ${relative}`);
+      }
+    }
+  }
+  finalDom.window.close();
   await fs.writeFile(htmlPath, withCriticalTheme);
 }
 

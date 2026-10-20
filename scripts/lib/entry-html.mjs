@@ -34,6 +34,21 @@ export const escapeText = (value) =>
 
 export const escapeAttr = (value) => escapeText(value).replaceAll('"', '&quot;');
 
+// Mirror the browser renderer's scheme check: build-time boot shells must not
+// turn a copy token into an executable or cross-origin relative URL.
+export const safeInlineHref = (href) => {
+  if (href.includes('\\') || [...href].some((char) => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127)) return null;
+  if (href.startsWith('/') && !href.startsWith('//')) return href;
+  if (href.startsWith('#') && /^#[a-z][a-z0-9_-]*$/iu.test(href)) return href;
+  if (!href.startsWith('https://')) return null;
+  try {
+    const url = new URL(href);
+    return url.protocol === 'https:' && url.hostname && !url.username && !url.password ? href : null;
+  } catch {
+    return null;
+  }
+};
+
 /* Copy links and **bold** are written in the data (see src/lib/inline-copy-links.tsx). */
 const INLINE_TOKEN_RE = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*/gu;
 
@@ -46,7 +61,10 @@ export const renderInlineCopy = (text) => {
     if (match[3] !== undefined) {
       html += `<strong>${escapeText(match[3])}</strong>`;
     } else {
-      html += `<a href="${escapeAttr(match[2])}">${escapeText(match[1])}</a>`;
+      const href = safeInlineHref(match[2]);
+      html += href
+        ? `<a href="${escapeAttr(href)}">${escapeText(match[1])}</a>`
+        : escapeText(match[1]);
     }
     cursor = match.index + match[0].length;
   }
