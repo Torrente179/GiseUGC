@@ -11,7 +11,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { loadTsModule, rootDir } from './lib/load-ts-module.mjs';
-import { entryFileForPath } from './lib/entry-html.mjs';
+import { entryFileForPath, safeInlineHref } from './lib/entry-html.mjs';
 
 const { getHubPageContent } = await loadTsModule('src/data/hub-pages.ts');
 const { getHubIdsInOrder, getHomePath } = await loadTsModule('src/lib/locale-path.ts');
@@ -79,8 +79,19 @@ const renderChildren = (hub) =>
     })
     .join('\n');
 
-const renderInlineCopy = (value) =>
-  escapeHtml(value).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
+const renderInlineCopy = (value, newTab = false) => {
+  let html = '';
+  let cursor = 0;
+  for (const match of value.matchAll(/\[([^\]]+)\]\(([^)\s]+)\)/g)) {
+    html += escapeHtml(value.slice(cursor, match.index));
+    const href = safeInlineHref(match[2]);
+    html += href
+      ? `<a href="${escapeHtml(href)}"${newTab ? ' target="_blank" rel="noopener noreferrer"' : ''}>${escapeHtml(match[1])}</a>`
+      : escapeHtml(match[1]);
+    cursor = match.index + match[0].length;
+  }
+  return html + escapeHtml(value.slice(cursor));
+};
 
 const renderSecondary = (hub) =>
   hub.secondary
@@ -93,7 +104,7 @@ const renderHub = (hub) => {
   const enUrl = `${SITE}${hub.locale === 'en' ? hub.path : hub.alternate}`;
   const homeUrl = `${SITE}${hub.home}`;
   const proofHtml = hub.proof
-    ? `\n        <p>${escapeHtml(hub.proof).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')}</p>`
+    ? `\n        <p>${renderInlineCopy(hub.proof, true)}</p>`
     : '';
   const schema = {
     '@context': 'https://schema.org',

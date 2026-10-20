@@ -58,7 +58,7 @@ export default defineConfig(({ mode }) => ({
   preview: {
     headers: {
       'Content-Security-Policy':
-        "default-src 'self'; img-src 'self' https://images.unsplash.com https://media.giselasaldarriaga.com https://www.googletagmanager.com https://www.google-analytics.com data: blob:; media-src 'self' https://media.giselasaldarriaga.com blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://media.giselasaldarriaga.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com; frame-src https://www.googletagmanager.com;",
+        "default-src 'self'; img-src 'self' https://images.unsplash.com https://media.giselasaldarriaga.com https://www.googletagmanager.com https://www.google-analytics.com data: blob:; media-src 'self' https://media.giselasaldarriaga.com blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://media.giselasaldarriaga.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.google-analytics.com; script-src-attr 'unsafe-hashes' 'sha256-7OYe+LAAHfcHW+MR8MWL3ZnFtA1ZZDMcV8KhE3AicPU='; frame-src https://www.googletagmanager.com;",
     },
   },
   plugins: [
