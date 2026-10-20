@@ -257,3 +257,10 @@ A second manual IndexNow ping was sent 2026-10-19 02:48 (America/Bogota) for /, 
 Search Console sitemap resubmission is on hold because the Ryze connector now
 requires a paid plan.
 
+
+## 2026-10-20: IndexNow ping after #28/#29
+
+- 2026-10-19 02:48 (UTC-5): manual IndexNow ping for `/`, `/en/` and the four guides changed by #28. HTTP 200.
+- 2026-10-20 02:10 (UTC-5): manual IndexNow ping for 18 URLs: `/`, `/en/` and the 16 service pages (8 ES, 8 EN) changed by #29 (unique H2s, `1c553f2`). HTTP 200.
+- 2026-10-20 02:11 (UTC-5): manual IndexNow ping for all 10 ES/EN resource guides (`/recursos/*`, `/en/resources/*`). This covers every guide #28 touched. HTTP 200.
+- Key file `bc6e18cf87bf49fcc1ad22e759c161ac.txt`. Search Console resubmission is still on hold because there is no connector access.
