@@ -35,3 +35,13 @@
 - `script-src 'unsafe-inline'` remains an XSS defense gap for inline `<script>` injection. The new `script-src-attr` policy covers event-handler attributes only. A strict script CSP should be staged with GTM/analytics and theme boot checks before enforcement.
 - The remaining reported npm findings are mostly build/test/CLI packages; the Tailwind 3 dependency chain includes advisories that npm cannot clear without a major Tailwind 4 migration. Avoid treating the numeric audit result as a live-site vulnerability count.
 - Code fixes in this worktree are not yet on production. The preview build and header are confirmed, while analytics, media playback, and route navigation on that preview have not been checked. Production traffic/compromise status remains unproven without provider logs.
+
+## After merge (#31, `3ed5762`)
+
+This section supersedes the "not yet on production" line above.
+
+- Production (`www.giselasaldarriaga.com`: `/`, `/en/`, `/servicios/`) serves the `script-src-attr` directive. Its hash is the SHA-256 of the handler the pages ship, `this.title='';this.rel='stylesheet'`. In a browser on the production home page, all three deferred stylesheets were active, GTM (`GTM-TX2WCCLT`) and GA4 (`G-3W6XVBLWXH`) scripts loaded with `dataLayer` populated, the console had no CSP errors, and an injected `onclick` attribute did not run (`script-src-attr` violation). Media playback and route navigation were not re-checked.
+- Fresh `npm audit --package-lock-only` on the merged lockfile: 27 findings (0 critical, 16 high, 9 moderate, 2 low); `--omit=dev`: 9 (5 high, 4 moderate), all in the Tailwind 3 build chain or the React Router 6 advisories above. `npm audit fix` without `--force` changes no package version.
+- Every lockfile entry resolves from `registry.npmjs.org` with an integrity hash; `react-router-dom@6.30.6` matches the registry's published integrity.
+- Follow-up changes: the scheme check now lives once in `src/lib/safe-inline-href.ts` (the build scripts load it through `load-ts-module.mjs`); `src/data/authored-copy-links.test.ts` fails CI when any authored copy link would be dropped as plain text; `react-router-dom` and `postcss` use `^6.30.6` / `^8.5.23` instead of exact pins, so later patch releases are not blocked.
+- GTM is allowed by `script-src`, so anyone who can publish the GTM container can run script on every page. That access is controlled in the Google account (publish permissions, 2FA), not in this repository, and was not reviewed.
