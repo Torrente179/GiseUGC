@@ -1,24 +1,9 @@
 import { Fragment, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import { safeInlineHref } from './safe-inline-href';
 
 const INLINE_TOKEN_RE = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*/g;
 const HAS_MARKDOWN_LINK_RE = /\[[^\]]+\]\([^)\s]+\)/;
-
-// Copy is currently authored in the repo, but it is also serialized into
-// prerendered route data. Keep future data sources from turning a copy link
-// into a javascript:, data:, or protocol-relative navigation.
-const safeInlineHref = (href: string): string | null => {
-  if (href.includes('\\') || [...href].some((char) => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127)) return null;
-  if (href.startsWith('/') && !href.startsWith('//')) return href;
-  if (href.startsWith('#') && /^#[a-z][a-z0-9_-]*$/iu.test(href)) return href;
-  if (!href.startsWith('https://')) return null;
-  try {
-    const url = new URL(href);
-    return url.protocol === 'https:' && url.hostname && !url.username && !url.password ? href : null;
-  } catch {
-    return null;
-  }
-};
 
 export type InlineCopySegment =
   | { type: 'text'; value: string }

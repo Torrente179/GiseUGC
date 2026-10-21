@@ -12,9 +12,14 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { rootDir } from './load-ts-module.mjs';
+import { loadTsModule, rootDir } from './load-ts-module.mjs';
 
 export { rootDir };
+
+// The browser renderer's scheme check, loaded from its one source so build-time
+// boot shells can never turn a copy token into an executable or cross-origin
+// relative URL that React would refuse.
+export const { safeInlineHref } = await loadTsModule('src/lib/safe-inline-href.ts');
 
 export const SITE_URL = 'https://www.giselasaldarriaga.com';
 
@@ -33,21 +38,6 @@ export const escapeText = (value) =>
   String(value).replace(/&(?=[A-Za-z0-9#])/gu, '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
 export const escapeAttr = (value) => escapeText(value).replaceAll('"', '&quot;');
-
-// Mirror the browser renderer's scheme check: build-time boot shells must not
-// turn a copy token into an executable or cross-origin relative URL.
-export const safeInlineHref = (href) => {
-  if (href.includes('\\') || [...href].some((char) => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127)) return null;
-  if (href.startsWith('/') && !href.startsWith('//')) return href;
-  if (href.startsWith('#') && /^#[a-z][a-z0-9_-]*$/iu.test(href)) return href;
-  if (!href.startsWith('https://')) return null;
-  try {
-    const url = new URL(href);
-    return url.protocol === 'https:' && url.hostname && !url.username && !url.password ? href : null;
-  } catch {
-    return null;
-  }
-};
 
 /* Copy links and **bold** are written in the data (see src/lib/inline-copy-links.tsx). */
 const INLINE_TOKEN_RE = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*/gu;
