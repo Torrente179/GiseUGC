@@ -1,0 +1,84 @@
+name: SEO crawl-trust gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Cancel superseded runs on the same ref.
+concurrency:
+  group: seo-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  seo-local:
+    name: Local prerender
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright (request-only, no extra browsers)
+        run: npx playwright install --with-deps chromium
+
+      - name: Build prerendered dist
+        env:
+          # Live R2 HEAD probes belong to npm run seo:check-video-urls, not this gate.
+          SEO_SKIP_VIDEO_HEAD: "1"
+        run: npm run build
+
+      - name: Crawl-trust against local dist
+        run: npm run test:seo
+
+  seo-production:
+    name: Production
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright (request-only, no extra browsers)
+        run: npx playwright install --with-deps chromium
+
+      - name: Wait for Vercel production
+        if: github.event_name == 'push'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: bash scripts/wait-for-production.sh
+
+      - name: Crawl-trust against production
+        env:
+          BASE_URL: https://www.giselasaldarriaga.com
+        run: npm run test:seo
+
+# Preview URLs are behind Vercel Deployment Protection. Juan Pablo will add
+# VERCEL_AUTOMATION_BYPASS_SECRET; the test already sends the bypass headers
+# when that env var is set. Hook for later:
+#
+#      - name: Crawl-trust against Vercel preview
+#        if: github.event_name == 'pull_request'
+#        env:
+#          BASE_URL: ${{ steps.preview.outputs.url }}
+#          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+#        run: npm run test:seo
