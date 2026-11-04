@@ -85,6 +85,11 @@ This folder is organized by subsystem instead of by date.
     `seo/2026-10-19-geo-prompt-baseline.md` — 2026-10-19 run after industry
     pages were removed. Supersedes `2026-10-15-geo-prompt-baseline.md`
     (kept for history).
+  - **Current SEO CI crawl-trust gate:**
+    `seo/2026-11-03-seo-ci-gate.md` — Playwright request crawl of every
+    sitemap URL against raw prerendered HTML (no JS). PR builds `dist/`;
+    `main` / `workflow_dispatch` also hit production. Architecture pointer:
+    `architecture/08-build-deployment.md`.
   - **Current guide answer blocks + homepage FAQ links:**
     `seo/2026-10-19-guide-answer-blocks-and-home-faq-links.md` —
     one paragraph under the H1 on the four hire/pricing guides

@@ -40,6 +40,10 @@ tmp/r2-upload/
 media-sources/nuevos/*
 !media-sources/nuevos/manifest.csv
 
+# Playwright crawl-trust artifacts
+/playwright-report/
+/test-results/
+
 # Local architecture handoff doc
 ARCHITECTURE.md
 tmp/video-feed/

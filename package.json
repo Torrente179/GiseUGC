@@ -13,6 +13,8 @@
     "typecheck": "tsc -p tsconfig.app.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:seo": "playwright test",
+    "test:seo:prod": "BASE_URL=https://www.giselasaldarriaga.com playwright test",
     "lighthouse:mobile": "lhci autorun --config=lighthouserc.mobile.cjs",
     "lighthouse:desktop": "lhci autorun --config=lighthouserc.desktop.cjs",
     "lighthouse:matrix": "npm run lighthouse:mobile && npm run lighthouse:desktop",
@@ -57,6 +59,7 @@
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/typography": "^0.5.15",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

@@ -96,9 +96,22 @@ Generated poster/startup runtime assets are versioned under `public/`. Source
 masters and local transcodes stay outside `public/` under `media-sources/` and
 gitignored `tmp/` directories.
 
+## SEO crawl-trust CI gate
+
+`.github/workflows/seo-gate.yml` builds the prerendered `dist/` on every
+pull request and crawls every sitemap URL as raw HTML (no JS). Push to
+`main` and `workflow_dispatch` also run the same checks against
+production. The test lives in `e2e/seo-crawl-trust.spec.ts`. How to run
+it, what it fails on, and the pending Vercel bypass secret are in
+[changes/seo/2026-11-03-seo-ci-gate.md](../changes/seo/2026-11-03-seo-ci-gate.md).
+Regular `npm test` / `.github/workflows/ci.yml` stay offline and do not
+run this gate.
+
 ## Release Gates
 
 Run build, typecheck, tests, lint, the Lighthouse matrix, route/asset/hydration
 smoke tests, media timing checks, and motion traces before promotion. The exact
 budgets and July 2026 reference results are in the
 [overhaul record](../changes/2026-07-29-performance-motion-media-architecture-overhaul.md).
+The SEO crawl-trust gate is the sitemap HTML check above; it is a CI
+workflow, not part of `npm test`.
